@@ -1,0 +1,50 @@
+{
+  "name": "discord-js-bot",
+  "version": "1.0.0",
+  "description": "A multipurpose discord bot built using discord-js",
+  "main": "bot.js",
+  "author": "Sai Teja M",
+  "license": "ISC",
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
+  "repository": {
+    "type": "git",
+    "url": "saiteja-madha/discord-js-bot"
+  },
+  "dependencies": {
+    "ascii-table": "0.0.9",
+    "axios": "^0.21.1",
+    "discord.js": "^13.0.0",
+    "dotenv": "^10.0.0",
+    "fs": "0.0.1-security",
+    "iso-639-1": "^2.1.9",
+    "module-alias": "^2.2.2",
+    "moment": "^2.29.1",
+    "mongoose": "^5.13.5",
+    "os": "^0.1.2",
+    "outdent": "^0.8.0",
+    "timestamp-to-date": "^1.1.0",
+    "twemoji-parser": "^13.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "keywords": [
+    "discord",
+    "discord.js",
+    "bot",
+    "multipurpose"
+  ],
+  "_moduleAliases": {
+    "@root": ".",
+    "@commands": "commands/",
+    "@database": "database/",
+    "@features": "features/",
+    "@schemas": "schemas/",
+    "@utils": "utils/"
+  }
+}
