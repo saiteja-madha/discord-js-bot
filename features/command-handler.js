@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const { getSettings } = require("@schemas/settings-schema");
 const { PREFIX: DEFAULT_PREFIX } = require("@root/config.json");
+const { sendMessage } = require("@root/utils/botUtils");
 
 const COMMAND_INDEX = new Collection();
 const COMMANDS = [];
@@ -29,12 +30,10 @@ function run(client) {
   readCommands("commands");
 
   client.on("messageCreate", async (message) => {
-    let prefix = DEFAULT_PREFIX;
+    if (message.channel.type === "DM" || message.author.bot || !message.channel.guild) return;
 
-    if (message.channel.guild) {
-      const settings = await getSettings(message.channel.guild.id);
-      if (settings?.prefix) prefix = settings?.prefix;
-    }
+    const settings = await getSettings(message.channel.guild.id);
+    const prefix = settings?.prefix || DEFAULT_PREFIX;
 
     if (!message.content.startsWith(prefix)) return;
 
@@ -44,7 +43,12 @@ function run(client) {
 
     if (cmd) {
       const ctx = new CommandContext(message, args, invoke, prefix);
-      cmd.execute(ctx).catch((ex) => console.log(ex));
+      try {
+        await cmd.execute(ctx);
+      } catch (ex) {
+        sendMessage(message.channel, "Oops! An error occurred while running the command");
+        console.log(ex);
+      }
     }
   });
 }

@@ -6,6 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const mongo = require("@database/mongo");
 const ascii = require("ascii-table");
+const { startupCheck } = require("@utils/botUtils");
 
 global.__appRoot = path.resolve(__dirname);
 const client = new Client({
@@ -27,15 +28,12 @@ client.once("ready", async () => {
 const loadFeatures = (client) => {
   let table = new ascii("Loading Features");
   table.setHeading("Feature", "Status");
-
   const readFeatures = (dir) => {
     const files = fs.readdirSync(path.join(__dirname, dir));
     for (const file of files) {
       const stat = fs.lstatSync(path.join(__dirname, dir, file));
-      if (stat.isDirectory()) {
-        if (file == "ignored") continue;
-        readFeatures(path.join(dir, file));
-      } else {
+      if (stat.isDirectory()) readFeatures(path.join(dir, file));
+      else {
         const feature = require(path.join(__dirname, dir, file));
         try {
           feature.run(client);
@@ -51,9 +49,12 @@ const loadFeatures = (client) => {
   console.log(table.toString());
 };
 
-client.on("error", (err) => {
-  console.log("Error");
-  console.log(err);
+// useful to find out unhandled promise rejections
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("Unhandled Rejection at:", reason.stack || reason);
 });
 
-client.login(process.env.BOT_TOKEN);
+(async () => {
+  await startupCheck();
+  client.login(process.env.BOT_TOKEN);
+})();

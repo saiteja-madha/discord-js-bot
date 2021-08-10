@@ -3,6 +3,7 @@ const { getSettings } = require("@schemas/settings-schema");
 const { incrementXP, setLevel } = require("@schemas/profile-schema");
 const { getRandomInt } = require("@utils/miscUtils");
 const { DEFAULT_LVL_UP_MSG } = require("@root/config.json");
+const { sendMessage } = require("@utils/botUtils");
 
 const XP_COOLDOWN = new Collection();
 const COOLDOWN_SECONDS = 5;
@@ -39,7 +40,7 @@ function run(client) {
       lvlUpMessage = lvlUpMessage.replace("{l}", level).replace("{m}", message.member.user);
       const lvlUpChannel = message.channel.guild.channels.cache.get(settings.level_up_channel) || message.channel;
 
-      lvlUpChannel.send(lvlUpMessage);
+      sendMessage(lvlUpChannel, lvlUpMessage);
     }
   });
 }

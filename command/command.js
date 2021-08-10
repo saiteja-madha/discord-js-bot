@@ -174,10 +174,7 @@ class Command {
       }
     }
 
-    await this.run(ctx).catch((ex) => {
-      sendMessage(channel, "Oops! An error occurred while running the command");
-      console.log(ex);
-    });
+    await this.run(ctx);
   }
 
   /**

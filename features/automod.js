@@ -24,8 +24,11 @@ function run(client) {
         MESSAGE_CACHE.set(key, cacheMessage(message));
       }
     }
-
-    performAutomod(message, settings);
+    try {
+      performAutomod(message, settings);
+    } catch (ex) {
+      console.log(ex);
+    }
   });
 
   client.on("messageDelete", async (message) => {
@@ -58,7 +61,7 @@ function run(client) {
         .addField("Everyone?", cachedMessage.mentions.everyone, true)
         .setFooter("Sent at: " + cachedMessage.createdAt);
 
-      logchannel.send({ embeds: [embed] });
+      sendMessage(logChannel, { embeds: [embed] });
     }
   });
 }
@@ -118,8 +121,13 @@ function performAutomod(message, settings) {
     message
       .delete()
       .then(async () => {
-        sendMessage(channel, "Auto-Moderation. Message deleted!").then((msg) => setTimeout(() => msg.delete(), 3000));
-        if (logChannel) logchannel.send({ embeds: [embed] });
+        let sentMsg = await sendMessage(channel, "Auto-Moderation. Message deleted!");
+        if (sentMsg) {
+          setTimeout(() => {
+            if (sentMsg.deletable) sentMsg.delete().catch((ex) => {});
+          }, 3000);
+        }
+        if (logChannel) sendMessage(logChannel, { embeds: [embed] });
         else automodLogChannel(channel.guild.id, null);
       })
       .catch((ex) => {});
