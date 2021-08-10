@@ -4,6 +4,6 @@ An awesome multipurpose discord bot built using discord.js
 
 ## Usage
 
-- Update the `.env` file with your bot token, mongoURI and other secrets
+- Rename `.env.example` to `.env` adn update it with your bot token, mongoURI and other secrets
 - Optionally edit `config.json`
 - Open terminal and run `node .` to start the bot
