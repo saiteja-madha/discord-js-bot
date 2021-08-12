@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
 const { BOT_INVITE, DISCORD_SERVER_INVITE, EMBED_COLORS } = require("@root/config.json");
 

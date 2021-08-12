@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { unmute } = require("@schemas/mute-schema");
 const { canInteract } = require("@utils/modUtils");
 const { getRoleByName } = require("@utils/guildUtils");

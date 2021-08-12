@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { EMBED_COLORS, GOOGLE_TRANSLATE } = require("@root/config.json");
 const { translate } = require("@utils/httpUtils");
 

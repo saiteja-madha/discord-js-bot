@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
 const { getSettings } = require("@schemas/automod-schema");
 const ascii = require("ascii-table");

@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { setPrefix } = require("@schemas/settings-schema");
 
 module.exports = class SetPrefix extends Command {

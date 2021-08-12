@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 
 module.exports = class PingCommand extends Command {
   constructor(client) {

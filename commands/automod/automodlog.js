@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { automodLogChannel } = require("@schemas/automod-schema");
 const { canSendEmbeds } = require("@utils/guildUtils");
 

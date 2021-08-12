@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { canInteract } = require("@utils/modUtils");
 
 module.exports = class SoftBan extends Command {

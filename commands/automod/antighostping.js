@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { antiGhostPing } = require("@schemas/automod-schema");
 
 module.exports = class AntiGhostPing extends Command {

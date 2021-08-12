@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { maxLines } = require("@schemas/automod-schema");
 
 module.exports = class MaxLines extends Command {

@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
 const { MESSAGES } = require("@root/config.json");
 const { getResponse } = require("@utils/httpUtils");

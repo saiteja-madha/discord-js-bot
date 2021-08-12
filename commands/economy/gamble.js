@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
 const { getConfig, addCoins } = require("@schemas/economy-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.json");

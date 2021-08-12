@@ -1,5 +1,5 @@
 const { Client, Collection } = require("discord.js");
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const path = require("path");
 const fs = require("fs");
 const { getSettings } = require("@schemas/settings-schema");

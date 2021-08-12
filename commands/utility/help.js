@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { getCommand, COMMANDS } = require("@features/command-handler");
 const { EMOJIS, EMBED_COLORS, BOT_INVITE, DISCORD_INVITE } = require("@root/config.json");
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");

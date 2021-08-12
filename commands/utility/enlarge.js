@@ -1,5 +1,5 @@
 const { Util, MessageEmbed } = require("discord.js");
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { EMBED_COLORS } = require("@root/config.json");
 const { parse } = require("twemoji-parser");
 

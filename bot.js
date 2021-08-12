@@ -49,7 +49,11 @@ const loadFeatures = (client) => {
   console.log(table.toString());
 };
 
-// useful to find out unhandled promise rejections
+// catch client errors and warnings
+client.on("error", (error) => console.log("Client Error: " + error));
+client.on("warn", (message) => console.log("Client Warning: " + message));
+
+// find unhandled promise rejections
 process.on("unhandledRejection", (reason, promise) => {
   console.log("Unhandled Rejection at:", reason.stack || reason);
 });

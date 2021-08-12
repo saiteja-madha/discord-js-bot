@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { timeformat } = require("@utils/botUtils");
 
 module.exports = class UptimeCommand extends Command {

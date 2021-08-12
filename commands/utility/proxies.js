@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { getResponse } = require("@utils/httpUtils");
 
 const PROXY_TYPES = ["all", "http", "socks4", "socks5"];

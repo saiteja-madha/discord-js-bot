@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@root/command");
+const { Command, CommandContext } = require("@root/structures");
 const { purgeMessages } = require("@utils/modUtils");
 
 module.exports = class PurgeUser extends Command {
