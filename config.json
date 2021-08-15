@@ -21,7 +21,8 @@
     "WHITE_DIAMOND_SUIT": "\u2662",
     "TICK": "\u2713",
     "X_MARK": "\u2715",
-    "CURRENCY": "\u20AA"
+    "CURRENCY": "\u20AA",
+    "WHITE_SMALL_SQUARE": "\u25AB"
   },
   "MESSAGES": {
     "API_ERROR": "Unexpected Backend Error! Try again later or contact support server"
