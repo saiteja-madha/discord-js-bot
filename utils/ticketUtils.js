@@ -5,6 +5,16 @@ const { outdent } = require("outdent");
 const { getSettings } = require("@schemas/settings-schema");
 const { sendMessage } = require("@utils/botUtils");
 
+const PERMS = [
+  "VIEW_CHANNEL",
+  "SEND_MESSAGES",
+  "EMBED_LINKS",
+  "READ_MESSAGE_HISTORY",
+  "ADD_REACTIONS",
+  "MANAGE_CHANNELS",
+  "MANAGE_MESSAGES",
+];
+
 /**
  * @param {Channel} channel
  */
@@ -27,9 +37,9 @@ function getTicketChannels(guild) {
 /**
  * @param {GuildMember} member
  */
-function getExistingTicketChannel(guild, memberId) {
+function getExistingTicketChannel(guild, userId) {
   const tktChannels = getTicketChannels(guild);
-  return tktChannels.filter((ch) => ch.topic.split("\\|")[1] === memberId).first();
+  return tktChannels.filter((ch) => ch.topic.split("|")[1] === userId).first();
 }
 
 /**
@@ -37,8 +47,9 @@ function getExistingTicketChannel(guild, memberId) {
  */
 async function parseTicketDetails(channel) {
   if (!channel.topic) return;
-  const userId = channel.topic.split("\\|")[1];
-  const title = channel.topic.split("\\|")[2];
+  const split = channel.topic?.split("|");
+  const userId = split[1];
+  const title = split[2];
   const user = await channel.client.users.fetch(userId, { cache: false }).catch((err) => {});
   return {
     title,
@@ -79,11 +90,11 @@ async function closeTicket(channel, closedBy, reason) {
     const ticketDetails = await parseTicketDetails(channel);
 
     const desc = outdent`
-    ${EMOJIS.WHITE_SMALL_SQUARE} **Server Name:** ${channel.guild.name}
-    ${EMOJIS.WHITE_SMALL_SQUARE} **Title:** ${ticketDetails.title}
-    ${EMOJIS.WHITE_SMALL_SQUARE} **Opened By:** ${ticketDetails.user ? ticketDetails.user.tag : "User left"}
-    ${EMOJIS.WHITE_SMALL_SQUARE} **Closed By:** ${closedBy ? closedBy.tag : "User left"}
-    ${EMOJIS.WHITE_SMALL_SQUARE} **Reason:** ${reason != null ? reason : "No reason provided"}
+    ${EMOJIS.ARROW} **Server Name:** ${channel.guild.name}
+    ${EMOJIS.ARROW} **Title:** ${ticketDetails.title}
+    ${EMOJIS.ARROW} **Opened By:** ${ticketDetails.user ? ticketDetails.user.tag : "User left"}
+    ${EMOJIS.ARROW} **Closed By:** ${closedBy ? closedBy.tag : "User left"}
+    ${EMOJIS.ARROW} **Reason:** ${reason != null ? reason : "No reason provided"}
     ${logsUrl == null ? "" : "\n[View Logs](" + logsUrl + ")"}
     `;
 
@@ -92,7 +103,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch((ex) => {});
     if (config.ticket.log_channel) {
-      let logChannel = channel.guild.channels.cache(logChannel);
+      let logChannel = channel.guild.channels.cache(config.ticket.log_channel);
       if (logChannel) sendMessage(logChannel, { embeds: [embed] });
     }
 
@@ -125,6 +136,7 @@ async function closeAllTickets(guild) {
 }
 
 module.exports = {
+  PERMS,
   getTicketChannels,
   getExistingTicketChannel,
   isTicketChannel,

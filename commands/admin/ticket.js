@@ -1,7 +1,12 @@
-const { setTicketLogChannel, setTicketLimit } = require("@root/schemas/settings-schema");
+const { MessageEmbed } = require("discord.js");
 const { Command, CommandContext } = require("@root/structures");
-const { canSendEmbeds } = require("@utils/guildUtils");
-const { isTicketChannel, closeTicket, closeAllTickets } = require("@utils/ticketUtils");
+const { sendMessage } = require("@root/utils/botUtils");
+const { canSendEmbeds, findMatchingRoles } = require("@utils/guildUtils");
+const { isTicketChannel, closeTicket, closeAllTickets, PERMS } = require("@utils/ticketUtils");
+const { setTicketLogChannel, setTicketLimit } = require("@schemas/settings-schema");
+const { createNewTicket } = require("@schemas/ticket-schema");
+const outdent = require("outdent");
+const { EMOJIS } = require("@root/config.json");
 
 module.exports = class Ticket extends Command {
   constructor(client) {
@@ -49,7 +54,48 @@ module.exports = class Ticket extends Command {
 /**
  * @param {CommandContext} ctx
  */
-async function setupTicket(ctx) {}
+async function setupTicket(ctx) {
+  const { message, channel, guild } = ctx;
+  const filter = (m) => m.author.id === message.author.id;
+
+  // wait for channel
+  await ctx.reply("Please `mention the channel` in which the reaction message must be sent");
+  let reply = await channel.awaitMessages({ filter, max: 1, time: 10000 });
+  let targetChannel = reply.first().mentions.channels.first();
+  if (!targetChannel) return ctx.reply("Failed to setup ticket. You did not mention a channel");
+  if (!targetChannel.isText() && !targetChannel.permissionsFor(guild.me).has(PERMS))
+    return ctx.reply("Missing permissions to send embeds in that channel");
+
+  // wait for title
+  await ctx.reply("Please enter the `title` of the ticket");
+  reply = await channel.awaitMessages({ filter, max: 1, time: 10000 });
+  let title = reply.first().content;
+
+  // wait for roles
+  await ctx.reply(outdent`What roles should have access to view the newly created tickets?
+  Please type the name of a existing role in this server.
+  Alternatively you can type \`none\``);
+  reply = await channel.awaitMessages({ filter, max: 1, time: 10000 });
+  let search = reply.first().content;
+  let role;
+  if (search.toLowerCase() !== "none") {
+    role = findMatchingRoles(guild, search)[0];
+    if (!role) return ctx.reply(`Uh oh, I couldn't find any roles called ${search}! Try again`);
+    await ctx.reply(`Alright! ${role.name} can now view the newly created tickets`);
+  }
+
+  // send an embed
+  const embed = new MessageEmbed()
+    .setAuthor(title)
+    .setDescription(`To create a ticket react with ${EMOJIS.TICKET_OPEN}`)
+    .setFooter("You can only have 1 open ticket at a time!");
+
+  const tktEmbed = await sendMessage(targetChannel, { embeds: [embed] });
+  await tktEmbed.react(EMOJIS.TICKET_OPEN);
+
+  // save to Database
+  await createNewTicket(guild.id, targetChannel.id, tktEmbed.id, title, role?.id);
+}
 
 /**
  * @param {CommandContext} ctx

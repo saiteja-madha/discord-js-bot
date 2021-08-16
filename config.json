@@ -22,7 +22,8 @@
     "TICK": "\u2713",
     "X_MARK": "\u2715",
     "CURRENCY": "\u20AA",
-    "WHITE_SMALL_SQUARE": "\u25AB"
+    "TICKET_OPEN": "🎫",
+    "TICKET_CLOSE": "🔒"
   },
   "MESSAGES": {
     "API_ERROR": "Unexpected Backend Error! Try again later or contact support server"

@@ -13,14 +13,31 @@ const Schema = mongoose.Schema({
   support_role: String,
 });
 
-const Model = mongoose.model("settings", Schema);
+const Model = mongoose.model("ticket-config", Schema);
 
 module.exports = {
   getConfig: async (guildId, channelId, messageId) => {
-    await Model.find({
+    return await Model.findOne({
       guild_id: guildId,
       channel_id: channelId,
       message_id: messageId,
     });
+  },
+
+  createNewTicket: async (guildId, channelId, messageId, title, roleId) => {
+    await Model.updateOne(
+      {
+        guild_id: guildId,
+        channel_id: channelId,
+        message_id: messageId,
+      },
+      {
+        title: title,
+        support_role: roleId,
+      },
+      {
+        upsert: true,
+      }
+    );
   },
 };
