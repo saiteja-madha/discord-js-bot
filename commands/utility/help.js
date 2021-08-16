@@ -44,6 +44,11 @@ const CMD_CATEGORIES = {
     image: "https://icons.iconarchive.com/icons/dryicons/aesthetica-2/128/community-users-icon.png",
     emoji: "\uD83E\uDEC2",
   },
+  TICKET: {
+    name: "Ticket",
+    image: "https://image.pngaaa.com/909/159909-middle.png",
+    emoji: "🎫",
+  },
   UTILITY: {
     name: "Utility",
     image: "https://icons.iconarchive.com/icons/blackvariant/button-ui-system-folders-alt/128/Utilities-icon.png",
@@ -141,6 +146,9 @@ function getCategoryHelpEmbed(ctx, category) {
       " **" +
       ctx.prefix +
       "cmd [attachment]:** Picks attachment image";
+  } else if (category === "TICKET") {
+    const cmd = getCommand("ticket");
+    return cmd.getUsageEmbed(ctx.prefix, "ticket", "TICKET Commands");
   } else {
     const commands = COMMANDS.filter((cmd) => cmd.category === category);
     if (commands.length == 0) return ctx.reply(`No commands in this category`);

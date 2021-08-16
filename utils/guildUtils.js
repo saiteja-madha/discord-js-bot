@@ -1,6 +1,6 @@
 const { Guild, TextChannel, VoiceChannel } = require("discord.js");
 
-const ROLE_MENTION = new RegExp("<@&(\\d{17,20})>", "g");
+const ROLE_MENTION = new RegExp("<?@?&?(\\d{17,20})>?", "g");
 
 /**
  * @param {Guild} guild
@@ -56,6 +56,12 @@ async function getMemberStats(guild) {
  * @param {String} query
  */
 function findMatchingRoles(guild, query) {
+  const patternMatch = ROLE_MENTION.exec(query);
+  if (patternMatch) {
+    let id = patternMatch[1];
+    let role = guild.roles.cache.filter((r) => r.id === id).first();
+    if (role) return [role];
+  }
   const idMatch = [];
   if (guild.roles.cache.has(query)) {
     idMatch.push(guild.roles.cache.get(query));
@@ -69,10 +75,10 @@ function findMatchingRoles(guild, query) {
     if (role.name === query) exact.push(role);
     if (lowerName.startsWith(query.toLowerCase())) startsWith.push(role);
     if (lowerName.includes(query.toLowerCase())) includes.push(role);
-    if (exact.length > 0) return exact;
-    if (startsWith.length > 0) return startsWith;
-    if (includes.length > 0) return includes;
   });
+  if (exact.length > 0) return exact;
+  if (startsWith.length > 0) return startsWith;
+  if (includes.length > 0) return includes;
   return [];
 }
 

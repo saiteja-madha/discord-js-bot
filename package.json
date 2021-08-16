@@ -27,6 +27,7 @@
     "mongoose": "^5.13.5",
     "os": "^0.1.2",
     "outdent": "^0.8.0",
+    "sourcebin_js": "^0.0.3-ignore",
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^13.1.0"
   },

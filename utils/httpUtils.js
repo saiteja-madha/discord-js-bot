@@ -1,5 +1,6 @@
 const axios = require("axios").default;
 const ISO6391 = require("iso-639-1");
+const sourcebin = require("sourcebin_js");
 
 /**
  * @param {String} url
@@ -61,8 +62,30 @@ async function translate(input, outputCode) {
   }
 }
 
+async function postToBin(content, title) {
+  try {
+    let response = await sourcebin.create(
+      [
+        {
+          name: " ",
+          content,
+          languageId: "text",
+        },
+      ],
+      {
+        title: title,
+        description: " ",
+      }
+    );
+    return response.url;
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
 module.exports = {
   getResponse,
   downloadImage,
   translate,
+  postToBin,
 };

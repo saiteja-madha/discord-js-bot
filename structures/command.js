@@ -11,7 +11,7 @@ class Command {
    */
 
   /**
-   * @typedef {"ADMIN" | "AUTOMOD" | "ECONOMY" | "FUN" | "IMAGE" | "INFORMATION" | "INVITE" | "MODERATION" | "OWNER" | "SOCIAL" | "UTILS" } CommandCategory
+   * @typedef {"ADMIN" | "AUTOMOD" | "ECONOMY" | "FUN" | "IMAGE" | "INFORMATION" | "INVITE" | "MODERATION" | "OWNER" | "SOCIAL" | "TICKET" | "UTILS" } CommandCategory
    */
 
   /**
@@ -191,7 +191,7 @@ class Command {
     return perms.map((perm) => "`" + permissions[perm] + "`").join(", ");
   }
 
-  sendUsage(channel, prefix, invoke, title) {
+  getUsageEmbed(prefix, invoke, title) {
     let desc = "";
     if (this.multiLineUsage) {
       let replaced = this.usage.replace(/{p}/g, prefix).replace(/{i}/g, invoke);
@@ -208,6 +208,11 @@ class Command {
 
     const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
     if (title) embed.setAuthor(title);
+    return embed;
+  }
+
+  sendUsage(channel, prefix, invoke, title) {
+    const embed = this.getUsageEmbed(prefix, invoke, title);
     sendMessage(channel, { embeds: [embed] });
   }
 

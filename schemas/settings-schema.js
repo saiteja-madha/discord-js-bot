@@ -10,6 +10,13 @@ const Schema = mongoose.Schema({
   },
   prefix: String,
   ranking_enabled: Boolean,
+  ticket: {
+    log_channel: String,
+    limit: {
+      type: Number,
+      default: 10,
+    },
+  },
 });
 
 const Model = mongoose.model("settings", Schema);
@@ -57,32 +64,14 @@ module.exports = {
     ).then(cache.remove(guildId));
   },
 
-  inviteTracking: async (guildId, status) => {
-    await Model.updateOne(
-      {
-        _id: guildId,
-      },
-      {
-        _id: guildId,
-        invite_tracking: status,
-      },
-      {
-        upsert: true,
-      }
-    ).then(cache.remove(guildId));
-  },
-
-  addInviteRank: async (guildId, roleId, invites) => {
+  setTicketLogChannel: async (guildId, channelId) => {
     const data = await Model.updateOne(
       {
         _id: guildId,
       },
       {
-        $push: {
-          invite_ranks: {
-            role_id: roleId,
-            invites: invites,
-          },
+        $set: {
+          "ticket.log_channel": channelId,
         },
       },
       {
@@ -93,16 +82,14 @@ module.exports = {
     return data;
   },
 
-  removeInviteRank: async (guildId, roleId) => {
+  setTicketLimit: async (guildId, limit) => {
     const data = await Model.updateOne(
       {
         _id: guildId,
       },
       {
-        $pull: {
-          invite_ranks: {
-            role_id: roleId,
-          },
+        $set: {
+          "ticket.limit": limit,
         },
       },
       {
