@@ -1,10 +1,15 @@
 const { getSettings } = require("@schemas/settings-schema");
 const { getConfig } = require("@schemas/ticket-schema");
 const { sendMessage } = require("@utils/botUtils");
-const { getTicketChannels, getExistingTicketChannel, isTicketChannel, closeTicket } = require("@utils/ticketUtils");
-const { Client, MessageEmbed, MessageReaction, User } = require("discord.js");
-const outdent = require("outdent");
-const { EMOJIS, EMBED_COLORS } = require("@root/config.json");
+const {
+  getTicketChannels,
+  getExistingTicketChannel,
+  isTicketChannel,
+  closeTicket,
+  openTicket,
+} = require("@utils/ticketUtils");
+const { Client, MessageReaction, User } = require("discord.js");
+const { EMOJIS } = require("@root/config.json");
 
 /**
  * @param {Client} client
@@ -32,9 +37,13 @@ async function handleNewTicket(reaction, user) {
     const settings = await getSettings(guild.id);
     const config = await getConfig(guild.id, channel.id, message.id);
     if (!config) return;
-    const existing = getTicketChannels(guild).size;
+
+    // check if user already has an open ticket
+    const alreadyExists = getExistingTicketChannel(guild, user.id);
+    if (alreadyExists) return await reaction.users.remove(user.id);
 
     // check if ticket limit is reached
+    const existing = getTicketChannels(guild).size;
     if (existing > settings.ticket.limit) {
       let sent = await sendMessage(channel, "Ticket limit reached! Try again later");
       setTimeout(() => {
@@ -43,68 +52,7 @@ async function handleNewTicket(reaction, user) {
       return;
     }
 
-    // check if user already has an open ticket
-    const alreadyExists = getExistingTicketChannel(guild, user.id);
-    if (alreadyExists) return await reaction.users.remove(user.id);
-
-    // create a channel
-    const ticketNumber = (existing + 1).toString();
-    const permissionOverwrites = [
-      {
-        id: guild.roles.everyone,
-        deny: ["VIEW_CHANNEL"],
-      },
-      {
-        id: user.id,
-        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
-      },
-      {
-        id: guild.me.roles.highest.id,
-        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
-      },
-    ];
-
-    if (config.support_role)
-      permissionOverwrites.push({
-        id: config.support_role,
-        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
-      });
-
-    const tktChannel = await guild.channels.create(`tіcket-${ticketNumber}`, {
-      type: "GUILD_TEXT",
-      topic: `tіcket|${user.id}|${config.title}`,
-      permissionOverwrites,
-    });
-
-    let embed = new MessageEmbed()
-      .setAuthor("Ticket #" + ticketNumber)
-      .setDescription(
-        outdent`Hello ${user.toString()}
-        Support will be with you shortly\
-        
-        **Ticket Reason:**\
-        ${config.title}`
-      )
-      .setFooter("To close your ticket react to the lock below");
-
-    const sent = await sendMessage(tktChannel, { content: user.toString(), embeds: [embed] });
-    await sent.react(EMOJIS.TICKET_CLOSE);
-
-    const desc = outdent`
-    ${EMOJIS.ARROW} **Server Name:** ${channel.guild.name}
-    ${EMOJIS.ARROW} **Title:** ${config.title}
-    ${EMOJIS.ARROW} **Reason:** ${config.reason ? config.reason : "No reason provided"}
-    
-    [View Channel](${sent.url})
-  `;
-    const dmEmbed = new MessageEmbed()
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setAuthor("Ticket Created")
-      .setDescription(desc);
-
-    user.send({ embeds: [dmEmbed] }).catch((err) => {});
-  } catch (ex) {
-    console.log(ex);
+    await openTicket(guild, user, config.title, config.support_role);
   } finally {
     await reaction.users.remove(user.id);
   }

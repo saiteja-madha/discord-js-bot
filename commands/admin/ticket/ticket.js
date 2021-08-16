@@ -139,10 +139,13 @@ async function setupTicket(ctx) {
  */
 async function setupLogChannel(ctx) {
   if (ctx.message.mentions.channels.size === 0)
-    return await ctx.message.reply("Please mention a channel name where ticket logs must be sent");
+    return await ctx.message.reply(
+      "Incorrect Usage! You need to mention a channel name where ticket logs must be sent"
+    );
 
   const target = ctx.message.mentions.channels.first();
-  if (!canSendEmbeds(target)) return await ctx.reply("I do have have permission to send embed to " + target.toString());
+  if (!canSendEmbeds(target))
+    return await ctx.reply("Oops! I do have have permission to send embed to " + target.toString());
 
   setTicketLogChannel(ctx.guild.id, target.id).then(
     ctx.reply("Configuration saved! Newly created ticket logs will be sent to " + target.toString())
@@ -154,8 +157,11 @@ async function setupLogChannel(ctx) {
  */
 async function setupLimit(ctx) {
   const limit = ctx.args[1];
-  if (!limit || isNaN(limit)) return ctx.message.reply("Please enter an integer input");
-  setTicketLimit(ctx.guild.id, limit).then(ctx.reply("Configuration saved"));
+  if (!limit || isNaN(limit)) return ctx.message.reply(`Incorrect usage! You did not provide a valid integer input`);
+  if (Number.parseInt(limit) < 5) return ctx.message.reply("Ticket limit cannot be less than 5");
+  setTicketLimit(ctx.guild.id, limit).then(
+    ctx.reply(`Configuration saved. You can now have a maximum of \`${limit}\` open tickets`)
+  );
 }
 
 /**

@@ -70,8 +70,8 @@ module.exports = {
         _id: guildId,
       },
       {
-        ticket: {
-          log_channel: channelId,
+        $set: {
+          "ticket.log_channel": channelId,
         },
       },
       {
@@ -88,8 +88,8 @@ module.exports = {
         _id: guildId,
       },
       {
-        ticket: {
-          limit,
+        $set: {
+          "ticket.limit": limit,
         },
       },
       {

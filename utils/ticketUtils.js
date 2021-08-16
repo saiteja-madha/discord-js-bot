@@ -138,6 +138,76 @@ async function closeAllTickets(guild) {
   return [success, failed];
 }
 
+/**
+ * @param {Guild} guild
+ * @param {User} user
+ */
+async function openTicket(guild, user, title, supportRole) {
+  try {
+    const existing = getTicketChannels(guild).size;
+    const ticketNumber = (existing + 1).toString();
+    const permissionOverwrites = [
+      {
+        id: guild.roles.everyone,
+        deny: ["VIEW_CHANNEL"],
+      },
+      {
+        id: user.id,
+        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+      },
+      {
+        id: guild.me.roles.highest.id,
+        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+      },
+    ];
+
+    if (supportRole)
+      permissionOverwrites.push({
+        id: supportRole,
+        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+      });
+
+    const tktChannel = await guild.channels.create(`tіcket-${ticketNumber}`, {
+      type: "GUILD_TEXT",
+      topic: `tіcket|${user.id}|${title}`,
+      permissionOverwrites,
+    });
+
+    let embed = new MessageEmbed()
+      .setAuthor("Ticket #" + ticketNumber)
+      .setDescription(
+        outdent`
+      Hello ${user.toString()}
+      Support will be with you shortly
+        
+      **Ticket Reason:**
+      ${title}`
+      )
+      .setFooter("To close your ticket react to the lock below");
+
+    const sent = await sendMessage(tktChannel, { content: user.toString(), embeds: [embed] });
+    await sent.react(EMOJIS.TICKET_CLOSE);
+
+    const desc = outdent`
+    ${EMOJIS.ARROW} **Server Name:** ${guild.name}
+    ${EMOJIS.ARROW} **Title:** ${title}
+    ${EMOJIS.ARROW} **Ticket:** #${ticketNumber}
+    
+    [View Channel](${sent.url})
+  `;
+    const dmEmbed = new MessageEmbed()
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setAuthor("Ticket Created")
+      .setDescription(desc);
+
+    user.send({ embeds: [dmEmbed] }).catch((err) => {});
+    return true;
+  } catch (ex) {
+    console.log(ex);
+    return false;
+  }
+}
+
 module.exports = {
   PERMS,
   getTicketChannels,
@@ -145,4 +215,5 @@ module.exports = {
   isTicketChannel,
   closeTicket,
   closeAllTickets,
+  openTicket,
 };
