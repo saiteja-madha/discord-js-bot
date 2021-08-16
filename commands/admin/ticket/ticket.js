@@ -16,6 +16,18 @@ module.exports = class Ticket extends Command {
       name: "ticket",
       description: "various ticketing commands",
       minArgsCount: 1,
+      multiLineUsage: true,
+      usage: outdent`
+      \`{p}{i} setup\` : start an interactive ticket setup
+      \`{p}{i} log <#channel>\` : setup log channel for tickets
+      \`{p}{i} limit <number>\` : set maximum number of concurrent open tickets
+      \`{p}{i} close\` : close the ticket
+      \`{p}{i} closeall\` : close all open tickets
+      \`{p}{i} add <userId|roleId>\` : add user/role to the ticket
+      \`{p}{i} remove <userId|roleId>\` : remove user/role from the ticket
+      `,
+      category: "TICKET",
+      userPermissions: ["ADMINISTRATOR"],
     });
   }
 
@@ -48,7 +60,7 @@ module.exports = class Ticket extends Command {
         return await removeFromTicket(ctx);
 
       default:
-        ctx.reply("Invalid input");
+        this.sendUsage(ctx.channel, ctx.prefix, ctx.invoke, "Incorrect Input");
     }
   }
 };
