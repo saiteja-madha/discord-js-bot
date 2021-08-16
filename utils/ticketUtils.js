@@ -90,7 +90,6 @@ async function closeTicket(channel, closedBy, reason) {
     const ticketDetails = await parseTicketDetails(channel);
 
     const desc = outdent`
-    ${EMOJIS.ARROW} **Server Name:** ${channel.guild.name}
     ${EMOJIS.ARROW} **Title:** ${ticketDetails.title}
     ${EMOJIS.ARROW} **Opened By:** ${ticketDetails.user ? ticketDetails.user.tag : "User left"}
     ${EMOJIS.ARROW} **Closed By:** ${closedBy ? closedBy.tag : "User left"}
@@ -101,9 +100,12 @@ async function closeTicket(channel, closedBy, reason) {
     await channel.delete();
     const embed = new MessageEmbed().setAuthor("Ticket Closed").setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
 
+    // send embed to user
     if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch((ex) => {});
+
+    // send embed to log channel
     if (config.ticket.log_channel) {
-      let logChannel = channel.guild.channels.cache(config.ticket.log_channel);
+      let logChannel = channel.guild.channels.cache.find((ch) => ch.id === config.ticket.log_channel);
       if (logChannel) sendMessage(logChannel, { embeds: [embed] });
     }
 
@@ -127,8 +129,9 @@ async function closeAllTickets(guild) {
   const channels = getTicketChannels(guild);
   let success = 0;
   let failed = 0;
-  for (const ch of channels) {
-    const status = await closeTicket(ch, guild.me, "Force close all open tickets");
+
+  for (const [id, ch] of channels) {
+    const status = await closeTicket(ch, guild.me.user, "Force close all open tickets");
     if (status.success) success++;
     else failed++;
   }

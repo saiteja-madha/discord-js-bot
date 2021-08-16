@@ -1,12 +1,14 @@
 const { MessageEmbed } = require("discord.js");
 const { Command, CommandContext } = require("@root/structures");
-const { sendMessage } = require("@root/utils/botUtils");
+const { sendMessage } = require("@utils/botUtils");
 const { canSendEmbeds, findMatchingRoles } = require("@utils/guildUtils");
 const { isTicketChannel, closeTicket, closeAllTickets, PERMS } = require("@utils/ticketUtils");
 const { setTicketLogChannel, setTicketLimit } = require("@schemas/settings-schema");
 const { createNewTicket } = require("@schemas/ticket-schema");
 const outdent = require("outdent");
-const { EMOJIS } = require("@root/config.json");
+const { EMBED_COLORS, EMOJIS } = require("@root/config.json");
+
+const SETUP_TIMEOUT = 30 * 1000;
 
 module.exports = class Ticket extends Command {
   constructor(client) {
@@ -57,44 +59,67 @@ module.exports = class Ticket extends Command {
 async function setupTicket(ctx) {
   const { message, channel, guild } = ctx;
   const filter = (m) => m.author.id === message.author.id;
+  let embed = new MessageEmbed()
+    .setAuthor("Ticket Setup")
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setFooter("Type cancel to cancel setup");
 
-  // wait for channel
-  await ctx.reply("Please `mention the channel` in which the reaction message must be sent");
-  let reply = await channel.awaitMessages({ filter, max: 1, time: 10000 });
-  let targetChannel = reply.first().mentions.channels.first();
-  if (!targetChannel) return ctx.reply("Failed to setup ticket. You did not mention a channel");
-  if (!targetChannel.isText() && !targetChannel.permissionsFor(guild.me).has(PERMS))
-    return ctx.reply("Missing permissions to send embeds in that channel");
+  let targetChannel, title, role;
+  try {
+    // wait for channel
+    await ctx.reply({
+      embeds: [embed.setDescription("Please `mention the channel` in which the reaction message must be sent")],
+    });
+    let reply = await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT });
+    if (reply.first().content === "cancel") return ctx.reply("Ticket setup has been cancelled");
+    targetChannel = reply.first().mentions.channels.first();
+    if (!targetChannel) return ctx.reply("Ticket setup has been cancelled. You did not mention a channel");
+    if (!targetChannel.isText() && !targetChannel.permissionsFor(guild.me).has(PERMS))
+      return ctx.reply(
+        `Ticket setup has been cancelled. I do not have permission to send embed to ${targetChannel.toString()}`
+      );
 
-  // wait for title
-  await ctx.reply("Please enter the `title` of the ticket");
-  reply = await channel.awaitMessages({ filter, max: 1, time: 10000 });
-  let title = reply.first().content;
+    // wait for title
+    await ctx.reply({ embeds: [embed.setDescription("Please enter the `title` of the ticket")] });
+    reply = await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT });
+    if (reply.first().content === "cancel") return ctx.reply("Ticket setup has been cancelled");
+    title = reply.first().content;
 
-  // wait for roles
-  await ctx.reply(outdent`What roles should have access to view the newly created tickets?
-  Please type the name of a existing role in this server.
-  Alternatively you can type \`none\``);
-  reply = await channel.awaitMessages({ filter, max: 1, time: 10000 });
-  let search = reply.first().content;
-  let role;
-  if (search.toLowerCase() !== "none") {
-    role = findMatchingRoles(guild, search)[0];
-    if (!role) return ctx.reply(`Uh oh, I couldn't find any roles called ${search}! Try again`);
-    await ctx.reply(`Alright! ${role.name} can now view the newly created tickets`);
+    // wait for roles
+    let desc = outdent`What roles should have access to view the newly created tickets?
+  Please type the name of a existing role in this server.\n
+  Alternatively you can type \`none\``;
+    await ctx.reply({ embeds: [embed.setDescription(desc)] });
+    reply = await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT });
+    let search = reply.first().content;
+    if (search === "cancel") return ctx.reply("Ticket setup has been cancelled");
+    if (search.toLowerCase() !== "none") {
+      role = findMatchingRoles(guild, search)[0];
+      if (!role) return ctx.reply(`Uh oh, I couldn't find any roles called ${search}! Ticket setup has been cancelled`);
+      await ctx.reply(`Alright! \`${role.name}\` can now view the newly created tickets`);
+    }
+  } catch (ex) {
+    return ctx.reply("No answer for 30 seconds, setup has cancelled");
   }
 
-  // send an embed
-  const embed = new MessageEmbed()
-    .setAuthor(title)
-    .setDescription(`To create a ticket react with ${EMOJIS.TICKET_OPEN}`)
-    .setFooter("You can only have 1 open ticket at a time!");
+  try {
+    // send an embed
+    embed
+      .setAuthor(title)
+      .setDescription(`To create a ticket react with ${EMOJIS.TICKET_OPEN}`)
+      .setFooter("You can only have 1 open ticket at a time!");
 
-  const tktEmbed = await sendMessage(targetChannel, { embeds: [embed] });
-  await tktEmbed.react(EMOJIS.TICKET_OPEN);
+    const tktEmbed = await sendMessage(targetChannel, { embeds: [embed] });
+    await tktEmbed.react(EMOJIS.TICKET_OPEN);
 
-  // save to Database
-  await createNewTicket(guild.id, targetChannel.id, tktEmbed.id, title, role?.id);
+    // save to Database
+    await createNewTicket(guild.id, targetChannel.id, tktEmbed.id, title, role?.id);
+
+    // send success
+    ctx.reply("Configuration saved! Ticket message is now setup 🎉");
+  } catch (ex) {
+    ctx.reply("Unexpected error occurred! Setup has cancelled");
+  }
 }
 
 /**
@@ -149,15 +174,18 @@ async function addToTicket(ctx) {
   if (!isTicketChannel(ctx.channel)) return await ctx.message.reply("This command can only be used in ticket channel");
 
   const inputId = ctx.args[1];
-  if (!inputId || isNaN(inputId)) ctx.reply("Oops! You need to input a valid userId/roleId");
+  if (!inputId || isNaN(inputId)) return ctx.reply("Oops! You need to input a valid userId/roleId");
 
-  ctx.channel.permissionOverwrites
-    .create(inputId, {
+  try {
+    await ctx.channel.permissionOverwrites.create(inputId, {
       VIEW_CHANNEL: true,
       SEND_MESSAGES: true,
-    })
-    .then(() => ctx.reply("Done!"))
-    .catch(ctx.reply("Failed to add user/role. Did you provide a valid ID?"));
+    });
+
+    ctx.message.reply("Done");
+  } catch (ex) {
+    ctx.reply("Failed to add user/role. Did you provide a valid ID?");
+  }
 }
 
 /**
@@ -167,13 +195,16 @@ async function removeFromTicket(ctx) {
   if (!isTicketChannel(ctx.channel)) return await ctx.message.reply("This command can only be used in ticket channel");
 
   const inputId = ctx.args[1];
-  if (!inputId || isNaN(inputId)) ctx.reply("Oops! You need to input a valid userId/roleId");
+  if (!inputId || isNaN(inputId)) return ctx.reply("Oops! You need to input a valid userId/roleId");
 
-  ctx.channel.permissionOverwrites
-    .create(inputId, {
+  try {
+    ctx.channel.permissionOverwrites.create(inputId, {
       VIEW_CHANNEL: false,
       SEND_MESSAGES: false,
-    })
-    .then(() => ctx.reply("Done!"))
-    .catch(ctx.reply("Failed to remove user/role. Did you provide a valid ID?"));
+    });
+
+    ctx.message.reply("Done");
+  } catch (ex) {
+    ctx.reply("Failed to remove user/role. Did you provide a valid ID?");
+  }
 }

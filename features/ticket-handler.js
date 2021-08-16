@@ -79,7 +79,11 @@ async function handleNewTicket(reaction, user) {
     let embed = new MessageEmbed()
       .setAuthor("Ticket #" + ticketNumber)
       .setDescription(
-        `Hello ${user.toString()}\nSupport will be with you shortly\n\n**Ticket Reason:**\n${config.title}`
+        outdent`Hello ${user.toString()}
+        Support will be with you shortly\
+        
+        **Ticket Reason:**\
+        ${config.title}`
       )
       .setFooter("To close your ticket react to the lock below");
 
