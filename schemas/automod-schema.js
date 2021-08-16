@@ -17,7 +17,7 @@ const Schema = mongoose.Schema({
   max_lines: Number,
 });
 
-const Model = mongoose.model("automod", Schema);
+const Model = mongoose.model("automod-config", Schema);
 
 module.exports = {
   getSettings: async (guildId) => {
