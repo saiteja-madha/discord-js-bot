@@ -9,7 +9,7 @@ const {
   openTicket,
 } = require("@utils/ticketUtils");
 const { Client, MessageReaction, User } = require("discord.js");
-const { EMOJIS } = require("@root/config.json");
+const { EMOJIS } = require("@root/config.js");
 
 /**
  * @param {Client} client

@@ -1,5 +1,5 @@
 const { Message } = require("discord.js");
-const { IMAGE_API } = require("@root/config.json");
+const { IMAGE_API } = require("@root/config.js");
 const { getMember } = require("./botUtils");
 
 /**

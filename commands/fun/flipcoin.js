@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
-const { EMBED_COLORS } = require("@root/config.json");
+const { EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class FlipCoinCommand extends Command {
   constructor(client) {

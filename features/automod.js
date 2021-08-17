@@ -1,8 +1,8 @@
 const { Client, Message } = require("discord.js");
 const { Collection, MessageEmbed, TextBasedChannels } = require("discord.js");
-const { getSettings, automodLogChannel } = require("@schemas/automod-schema");
+const { getSettings, automodLogChannel } = require("@schemas/settings-schema");
 const { containsLink, containsDiscordInvite } = require("@utils/miscUtils");
-const { EMOJIS } = require("@root/config.json");
+const { EMOJIS } = require("@root/config.js");
 const { sendMessage } = require("@utils/botUtils");
 
 const MESSAGE_CACHE = new Collection();
@@ -14,7 +14,7 @@ function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
 
-    const settings = await getSettings(message.channel.guild.id);
+    const settings = (await getSettings(message.channel.guild.id)).automod;
     if (!settings) return;
 
     if (settings.anti_ghostping) {
@@ -35,15 +35,15 @@ function run(client) {
     if (message.author.bot || message.channel.type === "DM") return;
 
     const { guild } = message.channel.guild;
-    const settings = await getSettings(guild.id);
+    const settings = (await getSettings(guild.id)).automod;
 
-    if (!settings || !settings.anti_ghostping || !settings.automodlog_channel) return;
+    if (!settings || !settings.anti_ghostping || !settings.log_channel) return;
     const key = `${guild.id}|${message.channel.id}|${message.id}`;
 
     // deleted message has mentions and was previously cached
     if (MESSAGE_CACHE.has(key)) {
       const cachedMessage = MESSAGE_CACHE.get(key);
-      const logChannel = guild.channels.cache.get(settings.automodlog_channel);
+      const logChannel = guild.channels.cache.get(settings.log_channel);
       if (!logChannel) return;
 
       const embed = new MessageEmbed()
@@ -74,7 +74,7 @@ function performAutomod(message, settings) {
   if (!shouldModerate(message)) return;
   const { channel, content, author, mentions } = message;
 
-  const logChannel = settings.automodlog_channel ? channel.guild.channels.cache.get(settings.automodlog_channel) : null;
+  const logChannel = settings.log_channel ? channel.guild.channels.cache.get(settings.log_channel) : null;
   let str = "";
 
   str += "Author: `" + author.tag + "`\n";

@@ -1,7 +1,7 @@
 const { PermissionResolvable, Client, MessageEmbed } = require("discord.js");
 const { permissions, sendMessage } = require("@utils/botUtils");
 const CommandContext = require("./command-context");
-const { EMBED_COLORS } = require("@root/config.json");
+const { EMBED_COLORS } = require("@root/config.js");
 
 class Command {
   /**

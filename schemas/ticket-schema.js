@@ -21,7 +21,7 @@ module.exports = {
       guild_id: guildId,
       channel_id: channelId,
       message_id: messageId,
-    });
+    }).lean();
   },
 
   createNewTicket: async (guildId, channelId, messageId, title, roleId) => {

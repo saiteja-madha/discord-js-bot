@@ -1,5 +1,5 @@
 const { Client, Guild, MessageEmbed, WebhookClient } = require("discord.js");
-const { EMBED_COLORS } = require("@root/config.json");
+const { EMBED_COLORS } = require("@root/config.js");
 const { registerGuild, updateGuildLeft } = require("@schemas/guild-data");
 const webhookClient = new WebhookClient({ url: process.env.JOIN_LEAVE_WEBHOOK });
 

@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
 const { getConfig, addCoins } = require("@schemas/economy-schema");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.json");
+const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { getRandomInt } = require("@utils/miscUtils");
 
 module.exports = class Gamble extends Command {

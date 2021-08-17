@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
-const { EMOJIS, EMBED_COLORS } = require("@root/config.json");
+const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const moment = require("moment");
 
 module.exports = class GuildInfoCommand extends Command {

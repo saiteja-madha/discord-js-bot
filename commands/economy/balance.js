@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
 const { getConfig } = require("@schemas/economy-schema");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.json");
+const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { getMember } = require("@utils/botUtils");
 
 module.exports = class Balance extends Command {

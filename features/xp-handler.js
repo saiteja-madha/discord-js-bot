@@ -2,7 +2,7 @@ const { Client, Collection } = require("discord.js");
 const { getSettings } = require("@schemas/settings-schema");
 const { incrementXP, setLevel } = require("@schemas/profile-schema");
 const { getRandomInt } = require("@utils/miscUtils");
-const { DEFAULT_LVL_UP_MSG } = require("@root/config.json");
+const { DEFAULT_LVL_UP_MSG } = require("@root/config.js");
 const { sendMessage } = require("@utils/botUtils");
 
 const XP_COOLDOWN = new Collection();

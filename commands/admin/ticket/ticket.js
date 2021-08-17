@@ -6,7 +6,7 @@ const { isTicketChannel, closeTicket, closeAllTickets, PERMS } = require("@utils
 const { setTicketLogChannel, setTicketLimit } = require("@schemas/settings-schema");
 const { createNewTicket } = require("@schemas/ticket-schema");
 const outdent = require("outdent");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.json");
+const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 
 const SETUP_TIMEOUT = 30 * 1000;
 

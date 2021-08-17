@@ -23,7 +23,7 @@ module.exports = {
     return await Model.findOne({
       guild_id: guildId,
       member_id: memberId,
-    });
+    }).lean();
   },
 
   addCoins: async (guildId, memberId, coins) => {

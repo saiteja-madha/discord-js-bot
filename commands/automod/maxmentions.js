@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@root/structures");
-const { maxMentions } = require("@schemas/automod-schema");
+const { maxMentions } = require("@schemas/settings-schema");
 
 module.exports = class MaxMentions extends Command {
   constructor(client) {

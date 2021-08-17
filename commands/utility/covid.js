@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { Command, CommandContext } = require("@root/structures");
-const { MESSAGES, EMBED_COLORS } = require("@root/config.json");
+const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 const timestampToDate = require("timestamp-to-date");
 

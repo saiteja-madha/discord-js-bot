@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
-const { MESSAGES } = require("@root/config.json");
+const { MESSAGES } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 const outdent = require("outdent");
 

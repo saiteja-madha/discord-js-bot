@@ -3,7 +3,7 @@ const { Command, CommandContext } = require("@root/structures");
 const path = require("path");
 const fs = require("fs");
 const { getSettings } = require("@schemas/settings-schema");
-const { PREFIX: DEFAULT_PREFIX } = require("@root/config.json");
+const { PREFIX: DEFAULT_PREFIX } = require("@root/config.js");
 const { sendMessage } = require("@root/utils/botUtils");
 
 const COMMAND_INDEX = new Collection();

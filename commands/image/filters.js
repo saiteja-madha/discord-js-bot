@@ -2,7 +2,7 @@ const { MessageEmbed, MessageAttachment } = require("discord.js");
 const { Command, CommandContext } = require("@root/structures");
 const { downloadImage } = require("@utils/httpUtils");
 const { getImageFromCommand, getFilter } = require("@utils/imageUtils");
-const { EMBED_COLORS } = require("@root/config.json");
+const { EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class Filters extends Command {
   constructor(client) {

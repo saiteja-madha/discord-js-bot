@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@root/structures");
-const { antiInvites } = require("@schemas/automod-schema");
+const { antiInvites } = require("@schemas/settings-schema");
 
 module.exports = class AntiInvites extends Command {
   constructor(client) {

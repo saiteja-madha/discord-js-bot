@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
 const { timeformat } = require("@utils/botUtils");
-const { EMOJIS, EMBED_COLORS, BOT_INVITE, DISCORD_INVITE } = require("@root/config.json");
+const { EMOJIS, EMBED_COLORS, BOT_INVITE, DISCORD_INVITE } = require("@root/config.js");
 const os = require("os");
 const outdent = require("outdent");
 

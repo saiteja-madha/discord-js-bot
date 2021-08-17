@@ -1,6 +1,6 @@
 const { Util, MessageEmbed } = require("discord.js");
 const { Command, CommandContext } = require("@root/structures");
-const { EMBED_COLORS } = require("@root/config.json");
+const { EMBED_COLORS } = require("@root/config.js");
 const { parse } = require("twemoji-parser");
 
 module.exports = class EnlargeCommand extends Command {

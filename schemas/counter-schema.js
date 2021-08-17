@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { CACHE_SIZE } = require("@root/config.json");
+const { CACHE_SIZE } = require("@root/config.js");
 const Cache = require("@utils/cache");
 const cache = new Cache(CACHE_SIZE);
 
@@ -29,7 +29,7 @@ module.exports = {
         guildId,
         await Model.findOne({
           _id: guildId,
-        })
+        }).lean()
       );
     }
     return cache.get(guildId);

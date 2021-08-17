@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@root/structures");
 const { MessageEmbed } = require("discord.js");
-const { EMOJIS, EMBED_COLORS } = require("@root/config.json");
+const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const { getMember } = require("@utils/botUtils");
 
 module.exports = class AvatarCommand extends Command {

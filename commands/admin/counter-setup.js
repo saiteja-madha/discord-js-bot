@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const { Command, CommandContext } = require("@root/structures");
 const db = require("@schemas/counter-schema");
-const { EMOJIS, EMBED_COLORS } = require("@root/config.json");
+const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const { getMemberStats } = require("@utils/guildUtils");
 
 module.exports = class CounterSetup extends Command {

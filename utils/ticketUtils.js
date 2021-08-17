@@ -1,6 +1,6 @@
 const { Channel, Guild, GuildMember, TextBasedChannels, MessageEmbed, User } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.json");
+const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { outdent } = require("outdent");
 const { getSettings } = require("@schemas/settings-schema");
 const { sendMessage } = require("@utils/botUtils");
