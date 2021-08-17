@@ -24,15 +24,15 @@ module.exports = class AutoModStatus extends Command {
     let table = new ascii("Automod Status");
     table.setHeading("Feature", "Status");
 
-    const logChannel = settings?.log_channel ? guild.channels.cache.get(settings?.log_channel).name : "Not Configured";
+    const logChannel = settings.log_channel ? guild.channels.cache.get(settings.log_channel).name : "Not Configured";
 
     table
-      .addRow("Max Lines", settings?.max_lines || "NA")
-      .addRow("Max Mentions", settings?.max_mentions || "NA")
-      .addRow("Max Role Mentions", settings?.max_role_mentions || "NA")
-      .addRow("AntiLinks", settings?.anti_links ? EMOJIS.TICK : EMOJIS.X_MARK)
-      .addRow("AntiInvites", settings?.anti_invites ? EMOJIS.TICK : EMOJIS.X_MARK)
-      .addRow("AntiGhostPing", settings?.anti_ghostping ? EMOJIS.TICK : EMOJIS.X_MARK);
+      .addRow("Max Lines", settings.max_lines || "NA")
+      .addRow("Max Mentions", settings.max_mentions || "NA")
+      .addRow("Max Role Mentions", settings.max_role_mentions || "NA")
+      .addRow("AntiLinks", settings.anti_links ? EMOJIS.TICK : EMOJIS.X_MARK)
+      .addRow("AntiInvites", settings.anti_invites ? EMOJIS.TICK : EMOJIS.X_MARK)
+      .addRow("AntiGhostPing", settings.anti_ghostping ? EMOJIS.TICK : EMOJIS.X_MARK);
 
     const embed = new MessageEmbed()
       .setAuthor("Automod Status")

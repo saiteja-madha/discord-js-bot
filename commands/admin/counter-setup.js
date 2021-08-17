@@ -72,7 +72,7 @@ module.exports = class CounterSetup extends Command {
  * @param {CommandContext} ctx
  */
 async function sendStatus(ctx) {
-  const { message, guild } = ctx;
+  const { guild } = ctx;
   const config = await db.getSettings(guild.id);
 
   if (!config) return ctx.reply("No counter channel has been configured on this guild");

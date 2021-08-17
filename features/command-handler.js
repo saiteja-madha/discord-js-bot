@@ -3,8 +3,7 @@ const { Command, CommandContext } = require("@root/structures");
 const path = require("path");
 const fs = require("fs");
 const { getSettings } = require("@schemas/settings-schema");
-const { PREFIX: DEFAULT_PREFIX } = require("@root/config.js");
-const { sendMessage } = require("@root/utils/botUtils");
+const { sendMessage } = require("@utils/botUtils");
 
 const COMMAND_INDEX = new Collection();
 const COMMANDS = [];
@@ -33,7 +32,7 @@ function run(client) {
     if (message.channel.type === "DM" || message.author.bot || !message.channel.guild) return;
 
     const settings = await getSettings(message.channel.guild.id);
-    const prefix = settings?.prefix || DEFAULT_PREFIX;
+    const prefix = settings.prefix;
 
     if (!message.content.startsWith(prefix)) return;
 

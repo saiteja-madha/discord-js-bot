@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const leanDefaults = require("mongoose-lean-defaults").default;
 const { CACHE_SIZE, PREFIX } = require("@root/config.js");
 const Cache = require("@utils/cache");
 const cache = new Cache(CACHE_SIZE);
@@ -29,8 +30,24 @@ const Schema = mongoose.Schema({
     max_role_mentions: Number,
     max_lines: Number,
   },
+  invite: {
+    tracking: Boolean,
+    ranks: [
+      {
+        invites: {
+          type: String,
+          required: true,
+        },
+        role_id: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+  },
 });
 
+Schema.plugin(leanDefaults);
 const Model = mongoose.model("settings", Schema);
 
 module.exports = {
@@ -40,7 +57,7 @@ module.exports = {
         guildId,
         await Model.findOne({
           _id: guildId,
-        }).lean()
+        }).lean({ defaults: true })
       );
     }
     return cache.get(guildId);
@@ -143,6 +160,43 @@ module.exports = {
       { _id: guildId },
       {
         $set: { "automod.max_lines": amount },
+      },
+      { upsert: true }
+    ).then(cache.remove(guildId));
+  },
+
+  inviteTracking: async (guildId, status) => {
+    await Model.updateOne(
+      { _id: guildId },
+      {
+        $set: { "invite.tracking": status },
+      },
+      { upsert: true }
+    ).then(cache.remove(guildId));
+  },
+
+  addInviteRank: async (guildId, roleId, invites) => {
+    return await Model.updateOne(
+      { _id: guildId },
+      {
+        $push: {
+          "invites.ranks": {
+            role_id: roleId,
+            invites: invites,
+          },
+        },
+      },
+      { upsert: true }
+    ).then(cache.remove(guildId));
+  },
+
+  removeInviteRank: async (guildId, roleId) => {
+    return await Model.updateOne(
+      { _id: guildId },
+      {
+        $pull: {
+          "invites.ranks": { role_id: roleId },
+        },
       },
       { upsert: true }
     ).then(cache.remove(guildId));

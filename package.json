@@ -25,6 +25,7 @@
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "mongoose": "^5.13.7",
+    "mongoose-lean-defaults": "^2.0.1",
     "os": "^0.1.2",
     "outdent": "^0.8.0",
     "sourcebin_js": "^0.0.3-ignore",

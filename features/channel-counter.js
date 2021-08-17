@@ -34,6 +34,9 @@ async function run(client) {
 
     if (!guild || !user) return;
 
+    const config = await db.getSettings(guild.id);
+    if (!config) return;
+
     // update bot count in database
     if (user.bot) await db.updateBotCount(guild.id, -1, true);
 
