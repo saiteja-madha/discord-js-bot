@@ -43,10 +43,11 @@
   ],
   "_moduleAliases": {
     "@root": ".",
-    "@commands": "commands/",
-    "@database": "database/",
-    "@features": "features/",
-    "@schemas": "schemas/",
-    "@utils": "utils/"
+    "@commands": "src/commands/",
+    "@database": "src/database/",
+    "@features": "src/features/",
+    "@schemas": "src/schemas/",
+    "@src": "src/",
+    "@utils": "src/utils/"
   }
 }

@@ -47,7 +47,7 @@ const loadFeatures = (client) => {
       }
     }
   };
-  readFeatures("features");
+  readFeatures("src/features");
   console.log(table.toString());
 };
 
