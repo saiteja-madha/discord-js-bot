@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const leanDefaults = require("mongoose-lean-defaults").default;
 const { CACHE_SIZE, PREFIX } = require("@root/config.js");
 const Cache = require("@utils/cache");
 const cache = new Cache(CACHE_SIZE);
@@ -47,7 +46,6 @@ const Schema = mongoose.Schema({
   },
 });
 
-Schema.plugin(leanDefaults);
 const Model = mongoose.model("settings", Schema);
 
 module.exports = {

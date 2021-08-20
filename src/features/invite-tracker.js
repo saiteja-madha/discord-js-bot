@@ -65,7 +65,7 @@ async function run(client) {
  */
 async function shouldInvitesBeTracked(guild) {
   const settings = await getSettings(guild.id);
-  return settings.invite.tracking && guild.me.permissions.has("MANAGE_GUILD");
+  return settings && settings.invite.tracking && guild.me.permissions.has("MANAGE_GUILD");
 }
 
 /**
@@ -86,7 +86,7 @@ async function cacheGuildInvites(guild) {
  */
 async function checkInviteRewards(guild, inviterData, isAdded) {
   const settings = await getSettings(guild.id);
-  if (settings.invite.ranks.length > 0 && inviterData?.inviter_id) {
+  if (settings && settings.invite.ranks.length > 0 && inviterData?.inviter_id) {
     let inviter = await guild.members.fetch(inviterData?.inviter_id).catch((ex) => {});
     if (!inviter) return;
 

@@ -13,7 +13,7 @@ const MESSAGE_CACHE = new Collection();
 function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
-    const settings = (await getSettings(message.channel.guild.id)).automod;
+    const settings = (await getSettings(message.channel.guild.id))?.automod;
     if (!settings) return;
 
     if (settings.anti_ghostping) {
@@ -34,7 +34,7 @@ function run(client) {
     if (message.author.bot || message.channel.type === "DM") return;
 
     const { guild } = message.channel.guild;
-    const settings = (await getSettings(guild.id)).automod;
+    const settings = (await getSettings(guild.id))?.automod;
 
     if (!settings || !settings.anti_ghostping || !settings.log_channel) return;
     const key = `${guild.id}|${message.channel.id}|${message.id}`;
