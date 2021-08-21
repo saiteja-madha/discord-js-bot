@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { CACHE_SIZE, PREFIX } = require("@root/config.js");
-const Cache = require("@utils/cache");
-const cache = new Cache(CACHE_SIZE);
+const { FixedSizeCache } = require("@src/structures");
+const cache = new FixedSizeCache(CACHE_SIZE);
 
 const Schema = mongoose.Schema({
   _id: {

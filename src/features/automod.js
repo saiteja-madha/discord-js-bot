@@ -13,13 +13,13 @@ const MESSAGE_CACHE = new Collection();
 function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
-    const settings = (await getSettings(message.channel.guild.id))?.automod;
+    const settings = (await getSettings(message.guild.id))?.automod;
     if (!settings) return;
 
     if (settings.anti_ghostping) {
       // Cache Messages with mentions
       if (message.mentions.members.size > 0 || message.mentions.everyone || message.mentions.roles.size > 0) {
-        const key = `${message.channel.guild.id}|${message.channel.id}|${message.id}`;
+        const key = `${message.guild.id}|${message.channel.id}|${message.id}`;
         MESSAGE_CACHE.set(key, cacheMessage(message));
       }
     }
@@ -33,7 +33,7 @@ function run(client) {
   client.on("messageDelete", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
 
-    const { guild } = message.channel.guild;
+    const { guild } = message.guild;
     const settings = (await getSettings(guild.id))?.automod;
 
     if (!settings || !settings.anti_ghostping || !settings.log_channel) return;

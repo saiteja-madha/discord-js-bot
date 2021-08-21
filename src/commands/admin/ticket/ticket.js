@@ -16,16 +16,36 @@ module.exports = class Ticket extends Command {
       name: "ticket",
       description: "various ticketing commands",
       minArgsCount: 1,
-      multiLineUsage: true,
-      usage: outdent`
-      \`{p}{i} setup\` : start an interactive ticket setup
-      \`{p}{i} log <#channel>\` : setup log channel for tickets
-      \`{p}{i} limit <number>\` : set maximum number of concurrent open tickets
-      \`{p}{i} close\` : close the ticket
-      \`{p}{i} closeall\` : close all open tickets
-      \`{p}{i} add <userId|roleId>\` : add user/role to the ticket
-      \`{p}{i} remove <userId|roleId>\` : remove user/role from the ticket
-      `,
+      subcommands: [
+        {
+          trigger: "setup",
+          description: "start an interactive ticket setup",
+        },
+        {
+          trigger: "log <#channel>",
+          description: "setup log channel for tickets",
+        },
+        {
+          trigger: "limit <number>",
+          description: "set maximum number of concurrent open tickets",
+        },
+        {
+          trigger: "close",
+          description: "close the ticket",
+        },
+        {
+          trigger: "closeall",
+          description: "close all open tickets",
+        },
+        {
+          trigger: "add <userId|roleId>",
+          description: "add user/role to the ticket",
+        },
+        {
+          trigger: "remove <userId|roleId>",
+          description: "remove user/role from the ticket",
+        },
+      ],
       category: "TICKET",
       userPermissions: ["ADMINISTRATOR"],
     });

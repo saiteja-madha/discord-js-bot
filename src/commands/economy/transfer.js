@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 const { getUser, addCoins } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const outdent = require("outdent");
-const { getMember } = require("@utils/botUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class Transfer extends Command {
   constructor(client) {
@@ -21,10 +21,10 @@ module.exports = class Transfer extends Command {
    * @param {CommandContext} ctx
    */
   async run(ctx) {
-    const { message, args, guild } = ctx;
+    const { message, args } = ctx;
     const { member } = message;
     const coins = args[0];
-    const target = await getMember(message, args[1], true);
+    const target = await resolveMember(message, args[1], true);
 
     if (!target) return message.reply(`No user found matching ${args[1]}`);
     if (isNaN(coins) || coins <= 0) return message.reply("Please enter a valid amount of coins to transfer");

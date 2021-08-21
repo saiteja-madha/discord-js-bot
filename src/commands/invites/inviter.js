@@ -23,11 +23,11 @@ module.exports = class InviterCommand extends Command {
     const { message } = ctx;
     const target = message.mentions.members.first() || message.member;
 
-    const inviteData = await getDetails(message.channel.guild.id, target.id);
+    const inviteData = await getDetails(message.guild.id, target.id);
     if (!inviteData || !inviteData.inviter_id) return ctx.reply(`Cannot track how \`${target.user.tag}\` joined`);
 
     let inviter = await message.client.users.fetch(inviteData.inviter_id, false, true);
-    let inviterData = await getDetails(message.channel.guild.id, inviteData.inviter_id);
+    let inviterData = await getDetails(message.guild.id, inviteData.inviter_id);
 
     const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setAuthor(`Invite data for ${target.displayName}`)
       .setDescription(outdent`

@@ -1,6 +1,6 @@
 const { Message } = require("discord.js");
 const { IMAGE_API } = require("@root/config.js");
-const { getMember } = require("@utils/botUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 /**
  * @param {Message} message
@@ -30,7 +30,7 @@ async function getImageFromCommand(message, args) {
   }
 
   if (!url) {
-    let member = await getMember(message, args[0]).catch((ex) => {});
+    let member = await resolveMember(message, args[0]).catch((ex) => {});
     if (member) url = member.user.displayAvatarURL({ size: 256, format: "png" });
   }
 

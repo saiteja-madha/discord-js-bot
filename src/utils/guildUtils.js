@@ -1,6 +1,7 @@
-const { Guild, TextChannel, VoiceChannel } = require("discord.js");
+const { Guild, TextChannel, VoiceChannel, Message } = require("discord.js");
 
 const ROLE_MENTION = new RegExp("<?@?&?(\\d{17,20})>?", "g");
+const MEMBER_MENTION = new RegExp("<?@?!?(\\d{17,20})>?", "g");
 
 /**
  * @param {Guild} guild
@@ -42,7 +43,7 @@ async function setVoiceChannelName(vc, name) {
  */
 async function getMemberStats(guild) {
   const all = await guild.members.fetch({
-    force: true,
+    force: false,
     cache: false,
   });
   const total = all.size;
@@ -56,6 +57,8 @@ async function getMemberStats(guild) {
  * @param {String} query
  */
 function findMatchingRoles(guild, query) {
+  if (!guild || !query || typeof query !== "string") return;
+
   const patternMatch = ROLE_MENTION.exec(query);
   if (patternMatch) {
     let id = patternMatch[1];
@@ -82,6 +85,40 @@ function findMatchingRoles(guild, query) {
   return [];
 }
 
+/**
+ * @param {Message} message
+ * @param {String} search
+ * @param {Boolean} exact
+ */
+async function resolveMember(message, query, exact = false) {
+  if (!message || !query || typeof query !== "string") return;
+
+  // Check if mentioned or ID is passed
+  const patternMatch = MEMBER_MENTION.exec(query);
+  if (patternMatch) {
+    let id = patternMatch[1];
+    let memberFound = await message.guild.members.fetch(id);
+    if (memberFound) return memberFound;
+  }
+
+  // Fetch and cache members from API
+  await message.guild.members.fetch({ query: query });
+
+  // Check if exact tag is matched
+  let matchingTags = message.guild.members.cache.filter((mem) => mem.user.tag === query);
+  if (matchingTags.size === 1) return matchingTags.first();
+
+  // Check for matching username
+  if (!exact) {
+    return message.guild.members.cache.find(
+      (x) =>
+        x.user.username === query ||
+        x.user.username.toLowerCase().includes(query.toLowerCase()) ||
+        x.displayName.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+}
+
 module.exports = {
   getRoleByName,
   canSendEmbeds,
@@ -89,4 +126,5 @@ module.exports = {
   setVoiceChannelName,
   getMemberStats,
   findMatchingRoles,
+  resolveMember,
 };

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { CACHE_SIZE } = require("@root/config.js");
-const FixedSizeCache = require("@utils/cache");
+const { FixedSizeCache } = require("@src/structures");
 const cache = new FixedSizeCache(CACHE_SIZE);
 
 const Schema = mongoose.Schema({
@@ -29,7 +29,7 @@ module.exports = {
         guildId,
         await Model.findOne({
           _id: guildId,
-        }).lean()
+        }).lean({ defaults: true })
       );
     }
     return cache.get(guildId);

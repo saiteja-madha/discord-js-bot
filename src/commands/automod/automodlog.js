@@ -24,8 +24,8 @@ module.exports = class AutoModLog extends Command {
 
     if (input === "none" || input === "off" || input === "disable") targetChannel = null;
     else {
-      if (mentions.channels.size == 0) return ctx.reply("Incorrect command usage");
-      targetChannel = mentions.channels.first();
+      if (message.mentions.channels.size == 0) return ctx.reply("Incorrect command usage");
+      targetChannel = message.mentions.channels.first();
 
       if (!canSendEmbeds(targetChannel))
         return ctx.reply(

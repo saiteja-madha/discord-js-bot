@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@src/structures");
 const { getCommand, COMMANDS } = require("@features/command-handler");
 const { EMOJIS, EMBED_COLORS, BOT_INVITE, DISCORD_INVITE } = require("@root/config.js");
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require("discord.js");
 
 const CMD_CATEGORIES = {
   ADMIN: {
@@ -29,6 +29,11 @@ const CMD_CATEGORIES = {
     image: "https://icons.iconarchive.com/icons/dapino/summer-holiday/128/photo-icon.png",
     emoji: "\uD83D\uDDBC",
   },
+  INVITE: {
+    name: "Invite",
+    image: "https://cdn4.iconfinder.com/data/icons/general-business/150/Invite-512.png",
+    emoji: "\uD83D\uDCE8",
+  },
   INFORMATION: {
     name: "Information",
     image: "https://icons.iconarchive.com/icons/graphicloads/100-flat/128/information-icon.png",
@@ -46,7 +51,7 @@ const CMD_CATEGORIES = {
   },
   TICKET: {
     name: "Ticket",
-    image: "https://image.pngaaa.com/909/159909-middle.png",
+    image: "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/512/ticket-icon.png",
     emoji: "🎫",
   },
   UTILITY: {
@@ -56,7 +61,7 @@ const CMD_CATEGORIES = {
   },
 };
 
-module.exports = class PingCommand extends Command {
+module.exports = class HelpCommand extends Command {
   constructor(client) {
     super(client, {
       name: "help",
@@ -89,39 +94,6 @@ module.exports = class PingCommand extends Command {
 
 /**
  * @param {CommandContext} ctx
- */
-function sendHelpMenu(ctx) {
-  const { message } = ctx;
-
-  let str = "**About Me:**\n";
-  str += "Hello I am " + message.channel.guild.me.displayName + "!\n";
-  str += "A cool multipurpose discord bot which can serve all your needs\n\n";
-  str += "**Quick Links:**" + "\n";
-  str += "Support Server: [Join here](" + DISCORD_INVITE + ")" + "\n";
-  str += "Invite Link: [Click me](" + BOT_INVITE + ")" + "\n\n";
-  str += "**Command modules:**" + "\n";
-  str += EMOJIS.ARROW + " utility" + "\n";
-  str += EMOJIS.ARROW + " fun" + "\n";
-  str += EMOJIS.ARROW + " image" + "\n";
-  str += EMOJIS.ARROW + " information" + "\n";
-  str += EMOJIS.ARROW + " social" + "\n";
-  str += EMOJIS.ARROW + " moderation" + "\n";
-  str += EMOJIS.ARROW + " invite" + "\n\n";
-  str += "**Admin Modules:**" + "\n";
-  str += EMOJIS.ARROW + " admin" + "\n";
-  str += EMOJIS.ARROW + " automod" + "\n";
-
-  const embed = new MessageEmbed()
-    .setDescription(str)
-    .setThumbnail(message.client.user.displayAvatarURL())
-    .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
-    .setFooter("Type " + ctx.prefix + "help <module> to see all related command", message.author.displayAvatarURL());
-
-  ctx.reply({ embeds: [embed] });
-}
-
-/**
- * @param {CommandContext} ctx
  * @param {String} category
  */
 function getCategoryHelpEmbed(ctx, category) {
@@ -146,14 +118,16 @@ function getCategoryHelpEmbed(ctx, category) {
       " **" +
       ctx.prefix +
       "cmd [attachment]:** Picks attachment image";
-  } else if (category === "TICKET") {
-    const cmd = getCommand("ticket");
-    return cmd.getUsageEmbed(ctx.prefix, "ticket", "TICKET Commands");
   } else {
     const commands = COMMANDS.filter((cmd) => cmd.category === category);
     if (commands.length == 0) return ctx.reply(`No commands in this category`);
-
-    commands.forEach((cmd) => (collector += `${EMOJIS.ARROW} \`${cmd.name}\` - ${cmd.description}\n`));
+    commands.forEach((cmd) => {
+      if (cmd.subcommands.length == 0) collector += `${EMOJIS.ARROW} \`${cmd.name}\` - ${cmd.description}\n`;
+      else
+        cmd.subcommands.forEach(
+          (sub) => (collector += `${EMOJIS.ARROW} \`${cmd.name} ${sub.trigger}\`: ${sub.description}\n`)
+        );
+    });
   }
 
   const embed = new MessageEmbed()
@@ -192,7 +166,7 @@ async function sendSelectionHelpMenu(ctx) {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(
-      `**About Me:**\nHello I am ${message.channel.guild.me.displayName}!\nA cool multipurpose discord bot which can serve all your needs`
+      `**About Me:**\nHello I am ${message.guild.me.displayName}!\nA cool multipurpose discord bot which can serve all your needs`
     )
     .setThumbnail(message.client.user.displayAvatarURL());
 

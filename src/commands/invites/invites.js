@@ -22,7 +22,7 @@ module.exports = class InvitesCommand extends Command {
     const { message } = ctx;
     const target = message.mentions.members.first() || message.member;
 
-    const inviteData = await getDetails(message.channel.guild.id, target.id);
+    const inviteData = await getDetails(message.guild.id, target.id);
     if (!inviteData) return ctx.reply(`No invite data found for \`${target.user.tag}\``);
 
     const embed = new MessageEmbed()

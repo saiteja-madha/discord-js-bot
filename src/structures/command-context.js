@@ -17,7 +17,7 @@ class CommandContext {
     /**
      * @type {Guild}
      */
-    this.guild = message.channel.guild;
+    this.guild = message.guild;
 
     /**
      * @type {TextBasedChannels}

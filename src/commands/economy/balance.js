@@ -2,7 +2,7 @@ const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
 const { getUser } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
-const { getMember } = require("@utils/botUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class Balance extends Command {
   constructor(client) {
@@ -21,7 +21,7 @@ module.exports = class Balance extends Command {
    */
   async run(ctx) {
     const { message, args } = ctx;
-    const target = (await getMember(message, args[0])) || message.member;
+    const target = (await resolveMember(message, args[0])) || message.member;
 
     const economy = await getUser(target.id);
 

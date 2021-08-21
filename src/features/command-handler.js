@@ -7,6 +7,9 @@ const { sendMessage } = require("@utils/botUtils");
 const { PREFIX } = require("@root/config");
 
 const COMMAND_INDEX = new Collection();
+/**
+ * @type {Command[]}
+ */
 const COMMANDS = [];
 
 /**
@@ -30,9 +33,9 @@ function run(client) {
   readCommands("src/commands");
 
   client.on("messageCreate", async (message) => {
-    if (message.channel.type === "DM" || message.author.bot || !message.channel.guild) return;
+    if (message.channel.type === "DM" || message.author.bot || !message.guild) return;
 
-    const settings = await getSettings(message.channel.guild.id);
+    const settings = await getSettings(message.guild.id);
     const prefix = settings?.prefix || PREFIX;
 
     if (!message.content.startsWith(prefix)) return;

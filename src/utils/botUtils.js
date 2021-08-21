@@ -1,4 +1,4 @@
-const { Message, TextBasedChannels, MessagePayload, MessageOptions } = require("discord.js");
+const { TextBasedChannels, MessagePayload, MessageOptions } = require("discord.js");
 const { getResponse } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 
@@ -38,30 +38,6 @@ async function startupCheck() {
     console.log("\x1b[31m[config.js]\x1b[0m - PREFIX cannot be empty");
     process.exit();
   }
-}
-
-/**
- * @param {Message} message
- * @param {String} search
- */
-async function getMember(message, search, exact = false) {
-  if (!message || !search) return;
-  let member;
-  const patternMatch = new RegExp("<?@?!?(\\d{17,20})>?", "g").exec(search);
-  if (patternMatch) {
-    let id = patternMatch[1];
-    member = await message.channel.guild.members.fetch(id, { cache: true }).catch((ex) => {});
-  }
-
-  if (!member && !exact) {
-    member = message.channel.guild.members.cache.find(
-      (x) =>
-        x.user.username.toLowerCase().includes(search.toLowerCase()) ||
-        x.displayName.toLowerCase().includes(search.toLowerCase())
-    );
-  }
-
-  return member;
 }
 
 const permissions = {
@@ -114,7 +90,6 @@ async function sendMessage(channel, message) {
 
 module.exports = {
   startupCheck,
-  getMember,
   permissions,
   sendMessage,
 };

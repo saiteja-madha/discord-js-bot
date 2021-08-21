@@ -15,9 +15,9 @@ function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.webhookId || message.channel.type === "DM") return;
 
-    const settings = await getSettings(message.channel.guild.id);
+    const settings = await getSettings(message.guild.id);
     if (!settings?.ranking_enabled) return;
-    const key = message.channel.guild.id + "|" + message.member.id;
+    const key = message.guild.id + "|" + message.member.id;
 
     // Cooldown check to prevent Message Spamming
     if (isOnCooldown(key)) return;
@@ -25,7 +25,7 @@ function run(client) {
 
     // Update member's XP in DB
     const xpToAdd = getRandomXP();
-    const data = await incrementXP(message.channel.guild.id, message.member.id, xpToAdd);
+    const data = await incrementXP(message.guild.id, message.member.id, xpToAdd);
 
     // Check if member has levelled up
     let { xp, level } = data;
@@ -35,10 +35,10 @@ function run(client) {
       ++level;
       xp -= needed;
 
-      await setLevel(message.channel.guild.id, message.member.id, level, xp);
+      await setLevel(message.guild.id, message.member.id, level, xp);
       let lvlUpMessage = settings.level_up_message || DEFAULT_LVL_UP_MSG;
       lvlUpMessage = lvlUpMessage.replace("{l}", level).replace("{m}", message.member.user);
-      const lvlUpChannel = message.channel.guild.channels.cache.get(settings.level_up_channel) || message.channel;
+      const lvlUpChannel = message.guild.channels.cache.get(settings.level_up_channel) || message.channel;
 
       sendMessage(lvlUpChannel, lvlUpMessage);
     }

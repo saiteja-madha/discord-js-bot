@@ -1,8 +1,8 @@
 const { Command, CommandContext } = require("@src/structures");
-const { getMember } = require("@utils/botUtils");
+const { resolveMember } = require("@utils/guildUtils");
 const { getUser, increaseReputation } = require("@schemas/user-schema");
 const { MessageEmbed } = require("discord.js");
-const { diff_hours, getRemainingTime } = require("@root/src/utils/miscUtils");
+const { diff_hours, getRemainingTime } = require("@utils/miscUtils");
 
 module.exports = class Reputation extends Command {
   constructor(client) {
@@ -22,7 +22,7 @@ module.exports = class Reputation extends Command {
   async run(ctx) {
     const { message, args } = ctx;
     const { author } = message;
-    const target = await getMember(message, args[0]);
+    const target = await resolveMember(message, args[0]);
 
     if (!target) return message.reply(`No user found matching ${args[0]}`);
     if (target.user.bot) return ctx.reply(`You cannot give reputation to bots`);

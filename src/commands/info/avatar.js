@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
-const { getMember } = require("@utils/botUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class AvatarCommand extends Command {
   constructor(client) {
@@ -19,7 +19,7 @@ module.exports = class AvatarCommand extends Command {
    */
   async run(ctx) {
     const { message, args } = ctx;
-    const target = (await getMember(message, args[0])) || message.member;
+    const target = (await resolveMember(message, args[0])) || message.member;
     const { user } = target;
 
     const x64 = user.displayAvatarURL({ format: "png", dynamic: true, size: 64 });

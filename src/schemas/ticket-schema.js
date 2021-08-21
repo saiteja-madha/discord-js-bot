@@ -25,19 +25,12 @@ module.exports = {
   },
 
   createNewTicket: async (guildId, channelId, messageId, title, roleId) => {
-    await Model.updateOne(
-      {
-        guild_id: guildId,
-        channel_id: channelId,
-        message_id: messageId,
-      },
-      {
-        title: title,
-        support_role: roleId,
-      },
-      {
-        upsert: true,
-      }
-    );
+    await new Model({
+      guild_id: guildId,
+      channel_id: channelId,
+      message_id: messageId,
+      title: title,
+      support_role: roleId,
+    }).save();
   },
 };

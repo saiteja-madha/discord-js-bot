@@ -22,7 +22,7 @@ module.exports = class ClearInvites extends Command {
     const target = message.mentions.members.first();
     if (!target) return ctx.reply(`Incorrect syntax. You must mention a target`);
 
-    await clearInvites(message.channel.guild.id, target.id).then(
+    await clearInvites(message.guild.id, target.id).then(
       ctx.reply(`Configuration saved! Invites cleared for \`${target.user.tag}\``)
     );
   }
