@@ -157,4 +157,4 @@ const GOOGLE_TRANSLATE = {
   yi: "Yiddish",
   yo: "Yoruba",
   zu: "Zulu",
-},
+};
