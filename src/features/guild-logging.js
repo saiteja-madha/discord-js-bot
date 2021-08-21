@@ -1,6 +1,6 @@
 const { Client, Guild, MessageEmbed, WebhookClient } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { registerGuild, updateGuildLeft } = require("@schemas/guild-data");
+const { registerGuild, updateGuildLeft } = require("@schemas/guild-schema");
 const webhookClient = new WebhookClient({ url: process.env.JOIN_LEAVE_WEBHOOK });
 
 /**
@@ -8,26 +8,14 @@ const webhookClient = new WebhookClient({ url: process.env.JOIN_LEAVE_WEBHOOK })
  */
 async function run(client) {
   client.on("guildCreate", async (guild) => {
-    guild.ownerId ||= (await guild.fetchOwner({ cache: true }).catch(() => {})).id;
-    const data = {
-      id: guild.id,
-      name: guild.name,
-      ownerId: guild.owner?.user?.tag,
-      memberCount: guild.memberCount,
-    };
-    console.log("Guild Joined: " + JSON.stringify(data));
+    if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
+    console.log(`Guild Joined: ${guild.name} Members: ${guild.memberCount}`);
     registerGuild(guild).then(() => sendWebhook(guild, true));
   });
 
   client.on("guildDelete", async (guild) => {
-    guild.ownerId ||= (await guild.fetchOwner({ cache: true }).catch(() => {})).id;
-    const data = {
-      id: guild.id,
-      name: guild.name,
-      ownerId: guild.owner?.user?.tag,
-      memberCount: guild.memberCount,
-    };
-    console.log("Guild Left: " + JSON.stringify(data));
+    if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
+    console.log(`Guild Left: ${guild.name} Members: ${guild.memberCount}`);
     updateGuildLeft(guild).then(() => sendWebhook(guild, false));
   });
 }

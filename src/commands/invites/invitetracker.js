@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@src/structures");
-const { inviteTracking } = require("@schemas/settings-schema");
+const { inviteTracking } = require("@schemas/guild-schema");
 
 module.exports = class InviteTracker extends Command {
   constructor(client) {

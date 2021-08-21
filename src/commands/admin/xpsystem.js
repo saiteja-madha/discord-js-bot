@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@src/structures");
-const { xpSystem } = require("@schemas/settings-schema");
+const { xpSystem } = require("@schemas/guild-schema");
 
 module.exports = class XPSystem extends Command {
   constructor(client) {

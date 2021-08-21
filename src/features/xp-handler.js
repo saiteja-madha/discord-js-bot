@@ -1,5 +1,5 @@
 const { Client, Collection } = require("discord.js");
-const { getSettings } = require("@schemas/settings-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { incrementXP, setLevel } = require("@schemas/profile-schema");
 const { getRandomInt } = require("@utils/miscUtils");
 const { DEFAULT_LVL_UP_MSG } = require("@root/config.js");
@@ -15,8 +15,8 @@ function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.webhookId || message.channel.type === "DM") return;
 
-    const settings = await getSettings(message.guild.id);
-    if (!settings?.ranking_enabled) return;
+    const settings = await getSettings(message.guild);
+    if (!settings.ranking?.enabled) return;
     const key = message.guild.id + "|" + message.member.id;
 
     // Cooldown check to prevent Message Spamming

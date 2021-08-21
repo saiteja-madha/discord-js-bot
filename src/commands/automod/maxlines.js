@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@src/structures");
-const { maxLines } = require("@schemas/settings-schema");
+const { maxLines } = require("@schemas/guild-schema");
 
 module.exports = class MaxLines extends Command {
   constructor(client) {

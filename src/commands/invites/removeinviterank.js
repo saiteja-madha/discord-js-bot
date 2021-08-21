@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@src/structures");
 const { findMatchingRoles } = require("@utils/guildUtils");
-const { getSettings, removeInviteRank } = require("@schemas/settings-schema");
+const { getSettings, removeInviteRank } = require("@schemas/guild-schema");
 
 module.exports = class AddInvitesCommand extends Command {
   constructor(client) {
@@ -26,9 +26,8 @@ module.exports = class AddInvitesCommand extends Command {
     const role = message.mentions.roles.first() || findMatchingRoles(guild, query)[0];
     if (!role) return ctx.reply("No roles found matching `" + query + "`");
 
-    let exists;
-    const settings = await getSettings(guild.id);
-    if (settings) exists = settings.invite.ranks.filter((obj) => obj.role_id === role.id);
+    const settings = await getSettings(guild);
+    const exists = settings.invite.ranks.filter((obj) => obj.role_id === role.id);
 
     if (!exists || exists.length == 0) return ctx.reply("No previous invite rank is configured found for this role");
     await removeInviteRank(guild.id, role.id).then(ctx.reply("Success! Configuration saved."));

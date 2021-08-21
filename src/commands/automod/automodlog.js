@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@src/structures");
-const { automodLogChannel } = require("@schemas/settings-schema");
+const { automodLogChannel } = require("@schemas/guild-schema");
 const { canSendEmbeds } = require("@utils/guildUtils");
 
 module.exports = class AutoModLog extends Command {

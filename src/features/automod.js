@@ -1,6 +1,6 @@
 const { Client, Message } = require("discord.js");
 const { Collection, MessageEmbed, TextBasedChannels } = require("discord.js");
-const { getSettings, automodLogChannel } = require("@schemas/settings-schema");
+const { getSettings, automodLogChannel } = require("@schemas/guild-schema");
 const { containsLink, containsDiscordInvite } = require("@utils/miscUtils");
 const { EMOJIS } = require("@root/config.js");
 const { sendMessage } = require("@utils/botUtils");
@@ -13,7 +13,7 @@ const MESSAGE_CACHE = new Collection();
 function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
-    const settings = (await getSettings(message.guild.id))?.automod;
+    const settings = (await getSettings(message.guild)).automod;
     if (!settings) return;
 
     if (settings.anti_ghostping) {
@@ -34,7 +34,7 @@ function run(client) {
     if (message.author.bot || message.channel.type === "DM") return;
 
     const { guild } = message.guild;
-    const settings = (await getSettings(guild.id))?.automod;
+    const settings = (await getSettings(guild)).automod;
 
     if (!settings || !settings.anti_ghostping || !settings.log_channel) return;
     const key = `${guild.id}|${message.channel.id}|${message.id}`;

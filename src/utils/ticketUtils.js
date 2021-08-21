@@ -2,7 +2,7 @@ const { Channel, Guild, GuildMember, TextBasedChannels, MessageEmbed, User } = r
 const { postToBin } = require("@utils/httpUtils");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const outdent = require("outdent");
-const { getSettings } = require("@schemas/settings-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { sendMessage } = require("@utils/botUtils");
 
 const PERMS = [
@@ -74,7 +74,7 @@ async function closeTicket(channel, closedBy, reason) {
   }
 
   try {
-    const config = await getSettings(channel.guild.id);
+    const config = await getSettings(channel.guild);
     const messages = await channel.messages.fetch();
     let reversed = Array.from(messages.values()).reverse();
 
@@ -124,14 +124,15 @@ async function closeTicket(channel, closedBy, reason) {
 
 /**
  * @param {Guild} guild
+ * @param {User} author
  */
-async function closeAllTickets(guild) {
+async function closeAllTickets(guild, author) {
   const channels = getTicketChannels(guild);
   let success = 0;
   let failed = 0;
 
   for (const [id, ch] of channels) {
-    const status = await closeTicket(ch, guild.me.user, "Force close all open tickets");
+    const status = await closeTicket(ch, author, "Force close all open tickets");
     if (status.success) success++;
     else failed++;
   }

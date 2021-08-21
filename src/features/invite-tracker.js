@@ -1,4 +1,4 @@
-const { getSettings } = require("@schemas/settings-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const db = require("@schemas/invite-schema");
 const { Client, Collection, Guild } = require("discord.js");
 
@@ -64,8 +64,8 @@ async function run(client) {
  * @param {Guild} guild
  */
 async function shouldInvitesBeTracked(guild) {
-  const settings = await getSettings(guild.id);
-  return settings && settings.invite.tracking && guild.me.permissions.has("MANAGE_GUILD");
+  const settings = await getSettings(guild);
+  return settings.invite.tracking && guild.me.permissions.has("MANAGE_GUILD");
 }
 
 /**
@@ -85,8 +85,8 @@ async function cacheGuildInvites(guild) {
  * @param {Boolean} isAdded
  */
 async function checkInviteRewards(guild, inviterData, isAdded) {
-  const settings = await getSettings(guild.id);
-  if (settings && settings.invite.ranks.length > 0 && inviterData?.inviter_id) {
+  const settings = await getSettings(guild);
+  if (settings.invite.ranks.length > 0 && inviterData?.inviter_id) {
     let inviter = await guild.members.fetch(inviterData?.inviter_id).catch((ex) => {});
     if (!inviter) return;
 

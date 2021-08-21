@@ -1,4 +1,4 @@
-const { getSettings } = require("@schemas/settings-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { getConfig } = require("@schemas/ticket-schema");
 const { sendMessage } = require("@utils/botUtils");
 const {
@@ -34,7 +34,7 @@ async function handleNewTicket(reaction, user) {
   const { guild, channel } = message;
 
   try {
-    const settings = await getSettings(guild.id);
+    const settings = await getSettings(guild);
     const config = await getConfig(guild.id, channel.id, message.id);
     if (!config) return;
 

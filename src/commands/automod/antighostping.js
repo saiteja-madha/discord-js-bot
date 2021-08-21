@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@src/structures");
-const { antiGhostPing } = require("@schemas/settings-schema");
+const { antiGhostPing } = require("@schemas/guild-schema");
 
 module.exports = class AntiGhostPing extends Command {
   constructor(client) {

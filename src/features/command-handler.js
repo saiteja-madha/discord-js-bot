@@ -2,9 +2,8 @@ const { Client, Collection } = require("discord.js");
 const { Command, CommandContext } = require("@src/structures");
 const path = require("path");
 const fs = require("fs");
-const { getSettings } = require("@schemas/settings-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { sendMessage } = require("@utils/botUtils");
-const { PREFIX } = require("@root/config");
 
 const COMMAND_INDEX = new Collection();
 /**
@@ -35,8 +34,8 @@ function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.channel.type === "DM" || message.author.bot || !message.guild) return;
 
-    const settings = await getSettings(message.guild.id);
-    const prefix = settings?.prefix || PREFIX;
+    const settings = await getSettings(message.guild);
+    const prefix = settings.prefix;
 
     if (!message.content.startsWith(prefix)) return;
 

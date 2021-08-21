@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
-const { getSettings } = require("@schemas/settings-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const ascii = require("ascii-table");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 
@@ -19,7 +19,7 @@ module.exports = class AutoModStatus extends Command {
    */
   async run(ctx) {
     const { guild } = ctx;
-    const settings = (await getSettings(guild.id))?.automod;
+    const settings = (await getSettings(guild)).automod;
 
     let table = new ascii("").setHeading("Feature", "Status");
     const logChannel = settings?.log_channel

@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@src/structures");
-const { antiLinks } = require("@schemas/settings-schema");
+const { antiLinks } = require("@schemas/guild-schema");
 
 module.exports = class AntiLinks extends Command {
   constructor(client) {

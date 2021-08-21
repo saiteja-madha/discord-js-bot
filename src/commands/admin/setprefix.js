@@ -1,5 +1,5 @@
 const { Command, CommandContext } = require("@src/structures");
-const { setPrefix } = require("@schemas/settings-schema");
+const { setPrefix } = require("@schemas/guild-schema");
 
 module.exports = class SetPrefix extends Command {
   constructor(client) {
