@@ -10,7 +10,7 @@ module.exports = class Transfer extends Command {
     super(client, {
       name: "transfer",
       description: "transfer coins to other user",
-      usage: "<coins> <@member|id>",
+      usage: "<@member|id> <coins>",
       minArgsCount: 2,
       category: "ECONOMY",
       botPermissions: ["EMBED_LINKS"],
@@ -23,10 +23,10 @@ module.exports = class Transfer extends Command {
   async run(ctx) {
     const { message, args } = ctx;
     const { member } = message;
-    const coins = args[0];
-    const target = await resolveMember(message, args[1], true);
+    const coins = args[1];
+    const target = await resolveMember(message, args[0], true);
 
-    if (!target) return message.reply(`No user found matching ${args[1]}`);
+    if (!target) return message.reply(`No user found matching ${args[0]}`);
     if (isNaN(coins) || coins <= 0) return message.reply("Please enter a valid amount of coins to transfer");
     if (target.user.bot) return message.reply("You cannot transfer coins to bots!");
     if (target.id === member.id) return message.reply("You cannot transfer coins to self!");

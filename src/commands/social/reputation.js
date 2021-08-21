@@ -40,8 +40,7 @@ module.exports = class Reputation extends Command {
       }
       await increaseReputation(author.id, target.id);
       const embed = new MessageEmbed()
-        .setThumbnail(target.user.displayAvatarURL())
-        .setAuthor(author.username, author.displayAvatarURL())
+        .setAuthor("From " + author.username, author.displayAvatarURL())
         .setDescription(target.toString() + " +1 Rep!");
 
       ctx.reply({ embeds: [embed] });

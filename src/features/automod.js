@@ -1,8 +1,7 @@
-const { Client, Message } = require("discord.js");
-const { Collection, MessageEmbed, TextBasedChannels } = require("discord.js");
+const { Client, Message, Collection, MessageEmbed } = require("discord.js");
 const { getSettings, automodLogChannel } = require("@schemas/guild-schema");
 const { containsLink, containsDiscordInvite } = require("@utils/miscUtils");
-const { EMOJIS } = require("@root/config.js");
+const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const { sendMessage } = require("@utils/botUtils");
 
 const MESSAGE_CACHE = new Collection();
@@ -14,7 +13,6 @@ function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
     const settings = (await getSettings(message.guild)).automod;
-    if (!settings) return;
 
     if (settings.anti_ghostping) {
       // Cache Messages with mentions
@@ -32,17 +30,17 @@ function run(client) {
 
   client.on("messageDelete", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
+    if (message.partial) message = await message.fetch();
+    if (!message.guild) return;
 
-    const { guild } = message.guild;
-    const settings = (await getSettings(guild)).automod;
-
-    if (!settings || !settings.anti_ghostping || !settings.log_channel) return;
-    const key = `${guild.id}|${message.channel.id}|${message.id}`;
+    const settings = (await getSettings(message.guild)).automod;
+    if (!settings.anti_ghostping || !settings.log_channel) return;
+    const key = `${message.guild.id}|${message.channel.id}|${message.id}`;
 
     // deleted message has mentions and was previously cached
     if (MESSAGE_CACHE.has(key)) {
       const cachedMessage = MESSAGE_CACHE.get(key);
-      const logChannel = guild.channels.cache.get(settings.log_channel);
+      const logChannel = message.guild.channels.cache.get(settings.log_channel);
       if (!logChannel) return;
 
       const embed = new MessageEmbed()
@@ -67,19 +65,14 @@ function run(client) {
 
 /**
  * Perform moderation on the message
- * @param {TextBasedChannels} message
+ * @param {Message} message
  */
 function performAutomod(message, settings) {
   if (!shouldModerate(message)) return;
   const { channel, content, author, mentions } = message;
-
   const logChannel = settings.log_channel ? channel.guild.channels.cache.get(settings.log_channel) : null;
-  let str = "";
 
-  str += "Author: `" + author.tag + "`\n";
-  str += "Channel: `<#" + channel.id + ">\n\n";
-  str += "**Reason:**\n";
-
+  let str = "**Reason:**\n";
   let shouldDelete = false;
 
   if (mentions.members.size > settings.max_mentions) {
@@ -115,7 +108,13 @@ function performAutomod(message, settings) {
   }
 
   if (shouldDelete && message.deletable) {
-    const embed = new MessageEmbed().setAuthor("Auto Moderation").setDescription(str);
+    const embed = new MessageEmbed()
+      .setAuthor("Auto Moderation")
+      .setThumbnail(author.avatarURL())
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setDescription(str)
+      .addField("Author", author.tag, true)
+      .addField("Channel", channel.toString(), true);
 
     message
       .delete()

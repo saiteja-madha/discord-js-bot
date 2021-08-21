@@ -1,7 +1,8 @@
 const { Guild, TextChannel, VoiceChannel, Message } = require("discord.js");
 
-const ROLE_MENTION = new RegExp("<?@?&?(\\d{17,20})>?", "g");
-const MEMBER_MENTION = new RegExp("<?@?!?(\\d{17,20})>?", "g");
+const ROLE_MENTION = /<?@?&?(\d{17,20})>?/;
+const MEMBER_MENTION = /<?@?!?(\d{17,20})>?/;
+const CHANNEL_MENTION = /<?#?(\d{17,20})>?/;
 
 /**
  * @param {Guild} guild
@@ -22,8 +23,30 @@ function canSendEmbeds(channel) {
  * @param {Guild} guild
  * @param {String} name
  */
-function getMatchingChannel(guild, name) {
-  return guild.channels.cache.filter((ch) => ch.name.includes(name));
+function getMatchingChannel(guild, query) {
+  if (!guild || !query || typeof query !== "string") return;
+
+  const patternMatch = query.match(CHANNEL_MENTION);
+  if (patternMatch) {
+    let id = patternMatch[1];
+    let channel = guild.channels.cache.find((r) => r.id === id);
+    if (channel) return [channel];
+  }
+
+  const exact = [];
+  const startsWith = [];
+  const includes = [];
+  guild.channels.cache.forEach((ch) => {
+    let lowerName = ch.name.toLowerCase();
+    if (ch.name === query) exact.push(ch);
+    if (lowerName.startsWith(query.toLowerCase())) startsWith.push(ch);
+    if (lowerName.includes(query.toLowerCase())) includes.push(ch);
+  });
+
+  if (exact.length > 0) return exact;
+  if (startsWith.length > 0) return startsWith;
+  if (includes.length > 0) return includes;
+  return [];
 }
 
 /**
@@ -59,17 +82,13 @@ async function getMemberStats(guild) {
 function findMatchingRoles(guild, query) {
   if (!guild || !query || typeof query !== "string") return;
 
-  const patternMatch = ROLE_MENTION.exec(query);
+  const patternMatch = query.match(ROLE_MENTION);
   if (patternMatch) {
     let id = patternMatch[1];
-    let role = guild.roles.cache.filter((r) => r.id === id).first();
+    let role = guild.roles.cache.find((r) => r.id === id);
     if (role) return [role];
   }
-  const idMatch = [];
-  if (guild.roles.cache.has(query)) {
-    idMatch.push(guild.roles.cache.get(query));
-    return idMatch;
-  }
+
   const exact = [];
   const startsWith = [];
   const includes = [];
@@ -92,25 +111,30 @@ function findMatchingRoles(guild, query) {
  */
 async function resolveMember(message, query, exact = false) {
   if (!message || !query || typeof query !== "string") return;
+  const memberManager = message.guild.members;
 
   // Check if mentioned or ID is passed
-  const patternMatch = MEMBER_MENTION.exec(query);
+  const patternMatch = query.match(MEMBER_MENTION);
   if (patternMatch) {
     let id = patternMatch[1];
-    let memberFound = await message.guild.members.fetch(id);
-    if (memberFound) return memberFound;
+
+    let mentioned = message.mentions.members.find((m) => m.id === id); // check if mentions contains the ID
+    if (mentioned) return mentioned;
+
+    let fetched = await memberManager.fetch({ user: id }).catch((ex) => {});
+    if (fetched) return fetched;
   }
 
   // Fetch and cache members from API
-  await message.guild.members.fetch({ query: query });
+  await memberManager.fetch({ query: query }).catch((ex) => {});
 
   // Check if exact tag is matched
-  let matchingTags = message.guild.members.cache.filter((mem) => mem.user.tag === query);
+  let matchingTags = memberManager.cache.filter((mem) => mem.user.tag === query);
   if (matchingTags.size === 1) return matchingTags.first();
 
   // Check for matching username
   if (!exact) {
-    return message.guild.members.cache.find(
+    return memberManager.cache.find(
       (x) =>
         x.user.username === query ||
         x.user.username.toLowerCase().includes(query.toLowerCase()) ||

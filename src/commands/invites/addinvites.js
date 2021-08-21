@@ -37,6 +37,6 @@ module.exports = class AddInvitesCommand extends Command {
       .setDescription(`${target.user.tag} now has ${getEffectiveInvites(inviteData)} invites`);
 
     ctx.reply({ embeds: [embed] });
-    checkInviteRewards(guild.id, inviteData, true);
+    checkInviteRewards(guild, inviteData, true);
   }
 };

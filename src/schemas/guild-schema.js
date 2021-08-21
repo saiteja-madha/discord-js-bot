@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { CACHE_SIZE, PREFIX } = require("@root/config.js");
 const { FixedSizeCache } = require("@src/structures");
-const cache = new FixedSizeCache(CACHE_SIZE);
+const cache = new FixedSizeCache(CACHE_SIZE.GUILDS);
 
 const Schema = mongoose.Schema({
   _id: {
@@ -80,6 +80,7 @@ async function registerGuild(guild) {
 
 module.exports = {
   getSettings: async (guild) => {
+    if (!guild) return;
     if (cache.contains(guild.id)) return cache.get(guild.id);
     else {
       let guildData = await Model.findOne({ _id: guild.id }).lean({ defaults: true });

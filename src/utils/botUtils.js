@@ -30,13 +30,27 @@ async function startupCheck() {
   }
   if (!config.BOT_INVITE) console.log("\x1b[33m[config.js]\x1b[0m - BOT_INVITE is not provided");
   if (!config.DISCORD_INVITE) console.log("\x1b[33m[config.js]\x1b[0m - DISCORD_INVITE is not provided");
-  if (!config.CACHE_SIZE || isNaN(config.CACHE_SIZE) || config.CACHE_SIZE <= 0) {
+  if (!config.CACHE_SIZE || isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS)) {
     console.log("\x1b[31m[config.js]\x1b[0m - CACHE_SIZE must be a positive integer");
     process.exit();
   }
   if (!config.PREFIX) {
     console.log("\x1b[31m[config.js]\x1b[0m - PREFIX cannot be empty");
     process.exit();
+  }
+}
+
+/**
+ * @param {TextBasedChannels} channel
+ * @param {string | MessagePayload | MessageOptions} message
+ */
+async function sendMessage(channel, message) {
+  if (!channel || !message) return;
+  if (channel.type === "GUILD_STAGE_VOICE" && channel.type === "GUILD_VOICE") return;
+  try {
+    return await channel.send(message);
+  } catch (ex) {
+    console.log(`[ERROR] - [sendMessage] - ${ex.message}`);
   }
 }
 
@@ -74,22 +88,19 @@ const permissions = {
   STREAM: "Video",
 };
 
-/**
- * @param {TextBasedChannels} channel
- * @param {string | MessagePayload | MessageOptions} message
- */
-async function sendMessage(channel, message) {
-  if (!channel || !message) return;
-  if (channel.type === "GUILD_STAGE_VOICE" && channel.type === "GUILD_VOICE") return;
-  try {
-    return await channel.send(message);
-  } catch (ex) {
-    console.log(`[ERROR] - [sendMessage] - ${ex.message}`);
-  }
-}
+const channelTypes = {
+  GUILD_TEXT: "Text",
+  GUILD_PUBLIC_THREAD: "Public Thread",
+  GUILD_PRIVATE_THREAD: "Private Thread",
+  GUILD_NEWS: "News",
+  GUILD_NEWS_THREAD: "News Thread",
+  GUILD_VOICE: "Voice",
+  GUILD_STAGE_VOICE: "Stage Voice",
+};
 
 module.exports = {
-  startupCheck,
+  channelTypes,
   permissions,
   sendMessage,
+  startupCheck,
 };

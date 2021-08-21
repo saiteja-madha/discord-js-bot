@@ -25,9 +25,12 @@ module.exports = class GuildInfoCommand extends Command {
     let createdAt = moment(guild.createdAt);
 
     let totalChannels = channels.cache.size;
-    let categories = channels.cache.filter((c) => c.type === "category").size;
-    let textChannels = channels.cache.filter((c) => c.type === "text").size;
-    let voiceChannels = channels.cache.filter((c) => c.type === "voice").size;
+    let categories = channels.cache.filter((c) => c.type === "GUILD_CATEGORY").size;
+    let textChannels = channels.cache.filter((c) => c.type === "GUILD_TEXT").size;
+    let voiceChannels = channels.cache.filter((c) => c.type === "GUILD_VOICE" || c.type === "GUILD_STAGE_VOICE").size;
+    let threadChannels = channels.cache.filter(
+      (c) => c.type === "GUILD_PRIVATE_THREAD" || c.type === "GUILD_PUBLIC_THREAD"
+    ).size;
 
     let memberCache = guild.members.cache;
     let all = memberCache.size;
@@ -66,13 +69,22 @@ module.exports = class GuildInfoCommand extends Command {
 
     let embed = new MessageEmbed()
       .setTitle("GUILD INFORMATION")
+      .setThumbnail(guild.iconURL())
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setDescription(desc)
       .addField(`Server Members [${all}]`, "```Members: " + users + "\nBots: " + bots + "```", true)
       .addField(`Online Stats [${onlineAll}]`, "```Members: " + onlineUsers + "\nBots: " + onlineBots + "```", true)
       .addField(
         `Categories and channels [${totalChannels}]`,
-        "```Categories: " + categories + " | Text: " + textChannels + " | Voice: " + voiceChannels + "```",
+        "```Categories: " +
+          categories +
+          " | Text: " +
+          textChannels +
+          " | Voice: " +
+          voiceChannels +
+          " | Thread: " +
+          threadChannels +
+          "```",
         false
       )
       .addField(`Roles [${rolesCount}]`, "```" + rolesString + "```", false)

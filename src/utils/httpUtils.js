@@ -14,7 +14,9 @@ async function getResponse(url) {
       data: res.data,
     };
   } catch (error) {
-    console.log(`[AXIOS ERROR]\nURL: ${url}\n${error}\n`);
+    if (error.response?.status !== 404) {
+      console.log(`[AXIOS ERROR]\nURL: ${url}\n${error}\n`);
+    }
     return {
       success: false,
       status: error.response?.status,

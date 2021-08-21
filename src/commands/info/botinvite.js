@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
-const { BOT_INVITE, DISCORD_SERVER_INVITE, EMBED_COLORS } = require("@root/config.js");
+const { BOT_INVITE, DISCORD_INVITE, EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class BotInviteCommand extends Command {
   constructor(client) {
@@ -17,7 +17,7 @@ module.exports = class BotInviteCommand extends Command {
   async run(ctx) {
     const { message } = ctx;
     let desc = "";
-    desc += `Support Server: [Join here](${DISCORD_SERVER_INVITE})` + "\n";
+    desc += `Support Server: [Join here](${DISCORD_INVITE})` + "\n";
     desc += `Invite Link: [Add me here](${BOT_INVITE})`;
 
     const embed = new MessageEmbed()
@@ -26,9 +26,10 @@ module.exports = class BotInviteCommand extends Command {
       .setDescription(desc);
 
     try {
-      await message.author.send(embed);
+      await message.author.send({ embeds: [embed] });
       message.reply("Check your DM for my invite :envelope_with_arrow:");
     } catch (ex) {
+      console.log(ex);
       message.reply("I cannot send you an invite! Is your DM open?");
     }
   }
