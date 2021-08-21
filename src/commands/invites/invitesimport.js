@@ -18,12 +18,12 @@ module.exports = class InvitesImportCommand extends Command {
   async run(ctx) {
     const { message } = ctx;
     const target = message.mentions.members.first();
-    let invites = await message.guild.fetchInvites();
+    let invites = await message.guild.invites.fetch({ cache: false });
 
     invites.forEach(async (invite) => {
       let user = invite.inviter;
-      if (!user || invite.uses == 0) return console.log("No inviter");
-      if (target && user.id !== target.id) return console.log("Skipping non user");
+      if (!user || invite.uses == 0) return; //console.log("No inviter");
+      if (target && user.id !== target.id) return; //console.log("Skipping non user");
       await incrementInvites(message.guild.id, user.id, "ADDED", invite.uses);
     });
 

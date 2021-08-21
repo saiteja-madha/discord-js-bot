@@ -29,10 +29,10 @@ module.exports = class AddInvitesCommand extends Command {
     if (!role) return ctx.reply("No roles found matching `" + query + "`");
 
     const settings = await getSettings(guild);
-    const exists = settings.invite.ranks.filter((obj) => obj.role_id === role.id);
+    const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
 
     let msg = "";
-    if (exists && exists.length > 1) {
+    if (exists) {
       await removeInviteRank(guild.id, role.id);
       msg += "Previous configuration found for this role. Overwriting data\n";
     }

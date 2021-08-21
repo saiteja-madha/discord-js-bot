@@ -49,7 +49,7 @@ const Schema = mongoose.Schema({
           type: String,
           required: true,
         },
-        role_id: {
+        _id: {
           type: String,
           required: true,
         },
@@ -147,8 +147,8 @@ module.exports = {
       { _id: id },
       {
         $push: {
-          "invites.ranks": {
-            role_id: roleId,
+          "invite.ranks": {
+            _id: roleId,
             invites: invites,
           },
         },
@@ -157,9 +157,7 @@ module.exports = {
   },
 
   removeInviteRank: async (id, roleId) => {
-    return await Model.updateOne({ _id: id }, { $pull: { "invites.ranks": { role_id: roleId } } }).then(
-      cache.remove(id)
-    );
+    return await Model.updateOne({ _id: id }, { $pull: { "invite.ranks": { _id: roleId } } }).then(cache.remove(id));
   },
 
   registerGuild,

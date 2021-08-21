@@ -1,5 +1,6 @@
 const { Command, CommandContext } = require("@src/structures");
 const { clearInvites } = require("@schemas/invite-schema");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class ClearInvites extends Command {
   constructor(client) {
@@ -19,7 +20,7 @@ module.exports = class ClearInvites extends Command {
    */
   async run(ctx) {
     const { message } = ctx;
-    const target = message.mentions.members.first();
+    const target = await resolveMember(message, args[0]);
     if (!target) return ctx.reply(`Incorrect syntax. You must mention a target`);
 
     await clearInvites(message.guild.id, target.id).then(

@@ -27,9 +27,9 @@ module.exports = class AddInvitesCommand extends Command {
     if (!role) return ctx.reply("No roles found matching `" + query + "`");
 
     const settings = await getSettings(guild);
-    const exists = settings.invite.ranks.filter((obj) => obj.role_id === role.id);
+    const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
 
-    if (!exists || exists.length == 0) return ctx.reply("No previous invite rank is configured found for this role");
+    if (!exists) return ctx.reply("No previous invite rank is configured found for this role");
     await removeInviteRank(guild.id, role.id).then(ctx.reply("Success! Configuration saved."));
   }
 };

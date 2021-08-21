@@ -93,12 +93,12 @@ async function checkInviteRewards(guild, inviterData, isAdded) {
     const invites = getEffectiveInvites(inviterData);
     settings.invite.ranks.forEach((reward) => {
       if (isAdded) {
-        if (invites + 1 >= reward.invites && inviter.roles.cache.has(reward.role_id)) {
-          inviter.roles.add(reward.role_id);
+        if (invites + 1 >= reward.invites && inviter.roles.cache.has(reward._id)) {
+          inviter.roles.add(reward._id);
         }
       } else {
-        if (invites - 1 < reward.invites && inviter.roles.cache.has(reward.role_id)) {
-          inviter.roles.remove(reward.roleID);
+        if (invites - 1 < reward.invites && inviter.roles.cache.has(reward._id)) {
+          inviter.roles.remove(reward._id);
         }
       }
     });
