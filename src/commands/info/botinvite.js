@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
-const { BOT_INVITE, DISCORD_INVITE, EMBED_COLORS } = require("@root/config.js");
+const { BOT_INVITE, SUPPORT_SERVER, EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class BotInviteCommand extends Command {
   constructor(client) {
@@ -17,7 +17,7 @@ module.exports = class BotInviteCommand extends Command {
   async run(ctx) {
     const { message } = ctx;
     let desc = "";
-    desc += `Support Server: [Join here](${DISCORD_INVITE})` + "\n";
+    desc += `Support Server: [Join here](${SUPPORT_SERVER})` + "\n";
     desc += `Invite Link: [Add me here](${BOT_INVITE})`;
 
     const embed = new MessageEmbed()

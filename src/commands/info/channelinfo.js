@@ -3,7 +3,6 @@ const { MessageEmbed } = require("discord.js");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const { getMatchingChannel } = require("@utils/guildUtils");
 const outdent = require("outdent");
-const { channelTypes } = require("@utils/botUtils");
 
 module.exports = class ChannelInfo extends Command {
   constructor(client) {
@@ -86,4 +85,14 @@ module.exports = class ChannelInfo extends Command {
     const embed = new MessageEmbed().setAuthor("Channel Details").setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
     ctx.reply({ embeds: [embed] });
   }
+};
+
+const channelTypes = {
+  GUILD_TEXT: "Text",
+  GUILD_PUBLIC_THREAD: "Public Thread",
+  GUILD_PRIVATE_THREAD: "Private Thread",
+  GUILD_NEWS: "News",
+  GUILD_NEWS_THREAD: "News Thread",
+  GUILD_VOICE: "Voice",
+  GUILD_STAGE_VOICE: "Stage Voice",
 };

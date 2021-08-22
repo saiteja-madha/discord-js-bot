@@ -1,6 +1,6 @@
 const { Command, CommandContext } = require("@src/structures");
 const { getCommand, COMMANDS } = require("@features/command-handler");
-const { EMOJIS, EMBED_COLORS, BOT_INVITE, DISCORD_INVITE } = require("@root/config.js");
+const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require("discord.js");
 
 const CMD_CATEGORIES = {
@@ -166,7 +166,11 @@ async function sendSelectionHelpMenu(ctx) {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(
-      `**About Me:**\nHello I am ${message.guild.me.displayName}!\nA cool multipurpose discord bot which can serve all your needs`
+      `**About Me:**\nHello I am ${message.guild.me.displayName}!\nA cool multipurpose discord bot which can serve all your needs
+      
+      **Invite Me:** [Here](${BOT_INVITE}) 
+      **Support Server:** [Join](${SUPPORT_SERVER})
+      `
     )
     .setThumbnail(message.client.user.displayAvatarURL());
 

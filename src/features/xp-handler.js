@@ -2,11 +2,10 @@ const { Client, Collection } = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
 const { incrementXP, setLevel } = require("@schemas/profile-schema");
 const { getRandomInt } = require("@utils/miscUtils");
-const { DEFAULT_LVL_UP_MSG } = require("@root/config.js");
+const { XP_SYSTEM } = require("@root/config.js");
 const { sendMessage } = require("@utils/botUtils");
 
 const XP_COOLDOWN = new Collection();
-const COOLDOWN_SECONDS = 5;
 
 /**
  * @param {Client} client
@@ -36,7 +35,7 @@ function run(client) {
       xp -= needed;
 
       await setLevel(message.guild.id, message.member.id, level, xp);
-      let lvlUpMessage = settings.level_up_message || DEFAULT_LVL_UP_MSG;
+      let lvlUpMessage = settings.level_up_message || XP_SYSTEM.DEFAULT_LVL_UP_MSG;
       lvlUpMessage = lvlUpMessage.replace("{l}", level).replace("{m}", message.member.user);
       const lvlUpChannel = message.guild.channels.cache.get(settings.level_up_channel) || message.channel;
 
@@ -66,7 +65,7 @@ function getXPNeeded(level) {
 function isOnCooldown(key) {
   if (XP_COOLDOWN.has(key)) {
     const difference = Date.now() - XP_COOLDOWN.get(key);
-    if (difference > COOLDOWN_SECONDS) {
+    if (difference > XP_SYSTEM.COOLDOWN) {
       XP_COOLDOWN.delete(key);
       return false;
     }

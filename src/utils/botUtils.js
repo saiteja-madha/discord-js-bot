@@ -3,7 +3,11 @@ const { getResponse } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 
 async function startupCheck() {
-  // Check for updates
+  await checkForUpdates();
+  validateConfig();
+}
+
+async function checkForUpdates() {
   const response = await getResponse("https://api.github.com/repos/saiteja-madha/discord-js-bot/releases/latest");
   if (!response.success) return console.log("\x1b[31m[Version Check] - Failed to check for bot updates\x1b[0m");
   if (response.data) {
@@ -14,23 +18,24 @@ async function startupCheck() {
       console.log("\x1b[32m[Download]:\x1b[0m https://github.com/saiteja-madha/discord-js-bot/releases/latest");
     }
   }
+}
 
-  // Validate .env and config.js
-  if (process.env.BOT_TOKEN === "") {
-    console.log("\x1b[31m[.env]\x1b[0m - BOT_TOKEN cannot be empty");
+function validateConfig() {
+  if (config.BOT_TOKEN === "") {
+    console.log("\x1b[31m[config.js]\x1b[0m - BOT_TOKEN cannot be empty");
     process.exit();
   }
-  if (process.env.MONGO_CONNECTION === "") {
-    console.log("\x1b[31m[.env]\x1b[0m - MONGO_CONNECTION cannot be empty");
+  if (config.MONGO_CONNECTION === "") {
+    console.log("\x1b[31m[config.js]\x1b[0m - MONGO_CONNECTION cannot be empty");
     process.exit();
   }
   if (config.OWNER_IDS.length === 0) console.log("\x1b[33m[config.js]\x1b[0m - OWNER_IDS are empty");
-  if (!config.IMAGE_API) {
+  if (!config.API.IMAGE_API) {
     console.log("\x1b[33m[config.js]\x1b[0m - IMAGE_API is not provided. Image commands will not work");
   }
   if (!config.BOT_INVITE) console.log("\x1b[33m[config.js]\x1b[0m - BOT_INVITE is not provided");
-  if (!config.DISCORD_INVITE) console.log("\x1b[33m[config.js]\x1b[0m - DISCORD_INVITE is not provided");
-  if (!config.CACHE_SIZE || isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS)) {
+  if (!config.SUPPORT_SERVER) console.log("\x1b[33m[config.js]\x1b[0m - SUPPORT_SERVER is not provided");
+  if (isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS) || isNaN(config.CACHE_SIZE.COUNTER)) {
     console.log("\x1b[31m[config.js]\x1b[0m - CACHE_SIZE must be a positive integer");
     process.exit();
   }
@@ -88,18 +93,7 @@ const permissions = {
   STREAM: "Video",
 };
 
-const channelTypes = {
-  GUILD_TEXT: "Text",
-  GUILD_PUBLIC_THREAD: "Public Thread",
-  GUILD_PRIVATE_THREAD: "Private Thread",
-  GUILD_NEWS: "News",
-  GUILD_NEWS_THREAD: "News Thread",
-  GUILD_VOICE: "Voice",
-  GUILD_STAGE_VOICE: "Stage Voice",
-};
-
 module.exports = {
-  channelTypes,
   permissions,
   sendMessage,
   startupCheck,

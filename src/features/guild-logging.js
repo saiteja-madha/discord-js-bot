@@ -1,7 +1,8 @@
 const { Client, Guild, MessageEmbed, WebhookClient } = require("discord.js");
-const { EMBED_COLORS } = require("@root/config.js");
+const { EMBED_COLORS, JOIN_LEAVE_WEBHOOK } = require("@root/config.js");
 const { registerGuild, updateGuildLeft } = require("@schemas/guild-schema");
-const webhookClient = new WebhookClient({ url: process.env.JOIN_LEAVE_WEBHOOK });
+
+const webhookClient = JOIN_LEAVE_WEBHOOK ? new WebhookClient({ url: JOIN_LEAVE_WEBHOOK }) : undefined;
 
 /**
  * @param {Client} client
@@ -24,6 +25,7 @@ async function run(client) {
  * @param {Guild} guild
  */
 function sendWebhook(guild, isJoin) {
+  if (!webhookClient) return;
   const { client } = guild;
 
   const embed = new MessageEmbed()

@@ -1,5 +1,4 @@
 require("module-alias/register");
-require("dotenv").config();
 
 const { Client, Intents } = require("discord.js");
 const path = require("path");
@@ -7,6 +6,7 @@ const fs = require("fs");
 const mongo = require("@database/mongo");
 const ascii = require("ascii-table");
 const { startupCheck } = require("@utils/botUtils");
+const { BOT_TOKEN } = require("@root/config");
 
 global.__appRoot = path.resolve(__dirname);
 const client = new Client({
@@ -62,5 +62,5 @@ process.on("unhandledRejection", (reason, promise) => {
 
 (async () => {
   await startupCheck();
-  client.login(process.env.BOT_TOKEN);
+  client.login(BOT_TOKEN);
 })();

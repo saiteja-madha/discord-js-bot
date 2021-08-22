@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
 const { timeformat } = require("@utils/miscUtils");
-const { EMOJIS, EMBED_COLORS, BOT_INVITE, DISCORD_INVITE } = require("@root/config.js");
+const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
 const os = require("os");
 const outdent = require("outdent");
 
@@ -85,7 +85,7 @@ module.exports = class BotStatsCommand extends Command {
       .addField("Node Js version", process.versions.node, false)
       .addField("Uptime", "```" + timeformat(process.uptime()) + "```", false)
       .addField("INVITE:", `[Add Me here!](${BOT_INVITE})`, true)
-      .addField("SUPPORT:", `[Discord!](${DISCORD_INVITE})`, true);
+      .addField("SUPPORT:", `[Discord!](${SUPPORT_SERVER})`, true);
 
     ctx.reply({ embeds: [embed] });
   }

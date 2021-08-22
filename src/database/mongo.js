@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const mongoPath = process.env.MONGO_CONNECTION;
+const { MONGO_CONNECTION } = require("@root/config");
 mongoose.plugin(require("mongoose-lean-defaults").default);
 
 module.exports = async () => {
-  await mongoose.connect(mongoPath, {
+  await mongoose.connect(MONGO_CONNECTION, {
     keepAlive: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,

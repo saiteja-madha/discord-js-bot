@@ -1,9 +1,9 @@
 const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
-const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
+const { MESSAGES, EMBED_COLORS, API } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 
-const ACCESS_KEY = process.env.WEATHERSTACK_KEY;
+const ACCESS_KEY = API.WEATHERSTACK_KEY;
 
 module.exports = class WeatherCommand extends Command {
   constructor(client) {
