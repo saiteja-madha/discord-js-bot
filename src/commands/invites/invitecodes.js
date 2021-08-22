@@ -1,13 +1,14 @@
 const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class InviteCodes extends Command {
   constructor(client) {
     super(client, {
       name: "invitecodes",
       description: "list all your invites codes in this guild",
-      usage: "[@member]",
+      usage: "[@member|id]",
       category: "INVITE",
       botPermissions: ["EMBED_LINKS", "MANAGE_GUILD"],
     });
@@ -17,8 +18,8 @@ module.exports = class InviteCodes extends Command {
    * @param {CommandContext} ctx
    */
   async run(ctx) {
-    const { message, guild } = ctx;
-    const target = message.mentions.members.first() || message.member;
+    const { message, guild, args } = ctx;
+    const target = (await resolveMember(message, args[0])) || message.member;
 
     let invites = await guild.invites.fetch({ cache: false });
     let reqInvites = invites.filter((inv) => inv.inviter.id === target.id);

@@ -20,7 +20,7 @@ module.exports = class ClearInvites extends Command {
    */
   async run(ctx) {
     const { message, args } = ctx;
-    const target = await resolveMember(message, args[0]);
+    const target = await resolveMember(message, args[0], true);
     if (!target) return ctx.reply(`Incorrect syntax. You must mention a target`);
 
     await clearInvites(message.guild.id, target.id).then(ctx.reply(`Done! Invites cleared for \`${target.user.tag}\``));

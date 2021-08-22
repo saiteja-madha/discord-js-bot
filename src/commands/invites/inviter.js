@@ -4,13 +4,14 @@ const { getDetails } = require("@schemas/invite-schema");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed } = require("discord.js");
 const outdent = require("outdent");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class InviterCommand extends Command {
   constructor(client) {
     super(client, {
       name: "inviter",
       description: "shows inviter information",
-      usage: "[@member]",
+      usage: "[@member|id]",
       category: "INVITE",
       botPermissions: ["EMBED_LINKS"],
     });
@@ -20,8 +21,8 @@ module.exports = class InviterCommand extends Command {
    * @param {CommandContext} ctx
    */
   async run(ctx) {
-    const { message } = ctx;
-    const target = message.mentions.members.first() || message.member;
+    const { message, args } = ctx;
+    const target = (await resolveMember(message, args[0])) || message.member;
 
     const inviteData = await getDetails(message.guild.id, target.id);
     if (!inviteData || !inviteData.inviter_id) return ctx.reply(`Cannot track how \`${target.user.tag}\` joined`);

@@ -3,13 +3,14 @@ const { getEffectiveInvites, checkInviteRewards } = require("@features/invite-tr
 const { incrementInvites } = require("@schemas/invite-schema");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed } = require("discord.js");
+const { resolveMember } = require("@root/src/utils/guildUtils");
 
 module.exports = class AddInvitesCommand extends Command {
   constructor(client) {
     super(client, {
       name: "addinvites",
       description: "add invites to a member",
-      usage: "<@member> <invites>",
+      usage: "<@member|id> <invites>",
       minArgsCount: 2,
       category: "INVITE",
       botPermissions: ["EMBED_LINKS"],
@@ -21,8 +22,8 @@ module.exports = class AddInvitesCommand extends Command {
    * @param {CommandContext} ctx
    */
   async run(ctx) {
-    const { message, guild } = ctx;
-    const target = message.mentions.members.first();
+    const { message, guild, args } = ctx;
+    const target = await resolveMember(message, args[0], true);
     const amount = ctx.args[1];
 
     if (!target) return ctx.reply(`Incorrect syntax. You must mention a target`);

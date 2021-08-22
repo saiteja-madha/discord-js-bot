@@ -30,7 +30,7 @@ async function getImageFromCommand(message, args) {
   }
 
   if (!url) {
-    let member = await resolveMember(message, args[0]).catch((ex) => {});
+    let member = await resolveMember(message, args[0]);
     if (member) url = member.user.displayAvatarURL({ size: 256, format: "png" });
   }
 
