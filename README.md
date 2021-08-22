@@ -11,22 +11,8 @@ git clone https://github.com/saiteja-madha/discord-js-bot.git
 cd discord-js-bot
 npm install
 ```
-After installation finishes use `node .` to start the bot
-
-## ⚙️ Configuration
-```
-Rename ".env.example" to ".env" and fill the values
-Optionally edit config.json
-```
-
-Property | Description | Optional
------------- | ------------- | -------------
-`BOT_TOKEN` | Discord bot token from [here](https://discord.com/developers/applications) | ❌
-`MONGO_CONNECTION` | Mongo Connection String URL | ❌
-`WEATHERSTACK_KEY` | API to get weather data from [here](https://weatherstack.com/) | ✅
-`JOIN_LEAVE_WEBHOOK` | Webhook URL to send guild join/leave details [here](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) | ✅
-
-<br>
+- Rename config-sample.js to config.js and fill the values
+- After installation finishes use `node .` to start the bot
 
 ## 📝 Features & Commands
 
@@ -168,7 +154,37 @@ Command | Description
    </tr>
 </table>
 
-<br>
+### 🎫 Ticket Commands
+```
+Commands marked * can be used in ticket channel only
+```
+Command | Description
+------------ | -------------
+`ticket setup` | start an interactive ticket setup
+`ticket log <#channel>` | setup log channel for tickets
+`ticket limit <number>` | set maximum number of concurrent open tickets
+`ticket close` | close the ticket*
+`ticket closeall` | close all open tickets
+`ticket add <userId\|roleId>` | add user/role to the ticket*
+`ticket remove <userId\|roleId>` | remove user/role from the ticket*
+
+### 📨 Invite Commands
+Invite tracking must be enabled for most of the commands to work 
+```
+!invitetracking ON 
+``` 
+Command | Description
+------------ | -------------
+`inviter [@member\|id]` | shows inviter information
+`invites [@member\|id]` | shows number of invites in this server
+`addinvites [@member\|id] <invites>` | add invites to a member
+`clearinvites [@member\|id]` | clear a users added invites
+`invitecodes [@member\|id]` | list of invites codes in this guild
+`invitesimport [@member\|id]` | add existing guild invites to users or all members
+`inviteranks` | shows the invite ranks configured on this guild
+`addinviterank <role-name> <invites>` | add auto-rank after reaching a particular number of invites
+`reminviterank <role-name>` | remove invite rank configured with that role
+`invitetracking <ON\|OFF>` | remove invite rank configured with that role
 
 ## 🤝 Contributing
 Feel free to [Fork](https://github.com/saiteja-madha/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
