@@ -24,17 +24,15 @@ async function run(client) {
     const usedInvite = newInvites.find((inv) => cachedInvites.get(inv.code).uses < inv.uses);
 
     // could not track who invited this user 😟
-    if (!usedInvite) {
-      return;
-    }
+    if (!usedInvite) return;
 
     // Joined using Vanity URL
     if (usedInvite.code === guild.vanityURLCode) {
       return await db.addInviter(guild.id, member.id, "VANITY");
     }
 
-    await db.addInviter(guild.id, member.id, usedInvite.inviter.id, usedInvite.code);
-    const inviterData = await db.incrementInvites(guild.id, usedInvite.inviter.id, "TRACKED");
+    await db.addInviter(guild.id, member.id, usedInvite.inviterId, usedInvite.code);
+    const inviterData = await db.incrementInvites(guild.id, usedInvite.inviterId, "TRACKED");
 
     checkInviteRewards(guild, inviterData, true);
   });
@@ -45,15 +43,12 @@ async function run(client) {
     const { guild } = member;
 
     let inviteData = await db.getDetails(guild.id, member.id);
-    if (!inviteData || !inviteData?.inviter_id) {
-      console.log(`${member.user.tag} left the server but I do not know who invited them.`);
-      return;
-    }
 
-    if (inviteData.inviter_id === "VANITY") {
-      console.log(`${member.user.tag} left the server. They joined using the server vanity URL.`);
-      return;
-    }
+    // No invite data for the member
+    if (!inviteData || !inviteData.inviter_id) return;
+
+    // member joined using vanity url
+    if (inviteData.inviter_id === "VANITY") return;
 
     const inviterData = await db.incrementInvites(guild.id, inviteData.inviter_id, "LEFT");
     checkInviteRewards(guild, inviterData, false);
@@ -63,20 +58,16 @@ async function run(client) {
 /**
  * @param {Guild} guild
  */
-async function shouldInvitesBeTracked(guild) {
-  const settings = await getSettings(guild);
-  return settings.invite.tracking && guild.me.permissions.has("MANAGE_GUILD");
-}
-
-/**
- * @param {Guild} guild
- */
 async function cacheGuildInvites(guild) {
-  if (!guild || !(await shouldInvitesBeTracked(guild))) return new Collection();
-  let invites = await guild.invites.fetch({ cache: false });
-  if (guild.vanityURLCode) invites.set(guild.vanityURLCode, await guild.fetchVanityData());
-  INVITE_CACHE.set(guild.id, invites);
-  return invites;
+  if (!guild || !(await getSettings(guild)).invite.tracking) return new Collection();
+  let invites = await guild.invites.fetch();
+
+  let tempMap = new Collection();
+  invites.forEach((inv) => tempMap.set(inv.code, cacheInvite(inv)));
+  if (guild.vanityURLCode) tempMap.set(guild.vanityURLCode, cacheInvite(await guild.fetchVanityData(), true));
+
+  INVITE_CACHE.set(guild.id, tempMap);
+  return tempMap;
 }
 
 /**
@@ -115,8 +106,17 @@ function getEffectiveInvites(inviterData) {
   );
 }
 
+function cacheInvite(invite, isVanity) {
+  return {
+    code: invite.code,
+    uses: invite.uses,
+    inviterId: isVanity ? "VANITY" : invite.inviter?.id,
+  };
+}
+
 module.exports = {
   run,
   getEffectiveInvites,
   checkInviteRewards,
+  cacheGuildInvites,
 };

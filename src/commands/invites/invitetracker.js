@@ -1,5 +1,6 @@
 const { Command, CommandContext } = require("@src/structures");
 const { inviteTracking } = require("@schemas/guild-schema");
+const { cacheGuildInvites } = require("@features/invite-tracker");
 
 module.exports = class InviteTracker extends Command {
   constructor(client) {
@@ -8,6 +9,7 @@ module.exports = class InviteTracker extends Command {
       description: "enable or disable invite tracking in the server",
       usage: "<ON|OFF>",
       minArgsCount: 1,
+      aliases: ["invitetracking"],
       category: "INVITE",
       userPermissions: ["ADMINISTRATOR"],
     });
@@ -24,6 +26,32 @@ module.exports = class InviteTracker extends Command {
     if (input === "none" || input === "off" || input === "disable") status = false;
     else if (input === "on" || input === "enable") status = true;
     else return ctx.reply("Incorrect Command Usage");
+
+    if (status) {
+      if (!guild.me.permissions.has(["MANAGE_GUILD", "MANAGE_CHANNELS"])) {
+        return await ctx.reply(
+          "Oops! I am missing `Manage Server`, `Manage Channels` permission!\nI cannot track invites"
+        );
+      }
+
+      const channelMissing = guild.channels.cache
+        .filter((ch) => ch.type === "GUILD_TEXT" && !ch.permissionsFor(guild.me).has("MANAGE_CHANNELS"))
+        .map((ch) => ch.name);
+
+      if (channelMissing.length > 1) {
+        return ctx.reply(
+          "I may not be able to track invites properly\nI am missing `Manage Channel` permission in the following channels ```" +
+            channelMissing.join(", ") +
+            "```"
+        );
+      }
+    }
+
+    try {
+      await cacheGuildInvites(guild);
+    } catch (ex) {
+      return ctx.reply("Unexpected error occurred while caching the invites!");
+    }
 
     inviteTracking(guild.id, status)
       .then(() => {

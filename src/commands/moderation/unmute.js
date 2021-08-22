@@ -36,8 +36,6 @@ module.exports = class UnmuteCommand extends Command {
       .forEach(async (target) => {
         const result = await unmute(guild.id, target.id);
 
-        console.log(result);
-
         if (result.nModified === 1) {
           await target.roles.remove(mutedRole);
           ctx.reply(`${target.user.tag} is unmuted`);

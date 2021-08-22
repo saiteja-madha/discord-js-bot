@@ -139,8 +139,8 @@ async function purgeMessages(message, type, amount, argument) {
  */
 function memberInteract(issuer, target) {
   const { guild } = issuer;
-  if (guild.ownerID === issuer.id) return true;
-  if (guild.ownerID === target.id) return false;
+  if (guild.ownerId === issuer.id) return true;
+  if (guild.ownerId === target.id) return false;
   const issuerRoles = issuer.roles.cache;
   const targetRoles = target.roles.cache;
   return (
