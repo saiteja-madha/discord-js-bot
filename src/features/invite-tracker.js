@@ -1,6 +1,7 @@
 const { getSettings } = require("@schemas/guild-schema");
 const db = require("@schemas/invite-schema");
 const { Client, Collection, Guild } = require("discord.js");
+const { handleGreeting } = require("@features/greeting-handler");
 
 const INVITE_CACHE = new Collection();
 
@@ -19,22 +20,22 @@ async function run(client) {
     if (member.user.bot || !member.guild) return;
     const { guild } = member;
 
+    const settings = await getSettings(guild);
+    if (!settings.invite.tracking) return;
+
     const cachedInvites = INVITE_CACHE.get(guild.id);
     const newInvites = await cacheGuildInvites(guild);
     const usedInvite = newInvites.find((inv) => cachedInvites.get(inv.code).uses < inv.uses);
 
-    // could not track who invited this user 😟
-    if (!usedInvite) return;
-
-    // Joined using Vanity URL
-    if (usedInvite.code === guild.vanityURLCode) {
-      return await db.addInviter(guild.id, member.id, "VANITY");
+    let inviterData = {};
+    if (usedInvite) {
+      const inviterId = usedInvite.code === guild.vanityURLCode ? "VANITY" : usedInvite.inviterId;
+      await db.addInviter(guild.id, member.id, inviterId, usedInvite.code);
+      inviterData = await db.incrementInvites(guild.id, inviterId, "TRACKED");
     }
 
-    await db.addInviter(guild.id, member.id, usedInvite.inviterId, usedInvite.code);
-    const inviterData = await db.incrementInvites(guild.id, usedInvite.inviterId, "TRACKED");
-
     checkInviteRewards(guild, inviterData, true);
+    handleGreeting(member, true, inviterData); // call greeting handler
   });
 
   client.on("guildMemberRemove", async (member) => {
@@ -52,6 +53,7 @@ async function run(client) {
 
     const inviterData = await db.incrementInvites(guild.id, inviteData.inviter_id, "LEFT");
     checkInviteRewards(guild, inviterData, false);
+    handleGreeting(member, false); // call greeting handler
   });
 }
 
