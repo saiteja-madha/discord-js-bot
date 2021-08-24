@@ -43,17 +43,18 @@ async function run(client) {
     if (member.user.bot) return;
     const { guild } = member;
 
-    let inviteData = await db.getDetails(guild.id, member.id);
+    const settings = await getSettings(guild);
+    if (!settings.invite.tracking) return;
+    let inviteData = (await db.getDetails(guild.id, member.id)) || {};
 
-    // No invite data for the member
-    if (!inviteData || !inviteData.inviter_id) return;
+    let inviterData = {};
+    if (inviteData.inviter_id) {
+      const inviterId = inviteData.inviter_id === "VANITY" ? "VANITY" : inviteData.inviter_id;
+      inviterData = await db.incrementInvites(guild.id, inviterId, "LEFT");
+    }
 
-    // member joined using vanity url
-    if (inviteData.inviter_id === "VANITY") return;
-
-    const inviterData = await db.incrementInvites(guild.id, inviteData.inviter_id, "LEFT");
     checkInviteRewards(guild, inviterData, false);
-    handleGreeting(member, false); // call greeting handler
+    handleGreeting(member, false, inviterData); // call greeting handler
   });
 }
 
@@ -77,10 +78,10 @@ async function cacheGuildInvites(guild) {
  * @param {Object} inviterData
  * @param {Boolean} isAdded
  */
-async function checkInviteRewards(guild, inviterData, isAdded) {
+async function checkInviteRewards(guild, inviterData = {}, isAdded) {
   const settings = await getSettings(guild);
-  if (settings.invite.ranks.length > 0 && inviterData?.inviter_id) {
-    let inviter = await guild.members.fetch(inviterData?.inviter_id).catch((ex) => {});
+  if (settings.invite.ranks.length > 0 && inviterData?.member_id) {
+    let inviter = await guild.members.fetch(inviterData?.member_id).catch((ex) => {});
     if (!inviter) return;
 
     const invites = getEffectiveInvites(inviterData);

@@ -39,7 +39,7 @@ module.exports = {
       },
       {},
       { upsert: true }
-    );
+    ).lean();
   },
 
   addInviter: async (guildId, memberId, inviterId, inviteCode) => {
@@ -65,16 +65,16 @@ module.exports = {
 
     switch (type) {
       case "TRACKED":
-        return await Model.findOneAndUpdate(filter, { $inc: { tracked_invites: amount || 1 } }, options);
+        return await Model.findOneAndUpdate(filter, { $inc: { tracked_invites: amount || 1 } }, options).lean();
 
       case "LEFT":
-        return await Model.findOneAndUpdate(filter, { $inc: { left_invites: amount || 1 } }, options);
+        return await Model.findOneAndUpdate(filter, { $inc: { left_invites: amount || 1 } }, options).lean();
 
       case "FAKE":
-        return await Model.findOneAndUpdate(filter, { $inc: { fake_invites: amount || 1 } }, options);
+        return await Model.findOneAndUpdate(filter, { $inc: { fake_invites: amount || 1 } }, options).lean();
 
       case "ADDED":
-        return await Model.findOneAndUpdate(filter, { $inc: { added_invites: amount || 1 } }, options);
+        return await Model.findOneAndUpdate(filter, { $inc: { added_invites: amount || 1 } }, options).lean();
     }
   },
 

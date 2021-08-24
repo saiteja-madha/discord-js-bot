@@ -35,7 +35,7 @@ function validateConfig() {
   }
   if (!config.BOT_INVITE) console.log("\x1b[33m[config.js]\x1b[0m - BOT_INVITE is not provided");
   if (!config.SUPPORT_SERVER) console.log("\x1b[33m[config.js]\x1b[0m - SUPPORT_SERVER is not provided");
-  if (isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS) || isNaN(config.CACHE_SIZE.COUNTER)) {
+  if (isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS) || isNaN(config.CACHE_SIZE.MEMBERS)) {
     console.log("\x1b[31m[config.js]\x1b[0m - CACHE_SIZE must be a positive integer");
     process.exit();
   }

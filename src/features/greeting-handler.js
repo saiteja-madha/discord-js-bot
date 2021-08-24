@@ -1,6 +1,7 @@
 const { Client, MessageEmbed, GuildMember } = require("discord.js");
 const { getConfig, setChannel } = require("@schemas/greeting-schema");
 const { sendMessage } = require("@utils/botUtils");
+const { getSettings } = require("@schemas/guild-schema");
 
 /**
  * @param {Client} client
@@ -33,6 +34,8 @@ async function handleGreeting(member, added, inviterData = {}) {
   const { guild } = member;
 
   const config = added ? (await getConfig(guild.id))?.welcome : (await getConfig(guild.id))?.farewell;
+  if (!config) return;
+
   const channel = guild.channels.cache.get(config.channel_id);
   if (!channel) return await setChannel(guild.id, null, added ? "welcome" : "farewell");
 
