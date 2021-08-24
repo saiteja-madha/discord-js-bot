@@ -6,7 +6,8 @@ const fs = require("fs");
 const mongo = require("@database/mongo");
 const ascii = require("ascii-table");
 const { startupCheck } = require("@utils/botUtils");
-const { BOT_TOKEN } = require("@root/config");
+const { BOT_TOKEN, DASHBOARD } = require("@root/config");
+const { launch } = require("@root/dashboard/app");
 
 global.__appRoot = path.resolve(__dirname);
 const client = new Client({
@@ -25,6 +26,7 @@ client.once("ready", async () => {
   console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
   await mongo();
   loadFeatures(client);
+  if (DASHBOARD.enabled) launch(client);
 });
 
 const loadFeatures = (client) => {
