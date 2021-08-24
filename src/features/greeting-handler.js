@@ -65,7 +65,7 @@ async function buildEmbed(member, config, inviterData) {
  * @param {GuildMember} member
  * @param {Object} inviterData
  */
-async function parse(content, member, inviterData) {
+async function parse(content, member, inviterData = {}) {
   let inviteData = {};
 
   if (content.includes("{inviter:")) {
@@ -85,7 +85,12 @@ async function parse(content, member, inviterData) {
     .replaceAll(/{member:name}/g, member.displayName)
     .replaceAll(/{member:tag}/g, member.user.tag)
     .replaceAll(/{inviter:name}/g, inviteData.name)
-    .replaceAll(/{inviter:tag}/g, inviteData.tag);
+    .replaceAll(/{inviter:tag}/g, inviteData.tag)
+    .replaceAll(/{invites}/g, getEffectiveInvites(inviterData));
+}
+
+function getEffectiveInvites(data) {
+  return data?.tracked_invites + data?.added_invites - data?.fake_invites - data?.left_invites || 0;
 }
 
 module.exports = {

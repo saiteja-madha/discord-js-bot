@@ -65,7 +65,6 @@ module.exports = {
   },
 
   setDescription: async (guildId, content, type) => {
-    const update = {};
     if (type === "welcome") await Model.updateOne({ _id: guildId }, { "welcome.embed.description": content }, upsert);
     else if (type === "farewell")
       await Model.updateOne({ _id: guildId }, { "farewell.embed.description": content }, upsert);
