@@ -6,6 +6,14 @@ module.exports = {
   PREFIX: "!", // Default prefix for the bot
   BOT_INVITE: "", // Your bot invite link
   SUPPORT_SERVER: "", // Your bot support server
+  DASHBOARD: {
+    enabled: true, // enable or disable dashboard
+    baseURL: "http://localhost:8080", // base url
+    failureURL: "http://localhost:8080", // failure redirect url
+    secret: "xxxxxxxxxxx", // bot secret
+    port: "8080", // port to run the bot on
+    expressSessionPassword: "discordbot", // random password string
+  },
   XP_SYSTEM: {
     COOLDOWN: 5, // Cooldown in seconds between messages
     DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
@@ -39,7 +47,7 @@ module.exports = {
   CACHE_SIZE: {
     GUILDS: 10,
     USERS: 1000,
-    COUNTER: 10,
+    MEMBERS: 10,
   },
   MESSAGES: {
     API_ERROR: "Unexpected Backend Error! Try again later or contact support server",

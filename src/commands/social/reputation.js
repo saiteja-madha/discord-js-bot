@@ -3,6 +3,7 @@ const { resolveMember } = require("@utils/guildUtils");
 const { getUser, increaseReputation } = require("@schemas/user-schema");
 const { MessageEmbed } = require("discord.js");
 const { diff_hours, getRemainingTime } = require("@utils/miscUtils");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class Reputation extends Command {
   constructor(client) {
@@ -40,8 +41,10 @@ module.exports = class Reputation extends Command {
       }
       await increaseReputation(author.id, target.id);
       const embed = new MessageEmbed()
-        .setAuthor("From " + author.username, author.displayAvatarURL())
-        .setDescription(target.toString() + " +1 Rep!");
+        .setColor(EMBED_COLORS.BOT_EMBED)
+        .setDescription(target.toString() + " +1 Rep!")
+        .setFooter(`By ${ctx.message.author.tag}`)
+        .setTimestamp(Date.now());
 
       ctx.reply({ embeds: [embed] });
     } catch (ex) {

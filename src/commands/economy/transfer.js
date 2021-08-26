@@ -2,7 +2,6 @@ const { Command, CommandContext } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
 const { getUser, addCoins } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
-const outdent = require("outdent");
 const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class Transfer extends Command {
@@ -39,11 +38,14 @@ module.exports = class Transfer extends Command {
       const src = await addCoins(member.id, -coins);
       const des = await addCoins(target.id, coins);
 
-      const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setAuthor("Coins Transferred")
-        .setDescription(outdent`**Updated Balance:**
-          **${member.displayName}:** ${src.coins}${EMOJIS.CURRENCY}
-          **${target.displayName}:** ${des.coins}${EMOJIS.CURRENCY}
-          `);
+      const embed = new MessageEmbed()
+        .setColor(EMBED_COLORS.BOT_EMBED)
+        .setAuthor("Updated Balance")
+        .setDescription(
+          `**${member.displayName}:** ${src.coins}${EMOJIS.CURRENCY}\n` +
+            `**${target.displayName}:** ${des.coins}${EMOJIS.CURRENCY}`
+        )
+        .setTimestamp(Date.now());
 
       ctx.reply({ embeds: [embed] });
     } catch (ex) {

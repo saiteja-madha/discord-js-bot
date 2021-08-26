@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@src/structures");
 const { getCommand, COMMANDS } = require("@features/command-handler");
 const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
 
 const CMD_CATEGORIES = {
   ADMIN: {
@@ -122,11 +122,11 @@ function getCategoryHelpEmbed(ctx, category) {
     const commands = COMMANDS.filter((cmd) => cmd.category === category);
     if (commands.length == 0) return ctx.reply(`No commands in this category`);
     commands.forEach((cmd) => {
-      if (cmd.subcommands.length == 0) collector += `${EMOJIS.ARROW} \`${cmd.name}\` - ${cmd.description}\n`;
-      else
+      if (cmd.category !== "ADMIN" && cmd.subcommands.length > 0) {
         cmd.subcommands.forEach(
           (sub) => (collector += `${EMOJIS.ARROW} \`${cmd.name} ${sub.trigger}\`: ${sub.description}\n`)
         );
+      } else collector += `${EMOJIS.ARROW} \`${cmd.name}\` - ${cmd.description}\n`;
     });
   }
 
@@ -166,11 +166,11 @@ async function sendSelectionHelpMenu(ctx) {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(
-      `**About Me:**\nHello I am ${message.guild.me.displayName}!\nA cool multipurpose discord bot which can serve all your needs
-      
-      **Invite Me:** [Here](${BOT_INVITE}) 
-      **Support Server:** [Join](${SUPPORT_SERVER})
-      `
+      `**About Me:**\n` +
+        `Hello I am ${message.guild.me.displayName}!\n` +
+        `A cool multipurpose discord bot which can serve all your needs\n\n` +
+        `**Invite Me:** [Here](${BOT_INVITE})\n` +
+        `**Support Server:** [Join](${SUPPORT_SERVER})`
     )
     .setThumbnail(message.client.user.displayAvatarURL());
 

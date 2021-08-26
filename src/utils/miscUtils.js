@@ -32,7 +32,7 @@ function getRandomInt(max) {
  * @param {String} text
  */
 function isHex(text) {
-  return /^#[0-9A-F]{6}$/i.test("#AABBCC");
+  return /^#[0-9A-F]{6}$/i.test(text);
 }
 
 /**
