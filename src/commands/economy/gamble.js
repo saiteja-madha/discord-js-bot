@@ -60,6 +60,7 @@ module.exports = class Gamble extends Command {
       const embed = new MessageEmbed()
         .setAuthor(member.displayName, member.user.displayAvatarURL())
         .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+        .setThumbnail("https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif")
         .setDescription(str)
         .setFooter(`${result}\nUpdated balance: ${remaining?.coins}${EMOJIS.CURRENCY}`);
 
