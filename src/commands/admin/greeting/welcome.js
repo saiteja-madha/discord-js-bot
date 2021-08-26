@@ -1,7 +1,7 @@
 const { Command, CommandContext } = require("@src/structures");
 const { isHex } = require("@utils/miscUtils");
 const db = require("@schemas/greeting-schema");
-const { buildEmbed } = require("@root/src/features/greeting-handler");
+const { buildEmbed } = require("@features/greeting-handler");
 const { getConfig } = require("@schemas/greeting-schema");
 
 module.exports = class Welcome extends Command {
@@ -83,14 +83,13 @@ module.exports = class Welcome extends Command {
   }
 };
 
-/**
- * @param {CommandContext} ctx
- */
 async function sendPreview(ctx) {
   const config = (await getConfig(ctx.guild.id))?.welcome;
   let embed = await buildEmbed(ctx.message.member, config?.embed);
   if (embed) {
     ctx.reply({ embeds: [embed] });
+  } else {
+    ctx.message.reply("Welcome message not configured in this server");
   }
 }
 

@@ -1,6 +1,8 @@
 const { Command, CommandContext } = require("@src/structures");
 const { isHex } = require("@utils/miscUtils");
 const db = require("@schemas/greeting-schema");
+const { buildEmbed } = require("@features/greeting-handler");
+const { getConfig } = require("@schemas/greeting-schema");
 
 module.exports = class Farewell extends Command {
   constructor(client) {
@@ -77,6 +79,16 @@ module.exports = class Farewell extends Command {
     }
   }
 };
+
+async function sendPreview(ctx) {
+  const config = (await getConfig(ctx.guild.id))?.farewell;
+  let embed = await buildEmbed(ctx.message.member, config?.embed);
+  if (embed) {
+    ctx.reply({ embeds: [embed] });
+  } else {
+    ctx.message.reply("Farewell message not configured in this server");
+  }
+}
 
 async function setDescription(ctx) {
   const { message, args } = ctx;
