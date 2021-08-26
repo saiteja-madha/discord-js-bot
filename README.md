@@ -222,5 +222,8 @@ Command | Description
 `removerr <#channel> <messageid>` | remove configured reaction for the specified message
 
 
+## Credits
+Dashboard: [Atlanta](https://github.com/Androz2091/AtlantaBot)
+
 ## 🤝 Contributing
 Feel free to [Fork](https://github.com/saiteja-madha/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
