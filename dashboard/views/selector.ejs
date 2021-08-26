@@ -46,7 +46,11 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
+                  <% if(guild.settingsUrl.includes('discordapp.com')) { %>
+                  <a href="<%= guild.settingsUrl %>"><button class="btn btn-block btn-primary">Invite</button></a>
+                  <% } else { %>
                   <a href="<%= guild.settingsUrl %>"><button class="btn btn-block btn-success">Manage</button></a>
+                  <% } %>
                 </div>
                 <!-- /.box-footer -->
               </div>
