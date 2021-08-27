@@ -7,17 +7,21 @@ const { loadReactionRoles, getReactionRole } = require("@schemas/reactionrole-sc
 async function run(client) {
   await loadReactionRoles();
 
-  client.on("messageReactionAdd", async (reaction) => {
+  client.on("messageReactionAdd", async (reaction, user) => {
     const data = await fetchRoleData(reaction);
     if (data) {
-      await reaction.message.member.roles.add(reaction.message.guild.roles.cache.get(data.role_id));
+      let member = await reaction.message.guild.fetch(user.id);
+      if (!member) return;
+      await member.roles.add(reaction.message.guild.roles.cache.get(data.role_id));
     }
   });
 
   client.on("messageReactionRemove", async (reaction) => {
     const data = await fetchRoleData(reaction);
     if (data) {
-      await reaction.message.member.roles.remove(reaction.message.guild.roles.cache.get(data.role_id));
+      let member = await reaction.message.guild.fetch(user.id);
+      if (!member) return;
+      await member.roles.remove(reaction.message.guild.roles.cache.get(data.role_id));
     }
   });
 }
