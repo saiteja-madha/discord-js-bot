@@ -16,7 +16,7 @@ async function run(client) {
     }
   });
 
-  client.on("messageReactionRemove", async (reaction) => {
+  client.on("messageReactionRemove", async (reaction, user) => {
     const data = await fetchRoleData(reaction);
     if (data) {
       let member = await reaction.message.guild.fetch(user.id);
