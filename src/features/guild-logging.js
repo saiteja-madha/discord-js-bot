@@ -7,7 +7,7 @@ const webhookClient = JOIN_LEAVE_WEBHOOK ? new WebhookClient({ url: JOIN_LEAVE_W
 /**
  * @param {Client} client
  */
-async function run(client) {
+async function init(client) {
   client.on("guildCreate", async (guild) => {
     if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
     console.log(`Guild Joined: ${guild.name} Members: ${guild.memberCount}`);
@@ -46,5 +46,5 @@ function sendWebhook(guild, isJoin) {
 }
 
 module.exports = {
-  run,
+  init,
 };

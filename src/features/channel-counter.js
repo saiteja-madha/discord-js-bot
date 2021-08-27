@@ -8,7 +8,7 @@ const TO_UPDATE_GUILDS = [];
 /**
  * @param {Client} client
  */
-async function run(client) {
+async function init(client) {
   // update all previously configured guild counters
   const counterGuilds = await updateCountersOnStartup(client);
   console.log("GUILDS with counter channels: " + counterGuilds);
@@ -128,5 +128,5 @@ function runScheduler(client, minutes) {
 }
 
 module.exports = {
-  run,
+  init,
 };

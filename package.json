@@ -19,6 +19,7 @@
     "ascii-table": "0.0.9",
     "axios": "^0.21.1",
     "btoa": "^1.2.1",
+    "country-language": "^0.1.7",
     "discord.js": "^13.1.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",

@@ -4,7 +4,7 @@ const { loadReactionRoles, getReactionRole } = require("@schemas/reactionrole-sc
 /**
  * @param {Client} client
  */
-async function run(client) {
+async function init(client) {
   await loadReactionRoles();
 
   client.on("messageReactionAdd", async (reaction) => {
@@ -31,5 +31,5 @@ const fetchRoleData = async (reaction) => {
 };
 
 module.exports = {
-  run,
+  init,
 };

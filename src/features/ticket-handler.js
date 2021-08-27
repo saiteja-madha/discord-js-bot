@@ -14,7 +14,7 @@ const { EMOJIS } = require("@root/config.js");
 /**
  * @param {Client} client
  */
-async function run(client) {
+async function init(client) {
   client.on("messageReactionAdd", async (reaction, user) => {
     if (reaction.partial) reaction = await reaction.fetch();
     if (user.partial) user = await user.fetch();
@@ -70,5 +70,5 @@ async function handleCloseTicket(reaction, user) {
 }
 
 module.exports = {
-  run,
+  init,
 };

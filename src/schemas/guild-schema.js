@@ -56,6 +56,14 @@ const Schema = mongoose.Schema({
       },
     ],
   },
+  flag_translation: {
+    enabled: Boolean,
+    channels: [
+      {
+        type: String,
+      },
+    ],
+  },
 });
 
 const Model = mongoose.model("guild", Schema);
@@ -165,5 +173,13 @@ module.exports = {
 
   updateGuildLeft: async (guild) => {
     await Model.updateOne({ _id: guild.id }, { "data.leftAt": new Date() });
+  },
+
+  flagTranslation: async (id, status) => {
+    await Model.updateOne({ _id: id }, { $set: { "flag_translation.enabled": status } }).then(cache.remove(id));
+  },
+
+  setFlagTrChannels: async (id, channels) => {
+    await Model.updateOne({ _id: id }, { "flag_translation.channels": channels }).then(cache.remove(id));
   },
 };

@@ -6,7 +6,7 @@ const { getSettings } = require("@schemas/guild-schema");
 /**
  * @param {Client} client
  */
-async function run(client) {
+async function init(client) {
   client.on("guildMemberAdd", async (member) => {
     if (member.user.bot) return;
     const { guild } = member;
@@ -94,7 +94,7 @@ function getEffectiveInvites(data) {
 }
 
 module.exports = {
-  run,
+  init,
   handleGreeting,
   buildEmbed,
 };

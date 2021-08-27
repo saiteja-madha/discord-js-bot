@@ -9,7 +9,7 @@ const MESSAGE_CACHE = new Collection();
 /**
  * @param {Client} client
  */
-function run(client) {
+function init(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
     const settings = (await getSettings(message.guild)).automod;
@@ -29,13 +29,12 @@ function run(client) {
   });
 
   client.on("messageDelete", async (message) => {
-    if (message.partial) message = await message.fetch();
-    if (message.author.bot || message.channel.type === "DM") return;
-    if (!message.guild) return;
+    const { channelId, id, guild } = message;
+    if (!guild) return;
 
     const settings = (await getSettings(message.guild)).automod;
     if (!settings.anti_ghostping || !settings.log_channel) return;
-    const key = `${message.guild.id}|${message.channel.id}|${message.id}`;
+    const key = `${guild.id}|${channelId}|${id}`;
 
     // deleted message has mentions and was previously cached
     if (MESSAGE_CACHE.has(key)) {
@@ -173,5 +172,5 @@ function cacheMessage(message) {
 }
 
 module.exports = {
-  run,
+  init,
 };
