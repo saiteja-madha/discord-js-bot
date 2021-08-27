@@ -4,6 +4,7 @@ const { sendMessage } = require("@utils/botUtils");
 const { EMBED_COLORS } = require("@root/config");
 const { getCountryLanguages } = require("country-language");
 const { getSettings } = require("@schemas/guild-schema");
+const { isTranslated, logTranslation } = require("@schemas/trlogs-schema");
 const data = require("@src/data.json");
 
 /**
@@ -11,12 +12,12 @@ const data = require("@src/data.json");
  */
 async function init(client) {
   client.on("messageReactionAdd", async (reaction, user) => {
-    const settings = (await getSettings(message.guild)).flag_translation;
-    if (!settings.enabled) return;
-
     if (reaction.partial) reaction = await reaction.fetch();
     const { message, emoji } = reaction;
     if (message.webhookId || !message.content) return;
+
+    const settings = (await getSettings(message.guild)).flag_translation;
+    if (!settings.enabled) return;
     if (settings.channels.length > 1 && !settings.channels.includes(message.channelId)) return;
 
     if (emoji.name?.length === 4) {
@@ -26,6 +27,9 @@ async function init(client) {
       const l1 = emoji.name[0] + emoji.name[1];
       const l2 = emoji.name[2] + emoji.name[3];
       const countryCode = data.UNICODE_LETTER[l1] + data.UNICODE_LETTER[l2];
+
+      if (!countryCode) return;
+      if (await isTranslated(message, countryCode)) return;
 
       getCountryLanguages(countryCode, async (err, languages) => {
         if (err) return;
@@ -58,6 +62,7 @@ async function init(client) {
           .setFooter(`Requested by ${user.tag}`, user.displayAvatarURL());
 
         sendMessage(message.channel, { embeds: [embed] });
+        logTranslation(message, countryCode);
       });
     }
   });
