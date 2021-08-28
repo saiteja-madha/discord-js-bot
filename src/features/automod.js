@@ -35,7 +35,7 @@ function run(client) {
 
     const settings = (await getSettings(message.guild)).automod;
     if (!settings.anti_ghostping || !settings.log_channel) return;
-    const key = `${message.guild.id}|${message.channel.id}|${message.id}`;
+    const key = `${guild.id}|${channelId}|${id}`;
 
     // deleted message has mentions and was previously cached
     if (MESSAGE_CACHE.has(key)) {

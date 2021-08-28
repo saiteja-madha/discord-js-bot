@@ -55,6 +55,9 @@ module.exports = class Farewell extends Command {
           .catch((_) => ctx.reply("Failed to save configuration"));
         break;
 
+      case "preview":
+        return await sendPreview(ctx);
+
       case "desc":
         return await setDescription(ctx);
 
