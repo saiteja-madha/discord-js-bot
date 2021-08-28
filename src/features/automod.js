@@ -29,8 +29,8 @@ function run(client) {
   });
 
   client.on("messageDelete", async (message) => {
-    if (message.partial) message = await message.fetch();
-    if (message.author.bot || message.channel.type === "DM") return;
+    if (message.partial) message = await message.fetch().catch((err) => {});
+    if (message.partial || message.author.bot || message.channel.type === "DM") return;
     if (!message.guild) return;
 
     const settings = (await getSettings(message.guild)).automod;
