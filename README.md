@@ -186,5 +186,44 @@ Command | Description
 `reminviterank <role-name>` | remove invite rank configured with that role
 `invitetracking <ON\|OFF>` | remove invite rank configured with that role
 
+### 📨 Greeting Commands
+
+Replace `cmd` with `welcome` for setting up welcome message and `farewell` for setting up farewell message<br>
+
+Command | Description
+------------ | -------------
+`cmd [#channel\|off]` | enable or disable greeting message
+`cmd preview` | preview the configured greeting message
+`cmd desc <text>` | set embed description
+`cmd thumbnail <ON\|OFF>` | enable/disable embed thumbnail
+`cmd color <hexcolor>` | set embed color
+`cmd footer <text>` | set embed footer content
+
+Replacements
+```
+\n : New Line
+{server} : Server Name
+{count} : Server member count
+{member:name} : Member Name
+{member:tag} : Member Tag
+{inviter:name} : Inviter Name
+{inviter:tag} : Inviter Tag
+{invites} : Inviter Invites
+``` 
+
+### Admin Commands
+
+Command | Description
+------------ | -------------
+`setprefix <new-prefix>` | sets a new prefix for this server
+`xpsystem <ON\|OFF>` | enable or disable XP ranking system in the server
+`counter <type> <name>` | setup counter channel in the guild. Counter types: `all/members/bots`
+`addrr <#channel> <messageid> <emote> <role>` | setup reaction role for the specified message
+`removerr <#channel> <messageid>` | remove configured reaction for the specified message
+
+
+## Credits
+Dashboard: [Atlanta](https://github.com/Androz2091/AtlantaBot)
+
 ## 🤝 Contributing
 Feel free to [Fork](https://github.com/saiteja-madha/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
