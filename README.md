@@ -220,10 +220,8 @@ Command | Description
 `counter <type> <name>` | setup counter channel in the guild. Counter types: `all/members/bots`
 `addrr <#channel> <messageid> <emote> <role>` | setup reaction role for the specified message
 `removerr <#channel> <messageid>` | remove configured reaction for the specified message
+`flagtr` | setup translation by reaction
 
-
-## Credits
-Dashboard: [Atlanta](https://github.com/Androz2091/AtlantaBot)
 
 ## 🤝 Contributing
 Feel free to [Fork](https://github.com/saiteja-madha/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
