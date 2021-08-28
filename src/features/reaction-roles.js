@@ -10,7 +10,7 @@ async function run(client) {
   client.on("messageReactionAdd", async (reaction, user) => {
     const data = await fetchRoleData(reaction);
     if (data) {
-      let member = await reaction.message.guild.fetch(user.id);
+      let member = await reaction.message.guild.members.fetch(user.id);
       if (!member) return;
       await member.roles.add(reaction.message.guild.roles.cache.get(data.role_id));
     }
@@ -19,7 +19,7 @@ async function run(client) {
   client.on("messageReactionRemove", async (reaction, user) => {
     const data = await fetchRoleData(reaction);
     if (data) {
-      let member = await reaction.message.guild.fetch(user.id);
+      let member = await reaction.message.guild.members.fetch(user.id);
       if (!member) return;
       await member.roles.remove(reaction.message.guild.roles.cache.get(data.role_id));
     }
