@@ -10,7 +10,7 @@ const XP_COOLDOWN = new Collection();
 /**
  * @param {Client} client
  */
-function init(client) {
+function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.webhookId || message.channel.type === "DM") return;
 
@@ -83,5 +83,5 @@ function applyCooldown(key) {
 }
 
 module.exports = {
-  init,
+  run,
 };

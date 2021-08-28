@@ -14,7 +14,7 @@ const COMMANDS = [];
 /**
  * @param {Client} client
  */
-function init(client) {
+function run(client) {
   const readCommands = (dir) => {
     const files = fs.readdirSync(path.join(__appRoot, dir));
     for (const file of files) {
@@ -85,7 +85,7 @@ function getCommand(invoke) {
 }
 
 module.exports = {
-  init,
+  run,
   getCommand,
   COMMANDS,
 };

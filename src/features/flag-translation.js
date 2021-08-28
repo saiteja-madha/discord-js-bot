@@ -10,7 +10,7 @@ const data = require("@src/data.json");
 /**
  * @param {Client} client
  */
-async function init(client) {
+async function run(client) {
   client.on("messageReactionAdd", async (reaction, user) => {
     if (reaction.partial) reaction = await reaction.fetch();
     const { message, emoji } = reaction;
@@ -69,5 +69,5 @@ async function init(client) {
 }
 
 module.exports = {
-  init,
+  run,
 };

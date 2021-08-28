@@ -40,7 +40,7 @@ const loadFeatures = (client) => {
       else {
         const feature = require(path.join(__dirname, dir, file));
         try {
-          feature.init(client);
+          feature.run(client);
           table.addRow(file, "\u2713");
         } catch (ex) {
           table.addRow(file, "\u2715");

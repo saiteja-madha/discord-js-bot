@@ -8,7 +8,7 @@ const INVITE_CACHE = new Collection();
 /**
  * @param {Client} client
  */
-async function init(client) {
+async function run(client) {
   client.guilds.cache.forEach(async (guild) => await cacheGuildInvites(guild));
 
   client.on("inviteCreate", async (invite) => await cacheGuildInvites(invite?.guild));
@@ -118,7 +118,7 @@ function cacheInvite(invite, isVanity) {
 }
 
 module.exports = {
-  init,
+  run,
   getEffectiveInvites,
   checkInviteRewards,
   cacheGuildInvites,

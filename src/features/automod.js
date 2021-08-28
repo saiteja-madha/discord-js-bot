@@ -9,7 +9,7 @@ const MESSAGE_CACHE = new Collection();
 /**
  * @param {Client} client
  */
-function init(client) {
+function run(client) {
   client.on("messageCreate", async (message) => {
     if (message.author.bot || message.channel.type === "DM") return;
     const settings = (await getSettings(message.guild)).automod;
@@ -172,5 +172,5 @@ function cacheMessage(message) {
 }
 
 module.exports = {
-  init,
+  run,
 };
