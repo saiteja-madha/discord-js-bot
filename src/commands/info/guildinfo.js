@@ -6,11 +6,11 @@ const moment = require("moment");
 module.exports = class GuildInfoCommand extends Command {
   constructor(client) {
     super(client, {
-      name: "guildinfo",
+      name: "serverinfo",
       description: "shows information about the discord server",
       command: {
         enabled: true,
-        aliases: ["serverinfo"],
+        aliases: ["guildinfo"],
         category: "INFORMATION",
         botPermissions: ["EMBED_LINKS"],
       },
