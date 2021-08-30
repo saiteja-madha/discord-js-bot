@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
 const Ascii = require("ascii-table");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");

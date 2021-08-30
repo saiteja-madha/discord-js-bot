@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { findMatchingRoles } = require("@utils/guildUtils");
 const { addReactionRole } = require("@schemas/reactionrole-schema");
-const { Util } = require("discord.js");
+const { Util, Message } = require("discord.js");
 
 const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
 

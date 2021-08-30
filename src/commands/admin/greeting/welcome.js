@@ -3,6 +3,7 @@ const { isHex } = require("@utils/miscUtils");
 const db = require("@schemas/greeting-schema");
 const { buildEmbed } = require("@src/handlers/greeting-handler");
 const { getConfig } = require("@schemas/greeting-schema");
+const { Message } = require("discord.js");
 
 module.exports = class Welcome extends Command {
   constructor(client) {

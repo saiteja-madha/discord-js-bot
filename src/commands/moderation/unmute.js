@@ -2,6 +2,7 @@ const { Command } = require("@src/structures");
 const { unmute } = require("@schemas/mute-schema");
 const { canInteract } = require("@utils/modUtils");
 const { getRoleByName } = require("@utils/guildUtils");
+const { Message } = require("discord.js");
 
 module.exports = class UnmuteCommand extends Command {
   constructor(client) {

@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { purgeMessages } = require("@utils/modUtils");
 
 module.exports = class PurgeBots extends Command {
@@ -35,7 +35,7 @@ module.exports = class PurgeBots extends Command {
       if (parseInt(amount) > 100) return message.reply("The max amount of messages that I can delete is 100");
     }
 
-    const target = mentions.users.first();
+    // const target = mentions.users.first();
     purgeMessages(message, "BOT", amount);
   }
 };

@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const { setPrefix } = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class SetPrefix extends Command {
   constructor(client) {

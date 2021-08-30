@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { antiLinks } = require("@schemas/guild-schema");
 const { Message } = require("discord.js");
 

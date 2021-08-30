@@ -6,6 +6,7 @@ const {
   Message,
   CommandInteraction,
   CommandInteractionOptionResolver,
+  // eslint-disable-next-line no-unused-vars
   ApplicationCommandOptionData,
 } = require("discord.js");
 

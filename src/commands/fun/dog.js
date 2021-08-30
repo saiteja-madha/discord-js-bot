@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
@@ -26,7 +26,7 @@ module.exports = class DogCommand extends Command {
    */
   async messageRun(message, args) {
     const response = await getResponse("https://dog.ceo/api/breeds/image/random");
-    if (!response.success) return ctx.reply(MESSAGES.API_ERROR);
+    if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
     const image = response.data?.message;
 

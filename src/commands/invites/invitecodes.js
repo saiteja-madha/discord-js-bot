@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { resolveMember } = require("@utils/guildUtils");

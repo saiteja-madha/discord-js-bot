@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Message } = require("discord.js");
 const { Command } = require("@src/structures");
 const db = require("@schemas/counter-schema");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");

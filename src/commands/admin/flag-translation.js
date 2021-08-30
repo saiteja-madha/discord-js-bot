@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const db = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class FlagTranslation extends Command {
   constructor(client) {

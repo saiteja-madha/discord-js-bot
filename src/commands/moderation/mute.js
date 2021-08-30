@@ -2,6 +2,7 @@ const { Command } = require("@src/structures");
 const { addMuteToDb, getMuteInfo } = require("@schemas/mute-schema");
 const { setupMutedRole, canInteract } = require("@utils/modUtils");
 const { getRoleByName } = require("@utils/guildUtils");
+const { Message } = require("discord.js");
 
 module.exports = class MuteCommand extends Command {
   constructor(client) {
@@ -15,7 +16,6 @@ module.exports = class MuteCommand extends Command {
         category: "MODERATION",
         botPermissions: ["MANAGE_ROLES"],
         userPermissions: ["KICK_MEMBERS"],
-        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
         enabled: false,

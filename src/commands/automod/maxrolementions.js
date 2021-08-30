@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const { maxRoleMentions } = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class MaxRoleMentions extends Command {
   constructor(client) {

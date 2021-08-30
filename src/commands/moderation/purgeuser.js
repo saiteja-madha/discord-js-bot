@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const { purgeMessages } = require("@utils/modUtils");
+const { Message } = require("discord.js");
 
 module.exports = class PurgeUser extends Command {
   constructor(client) {

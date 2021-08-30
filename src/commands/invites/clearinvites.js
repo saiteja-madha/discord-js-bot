@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { clearInvites } = require("@schemas/invite-schema");
 const { resolveMember } = require("@utils/guildUtils");
 const { Message } = require("discord.js");

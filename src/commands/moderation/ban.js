@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const { canInteract } = require("@utils/modUtils");
+const { Message } = require("discord.js");
 
 module.exports = class BanCommand extends Command {
   constructor(client) {

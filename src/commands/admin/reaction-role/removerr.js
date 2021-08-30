@@ -1,5 +1,6 @@
 const { removeReactionRole } = require("@root/src/schemas/reactionrole-schema");
 const { Command } = require("@src/structures");
+const { Message } = require("discord.js");
 
 const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
 

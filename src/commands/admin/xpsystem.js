@@ -1,5 +1,6 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { xpSystem } = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class XPSystem extends Command {
   constructor(client) {

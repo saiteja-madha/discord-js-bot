@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Message } = require("discord.js");
 const { getUser, addCoins } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { getRandomInt } = require("@utils/miscUtils");

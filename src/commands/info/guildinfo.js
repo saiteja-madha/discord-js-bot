@@ -97,7 +97,7 @@ module.exports = class GuildInfoCommand extends Command {
 
     if (guild.splashURL) embed.setImage(guild.splashURL);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };
 
