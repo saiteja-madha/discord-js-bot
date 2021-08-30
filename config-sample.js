@@ -15,6 +15,7 @@ module.exports = {
     expressSessionPassword: "discordbot", // random password string
   },
   SLASH_COMMANDS: {
+    ENABLED: false,
     GLOBAL: false, // Should the slash commands be registered globally
     TEST_GUILD_ID: "xxxxxxxxxx", // Guild ID where the slash commands should be registered. [** Test you commands here first **]
   },

@@ -162,14 +162,18 @@ module.exports = class BotClient extends Client {
 
     if (toRegister.length === 0) return;
 
-    // Register for a specific guild
-    if (guildId && typeof guildId === "string") {
-      const guild = this.guilds.cache.get(guildId);
-      if (!guild) throw new Error(`No guilds found matching ${guildId}`);
-      return await guild.commands.set(toRegister);
+    if (!guildId) {
+      await this.application.commands.set(toRegister);
     }
 
-    if (!guildId) await this.application.commands.set(toRegister);
+    // Register for a specific guild
+    else if (guildId && typeof guildId === "string") {
+      const guild = this.guilds.cache.get(guildId);
+      if (!guild) throw new Error(`No guilds found matching ${guildId}`);
+      await guild.commands.set(toRegister);
+    }
+
+    console.log("Successfully registered slash commands");
   }
 
   /**

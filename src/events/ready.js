@@ -21,7 +21,11 @@ module.exports = async (client) => {
       toRegister.push(data);
     });
 
-  await client.registerSlashCommands(client.config.SLASH_COMMANDS.TEST_GUILD_ID);
+  // check if slash commands are enabled
+  if (client.config.SLASH_COMMANDS.ENABLED) {
+    if (client.config.SLASH_COMMANDS.GLOBAL) await client.registerSlashCommands();
+    else await client.registerSlashCommands(client.config.SLASH_COMMANDS.TEST_GUILD_ID);
+  }
 
   // Load reaction roles to cache
   await loadReactionRoles();
