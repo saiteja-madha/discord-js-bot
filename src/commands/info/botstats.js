@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { timeformat } = require("@utils/miscUtils");
 const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
 const os = require("os");
@@ -10,17 +10,24 @@ module.exports = class BotStatsCommand extends Command {
     super(client, {
       name: "botstats",
       description: "shows bot information",
-      aliases: ["botstat", "botinfo"],
-      category: "INFORMATION",
-      botPermissions: ["EMBED_LINKS"],
+      cooldown: 5,
+      command: {
+        enabled: true,
+        aliases: ["botstat", "botinfo"],
+        category: "INFORMATION",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message } = ctx;
+  async messageRun(message, args) {
     const { client } = message;
 
     // STATS
@@ -32,23 +39,23 @@ module.exports = class BotStatsCommand extends Command {
     const platform = process.platform.replace(/win32/g, "Windows");
     const architecture = os.arch();
     const cores = os.cpus().length;
-    const cpuUsage = (process.cpuUsage().user / 1024 / 1024).toFixed(2) + " MB";
+    const cpuUsage = `${(process.cpuUsage().user / 1024 / 1024).toFixed(2)} MB`;
 
     // RAM
-    const botUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2) + " MB";
-    const botAvailable = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2) + " GB";
-    const botUsage = ((process.memoryUsage().heapUsed / os.totalmem()) * 100).toFixed(1) + "%";
+    const botUsed = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`;
+    const botAvailable = `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB`;
+    const botUsage = `${((process.memoryUsage().heapUsed / os.totalmem()) * 100).toFixed(1)}%`;
 
-    const overallUsed = ((os.totalmem() - os.freemem()) / 1024 / 1024 / 1024).toFixed(2) + " GB";
-    const overallAvailable = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2) + " GB";
-    const overallUsage = Math.floor(((os.totalmem() - os.freemem()) / os.totalmem()) * 100) + "%";
+    const overallUsed = `${((os.totalmem() - os.freemem()) / 1024 / 1024 / 1024).toFixed(2)} GB`;
+    const overallAvailable = `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB`;
+    const overallUsage = `${Math.floor(((os.totalmem() - os.freemem()) / os.totalmem()) * 100)}%`;
 
     let desc = "";
-    desc = desc + EMOJIS.CUBE_BULLET + " Total guilds: " + guilds + "\n";
-    desc = desc + EMOJIS.CUBE_BULLET + " Total users: " + users + "\n";
-    desc = desc + EMOJIS.CUBE_BULLET + " Total channels: " + channels + "\n";
-    desc = desc + EMOJIS.CUBE_BULLET + " Websocket Ping: " + client.ws.ping + " ms\n";
-    desc = desc + "\n";
+    desc = `${desc + EMOJIS.CUBE_BULLET} Total guilds: ${guilds}\n`;
+    desc = `${desc + EMOJIS.CUBE_BULLET} Total users: ${users}\n`;
+    desc = `${desc + EMOJIS.CUBE_BULLET} Total channels: ${channels}\n`;
+    desc = `${desc + EMOJIS.CUBE_BULLET} Websocket Ping: ${client.ws.ping} ms\n`;
+    desc += "\n";
 
     const embed = new MessageEmbed()
       .setTitle("Bot Information")
@@ -83,10 +90,10 @@ module.exports = class BotStatsCommand extends Command {
         true
       )
       .addField("Node Js version", process.versions.node, false)
-      .addField("Uptime", "```" + timeformat(process.uptime()) + "```", false)
+      .addField("Uptime", `\`\`\`${timeformat(process.uptime())}\`\`\``, false)
       .addField("INVITE:", `[Add Me here!](${BOT_INVITE})`, true)
       .addField("SUPPORT:", `[Discord!](${SUPPORT_SERVER})`, true);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

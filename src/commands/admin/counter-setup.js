@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const db = require("@schemas/counter-schema");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const { getMemberStats } = require("@utils/guildUtils");
@@ -9,75 +9,79 @@ module.exports = class CounterSetup extends Command {
     super(client, {
       name: "counter",
       description: "setup counter channel in the guild. Counter types: `all/members/bots`",
-      usage: "<type> <channel-name>",
-      minArgsCount: 1,
-      category: "ADMIN",
-      botPermissions: ["ADMINISTRATOR"],
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        usage: "<type> <channel-name>",
+        minArgsCount: 1,
+        category: "ADMIN",
+        botPermissions: ["ADMINISTRATOR"],
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args, guild } = ctx;
+  async messageRun(message, args) {
+    const { guild } = message;
     const type = args[0].toLowerCase();
 
-    if (type === "status") return await sendStatus(ctx);
+    if (type === "status") return sendStatus(message);
 
     if (!type || !["all", "members", "bots"].includes(type))
-      return ctx.reply("Incorrect arguments are passed! Counter types: `all/members/bots`");
+      return message.reply("Incorrect arguments are passed! Counter types: `all/members/bots`");
 
-    if (args.length < 2) return ctx.reply("Incorrect Usage!");
+    if (args.length < 2) return message.reply("Incorrect Usage!");
 
     args.shift();
     let channelName = args.join(" ");
 
     const stats = await getMemberStats(guild);
-    if (type === "all") channelName += " : " + stats[0];
-    else if (type === "members") channelName += " : " + stats[2];
-    else if (type === "bots") channelName += " : " + stats[1];
+    if (type === "all") channelName += ` : ${stats[0]}`;
+    else if (type === "members") channelName += ` : ${stats[2]}`;
+    else if (type === "bots") channelName += ` : ${stats[1]}`;
 
-    try {
-      const vc = await guild.channels.create(channelName, {
-        type: "GUILD_VOICE",
-        permissionOverwrites: [
-          {
-            id: guild.roles.everyone,
-            deny: ["CONNECT"],
-          },
-          {
-            id: guild.me.roles.highest.id,
-            allow: ["VIEW_CHANNEL", "MANAGE_CHANNELS", "MANAGE_ROLES"],
-          },
-        ],
-      });
+    const vc = await guild.channels.create(channelName, {
+      type: "GUILD_VOICE",
+      permissionOverwrites: [
+        {
+          id: guild.roles.everyone,
+          deny: ["CONNECT"],
+        },
+        {
+          id: guild.me.roles.highest.id,
+          allow: ["VIEW_CHANNEL", "MANAGE_CHANNELS", "MANAGE_ROLES"],
+        },
+      ],
+    });
 
-      if (type === "all") await db.setTotalCountChannel(guild.id, vc.id, args.join(" "));
-      if (type === "members") await db.setMemberCountChannel(guild.id, vc.id, args.join(" "));
-      if (type === "bots") await db.setBotCountChannel(guild.id, vc.id, args.join(" "));
+    if (type === "all") await db.setTotalCountChannel(guild.id, vc.id, args.join(" "));
+    if (type === "members") await db.setMemberCountChannel(guild.id, vc.id, args.join(" "));
+    if (type === "bots") await db.setBotCountChannel(guild.id, vc.id, args.join(" "));
 
-      await db.updateBotCount(guild.id, stats[1], false);
+    await db.updateBotCount(guild.id, stats[1], false);
 
-      ctx.reply("Configuration saved! Counter channel created");
-    } catch (ex) {
-      console.log(ex);
-      ctx.reply("Setup cancelled! Failed to create voice channel. Try again later");
-    }
+    message.channel.send("Configuration saved! Counter channel created");
   }
 };
 
 /**
- * @param {CommandContext} ctx
+ * @param {Message} message
  */
-async function sendStatus(ctx) {
-  const { guild } = ctx;
+async function sendStatus(message) {
+  const { guild } = message;
   const config = await db.getSettings(guild.id);
 
-  if (!config) return ctx.reply("No counter channel has been configured on this guild");
+  if (!config) return message.reply("No counter channel has been configured on this guild");
 
-  let v1, v2, v3;
+  let v1;
+  let v2;
+  let v3;
   if (config.tc_channel) v1 = guild.channels.cache.get(config.tc_channel);
   if (config.mc_channel) v2 = guild.channels.cache.get(config.mc_channel);
   if (config.bc_channel) v3 = guild.channels.cache.get(config.bc_channel);
@@ -93,5 +97,5 @@ async function sendStatus(ctx) {
     .setAuthor("Counter Configuration")
     .setDescription(desc);
 
-  ctx.reply({ embeds: [embed] });
+  message.reply({ embeds: [embed] });
 }

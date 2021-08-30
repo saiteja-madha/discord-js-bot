@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 const moment = require("moment");
@@ -9,39 +9,45 @@ module.exports = class UrbanCommand extends Command {
     super(client, {
       name: "urban",
       description: "searches the urban dictionary",
-      usage: "<word>",
-      minArgsCount: 1,
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
+      cooldown: 5,
+      command: {
+        enabled: true,
+        usage: "<word>",
+        minArgsCount: 1,
+        category: "UTILITY",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args } = ctx;
-
+  async messageRun(message, args) {
     const response = await getResponse(`http://api.urbandictionary.com/v0/define?term=${args}`);
-    if (!response.success) return ctx.reply(MESSAGES.API_ERROR);
+    if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
-    let json = response.data;
-    if (!json.list[0]) return ctx.reply(`Nothing found matching \`${args}\``);
+    const json = response.data;
+    if (!json.list[0]) return message.reply(`Nothing found matching \`${args}\``);
 
-    let data = json.list[0];
-    let embed = new MessageEmbed()
+    const data = json.list[0];
+    const embed = new MessageEmbed()
       .setTitle(data.word)
       .setURL(data.permalink)
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setDescription("**Definition**```css\n" + data.definition + "```")
+      .setDescription(`**Definition**\`\`\`css\n${data.definition}\`\`\``)
       .addField("Author", data.author, true)
       .addField("ID", data.defid.toString(), true)
       .addField("\u200b", "\u200b", true)
       .addField("Example", data.example, true)
-      .addField("Likes / Dislikes", "👍 " + data.thumbs_up + " | 👎 " + data.thumbs_down, true)
+      .addField("Likes / Dislikes", `👍 ${data.thumbs_up} | 👎 ${data.thumbs_down}`, true)
       .addField("\u200b", "\u200b", true)
-      .setFooter("Created " + moment(data.written_on).fromNow());
+      .setFooter(`Created ${moment(data.written_on).fromNow()}`);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

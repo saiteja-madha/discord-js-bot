@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const { getMatchingChannel } = require("@utils/guildUtils");
 const outdent = require("outdent");
@@ -9,32 +9,37 @@ module.exports = class ChannelInfo extends Command {
     super(client, {
       name: "chinfo",
       description: "shows mentioned channel information",
-      usage: "[channel]",
-      aliases: ["channelinfo"],
-      category: "INFORMATION",
-      botPermissions: ["EMBED_LINKS"],
+      command: {
+        enabled: true,
+        usage: "[channel]",
+        aliases: ["channelinfo"],
+        category: "INFORMATION",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message, args, channel, guild } = ctx;
+  async messageRun(message, args) {
+    const { channel, guild } = message;
     let targetChannel;
 
     if (message.mentions.channels.size > 0) {
       targetChannel = message.mentions.channels.first();
+    } else if (args.length > 0) {
+      const search = args.join(" ");
+      const tcByName = getMatchingChannel(guild, search);
+      if (tcByName.length === 0) return message.reply(`No channels found matching \`${search}\`!`);
+      if (tcByName.length > 1) return message.reply(`Multiple channels found matching \`${search}\`!`);
+      [targetChannel] = tcByName;
     } else {
-      if (args.length > 0) {
-        const search = args.join(" ");
-        const tcByName = getMatchingChannel(guild, search);
-        if (tcByName.length == 0) return ctx.reply(`No channels found matching \`${search}\`!`);
-        if (tcByName.length > 1) return ctx.reply(`Multiple channels found matching \`${search}\`!`);
-        targetChannel = tcByName[0];
-      } else {
-        targetChannel = channel;
-      }
+      targetChannel = channel;
     }
 
     const { id, name, topic, parent, position, type } = targetChannel;
@@ -43,8 +48,8 @@ module.exports = class ChannelInfo extends Command {
     ${EMOJIS.ARROW} ID: **${id}**
     ${EMOJIS.ARROW} Name: **${name}**
     ${EMOJIS.ARROW} Type: **${channelTypes[type] || type}**
-    ${EMOJIS.ARROW} Category: **${parent ? parent : "NA"}**
-    ${EMOJIS.ARROW} Topic: **${topic ? topic : "No topic set"}**\n
+    ${EMOJIS.ARROW} Category: **${parent || "NA"}**
+    ${EMOJIS.ARROW} Topic: **${topic || "No topic set"}**\n
     `;
 
     if (type === "GUILD_TEXT") {
@@ -83,7 +88,7 @@ module.exports = class ChannelInfo extends Command {
     }
 
     const embed = new MessageEmbed().setAuthor("Channel Details").setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
-    ctx.reply({ embeds: [embed] });
+    channel.send({ embeds: [embed] });
   }
 };
 

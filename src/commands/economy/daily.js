@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { getUser, updateDailyStreak } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { diff_hours, getRemainingTime } = require("@utils/miscUtils");
@@ -9,16 +9,23 @@ module.exports = class DailyCommand extends Command {
     super(client, {
       name: "daily",
       description: "receive a daily bonus",
-      category: "ECONOMY",
-      botPermissions: ["EMBED_LINKS"],
+      cooldown: 5,
+      command: {
+        enabled: true,
+        category: "ECONOMY",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message } = ctx;
+  async messageRun(message, args) {
     const { member } = message;
 
     const user = await getUser(member.id);
@@ -29,7 +36,7 @@ module.exports = class DailyCommand extends Command {
       const difference = diff_hours(new Date(), lastUpdated);
       if (difference < 24) {
         const nextUsage = lastUpdated.setHours(lastUpdated.getHours() + 24);
-        return ctx.reply("You can again run this command in `" + getRemainingTime(nextUsage) + "`");
+        return message.reply(`You can again run this command in \`${getRemainingTime(nextUsage)}\``);
       }
       streak = user.daily.streak || streak;
       if (difference < 48) streak += 1;
@@ -46,6 +53,6 @@ module.exports = class DailyCommand extends Command {
           `**Updated Balance:** ${updated?.coins || 0}${EMOJIS.CURRENCY}`
       );
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

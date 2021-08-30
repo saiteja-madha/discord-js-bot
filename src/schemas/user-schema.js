@@ -32,20 +32,15 @@ const Schema = mongoose.Schema({
   },
 });
 
-// Schema.plugin(leanDefaults);
 const Model = mongoose.model("user", Schema);
 
 const upsert = { upsert: true };
 const upsertNew = { upsert: true, new: true };
 
 module.exports = {
-  getUser: async (id) => {
-    return await Model.findOne({ id }).lean({ defaults: true });
-  },
+  getUser: async (id) => Model.findOne({ id }).lean({ defaults: true }),
 
-  loggedIn: async (id, status) => {
-    return await Model.updateOne({ id }, { logged: status }, upsert);
-  },
+  loggedIn: async (id, status) => Model.updateOne({ id }, { logged: status }, upsert),
 
   increaseReputation: async (id, targetId) => {
     await Model.updateOne(
@@ -56,12 +51,10 @@ module.exports = {
     await Model.updateOne({ id: targetId }, { $inc: { "reputation.received": 1 } }, upsert);
   },
 
-  addCoins: async (id, coins) => {
-    return await Model.findOneAndUpdate({ id }, { $inc: { coins } }, upsertNew);
-  },
+  addCoins: async (id, coins) => Model.findOneAndUpdate({ id }, { $inc: { coins } }, upsertNew),
 
-  updateDailyStreak: async (id, coins, streak) => {
-    return await Model.findOneAndUpdate(
+  updateDailyStreak: async (id, coins, streak) =>
+    Model.findOneAndUpdate(
       { id },
       {
         $set: {
@@ -71,6 +64,5 @@ module.exports = {
         $inc: { coins },
       },
       upsertNew
-    );
-  },
+    ),
 };

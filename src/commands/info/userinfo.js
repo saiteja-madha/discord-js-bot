@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { resolveMember } = require("@utils/guildUtils");
 
@@ -8,23 +8,29 @@ module.exports = class UserInfo extends Command {
     super(client, {
       name: "userinfo",
       description: "shows information about the user",
-      usage: "[@member|id]",
-      aliases: ["uinfo", "memberinfo"],
-      category: "INFORMATION",
-      botPermissions: ["EMBED_LINKS"],
+      command: {
+        enabled: true,
+        usage: "[@member|id]",
+        aliases: ["uinfo", "memberinfo"],
+        category: "INFORMATION",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message } = ctx;
-    const target = (await resolveMember(message, ctx.args[0])) || message.member;
+  async messageRun(message, args) {
+    const target = (await resolveMember(message, args[0])) || message.member;
 
     // color
     let color = message.member.displayHexColor;
-    if (color == "#000000") color = EMBED_COLORS.BOT_EMBED;
+    if (color === "#000000") color = EMBED_COLORS.BOT_EMBED;
 
     const embed = new MessageEmbed()
       .setAuthor(`User information for ${target.displayName}`, target.user.displayAvatarURL())
@@ -36,9 +42,9 @@ module.exports = class UserInfo extends Command {
       .addField("Discord Registered", target.user.createdAt.toUTCString())
       .addField(`Roles [${target.roles.cache.size}]`, target.roles.cache.map((r) => r.name).join(", "), false)
       .addField("Avatar-URL", target.user.displayAvatarURL({ format: "png" }))
-      .setFooter(`Requested by ${ctx.message.member.user.tag}`)
+      .setFooter(`Requested by ${message.member.user.tag}`)
       .setTimestamp(Date.now());
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

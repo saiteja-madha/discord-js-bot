@@ -1,5 +1,5 @@
-const { MessageEmbed } = require("discord.js");
-const { Command, CommandContext } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
+const { Command } = require("@src/structures");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 const timestampToDate = require("timestamp-to-date");
@@ -9,28 +9,35 @@ module.exports = class CovidCommand extends Command {
     super(client, {
       name: "covid",
       description: "get covid statistics for a country",
-      usage: "<country>",
-      minArgsCount: 1,
-      category: "UTILITY",
+      cooldown: 5,
+      command: {
+        enabled: true,
+        usage: "<country>",
+        minArgsCount: 1,
+        category: "UTILITY",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args } = ctx;
+  async messageRun(message, args) {
     const cntry = args[0];
-
     const response = await getResponse(`https://disease.sh/v2/countries/${cntry}`);
 
-    if (response.status === 404) return ctx.reply("```css\nCountry with the provided name is not found```");
-    if (!response.success) return ctx.reply(MESSAGES.API_ERROR);
+    if (response.status === 404) return message.reply("```css\nCountry with the provided name is not found```");
+    if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
-    const data = response.data;
+    const { data } = response;
     const mg = timestampToDate(data?.updated, "dd.MM.yyyy at HH:mm");
     const embed = new MessageEmbed()
-      .setTitle("Covid - " + data?.country)
+      .setTitle(`Covid - ${data?.country}`)
       .setThumbnail(data?.countryInfo.flag)
       .setColor(EMBED_COLORS.BOT_EMBED)
       .addField("Cases total", data?.cases.toString(), true)
@@ -42,8 +49,8 @@ module.exports = class CovidCommand extends Command {
       .addField("Critical stage", data?.critical.toString(), true)
       .addField("Cases per 1 million", data?.casesPerOneMillion.toString(), true)
       .addField("Deaths per 1 million", data?.deathsPerOneMillion.toString(), true)
-      .setFooter("Last updated on " + mg);
+      .setFooter(`Last updated on ${mg}`);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

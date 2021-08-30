@@ -1,9 +1,9 @@
 const FixedSizeCache = require("./cache");
 const Command = require("./command");
-const CommandContext = require("./command-context");
+const BotClient = require("./BotClient");
 
 module.exports = {
+  BotClient,
   Command,
-  CommandContext,
   FixedSizeCache,
 };

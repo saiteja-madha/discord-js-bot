@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { addMuteToDb, getMuteInfo } = require("@schemas/mute-schema");
 const { setupMutedRole, canInteract } = require("@utils/modUtils");
 const { getRoleByName } = require("@utils/guildUtils");
@@ -8,36 +8,44 @@ module.exports = class MuteCommand extends Command {
     super(client, {
       name: "mute",
       description: "mutes the specified member(s)",
-      usage: "<@member(s)> [reason]",
-      minArgsCount: 1,
-      category: "MODERATION",
-      botPermissions: ["MANAGE_ROLES"],
-      userPermissions: ["KICK_MEMBERS"],
+      command: {
+        enabled: true,
+        usage: "<@member(s)> [reason]",
+        minArgsCount: 1,
+        category: "MODERATION",
+        botPermissions: ["MANAGE_ROLES"],
+        userPermissions: ["KICK_MEMBERS"],
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message, guild, channel } = ctx;
+  async messageRun(message, args) {
+    const { guild, channel } = message;
     const { author, member, content } = message;
     const mentions = message.mentions.members;
 
-    if (mentions.size == 0) return ctx.reply("No members mentioned");
+    if (mentions.size == 0) return message.reply("No members mentioned");
 
     let mutedRole = getRoleByName(guild, "muted");
 
     if (!mutedRole) {
       if (!guild.me.permissions.has("MANAGE_GUILD")) {
-        return ctx.reply("No `Muted` role exists! Please create a muted role before using this command");
+        return message.reply("No `Muted` role exists! Please create a muted role before using this command");
       }
 
-      ctx.reply("No `Muted` role exists! Attempting to create a muted role...");
+      message.reply("No `Muted` role exists! Attempting to create a muted role...");
       mutedRole = await setupMutedRole(guild);
 
       if (!mutedRole) {
-        return ctx.reply(
+        return message.reply(
           `Something went wrong while setting up. Please make sure I have permission to edit/create roles, and modify every channel.
           Alternatively, give me the \`Administrator\` permission for setting up`
         );
@@ -45,7 +53,9 @@ module.exports = class MuteCommand extends Command {
     }
 
     if (!mutedRole.editable) {
-      return ctx.reply("I do not have permission to move members to `Muted` role. Is that role below my highest role?");
+      return message.reply(
+        "I do not have permission to move members to `Muted` role. Is that role below my highest role?"
+      );
     }
 
     const regex = /<@!?(\d+)>/g;
@@ -64,7 +74,7 @@ module.exports = class MuteCommand extends Command {
 
         if (previousMute) {
           if (previousMute.isPermanent && previousMute.current) {
-            return ctx.reply(`${target.user.tag} is already muted`);
+            return channel.send(`${target.user.tag} is already muted`);
           }
         }
 
@@ -72,16 +82,11 @@ module.exports = class MuteCommand extends Command {
           await target.roles.add(mutedRole);
         } catch (ex) {
           console.log(ex);
-          return ctx.reply(`Failed to add muted role to ${target.user.tag}`);
+          return channel.send(`Failed to add muted role to ${target.user.tag}`);
         }
 
-        try {
-          await addMuteToDb(guild, author, target, reason);
-          ctx.reply(`${target.user.tag} is now muted on this server`);
-        } catch (ex) {
-          ctx.reply("Unexpected backend error");
-          return console.log(ex);
-        }
+        await addMuteToDb(guild, author, target, reason);
+        channel.send(`${target.user.tag} is now muted on this server`);
       });
   }
 };

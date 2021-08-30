@@ -1,19 +1,26 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
+const { Message } = require("discord.js");
 
 module.exports = class PingCommand extends Command {
   constructor(client) {
     super(client, {
       name: "ping",
       description: "shows the current ping from the bot to the discord servers",
-      category: "INFORMATION",
+      command: {
+        enabled: true,
+        category: "INFORMATION",
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message } = ctx;
-    ctx.reply("🏓 Pong : `" + Math.floor(message.client.ws.ping) + "ms`");
+  async messageRun(message, args) {
+    message.reply(`🏓 Pong : \`${Math.floor(message.client.ws.ping)}ms\``);
   }
 };

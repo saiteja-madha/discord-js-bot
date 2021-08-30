@@ -15,21 +15,19 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("logs-translation", Schema);
 
 module.exports = {
-  isTranslated: async (message, code) => {
-    return await Model.findOne({
+  isTranslated: async (message, code) =>
+    Model.findOne({
       guild_id: message.guildId,
       channel_id: message.channelId,
       message_id: message.id,
       emoji: code,
-    }).lean();
-  },
+    }).lean({ defaults: true }),
 
-  logTranslation: async (message, code) => {
-    return new Model({
+  logTranslation: async (message, code) =>
+    new Model({
       guild_id: message.guildId,
       channel_id: message.channelId,
       message_id: message.id,
       emoji: code,
-    }).save();
-  },
+    }).save(),
 };

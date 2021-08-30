@@ -50,7 +50,7 @@ async function parseTicketDetails(channel) {
   const split = channel.topic?.split("|");
   const userId = split[1];
   const title = split[2];
-  const user = await channel.client.users.fetch(userId, { cache: false }).catch((err) => {});
+  const user = await channel.client.users.fetch(userId, { cache: false }).catch(() => {});
   return {
     title,
     user,
@@ -76,17 +76,17 @@ async function closeTicket(channel, closedBy, reason) {
   try {
     const config = await getSettings(channel.guild);
     const messages = await channel.messages.fetch();
-    let reversed = Array.from(messages.values()).reverse();
+    const reversed = Array.from(messages.values()).reverse();
 
     let content = "";
     reversed.forEach((m) => {
-      content += "[" + new Date(m.createdAt).toLocaleString("en-US") + "] - " + m.author.tag + "\n";
-      if (m.cleanContent !== "") content += m.cleanContent + "\n";
-      if (m.attachments.size > 0) content += m.attachments.map((att) => att.proxyURL).join(", ") + "\n";
+      content += `[${new Date(m.createdAt).toLocaleString("en-US")}] - ${m.author.tag}\n`;
+      if (m.cleanContent !== "") content += `${m.cleanContent}\n`;
+      if (m.attachments.size > 0) content += `${m.attachments.map((att) => att.proxyURL).join(", ")}\n`;
       content += "\n";
     });
 
-    const logsUrl = await postToBin(content, "Ticket Logs for " + channel.name);
+    const logsUrl = await postToBin(content, `Ticket Logs for ${channel.name}`);
     const ticketDetails = await parseTicketDetails(channel);
 
     const desc = outdent`
@@ -94,18 +94,18 @@ async function closeTicket(channel, closedBy, reason) {
     ${EMOJIS.ARROW} **Opened By:** ${ticketDetails.user ? ticketDetails.user.tag : "User left"}
     ${EMOJIS.ARROW} **Closed By:** ${closedBy ? closedBy.tag : "User left"}
     ${EMOJIS.ARROW} **Reason:** ${reason != null ? reason : "No reason provided"}
-    ${logsUrl == null ? "" : "\n[View Logs](" + logsUrl + ")"}
+    ${logsUrl == null ? "" : `\n[View Logs](${logsUrl})`}
     `;
 
     await channel.delete();
     const embed = new MessageEmbed().setAuthor("Ticket Closed").setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
 
     // send embed to user
-    if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch((ex) => {});
+    if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch(() => {});
 
     // send embed to log channel
     if (config && config.ticket.log_channel) {
-      let logChannel = channel.guild.channels.cache.find((ch) => ch.id === config.ticket.log_channel);
+      const logChannel = channel.guild.channels.cache.find((ch) => ch.id === config.ticket.log_channel);
       if (logChannel) sendMessage(logChannel, { embeds: [embed] });
     }
 
@@ -131,11 +131,12 @@ async function closeAllTickets(guild, author) {
   let success = 0;
   let failed = 0;
 
-  for (const [id, ch] of channels) {
+  channels.forEach(async (ch) => {
     const status = await closeTicket(ch, author, "Force close all open tickets");
-    if (status.success) success++;
-    else failed++;
-  }
+    if (status.success) success += 1;
+    else failed += 1;
+  });
+
   return [success, failed];
 }
 
@@ -162,11 +163,12 @@ async function openTicket(guild, user, title, supportRole) {
       },
     ];
 
-    if (supportRole)
+    if (supportRole) {
       permissionOverwrites.push({
         id: supportRole,
         allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
       });
+    }
 
     const tktChannel = await guild.channels.create(`tіcket-${ticketNumber}`, {
       type: "GUILD_TEXT",
@@ -174,8 +176,8 @@ async function openTicket(guild, user, title, supportRole) {
       permissionOverwrites,
     });
 
-    let embed = new MessageEmbed()
-      .setAuthor("Ticket #" + ticketNumber)
+    const embed = new MessageEmbed()
+      .setAuthor(`Ticket #${ticketNumber}`)
       .setDescription(
         outdent`
       Hello ${user.toString()}
@@ -201,7 +203,7 @@ async function openTicket(guild, user, title, supportRole) {
       .setAuthor("Ticket Created")
       .setDescription(desc);
 
-    user.send({ embeds: [dmEmbed] }).catch((err) => {});
+    user.send({ embeds: [dmEmbed] }).catch(() => {});
     return true;
   } catch (ex) {
     console.log(ex);
@@ -209,6 +211,7 @@ async function openTicket(guild, user, title, supportRole) {
   }
 }
 
+// eslint-disable-next-line max-len
 module.exports = {
   PERMS,
   getTicketChannels,

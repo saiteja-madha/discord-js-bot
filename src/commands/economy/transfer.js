@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { getUser, addCoins } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { resolveMember } = require("@utils/guildUtils");
@@ -9,18 +9,24 @@ module.exports = class Transfer extends Command {
     super(client, {
       name: "transfer",
       description: "transfer coins to other user",
-      usage: "<@member|id> <coins>",
-      minArgsCount: 2,
-      category: "ECONOMY",
-      botPermissions: ["EMBED_LINKS"],
+      command: {
+        enabled: true,
+        usage: "<@member|id> <coins>",
+        minArgsCount: 2,
+        category: "ECONOMY",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message, args } = ctx;
+  async messageRun(message, args) {
     const { member } = message;
     const coins = args[1];
     const target = await resolveMember(message, args[0], true);
@@ -34,23 +40,18 @@ module.exports = class Transfer extends Command {
     if (!economy || economy?.coins < coins)
       return message.reply(`Insufficient coin balance! You only have ${economy?.coins || 0}${EMOJIS.CURRENCY}`);
 
-    try {
-      const src = await addCoins(member.id, -coins);
-      const des = await addCoins(target.id, coins);
+    const src = await addCoins(member.id, -coins);
+    const des = await addCoins(target.id, coins);
 
-      const embed = new MessageEmbed()
-        .setColor(EMBED_COLORS.BOT_EMBED)
-        .setAuthor("Updated Balance")
-        .setDescription(
-          `**${member.displayName}:** ${src.coins}${EMOJIS.CURRENCY}\n` +
-            `**${target.displayName}:** ${des.coins}${EMOJIS.CURRENCY}`
-        )
-        .setTimestamp(Date.now());
+    const embed = new MessageEmbed()
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setAuthor("Updated Balance")
+      .setDescription(
+        `**${member.displayName}:** ${src.coins}${EMOJIS.CURRENCY}\n` +
+          `**${target.displayName}:** ${des.coins}${EMOJIS.CURRENCY}`
+      )
+      .setTimestamp(Date.now());
 
-      ctx.reply({ embeds: [embed] });
-    } catch (ex) {
-      console.log(ex);
-      message.reply("Failed to transfer coins");
-    }
+    await message.channel.send({ embeds: [embed] });
   }
 };

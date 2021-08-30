@@ -30,9 +30,7 @@ async function getResponse(url) {
  */
 async function downloadImage(url) {
   try {
-    const res = await axios.get(url, {
-      responseType: "stream",
-    });
+    const res = await axios.get(url, { responseType: "stream" });
     return res.data;
   } catch (error) {
     console.log(`[AXIOS ERROR]\nURL: ${url}\n${error}\n`);
@@ -49,12 +47,12 @@ async function translate(input, outputCode) {
       `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${outputCode}&dt=t&q=${input}`
     );
 
-    if (response && response?.status == 200) {
+    if (response && response?.status === 200) {
       return {
         input: response.data[0][0][1],
         output: response.data[0][0][0],
         inputCode: response.data[2],
-        outputCode: outputCode,
+        outputCode,
         inputLang: ISO6391.getName(response.data[2]),
         outputLang: ISO6391.getName(outputCode),
       };
@@ -66,7 +64,7 @@ async function translate(input, outputCode) {
 
 async function postToBin(content, title) {
   try {
-    let response = await sourcebin.create(
+    const response = await sourcebin.create(
       [
         {
           name: " ",
@@ -75,7 +73,7 @@ async function postToBin(content, title) {
         },
       ],
       {
-        title: title,
+        title,
         description: " ",
       }
     );

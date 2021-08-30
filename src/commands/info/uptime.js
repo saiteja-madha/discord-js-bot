@@ -1,19 +1,27 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { timeformat } = require("@utils/miscUtils");
+const { Message } = require("discord.js");
 
 module.exports = class UptimeCommand extends Command {
   constructor(client) {
     super(client, {
       name: "uptime",
       description: "shows bot's uptime",
-      category: "INFORMATION",
+      command: {
+        enabled: true,
+        category: "INFORMATION",
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    ctx.reply("My Uptime: `" + timeformat(process.uptime()) + "`");
+  async messageRun(message, args) {
+    message.reply(`My Uptime: \`${timeformat(process.uptime())}\``);
   }
 };

@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 
@@ -8,27 +8,33 @@ module.exports = class CatCommand extends Command {
     super(client, {
       name: "cat",
       description: "shows a random cat image",
-      category: "FUN",
-      botPermissions: ["EMBED_LINKS"],
+      cooldown: 5,
+      command: {
+        enabled: true,
+        category: "FUN",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message } = ctx;
-
+  async messageRun(message, args) {
     const response = await getResponse("https://api.thecatapi.com/v1/images/search");
-    if (!response.success) return ctx.reply(MESSAGES.API_ERROR);
+    if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
     const image = response.data[0]?.url;
 
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setImage(image)
       .setFooter(`Requested by ${message.author.tag}`);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

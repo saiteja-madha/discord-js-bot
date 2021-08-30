@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { BOT_INVITE, SUPPORT_SERVER, EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class BotInviteCommand extends Command {
@@ -7,17 +7,23 @@ module.exports = class BotInviteCommand extends Command {
     super(client, {
       name: "botinvite",
       description: "get the bot's invite",
-      category: "INFORMATION",
+      command: {
+        enabled: true,
+        category: "INFORMATION",
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message } = ctx;
+  async messageRun(message, args) {
     let desc = "";
-    desc += `Support Server: [Join here](${SUPPORT_SERVER})` + "\n";
+    desc += `Support Server: [Join here](${SUPPORT_SERVER})\n`;
     desc += `Invite Link: [Add me here](${BOT_INVITE})`;
 
     const embed = new MessageEmbed()

@@ -16,21 +16,19 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("ticket-config", Schema);
 
 module.exports = {
-  getConfig: async (guildId, channelId, messageId) => {
-    return await Model.findOne({
+  getConfig: async (guildId, channelId, messageId) =>
+    Model.findOne({
       guild_id: guildId,
       channel_id: channelId,
       message_id: messageId,
-    }).lean();
-  },
+    }).lean({ defaults: true }),
 
-  createNewTicket: async (guildId, channelId, messageId, title, roleId) => {
-    await new Model({
+  createNewTicket: async (guildId, channelId, messageId, title, roleId) =>
+    new Model({
       guild_id: guildId,
       channel_id: channelId,
       message_id: messageId,
-      title: title,
+      title,
       support_role: roleId,
-    }).save();
-  },
+    }).save(),
 };

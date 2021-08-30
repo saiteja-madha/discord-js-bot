@@ -3,6 +3,21 @@ const { sendMessage } = require("@utils/botUtils");
 const { containsLink } = require("@utils/miscUtils");
 
 /**
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ */
+function memberInteract(issuer, target) {
+  const { guild } = issuer;
+  if (guild.ownerId === issuer.id) return true;
+  if (guild.ownerId === target.id) return false;
+  const issuerRoles = issuer.roles.cache;
+  const targetRoles = target.roles.cache;
+  return (
+    !issuerRoles.size === 0 && (targetRoles.size === 0 || issuer.roles.highest.position < target.roles.highest.position)
+  );
+}
+
+/**
  * @param {GuildMember} mod
  * @param {GuildMember} target
  * @param {String} action
@@ -38,7 +53,7 @@ async function setupMutedRole(guild) {
       },
     });
 
-    guild.channels.cache.forEach(async (channel, id) => {
+    guild.channels.cache.forEach(async (channel) => {
       if (channel.type !== "GUILD_VOICE" && channel.type !== "GUILD_STAGE_VOICE") {
         if (channel.permissionsFor(guild.me).has(["VIEW_CHANNEL", "MANAGE_CHANNELS"], true)) {
           await channel.permissionOverwrites.create(mutedRole, {
@@ -60,7 +75,7 @@ async function setupMutedRole(guild) {
 
     return mutedRole;
   } catch (ex) {
-    console.log("Muted Role Creation Error: " + ex);
+    console.log(`Muted Role Creation Error: ${ex}`);
     return mutedRole;
   }
 }
@@ -73,43 +88,45 @@ async function setupMutedRole(guild) {
 async function purgeMessages(message, type, amount, argument) {
   const { channel } = message;
   const toDelete = new Collection();
-  const messages = await channel.messages.fetch(
-    {
-      limit: amount,
-    },
-    false,
-    true
-  );
+  const messages = await channel.messages.fetch({ limit: amount }, false, true);
 
   messages.every((msg) => {
-    if (toDelete.size == amount) return false;
+    if (toDelete.size === amount) return false;
     const { id } = msg;
 
     switch (type) {
       case "ATTACHMENT":
         if (msg.attachments.size > 0) toDelete.set(id, msg);
         break;
+
       case "BOT":
         if (msg.author.bot) toDelete.set(id, msg);
         break;
+
       case "LINK":
         if (containsLink(msg.content)) toDelete.set(id, msg);
         break;
+
       case "TOKEN":
         if (msg.content.includes(argument)) toDelete.set(id, msg);
         break;
+
       case "USER":
         if (argument.includes(msg.author.id)) toDelete.set(id, msg);
         break;
+
       case "ALL":
         toDelete.set(id, msg);
         break;
+
+      default:
+        return;
     }
 
     return true;
   });
 
-  if (toDelete.size == 0) {
+  if (toDelete.size === 0) {
     return sendMessage(channel, "Not found messages that can be purged!");
   }
 
@@ -123,29 +140,8 @@ async function purgeMessages(message, type, amount, argument) {
 
   if (deletedMessages) {
     const sentMsg = await sendMessage(channel, `Successfully purged ${deletedMessages.size} messages`);
-    sentMsg
-      .delete({
-        timeout: 3000,
-      })
-      .catch((ex) => {
-        /* Ignore */
-      });
+    sentMsg.delete({ timeout: 3000 }).catch(() => {});
   }
-}
-
-/**
- * @param {GuildMember} issuer
- * @param {GuildMember} target
- */
-function memberInteract(issuer, target) {
-  const { guild } = issuer;
-  if (guild.ownerId === issuer.id) return true;
-  if (guild.ownerId === target.id) return false;
-  const issuerRoles = issuer.roles.cache;
-  const targetRoles = target.roles.cache;
-  return (
-    !issuerRoles.size == 0 && (targetRoles.size == 0 || issuer.roles.highest.position < target.roles.highest.position)
-  );
 }
 
 module.exports = {

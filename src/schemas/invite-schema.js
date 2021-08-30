@@ -31,19 +31,18 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("invites", Schema);
 
 module.exports = {
-  getDetails: async (guildId, memberId) => {
-    return await Model.findOne(
+  getDetails: async (guildId, memberId) =>
+    Model.findOne(
       {
         guild_id: guildId,
         member_id: memberId,
       },
       {},
       { upsert: true }
-    ).lean();
-  },
+    ).lean({ defaults: true }),
 
-  addInviter: async (guildId, memberId, inviterId, inviteCode) => {
-    return await Model.updateOne(
+  addInviter: async (guildId, memberId, inviterId, inviteCode) =>
+    Model.updateOne(
       {
         guild_id: guildId,
         member_id: memberId,
@@ -53,8 +52,7 @@ module.exports = {
         invite_code: inviteCode,
       },
       { upsert: true }
-    );
-  },
+    ),
 
   /**
    * @param {"TRACKED"|"LEFT"|"FAKE"|"ADDED"} type
@@ -65,27 +63,36 @@ module.exports = {
 
     switch (type) {
       case "TRACKED":
-        return await Model.findOneAndUpdate(filter, { $inc: { tracked_invites: amount || 1 } }, options).lean();
+        return Model.findOneAndUpdate(filter, { $inc: { tracked_invites: amount || 1 } }, options).lean({
+          defaults: true,
+        });
 
       case "LEFT":
-        return await Model.findOneAndUpdate(filter, { $inc: { left_invites: amount || 1 } }, options).lean();
+        return Model.findOneAndUpdate(filter, { $inc: { left_invites: amount || 1 } }, options).lean({
+          defaults: true,
+        });
 
       case "FAKE":
-        return await Model.findOneAndUpdate(filter, { $inc: { fake_invites: amount || 1 } }, options).lean();
+        return Model.findOneAndUpdate(filter, { $inc: { fake_invites: amount || 1 } }, options).lean({
+          defaults: true,
+        });
 
       case "ADDED":
-        return await Model.findOneAndUpdate(filter, { $inc: { added_invites: amount || 1 } }, options).lean();
+        return Model.findOneAndUpdate(filter, { $inc: { added_invites: amount || 1 } }, options).lean({
+          defaults: true,
+        });
+
+      default:
     }
   },
 
-  clearInvites: async (guildId, memberId) => {
-    return await Model.updateOne(
+  clearInvites: async (guildId, memberId) =>
+    Model.updateOne(
       {
         guild_id: guildId,
         member_id: memberId,
       },
       { added_invites: 0 },
       { upsert: true }
-    );
-  },
+    ),
 };

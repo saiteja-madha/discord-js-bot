@@ -1,4 +1,4 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { unmute } = require("@schemas/mute-schema");
 const { canInteract } = require("@utils/modUtils");
 const { getRoleByName } = require("@utils/guildUtils");
@@ -8,27 +8,36 @@ module.exports = class UnmuteCommand extends Command {
     super(client, {
       name: "unmute",
       description: "umutes the specified member(s)",
-      usage: "<@member(s)> [reason]",
-      minArgsCount: 1,
-      category: "MODERATION",
-      botPermissions: ["MANAGE_ROLES"],
-      userPermissions: ["KICK_MEMBERS"],
+      command: {
+        enabled: true,
+        usage: "<@member(s)> [reason]",
+        minArgsCount: 1,
+        category: "MODERATION",
+        botPermissions: ["MANAGE_ROLES"],
+        userPermissions: ["KICK_MEMBERS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message, guild, channel } = ctx;
+  async messageRun(message, args) {
+    const { guild, channel } = message;
     const { member } = message;
     const mentions = message.mentions.members;
 
-    if (mentions.size == 0) return ctx.reply("No members mentioned");
+    if (mentions.size == 0) return message.reply("No members mentioned");
 
     const mutedRole = getRoleByName(guild, "muted");
     if (!mutedRole.editable) {
-      return ctx.reply("I do not have permission to move members to `Muted` role. Is that role below my highest role?");
+      return message.reply(
+        "I do not have permission to move members to `Muted` role. Is that role below my highest role?"
+      );
     }
 
     mentions
@@ -38,9 +47,9 @@ module.exports = class UnmuteCommand extends Command {
 
         if (result.nModified === 1) {
           await target.roles.remove(mutedRole);
-          ctx.reply(`${target.user.tag} is unmuted`);
+          channel.send(`${target.user.tag} is unmuted`);
         } else {
-          ctx.reply(`${target.user.tag} is not muted`);
+          channel.send(`${target.user.tag} is not muted`);
         }
       });
   }

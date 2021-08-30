@@ -1,27 +1,34 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
-const { EMBED_COLORS, EMOJIS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class InviteRanks extends Command {
   constructor(client) {
     super(client, {
       name: "inviteranks",
       description: "shows the invite ranks configured on this guild",
-      category: "INVITE",
-      botPermissions: ["EMBED_LINKS"],
+      command: {
+        enabled: true,
+        category: "INVITE",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    let settings = await getSettings(ctx.guild);
-    if (settings.invite.ranks.length == 0) return await ctx.reply("No invite ranks configured in this server");
+  async messageRun(message, args) {
+    const settings = await getSettings(message.guild);
+    if (settings.invite.ranks.length === 0) return message.reply("No invite ranks configured in this server");
     let str = "";
     settings.invite.ranks.forEach((data) => {
-      let roleName = ctx.guild.roles.cache.get(data._id)?.toString();
+      const roleName = message.guild.roles.cache.get(data._id)?.toString();
       if (roleName) {
         str += `${roleName}: ${data.invites} invites\n`;
       }
@@ -29,6 +36,6 @@ module.exports = class InviteRanks extends Command {
 
     const embed = new MessageEmbed().setAuthor("Invite Ranks").setColor(EMBED_COLORS.BOT_EMBED).setDescription(str);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

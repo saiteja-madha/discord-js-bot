@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { EMOJIS, MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 const outdent = require("outdent");
@@ -9,28 +9,34 @@ module.exports = class Pokedex extends Command {
     super(client, {
       name: "pokedex",
       description: "shows pokemon information",
-      usage: "<pokemon>",
-      minArgsCount: 1,
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
+      cooldown: 5,
+      command: {
+        enabled: true,
+        usage: "<pokemon>",
+        minArgsCount: 1,
+        category: "UTILITY",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message, args } = ctx;
-
+  async messageRun(message, args) {
     const response = await getResponse(`https://pokeapi.glitch.me/v1/pokemon/${args}`);
-    if (response.status === 404) return ctx.reply("```The given pokemon is not found```");
-    if (!response.success) return ctx.reply(MESSAGES.API_ERROR);
+    if (response.status === 404) return message.reply("```The given pokemon is not found```");
+    if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
     const json = response.data[0];
     if (!json) return;
 
-    let embed = new MessageEmbed()
-      .setTitle("Pokédex - " + json.name)
+    const embed = new MessageEmbed()
+      .setTitle(`Pokédex - ${json.name}`)
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(json.sprite)
       .setDescription(
@@ -55,6 +61,6 @@ module.exports = class Pokedex extends Command {
       )
       .setFooter(json.description);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.reply({ embeds: [embed] });
   }
 };
