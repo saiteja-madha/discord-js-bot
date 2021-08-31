@@ -127,12 +127,12 @@ class Command {
 
     // Check user permissions
     if (options.userPermissions.length > 0 && !channel.permissionsFor(member).has(options.userPermissions)) {
-      return message.reply(`You need ${this.parsePermissions(options.userPermissions)} for this command`);
+      return message.reply(`You need ${this.constructor.parsePermissions(options.userPermissions)} for this command`);
     }
 
     // Check bot permissions
     if (options.botPermissions.length > 0 && !channel.permissionsFor(guild.me).has(options.botPermissions)) {
-      return message.reply(`I need ${this.parsePermissions(options.botPermissions)} for this command`);
+      return message.reply(`I need ${this.constructor.parsePermissions(options.botPermissions)} for this command`);
     }
 
     await this.messageRun(message, args, invoke, prefix);
