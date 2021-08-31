@@ -1,7 +1,7 @@
 const { GuildMember } = require("discord.js");
 const { BotClient } = require("@src/structures");
 const { inviteHandler, greetingHandler } = require("@root/src/handlers");
-const { getSettings, updateBotCount } = require("@schemas/counter-schema");
+const { getConfig, updateBotCount } = require("@schemas/counter-schema");
 
 /**
  * @param {BotClient} client
@@ -12,7 +12,7 @@ module.exports = async (client, member) => {
   const { guild } = member;
 
   // Channel Counter
-  const counterConfig = await getSettings(guild.id);
+  const counterConfig = await getConfig(guild.id);
   if (counterConfig) {
     if (member.user.bot) await updateBotCount(guild.id, -1, true);
     if (!client.counterUpdateQueue.includes(guild.id)) client.counterUpdateQueue.push(guild.id);
