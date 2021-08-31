@@ -62,8 +62,8 @@ const buildEmbed = async (member, config, inviterData) => {
  * @param {Object} inviterData
  */
 async function sendWelcome(member, inviterData = {}) {
-  const config = await getConfig(member.guild.id)?.welcome;
-  if (!config) return;
+  const config = (await getConfig(member.guild.id))?.welcome;
+  if (!config || !config.enabled) return;
 
   // check if channel exists
   const channel = member.guild.channels.cache.get(config.channel_id);
@@ -86,8 +86,8 @@ async function sendWelcome(member, inviterData = {}) {
  * @param {Object} inviterData
  */
 async function sendFarewell(member, inviterData = {}) {
-  const config = await getConfig(member.guild.id)?.farewell;
-  if (!config) return;
+  const config = (await getConfig(member.guild.id))?.farewell;
+  if (!config || !config.enabled) return;
 
   // check if channel exists
   const channel = member.guild.channels.cache.get(config.channel_id);

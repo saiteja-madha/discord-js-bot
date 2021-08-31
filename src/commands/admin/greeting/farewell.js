@@ -89,12 +89,18 @@ module.exports = class Farewell extends Command {
 
 async function sendPreview(message) {
   const config = (await getConfig(message.guild.id))?.farewell;
-  const embed = await buildEmbed(message.member, config?.embed);
-  if (embed) {
-    message.reply({ embeds: [embed] });
-  } else {
-    message.reply("Farewell message not configured in this server");
+  if (!config || !config.enabled) return message.reply("Farewell message not enabled in this server");
+
+  const targetChannel = message.guild.channels.cache.get(config.channel_id);
+  if (!config.embed.description) {
+    config.embed.description = "Goodbye {member:tag}!";
   }
+
+  const embed = await buildEmbed(message.member, config?.embed);
+  message.channel.send({
+    content: `Target Channel: ${targetChannel ? targetChannel.toString() : "Not found"}`,
+    embeds: [embed],
+  });
 }
 
 async function setDescription(message, args) {
