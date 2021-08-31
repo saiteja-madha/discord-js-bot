@@ -42,23 +42,19 @@ async function downloadImage(url) {
  * @param {String} outputCode
  */
 async function translate(input, outputCode) {
-  try {
-    const response = await axios.get(
-      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${outputCode}&dt=t&q=${input}`
-    );
+  const response = await getResponse(
+    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${outputCode}&dt=t&q=${input}`
+  );
 
-    if (response && response?.status === 200) {
-      return {
-        input: response.data[0][0][1],
-        output: response.data[0][0][0],
-        inputCode: response.data[2],
-        outputCode,
-        inputLang: ISO6391.getName(response.data[2]),
-        outputLang: ISO6391.getName(outputCode),
-      };
-    }
-  } catch (ex) {
-    console.log(ex);
+  if (response.success && response.status === 200) {
+    return {
+      input: response.data[0][0][1],
+      output: response.data[0][0][0],
+      inputCode: response.data[2],
+      outputCode,
+      inputLang: ISO6391.getName(response.data[2]),
+      outputLang: ISO6391.getName(outputCode),
+    };
   }
 }
 
