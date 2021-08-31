@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
 const { getUser, updateDailyStreak } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
-const { diff_hours, getRemainingTime } = require("@utils/miscUtils");
+const { diffHours, getRemainingTime } = require("@utils/miscUtils");
 
 module.exports = class DailyCommand extends Command {
   constructor(client) {
@@ -33,7 +33,7 @@ module.exports = class DailyCommand extends Command {
 
     if (user && user.daily.timestamp) {
       const lastUpdated = new Date(user.daily.timestamp);
-      const difference = diff_hours(new Date(), lastUpdated);
+      const difference = diffHours(new Date(), lastUpdated);
       if (difference < 24) {
         const nextUsage = lastUpdated.setHours(lastUpdated.getHours() + 24);
         return message.reply(`You can again run this command in \`${getRemainingTime(nextUsage)}\``);

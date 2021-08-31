@@ -3,6 +3,7 @@ require("module-alias/register");
 const path = require("path");
 const { startupCheck } = require("@utils/botUtils");
 const { BotClient } = require("@src/structures");
+const { launch } = require("@root/dashboard/app");
 
 global.__appRoot = path.resolve(__dirname);
 
@@ -22,6 +23,7 @@ process.on("unhandledRejection", (reason) => {
 
 (async () => {
   await startupCheck();
+  if (client.config.DASHBOARD.enabled) await launch(client);
   await client.initializeMongoose();
   await client.login(client.config.BOT_TOKEN);
 })();

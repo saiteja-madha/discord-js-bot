@@ -62,7 +62,7 @@ module.exports = class WeatherCommand extends Command {
     const json = response.data;
     if (!json.request) return interaction.followUp(`No city found matching \`${place}\``);
 
-    const embed = buildEmbed(response);
+    const embed = buildEmbed(json);
     interaction.followUp({ embeds: [embed] });
   }
 };

@@ -52,7 +52,7 @@ module.exports = {
   CACHE_SIZE: {
     GUILDS: 10,
     USERS: 1000,
-    MEMBERS: 10,
+    MEMBERS: 1000,
   },
   MESSAGES: {
     API_ERROR: "Unexpected Backend Error! Try again later or contact support server",

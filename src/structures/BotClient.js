@@ -28,6 +28,9 @@ module.exports = class BotClient extends Client {
     this.commands = []; // store actual command
     this.commandIndex = new Collection(); // store (alias, arrayIndex) pair
 
+    /**
+     * @type {Collection<string, Command>}
+     */
     this.slashCommands = new Collection(); // store slash commands
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 

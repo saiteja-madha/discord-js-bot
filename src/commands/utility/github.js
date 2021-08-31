@@ -9,7 +9,7 @@ module.exports = class GithubCommand extends Command {
     super(client, {
       name: "github",
       description: "shows github statistics of a user",
-      cooldown: 5,
+      cooldown: 10,
       command: {
         enabled: true,
         aliases: ["git"],

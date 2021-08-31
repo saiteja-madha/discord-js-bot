@@ -105,7 +105,12 @@ class Command {
     const { channel, guild, member } = message;
     const options = this.command;
 
-    // TODO: Cooldown check
+    if (this.cooldown > 0) {
+      const remaining = this.getRemainingCooldown(member.id);
+      if (remaining > 0) {
+        return message.reply(`You are on cooldown. You can use the command after ${timeformat(remaining)}`);
+      }
+    }
 
     // Return if bot cannot send message
     if (!channel.permissionsFor(guild.me).has("SEND_MESSAGES")) return;
@@ -136,6 +141,7 @@ class Command {
     }
 
     await this.messageRun(message, args, invoke, prefix);
+    this.applyCooldown(member.id);
   }
 
   /**
@@ -207,6 +213,24 @@ class Command {
   sendUsage(channel, prefix, invoke, title = "Command Usage") {
     const embed = this.getUsageEmbed(prefix, invoke, title);
     sendMessage(channel, { embeds: [embed] });
+  }
+
+  getRemainingCooldown(memberId) {
+    const key = this.name + "|" + memberId;
+    if (this.client.messageCooldownCache.has(key)) {
+      const remaining = (Date.now() - this.client.messageCooldownCache.get(key)) * 0.001;
+      if (remaining > this.cooldown) {
+        this.client.messageCooldownCache.delete(key);
+        return 0;
+      }
+      return remaining;
+    }
+    return 0;
+  }
+
+  applyCooldown(memberId) {
+    const key = this.name + "|" + memberId;
+    this.client.messageCooldownCache.set(key, Date.now());
   }
 
   /**

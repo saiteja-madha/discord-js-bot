@@ -14,7 +14,7 @@ module.exports = class TranslateCommand extends Command {
     super(client, {
       name: "translate",
       description: "translate from one language to other",
-      cooldown: 5,
+      cooldown: 20,
       command: {
         enabled: true,
         aliases: ["tr"],
