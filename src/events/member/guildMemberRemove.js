@@ -8,8 +8,8 @@ const { inviteHandler, greetingHandler } = require("@src/handlers");
  * @param {GuildMember|PartialGuildMember} member
  */
 module.exports = async (client, member) => {
-  if (member.partial) await member.fetch();
-  if (!member || !member.guild) return;
+  if (member.partial) await member.user.fetch();
+  if (!member.guild) return;
   const { guild } = member;
 
   const counterConfig = await getConfig(guild.id);
@@ -19,7 +19,7 @@ module.exports = async (client, member) => {
   }
 
   // Invite Tracker
-  const inviterData = await inviteHandler.trackLeftMember(member);
+  const inviterData = await inviteHandler.trackLeftMember(guild, member.user);
 
   // Farewell message
   greetingHandler.sendFarewell(member, inviterData);

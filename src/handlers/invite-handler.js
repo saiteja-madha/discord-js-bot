@@ -1,4 +1,4 @@
-const { Collection, Guild, GuildMember } = require("discord.js");
+const { Collection, Guild, GuildMember, User } = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
 const db = require("@schemas/invite-schema");
 
@@ -85,15 +85,13 @@ async function trackJoinedMember(member) {
 
 /**
  * Fetch inviter data from database
- *
- * @param {GuildMember} member
+ * @param {Guild} guild
+ * @param {User} user
  */
-async function trackLeftMember(member) {
-  const { guild } = member;
-
+async function trackLeftMember(guild, user) {
   const settings = await getSettings(guild);
   if (!settings.invite.tracking) return;
-  const inviteData = (await db.getDetails(guild.id, member.id)) || {};
+  const inviteData = (await db.getDetails(guild.id, user.id)) || {};
 
   let inviterData = {};
   if (inviteData.inviter_id) {
