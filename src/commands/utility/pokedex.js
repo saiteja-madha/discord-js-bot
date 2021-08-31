@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
+const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
 const { EMOJIS, MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getResponse } = require("@utils/httpUtils");
 const outdent = require("outdent");
@@ -18,7 +18,15 @@ module.exports = class Pokedex extends Command {
         botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
-        enabled: false,
+        enabled: true,
+        options: [
+          {
+            name: "pokemon",
+            description: "pokemon name to get information for",
+            type: "STRING",
+            required: true,
+          },
+        ],
       },
     });
   }
@@ -34,13 +42,37 @@ module.exports = class Pokedex extends Command {
 
     const json = response.data[0];
     if (!json) return;
+    const embed = buildEmbed(json);
 
-    const embed = new MessageEmbed()
-      .setTitle(`Pokédex - ${json.name}`)
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(json.sprite)
-      .setDescription(
-        outdent`
+    message.channel.send({ embeds: [embed] });
+  }
+
+  /**
+   * @param {CommandInteraction} interaction
+   * @param {CommandInteractionOptionResolver} options
+   */
+  async interactionRun(interaction, options) {
+    const pokemon = options.getString("pokemon");
+
+    const response = await getResponse(`https://pokeapi.glitch.me/v1/pokemon/${pokemon}`);
+    if (response.status === 404) return interaction.followUp("```The given pokemon is not found```");
+    if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
+
+    const json = response.data[0];
+    if (!json) return;
+    const embed = buildEmbed(json);
+
+    interaction.followUp({ embeds: [embed] });
+  }
+};
+
+const buildEmbed = (json) => {
+  const embed = new MessageEmbed()
+    .setTitle(`Pokédex - ${json.name}`)
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setThumbnail(json.sprite)
+    .setDescription(
+      outdent`
             ${EMOJIS.WHITE_DIAMOND_SUIT} **ID**: ${json.number}
             ${EMOJIS.WHITE_DIAMOND_SUIT} **Name**: ${json.name}
             ${EMOJIS.WHITE_DIAMOND_SUIT} **Species**: ${json.species}
@@ -58,9 +90,8 @@ module.exports = class Pokedex extends Command {
             ${EMOJIS.WHITE_DIAMOND_SUIT} **Is Mythical?**: ${json.mythical}
             ${EMOJIS.WHITE_DIAMOND_SUIT} **Is Generation?**: ${json.gen}
             `
-      )
-      .setFooter(json.description);
+    )
+    .setFooter(json.description);
 
-    message.channel.reply({ embeds: [embed] });
-  }
+  return embed;
 };
