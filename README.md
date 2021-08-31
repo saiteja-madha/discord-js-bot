@@ -1,5 +1,6 @@
 # 🤖 Description
-An awesome multipurpose discord bot built using discord.js
+An awesome multipurpose discord bot built using discord.js<br>
+Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=752922609733337190&permissions=8&scope=bot%20applications.commands)
 
 ## Requirements
 - Node.js 16.6.0 or newer
