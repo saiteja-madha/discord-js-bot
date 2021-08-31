@@ -84,12 +84,12 @@ module.exports = class HelpCommand extends Command {
    */
   async messageRun(message, args, invoke, prefix) {
     let trigger = args[0];
-    if (!trigger) return sendSelectionHelpMenu(message);
+    if (!trigger) return sendSelectionHelpMenu(message, prefix);
 
     // check if category Help
     if (trigger.toUpperCase() === "INFO") trigger = "INFORMATION";
     if (Object.prototype.hasOwnProperty.call(CMD_CATEGORIES, trigger.toUpperCase())) {
-      const embed = getCategoryHelpEmbed(message, trigger.toUpperCase());
+      const embed = getCategoryHelpEmbed(message, trigger.toUpperCase(), prefix);
       return message.channel.send({ embeds: [embed] });
     }
 
@@ -104,29 +104,29 @@ module.exports = class HelpCommand extends Command {
  * @param {Message} message
  * @param {String} category
  */
-function getCategoryHelpEmbed(message, category) {
+function getCategoryHelpEmbed(message, category, prefix) {
   let collector = "";
   if (category === "IMAGE") {
     message.client.commands
-      .filter((cmd) => cmd.category === category)
+      .filter((cmd) => cmd.command.category === category)
       .forEach((cmd) =>
-        cmd.aliases.forEach((alias) => {
+        cmd.command.aliases.forEach((alias) => {
           collector += `\`${alias}\`, `;
         })
       );
 
     collector +=
       "\n\nYou can use these image commands in following formats\n" +
-      `**${message.prefix}cmd:** Picks message authors avatar as image\n` +
-      `**${message.prefix}cmd <@member>:** Picks mentioned members avatar as image\n` +
-      `**${message.prefix}cmd <url>:** Picks image from provided URL\n` +
-      `**${message.prefix}cmd [attachment]:** Picks attachment image`;
+      `**${prefix}cmd:** Picks message authors avatar as image\n` +
+      `**${prefix}cmd <@member>:** Picks mentioned members avatar as image\n` +
+      `**${prefix}cmd <url>:** Picks image from provided URL\n` +
+      `**${prefix}cmd [attachment]:** Picks attachment image`;
   } else {
-    const commands = message.client.commands.filter((cmd) => cmd.category === category);
+    const commands = message.client.commands.filter((cmd) => cmd.command.category === category);
     if (commands.length === 0) return message.reply("No commands in this category");
     commands.forEach((cmd) => {
-      if (cmd.category !== "ADMIN" && cmd.subcommands.length > 0) {
-        cmd.subcommands.forEach((sub) => {
+      if (cmd.command.category !== "ADMIN" && cmd.command.subcommands.length > 0) {
+        cmd.command.subcommands.forEach((sub) => {
           collector += `${EMOJIS.ARROW} \`${cmd.name} ${sub.trigger}\`: ${sub.description}\n`;
         });
       } else collector += `${EMOJIS.ARROW} \`${cmd.name}\` - ${cmd.description}\n`;
@@ -145,7 +145,7 @@ function getCategoryHelpEmbed(message, category) {
 /**
  * @param {Message} message
  */
-async function sendSelectionHelpMenu(message) {
+async function sendSelectionHelpMenu(message, prefix) {
   const options = [];
   const keys = Object.keys(CMD_CATEGORIES);
   keys.forEach((key) => {
@@ -174,7 +174,7 @@ async function sendSelectionHelpMenu(message) {
     )
     .setThumbnail(message.client.user.displayAvatarURL());
 
-  const sentMsg = await message.reply({
+  const sentMsg = await message.channel.send({
     embeds: [embed],
     components: [row],
   });
@@ -191,7 +191,7 @@ async function sendSelectionHelpMenu(message) {
   collector.on("collect", async (interaction) => {
     await interaction.deferUpdate();
     const value = interaction.values[0];
-    const newEmbed = getCategoryHelpEmbed(message, value.toUpperCase());
+    const newEmbed = getCategoryHelpEmbed(message, value.toUpperCase(), prefix);
     sentMsg.edit({ embeds: [newEmbed] });
   });
 
