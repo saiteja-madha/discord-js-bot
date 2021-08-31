@@ -1,6 +1,7 @@
 const { BotClient } = require("@src/structures");
 const { counterHandler, inviteHandler } = require("@src/handlers");
 const { loadReactionRoles } = require("@schemas/reactionrole-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 /**
  * @param {BotClient} client
@@ -8,20 +9,7 @@ const { loadReactionRoles } = require("@schemas/reactionrole-schema");
 module.exports = async (client) => {
   console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
 
-  const toRegister = [];
-  client.commands
-    .filter((cmd) => cmd.slashCommand.enabled)
-    .forEach((cmd) => {
-      let data = {
-        name: cmd.name,
-        description: cmd.description,
-        type: "CHAT_INPUT",
-        options: cmd.slashCommand.options,
-      };
-      toRegister.push(data);
-    });
-
-  // check if slash commands are enabled
+  // register slash commands
   if (client.config.SLASH_COMMANDS.ENABLED) {
     if (client.config.SLASH_COMMANDS.GLOBAL) await client.registerSlashCommands();
     else await client.registerSlashCommands(client.config.SLASH_COMMANDS.TEST_GUILD_ID);
@@ -33,6 +21,9 @@ module.exports = async (client) => {
   // initialize counter Handler
   await counterHandler.init(client);
 
-  // cache guild invites
-  client.guilds.cache.forEach(async (guild) => inviteHandler.cacheGuildInvites(guild));
+  // cache invites for tracking enabled guilds
+  client.guilds.cache.forEach(async (guild) => {
+    const settings = await getSettings(guild);
+    if (settings.invite.tracking) inviteHandler.cacheGuildInvites(guild);
+  });
 };

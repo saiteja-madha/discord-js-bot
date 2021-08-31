@@ -8,16 +8,16 @@ const getEffectiveInvites = (data = {}) =>
 const cacheInvite = (invite, isVanity) => ({
   code: invite.code,
   uses: invite.uses,
+  maxUses: invite.maxUses,
   inviterId: isVanity ? "VANITY" : invite.inviter?.id,
 });
 
 /**
- * This function checks if invite tracking is enabled for the guild and then caches it
- *
+ * This function caches all invites for the provided guild
  * @param {Guild} guild
  */
 async function cacheGuildInvites(guild) {
-  if (!guild || !(await getSettings(guild)).invite.tracking) return new Collection();
+  if (!guild.me.permissions.has("MANAGE_GUILD")) return new Collection();
   const invites = await guild.invites.fetch();
 
   const tempMap = new Collection();
@@ -32,11 +32,9 @@ async function cacheGuildInvites(guild) {
 
 /**
  * Add roles to inviter based on invites count
- *
  * @param {Guild} guild
  * @param {object} inviterData
  * @param {boolean} isAdded
- * @returns
  */
 const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
   const settings = await getSettings(guild);
@@ -59,18 +57,38 @@ const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
 
 /**
  * Track inviter by comparing new invites with cached invites
- *
  * @param {GuildMember} member
  */
 async function trackJoinedMember(member) {
   const { guild } = member;
 
-  const settings = await getSettings(guild);
-  if (!settings.invite.tracking) return;
-
   const cachedInvites = guild.client.inviteCache.get(guild.id);
   const newInvites = await cacheGuildInvites(guild);
-  const usedInvite = newInvites.find((inv) => cachedInvites.get(inv.code).uses < inv.uses);
+
+  // return if no cached data
+  if (!cachedInvites) return {};
+  let usedInvite;
+
+  // compare newInvites with cached invites
+  usedInvite = newInvites.find(
+    (inv) => inv.uses !== 0 && cachedInvites.get(inv.code) && cachedInvites.get(inv.code).uses < inv.uses
+  );
+
+  // Special case: Invitation was deleted after member's arrival and
+  // just before GUILD_MEMBER_ADD (https://github.com/Androz2091/discord-invites-tracker/blob/29202ee8e85bb1651f19a466e2c0721b2373fefb/index.ts#L46)
+  if (!usedInvite) {
+    cachedInvites
+      .sort((a, b) => (a.deletedTimestamp && b.deletedTimestamp ? b.deletedTimestamp - a.deletedTimestamp : 0))
+      .forEach((invite) => {
+        if (
+          !newInvites.get(invite.code) && // If the invitation is no longer present
+          invite.maxUses > 0 && // If the invitation was indeed an invitation with a limited number of uses
+          invite.uses === invite.maxUses - 1 // What if the invitation was about to reach the maximum number of uses
+        ) {
+          usedInvite = invite;
+        }
+      });
+  }
 
   let inviterData = {};
   if (usedInvite) {
@@ -109,4 +127,5 @@ module.exports = {
   cacheGuildInvites,
   checkInviteRewards,
   getEffectiveInvites,
+  cacheInvite,
 };

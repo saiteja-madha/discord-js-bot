@@ -1,11 +1,15 @@
 const { Invite } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { inviteHandler } = require("@src/handlers");
 
 /**
  * @param {BotClient} client
  * @param {Invite} invite
  */
 module.exports = async (client, invite) => {
-  await inviteHandler.cacheGuildInvites(invite?.guild);
+  const cachedInvites = client.inviteCache.get(invite?.guild.id);
+
+  // Check if invite code exists in the cache
+  if (cachedInvites && cachedInvites.get(invite.code)) {
+    cachedInvites.get(invite.code).deletedTimestamp = Date.now();
+  }
 };

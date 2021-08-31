@@ -2,6 +2,7 @@ const { GuildMember } = require("discord.js");
 const { BotClient } = require("@src/structures");
 const { inviteHandler, greetingHandler } = require("@root/src/handlers");
 const { getConfig, updateBotCount } = require("@schemas/counter-schema");
+const { getSettings } = require("@root/src/schemas/guild-schema");
 
 /**
  * @param {BotClient} client
@@ -18,8 +19,9 @@ module.exports = async (client, member) => {
     if (!client.counterUpdateQueue.includes(guild.id)) client.counterUpdateQueue.push(guild.id);
   }
 
-  // Track invites
-  const inviterData = await inviteHandler.trackJoinedMember(member);
+  // Check if invite tracking is enabled
+  const settings = await getSettings(guild);
+  const inviterData = settings.invite.tracking ? await inviteHandler.trackJoinedMember(member) : {};
 
   // Send welcome message
   greetingHandler.sendWelcome(member, inviterData);

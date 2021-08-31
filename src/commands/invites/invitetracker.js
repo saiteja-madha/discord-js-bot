@@ -10,6 +10,7 @@ module.exports = class InviteTracker extends Command {
       description: "enable or disable invite tracking in the server",
       command: {
         enabled: true,
+        aliases: ["invitetracking"],
         usage: "<ON|OFF>",
         minArgsCount: 1,
         category: "INVITE",
@@ -52,9 +53,12 @@ module.exports = class InviteTracker extends Command {
           )}\`\`\``
         );
       }
+
+      await cacheGuildInvites(guild);
+    } else {
+      this.client.inviteCache.delete(message.guildId);
     }
 
-    await cacheGuildInvites(guild);
     await inviteTracking(guild.id, status);
     message.channel.send(`Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`);
   }
