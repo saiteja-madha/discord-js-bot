@@ -147,20 +147,14 @@ module.exports = class BotClient extends Client {
    * @param {string} [guildId]
    */
   async registerSlashCommands(guildId) {
-    const toRegister = [];
-    this.commands
-      .filter((cmd) => cmd.slashCommand.enabled) // Filter out the slash-commands
-      .forEach((cmd) => {
-        let data = {
-          name: cmd.name,
-          description: cmd.description,
-          type: "CHAT_INPUT",
-          options: cmd.slashCommand.options,
-        };
-        toRegister.push(data);
-      });
-
-    if (toRegister.length === 0) return;
+    const toRegister = this.commands
+      .filter((cmd) => cmd.slashCommand.enabled)
+      .map((cmd) => ({
+        name: cmd.name,
+        description: cmd.description,
+        type: "CHAT_INPUT",
+        options: cmd.slashCommand.options,
+      }));
 
     if (!guildId) {
       await this.application.commands.set(toRegister);

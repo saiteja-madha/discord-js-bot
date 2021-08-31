@@ -8,8 +8,8 @@ const { sendMessage } = require("@utils/botUtils");
  * @param {Message | PartialMessage} message
  */
 module.exports = async (client, message) => {
-  if (message.partial) await message.fetch().catch((err) => {});
-  if (!message || message.author.bot || !message.guild) return;
+  if (message.partial) return;
+  if (message.author.bot || !message.guild) return;
 
   const settings = (await getSettings(message.guild)).automod;
   if (!settings.anti_ghostping || !settings.log_channel) return;
