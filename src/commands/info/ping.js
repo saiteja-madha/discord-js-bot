@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
+const { Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
 
 module.exports = class PingCommand extends Command {
   constructor(client) {
