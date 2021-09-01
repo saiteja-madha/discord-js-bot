@@ -16,7 +16,7 @@ module.exports = class Eval extends Command {
         botPermissions: ['EMBED_LINKS']
       },
       slashCommand: {
-        enabled: true,
+        enabled: false,
         options: [
           {
             name: "input",
