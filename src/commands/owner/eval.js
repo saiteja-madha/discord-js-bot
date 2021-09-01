@@ -12,6 +12,7 @@ module.exports = class Eval extends Command {
         minArgsCount: 1,
         category: "OWNER",
         botOwnerOnly: true,
+        hidden: true,
         botPermissions: ['EMBED_LINKS']
       },
       slashCommand: {
