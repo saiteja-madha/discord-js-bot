@@ -125,6 +125,11 @@ class Command {
       return message.reply(`The \`${this.name}\` command can only be used by the guild owner.`);
     }
 
+        // Bot OwnerOnly check
+        if (options.botOwnerOnly && !this.client.config.OWNER_IDS.includes(member.id)) {
+          return message.reply(`The \`${this.name}\` command can only be used by the bot owner.`);
+        }
+
     // NSFW command
     if (options.nsfw && !channel.nsfw) {
       return message.reply(`The \`${this.name}\` command can only be used in NSFW Channel.`);

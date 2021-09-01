@@ -57,4 +57,4 @@ module.exports = {
   MESSAGES: {
     API_ERROR: "Unexpected Backend Error! Try again later or contact support server",
   },
-};
+}
