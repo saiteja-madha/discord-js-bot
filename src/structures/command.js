@@ -126,7 +126,7 @@ class Command {
     }
 
         // Bot OwnerOnly check
-        if (options.botOwnerOnly && this.client.config.OWNER_IDS !== member.id) {
+        if (options.botOwnerOnly && !this.client.config.OWNER_IDS.includes(member.id)) {
           return message.reply(`The \`${this.name}\` command can only be used by the bot owner.`);
         }
 
