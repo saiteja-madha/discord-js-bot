@@ -41,6 +41,6 @@ module.exports = class AutoModLog extends Command {
     }
 
     await automodLogChannel(message.guildId, targetChannel?.id);
-    message.channel.sendy(`Configuration saved! AutomodLog channel ${targetChannel ? "updated" : "removed"}`);
+    message.channel.send(`Configuration saved! AutomodLog channel ${targetChannel ? "updated" : "removed"}`);
   }
 };

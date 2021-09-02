@@ -36,16 +36,19 @@ function performAutomod(message, settings) {
   let str = "**Reason:**\n";
   let shouldDelete = false;
 
+  // Max mentions
   if (mentions.members.size > settings.max_mentions) {
     str += `Mentions: ${mentions.members.size}\n`;
     shouldDelete = true;
   }
 
+  // Maxrole mentions
   if (mentions.roles.size > settings.max_role_mentions) {
     str += `RoleMentions: ${mentions.roles.size}\n`;
     shouldDelete = true;
   }
 
+  // Max Lines
   if (settings.max_lines > 0) {
     const count = content.split("\n").length;
     if (count > settings.max_lines) {
@@ -54,6 +57,7 @@ function performAutomod(message, settings) {
     }
   }
 
+  // Anti links
   if (settings.anti_links) {
     if (containsLink(content)) {
       str += `Links Found: ${message.client.config.EMOJIS.TICK}\n`;
@@ -61,6 +65,32 @@ function performAutomod(message, settings) {
     }
   }
 
+  // Anti Scam
+  if (!settings.anti_links && settings.anti_scam) {
+    if (containsLink(content)) {
+      const key = message.author.id + "|" + message.guildId;
+      if (message.client.antiScamCache.has(key)) {
+        let antiScamInfo = message.client.antiScamCache.get(key);
+        if (
+          antiScamInfo.channelId !== message.channelId &&
+          antiScamInfo.content === content &&
+          Date.now() - antiScamInfo.timestamp < 5000
+        ) {
+          str += `AntiScam Found: ${message.client.config.EMOJIS.TICK}\n`;
+          shouldDelete = true;
+        }
+      } else {
+        let antiScamInfo = {
+          channelId: message.channelId,
+          content,
+          timestamp: Date.now(),
+        };
+        message.client.antiScamCache.set(key, antiScamInfo);
+      }
+    }
+  }
+
+  // Anti Invites
   if (!settings.anti_links && settings.anti_invites) {
     if (containsDiscordInvite(content)) {
       str += `Discord Invites Found: ${message.client.config.EMOJIS.TICK}\n`;
@@ -74,6 +104,7 @@ function performAutomod(message, settings) {
       .setThumbnail(author.avatarURL())
       .setColor(message.client.config.EMBED_COLORS.BOT_EMBED)
       .setDescription(str)
+      .addField("Content", content, false)
       .addField("Author", author.tag, true)
       .addField("Channel", channel.toString(), true);
 

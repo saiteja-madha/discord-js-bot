@@ -39,6 +39,8 @@ module.exports = class BotClient extends Client {
     this.xpCooldownCache = new Collection(); // store (guildId|memberID, Date) pair
     this.inviteCache = new Collection(); // store (guildId, Map<inviteData>) pair
 
+    this.antiScamCache = new Collection(); // store message data for anti_scam feature
+
     // initialize webhook for sending guild join/leave details
     this.joinLeaveWebhook = this.config.JOIN_LEAVE_WEBHOOK
       ? new WebhookClient({ url: this.config.JOIN_LEAVE_WEBHOOK })

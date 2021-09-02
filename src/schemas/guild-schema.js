@@ -37,6 +37,7 @@ const Schema = mongoose.Schema({
     log_channel: String,
     anti_links: Boolean,
     anti_invites: Boolean,
+    anti_scam: Boolean,
     anti_ghostping: Boolean,
     max_mentions: Number,
     max_role_mentions: Number,
@@ -121,6 +122,8 @@ module.exports = {
     Model.updateOne({ _id }, { "automod.log_channel": channelId }).then(cache.remove(_id)),
 
   antiLinks: async (_id, status) => Model.updateOne({ _id }, { "automod.anti_links": status }).then(cache.remove(_id)),
+
+  antiScam: async (_id, status) => Model.updateOne({ _id }, { "automod.anti_scam": status }).then(cache.remove(_id)),
 
   antiInvites: async (_id, status) =>
     Model.updateOne({ _id }, { "automod.anti_invites": status }).then(cache.remove(_id)),
