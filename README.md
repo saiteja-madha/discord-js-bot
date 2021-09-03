@@ -27,7 +27,7 @@ npm install
 - Economy Commands
 - Social Commands
 
-Complete complete commands list can be found at the [Wiki](https://github.com/saiteja-madha/discord-js-bot/wiki)
+Complete commands list can be found at the [Wiki](https://github.com/saiteja-madha/discord-js-bot/wiki)
 
 ## 🤝 Contributing
 Feel free to [Fork](https://github.com/saiteja-madha/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
