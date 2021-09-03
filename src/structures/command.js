@@ -75,7 +75,7 @@ class Command {
     this.command = data.command || {};
     this.command.aliases = data.command.aliases || [];
     this.command.usage = data.command.usage || "";
-    this.command.minArgsCount = data.command.minArgsCount;
+    this.command.minArgsCount = data.command.minArgsCount || 0;
     this.command.category = data.command.category || "NONE";
     this.command.subcommands = data.command.subcommands || [];
     this.command.botPermissions = data.command.botPermissions || [];
@@ -125,10 +125,10 @@ class Command {
       return message.reply(`The \`${this.name}\` command can only be used by the guild owner.`);
     }
 
-        // Bot OwnerOnly check
-        if (options.botOwnerOnly && !this.client.config.OWNER_IDS.includes(member.id)) {
-          return message.reply(`The \`${this.name}\` command can only be used by the bot owner.`);
-        }
+    // Bot OwnerOnly check
+    if (options.botOwnerOnly && !this.client.config.OWNER_IDS.includes(member.id)) {
+      return message.reply(`The \`${this.name}\` command can only be used by the bot owner.`);
+    }
 
     // NSFW command
     if (options.nsfw && !channel.nsfw) {
@@ -222,10 +222,10 @@ class Command {
 
   getRemainingCooldown(memberId) {
     const key = this.name + "|" + memberId;
-    if (this.client.messageCooldownCache.has(key)) {
-      const remaining = (Date.now() - this.client.messageCooldownCache.get(key)) * 0.001;
+    if (this.client.cmdCooldownCache.has(key)) {
+      const remaining = (Date.now() - this.client.cmdCooldownCache.get(key)) * 0.001;
       if (remaining > this.cooldown) {
-        this.client.messageCooldownCache.delete(key);
+        this.client.cmdCooldownCache.delete(key);
         return 0;
       }
       return remaining;
@@ -235,27 +235,91 @@ class Command {
 
   applyCooldown(memberId) {
     const key = this.name + "|" + memberId;
-    this.client.messageCooldownCache.set(key, Date.now());
+    this.client.cmdCooldownCache.set(key, Date.now());
   }
 
   /**
    * Validates the constructor parameters
    * @param {Client} client - Client to validate
-   * @param {CommandInfo} info - Info to validate
+   * @param {CommandData} data - Info to validate
    * @private
    */
-  static validateInfo(client, info) {
+  static validateInfo(client, data) {
     if (!client) throw new Error("A client must be specified.");
-    if (typeof info !== "object") {
-      throw new TypeError("Command info must be an Object.");
+    if (typeof data !== "object") {
+      throw new TypeError("Command data must be an Object.");
     }
-    if (typeof info.name !== "string" || info.name !== info.name.toLowerCase()) {
+    if (typeof data.name !== "string" || data.name !== data.name.toLowerCase()) {
       throw new Error("Command name must be a lowercase string.");
     }
-    if (typeof info.description !== "string") {
+    if (typeof data.description !== "string") {
       throw new TypeError("Command description must be a string.");
     }
-    // TODO: Validate Command info
+    if (typeof data.cooldown !== "number") {
+      throw new TypeError("Command cooldown must be a number");
+    }
+    if (typeof data.command !== "object") {
+      throw new TypeError("Command.command must be an object");
+    }
+    if (typeof data.command.enabled !== "boolean") {
+      throw new TypeError("Command.command enabled must be a boolean value");
+    }
+    if (
+      data.command.aliases &&
+      (!Array.isArray(data.command.aliases) ||
+        data.command.aliases.some((ali) => typeof ali !== "string" || ali !== ali.toLowerCase()))
+    ) {
+      throw new TypeError("Command.command aliases must be an Array of lowercase strings.");
+    }
+    if (typeof data.command.usage !== "string") {
+      throw new TypeError("Command.command usage must be a string");
+    }
+    if (typeof data.command.minArgsCount !== "number") {
+      throw new TypeError("Command.command minArgsCount must be a number");
+    }
+    if (!Array.isArray(data.command.subcommands)) {
+      throw new TypeError("Command.command subcommands must be an array");
+    }
+    if (data.command.botPermissions) {
+      if (!Array.isArray(data.command.botPermissions)) {
+        throw new TypeError("Command.command botPermissions must be an Array of permission key strings.");
+      }
+      for (const perm of data.command.botPermissions) {
+        if (!permissions[perm]) throw new RangeError(`Invalid command clientPermission: ${perm}`);
+      }
+    }
+    if (data.command.userPermissions) {
+      if (!Array.isArray(data.command.userPermissions)) {
+        throw new TypeError("Command.command userPermissions must be an Array of permission key strings.");
+      }
+      for (const perm of data.command.userPermissions) {
+        if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
+      }
+    }
+    if (typeof data.command.guildOwnerOnly !== "boolean") {
+      throw new TypeError("Command.command guildOwnerOnly must be a boolean value");
+    }
+    if (typeof data.command.botOwnerOnly !== "boolean") {
+      throw new TypeError("Command.command botOwnerOnly must be a boolean value");
+    }
+    if (typeof data.command.nsfw !== "boolean") {
+      throw new TypeError("Command.command nsfw must be a boolean value");
+    }
+    if (typeof data.command.hidden !== "boolean") {
+      throw new TypeError("Command.command hidden must be a boolean value");
+    }
+    if (typeof data.slashCommand !== "object") {
+      throw new TypeError("Command.slashCommand must be an object");
+    }
+    if (typeof data.slashCommand.enabled !== "boolean") {
+      throw new TypeError("Command.slashCommand enabled must be a boolean value");
+    }
+    if (typeof data.slashCommand.ephemeral !== "boolean") {
+      throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
+    }
+    if (!Array.isArray(data.slashCommand.options)) {
+      throw new TypeError("Command.slashCommand options must be a array");
+    }
   }
 }
 
