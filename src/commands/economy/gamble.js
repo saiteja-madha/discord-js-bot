@@ -47,7 +47,7 @@ module.exports = class Gamble extends Command {
 
     const str = `
     **Gamble Amount:** ${betAmount}${EMOJIS.CURRENCY}
-    **Multiplier:** 1.5x
+    **Multiplier:** 2x
     ╔══════════╗
     ║ ${getEmoji()} ║ ${getEmoji()} ║ ${getEmoji()} ‎‎‎‎║
     ╠══════════╣
