@@ -40,7 +40,8 @@
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-plugin-jsdoc": "^36.0.8",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "prettier": "2.3.2"
   },
   "keywords": [
     "discord",
