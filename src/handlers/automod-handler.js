@@ -74,7 +74,7 @@ function performAutomod(message, settings) {
         if (
           antiScamInfo.channelId !== message.channelId &&
           antiScamInfo.content === content &&
-          Date.now() - antiScamInfo.timestamp < 5000
+          Date.now() - antiScamInfo.timestamp < 2000
         ) {
           str += `AntiScam Found: ${message.client.config.EMOJIS.TICK}\n`;
           shouldDelete = true;

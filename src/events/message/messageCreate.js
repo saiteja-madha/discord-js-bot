@@ -3,7 +3,7 @@ const { BotClient } = require("@src/structures");
 const { automodHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/guild-schema");
 const { getRandomInt } = require("@utils/miscUtils");
-const { incrementXP, setLevel } = require("@schemas/profile-schema");
+const { incrementXP, setLevel, incrementMessages } = require("@schemas/profile-schema");
 const { sendMessage } = require("@utils/botUtils");
 
 /**
@@ -44,7 +44,9 @@ async function xpHandler(message) {
   // Cooldown check to prevent Message Spamming
   if (message.client.xpCooldownCache.has(key)) {
     const difference = Date.now() - message.client.xpCooldownCache.get(key) / 0.001;
-    if (difference < message.client.config.XP_SYSTEM.COOLDOWN) return;
+    if (difference < message.client.config.XP_SYSTEM.COOLDOWN) {
+      return incrementMessages(message.guildId, message.member.id); // if on cooldown only increment messages
+    }
     message.client.xpCooldownCache.delete(key);
   }
 

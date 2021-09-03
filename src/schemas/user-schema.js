@@ -12,6 +12,10 @@ const Schema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  bank: {
+    type: Number,
+    default: 0,
+  },
   reputation: {
     received: {
       type: Number,
@@ -52,6 +56,19 @@ module.exports = {
   },
 
   addCoins: async (id, coins) => Model.findOneAndUpdate({ id }, { $inc: { coins } }, upsertNew),
+
+  depositCoins: async (id, coins) => {
+    return await Model.findOneAndUpdate(
+      { id },
+      {
+        $inc: {
+          coins: -coins,
+          bank: coins,
+        },
+      },
+      upsertNew
+    );
+  },
 
   updateDailyStreak: async (id, coins, streak) =>
     Model.findOneAndUpdate(

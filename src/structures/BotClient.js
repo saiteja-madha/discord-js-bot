@@ -22,23 +22,15 @@ module.exports = class BotClient extends Client {
 
     this.config = require("@root/config"); // load the config file
 
-    /**
-     * @type {Command[]}
-     */
     this.commands = []; // store actual command
     this.commandIndex = new Collection(); // store (alias, arrayIndex) pair
-
-    /**
-     * @type {Collection<string, Command>}
-     */
     this.slashCommands = new Collection(); // store slash commands
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 
     // initialize cache
-    this.messageCooldownCache = new Collection(); // store message cooldowns
-    this.xpCooldownCache = new Collection(); // store (guildId|memberID, Date) pair
-    this.inviteCache = new Collection(); // store (guildId, Map<inviteData>) pair
-
+    this.cmdCooldownCache = new Collection(); // store message cooldowns for commands
+    this.xpCooldownCache = new Collection(); // store message cooldowns for xp
+    this.inviteCache = new Collection(); // store invite data for invite tracking
     this.antiScamCache = new Collection(); // store message data for anti_scam feature
 
     // initialize webhook for sending guild join/leave details
@@ -99,7 +91,9 @@ module.exports = class BotClient extends Client {
   loadCommand(cmd) {
     const index = this.commands.length;
     if (cmd.command.enabled) {
-      if (this.commandIndex.has(cmd.name)) throw new Error(`Command ${cmd.name} already registered`);
+      if (this.commandIndex.has(cmd.name)) {
+        throw new Error(`Command ${cmd.name} already registered`);
+      }
       cmd.command.aliases.forEach((alias) => {
         if (this.commandIndex.has(alias)) throw new Error(`Alias ${alias} already registered`);
         this.commandIndex.set(alias.toLowerCase(), index);
@@ -109,7 +103,9 @@ module.exports = class BotClient extends Client {
     }
 
     if (cmd.slashCommand.enabled) {
-      if (this.slashCommands.has(cmd.name)) throw new Error(`Slash Command ${cmd.name} already registered`);
+      if (this.slashCommands.has(cmd.name)) {
+        throw new Error(`Slash Command ${cmd.name} already registered`);
+      }
       this.slashCommands.set(cmd.name, cmd);
     }
   }
@@ -188,7 +184,9 @@ module.exports = class BotClient extends Client {
       let existing = await guild.commands.fetch();
       let found = existing.find((cmd) => cmd.name === command);
 
-      if (!found) throw new Error(`No slash command found matching ${command} in guild ${guild.name}`);
+      if (!found) {
+        throw new Error(`No slash command found matching ${command} in guild ${guild.name}`);
+      }
       await found.delete();
     }
     if (!guildId) {

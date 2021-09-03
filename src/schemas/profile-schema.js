@@ -32,8 +32,6 @@ module.exports = {
         member_id: memberId,
       },
       {
-        guild_id: guildId,
-        member_id: memberId,
         $inc: {
           xp,
           messages: 1,
@@ -43,6 +41,18 @@ module.exports = {
         upsert: true,
         new: true,
       }
+    ),
+
+  incrementMessages: async (guildId, memberId) =>
+    Model.updateOne(
+      {
+        guild_id: guildId,
+        member_id: memberId,
+      },
+      {
+        $inc: { messages: 1 },
+      },
+      { upsert: true }
     ),
 
   setLevel: async (guildId, memberId, level, xp) =>

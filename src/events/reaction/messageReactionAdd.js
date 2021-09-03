@@ -9,10 +9,16 @@ const { getSettings } = require("@schemas/guild-schema");
  * @param {User|PartialUser} user
  */
 module.exports = async (client, reaction, user) => {
-  if (reaction.partial) await reaction.fetch();
+  if (reaction.partial) {
+    try {
+      await reaction.fetch();
+    } catch (ex) {
+      return; // Failed to fetch message (maybe deleted)
+    }
+  }
   if (user.partial) await user.fetch();
   const { message, emoji } = reaction;
-  if (user.bot || message.webhookId || !message.content) return;
+  if (user.bot || !message.content) return;
 
   // Ticketing
   if (emoji.name === client.config.EMOJIS.TICKET_OPEN) await reactionHandler.handleNewTicket(reaction, user);

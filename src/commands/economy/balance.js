@@ -34,8 +34,11 @@ module.exports = class Balance extends Command {
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setAuthor(target.displayName, target.user.displayAvatarURL())
-      .setDescription(`**Coin balance:** ${economy?.coins || 0}${EMOJIS.CURRENCY}`);
+      .setAuthor(target.displayName)
+      .setThumbnail(target.user.displayAvatarURL())
+      .addField("Wallet", `${economy?.coins || 0}${EMOJIS.CURRENCY}`, true)
+      .addField("Bank", `${economy?.bank || 0}${EMOJIS.CURRENCY}`, true)
+      .addField("Net Worth", `${(economy?.coins || 0) + (economy?.bank || 0)}${EMOJIS.CURRENCY}`, true);
 
     message.channel.send({ embeds: [embed] });
   }
