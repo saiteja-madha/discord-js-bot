@@ -17,12 +17,14 @@ async function getImageFromCommand(message, args) {
     if (attachIsImage) url = attachUrl;
   }
 
-  if (!url && args.length == 0) url = message.author.displayAvatarURL({ size: 256, format: "png" });
+  if (!url && args.length === 0) url = message.author.displayAvatarURL({ size: 256, format: "png" });
 
-  if (!url && args.length != 0) {
+  if (!url && args.length !== 0) {
     try {
       url = new URL(args[0]).href;
-    } catch (ex) {}
+    } catch (ex) {
+      /* Ignore */
+    }
   }
 
   if (!url && message.mentions.users.size > 0) {
@@ -30,7 +32,7 @@ async function getImageFromCommand(message, args) {
   }
 
   if (!url) {
-    let member = await resolveMember(message, args[0]);
+    const member = await resolveMember(message, args[0]);
     if (member) url = member.user.displayAvatarURL({ size: 256, format: "png" });
   }
 
@@ -44,7 +46,7 @@ async function getImageFromCommand(message, args) {
  * @param {String} image
  */
 function getGenerator(genName, image) {
-  const endpoint = new URL(API.IMAGE_API + "/generators/" + genName);
+  const endpoint = new URL(`${API.IMAGE_API}/generators/${genName}`);
   endpoint.searchParams.append("image", image);
   return endpoint.href;
 }
@@ -54,7 +56,7 @@ function getGenerator(genName, image) {
  * @param {String} image
  */
 function getFilter(filter, image) {
-  const endpoint = new URL(API.IMAGE_API + "/filters/" + filter);
+  const endpoint = new URL(`${API.IMAGE_API}/filters/${filter}`);
   endpoint.searchParams.append("image", image);
   return endpoint.href;
 }

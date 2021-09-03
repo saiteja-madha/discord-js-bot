@@ -25,15 +25,13 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("profile", Schema);
 
 module.exports = {
-  incrementXP: async (guildId, memberId, xp) => {
-    return await Model.findOneAndUpdate(
+  incrementXP: async (guildId, memberId, xp) =>
+    Model.findOneAndUpdate(
       {
         guild_id: guildId,
         member_id: memberId,
       },
       {
-        guild_id: guildId,
-        member_id: memberId,
         $inc: {
           xp,
           messages: 1,
@@ -43,11 +41,22 @@ module.exports = {
         upsert: true,
         new: true,
       }
-    );
-  },
+    ),
 
-  setLevel: async (guildId, memberId, level, xp) => {
-    return await Model.updateOne(
+  incrementMessages: async (guildId, memberId) =>
+    Model.updateOne(
+      {
+        guild_id: guildId,
+        member_id: memberId,
+      },
+      {
+        $inc: { messages: 1 },
+      },
+      { upsert: true }
+    ),
+
+  setLevel: async (guildId, memberId, level, xp) =>
+    Model.updateOne(
       {
         guild_id: guildId,
         member_id: memberId,
@@ -56,6 +65,5 @@ module.exports = {
         level,
         xp,
       }
-    );
-  },
+    ),
 };

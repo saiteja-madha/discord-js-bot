@@ -1,28 +1,35 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { canInteract } = require("@utils/modUtils");
+const { Message } = require("discord.js");
 
 module.exports = class BanCommand extends Command {
   constructor(client) {
     super(client, {
       name: "ban",
       description: "bans the specified member(s)",
-      usage: "<@member(s)> [reason]",
-      minArgsCount: 1,
-      category: "MODERATION",
-      botPermissions: ["BAN_MEMBERS"],
-      userPermissions: ["BAN_MEMBERS"],
+      command: {
+        enabled: true,
+        usage: "<@member(s)> [reason]",
+        minArgsCount: 1,
+        category: "MODERATION",
+        botPermissions: ["BAN_MEMBERS"],
+        userPermissions: ["BAN_MEMBERS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message } = ctx;
+  async messageRun(message, args) {
     const { channel, member, content } = message;
     const mentions = message.mentions.members;
 
-    if (mentions.size == 0) return ctx.reply("No members mentioned");
+    if (mentions.size == 0) return message.reply("No members mentioned");
 
     const regex = /<@!?(\d+)>/g;
     let match = regex.exec(content);
@@ -42,10 +49,10 @@ module.exports = class BanCommand extends Command {
             days: 0,
             reason,
           });
-          ctx.reply(`${target.user.tag} is banned from this server`);
+          message.channel.send(`${target.user.tag} is banned from this server`);
         } catch (ex) {
           console.log(ex);
-          return ctx.reply(`Failed to ban ${target.user.tag}`);
+          return message.channel.send(`Failed to ban ${target.user.tag}`);
         }
       });
   }

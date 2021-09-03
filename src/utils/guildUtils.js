@@ -28,8 +28,8 @@ function getMatchingChannel(guild, query) {
 
   const patternMatch = query.match(CHANNEL_MENTION);
   if (patternMatch) {
-    let id = patternMatch[1];
-    let channel = guild.channels.cache.find((r) => r.id === id);
+    const id = patternMatch[1];
+    const channel = guild.channels.cache.find((r) => r.id === id);
     if (channel) return [channel];
   }
 
@@ -37,7 +37,7 @@ function getMatchingChannel(guild, query) {
   const startsWith = [];
   const includes = [];
   guild.channels.cache.forEach((ch) => {
-    let lowerName = ch.name.toLowerCase();
+    const lowerName = ch.name.toLowerCase();
     if (ch.name === query) exact.push(ch);
     if (lowerName.startsWith(query.toLowerCase())) startsWith.push(ch);
     if (lowerName.includes(query.toLowerCase())) includes.push(ch);
@@ -56,7 +56,7 @@ function getMatchingChannel(guild, query) {
 async function setVoiceChannelName(vc, name) {
   if (vc.manageable) {
     vc.setName(name).catch((err) => {
-      console.log("Set Name error: " + err);
+      console.log("Set Name error: ", err);
     });
   }
 }
@@ -84,8 +84,8 @@ function findMatchingRoles(guild, query) {
 
   const patternMatch = query.match(ROLE_MENTION);
   if (patternMatch) {
-    let id = patternMatch[1];
-    let role = guild.roles.cache.find((r) => r.id === id);
+    const id = patternMatch[1];
+    const role = guild.roles.cache.find((r) => r.id === id);
     if (role) return [role];
   }
 
@@ -93,7 +93,7 @@ function findMatchingRoles(guild, query) {
   const startsWith = [];
   const includes = [];
   guild.roles.cache.forEach((role) => {
-    let lowerName = role.name.toLowerCase();
+    const lowerName = role.name.toLowerCase();
     if (role.name === query) exact.push(role);
     if (lowerName.startsWith(query.toLowerCase())) startsWith.push(role);
     if (lowerName.includes(query.toLowerCase())) includes.push(role);
@@ -116,20 +116,20 @@ async function resolveMember(message, query, exact = false) {
   // Check if mentioned or ID is passed
   const patternMatch = query.match(MEMBER_MENTION);
   if (patternMatch) {
-    let id = patternMatch[1];
+    const id = patternMatch[1];
 
-    let mentioned = message.mentions.members.find((m) => m.id === id); // check if mentions contains the ID
+    const mentioned = message.mentions.members.find((m) => m.id === id); // check if mentions contains the ID
     if (mentioned) return mentioned;
 
-    let fetched = await memberManager.fetch({ user: id }).catch((ex) => {});
+    const fetched = await memberManager.fetch({ user: id }).catch(() => {});
     if (fetched) return fetched;
   }
 
   // Fetch and cache members from API
-  await memberManager.fetch({ query: query }).catch((ex) => {});
+  await memberManager.fetch({ query }).catch(() => {});
 
   // Check if exact tag is matched
-  let matchingTags = memberManager.cache.filter((mem) => mem.user.tag === query);
+  const matchingTags = memberManager.cache.filter((mem) => mem.user.tag === query);
   if (matchingTags.size === 1) return matchingTags.first();
 
   // Check for matching username

@@ -1,7 +1,7 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
-const ascii = require("ascii-table");
+const Ascii = require("ascii-table");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class AutoModStatus extends Command {
@@ -9,21 +9,27 @@ module.exports = class AutoModStatus extends Command {
     super(client, {
       name: "automodstatus",
       description: "check automod configuration for this guild",
-      category: "AUTOMOD",
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        category: "AUTOMOD",
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { guild } = ctx;
-    const settings = (await getSettings(guild)).automod;
+  async messageRun(message, args) {
+    const settings = (await getSettings(message.guild)).automod;
 
-    let table = new ascii("").setHeading("Feature", "Status");
+    const table = new Ascii("").setHeading("Feature", "Status");
     const logChannel = settings?.log_channel
-      ? guild.channels.cache.get(settings.log_channel).toString()
+      ? message.guild.channels.cache.get(settings.log_channel).toString()
       : "Not Configured";
 
     table
@@ -37,8 +43,8 @@ module.exports = class AutoModStatus extends Command {
     const embed = new MessageEmbed()
       .setAuthor("Automod Status")
       .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
-      .setDescription("**Log Channel:** " + logChannel + "\n\n```" + table.toString() + "```");
+      .setDescription(`**Log Channel:** ${logChannel}\n\n\`\`\`${table.toString()}\`\`\``);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };

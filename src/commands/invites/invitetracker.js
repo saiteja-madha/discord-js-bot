@@ -1,35 +1,43 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { inviteTracking } = require("@schemas/guild-schema");
-const { cacheGuildInvites } = require("@features/invite-tracker");
+const { cacheGuildInvites } = require("@src/handlers/invite-handler");
+const { Message } = require("discord.js");
 
 module.exports = class InviteTracker extends Command {
   constructor(client) {
     super(client, {
       name: "invitetracker",
       description: "enable or disable invite tracking in the server",
-      usage: "<ON|OFF>",
-      minArgsCount: 1,
-      aliases: ["invitetracking"],
-      category: "INVITE",
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        aliases: ["invitetracking"],
+        usage: "<ON|OFF>",
+        minArgsCount: 1,
+        category: "INVITE",
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args, guild } = ctx;
+  async messageRun(message, args) {
+    const { guild } = message;
     const input = args[0].toLowerCase();
     let status;
 
     if (input === "none" || input === "off" || input === "disable") status = false;
     else if (input === "on" || input === "enable") status = true;
-    else return ctx.reply("Incorrect Command Usage");
+    else return message.reply("Incorrect Command Usage");
 
     if (status) {
       if (!guild.me.permissions.has(["MANAGE_GUILD", "MANAGE_CHANNELS"])) {
-        return await ctx.reply(
+        return message.reply(
           "Oops! I am missing `Manage Server`, `Manage Channels` permission!\nI cannot track invites"
         );
       }
@@ -39,27 +47,19 @@ module.exports = class InviteTracker extends Command {
         .map((ch) => ch.name);
 
       if (channelMissing.length > 1) {
-        return ctx.reply(
-          "I may not be able to track invites properly\nI am missing `Manage Channel` permission in the following channels ```" +
-            channelMissing.join(", ") +
-            "```"
+        return message.reply(
+          `I may not be able to track invites properly\nI am missing \`Manage Channel\` permission in the following channels \`\`\`${channelMissing.join(
+            ", "
+          )}\`\`\``
         );
       }
-    }
 
-    try {
       await cacheGuildInvites(guild);
-    } catch (ex) {
-      return ctx.reply("Unexpected error occurred while caching the invites!");
+    } else {
+      this.client.inviteCache.delete(message.guildId);
     }
 
-    inviteTracking(guild.id, status)
-      .then(() => {
-        ctx.reply(`Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`);
-      })
-      .catch((err) => {
-        console.log(err);
-        ctx.reply("Unexpected backend error");
-      });
+    await inviteTracking(guild.id, status);
+    message.channel.send(`Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`);
   }
 };

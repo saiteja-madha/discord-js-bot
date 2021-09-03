@@ -1,45 +1,46 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { maxLines } = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class MaxLines extends Command {
   constructor(client) {
     super(client, {
       name: "maxlines",
       description: "sets maximum lines allowed per message",
-      usage: "<number>",
-      minArgsCount: 1,
-      category: "AUTOMOD",
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        usage: "<number>",
+        minArgsCount: 1,
+        category: "AUTOMOD",
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args, guild } = ctx;
+  async messageRun(message, args) {
     let input = args[0];
 
     if (isNaN(input)) {
       if (input === "none" || input === "off") input = 0;
-      else return ctx.reply("Not a valid input");
+      else return message.reply("Not a valid input");
     }
 
-    if (parseInt(input) < 0) return ctx.reply("The maximum number of lines must be a positive integer!");
+    if (parseInt(input, 10) < 0) return message.reply("The maximum number of lines must be a positive integer!");
 
-    await maxLines(guild.id, input)
-      .then(() => {
-        ctx.reply(
-          `${
-            input == 0
-              ? "Maximum line limit is disabled"
-              : "Messages longer than `" + input + "` lines will now be automatically deleted"
-          }`
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-        ctx.reply("Unexpected backend error");
-      });
+    await maxLines(message.guildId, input);
+    message.channel.send(
+      `${
+        input === 0
+          ? "Maximum line limit is disabled"
+          : `Messages longer than \`${input}\` lines will now be automatically deleted`
+      }`
+    );
   }
 };

@@ -1,7 +1,6 @@
-const { Command, CommandContext } = require("@src/structures");
-const { getCommand, COMMANDS } = require("@features/command-handler");
+const { Command } = require("@src/structures");
 const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, Message } = require("discord.js");
 
 const CMD_CATEGORIES = {
   ADMIN: {
@@ -66,66 +65,70 @@ module.exports = class HelpCommand extends Command {
     super(client, {
       name: "help",
       description: "command help menu",
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
+      command: {
+        enabled: true,
+        category: "UTILITY",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
+   * @param {string} invoke
+   * @param {string} prefix
    */
-  async run(ctx) {
-    let invoke = ctx.args[0];
-    if (!invoke) return sendSelectionHelpMenu(ctx);
+  async messageRun(message, args, invoke, prefix) {
+    let trigger = args[0];
+    if (!trigger) return sendSelectionHelpMenu(message, prefix);
 
     // check if category Help
-    if (invoke.toUpperCase() === "INFO") invoke = "INFORMATION";
-    if (CMD_CATEGORIES.hasOwnProperty(invoke.toUpperCase())) {
-      const embed = getCategoryHelpEmbed(ctx, invoke.toUpperCase());
-      return ctx.reply({ embeds: [embed] });
+    if (trigger.toUpperCase() === "INFO") trigger = "INFORMATION";
+    if (Object.prototype.hasOwnProperty.call(CMD_CATEGORIES, trigger.toUpperCase())) {
+      const embed = getCategoryHelpEmbed(message, trigger.toUpperCase(), prefix);
+      return message.channel.send({ embeds: [embed] });
     }
 
     // check if command help
-    const cmd = getCommand(invoke);
-    if (cmd) return cmd.sendUsage(ctx.message.channel, ctx.prefix, ctx.args[0]);
-    ctx.reply("No matching command or module found");
+    const cmd = this.client.getCommand(trigger);
+    if (cmd) return cmd.sendUsage(message.channel, prefix, trigger);
+    message.reply("No matching command or module found");
   }
 };
 
 /**
- * @param {CommandContext} ctx
+ * @param {Message} message
  * @param {String} category
  */
-function getCategoryHelpEmbed(ctx, category) {
+function getCategoryHelpEmbed(message, category, prefix) {
   let collector = "";
   if (category === "IMAGE") {
-    COMMANDS.filter((cmd) => cmd.category === category).forEach((cmd) =>
-      cmd.aliases.forEach((alias) => (collector += "`" + alias + "`, "))
-    );
+    message.client.commands
+      .filter((cmd) => cmd.command.category === category)
+      .forEach((cmd) =>
+        cmd.command.aliases.forEach((alias) => {
+          collector += `\`${alias}\`, `;
+        })
+      );
 
     collector +=
-      "\n\n" +
-      "You can use these image commands in following formats\n" +
-      " **" +
-      ctx.prefix +
-      "cmd:** Picks message authors avatar as image\n" +
-      " **" +
-      ctx.prefix +
-      "cmd <@member>:** Picks mentioned members avatar as image\n" +
-      " **" +
-      ctx.prefix +
-      "cmd <url>:** Picks image from provided URL\n" +
-      " **" +
-      ctx.prefix +
-      "cmd [attachment]:** Picks attachment image";
+      "\n\nYou can use these image commands in following formats\n" +
+      `**${prefix}cmd:** Picks message authors avatar as image\n` +
+      `**${prefix}cmd <@member>:** Picks mentioned members avatar as image\n` +
+      `**${prefix}cmd <url>:** Picks image from provided URL\n` +
+      `**${prefix}cmd [attachment]:** Picks attachment image`;
   } else {
-    const commands = COMMANDS.filter((cmd) => cmd.category === category);
-    if (commands.length == 0) return ctx.reply(`No commands in this category`);
+    const commands = message.client.commands.filter((cmd) => cmd.command.category === category);
+    if (commands.length === 0) return message.reply("No commands in this category");
     commands.forEach((cmd) => {
-      if (cmd.category !== "ADMIN" && cmd.subcommands.length > 0) {
-        cmd.subcommands.forEach(
-          (sub) => (collector += `${EMOJIS.ARROW} \`${cmd.name} ${sub.trigger}\`: ${sub.description}\n`)
-        );
+      if (cmd.command.category !== "ADMIN" && cmd.command.subcommands.length > 0) {
+        cmd.command.subcommands.forEach((sub) => {
+          collector += `${EMOJIS.ARROW} \`${cmd.name} ${sub.trigger}\`: ${sub.description}\n`;
+        });
       } else collector += `${EMOJIS.ARROW} \`${cmd.name}\` - ${cmd.description}\n`;
     });
   }
@@ -133,31 +136,28 @@ function getCategoryHelpEmbed(ctx, category) {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(CMD_CATEGORIES[category].image)
-    .setAuthor(category + " Commands")
+    .setAuthor(`${category} Commands`)
     .setDescription(collector);
 
   return embed;
 }
 
 /**
- * @param {CommandContext} ctx
+ * @param {Message} message
  */
-async function sendSelectionHelpMenu(ctx) {
-  const { message } = ctx;
-
+async function sendSelectionHelpMenu(message, prefix) {
   const options = [];
-  for (let key in CMD_CATEGORIES) {
-    if (CMD_CATEGORIES.hasOwnProperty(key)) {
-      let value = CMD_CATEGORIES[key];
-      let data = {
-        label: value.name,
-        value: value.name,
-        description: `View commands in ${value.name} category`,
-        emoji: value.emoji,
-      };
-      options.push(data);
-    }
-  }
+  const keys = Object.keys(CMD_CATEGORIES);
+  keys.forEach((key) => {
+    const value = CMD_CATEGORIES[key];
+    const data = {
+      label: value.name,
+      value: value.name,
+      description: `View commands in ${value.name} category`,
+      emoji: value.emoji,
+    };
+    options.push(data);
+  });
 
   const row = new MessageActionRow().addComponents(
     new MessageSelectMenu().setCustomId("help-menu").setPlaceholder("Choose the command category").addOptions(options)
@@ -166,15 +166,15 @@ async function sendSelectionHelpMenu(ctx) {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(
-      `**About Me:**\n` +
+      "**About Me:**\n" +
         `Hello I am ${message.guild.me.displayName}!\n` +
-        `A cool multipurpose discord bot which can serve all your needs\n\n` +
+        "A cool multipurpose discord bot which can serve all your needs\n\n" +
         `**Invite Me:** [Here](${BOT_INVITE})\n` +
         `**Support Server:** [Join](${SUPPORT_SERVER})`
     )
     .setThumbnail(message.client.user.displayAvatarURL());
 
-  const sentMsg = await ctx.reply({
+  const sentMsg = await message.channel.send({
     embeds: [embed],
     components: [row],
   });
@@ -191,7 +191,7 @@ async function sendSelectionHelpMenu(ctx) {
   collector.on("collect", async (interaction) => {
     await interaction.deferUpdate();
     const value = interaction.values[0];
-    let newEmbed = getCategoryHelpEmbed(ctx, value.toUpperCase());
+    const newEmbed = getCategoryHelpEmbed(message, value.toUpperCase(), prefix);
     sentMsg.edit({ embeds: [newEmbed] });
   });
 

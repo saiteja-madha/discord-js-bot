@@ -1,52 +1,59 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const moment = require("moment");
 
 module.exports = class GuildInfoCommand extends Command {
   constructor(client) {
     super(client, {
-      name: "guildinfo",
+      name: "serverinfo",
       description: "shows information about the discord server",
-      aliases: ["serverinfo"],
-      category: "INFORMATION",
-      botPermissions: ["EMBED_LINKS"],
+      command: {
+        enabled: true,
+        aliases: ["guildinfo"],
+        category: "INFORMATION",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { guild } = ctx;
+  async messageRun(message, args) {
+    const { guild } = message;
     const { name, id, preferredLocale, channels, roles, ownerId } = guild;
 
-    let owner = await guild.members.fetch(ownerId);
-    let createdAt = moment(guild.createdAt);
+    const owner = await guild.members.fetch(ownerId);
+    const createdAt = moment(guild.createdAt);
 
-    let totalChannels = channels.cache.size;
-    let categories = channels.cache.filter((c) => c.type === "GUILD_CATEGORY").size;
-    let textChannels = channels.cache.filter((c) => c.type === "GUILD_TEXT").size;
-    let voiceChannels = channels.cache.filter((c) => c.type === "GUILD_VOICE" || c.type === "GUILD_STAGE_VOICE").size;
-    let threadChannels = channels.cache.filter(
+    const totalChannels = channels.cache.size;
+    const categories = channels.cache.filter((c) => c.type === "GUILD_CATEGORY").size;
+    const textChannels = channels.cache.filter((c) => c.type === "GUILD_TEXT").size;
+    const voiceChannels = channels.cache.filter((c) => c.type === "GUILD_VOICE" || c.type === "GUILD_STAGE_VOICE").size;
+    const threadChannels = channels.cache.filter(
       (c) => c.type === "GUILD_PRIVATE_THREAD" || c.type === "GUILD_PUBLIC_THREAD"
     ).size;
 
-    let memberCache = guild.members.cache;
-    let all = memberCache.size;
-    let bots = memberCache.filter((m) => m.user.bot).size;
-    let users = all - bots;
-    let onlineUsers = memberCache.filter((m) => !m.user.bot && m.presence?.status === "online").size;
-    let onlineBots = memberCache.filter((m) => m.user.bot && m.presence?.status === "online").size;
-    let onlineAll = onlineUsers + onlineBots;
+    const memberCache = guild.members.cache;
+    const all = memberCache.size;
+    const bots = memberCache.filter((m) => m.user.bot).size;
+    const users = all - bots;
+    const onlineUsers = memberCache.filter((m) => !m.user.bot && m.presence?.status === "online").size;
+    const onlineBots = memberCache.filter((m) => m.user.bot && m.presence?.status === "online").size;
+    const onlineAll = onlineUsers + onlineBots;
 
-    let rolesCount = roles.cache.size;
-    let rolesString = roles.cache
+    const rolesCount = roles.cache.size;
+    const rolesString = roles.cache
       .filter((r) => !r.name.includes("everyone"))
       .map((r) => `${r.name}[${getMembersInRole(memberCache, r)}]`)
       .join(", ");
 
-    let verificationLevel = guild.verificationLevel;
+    let { verificationLevel } = guild;
     switch (guild.verificationLevel) {
       case "VERY_HIGH":
         verificationLevel = "┻�?┻ミヽ(ಠ益ಠ)ノ彡┻�?┻";
@@ -61,44 +68,36 @@ module.exports = class GuildInfoCommand extends Command {
     }
 
     let desc = "";
-    desc = desc + EMOJIS.ARROW + " **Id:** " + id + "\n";
-    desc = desc + EMOJIS.ARROW + " **Name:** " + name + "\n";
-    desc = desc + EMOJIS.ARROW + " **Owner:** " + owner.user.tag + "\n";
-    desc = desc + EMOJIS.ARROW + " **Region:** " + preferredLocale + "\n";
-    desc = desc + "\n";
+    desc = `${desc + EMOJIS.ARROW} **Id:** ${id}\n`;
+    desc = `${desc + EMOJIS.ARROW} **Name:** ${name}\n`;
+    desc = `${desc + EMOJIS.ARROW} **Owner:** ${owner.user.tag}\n`;
+    desc = `${desc + EMOJIS.ARROW} **Region:** ${preferredLocale}\n`;
+    desc += "\n";
 
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle("GUILD INFORMATION")
       .setThumbnail(guild.iconURL())
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setDescription(desc)
-      .addField(`Server Members [${all}]`, "```Members: " + users + "\nBots: " + bots + "```", true)
-      .addField(`Online Stats [${onlineAll}]`, "```Members: " + onlineUsers + "\nBots: " + onlineBots + "```", true)
+      .addField(`Server Members [${all}]`, `\`\`\`Members: ${users}\nBots: ${bots}\`\`\``, true)
+      .addField(`Online Stats [${onlineAll}]`, `\`\`\`Members: ${onlineUsers}\nBots: ${onlineBots}\`\`\``, true)
       .addField(
         `Categories and channels [${totalChannels}]`,
-        "```Categories: " +
-          categories +
-          " | Text: " +
-          textChannels +
-          " | Voice: " +
-          voiceChannels +
-          " | Thread: " +
-          threadChannels +
-          "```",
+        `\`\`\`Categories: ${categories} | Text: ${textChannels} | Voice: ${voiceChannels} | Thread: ${threadChannels}\`\`\``,
         false
       )
-      .addField(`Roles [${rolesCount}]`, "```" + rolesString + "```", false)
-      .addField("Verification", "```" + verificationLevel + "```", true)
-      .addField("Boost Count", "```" + guild.premiumSubscriptionCount + "```", true)
+      .addField(`Roles [${rolesCount}]`, `\`\`\`${rolesString}\`\`\``, false)
+      .addField("Verification", `\`\`\`${verificationLevel}\`\`\``, true)
+      .addField("Boost Count", `\`\`\`${guild.premiumSubscriptionCount}\`\`\``, true)
       .addField(
         `Server Created [${createdAt.fromNow()}]`,
-        "```" + createdAt.format("dddd, Do MMMM YYYY") + "```",
+        `\`\`\`${createdAt.format("dddd, Do MMMM YYYY")}\`\`\``,
         false
       );
 
     if (guild.splashURL) embed.setImage(guild.splashURL);
 
-    ctx.reply({ embeds: [embed] });
+    message.channel.send({ embeds: [embed] });
   }
 };
 

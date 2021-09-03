@@ -2,11 +2,6 @@ const { TextBasedChannels, MessagePayload, MessageOptions } = require("discord.j
 const { getResponse } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 
-async function startupCheck() {
-  await checkForUpdates();
-  validateConfig();
-}
-
 async function checkForUpdates() {
   const response = await getResponse("https://api.github.com/repos/saiteja-madha/discord-js-bot/releases/latest");
   if (!response.success) return console.log("\x1b[31m[Version Check] - Failed to check for bot updates\x1b[0m");
@@ -14,7 +9,7 @@ async function checkForUpdates() {
     if (require("@root/package.json").version.replace(/[^0-9]/g, "") >= response.data.tag_name.replace(/[^0-9]/g, "")) {
       console.log("\x1b[32m[Version Check] - Your discord bot is up to date\x1b[0m");
     } else {
-      console.log("\x1b[33m[Version Check] - " + response.data.tag_name + " update is available\x1b[0m");
+      console.log(`\x1b[33m[Version Check] - ${response.data.tag_name} update is available\x1b[0m`);
       console.log("\x1b[32m[Download]:\x1b[0m https://github.com/saiteja-madha/discord-js-bot/releases/latest");
     }
   }
@@ -43,6 +38,11 @@ function validateConfig() {
     console.log("\x1b[31m[config.js]\x1b[0m - PREFIX cannot be empty");
     process.exit();
   }
+}
+
+async function startupCheck() {
+  await checkForUpdates();
+  validateConfig();
 }
 
 /**

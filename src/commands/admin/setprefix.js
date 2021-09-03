@@ -1,34 +1,35 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { setPrefix } = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class SetPrefix extends Command {
   constructor(client) {
     super(client, {
       name: "setprefix",
       description: "sets a new prefix for this server",
-      usage: "<new-prefix>",
-      minArgsCount: 1,
-      category: "ADMIN",
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        usage: "<new-prefix>",
+        minArgsCount: 1,
+        category: "ADMIN",
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args, guild, message } = ctx;
+  async messageRun(message, args) {
     const newPrefix = args[0];
 
     if (newPrefix.length > 2) return message.reply("Prefix length cannot exceed `2` characters");
 
-    await setPrefix(guild.id, newPrefix)
-      .then(() => {
-        ctx.reply(`New prefix has been set to \`${newPrefix}\``);
-      })
-      .catch((err) => {
-        console.log(err);
-        ctx.reply("Unexpected backend error");
-      });
+    await setPrefix(message.guildId, newPrefix);
+    message.reply(`New prefix has been set to \`${newPrefix}\``);
   }
 };

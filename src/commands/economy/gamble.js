@@ -1,5 +1,5 @@
-const { Command, CommandContext } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { Command } = require("@src/structures");
+const { MessageEmbed, Message } = require("discord.js");
 const { getUser, addCoins } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { getRandomInt } = require("@utils/miscUtils");
@@ -9,19 +9,25 @@ module.exports = class Gamble extends Command {
     super(client, {
       name: "gamble",
       description: "try your luck by gambling",
-      usage: "<amount>",
-      minArgsCount: 1,
-      aliases: ["slot"],
-      category: "ECONOMY",
-      botPermissions: ["EMBED_LINKS"],
+      command: {
+        enabled: true,
+        usage: "<amount>",
+        minArgsCount: 1,
+        aliases: ["slot"],
+        category: "ECONOMY",
+        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message, args, guild } = ctx;
+  async messageRun(message, args) {
     const { member } = message;
     const betAmount = args[0];
 
@@ -35,11 +41,11 @@ module.exports = class Gamble extends Command {
         `You do not have sufficient coins to gamble!\n**Coin balance:** ${economy?.coins || 0}${EMOJIS.CURRENCY}`
       );
 
-    let slot1 = getEmoji();
-    let slot2 = getEmoji();
-    let slot3 = getEmoji();
+    const slot1 = getEmoji();
+    const slot2 = getEmoji();
+    const slot3 = getEmoji();
 
-    let str = `
+    const str = `
     **Gamble Amount:** ${betAmount}${EMOJIS.CURRENCY}
     **Multiplier:** 1.5x
     ╔══════════╗
@@ -52,23 +58,18 @@ module.exports = class Gamble extends Command {
     `;
 
     const reward = calculateReward(betAmount, slot1, slot2, slot3);
-    const result = (reward > 0 ? "You won: " + reward : "You lost: " + betAmount) + EMOJIS.CURRENCY;
+    const result = (reward > 0 ? `You won: ${reward}` : `You lost: ${betAmount}`) + EMOJIS.CURRENCY;
     const balance = reward - betAmount;
 
-    try {
-      const remaining = await addCoins(member.id, balance);
-      const embed = new MessageEmbed()
-        .setAuthor(member.displayName, member.user.displayAvatarURL())
-        .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
-        .setThumbnail("https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif")
-        .setDescription(str)
-        .setFooter(`${result}\nUpdated balance: ${remaining?.coins}${EMOJIS.CURRENCY}`);
+    const remaining = await addCoins(member.id, balance);
+    const embed = new MessageEmbed()
+      .setAuthor(member.displayName, member.user.displayAvatarURL())
+      .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+      .setThumbnail("https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif")
+      .setDescription(str)
+      .setFooter(`${result}\nUpdated balance: ${remaining?.coins}${EMOJIS.CURRENCY}`);
 
-      ctx.reply({ embeds: [embed] });
-    } catch (ex) {
-      console.log(ex);
-      ctx.reply("Failed to update coin balance");
-    }
+    message.channel.send({ embeds: [embed] });
   }
 };
 
@@ -99,7 +100,7 @@ function getEmoji() {
 }
 
 function calculateReward(amount, var1, var2, var3) {
-  if (var1 === var2 && var2.equals === var3) return 2.25 * amount;
-  if (var1 === var2 || var2 === var3 || var1 === var3) return 1.5 * amount;
-  else return 0;
+  if (var1 === var2 && var2.equals === var3) return 3 * amount;
+  if (var1 === var2 || var2 === var3 || var1 === var3) return 2 * amount;
+  return 0;
 }

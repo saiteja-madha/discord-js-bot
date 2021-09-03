@@ -22,12 +22,13 @@ const Model = mongoose.model("reaction-roles", Schema);
 
 // Cache
 const cache = new Map();
-const getKey = (guildId, channelId, messageId) => guildId + "|" + channelId + "|" + messageId;
+const getKey = (guildId, channelId, messageId) => `${guildId}|${channelId}|${messageId}`;
 
 module.exports = {
   loadReactionRoles: async () => {
     cache.clear();
-    (await Model.find().lean()).forEach((doc) => {
+    (await Model.find().lean({ defaults: true })).forEach((doc) => {
+      // eslint-disable-next-line camelcase
       const { guild_id, channel_id, message_id, roles } = doc;
       const key = getKey(guild_id, channel_id, message_id);
       cache.set(key, roles);
@@ -42,14 +43,14 @@ module.exports = {
     };
 
     // Pull if existing emote:role found
-    await Model.updateOne(filter, { $pull: { roles: { emote: emote } } });
+    await Model.updateOne(filter, { $pull: { roles: { emote } } });
 
     // Add new one to array
     const data = await Model.findOneAndUpdate(
       filter,
-      { $addToSet: { roles: { emote: emote, role_id: roleId } } },
+      { $addToSet: { roles: { emote, role_id: roleId } } },
       { upsert: true, new: true }
-    ).lean();
+    ).lean({ defaults: true });
 
     cache.set(getKey(guildId, channelId, messageId), data.roles);
   },
@@ -70,7 +71,5 @@ module.exports = {
     cache.delete(getKey(guildId, channelId, messageId));
   },
 
-  getReactionRole: (guildId, channelId, messageId) => {
-    return cache.get(getKey(guildId, channelId, messageId));
-  },
+  getReactionRole: (guildId, channelId, messageId) => cache.get(getKey(guildId, channelId, messageId)),
 };

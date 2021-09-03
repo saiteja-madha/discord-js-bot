@@ -1,11 +1,8 @@
-const LINK_PATTERN = new RegExp(
-  /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
-);
+const LINK_PATTERN =
+  /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
-const DISCORD_INVITE_PATTERN = new RegExp(
-  "(?:https?://)?(?:\\w+\\.)?discord(?:(?:app)?\\.com/invite|\\.gg)/(?<code>[a-z0-9-]+)(?:\\?\\S*)?(?:#\\S*)?",
-  "g"
-);
+const DISCORD_INVITE_PATTERN =
+  /(https?:\/\/)?(www.)?(discord.(gg|io|me|li|link|plus)|discorda?p?p?.com\/invite|invite.gg|dsc.gg|urlcord.cf)\/[^\s/]+?(?=\b)/;
 
 /**
  * @param {String} text
@@ -39,25 +36,25 @@ function isHex(text) {
  * @param {Date} dt2
  * @param {Date} dt1
  */
-function diff_hours(dt2, dt1) {
-  var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+function diffHours(dt2, dt1) {
+  let diff = (dt2.getTime() - dt1.getTime()) / 1000;
   diff /= 60 * 60;
   return Math.abs(Math.round(diff));
 }
 
 /**
- * @param {String} timeInSeconds
+ * @param {number} timeInSeconds
  */
 function timeformat(timeInSeconds) {
-  var days = Math.floor((timeInSeconds % 31536000) / 86400);
-  var hours = Math.floor((timeInSeconds % 86400) / 3600);
-  var minutes = Math.floor((timeInSeconds % 3600) / 60);
-  var seconds = Math.round(timeInSeconds % 60);
+  const days = Math.floor((timeInSeconds % 31536000) / 86400);
+  const hours = Math.floor((timeInSeconds % 86400) / 3600);
+  const minutes = Math.floor((timeInSeconds % 3600) / 60);
+  const seconds = Math.round(timeInSeconds % 60);
   return (
-    (days > 0 ? days + " days, " : "") +
-    (hours > 0 ? hours + " hours, " : "") +
-    (minutes > 0 ? minutes + " minutes, " : "") +
-    (seconds > 0 ? seconds + " seconds" : "")
+    (days > 0 ? `${days} days, ` : "") +
+    (hours > 0 ? `${hours} hours, ` : "") +
+    (minutes > 0 ? `${minutes} minutes, ` : "") +
+    (seconds > 0 ? `${seconds} seconds` : "")
   );
 }
 
@@ -75,7 +72,7 @@ module.exports = {
   containsDiscordInvite,
   getRandomInt,
   isHex,
-  diff_hours,
+  diffHours,
   timeformat,
   getRemainingTime,
 };

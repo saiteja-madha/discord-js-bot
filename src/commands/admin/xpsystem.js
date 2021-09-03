@@ -1,37 +1,38 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { xpSystem } = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class XPSystem extends Command {
   constructor(client) {
     super(client, {
       name: "xpsystem",
       description: "enable or disable XP ranking system in the server",
-      usage: "<ON|OFF>",
-      minArgsCount: 1,
-      category: "ADMIN",
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        usage: "<ON|OFF>",
+        minArgsCount: 1,
+        category: "ADMIN",
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args, guild } = ctx;
+  async messageRun(message, args) {
     const input = args[0].toLowerCase();
     let status;
 
     if (input === "none" || input === "off" || input === "disable") status = false;
     else if (input === "on" || input === "enable") status = true;
-    else return ctx.reply("Incorrect Command Usage");
+    else return message.reply("Incorrect Command Usage");
 
-    xpSystem(guild.id, status)
-      .then(() => {
-        ctx.reply(`Configuration saved! XP System is now ${status ? "enabled" : "disabled"}`);
-      })
-      .catch((err) => {
-        console.log(err);
-        ctx.reply("Unexpected backend error");
-      });
+    await xpSystem(message.guildId, status);
+    message.channel.send(`Configuration saved! XP System is now ${status ? "enabled" : "disabled"}`);
   }
 };

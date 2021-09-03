@@ -1,45 +1,46 @@
-const { Command, CommandContext } = require("@src/structures");
+const { Command } = require("@src/structures");
 const { maxRoleMentions } = require("@schemas/guild-schema");
+const { Message } = require("discord.js");
 
 module.exports = class MaxRoleMentions extends Command {
   constructor(client) {
     super(client, {
       name: "maxrolementions",
       description: "sets maximum role mentions allowed per message",
-      usage: "<number>",
-      minArgsCount: 1,
-      category: "AUTOMOD",
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        usage: "<number>",
+        minArgsCount: 1,
+        category: "AUTOMOD",
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { args, guild } = ctx;
+  async messageRun(message, args) {
     let input = args[0];
 
     if (isNaN(input)) {
       if (input === "none" || input === "off") input = 0;
-      else return ctx.reply("Not a valid input");
+      else return message.reply("Not a valid input");
     }
 
-    if (parseInt(input) < 2) return ctx.reply("Maximum mentions must atleast be 2");
+    if (parseInt(input, 10) < 2) return message.reply("Maximum mentions must atleast be 2");
 
-    await maxRoleMentions(guild.id, input)
-      .then(() => {
-        ctx.reply(
-          `${
-            input == 0
-              ? "Maximum role mentions limit is disabled"
-              : "Messages having more than `" + input + "` role mentions will now be automatically deleted"
-          }`
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-        ctx.reply("Unexpected backend error");
-      });
+    await maxRoleMentions(message.guildId, input);
+    message.channel.send(
+      `${
+        input === 0
+          ? "Maximum role mentions limit is disabled"
+          : `Messages having more than \`${input}\` role mentions will now be automatically deleted`
+      }`
+    );
   }
 };

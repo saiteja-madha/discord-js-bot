@@ -25,9 +25,7 @@ const Schema = mongoose.Schema(
       required: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const Model = mongoose.model("mutes", Schema);
@@ -60,24 +58,20 @@ module.exports = {
     }
   },
 
-  unmute: async (guildId, targetId) => {
-    return await Model.updateOne(
+  unmute: async (guildId, targetId) =>
+    Model.updateOne(
       {
         guildId,
         userId: targetId,
         current: true,
       },
-      {
-        current: false,
-      }
-    );
-  },
+      { current: false }
+    ),
 
-  getMuteInfo: async (guild, targetId) => {
-    return await Model.findOne({
+  getMuteInfo: async (guild, targetId) =>
+    Model.findOne({
       guildId: guild.id,
       userId: targetId,
       current: true,
-    });
-  },
+    }),
 };

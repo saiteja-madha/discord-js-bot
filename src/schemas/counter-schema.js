@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { CACHE_SIZE } = require("@root/config.js");
 const { FixedSizeCache } = require("@src/structures");
+
 const cache = new FixedSizeCache(CACHE_SIZE.GUILDS);
 
 const Schema = mongoose.Schema({
@@ -23,99 +24,61 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("counter-config", Schema);
 
 module.exports = {
-  getSettings: async (guildId) => {
-    if (!cache.contains(guildId)) {
-      cache.add(
-        guildId,
-        await Model.findOne({
-          _id: guildId,
-        }).lean({ defaults: true })
-      );
-    }
-    return cache.get(guildId);
+  getConfig: async (guildId) => {
+    if (cache.contains(guildId)) return cache.get(guildId);
+    const config = await Model.findOne({ _id: guildId }).lean({ defaults: true });
+    cache.add(guildId, config);
+    return config;
   },
 
-  setTotalCountChannel: async (guildId, channelId, name) => {
-    return await Model.updateOne(
-      {
-        _id: guildId,
-      },
+  setTotalCountChannel: async (guildId, channelId, name) =>
+    Model.updateOne(
+      { _id: guildId },
       {
         _id: guildId,
         tc_channel: channelId,
         tc_name: name,
       },
-      {
-        upsert: true,
-      }
-    ).then(cache.remove(guildId));
-  },
+      { upsert: true }
+    ).then(cache.remove(guildId)),
 
-  setMemberCountChannel: async (guildId, channelId, name) => {
-    return await Model.updateOne(
-      {
-        _id: guildId,
-      },
+  setMemberCountChannel: async (guildId, channelId, name) =>
+    Model.updateOne(
+      { _id: guildId },
       {
         _id: guildId,
         mc_channel: channelId,
         mc_name: name,
       },
-      {
-        upsert: true,
-      }
-    ).then(cache.remove(guildId));
-  },
+      { upsert: true }
+    ).then(cache.remove(guildId)),
 
-  setBotCountChannel: async (guildId, channelId, name) => {
-    return await Model.updateOne(
-      {
-        _id: guildId,
-      },
+  setBotCountChannel: async (guildId, channelId, name) =>
+    Model.updateOne(
+      { _id: guildId },
       {
         _id: guildId,
         bc_channel: channelId,
         bc_name: name,
       },
-      {
-        upsert: true,
-      }
-    ).then(cache.remove(guildId));
-  },
+      { upsert: true }
+    ).then(cache.remove(guildId)),
 
   updateBotCount: async (guildId, count, isIncrement = false) => {
     if (isIncrement) {
-      return await Model.updateOne(
+      return Model.updateOne(
+        { _id: guildId },
         {
           _id: guildId,
+          $inc: { bot_count: count },
         },
-        {
-          _id: guildId,
-          $inc: {
-            bot_count: count,
-          },
-        },
-        {
-          upsert: true,
-        }
-      ).then(cache.remove(guildId));
-    } else {
-      return await Model.updateOne(
-        {
-          _id: guildId,
-        },
-        {
-          _id: guildId,
-          bot_count: count,
-        },
-        {
-          upsert: true,
-        }
+        { upsert: true }
       ).then(cache.remove(guildId));
     }
+    return Model.updateOne({ _id: guildId }, { _id: guildId, bot_count: count }, { upsert: true }).then(
+      cache.remove(guildId)
+    );
   },
 
-  getCounterGuilds: async () => {
-    return await Model.find().select("_id");
-  },
+  getCounterGuilds: async () => Model.find().select("_id").lean({ defaults: true }),
 };

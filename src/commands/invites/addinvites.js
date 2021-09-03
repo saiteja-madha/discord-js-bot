@@ -1,8 +1,8 @@
-const { Command, CommandContext } = require("@src/structures");
-const { getEffectiveInvites, checkInviteRewards } = require("@features/invite-tracker");
+const { Command } = require("@src/structures");
+const { getEffectiveInvites, checkInviteRewards } = require("@src/handlers/invite-handler");
 const { incrementInvites } = require("@schemas/invite-schema");
 const { EMBED_COLORS } = require("@root/config.js");
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Message } = require("discord.js");
 const { resolveMember } = require("@root/src/utils/guildUtils");
 
 module.exports = class AddInvitesCommand extends Command {
@@ -10,26 +10,32 @@ module.exports = class AddInvitesCommand extends Command {
     super(client, {
       name: "addinvites",
       description: "add invites to a member",
-      usage: "<@member|id> <invites>",
-      minArgsCount: 2,
-      category: "INVITE",
-      botPermissions: ["EMBED_LINKS"],
-      userPermissions: ["ADMINISTRATOR"],
+      command: {
+        enabled: true,
+        usage: "<@member|id> <invites>",
+        minArgsCount: 2,
+        category: "INVITE",
+        botPermissions: ["EMBED_LINKS"],
+        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: false,
+      },
     });
   }
 
   /**
-   * @param {CommandContext} ctx
+   * @param {Message} message
+   * @param {string[]} args
    */
-  async run(ctx) {
-    const { message, guild, args } = ctx;
+  async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
-    const amount = ctx.args[1];
+    const amount = args[1];
 
-    if (!target) return ctx.reply(`Incorrect syntax. You must mention a target`);
-    if (isNaN(amount)) return ctx.reply(`Invite amount must be a number`);
+    if (!target) return message.reply("Incorrect syntax. You must mention a target");
+    if (isNaN(amount)) return message.reply("Invite amount must be a number");
 
-    const inviteData = await incrementInvites(guild.id, target.id, "ADDED", amount);
+    const inviteData = await incrementInvites(message.guildId, target.id, "ADDED", amount);
 
     const embed = new MessageEmbed()
       .setAuthor(`Added invites to ${target.user.username}`)
@@ -37,7 +43,7 @@ module.exports = class AddInvitesCommand extends Command {
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setDescription(`${target.user.tag} now has ${getEffectiveInvites(inviteData)} invites`);
 
-    ctx.reply({ embeds: [embed] });
-    checkInviteRewards(guild, inviteData, true);
+    message.channel.send({ embeds: [embed] });
+    checkInviteRewards(message.guild, inviteData, true);
   }
 };

@@ -1,7 +1,7 @@
 module.exports = class Cache {
   constructor(size) {
     this.map = new Map();
-    if (size < 1) throw new Exception("Cache size must at least be 1");
+    if (size < 1) throw new Error("Cache size must at least be 1");
     this.keys = new Array(size);
     this.currIndex = 0;
   }
@@ -9,8 +9,8 @@ module.exports = class Cache {
   /**
    * Adds a key and pairs it with a value
    * If this is already at maximum occupation, this will remove the oldest element.
-   * @param {Any} key
-   * @param {Any} value
+   * @param {any} key
+   * @param {any} value
    */
   add(key, value) {
     if (this.map.has(key)) {
@@ -29,7 +29,7 @@ module.exports = class Cache {
 
   /**
    * Checks if this cache contains a key
-   * @param {Any} key
+   * @param {any} key
    */
   contains(key) {
     return this.map.has(key);
@@ -37,7 +37,7 @@ module.exports = class Cache {
 
   /**
    * Retrieves a value from this cache corresponding to the specified key
-   * @param {Any} key
+   * @param {any} key
    */
   get(key) {
     return this.map.get(key);
@@ -45,7 +45,7 @@ module.exports = class Cache {
 
   /**
    * Removed the key value entry from this cache corresponding to the specified key
-   * @param {Any} key
+   * @param {any} key
    */
   remove(key) {
     this.map.delete(key);

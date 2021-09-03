@@ -14,6 +14,11 @@ module.exports = {
     port: "8080", // port to run the bot on
     expressSessionPassword: "discordbot", // random password string
   },
+  SLASH_COMMANDS: {
+    ENABLED: false,
+    GLOBAL: false, // Should the slash commands be registered globally
+    TEST_GUILD_ID: "xxxxxxxxxx", // Guild ID where the slash commands should be registered. [** Test you commands here first **]
+  },
   XP_SYSTEM: {
     COOLDOWN: 5, // Cooldown in seconds between messages
     DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
@@ -47,7 +52,7 @@ module.exports = {
   CACHE_SIZE: {
     GUILDS: 10,
     USERS: 1000,
-    MEMBERS: 10,
+    MEMBERS: 1000,
   },
   MESSAGES: {
     API_ERROR: "Unexpected Backend Error! Try again later or contact support server",
