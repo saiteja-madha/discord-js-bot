@@ -100,7 +100,7 @@ function getEmoji() {
 }
 
 function calculateReward(amount, var1, var2, var3) {
-  if (var1 === var2 && var2.equals === var3) return 2.25 * amount;
-  if (var1 === var2 || var2 === var3 || var1 === var3) return 1.5 * amount;
+  if (var1 === var2 && var2.equals === var3) return 3 * amount;
+  if (var1 === var2 || var2 === var3 || var1 === var3) return 2 * amount;
   return 0;
 }

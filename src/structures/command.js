@@ -255,13 +255,13 @@ class Command {
     if (typeof data.description !== "string") {
       throw new TypeError("Command description must be a string.");
     }
-    if (typeof data.cooldown !== "number") {
+    if (data.cooldown && typeof data.cooldown !== "number") {
       throw new TypeError("Command cooldown must be a number");
     }
     if (typeof data.command !== "object") {
       throw new TypeError("Command.command must be an object");
     }
-    if (typeof data.command.enabled !== "boolean") {
+    if (data.command.enabled && typeof data.command.enabled !== "boolean") {
       throw new TypeError("Command.command enabled must be a boolean value");
     }
     if (
@@ -271,13 +271,13 @@ class Command {
     ) {
       throw new TypeError("Command.command aliases must be an Array of lowercase strings.");
     }
-    if (typeof data.command.usage !== "string") {
+    if (data.command.usage && typeof data.command.usage !== "string") {
       throw new TypeError("Command.command usage must be a string");
     }
-    if (typeof data.command.minArgsCount !== "number") {
+    if (data.command.minArgsCount && typeof data.command.minArgsCount !== "number") {
       throw new TypeError("Command.command minArgsCount must be a number");
     }
-    if (!Array.isArray(data.command.subcommands)) {
+    if (data.command.subcommands && !Array.isArray(data.command.subcommands)) {
       throw new TypeError("Command.command subcommands must be an array");
     }
     if (data.command.botPermissions) {
@@ -296,28 +296,28 @@ class Command {
         if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
       }
     }
-    if (typeof data.command.guildOwnerOnly !== "boolean") {
+    if (data.command.guildOwnerOnly && typeof data.command.guildOwnerOnly !== "boolean") {
       throw new TypeError("Command.command guildOwnerOnly must be a boolean value");
     }
-    if (typeof data.command.botOwnerOnly !== "boolean") {
+    if (data.command.botOwnerOnly && typeof data.command.botOwnerOnly !== "boolean") {
       throw new TypeError("Command.command botOwnerOnly must be a boolean value");
     }
-    if (typeof data.command.nsfw !== "boolean") {
+    if (data.command.nsfw && typeof data.command.nsfw !== "boolean") {
       throw new TypeError("Command.command nsfw must be a boolean value");
     }
-    if (typeof data.command.hidden !== "boolean") {
+    if (data.command.hidden && typeof data.command.hidden !== "boolean") {
       throw new TypeError("Command.command hidden must be a boolean value");
     }
     if (typeof data.slashCommand !== "object") {
       throw new TypeError("Command.slashCommand must be an object");
     }
-    if (typeof data.slashCommand.enabled !== "boolean") {
+    if (data.slashCommand.enabled && typeof data.slashCommand.enabled !== "boolean") {
       throw new TypeError("Command.slashCommand enabled must be a boolean value");
     }
-    if (typeof data.slashCommand.ephemeral !== "boolean") {
+    if (data.slashCommand.ephemeral && typeof data.slashCommand.ephemeral !== "boolean") {
       throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
     }
-    if (!Array.isArray(data.slashCommand.options)) {
+    if (data.slashCommand.options && !Array.isArray(data.slashCommand.options)) {
       throw new TypeError("Command.slashCommand options must be a array");
     }
   }

@@ -9,7 +9,6 @@ module.exports = class DailyCommand extends Command {
     super(client, {
       name: "daily",
       description: "receive a daily bonus",
-      cooldown: 5,
       command: {
         enabled: true,
         category: "ECONOMY",
@@ -43,7 +42,7 @@ module.exports = class DailyCommand extends Command {
       else streak = 0;
     }
 
-    const updated = await updateDailyStreak(member.id, 100, streak);
+    const updated = await updateDailyStreak(member.id, 1000, streak);
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
