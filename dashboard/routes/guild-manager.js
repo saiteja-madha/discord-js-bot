@@ -86,6 +86,25 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
     if (data.ranking !== guildData.ranking.enabled) {
       await settings.xpSystem(guild.id, data.ranking);
     }
+
+    data.flag_translation = data.flag_translation === "on" ? true : false;
+    if (data.flag_translation !== guildData.flag_translation.enabled) {
+      await settings.xpSystem(guild.id, data.flag_translation);
+    }
+
+    if (data.channels) {
+      if (typeof data.channels === "string") {
+        data.channels = guild.channels.cache.find((ch) => ch.name === data.channels)?.id;
+        await settings.setFlagTrChannels(guild.id, [data.channels]);
+      } else if (Array.isArray(data.channels)) {
+        const ids = [];
+        data.channels.forEach((name) => {
+          let id = guild.channels.cache.find((ch) => ch.name === name)?.id;
+          ids.push(id);
+        });
+        await settings.setFlagTrChannels(guild.id, ids);
+      }
+    }
   }
 
   if (Object.prototype.hasOwnProperty.call(data, "ticketUpdate")) {
@@ -125,6 +144,11 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
     data.anti_links = data.anti_links === "on" ? true : false;
     if (data.anti_links !== guildData.automod.anti_links) {
       await settings.antiLinks(guild.id, data.anti_links);
+    }
+
+    data.anti_scam = data.anti_scam === "on" ? true : false;
+    if (data.anti_scam !== guildData.automod.anti_scam) {
+      await settings.antiScam(guild.id, data.anti_scam);
     }
 
     data.anti_invites = data.anti_invites === "on" ? true : false;
