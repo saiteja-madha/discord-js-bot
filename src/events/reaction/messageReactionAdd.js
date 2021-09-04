@@ -18,7 +18,7 @@ module.exports = async (client, reaction, user) => {
   }
   if (user.partial) await user.fetch();
   const { message, emoji } = reaction;
-  if (user.bot || !message.content) return;
+  if (user.bot) return;
 
   // Ticketing
   if (emoji.name === client.config.EMOJIS.TICKET_OPEN) await reactionHandler.handleNewTicket(reaction, user);
@@ -33,7 +33,7 @@ module.exports = async (client, reaction, user) => {
   }
 
   // Translation by flags
-  if (emoji.name?.length === 4 && (await getSettings(message.guild)).flag_translation.enabled) {
+  if (emoji.name?.length === 4 && message.content && (await getSettings(message.guild)).flag_translation.enabled) {
     reactionHandler.handleFlagReaction(message, user);
   }
 };

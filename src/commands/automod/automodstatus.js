@@ -37,6 +37,7 @@ module.exports = class AutoModStatus extends Command {
       .addRow("Max Mentions", settings?.max_mentions || "NA")
       .addRow("Max Role Mentions", settings?.max_role_mentions || "NA")
       .addRow("AntiLinks", settings?.anti_links ? EMOJIS.TICK : EMOJIS.X_MARK)
+      .addRow("AntiScam", settings?.anti_scam ? EMOJIS.TICK : EMOJIS.X_MARK)
       .addRow("AntiInvites", settings?.anti_invites ? EMOJIS.TICK : EMOJIS.X_MARK)
       .addRow("AntiGhostPing", settings?.anti_ghostping ? EMOJIS.TICK : EMOJIS.X_MARK);
 

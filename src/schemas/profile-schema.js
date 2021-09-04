@@ -41,7 +41,7 @@ module.exports = {
         upsert: true,
         new: true,
       }
-    ),
+    ).lean({ defaults: true }),
 
   incrementMessages: async (guildId, memberId) =>
     Model.updateOne(
