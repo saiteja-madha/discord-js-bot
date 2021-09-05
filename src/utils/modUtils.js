@@ -45,12 +45,10 @@ async function setupMutedRole(guild) {
 
   try {
     mutedRole = await guild.roles.create({
-      data: {
-        name: "Muted",
-        permissions: [],
-        color: 11,
-        position: guild.me.roles.highest.position,
-      },
+      name: "Muted",
+      permissions: [],
+      color: 11,
+      position: guild.me.roles.highest.position,
     });
 
     guild.channels.cache.forEach(async (channel) => {
@@ -72,12 +70,10 @@ async function setupMutedRole(guild) {
         }
       }
     });
-
-    return mutedRole;
   } catch (ex) {
     console.log(`Muted Role Creation Error: ${ex}`);
-    return mutedRole;
   }
+  return mutedRole;
 }
 
 /**
