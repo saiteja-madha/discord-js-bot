@@ -44,7 +44,8 @@ module.exports = class UserInfo extends Command {
    * @param {CommandInteractionOptionResolver} options
    */
   async interactionRun(interaction, options) {
-    const target = options.getUser("user") || interaction.user;
+    const targetUser = options.getUser("user") || interaction.user;
+    const target = await interaction.guild.members.fetch(targetUser);
     const embed = buildEmbed(target);
     interaction.followUp({ embeds: [embed] });
   }

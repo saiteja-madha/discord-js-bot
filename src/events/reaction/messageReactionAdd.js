@@ -34,6 +34,6 @@ module.exports = async (client, reaction, user) => {
 
   // Translation by flags
   if (emoji.name?.length === 4 && message.content && (await getSettings(message.guild)).flag_translation.enabled) {
-    reactionHandler.handleFlagReaction(message, user);
+    reactionHandler.handleFlagReaction(emoji, message, user);
   }
 };

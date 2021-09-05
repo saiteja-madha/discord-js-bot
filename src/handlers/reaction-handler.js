@@ -1,4 +1,4 @@
-const { MessageReaction, User, MessageEmbed, Message } = require("discord.js");
+const { MessageReaction, User, MessageEmbed, Message, ReactionEmoji } = require("discord.js");
 const { getReactionRole } = require("@schemas/reactionrole-schema");
 const { getSettings } = require("@schemas/guild-schema");
 const { getConfig } = require("@schemas/ticket-schema");
@@ -64,7 +64,7 @@ async function handleCloseTicket(reaction, user) {
 }
 
 /**
- * @param {String} emoji
+ * @param {ReactionEmoji} emoji
  * @param {Message} message
  * @param {User} user
  */
@@ -93,11 +93,11 @@ async function handleFlagReaction(emoji, message, user) {
 
     let src;
     let desc = "";
-    targetCodes.forEach(async (tc) => {
+    for (const tc of targetCodes) {
       const response = await translate(message.content, tc);
       src = response.inputLang;
       desc += `**${response.outputLang}:**\n${response.output}\n\n`;
-    });
+    }
 
     const head = `Original Message: [here](${message.url})\nSource Language: ${src}\n\n`;
     const embed = new MessageEmbed()
