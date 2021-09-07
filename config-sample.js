@@ -34,6 +34,13 @@ module.exports = {
     SUCCESS_EMBED: "0x00A56A",
     ERROR_EMBED: "0xD61A3C",
     WARNING_EMBED: "0xF7E919",
+    TICKET_CREATE: "0x068ADD",
+    TICKET_CLOSE: "0x068ADD",
+    MUTE_EMBED: "#102027",
+    UNMUTE_EMBED: "#4B636E",
+    KICK_EMBED: "#FF7961",
+    SOFTBAN_EMBED: "#AF4448",
+    BAN_EMBED: "#D32F2F",
   },
   /* Unicode Emojis Used */
   EMOJIS: {
