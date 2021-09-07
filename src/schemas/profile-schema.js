@@ -20,6 +20,10 @@ const Schema = mongoose.Schema({
     type: Number,
     default: 1,
   },
+  strikes: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Model = mongoose.model("profile", Schema);
@@ -64,6 +68,19 @@ module.exports = {
       {
         level,
         xp,
+      }
+    ),
+
+  addStrikes: async (guildId, memberId, strikes) =>
+    Model.findOneAndUpdate(
+      {
+        guild_id: guildId,
+        member_id: memberId,
+      },
+      { $inc: { strikes } },
+      {
+        upsert: true,
+        new: true,
       }
     ),
 };

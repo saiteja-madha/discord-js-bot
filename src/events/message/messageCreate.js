@@ -15,6 +15,8 @@ module.exports = async (client, message) => {
   const settings = await getSettings(message.guild);
   const { prefix } = settings;
 
+  if (message.content.includes(`${client.user.id}`)) message.reply(`My prefix is \`${settings.prefix}\``);
+
   let isCommand = false;
   if (message.content.startsWith(prefix)) {
     const args = message.content.replace(`${prefix}`, "").split(/\s+/);
@@ -31,7 +33,7 @@ module.exports = async (client, message) => {
     }
   }
 
-  if (!isCommand) automodHandler.performAutomod(message, settings.automod);
+  if (!isCommand) automodHandler.performAutomod(message, settings);
   if (settings.ranking.enabled) xpHandler(message);
 };
 

@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const { purgeMessages } = require("@utils/modUtils");
+const { Message } = require("discord.js");
 
 module.exports = class PurgeBots extends Command {
   constructor(client) {
@@ -25,10 +26,7 @@ module.exports = class PurgeBots extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { mentions } = message;
     const amount = args[0] || 100;
-
-    if (!mentions.users.first()) return message.reply("Incorrect usage! No user mentioned");
 
     if (amount) {
       if (isNaN(amount)) return message.reply("Numbers are only allowed");

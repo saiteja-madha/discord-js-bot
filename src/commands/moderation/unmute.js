@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
-const { unmute } = require("@schemas/mute-schema");
-const { canInteract } = require("@utils/modUtils");
-const { getRoleByName } = require("@utils/guildUtils");
+const { canInteract, unmuteTarget } = require("@utils/modUtils");
+const { getRoleByName, resolveMember } = require("@utils/guildUtils");
 const { Message } = require("discord.js");
 
 module.exports = class UnmuteCommand extends Command {
@@ -28,30 +27,38 @@ module.exports = class UnmuteCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { guild, channel } = message;
-    const { member } = message;
+    const { content } = message;
     const mentions = message.mentions.members;
 
-    if (mentions.size == 0) return message.reply("No members mentioned");
-
-    const mutedRole = getRoleByName(guild, "muted");
+    const mutedRole = getRoleByName(message.guild, "muted");
     if (!mutedRole.editable) {
       return message.reply(
         "I do not have permission to move members to `Muted` role. Is that role below my highest role?"
       );
     }
 
-    mentions
-      .filter((target) => canInteract(member, target, "unmute", channel))
-      .forEach(async (target) => {
-        const result = await unmute(guild.id, target.id);
+    // !unmute ID <reason>
+    if (mentions.size === 0) {
+      const target = await resolveMember(message, args[0], true);
+      if (!target) return message.reply(`No user found matching ${args[0]}`);
+      const reason = content.split(args[0])[1].trim();
+      return unmute(message, target, reason, mutedRole);
+    }
 
-        if (result.nModified === 1) {
-          await target.roles.remove(mutedRole);
-          channel.send(`${target.user.tag} is unmuted`);
-        } else {
-          channel.send(`${target.user.tag} is not muted`);
-        }
-      });
+    // !unmute @m1 @m2 ... <reason>
+    const regex = /<@!?(\d+)>/g;
+    const matches = content.match(regex);
+    const lastMatch = matches[matches.length - 1];
+    const reason = content.split(lastMatch)[1].trim();
+
+    mentions.forEach(async (target) => await unmute(message, target, reason));
   }
 };
+
+async function unmute(message, target, reason) {
+  if (!canInteract(message.member, target, "unmute", message.channel)) return;
+  const status = await unmuteTarget(message.member, target, reason);
+  if (status === "NOT_MUTED") return message.channel.send(`${target.user.tag} is not muted`);
+  if (status) message.channel.send(`${target.user.tag} is unmuted`);
+  else message.channel.send(`Failed to unmute ${target.user.tag}`);
+}

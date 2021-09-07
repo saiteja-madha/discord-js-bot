@@ -34,7 +34,15 @@ const Schema = mongoose.Schema({
     },
   },
   automod: {
-    log_channel: String,
+    debug: Boolean,
+    strikes: {
+      type: Number,
+      default: 5,
+    },
+    action: {
+      type: String,
+      default: "MUTE",
+    },
     anti_links: Boolean,
     anti_invites: Boolean,
     anti_scam: Boolean,
@@ -66,6 +74,7 @@ const Schema = mongoose.Schema({
       },
     ],
   },
+  modlog_channel: String,
 });
 
 const Model = mongoose.model("guild", Schema);
@@ -118,8 +127,11 @@ module.exports = {
     await Model.updateOne({ _id }, { "ticket.limit": limit }).then(cache.remove(_id));
   },
 
-  automodLogChannel: async (_id, channelId) =>
-    Model.updateOne({ _id }, { "automod.log_channel": channelId }).then(cache.remove(_id)),
+  maxStrikes: async (_id, strikes) => Model.updateOne({ _id }, { "automod.strikes": strikes }).then(cache.remove(_id)),
+
+  automodAction: async (_id, action) => Model.updateOne({ _id }, { "automod.action": action }).then(cache.remove(_id)),
+
+  automodDebug: async (_id, status) => Model.updateOne({ _id }, { "automod.debug": status }).then(cache.remove(_id)),
 
   antiLinks: async (_id, status) => Model.updateOne({ _id }, { "automod.anti_links": status }).then(cache.remove(_id)),
 
@@ -172,4 +184,7 @@ module.exports = {
   setFlagTrChannels: async (_id, channels) => {
     await Model.updateOne({ _id }, { "flag_translation.channels": channels }).then(cache.remove(_id));
   },
+
+  modLogChannel: async (_id, channelId) =>
+    Model.updateOne({ _id }, { modlog_channel: channelId }).then(cache.remove(_id)),
 };

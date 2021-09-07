@@ -98,7 +98,10 @@ async function closeTicket(channel, closedBy, reason) {
     `;
 
     await channel.delete();
-    const embed = new MessageEmbed().setAuthor("Ticket Closed").setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
+    const embed = new MessageEmbed()
+      .setAuthor("Ticket Closed")
+      .setColor(EMBED_COLORS.TICKET_CLOSE)
+      .setDescription(desc);
 
     // send embed to user
     if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch(() => {});
@@ -199,7 +202,7 @@ async function openTicket(guild, user, title, supportRole) {
     [View Channel](${sent.url})
   `;
     const dmEmbed = new MessageEmbed()
-      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setColor(EMBED_COLORS.TICKET_CREATE)
       .setAuthor("Ticket Created")
       .setDescription(desc);
 

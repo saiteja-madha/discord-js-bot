@@ -143,6 +143,26 @@ async function resolveMember(message, query, exact = false) {
   }
 }
 
+/**
+ * @param {Message} message
+ */
+async function resolveMembers(message) {
+  const regex = /<?@?!?(\d{17,20})>?/g;
+  const targetMembers = [];
+  let lastMatch, result;
+  while ((result = regex.exec(message.content))) {
+    lastMatch = result[0];
+    let target = await message.guild.members.fetch(result[1]);
+    if (target) targetMembers.push(target);
+  }
+
+  const remaining = message.content.split(lastMatch)[1].trim();
+  return {
+    members: targetMembers,
+    remainingArgs: remaining.split(/\\s/),
+  };
+}
+
 module.exports = {
   getRoleByName,
   canSendEmbeds,

@@ -11,13 +11,13 @@ module.exports = async (client, message) => {
   if (message.partial) return;
   if (message.author.bot || !message.guild) return;
 
-  const settings = (await getSettings(message.guild)).automod;
-  if (!settings.anti_ghostping || !settings.log_channel) return;
+  const settings = await getSettings(message.guild);
+  if (!settings.anti_ghostping || !settings.modlog_channel) return;
   const { members, roles, everyone } = message.mentions;
 
   // Check message if it contains mentions
   if (members.size > 0 || roles.size > 0 || everyone) {
-    const logChannel = message.guild.channels.cache.get(settings.log_channel);
+    const logChannel = message.guild.channels.cache.get(settings.modlog_channel);
     if (!logChannel) return;
 
     const embed = new MessageEmbed()
