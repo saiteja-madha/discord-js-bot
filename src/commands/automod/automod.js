@@ -83,11 +83,11 @@ async function setStatus(message, args) {
     .addRow("AntiGhostPing", automod.anti_ghostping ? EMOJIS.TICK : EMOJIS.X_MARK);
 
   const embed = new MessageEmbed()
-    .setAuthor("Automod Status")
+    .setAuthor("Automod Configuration")
     .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
-    .setDescription(`**Log Channel:** ${logChannel}\n\n\`\`\`${table.toString()}\`\`\``);
+    .setDescription("```" + table.toString() + "```");
 
-  message.channel.send({ embeds: [embed] });
+  message.channel.send({ content: `**Log Channel:** ${logChannel}`, embeds: [embed] });
 }
 
 async function setStrikes(message, args) {

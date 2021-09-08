@@ -1,4 +1,4 @@
-const { Channel, Guild, GuildMember, TextBasedChannels, MessageEmbed, User } = require("discord.js");
+const { Channel, Guild, GuildMember, BaseGuildTextChannel, MessageEmbed, User } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const outdent = require("outdent");
@@ -43,7 +43,7 @@ function getExistingTicketChannel(guild, userId) {
 }
 
 /**
- * @param {TextBasedChannels} channel
+ * @param {BaseGuildTextChannel} channel
  */
 async function parseTicketDetails(channel) {
   if (!channel.topic) return;
@@ -58,7 +58,7 @@ async function parseTicketDetails(channel) {
 }
 
 /**
- * @param {TextBasedChannels} channel
+ * @param {BaseGuildTextChannel} channel
  * @param {User} closedBy
  * @param {String} reason
  */
@@ -97,7 +97,7 @@ async function closeTicket(channel, closedBy, reason) {
     ${logsUrl == null ? "" : `\n[View Logs](${logsUrl})`}
     `;
 
-    await channel.delete();
+    if (channel.deletable) await channel.delete();
     const embed = new MessageEmbed()
       .setAuthor("Ticket Closed")
       .setColor(EMBED_COLORS.TICKET_CLOSE)

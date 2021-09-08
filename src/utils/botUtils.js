@@ -1,4 +1,4 @@
-const { TextBasedChannels, MessagePayload, MessageOptions } = require("discord.js");
+const { MessagePayload, MessageOptions, User, BaseGuildTextChannel } = require("discord.js");
 const { getResponse } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 
@@ -46,16 +46,29 @@ async function startupCheck() {
 }
 
 /**
- * @param {TextBasedChannels} channel
+ * @param {BaseGuildTextChannel} channel
  * @param {string | MessagePayload | MessageOptions} message
  */
 async function sendMessage(channel, message) {
   if (!channel || !message) return;
-  if (channel.type === "GUILD_STAGE_VOICE" && channel.type === "GUILD_VOICE") return;
+  if (!channel.permissionsFor(channel.guild?.me).has("SEND_MESSAGES")) return;
   try {
     return await channel.send(message);
   } catch (ex) {
     console.log(`[ERROR] - [sendMessage] - ${ex.message}`);
+  }
+}
+
+/**
+ * @param {User} user
+ * @param {string|MessagePayload|MessageOptions} message
+ */
+async function safeDM(user, message) {
+  if (!user || !message) return;
+  try {
+    return await user.send(message);
+  } catch (ex) {
+    console.log(`[ERROR] - [safeDM] - ${ex.message}`);
   }
 }
 
@@ -96,5 +109,6 @@ const permissions = {
 module.exports = {
   permissions,
   sendMessage,
+  safeDM,
   startupCheck,
 };

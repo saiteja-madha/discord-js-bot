@@ -165,17 +165,18 @@ async function setupTicket(message) {
 }
 
 /**
- * @param {Message} ctx
+ * @param {Message} message
  */
-async function setupLogChannel(ctx) {
-  if (ctx.message.mentions.channels.size === 0)
-    return ctx.message.reply("Incorrect Usage! You need to mention a channel name where ticket logs must be sent");
+async function setupLogChannel(message) {
+  if (message.mentions.channels.size === 0)
+    return message.reply("Incorrect Usage! You need to mention a channel name where ticket logs must be sent");
 
-  const target = ctx.message.mentions.channels.first();
-  if (!canSendEmbeds(target)) return ctx.reply(`Oops! I do have have permission to send embed to ${target.toString()}`);
+  const target = message.mentions.channels.first();
+  if (!canSendEmbeds(target))
+    return message.reply(`Oops! I do have have permission to send embed to ${target.toString()}`);
 
-  setTicketLogChannel(ctx.guild.id, target.id).then(
-    ctx.reply(`Configuration saved! Newly created ticket logs will be sent to ${target.toString()}`)
+  setTicketLogChannel(message.guildId, target.id).then(
+    message.channel.send(`Configuration saved! Newly created ticket logs will be sent to ${target.toString()}`)
   );
 }
 

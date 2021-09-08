@@ -14,7 +14,8 @@ const { translate } = require("@utils/httpUtils");
  */
 function getRole(reaction) {
   const { message, emoji } = reaction;
-  const rr = getReactionRole(message.guild.id, message.channel.id, message.id) || [];
+  if (!message || !message.channel) return;
+  const rr = getReactionRole(message.guildId, message.channel.id, message.id) || [];
   const emote = emoji.id ? emoji.id : emoji.toString();
   const found = rr.find((doc) => doc.emote === emote);
   if (found) return message.guild.roles.cache.get(found.role_id);

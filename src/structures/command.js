@@ -2,7 +2,7 @@ const {
   PermissionResolvable,
   Client,
   MessageEmbed,
-  TextBasedChannels,
+  BaseGuildTextChannel,
   Message,
   CommandInteraction,
   CommandInteractionOptionResolver,
@@ -210,7 +210,7 @@ class Command {
 
   /**
    * send the commands usage embed
-   * @param {TextBasedChannels} channel - channel where the embed must be sent
+   * @param {BaseGuildTextChannel} channel - channel where the embed must be sent
    * @param {string} prefix - command prefix
    * @param {string} invoke - alias that was used to trigger this command
    * @param {string} title - the embed title
