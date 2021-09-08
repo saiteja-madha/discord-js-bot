@@ -3,7 +3,7 @@ const { sendMessage } = require("@utils/botUtils");
 const { containsLink, timeformat } = require("@utils/miscUtils");
 const { addModLogToDb, removeMutes, getMuteInfo } = require("@schemas/modlog-schema");
 const { getSettings } = require("@schemas/guild-schema");
-const { EMOJIS } = require("@root/config");
+const { EMOJIS, EMBED_COLORS } = require("@root/config");
 const { getRoleByName } = require("./guildUtils");
 
 /**
@@ -303,18 +303,37 @@ async function logModeration(issuer, target, reason, type, data = {}) {
         .addField("Channel", `#${data.channel.name} [${data.channel.id}]`, false);
       break;
 
-    default:
-      embed
-        .setAuthor("Moderation Case - " + type)
-        .setThumbnail(target.user.displayAvatarURL())
-        .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
-        .addField("Member", `${target.displayName} [${target.id}]`, false)
-        .addField("Reason", reason || "No reason provided", true)
-        .setTimestamp(Date.now());
+    case "MUTE":
+      embed.setColor(EMBED_COLORS.MUTE_EMBED);
+      break;
 
-      if (data.isPermanent) embed.addField("IsPermanent", EMOJIS.TICK, true);
-      if (data.minutes) embed.addField("Expires In", timeformat(data.minutes * 60), true);
+    case "UNMUTE":
+      embed.setColor(EMBED_COLORS.UNMUTE_EMBED);
+      break;
+
+    case "KICK":
+      embed.setColor(EMBED_COLORS.KICK_EMBED);
+      break;
+
+    case "SOFTBAN":
+      embed.setColor(EMBED_COLORS.SOFTBAN_EMBED);
+      break;
+
+    case "BAN":
+      embed.setColor(EMBED_COLORS.BAN_EMBED);
+      break;
   }
+
+  embed
+    .setAuthor("Moderation Case - " + type)
+    .setThumbnail(target.user.displayAvatarURL())
+    .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
+    .addField("Member", `${target.displayName} [${target.id}]`, false)
+    .addField("Reason", reason || "No reason provided", true)
+    .setTimestamp(Date.now());
+
+  if (data.isPermanent) embed.addField("IsPermanent", EMOJIS.TICK, true);
+  if (data.minutes) embed.addField("Expires In", timeformat(data.minutes * 60), true);
 
   await addModLogToDb(issuer, target, reason, type.toUpperCase(), data);
   sendMessage(logChannel, { embeds: [embed] });
