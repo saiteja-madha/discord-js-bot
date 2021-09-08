@@ -1,8 +1,10 @@
 const { Message, MessageEmbed } = require("discord.js");
-const { sendMessage } = require("@utils/botUtils");
+const { sendMessage, safeDM } = require("@utils/botUtils");
 const { containsLink, containsDiscordInvite } = require("@utils/miscUtils");
 const { addStrikes } = require("@schemas/profile-schema");
 const { muteTarget, kickTarget, banTarget } = require("@utils/modUtils");
+const { EMBED_COLORS } = require("@root/config");
+const Ascii = require("ascii-table");
 
 /**
  * Check if the message needs to be moderated and has required permissions
@@ -107,28 +109,36 @@ async function performAutomod(message, settings) {
 
   if (shouldDelete || strikesTotal > 0) {
     // delete message if deletable
-    if (shouldDelete && message.deletable) await message.delete().catch((ex) => {});
+    if (shouldDelete && message.deletable)
+      message
+        .delete()
+        .then(async (_) => {
+          const sentMsg = await sendMessage(channel, `> Auto-Moderation! Message deleted`);
+          if (sentMsg?.deletable) setTimeout(() => sentMsg.delete().catch(() => {}), 5000);
+        })
+        .catch((ex) => {});
 
     // add strikes to member
     const profile = await addStrikes(message.guildId, author.id, strikesTotal);
 
+    // send automod log
     embed
       .setAuthor("Auto Moderation")
       .setThumbnail(author.avatarURL())
       .setColor(message.client.config.EMBED_COLORS.BOT_EMBED)
-      .setDescription(`**Content:**\n ${content}`)
-      .setFooter(`By ${author.tag} in #${channel.name}`);
+      .setDescription(`**Channel:** #${channel.name}\n**Content:**\n${content}`)
+      .setFooter(`By ${author.tag} | ${author.id}`);
 
-    const sentMsg = await sendMessage(
-      channel,
-      `${message.member.toString()}\n` +
-        `> Auto-Moderation! ${shouldDelete ? "Message deleted" : ""}\n` +
-        `> You received ${profile.strikes}/${automod.strikes} strikes!`
-    );
-
-    setTimeout(() => sentMsg.delete().catch(() => {}), 5000);
     sendMessage(logChannel, { embeds: [embed] });
 
+    // DM strike details
+    await safeDM(message.author, {
+      content: ` > Guild: ${message.guild.name}
+      > You received ${profile.strikes}/${automod.strikes} strikes!`,
+      embeds: [getStrikeDetails(automod)],
+    });
+
+    // check if max strikes are received
     if (profile.strikes >= automod.strikes) {
       const reason = "Automod: Max strikes received";
 
@@ -152,6 +162,24 @@ async function performAutomod(message, settings) {
   }
 }
 
+function getStrikeDetails(automod) {
+  const table = new Ascii("").setHeading("Feature", "Strikes");
+
+  if (automod.max_lines) table.addRow("Max Lines", `1/line > ${automod.max_lines} lines`);
+  if (automod.max_mentions) table.addRow("Mentions", `1/mention > ${automod.max_mentions} mentions`);
+  if (automod.max_role_mentions) table.addRow("Role Mentions", `1/mention > ${automod.max_role_mentions} mentions`);
+  if (automod.anti_links) table.addRow("Links", "1 per link");
+  if (automod.anti_invites) table.addRow("Discord Invite", "1 per invite");
+  if (automod.anti_ghostping) table.addRow("GhostPing", "1 per detection");
+  if (automod.anti_scam) table.addRow("AntiScam", "1 per detection");
+
+  return new MessageEmbed()
+    .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+    .setAuthor("Strike Details")
+    .setDescription("```" + table.toString() + "```");
+}
+
 module.exports = {
   performAutomod,
+  getStrikeDetails,
 };
