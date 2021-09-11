@@ -80,6 +80,23 @@
                                                 <% } %>
                                             </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label>Moderation Logs</label>
+                                            <select class="form-control" name="modlog_channel">
+                                                <% if(guild.modlog_channel && bot.channels.cache.has(guild.modlog_channel)){ %>
+                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.modlog_channel).name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT" && ch.id !== guild.modlog_channel).forEach((ch) => { %>
+                                                        <option>#<%= ch.name %></option>
+                                                    <% }); %>
+                                                        <option>No channel</option>
+                                                <% } else { %>
+                                                    <option selected="selected">No channel</option>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                        <option>#<%= ch.name %></option>
+                                                    <% }); %>
+                                                <% } %>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="box-footer">
                                         <button type="submit" name="basicUpdate" class="btn btn-primary">Update</button>
@@ -97,7 +114,7 @@
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Ticket Limit</label>
-                                            <input type="text" name="limit" class="form-control" value="<%= guild.ticket.limit %>">
+                                            <input type="number" name="limit" class="form-control" value="<%= guild.ticket.limit %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Ticket Logs</label>
@@ -124,6 +141,10 @@
                             </div>
                             <!-- END: TICKET CONFIGURATION -->
 
+                        </div>
+
+                        <div class="col-md-6">
+
                             <!-- INVITE CONFIGURATION -->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
@@ -149,9 +170,7 @@
                                 </form>
                             </div>
                             <!-- END: INVITE CONFIGURATION -->
-                        </div>
 
-                        <div class="col-md-6">
                             <!-- AUTOMOD CONFIGURATION -->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
@@ -160,33 +179,35 @@
                                 <form role="form" action="/manage/<%= guild.id %>/basic/" method="POST">
                                     <div class="box-body">
                                         <div class="form-group">
+                                            <label>Max Strikes</label>
+                                            <input type="number" name="max_strikes" class="form-control" value="<%= guild.automod.strikes %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max Strikes Action</label>
+                                            <select class="form-control" name="automod_action">
+                                                <option selected="selected"><%= guild.automod.action %></option>
+                                                <% if(guild.automod.action !== "MUTE") { %>
+                                                    <option>MUTE</option>
+                                                <% } %>
+                                                <% if(guild.automod.action !== "KICK") { %>
+                                                    <option>KICK</option>
+                                                <% } %>
+                                                <% if(guild.automod.action !== "BAN") { %>
+                                                    <option>BAN</option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Max Lines</label>
-                                            <input type="text" name="max_lines" class="form-control" value="<%= guild.automod.max_lines %>">
+                                            <input type="number" name="max_lines" class="form-control" value="<%= guild.automod.max_lines %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Max Mentions</label>
-                                            <input type="text" name="max_mentions" class="form-control" value="<%= guild.automod.max_mentions %>">
+                                            <input type="number" name="max_mentions" class="form-control" value="<%= guild.automod.max_mentions %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Max Role Mentions</label>
-                                            <input type="text" name="max_role_mentions" class="form-control" value="<%= guild.automod.max_role_mentions %>">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Automod Logs</label>
-                                            <select class="form-control" name="channel">
-                                                <% if(guild.automod.log_channel && bot.channels.cache.has(guild.automod.log_channel)){ %>
-                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.automod.log_channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT" && ch.id !== guild.automod.log_channel).forEach((ch) => { %>
-                                                        <option>#<%= ch.name %></option>
-                                                    <% }); %>
-                                                        <option>No channel</option>
-                                                <% } else { %>
-                                                    <option selected="selected">No channel</option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").forEach((ch) => { %>
-                                                        <option>#<%= ch.name %></option>
-                                                    <% }); %>
-                                                <% } %>
-                                            </select>
+                                            <input type="number" name="max_role_mentions" class="form-control" value="<%= guild.automod.max_role_mentions %>">
                                         </div>
                                         <div class="form-group">
                                             <div class="checkbox">

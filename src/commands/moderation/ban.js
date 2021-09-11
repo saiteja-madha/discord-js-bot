@@ -1,5 +1,6 @@
+const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
-const { canInteract } = require("@utils/modUtils");
+const { canInteract, banTarget } = require("@utils/modUtils");
 const { Message } = require("discord.js");
 
 module.exports = class BanCommand extends Command {
@@ -9,7 +10,7 @@ module.exports = class BanCommand extends Command {
       description: "bans the specified member(s)",
       command: {
         enabled: true,
-        usage: "<@member(s)> [reason]",
+        usage: "<ID|@member(s)> [reason]",
         minArgsCount: 1,
         category: "MODERATION",
         botPermissions: ["BAN_MEMBERS"],
@@ -26,34 +27,30 @@ module.exports = class BanCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { channel, member, content } = message;
+    const { content } = message;
     const mentions = message.mentions.members;
 
-    if (mentions.size == 0) return message.reply("No members mentioned");
-
-    const regex = /<@!?(\d+)>/g;
-    let match = regex.exec(content);
-    let lastMatch;
-    while (match != null) {
-      lastMatch = match[0];
-      match = regex.exec(content);
+    // !ban ID <reason>
+    if (mentions.size === 0) {
+      const target = await resolveMember(message, args[0], true);
+      if (!target) return message.reply(`No user found matching ${args[0]}`);
+      const reason = content.split(args[0])[1].trim();
+      return ban(message, target, reason);
     }
 
-    const reason = content.split(lastMatch)[1].trim() || "No reason provided";
+    // !ban @m1 @m2 ... <reason>
+    const regex = /<@!?(\d+)>/g;
+    const matches = content.match(regex);
+    const lastMatch = matches[matches.length - 1];
+    const reason = content.split(lastMatch)[1].trim();
 
-    mentions
-      .filter((target) => canInteract(member, target, "ban", channel))
-      .forEach(async (target) => {
-        try {
-          await target.ban({
-            days: 0,
-            reason,
-          });
-          message.channel.send(`${target.user.tag} is banned from this server`);
-        } catch (ex) {
-          console.log(ex);
-          return message.channel.send(`Failed to ban ${target.user.tag}`);
-        }
-      });
+    mentions.forEach(async (target) => await ban(message, target, reason));
   }
 };
+
+async function ban(message, target, reason) {
+  if (!canInteract(message.member, target, "ban", message.channel)) return;
+  const status = await banTarget(message.member, target, reason);
+  if (status) message.channel.send(`${target.user.tag} is banned from this server`);
+  else message.channel.send(`Failed to ban ${target.user.tag}`);
+}

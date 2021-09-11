@@ -1,4 +1,4 @@
-const { Channel, Guild, GuildMember, TextBasedChannels, MessageEmbed, User } = require("discord.js");
+const { Channel, Guild, GuildMember, BaseGuildTextChannel, MessageEmbed, User } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const outdent = require("outdent");
@@ -43,7 +43,7 @@ function getExistingTicketChannel(guild, userId) {
 }
 
 /**
- * @param {TextBasedChannels} channel
+ * @param {BaseGuildTextChannel} channel
  */
 async function parseTicketDetails(channel) {
   if (!channel.topic) return;
@@ -58,7 +58,7 @@ async function parseTicketDetails(channel) {
 }
 
 /**
- * @param {TextBasedChannels} channel
+ * @param {BaseGuildTextChannel} channel
  * @param {User} closedBy
  * @param {String} reason
  */
@@ -97,16 +97,19 @@ async function closeTicket(channel, closedBy, reason) {
     ${logsUrl == null ? "" : `\n[View Logs](${logsUrl})`}
     `;
 
-    await channel.delete();
-    const embed = new MessageEmbed().setAuthor("Ticket Closed").setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
+    if (channel.deletable) await channel.delete();
+    const embed = new MessageEmbed()
+      .setAuthor("Ticket Closed")
+      .setColor(EMBED_COLORS.TICKET_CLOSE)
+      .setDescription(desc);
 
     // send embed to user
     if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch(() => {});
 
     // send embed to log channel
-    if (config && config.ticket.log_channel) {
-      const logChannel = channel.guild.channels.cache.find((ch) => ch.id === config.ticket.log_channel);
-      if (logChannel) sendMessage(logChannel, { embeds: [embed] });
+    if (config.ticket.log_channel) {
+      const logChannel = channel.guild.channels.cache.get(config.ticket.log_channel);
+      sendMessage(logChannel, { embeds: [embed] });
     }
 
     return {
@@ -199,7 +202,7 @@ async function openTicket(guild, user, title, supportRole) {
     [View Channel](${sent.url})
   `;
     const dmEmbed = new MessageEmbed()
-      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setColor(EMBED_COLORS.TICKET_CREATE)
       .setAuthor("Ticket Created")
       .setDescription(desc);
 

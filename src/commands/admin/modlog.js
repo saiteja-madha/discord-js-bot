@@ -1,18 +1,18 @@
 const { Command } = require("@src/structures");
-const { automodLogChannel } = require("@schemas/guild-schema");
-const { canSendEmbeds } = require("@utils/guildUtils");
+const { modLogChannel } = require("@schemas/guild-schema");
 const { Message } = require("discord.js");
+const { canSendEmbeds } = require("@root/src/utils/guildUtils");
 
-module.exports = class AutoModLog extends Command {
+module.exports = class SetPrefix extends Command {
   constructor(client) {
     super(client, {
-      name: "automodlog",
-      description: "enable/disable logging of automod events",
+      name: "modlog",
+      description: "enable or disable moderation logs",
       command: {
         enabled: true,
         usage: "<#channel|OFF>",
         minArgsCount: 1,
-        category: "AUTOMOD",
+        category: "ADMIN",
         userPermissions: ["ADMINISTRATOR"],
       },
       slashCommand: {
@@ -40,7 +40,7 @@ module.exports = class AutoModLog extends Command {
         );
     }
 
-    await automodLogChannel(message.guildId, targetChannel?.id);
-    message.channel.send(`Configuration saved! AutomodLog channel ${targetChannel ? "updated" : "removed"}`);
+    await modLogChannel(message.guildId, targetChannel?.id);
+    message.channel.send(`Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`);
   }
 };

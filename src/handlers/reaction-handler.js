@@ -14,7 +14,8 @@ const { translate } = require("@utils/httpUtils");
  */
 function getRole(reaction) {
   const { message, emoji } = reaction;
-  const rr = getReactionRole(message.guild.id, message.channel.id, message.id) || [];
+  if (!message || !message.channel) return;
+  const rr = getReactionRole(message.guildId, message.channel.id, message.id) || [];
   const emote = emoji.id ? emoji.id : emoji.toString();
   const found = rr.find((doc) => doc.emote === emote);
   if (found) return message.guild.roles.cache.get(found.role_id);
@@ -95,6 +96,7 @@ async function handleFlagReaction(emoji, message, user) {
     let desc = "";
     for (const tc of targetCodes) {
       const response = await translate(message.content, tc);
+      if (!response.success) continue;
       src = response.inputLang;
       desc += `**${response.outputLang}:**\n${response.output}\n\n`;
     }

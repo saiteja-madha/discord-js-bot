@@ -8,9 +8,15 @@ const { BotClient } = require("@src/structures");
  * @param {User} user
  */
 module.exports = async (client, reaction, user) => {
-  if (reaction.partial) await reaction.fetch();
+  if (reaction.partial) {
+    try {
+      await reaction.fetch()
+    } catch(ex) {
+      return; // Possibly deleted
+    }
+  }
   const { message } = reaction;
-  if (user.bot || message.webhookId || !message.content) return;
+  if (!message.content) return;
 
   const reactionRole = reactionHandler.getRole(reaction);
   if (reactionRole) {

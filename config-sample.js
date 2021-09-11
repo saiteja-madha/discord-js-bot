@@ -29,11 +29,18 @@ module.exports = {
   },
   /* Bot Embed Colors */
   EMBED_COLORS: {
-    BOT_EMBED: "0x068ADD",
-    TRANSPARENT_EMBED: "0x36393F",
-    SUCCESS_EMBED: "0x00A56A",
-    ERROR_EMBED: "0xD61A3C",
-    WARNING_EMBED: "0xF7E919",
+    BOT_EMBED: "#068ADD",
+    TRANSPARENT_EMBED: "#36393F",
+    SUCCESS_EMBED: "#00A56A",
+    ERROR_EMBED: "#D61A3C",
+    WARNING_EMBED: "#F7E919",
+    TICKET_CREATE: "#068ADD",
+    TICKET_CLOSE: "#068ADD",
+    MUTE_EMBED: "#102027",
+    UNMUTE_EMBED: "#4B636E",
+    KICK_EMBED: "#FF7961",
+    SOFTBAN_EMBED: "#AF4448",
+    BAN_EMBED: "#D32F2F",
   },
   /* Unicode Emojis Used */
   EMOJIS: {
