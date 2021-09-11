@@ -105,6 +105,11 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
         await settings.setFlagTrChannels(guild.id, ids);
       }
     }
+
+    data.modlog_channel = guild.channels.cache.find((ch) => "#" + ch.name === data.modlog_channel)?.id;
+    if (data.modlog_channel !== guildData.automod.log_channel) {
+      await settings.modLogChannel(guild.id, data.modlog_channel);
+    }
   }
 
   if (Object.prototype.hasOwnProperty.call(data, "ticketUpdate")) {
@@ -126,6 +131,14 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
   }
 
   if (Object.prototype.hasOwnProperty.call(data, "automodUpdate")) {
+    if (data.automod_action != guildData.automod.strikes) {
+      await settings.maxLines(guild.id, data.automod_action);
+    }
+
+    if (data.automod_action != guildData.automod.action) {
+      await settings.maxLines(guild.id, data.automod_action);
+    }
+
     if (data.max_lines != guildData.automod.max_lines) {
       await settings.maxLines(guild.id, data.max_lines);
     }
@@ -134,11 +147,6 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
     }
     if (data.max_role_mentions != guildData.automod.max_role_mentions) {
       await settings.maxRoleMentions(guild.id, data.max_role_mentions);
-    }
-
-    data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== guildData.automod.log_channel) {
-      await settings.setTicketLogChannel(guild.id, data.channel);
     }
 
     data.anti_links = data.anti_links === "on" ? true : false;

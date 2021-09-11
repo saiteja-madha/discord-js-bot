@@ -6,7 +6,7 @@ module.exports = class AntiGhostPing extends Command {
   constructor(client) {
     super(client, {
       name: "antighostping",
-      description: "Log deleted messages with mentions (Requires `!automodlog` setup)",
+      description: "Log deleted messages with mentions (Requires `!modlog` channel setup)",
       command: {
         enabled: true,
         usage: "<ON|OFF>",

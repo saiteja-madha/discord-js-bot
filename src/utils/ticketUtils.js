@@ -107,9 +107,9 @@ async function closeTicket(channel, closedBy, reason) {
     if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch(() => {});
 
     // send embed to log channel
-    if (config && config.ticket.log_channel) {
-      const logChannel = channel.guild.channels.cache.find((ch) => ch.id === config.ticket.log_channel);
-      if (logChannel) sendMessage(logChannel, { embeds: [embed] });
+    if (config.ticket.log_channel) {
+      const logChannel = channel.guild.channels.cache.get(config.ticket.log_channel);
+      sendMessage(logChannel, { embeds: [embed] });
     }
 
     return {

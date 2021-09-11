@@ -93,7 +93,7 @@ async function setStatus(message, args) {
 async function setStrikes(message, args) {
   const strikes = args[1];
 
-  if (isNaN(strikes) && Number.parseInt(strikes) < 1)
+  if (isNaN(strikes) || Number.parseInt(strikes) < 1)
     return message.reply("Strikes must be a valid number greater than 0");
 
   await maxStrikes(message.guildId, strikes);
