@@ -96,6 +96,7 @@ async function handleFlagReaction(emoji, message, user) {
     let desc = "";
     for (const tc of targetCodes) {
       const response = await translate(message.content, tc);
+      if (!response.success) continue;
       src = response.inputLang;
       desc += `**${response.outputLang}:**\n${response.output}\n\n`;
     }
