@@ -48,7 +48,7 @@ module.exports = class DailyCommand extends Command {
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setAuthor(member.displayName, member.user.displayAvatarURL())
       .setDescription(
-        `You got 100${EMOJIS.CURRENCY} as your daily reward\n` +
+        `You got 1000${EMOJIS.CURRENCY} as your daily reward\n` +
           `**Updated Balance:** ${updated?.coins || 0}${EMOJIS.CURRENCY}`
       );
 
