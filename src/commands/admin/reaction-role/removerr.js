@@ -16,12 +16,6 @@ module.exports = class RemoveReactionRole extends Command {
         category: "ADMIN",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

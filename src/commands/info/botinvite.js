@@ -11,12 +11,6 @@ module.exports = class BotInviteCommand extends Command {
         enabled: true,
         category: "INFORMATION",
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

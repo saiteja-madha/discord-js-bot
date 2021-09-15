@@ -13,7 +13,7 @@ module.exports = class Eval extends Command {
         category: "OWNER",
         botOwnerOnly: true,
         hidden: true,
-        botPermissions: ['EMBED_LINKS']
+        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
         enabled: false,
@@ -26,9 +26,6 @@ module.exports = class Eval extends Command {
           },
         ],
       },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 
@@ -37,33 +34,29 @@ module.exports = class Eval extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
+    const input = args.join(" ");
+    if (!input) return message.reply("Please provide code to eval");
+    if (!input.toLowerCase().includes("token")) {
+      const embed = new MessageEmbed();
 
-        const input = args.join(' ');
-        if (!input) return message.reply('Please provide code to eval');
-        if(!input.toLowerCase().includes('token')) {
-    
-          const embed = new MessageEmbed();
-    
-          try {
-            let output = eval(input);
-            if (typeof output !== 'string') output = require('util').inspect(output, { depth: 0 });
-            
-            embed
-              .addField('📥 Input', `\`\`\`js\n${input.length > 1024 ? 'Too large to display.' : input}\`\`\``)
-              .addField('📤 Output', `\`\`\`js\n${output.length > 1024 ? 'Too large to display.' : output}\`\`\``)
-              .setColor('RANDOM');
-    
-          } catch(err) {
-            embed
-              .addField('📥 Input', `\`\`\`js\n${input.length > 1024 ? 'Too large to display.' : input}\`\`\``)
-              .addField('📤 Output', `\`\`\`js\n${err.length > 1024 ? 'Too large to display.' : err}\`\`\``)
-              .setColor('ORANGE');
-          }
-    
-          message.channel.send({embeds: [embed]});
-    
-        } else {
-          message.channel.send('my token: ||screw you||');
-        }
+      try {
+        let output = eval(input);
+        if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
+
+        embed
+          .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
+          .addField("📤 Output", `\`\`\`js\n${output.length > 1024 ? "Too large to display." : output}\`\`\``)
+          .setColor("RANDOM");
+      } catch (err) {
+        embed
+          .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
+          .addField("📤 Output", `\`\`\`js\n${err.length > 1024 ? "Too large to display." : err}\`\`\``)
+          .setColor("ORANGE");
       }
-    };
+
+      message.channel.send({ embeds: [embed] });
+    } else {
+      message.channel.send("my token: ||screw you||");
+    }
+  }
+};

@@ -103,14 +103,14 @@ module.exports = class BotClient extends Client {
       this.commands.push(cmd);
     }
 
-    if (cmd.slashCommand.enabled) {
+    if (cmd.slashCommand?.enabled) {
       if (this.slashCommands.has(cmd.name)) {
         throw new Error(`Slash Command ${cmd.name} already registered`);
       }
       this.slashCommands.set(cmd.name, cmd);
     }
 
-    if (cmd.contextMenu.enabled) {
+    if (cmd.contextMenu?.enabled) {
       if (this.contextMenus.has(cmd.name)) {
         throw new Error(`Context Menu ${cmd.name} already registered`);
       }
@@ -139,6 +139,7 @@ module.exports = class BotClient extends Client {
     readCommands(directory);
     console.log(`Loaded ${this.commands.length} commands`);
     console.log(`Loaded ${this.slashCommands.size} slash commands`);
+    console.log(`Loaded ${this.contextMenus.size} contexts`);
   }
 
   /**
@@ -155,32 +156,36 @@ module.exports = class BotClient extends Client {
    * Register slash command on startup
    * @param {string} [guildId]
    */
-  async registerSlashCommandsContextMenu(guildId) {
-    const toRegister = this.commands
-      .filter((cmd) => cmd.slashCommand.enabled)
-      .map((cmd) => ({
-        name: cmd.name,
-        description: cmd.description,
-        type: "CHAT_INPUT",
-        options: cmd.slashCommand.options,
-      }));
+  async registerInteractions(guildId) {
+    const toRegister = [];
 
-    if (!guildId) {
-      await this.application.commands.set(toRegister);
+    // filter slash commands
+    if (this.config.INTERACTIONS.SLASH) {
+      this.commands
+        .filter((cmd) => cmd.slashCommand?.enabled)
+        .map((cmd) => ({
+          name: cmd.name,
+          description: cmd.description,
+          type: "CHAT_INPUT",
+          options: cmd.slashCommand.options,
+        }))
+        .forEach((s) => toRegister.push(s));
     }
 
-    const toRegisterContext = this.commands
-      .filter((cmd) => cmd.contextMenu.enabled)
-      .map((cmd) => ({
-        name: cmd.name,
-        type: cmd.contextMenu.type,
-      }));
-    toRegisterContext.forEach(r => {
-      toRegister.push(r)
-    })
+    // filter contexts
+    if (this.config.INTERACTIONS.CONTEXT) {
+      this.commands
+        .filter((cmd) => cmd.contextMenu?.enabled)
+        .map((cmd) => ({
+          name: cmd.name,
+          type: cmd.contextMenu.type,
+        }))
+        .forEach((c) => toRegister.push(c));
+    }
 
+    // Register GLobally
     if (!guildId) {
-      await this.application.commands.set(toRegisterContext);
+      await this.application.commands.set(toRegister);
     }
 
     // Register for a specific guild
@@ -188,6 +193,11 @@ module.exports = class BotClient extends Client {
       const guild = this.guilds.cache.get(guildId);
       if (!guild) throw new Error(`No guilds found matching ${guildId}`);
       await guild.commands.set(toRegister);
+    }
+
+    // Throw an error
+    else {
+      throw new Error(`Did you provide a valid guildId to register slash commands`);
     }
 
     console.log("Successfully registered slash commands");
@@ -198,7 +208,7 @@ module.exports = class BotClient extends Client {
    * @param {string} command - name of the slash command to be deleted
    * @param {string} [guildId] - guild in which the command should be deleted
    */
-  async unRegisterSlashCommand(command, guildId) {
+  async unRegisterInteraction(command, guildId) {
     if (guildId && typeof guildId === "string") {
       const guild = this.guilds.cache.get(guildId);
       if (!guild) throw new Error(`No guilds found matching ${guildId}`);

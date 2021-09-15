@@ -12,12 +12,6 @@ module.exports = class FlipCoinCommand extends Command {
         category: "FUN",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

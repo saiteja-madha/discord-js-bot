@@ -17,12 +17,6 @@ module.exports = class BotStatsCommand extends Command {
         category: "INFORMATION",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

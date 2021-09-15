@@ -18,12 +18,6 @@ module.exports = class GithubCommand extends Command {
         category: "UTILITY",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

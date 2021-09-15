@@ -17,12 +17,6 @@ module.exports = class CounterSetup extends Command {
         botPermissions: ["ADMINISTRATOR"],
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

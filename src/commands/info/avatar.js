@@ -25,9 +25,6 @@ module.exports = class AvatarCommand extends Command {
           },
         ],
       },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

@@ -16,12 +16,6 @@ module.exports = class MuteCommand extends Command {
         botPermissions: ["MANAGE_ROLES"],
         userPermissions: ["KICK_MEMBERS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

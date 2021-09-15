@@ -14,12 +14,6 @@ module.exports = class AntiGhostPing extends Command {
         category: "AUTOMOD",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

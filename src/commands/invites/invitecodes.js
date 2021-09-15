@@ -14,12 +14,6 @@ module.exports = class InviteCodes extends Command {
         category: "INVITE",
         botPermissions: ["EMBED_LINKS", "MANAGE_GUILD"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

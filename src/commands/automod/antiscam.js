@@ -14,12 +14,6 @@ module.exports = class AntiLinks extends Command {
         category: "AUTOMOD",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

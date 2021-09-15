@@ -18,12 +18,6 @@ module.exports = class Reputation extends Command {
         category: "SOCIAL",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

@@ -29,9 +29,6 @@ module.exports = class WeatherCommand extends Command {
           },
         ],
       },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

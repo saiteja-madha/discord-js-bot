@@ -15,12 +15,6 @@ module.exports = class FlipTextCommand extends Command {
         category: "FUN",
         minArgsCount: 1,
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

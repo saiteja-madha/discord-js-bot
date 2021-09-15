@@ -49,9 +49,6 @@ module.exports = class Filters extends Command {
           },
         ],
       },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

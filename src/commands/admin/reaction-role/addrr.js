@@ -17,12 +17,6 @@ module.exports = class AddReactionRole extends Command {
         category: "ADMIN",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

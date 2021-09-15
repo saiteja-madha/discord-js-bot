@@ -15,9 +15,6 @@ module.exports = class PingCommand extends Command {
         ephemeral: true,
         options: [],
       },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

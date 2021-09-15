@@ -16,12 +16,6 @@ module.exports = class SoftBan extends Command {
         clientPermissions: ["BAN_MEMBERS"],
         userPermissions: ["BAN_MEMBERS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

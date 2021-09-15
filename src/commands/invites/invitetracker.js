@@ -16,12 +16,6 @@ module.exports = class InviteTracker extends Command {
         category: "INVITE",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

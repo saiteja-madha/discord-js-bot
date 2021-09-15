@@ -34,6 +34,14 @@ class Command {
    */
 
   /**
+   * @typedef {Object} ContextInfo
+   * @property {boolean} enabled - Whether the slash command is enabled or not
+   * @property {boolean} ephemeral - Whether the reply should be ephemeral
+   * @property {"MESSAGE"|"USER"} type - Type of context menu
+   * @property {ApplicationCommandOptionData[]} options - command options
+   */
+
+  /**
    * @typedef {Object} CommandInfo
    * @property {boolean} enabled - Whether the command is enabled or not
    * @property {string[]} [aliases] - Alternative names for the command (all must be lowercase)
@@ -56,7 +64,7 @@ class Command {
    * @property {number} cooldown - The command cooldown in seconds
    * @property {CommandInfo} command - A short description of the command
    * @property {InteractionInfo} slashCommand - A short description of the command
-   * @property {InteractionInfo} contextMenu - A short description of the command
+   * @property {ContextInfo} contextMenu - A short description of the command
    */
 
   /**
@@ -89,18 +97,22 @@ class Command {
     /**
      * @type {InteractionInfo}
      */
-    this.slashCommand = data.slashCommand || {};
-    this.slashCommand.enabled = data.slashCommand.enabled || false;
-    this.slashCommand.ephemeral = data.slashCommand.ephemeral || false;
-    this.slashCommand.options = data.slashCommand.options || [];
+    if (data.slashCommand) {
+      this.slashCommand = data.slashCommand;
+      this.slashCommand.enabled = data.slashCommand.enabled;
+      this.slashCommand.ephemeral = data.slashCommand.ephemeral || false;
+      this.slashCommand.options = data.slashCommand.options || [];
+    }
 
     /**
      * @type {InteractionInfo}
      */
-    this.contextMenu = data.contextMenu || {};
-    this.contextMenu.enabled = data.contextMenu.enabled || false;
-    this.contextMenu.ephemeral = data.contextMenu.ephemeral || false;
-    this.contextMenu.type = data.contextMenu.type || false;
+    if (data.contextMenu) {
+      this.contextMenu = data.contextMenu;
+      this.contextMenu.enabled = data.contextMenu.enabled;
+      this.contextMenu.ephemeral = data.contextMenu.ephemeral || false;
+      this.contextMenu.type = data.contextMenu.type;
+    }
   }
 
   /**
@@ -277,79 +289,91 @@ class Command {
     if (data.cooldown && typeof data.cooldown !== "number") {
       throw new TypeError("Command cooldown must be a number");
     }
-    if (typeof data.command !== "object") {
-      throw new TypeError("Command.command must be an object");
-    }
-    if (data.command.enabled && typeof data.command.enabled !== "boolean") {
-      throw new TypeError("Command.command enabled must be a boolean value");
-    }
-    if (
-      data.command.aliases &&
-      (!Array.isArray(data.command.aliases) ||
-        data.command.aliases.some((ali) => typeof ali !== "string" || ali !== ali.toLowerCase()))
-    ) {
-      throw new TypeError("Command.command aliases must be an Array of lowercase strings.");
-    }
-    if (data.command.usage && typeof data.command.usage !== "string") {
-      throw new TypeError("Command.command usage must be a string");
-    }
-    if (data.command.minArgsCount && typeof data.command.minArgsCount !== "number") {
-      throw new TypeError("Command.command minArgsCount must be a number");
-    }
-    if (data.command.subcommands && !Array.isArray(data.command.subcommands)) {
-      throw new TypeError("Command.command subcommands must be an array");
-    }
-    if (data.command.botPermissions) {
-      if (!Array.isArray(data.command.botPermissions)) {
-        throw new TypeError("Command.command botPermissions must be an Array of permission key strings.");
+
+    // Validate Command Details
+    if (data.command) {
+      if (typeof data.command !== "object") {
+        throw new TypeError("Command.command must be an object");
       }
-      for (const perm of data.command.botPermissions) {
-        if (!permissions[perm]) throw new RangeError(`Invalid command clientPermission: ${perm}`);
+      if (data.command.enabled && typeof data.command.enabled !== "boolean") {
+        throw new TypeError("Command.command enabled must be a boolean value");
+      }
+      if (
+        data.command.aliases &&
+        (!Array.isArray(data.command.aliases) ||
+          data.command.aliases.some((ali) => typeof ali !== "string" || ali !== ali.toLowerCase()))
+      ) {
+        throw new TypeError("Command.command aliases must be an Array of lowercase strings.");
+      }
+      if (data.command.usage && typeof data.command.usage !== "string") {
+        throw new TypeError("Command.command usage must be a string");
+      }
+      if (data.command.minArgsCount && typeof data.command.minArgsCount !== "number") {
+        throw new TypeError("Command.command minArgsCount must be a number");
+      }
+      if (data.command.subcommands && !Array.isArray(data.command.subcommands)) {
+        throw new TypeError("Command.command subcommands must be an array");
+      }
+      if (data.command.botPermissions) {
+        if (!Array.isArray(data.command.botPermissions)) {
+          throw new TypeError("Command.command botPermissions must be an Array of permission key strings.");
+        }
+        for (const perm of data.command.botPermissions) {
+          if (!permissions[perm]) throw new RangeError(`Invalid command clientPermission: ${perm}`);
+        }
+      }
+      if (data.command.userPermissions) {
+        if (!Array.isArray(data.command.userPermissions)) {
+          throw new TypeError("Command.command userPermissions must be an Array of permission key strings.");
+        }
+        for (const perm of data.command.userPermissions) {
+          if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
+        }
+      }
+      if (data.command.guildOwnerOnly && typeof data.command.guildOwnerOnly !== "boolean") {
+        throw new TypeError("Command.command guildOwnerOnly must be a boolean value");
+      }
+      if (data.command.botOwnerOnly && typeof data.command.botOwnerOnly !== "boolean") {
+        throw new TypeError("Command.command botOwnerOnly must be a boolean value");
+      }
+      if (data.command.nsfw && typeof data.command.nsfw !== "boolean") {
+        throw new TypeError("Command.command nsfw must be a boolean value");
+      }
+      if (data.command.hidden && typeof data.command.hidden !== "boolean") {
+        throw new TypeError("Command.command hidden must be a boolean value");
       }
     }
-    if (data.command.userPermissions) {
-      if (!Array.isArray(data.command.userPermissions)) {
-        throw new TypeError("Command.command userPermissions must be an Array of permission key strings.");
+
+    // Validate Slash Command Details
+    if (data.slashCommand) {
+      if (typeof data.slashCommand !== "object") {
+        throw new TypeError("Command.slashCommand must be an object");
       }
-      for (const perm of data.command.userPermissions) {
-        if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
+      if (data.slashCommand.enabled && typeof data.slashCommand.enabled !== "boolean") {
+        throw new TypeError("Command.slashCommand enabled must be a boolean value");
+      }
+      if (data.slashCommand.ephemeral && typeof data.slashCommand.ephemeral !== "boolean") {
+        throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
+      }
+      if (data.slashCommand.options && !Array.isArray(data.slashCommand.options)) {
+        throw new TypeError("Command.slashCommand options must be a array");
       }
     }
-    if (data.command.guildOwnerOnly && typeof data.command.guildOwnerOnly !== "boolean") {
-      throw new TypeError("Command.command guildOwnerOnly must be a boolean value");
-    }
-    if (data.command.botOwnerOnly && typeof data.command.botOwnerOnly !== "boolean") {
-      throw new TypeError("Command.command botOwnerOnly must be a boolean value");
-    }
-    if (data.command.nsfw && typeof data.command.nsfw !== "boolean") {
-      throw new TypeError("Command.command nsfw must be a boolean value");
-    }
-    if (data.command.hidden && typeof data.command.hidden !== "boolean") {
-      throw new TypeError("Command.command hidden must be a boolean value");
-    }
-    if (typeof data.slashCommand !== "object") {
-      throw new TypeError("Command.slashCommand must be an object");
-    }
-    if (data.slashCommand.enabled && typeof data.slashCommand.enabled !== "boolean") {
-      throw new TypeError("Command.slashCommand enabled must be a boolean value");
-    }
-    if (data.slashCommand.ephemeral && typeof data.slashCommand.ephemeral !== "boolean") {
-      throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
-    }
-    if (data.slashCommand.options && !Array.isArray(data.slashCommand.options)) {
-      throw new TypeError("Command.slashCommand options must be a array");
-    }
-    if (typeof data.contextMenu !== "object") {
-      throw new TypeError("Command.contextMenu must be an object");
-    }
-    if (data.contextMenu.enabled && typeof data.contextMenu.enabled !== "boolean") {
-      throw new TypeError("Command.contextMenu enabled must be a boolean value");
-    }
-    if (data.contextMenu.ephemeral && typeof data.contextMenu.ephemeral !== "boolean") {
-      throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
-    }
-    if (data.contextMenu.enabled && !["MESSAGE", "USER"].includes(data.contextMenu.type)) {
-      throw new TypeError("Command.contextMenu type must be a either MESSAGE or USER");
+
+    // Validate Context Menu
+    if (data.contextMenu) {
+      if (typeof data.contextMenu !== "object") {
+        throw new TypeError("Command.contextMenu must be an object");
+      }
+      if (data.contextMenu.enabled && typeof data.contextMenu.enabled !== "boolean") {
+        throw new TypeError("Command.contextMenu enabled must be a boolean value");
+      }
+      if (data.contextMenu.ephemeral && typeof data.contextMenu.ephemeral !== "boolean") {
+        throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
+      }
+      if (data.contextMenu.enabled && !["MESSAGE", "USER"].includes(data.contextMenu.type)) {
+        throw new TypeError("Command.contextMenu type must be a either MESSAGE or USER");
+      }
     }
   }
 }

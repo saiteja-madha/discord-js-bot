@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
-const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER, MESSAGES } = require("@root/config.js");
+const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, Message } = require("discord.js");
-const { getResponse } = require("@utils/httpUtils");
 
 const CMD_CATEGORIES = {
   ADMIN: {
@@ -71,12 +70,6 @@ module.exports = class HelpCommand extends Command {
         category: "UTILITY",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false,
-      }
     });
   }
 

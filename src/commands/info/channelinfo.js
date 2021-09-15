@@ -27,9 +27,6 @@ module.exports = class ChannelInfo extends Command {
           },
         ],
       },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

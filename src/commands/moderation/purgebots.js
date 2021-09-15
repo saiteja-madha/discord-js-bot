@@ -15,12 +15,6 @@ module.exports = class PurgeBots extends Command {
         botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
         userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

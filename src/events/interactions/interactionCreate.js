@@ -7,6 +7,7 @@ const { timeformat } = require("@utils/miscUtils");
  * @param {Interaction} interaction
  */
 module.exports = async (client, interaction) => {
+  // Slash Command
   if (interaction.isCommand()) {
     if (!client.slashCommands.has(interaction.commandName)) {
       return interaction.reply("An error has occurred").catch(() => {});
@@ -32,17 +33,21 @@ module.exports = async (client, interaction) => {
 
     // Run the event
     await command.interactionRun(interaction, interaction.options);
-    command.applyCooldown(interaction.member.id);
-  }else if(interaction.isContextMenu()){
+    command.applyCooldown(interaction.user.id);
+  }
+
+  // Context Menu
+  else if (interaction.isContextMenu()) {
     if (!client.contextMenus.has(interaction.commandName)) {
       return interaction.reply("An error has occurred").catch(() => {});
     }
 
-    // get the slash command
+    // get the context menu
     const command = client.contextMenus.get(interaction.commandName);
+
     // cooldown check
     if (command.cooldown > 0) {
-      const remaining = command.getRemainingCooldown(interaction.member.id);
+      const remaining = command.getRemainingCooldown(interaction.user.id);
       if (remaining > 0)
         return interaction
           .reply({
@@ -56,7 +61,7 @@ module.exports = async (client, interaction) => {
     await interaction.deferReply({ ephemeral: command.contextMenu.ephemeral }).catch(() => {});
 
     // Run the event
-    await command.contextRun(interaction);
-    command.applyCooldown(interaction.member.id);
+    await command.contextRun(interaction, interaction.options);
+    command.applyCooldown(interaction.user.id);
   }
 };

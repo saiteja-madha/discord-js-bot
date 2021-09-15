@@ -41,9 +41,6 @@ module.exports = class TranslateCommand extends Command {
           },
         ],
       },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 

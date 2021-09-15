@@ -16,12 +16,6 @@ module.exports = class ClearInvites extends Command {
         botPermissions: ["EMBED_LINKS"],
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
-      contextMenu: {
-        enabled: false
-      }
     });
   }
 
