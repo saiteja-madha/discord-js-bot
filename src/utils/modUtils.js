@@ -324,16 +324,18 @@ async function logModeration(issuer, target, reason, type, data = {}) {
       break;
   }
 
-  embed
-    .setAuthor("Moderation Case - " + type)
-    .setThumbnail(target.user.displayAvatarURL())
-    .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
-    .addField("Member", `${target.displayName} [${target.id}]`, false)
-    .addField("Reason", reason || "No reason provided", true)
-    .setTimestamp(Date.now());
+  if (type.toUpperCase() !== "PURGE") {
+    embed
+      .setAuthor("Moderation Case - " + type)
+      .setThumbnail(target.user.displayAvatarURL())
+      .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
+      .addField("Member", `${target.displayName} [${target.id}]`, false)
+      .addField("Reason", reason || "No reason provided", true)
+      .setTimestamp(Date.now());
 
-  if (data.isPermanent) embed.addField("IsPermanent", EMOJIS.TICK, true);
-  if (data.minutes) embed.addField("Expires In", timeformat(data.minutes * 60), true);
+    if (data.isPermanent) embed.addField("IsPermanent", EMOJIS.TICK, true);
+    if (data.minutes) embed.addField("Expires In", timeformat(data.minutes * 60), true);
+  }
 
   await addModLogToDb(issuer, target, reason, type.toUpperCase(), data);
   sendMessage(logChannel, { embeds: [embed] });
