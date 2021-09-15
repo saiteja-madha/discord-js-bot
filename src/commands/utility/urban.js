@@ -28,6 +28,9 @@ module.exports = class UrbanCommand extends Command {
           },
         ],
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

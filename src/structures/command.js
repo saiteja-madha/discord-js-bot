@@ -56,6 +56,7 @@ class Command {
    * @property {number} cooldown - The command cooldown in seconds
    * @property {CommandInfo} command - A short description of the command
    * @property {InteractionInfo} slashCommand - A short description of the command
+   * @property {InteractionInfo} contextMenu - A short description of the command
    */
 
   /**
@@ -92,6 +93,14 @@ class Command {
     this.slashCommand.enabled = data.slashCommand.enabled || false;
     this.slashCommand.ephemeral = data.slashCommand.ephemeral || false;
     this.slashCommand.options = data.slashCommand.options || [];
+
+    /**
+     * @type {InteractionInfo}
+     */
+    this.contextMenu = data.contextMenu || {};
+    this.contextMenu.enabled = data.contextMenu.enabled || false;
+    this.contextMenu.ephemeral = data.contextMenu.ephemeral || false;
+    this.contextMenu.type = data.contextMenu.type || false;
   }
 
   /**
@@ -170,6 +179,16 @@ class Command {
   async interactionRun(interaction, options) {
     if (this.slashCommand.enabled) {
       throw new Error(`${this.constructor.name} doesn't have a interactionRun() method.`);
+    }
+  }
+
+  /**
+   * Function that is called when interaction is sent
+   * @param {CommandInteraction} interaction
+   */
+  async contextRun(interaction) {
+    if (this.contextMenu.enabled) {
+      throw new Error(`${this.constructor.name} doesn't have a contextRun() method.`);
     }
   }
 
@@ -319,6 +338,18 @@ class Command {
     }
     if (data.slashCommand.options && !Array.isArray(data.slashCommand.options)) {
       throw new TypeError("Command.slashCommand options must be a array");
+    }
+    if (typeof data.contextMenu !== "object") {
+      throw new TypeError("Command.contextMenu must be an object");
+    }
+    if (data.contextMenu.enabled && typeof data.contextMenu.enabled !== "boolean") {
+      throw new TypeError("Command.contextMenu enabled must be a boolean value");
+    }
+    if (data.contextMenu.ephemeral && typeof data.contextMenu.ephemeral !== "boolean") {
+      throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
+    }
+    if (data.contextMenu.enabled && !["MESSAGE", "USER"].includes(data.contextMenu.type)) {
+      throw new TypeError("Command.contextMenu type must be a either MESSAGE or USER");
     }
   }
 }

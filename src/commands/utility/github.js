@@ -21,6 +21,9 @@ module.exports = class GithubCommand extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

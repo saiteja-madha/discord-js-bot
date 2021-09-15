@@ -37,6 +37,9 @@ module.exports = class Automod extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

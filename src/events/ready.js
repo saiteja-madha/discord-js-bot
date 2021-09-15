@@ -11,8 +11,8 @@ module.exports = async (client) => {
 
   // register slash commands
   if (client.config.SLASH_COMMANDS.ENABLED) {
-    if (client.config.SLASH_COMMANDS.GLOBAL) await client.registerSlashCommands();
-    else await client.registerSlashCommands(client.config.SLASH_COMMANDS.TEST_GUILD_ID);
+    if (client.config.SLASH_COMMANDS.GLOBAL) await client.registerSlashCommandsContextMenu();
+    else await client.registerSlashCommandsContextMenu(client.config.SLASH_COMMANDS.TEST_GUILD_ID);
   }
 
   // Load reaction roles to cache

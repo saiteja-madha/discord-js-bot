@@ -53,6 +53,9 @@ module.exports = class Ticket extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

@@ -17,6 +17,9 @@ module.exports = class InviteCodes extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

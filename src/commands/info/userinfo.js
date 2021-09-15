@@ -26,6 +26,9 @@ module.exports = class UserInfo extends Command {
           },
         ],
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

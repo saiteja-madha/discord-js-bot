@@ -19,6 +19,9 @@ module.exports = class Transfer extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

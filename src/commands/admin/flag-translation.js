@@ -34,6 +34,9 @@ module.exports = class FlagTranslation extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

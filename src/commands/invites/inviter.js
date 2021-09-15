@@ -20,6 +20,9 @@ module.exports = class InviterCommand extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

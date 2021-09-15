@@ -73,6 +73,9 @@ module.exports = class Generator extends Command {
           },
         ],
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

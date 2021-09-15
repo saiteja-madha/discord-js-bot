@@ -19,6 +19,9 @@ module.exports = class EnlargeCommand extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

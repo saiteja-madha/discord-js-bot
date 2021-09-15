@@ -19,6 +19,9 @@ module.exports = class SoftBan extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

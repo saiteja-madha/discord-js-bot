@@ -45,6 +45,9 @@ module.exports = class Farewell extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

@@ -25,6 +25,7 @@ module.exports = class BotClient extends Client {
     this.commands = []; // store actual command
     this.commandIndex = new Collection(); // store (alias, arrayIndex) pair
     this.slashCommands = new Collection(); // store slash commands
+    this.contextMenus = new Collection(); // store contextMenus
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 
     // initialize cache
@@ -108,6 +109,13 @@ module.exports = class BotClient extends Client {
       }
       this.slashCommands.set(cmd.name, cmd);
     }
+
+    if (cmd.contextMenu.enabled) {
+      if (this.contextMenus.has(cmd.name)) {
+        throw new Error(`Context Menu ${cmd.name} already registered`);
+      }
+      this.contextMenus.set(cmd.name, cmd);
+    }
   }
 
   /**
@@ -147,7 +155,7 @@ module.exports = class BotClient extends Client {
    * Register slash command on startup
    * @param {string} [guildId]
    */
-  async registerSlashCommands(guildId) {
+  async registerSlashCommandsContextMenu(guildId) {
     const toRegister = this.commands
       .filter((cmd) => cmd.slashCommand.enabled)
       .map((cmd) => ({
@@ -159,6 +167,20 @@ module.exports = class BotClient extends Client {
 
     if (!guildId) {
       await this.application.commands.set(toRegister);
+    }
+
+    const toRegisterContext = this.commands
+      .filter((cmd) => cmd.contextMenu.enabled)
+      .map((cmd) => ({
+        name: cmd.name,
+        type: cmd.contextMenu.type,
+      }));
+    toRegisterContext.forEach(r => {
+      toRegister.push(r)
+    })
+
+    if (!guildId) {
+      await this.application.commands.set(toRegisterContext);
     }
 
     // Register for a specific guild

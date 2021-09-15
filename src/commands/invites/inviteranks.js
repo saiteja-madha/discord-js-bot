@@ -16,6 +16,9 @@ module.exports = class InviteRanks extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

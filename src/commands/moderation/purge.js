@@ -18,6 +18,9 @@ module.exports = class PurgeCommand extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

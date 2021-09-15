@@ -17,6 +17,9 @@ module.exports = class MaxRoleMentions extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

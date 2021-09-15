@@ -17,6 +17,9 @@ module.exports = class SetPrefix extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

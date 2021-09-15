@@ -28,6 +28,9 @@ module.exports = class CovidCommand extends Command {
           },
         ],
       },
+      contextMenu: {
+        enabled: false,
+      }
     });
   }
 
@@ -61,6 +64,7 @@ module.exports = class CovidCommand extends Command {
     interaction.followUp({ embeds: [embed] });
   }
 };
+
 
 const buildEmbed = ({ data }) => {
   const mg = timestampToDate(data?.updated, "dd.MM.yyyy at HH:mm");

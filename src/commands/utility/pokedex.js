@@ -28,6 +28,9 @@ module.exports = class Pokedex extends Command {
           },
         ],
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 

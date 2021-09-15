@@ -19,6 +19,9 @@ module.exports = class ClearInvites extends Command {
       slashCommand: {
         enabled: false,
       },
+      contextMenu: {
+        enabled: false
+      }
     });
   }
 
