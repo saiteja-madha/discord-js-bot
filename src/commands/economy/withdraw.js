@@ -15,9 +15,6 @@ module.exports = class Balance extends Command {
         category: "ECONOMY",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

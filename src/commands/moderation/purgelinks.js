@@ -15,9 +15,6 @@ module.exports = class PurgeLinks extends Command {
         botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
         userPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

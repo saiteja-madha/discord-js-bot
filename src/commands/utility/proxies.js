@@ -17,9 +17,6 @@ module.exports = class ProxiesCommand extends Command {
         category: "UTILITY",
         botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

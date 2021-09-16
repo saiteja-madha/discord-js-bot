@@ -31,9 +31,6 @@ module.exports = class FlagTranslation extends Command {
         category: "ADMIN",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

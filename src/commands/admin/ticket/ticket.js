@@ -50,9 +50,6 @@ module.exports = class Ticket extends Command {
         category: "TICKET",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

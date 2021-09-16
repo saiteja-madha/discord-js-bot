@@ -42,9 +42,6 @@ module.exports = class Welcome extends Command {
         category: "ADMIN",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

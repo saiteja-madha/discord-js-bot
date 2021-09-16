@@ -16,9 +16,6 @@ module.exports = class KickCommand extends Command {
         botPermissions: ["KICK_MEMBERS"],
         userPermissions: ["KICK_MEMBERS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

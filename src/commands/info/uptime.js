@@ -11,9 +11,6 @@ module.exports = class UptimeCommand extends Command {
         enabled: true,
         category: "INFORMATION",
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

@@ -14,10 +14,11 @@ module.exports = {
     port: "8080", // port to run the bot on
     expressSessionPassword: "discordbot", // random password string
   },
-  SLASH_COMMANDS: {
-    ENABLED: false,
-    GLOBAL: false, // Should the slash commands be registered globally
-    TEST_GUILD_ID: "xxxxxxxxxx", // Guild ID where the slash commands should be registered. [** Test you commands here first **]
+  INTERACTIONS: {
+    SLASH: true, // Should the interactions be enabled
+    CONTEXT: true, // Should contexts be enabled
+    GLOBAL: false, // Should the interactions be registered globally
+    TEST_GUILD_ID: "xxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
   XP_SYSTEM: {
     COOLDOWN: 5, // Cooldown in seconds between messages

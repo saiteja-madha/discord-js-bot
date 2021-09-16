@@ -14,9 +14,6 @@ module.exports = class DogCommand extends Command {
         category: "FUN",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

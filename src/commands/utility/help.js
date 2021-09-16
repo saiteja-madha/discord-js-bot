@@ -70,9 +70,6 @@ module.exports = class HelpCommand extends Command {
         category: "UTILITY",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

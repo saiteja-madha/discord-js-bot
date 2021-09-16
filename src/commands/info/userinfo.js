@@ -1,5 +1,11 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
+const {
+  MessageEmbed,
+  Message,
+  CommandInteraction,
+  CommandInteractionOptionResolver,
+  ContextMenuInteraction,
+} = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { resolveMember } = require("@utils/guildUtils");
 
@@ -26,6 +32,10 @@ module.exports = class UserInfo extends Command {
           },
         ],
       },
+      contextMenu: {
+        enabled: true,
+        type: "USER",
+      },
     });
   }
 
@@ -46,6 +56,15 @@ module.exports = class UserInfo extends Command {
   async interactionRun(interaction, options) {
     const targetUser = options.getUser("user") || interaction.user;
     const target = await interaction.guild.members.fetch(targetUser);
+    const embed = buildEmbed(target);
+    interaction.followUp({ embeds: [embed] });
+  }
+
+  /**
+   * @param {ContextMenuInteraction} interaction
+   */
+  async contextRun(interaction) {
+    const target = (await interaction.guild.members.fetch(interaction.targetId)) || interaction.member;
     const embed = buildEmbed(target);
     interaction.followUp({ embeds: [embed] });
   }
