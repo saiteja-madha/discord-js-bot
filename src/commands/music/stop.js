@@ -21,7 +21,7 @@ module.exports = class Play extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const queue = message.client.player.getQueue(message.guildId);
+    const queue = this.client.player.getQueue(message.guildId);
     if (!queue || !queue.playing) return message.channel.send("No music is being played!");
     queue.destroy();
     return message.channel.send("Stopped the player!");

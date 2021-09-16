@@ -31,7 +31,7 @@ module.exports = class Play extends Command {
 
     let searchResult;
     try {
-      searchResult = await message.client.player.search(query, {
+      searchResult = await this.client.player.search(query, {
         requestedBy: message.author,
         searchEngine: QueryType.AUTO,
       });
@@ -40,14 +40,14 @@ module.exports = class Play extends Command {
       message.channel.send("Failed to fetch results");
     }
 
-    const queue = message.client.player.createQueue(guild, {
+    const queue = this.client.player.createQueue(guild, {
       metadata: channel,
     });
 
     try {
       if (!queue.connection) await queue.connect(member.voice.channel);
     } catch {
-      message.client.player.deleteQueue(message.guildId);
+      this.client.player.deleteQueue(message.guildId);
       return message.channel.send("Could not join your voice channel!");
     }
 
