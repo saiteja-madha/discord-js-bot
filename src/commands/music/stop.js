@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
 
-module.exports = class Play extends Command {
+module.exports = class Stop extends Command {
   constructor(client) {
     super(client, {
       name: "stop",
