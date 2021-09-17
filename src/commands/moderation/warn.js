@@ -3,18 +3,17 @@ const { Command } = require("@src/structures");
 const { canInteract, addModAction } = require("@utils/modUtils");
 const { Message } = require("discord.js");
 
-module.exports = class SoftBan extends Command {
+module.exports = class Warn extends Command {
   constructor(client) {
     super(client, {
-      name: "softban",
-      description: "softban the specified member(s). Kicks and deletes messages",
+      name: "warn",
+      description: "warns the specified member(s)",
       command: {
         enabled: true,
         usage: "<ID|@member(s)> [reason]",
         minArgsCount: 1,
         category: "MODERATION",
-        clientPermissions: ["BAN_MEMBERS"],
-        userPermissions: ["BAN_MEMBERS"],
+        userPermissions: ["KICK_MEMBERS"],
       },
     });
   }
@@ -27,27 +26,27 @@ module.exports = class SoftBan extends Command {
     const { content } = message;
     const mentions = message.mentions.members;
 
-    // !softban ID <reason>
+    // !warn ID <reason>
     if (mentions.size === 0) {
       const target = await resolveMember(message, args[0], true);
       if (!target) return message.reply(`No user found matching ${args[0]}`);
       const reason = content.split(args[0])[1].trim();
-      return softban(message, target, reason);
+      return warn(message, target, reason);
     }
 
-    // !softban @m1 @m2 ... <reason>
+    // !kick @m1 @m2 ... <reason>
     const regex = /<@!?(\d+)>/g;
     const matches = content.match(regex);
     const lastMatch = matches[matches.length - 1];
     const reason = content.split(lastMatch)[1].trim();
 
-    mentions.forEach(async (target) => await softban(message, target, reason));
+    mentions.forEach(async (target) => await warn(message, target, reason));
   }
 };
 
-async function softban(message, target, reason) {
-  if (!canInteract(message.member, target, "softban", message.channel)) return;
-  const status = await addModAction(message.member, target, reason, "SOFTBAN");
-  if (status) message.channel.send(`${target.user.tag} is soft-banned from this server`);
-  else message.channel.send(`Failed to softban ${target.user.tag}`);
+async function warn(message, target, reason) {
+  if (!canInteract(message.member, target, "warn", message.channel)) return;
+  let status = await addModAction(message.member, target, reason, "WARN");
+  if (status) message.channel.send(`${target.user.tag} is warned by ${message.author.tag}`);
+  else message.channel.send(`Failed to warn ${target.user.tag}`);
 }

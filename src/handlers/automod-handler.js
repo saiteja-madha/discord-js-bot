@@ -2,7 +2,7 @@ const { Message, MessageEmbed } = require("discord.js");
 const { sendMessage, safeDM } = require("@utils/botUtils");
 const { containsLink, containsDiscordInvite } = require("@utils/miscUtils");
 const { addStrikes } = require("@schemas/profile-schema");
-const { muteTarget, kickTarget, banTarget } = require("@utils/modUtils");
+const { addModAction } = require("@utils/modUtils");
 const { EMBED_COLORS } = require("@root/config");
 const Ascii = require("ascii-table");
 
@@ -142,19 +142,8 @@ async function performAutomod(message, settings) {
     if (profile.strikes >= automod.strikes) {
       const reason = "Automod: Max strikes received";
 
-      switch (automod.action) {
-        case "MUTE":
-          await muteTarget(message.guild.me, message.member, reason);
-          break;
-
-        case "KICK":
-          await kickTarget(message.guild.me, message.member, reason);
-          break;
-
-        case "BAN":
-          await banTarget(message.guild.me, message.member, reason);
-          break;
-      }
+      // Add Moderation
+      await addModAction(message.guild.me, message.member, reason, automod.action);
 
       // Reset Strikes
       await addStrikes(message.guildId, message.member.id, -profile.strikes);

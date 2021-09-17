@@ -1,6 +1,6 @@
 const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
-const { canInteract, kickTarget } = require("@utils/modUtils");
+const { canInteract, addModAction } = require("@utils/modUtils");
 const { Message } = require("discord.js");
 
 module.exports = class KickCommand extends Command {
@@ -47,7 +47,7 @@ module.exports = class KickCommand extends Command {
 
 async function kick(message, target, reason) {
   if (!canInteract(message.member, target, "kick", message.channel)) return;
-  let status = await kickTarget(message.member, target, reason);
+  let status = await addModAction(message.member, target, reason, "KICK");
   if (status) message.channel.send(`${target.user.tag} is kicked from this server`);
   else message.channel.send(`Failed to kick ${target.user.tag}`);
 }
