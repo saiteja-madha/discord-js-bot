@@ -14,9 +14,6 @@ module.exports = class DailyCommand extends Command {
         category: "ECONOMY",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

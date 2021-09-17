@@ -14,9 +14,6 @@ module.exports = class AntiInvites extends Command {
         category: "AUTOMOD",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

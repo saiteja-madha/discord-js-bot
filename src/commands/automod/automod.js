@@ -34,9 +34,6 @@ module.exports = class Automod extends Command {
         category: "AUTOMOD",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

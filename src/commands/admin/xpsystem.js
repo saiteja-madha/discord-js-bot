@@ -14,9 +14,6 @@ module.exports = class XPSystem extends Command {
         category: "ADMIN",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

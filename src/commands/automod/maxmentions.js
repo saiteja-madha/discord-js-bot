@@ -14,9 +14,6 @@ module.exports = class MaxMentions extends Command {
         category: "AUTOMOD",
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

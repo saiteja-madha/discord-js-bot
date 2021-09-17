@@ -16,9 +16,6 @@ module.exports = class InvitesCommand extends Command {
         category: "INVITE",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

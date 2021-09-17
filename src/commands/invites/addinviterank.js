@@ -16,9 +16,6 @@ module.exports = class AddInvitesCommand extends Command {
         botPermissions: ["MANAGE_GUILD"],
         userPermissions: ["ADMINISTRATOR"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

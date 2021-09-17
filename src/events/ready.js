@@ -9,11 +9,9 @@ const { getSettings } = require("@schemas/guild-schema");
 module.exports = async (client) => {
   console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
 
-  // register slash commands
-  if (client.config.SLASH_COMMANDS.ENABLED) {
-    if (client.config.SLASH_COMMANDS.GLOBAL) await client.registerSlashCommands();
-    else await client.registerSlashCommands(client.config.SLASH_COMMANDS.TEST_GUILD_ID);
-  }
+  // Register Interactions
+  if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions();
+  else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
 
   // Load reaction roles to cache
   await loadReactionRoles();

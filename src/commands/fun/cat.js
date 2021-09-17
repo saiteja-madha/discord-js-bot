@@ -14,9 +14,6 @@ module.exports = class CatCommand extends Command {
         category: "FUN",
         botPermissions: ["EMBED_LINKS"],
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 
