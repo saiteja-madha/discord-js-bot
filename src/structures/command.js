@@ -23,7 +23,7 @@ class Command {
    */
 
   /**
-   * @typedef {"ADMIN" | "AUTOMOD" | "ECONOMY" | "FUN" | "IMAGE" | "INFORMATION" | "INVITE" | "MODERATION" | "NONE" | "OWNER" | "SOCIAL" | "TICKET" | "UTILITY" } CommandCategory
+   * @typedef {"ADMIN" | "AUTOMOD" | "ECONOMY" | "FUN" | "IMAGE" | "INFORMATION" | "INVITE" | "MODERATION" | "MUSIC" |"NONE" | "OWNER" | "SOCIAL" | "TICKET" | "UTILITY" } CommandCategory
    */
 
   /**

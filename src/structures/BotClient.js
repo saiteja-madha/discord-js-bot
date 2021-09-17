@@ -5,6 +5,7 @@ const Ascii = require("ascii-table");
 const mongoose = require("mongoose");
 const Command = require("./command");
 mongoose.plugin(require("mongoose-lean-defaults").default);
+const { Player } = require("discord-player");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -16,6 +17,7 @@ module.exports = class BotClient extends Client {
         Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_PRESENCES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.GUILD_VOICE_STATES,
       ],
       partials: ["USER", "MESSAGE", "REACTION"],
     });
@@ -38,6 +40,9 @@ module.exports = class BotClient extends Client {
     this.joinLeaveWebhook = this.config.JOIN_LEAVE_WEBHOOK
       ? new WebhookClient({ url: this.config.JOIN_LEAVE_WEBHOOK })
       : undefined;
+
+    // Music Player
+    this.player = new Player(this);
   }
 
   /**
