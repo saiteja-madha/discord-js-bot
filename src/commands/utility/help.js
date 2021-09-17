@@ -43,6 +43,11 @@ const CMD_CATEGORIES = {
     image: "https://icons.iconarchive.com/icons/lawyerwordpress/law/128/Gavel-Law-icon.png",
     emoji: "\uD83D\uDD28",
   },
+  MUSIC: {
+    name: "Music",
+    image: "https://icons.iconarchive.com/icons/wwalczyszyn/iwindows/256/Music-Library-icon.png",
+    emoji: "🎵",
+  },
   SOCIAL: {
     name: "Social",
     image: "https://icons.iconarchive.com/icons/dryicons/aesthetica-2/128/community-users-icon.png",
