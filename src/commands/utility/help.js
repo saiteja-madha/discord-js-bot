@@ -189,10 +189,10 @@ async function sendSelectionHelpMenu(message, prefix) {
     await interaction.deferUpdate();
     const value = interaction.values[0];
     const newEmbed = getCategoryHelpEmbed(message, value.toUpperCase(), prefix);
-    sentMsg.edit({ embeds: [newEmbed] });
+    if (sentMsg && sentMsg.editable) sentMsg.edit({ embeds: [newEmbed] });
   });
 
   collector.on("end", () => {
-    sentMsg.edit({ components: [] });
+    if (sentMsg && sentMsg.editable) sentMsg.edit({ components: [] });
   });
 }
