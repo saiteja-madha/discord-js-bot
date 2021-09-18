@@ -1,5 +1,11 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
+const {
+  MessageEmbed,
+  Message,
+  CommandInteraction,
+  CommandInteractionOptionResolver,
+  ContextMenuInteraction,
+} = require("discord.js");
 const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
 const { resolveMember } = require("@utils/guildUtils");
 
@@ -8,6 +14,7 @@ module.exports = class AvatarCommand extends Command {
     super(client, {
       name: "avatar",
       description: "displays avatar information about the user",
+      cooldown: 5,
       command: {
         enabled: true,
         usage: "[@member|id]",
@@ -24,6 +31,10 @@ module.exports = class AvatarCommand extends Command {
             required: false,
           },
         ],
+      },
+      contextMenu: {
+        enabled: true,
+        type: "USER",
       },
     });
   }
@@ -46,6 +57,15 @@ module.exports = class AvatarCommand extends Command {
   async interactionRun(interaction, options) {
     const target = options.getUser("user") || interaction.user;
     const embed = buildEmbed(target);
+    interaction.followUp({ embeds: [embed] });
+  }
+
+  /**
+   * @param {ContextMenuInteraction} interaction
+   */
+  async contextRun(interaction) {
+    const user = await interaction.client.users.fetch(interaction.targetId);
+    const embed = buildEmbed(user);
     interaction.followUp({ embeds: [embed] });
   }
 };

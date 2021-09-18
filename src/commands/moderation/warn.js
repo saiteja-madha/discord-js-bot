@@ -1,7 +1,7 @@
 const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
 const { canInteract, addModAction } = require("@utils/modUtils");
-const { Message } = require("discord.js");
+const { Message, ContextMenuInteraction } = require("discord.js");
 
 module.exports = class Warn extends Command {
   constructor(client) {
@@ -14,6 +14,10 @@ module.exports = class Warn extends Command {
         minArgsCount: 1,
         category: "MODERATION",
         userPermissions: ["KICK_MEMBERS"],
+      },
+      contextMenu: {
+        enabled: true,
+        type: "USER",
       },
     });
   }
@@ -41,6 +45,19 @@ module.exports = class Warn extends Command {
     const reason = content.split(lastMatch)[1].trim();
 
     mentions.forEach(async (target) => await warn(message, target, reason));
+  }
+
+  /**
+   * @param {ContextMenuInteraction} interaction
+   */
+  async contextRun(interaction) {
+    const target = (await interaction.guild.members.fetch(interaction.targetId)) || interaction.member;
+    if (!canInteract(interaction.member, target, "warn")) {
+      interaction.followUp("Missing permission to warn this member");
+    }
+    let status = await addModAction(interaction.member, target, "", "WARN");
+    if (status) interaction.followUp(`${target.user.tag} is warned by ${interaction.member.user.tag}`);
+    else interaction.followUp(`Failed to warn ${target.user.tag}`);
   }
 };
 
