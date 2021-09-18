@@ -1,15 +1,16 @@
 const { Command } = require("@src/structures");
-const Discord = require('discord.js')
-const { Message } = require("discord.js");
+const { Message, Util, MessageEmbed } = require("discord.js");
 
-module.exports = class EmojiInfoCommand extends Command {
+module.exports = class EmojiInfo extends Command {
   constructor(client) {
     super(client, {
       name: "emojiinfo",
-      aliases: ["emoji"],
       description: "shows info about an emoji",
       command: {
         enabled: true,
+        usage: "<emoji>",
+        minArgsCount: 1,
+        aliases: ["emoji"],
         category: "INFORMATION",
       },
       slashCommand: {
@@ -24,16 +25,19 @@ module.exports = class EmojiInfoCommand extends Command {
    */
   async messageRun(message, args) {
     const emoji = args[0];
-    if (!emoji) return message.channel.send("No emoji provided!");
-    let custom = Discord.Util.parseEmoji(emoji);
-    let url = `https://cdn.discordapp.com/emojis/${custom.id}`
-    let link = ""
-    if (custom.animated === true) {
-        link = `${url}.gif?v=1`
-    }
-    else {
-        link = `${url}.png`
-    }
-    
-  return message.channel.send(`**Id:** ${custom.id}\n**Name:** ${custom.name}\n**Animated:** ${custom.animated ? "Yes" : "No"}\n**Url:** ${link}`);
-  }}
+    let custom = Util.parseEmoji(emoji);
+    if (!custom.id) return message.channel.send("This is not a valid guild emoji");
+
+    let url = `https://cdn.discordapp.com/emojis/${custom.id}.${custom.animated ? "gif?v=1" : "png"}`;
+
+    const embed = new MessageEmbed()
+      .setColor(this.client.config.EMBED_COLORS.BOT_EMBED)
+      .setAuthor("Emoji Info")
+      .setDescription(
+        `**Id:** ${custom.id}\n` + `**Name:** ${custom.name}\n` + `**Animated:** ${custom.animated ? "Yes" : "No"}`
+      )
+      .setImage(url);
+
+    return message.channel.send({ embeds: [embed] });
+  }
+};
