@@ -24,7 +24,7 @@ module.exports = class Automod extends Command {
           },
           {
             trigger: "action <MUTE|KICK|BAN>",
-            description: "set automod action to performed after maximum strikes",
+            description: "set action to be performed after receiving maximum strikes",
           },
           {
             trigger: "debug <ON|OFF>",
@@ -107,7 +107,7 @@ async function setAction(message, args, prefix) {
   if (action === "MUTE") {
     let mutedRole = getRoleByName(message.guild, "muted");
     if (!mutedRole) {
-      return await message.reply(`Muted role doesn't exist in this guild. Use \`${prefix}mute setup\` to create one`);
+      return message.reply(`Muted role doesn't exist in this guild. Use \`${prefix}mute setup\` to create one`);
     }
 
     if (!mutedRole.editable) {
