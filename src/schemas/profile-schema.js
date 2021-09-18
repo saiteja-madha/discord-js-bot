@@ -24,11 +24,29 @@ const Schema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  warnings: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Model = mongoose.model("profile", Schema);
 
 module.exports = {
+  getProfile: async (guildId, memberId) =>
+    Model.findOne({
+      guild_id: guildId,
+      member_id: memberId,
+    }).lean({ defaults: true }),
+
+  getTop100: async (guildId) =>
+    Model.find({
+      guild_id: guildId,
+    })
+      .limit(100)
+      .sort({ level: -1, xp: -1 })
+      .lean({ defaults: true }),
+
   incrementXP: async (guildId, memberId, xp) =>
     Model.findOneAndUpdate(
       {
@@ -82,5 +100,18 @@ module.exports = {
         upsert: true,
         new: true,
       }
-    ),
+    ).lean({ defaults: true }),
+
+  addWarnings: async (guildId, memberId, warnings) =>
+    Model.findOneAndUpdate(
+      {
+        guild_id: guildId,
+        member_id: memberId,
+      },
+      { $inc: { warnings } },
+      {
+        upsert: true,
+        new: true,
+      }
+    ).lean({ defaults: true }),
 };

@@ -140,10 +140,8 @@ async function performAutomod(message, settings) {
 
     // check if max strikes are received
     if (profile.strikes >= automod.strikes) {
-      const reason = "Automod: Max strikes received";
-
       // Add Moderation
-      await addModAction(message.guild.me, message.member, reason, automod.action);
+      await addModAction(message.guild.me, message.member, "Automod: Max strikes received", automod.action);
 
       // Reset Strikes
       await addStrikes(message.guildId, message.member.id, -profile.strikes);

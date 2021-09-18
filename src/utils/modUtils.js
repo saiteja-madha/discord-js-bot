@@ -1,8 +1,9 @@
 const { Message, Guild, GuildMember, TextChannel, Collection, MessageEmbed } = require("discord.js");
 const { sendMessage } = require("@utils/botUtils");
 const { containsLink, timeformat } = require("@utils/miscUtils");
-const { addModLogToDb, removeMutes, getMuteInfo, getWarnings } = require("@schemas/modlog-schema");
+const { addModLogToDb, removeMutes, getMuteInfo } = require("@schemas/modlog-schema");
 const { getSettings } = require("@schemas/guild-schema");
+const { addWarnings } = require("@schemas/profile-schema");
 const { EMOJIS, EMBED_COLORS } = require("@root/config");
 const { getRoleByName } = require("./guildUtils");
 
@@ -155,13 +156,18 @@ async function purgeMessages(message, type, amount, argument) {
  * @param {string} reason
  */
 async function warnTarget(issuer, target, reason) {
-  if (!memberInteract(issuer.guild.me, target)) return;
+  const { guild } = issuer;
+  if (!memberInteract(guild.me, target)) return;
+
   try {
     await logModeration(issuer, target, reason, "Warn");
-    const current = await getWarnings(issuer.guild.id, target.id);
-    const settings = await getSettings(issuer.guild);
-    if (current.length > settings.max_warnings) {
-      await addModAction(issuer.guild.me, target, "Max warnings reached", settings.max_warn_action);
+    const profile = await addWarnings(guild.id, target.id, 1);
+    const settings = await getSettings(guild);
+
+    // check if max warnings are reached
+    if (profile.warnings > settings.max_warnings) {
+      await addModAction(guild.me, target, "Max warnings reached", settings.max_warn_action); // moderate
+      await addWarnings(guild.id, target.id, -profile.warnings); // reset warnings
     }
     return true;
   } catch (ex) {
