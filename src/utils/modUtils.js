@@ -400,6 +400,8 @@ async function addModAction(issuer, target, reason, action) {
       await banTarget(issuer, target, reason);
       break;
   }
+
+  return true;
 }
 
 module.exports = {
