@@ -28,6 +28,9 @@ module.exports = {
     IMAGE_API: "https://discord-js-image-manipulation.herokuapp.com", // Image commands won't work without this
     WEATHERSTACK_KEY: "", // https://weatherstack.com/
   },
+  MISCELLANEOUS: {
+    DAILY_COINS: 100, // coins to be received by daily command
+  },
   /* Bot Embed Colors */
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",

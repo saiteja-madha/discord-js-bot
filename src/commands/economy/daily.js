@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
 const { getUser, updateDailyStreak } = require("@schemas/user-schema");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
+const { EMBED_COLORS, EMOJIS, MISCELLANEOUS } = require("@root/config.js");
 const { diffHours, getRemainingTime } = require("@utils/miscUtils");
 
 module.exports = class DailyCommand extends Command {
@@ -39,13 +39,13 @@ module.exports = class DailyCommand extends Command {
       else streak = 0;
     }
 
-    const updated = await updateDailyStreak(member.id, 1000, streak);
+    const updated = await updateDailyStreak(member.id, MISCELLANEOUS.DAILY_COINS, streak);
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setAuthor(member.displayName, member.user.displayAvatarURL())
       .setDescription(
-        `You got 1000${EMOJIS.CURRENCY} as your daily reward\n` +
+        `You got ${MISCELLANEOUS.DAILY_COINS}${EMOJIS.CURRENCY} as your daily reward\n` +
           `**Updated Balance:** ${updated?.coins || 0}${EMOJIS.CURRENCY}`
       );
 
