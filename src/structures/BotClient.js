@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const Ascii = require("ascii-table");
 const mongoose = require("mongoose");
-const Command = require("./command");
+const Command = require("./Command");
 mongoose.plugin(require("mongoose-lean-defaults").default);
 const { Player } = require("discord-player");
 
