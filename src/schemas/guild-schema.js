@@ -75,6 +75,14 @@ const Schema = mongoose.Schema({
     ],
   },
   modlog_channel: String,
+  max_warnings: {
+    type: Number,
+    default: 5,
+  },
+  max_warn_action: {
+    type: String,
+    default: "BAN",
+  },
 });
 
 const Model = mongoose.model("guild", Schema);
@@ -111,80 +119,165 @@ module.exports = {
     return guildData;
   },
 
+  registerGuild,
+
+  updateGuildLeft: async (guild) =>
+    Model.updateOne({ _id: guild.id }, { "data.leftAt": new Date() }).then(cache.remove(guild.id)),
+
   setPrefix: async (_id, prefix) => {
-    await Model.updateOne({ _id }, { prefix }).then(cache.remove(_id));
+    await Model.updateOne({ _id }, { prefix });
+    if (cache.contains(_id)) {
+      cache.get(_id).prefix = prefix;
+    }
   },
 
   xpSystem: async (_id, status) => {
-    await Model.updateOne({ _id }, { "ranking.enabled": status }).then(cache.remove(_id));
+    await Model.updateOne({ _id }, { "ranking.enabled": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).ranking.enabled = status;
+    }
   },
 
   setTicketLogChannel: async (_id, channelId) => {
-    await Model.updateOne({ _id }, { "ticket.log_channel": channelId }).then(cache.remove(_id));
+    await Model.updateOne({ _id }, { "ticket.log_channel": channelId });
+    if (cache.contains(_id)) {
+      cache.get(_id).ticket.log_channel = channelId;
+    }
   },
 
   setTicketLimit: async (_id, limit) => {
-    await Model.updateOne({ _id }, { "ticket.limit": limit }).then(cache.remove(_id));
+    await Model.updateOne({ _id }, { "ticket.limit": limit });
+    if (cache.contains(_id)) {
+      cache.get(_id).ticket.limit = limit;
+    }
   },
 
-  maxStrikes: async (_id, strikes) => Model.updateOne({ _id }, { "automod.strikes": strikes }).then(cache.remove(_id)),
+  maxStrikes: async (_id, strikes) => {
+    await Model.updateOne({ _id }, { "automod.strikes": strikes });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.strikes = strikes;
+    }
+  },
 
-  automodAction: async (_id, action) => Model.updateOne({ _id }, { "automod.action": action }).then(cache.remove(_id)),
+  automodAction: async (_id, action) => {
+    await Model.updateOne({ _id }, { "automod.action": action });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.action = action;
+    }
+  },
 
-  automodDebug: async (_id, status) => Model.updateOne({ _id }, { "automod.debug": status }).then(cache.remove(_id)),
+  automodDebug: async (_id, status) => {
+    await Model.updateOne({ _id }, { "automod.debug": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.debug = status;
+    }
+  },
 
-  antiLinks: async (_id, status) => Model.updateOne({ _id }, { "automod.anti_links": status }).then(cache.remove(_id)),
+  antiLinks: async (_id, status) => {
+    await Model.updateOne({ _id }, { "automod.anti_links": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.anti_links = status;
+    }
+  },
 
-  antiScam: async (_id, status) => Model.updateOne({ _id }, { "automod.anti_scam": status }).then(cache.remove(_id)),
+  antiScam: async (_id, status) => {
+    await Model.updateOne({ _id }, { "automod.anti_scam": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.anti_scam = status;
+    }
+  },
 
-  antiInvites: async (_id, status) =>
-    Model.updateOne({ _id }, { "automod.anti_invites": status }).then(cache.remove(_id)),
+  antiInvites: async (_id, status) => {
+    await Model.updateOne({ _id }, { "automod.anti_invites": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.anti_invites = status;
+    }
+  },
 
-  antiGhostPing: async (_id, status) =>
-    Model.updateOne({ _id }, { "automod.anti_ghostping": status }).then(cache.remove(_id)),
+  antiGhostPing: async (_id, status) => {
+    await Model.updateOne({ _id }, { "automod.anti_ghostping": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.anti_ghostping = status;
+    }
+  },
 
-  maxMentions: async (_id, amount) =>
-    Model.updateOne({ _id }, { "automod.max_mentions": amount }).then(cache.remove(_id)),
+  maxMentions: async (_id, amount) => {
+    await Model.updateOne({ _id }, { "automod.max_mentions": amount });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.max_mentions = amount;
+    }
+  },
 
-  maxRoleMentions: async (_id, amount) =>
-    Model.updateOne({ _id }, { "automod.max_role_mentions": amount }).then(cache.remove(_id)),
+  maxRoleMentions: async (_id, amount) => {
+    await Model.updateOne({ _id }, { "automod.max_role_mentions": amount });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.max_role_mentions = amount;
+    }
+  },
 
-  maxLines: async (_id, amount) => Model.updateOne({ _id }, { "automod.max_lines": amount }).then(cache.remove(_id)),
+  maxLines: async (_id, amount) => {
+    await Model.updateOne({ _id }, { "automod.max_lines": amount });
+    if (cache.contains(_id)) {
+      cache.get(_id).automod.max_lines = amount;
+    }
+  },
 
   inviteTracking: async (_id, status) => {
-    Model.updateOne({ _id }, { $set: { "invite.tracking": status } }).then(cache.remove(_id));
+    await Model.updateOne({ _id }, { "invite.tracking": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).invite.tracking = status;
+    }
   },
 
-  addInviteRank: async (_id, roleId, invites) =>
-    Model.updateOne(
-      { _id },
-      {
-        $push: {
-          "invite.ranks": {
-            _id: roleId,
-            invites,
-          },
-        },
-      }
-    ).then(cache.remove(_id)),
+  addInviteRank: async (_id, roleId, invites) => {
+    const toPush = {
+      _id: roleId,
+      invites,
+    };
 
-  removeInviteRank: async (_id, roleId) =>
-    Model.updateOne({ _id }, { $pull: { "invite.ranks": { _id: roleId } } }).then(cache.remove(_id)),
+    await Model.updateOne({ _id }, { $push: { "invite.ranks": toPush } });
+    if (cache.contains(_id)) {
+      cache.get(_id).invite.ranks.push(toPush);
+    }
+  },
 
-  registerGuild,
-
-  updateGuildLeft: async (guild) => {
-    await Model.updateOne({ _id: guild.id }, { "data.leftAt": new Date() }).then(cache.remove(guild.id));
+  removeInviteRank: async (_id, roleId) => {
+    await Model.updateOne({ _id }, { $pull: { "invite.ranks": { _id: roleId } } });
+    cache.remove(_id);
   },
 
   flagTranslation: async (_id, status) => {
-    await Model.updateOne({ _id }, { $set: { "flag_translation.enabled": status } }).then(cache.remove(_id));
+    await Model.updateOne({ _id }, { "flag_translation.enabled": status });
+    if (cache.contains(_id)) {
+      cache.get(_id).flag_translation.enabled = status;
+    }
   },
 
   setFlagTrChannels: async (_id, channels) => {
-    await Model.updateOne({ _id }, { "flag_translation.channels": channels }).then(cache.remove(_id));
+    await Model.updateOne({ _id }, { "flag_translation.channels": channels });
+    if (cache.contains(_id)) {
+      cache.get(_id).flag_translation.channels = channels;
+    }
   },
 
-  modLogChannel: async (_id, channelId) =>
-    Model.updateOne({ _id }, { modlog_channel: channelId }).then(cache.remove(_id)),
+  modLogChannel: async (_id, channelId) => {
+    await Model.updateOne({ _id }, { modlog_channel: channelId });
+    if (cache.contains(_id)) {
+      cache.get(_id).modlog_channel = channelId;
+    }
+  },
+
+  maxWarnings: async (_id, amount) => {
+    await Model.updateOne({ _id }, { max_warnings: amount });
+    if (cache.contains(_id)) {
+      cache.get(_id).max_warnings = amount;
+    }
+  },
+
+  maxWarnAction: async (_id, action) => {
+    await Model.updateOne({ _id }, { max_warn_action: action });
+    if (cache.contains(_id)) {
+      cache.get(_id).max_warn_action = action;
+    }
+  },
 };

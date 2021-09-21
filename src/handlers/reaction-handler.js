@@ -94,12 +94,16 @@ async function handleFlagReaction(emoji, message, user) {
 
     let src;
     let desc = "";
+    let translated = 0;
     for (const tc of targetCodes) {
       const response = await translate(message.content, tc);
-      if (!response.success) continue;
+      if (!response) continue;
       src = response.inputLang;
       desc += `**${response.outputLang}:**\n${response.output}\n\n`;
+      translated += 1;
     }
+
+    if (translated === 0) return;
 
     const head = `Original Message: [here](${message.url})\nSource Language: ${src}\n\n`;
     const embed = new MessageEmbed()

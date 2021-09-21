@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { setupMutedRole, canInteract, muteTarget } = require("@utils/modUtils");
+const { setupMutedRole, canInteract, addModAction } = require("@utils/modUtils");
 const { getRoleByName, resolveMember } = require("@utils/guildUtils");
 const { Message } = require("discord.js");
 
@@ -81,7 +81,7 @@ async function muteSetup(message) {
 
 async function mute(message, target, reason) {
   if (!canInteract(message.member, target, "mute", message.channel)) return;
-  const status = await muteTarget(message.member, target, reason);
+  const status = await addModAction(message.member, target, reason, "MUTE");
   if (status === "ALREADY_MUTED") return message.channel.send(`${target.user.tag} is already muted`);
   if (status) message.channel.send(`${target.user.tag} is now muted on this server`);
   else message.channel.send(`Failed to add muted role to ${target.user.tag}`);

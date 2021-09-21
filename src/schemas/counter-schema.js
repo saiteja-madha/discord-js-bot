@@ -31,54 +31,73 @@ module.exports = {
     return config;
   },
 
-  setTotalCountChannel: async (guildId, channelId, name) =>
-    Model.updateOne(
+  getCounterGuilds: async () => Model.find().select("_id").lean({ defaults: true }),
+
+  setTotalCountChannel: async (guildId, channelId, name) => {
+    await Model.updateOne(
       { _id: guildId },
       {
-        _id: guildId,
         tc_channel: channelId,
         tc_name: name,
       },
       { upsert: true }
-    ).then(cache.remove(guildId)),
+    );
 
-  setMemberCountChannel: async (guildId, channelId, name) =>
-    Model.updateOne(
+    if (cache.contains(guildId)) {
+      const config = cache.get(guildId);
+      config.tc_channel = channelId;
+      config.tc_name = name;
+    }
+  },
+
+  setMemberCountChannel: async (guildId, channelId, name) => {
+    await Model.updateOne(
       { _id: guildId },
       {
-        _id: guildId,
         mc_channel: channelId,
         mc_name: name,
       },
       { upsert: true }
-    ).then(cache.remove(guildId)),
+    );
 
-  setBotCountChannel: async (guildId, channelId, name) =>
-    Model.updateOne(
+    if (cache.contains(guildId)) {
+      const config = cache.get(guildId);
+      config.mc_channel = channelId;
+      config.mc_name = name;
+    }
+  },
+
+  setBotCountChannel: async (guildId, channelId, name) => {
+    await Model.updateOne(
       { _id: guildId },
       {
-        _id: guildId,
         bc_channel: channelId,
         bc_name: name,
       },
       { upsert: true }
-    ).then(cache.remove(guildId)),
-
-  updateBotCount: async (guildId, count, isIncrement = false) => {
-    if (isIncrement) {
-      return Model.updateOne(
-        { _id: guildId },
-        {
-          _id: guildId,
-          $inc: { bot_count: count },
-        },
-        { upsert: true }
-      ).then(cache.remove(guildId));
-    }
-    return Model.updateOne({ _id: guildId }, { _id: guildId, bot_count: count }, { upsert: true }).then(
-      cache.remove(guildId)
     );
+
+    if (cache.contains(guildId)) {
+      const config = cache.get(guildId);
+      config.bc_channel = channelId;
+      config.bc_name = name;
+    }
   },
 
-  getCounterGuilds: async () => Model.find().select("_id").lean({ defaults: true }),
+  updateBotCount: async (guildId, count, isIncrement = false) => {
+    // Increment Count
+    if (isIncrement) {
+      await Model.updateOne({ _id: guildId }, { $inc: { bot_count: count } }, { upsert: true });
+      if (cache.contains(guildId)) {
+        cache.get(guildId).bot_count += count;
+      }
+    }
+    // Update Count
+    else {
+      await Model.updateOne({ _id: guildId }, { bot_count: count }, { upsert: true });
+      if (cache.contains(guildId)) {
+        cache.get(guildId).bot_count = count;
+      }
+    }
+  },
 };

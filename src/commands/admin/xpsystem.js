@@ -11,6 +11,7 @@ module.exports = class XPSystem extends Command {
         enabled: true,
         usage: "<ON|OFF>",
         minArgsCount: 1,
+        aliases: ["xptracking"],
         category: "ADMIN",
         userPermissions: ["ADMINISTRATOR"],
       },

@@ -1,6 +1,6 @@
 const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
-const { canInteract, softbanTarget } = require("@utils/modUtils");
+const { canInteract, addModAction } = require("@utils/modUtils");
 const { Message } = require("discord.js");
 
 module.exports = class SoftBan extends Command {
@@ -47,7 +47,7 @@ module.exports = class SoftBan extends Command {
 
 async function softban(message, target, reason) {
   if (!canInteract(message.member, target, "softban", message.channel)) return;
-  const status = await softbanTarget(message.member, target, reason);
+  const status = await addModAction(message.member, target, reason, "SOFTBAN");
   if (status) message.channel.send(`${target.user.tag} is soft-banned from this server`);
   else message.channel.send(`Failed to softban ${target.user.tag}`);
 }

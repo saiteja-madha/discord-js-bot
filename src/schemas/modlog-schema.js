@@ -82,4 +82,11 @@ module.exports = {
       },
       { "data.current": false }
     ),
+
+  getWarnings: async (guildId, targetId) =>
+    Model.find({
+      guild_id: guildId,
+      member_id: targetId,
+      type: "WARN",
+    }),
 };
