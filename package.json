@@ -24,6 +24,8 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "ffmpeg-static": "^4.4.0",
+    "fixedsize-map": "^1.0.1",
     "fs": "0.0.1-security",
     "iso-639-1": "^2.1.9",
     "module-alias": "^2.2.2",
