@@ -1,7 +1,10 @@
-# 🤖 Description
+<img width="200" height="200" align="left" style="float: left; margin: 0 10px 0 0;" alt="Karma" src="https://cdn.discordapp.com/avatars/752922609733337190/e33accb1135c9084f69d503e17bb4290.png?size=1024"> 
 
-An awesome multipurpose discord bot built using discord.js v13 with support for slash commands<br>
-Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=752922609733337190&permissions=8&scope=bot%20applications.commands)
+# Strange Bot 🤖
+
+> An awesome multipurpose discord bot build using [discord.js v13](https://discord.js.org) with support for slash commands and context menus
+
+> Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=752922609733337190&permissions=8&scope=bot%20applications.commands)
 
 ## Requirements
 
