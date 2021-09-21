@@ -33,7 +33,7 @@ module.exports = class UserInfo extends Command {
         ],
       },
       contextMenu: {
-        enabled: true,
+        enabled: false,
         type: "USER",
       },
     });

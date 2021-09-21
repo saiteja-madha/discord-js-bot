@@ -35,6 +35,8 @@ module.exports = {
     });
   },
 
+  getReactionRole: (guildId, channelId, messageId) => cache.get(getKey(guildId, channelId, messageId)),
+
   addReactionRole: async (guildId, channelId, messageId, emote, roleId) => {
     const filter = {
       guild_id: guildId,
@@ -70,6 +72,4 @@ module.exports = {
     await Model.deleteOne(filter);
     cache.delete(getKey(guildId, channelId, messageId));
   },
-
-  getReactionRole: (guildId, channelId, messageId) => cache.get(getKey(guildId, channelId, messageId)),
 };

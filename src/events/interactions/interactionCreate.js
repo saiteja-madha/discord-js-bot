@@ -32,8 +32,12 @@ module.exports = async (client, interaction) => {
     await interaction.deferReply({ ephemeral: command.slashCommand.ephemeral }).catch(() => {});
 
     // Run the event
-    await command.interactionRun(interaction, interaction.options);
-    command.applyCooldown(interaction.user.id);
+    try {
+      await command.interactionRun(interaction, interaction.options);
+      command.applyCooldown(interaction.user.id);
+    } catch {
+      interaction.deferReply("Oops! An error occurred while running the command");
+    }
   }
 
   // Context Menu
@@ -61,7 +65,11 @@ module.exports = async (client, interaction) => {
     await interaction.deferReply({ ephemeral: command.contextMenu.ephemeral }).catch(() => {});
 
     // Run the event
-    await command.contextRun(interaction, interaction.options);
-    command.applyCooldown(interaction.user.id);
+    try {
+      await command.contextRun(interaction, interaction.options);
+      command.applyCooldown(interaction.user.id);
+    } catch {
+      interaction.deferReply("Oops! An error occurred while running the command");
+    }
   }
 };

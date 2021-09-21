@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { canInteract, unmuteTarget } = require("@utils/modUtils");
+const { canInteract, addModAction } = require("@utils/modUtils");
 const { getRoleByName, resolveMember } = require("@utils/guildUtils");
 const { Message } = require("discord.js");
 
@@ -54,7 +54,7 @@ module.exports = class UnmuteCommand extends Command {
 
 async function unmute(message, target, reason) {
   if (!canInteract(message.member, target, "unmute", message.channel)) return;
-  const status = await unmuteTarget(message.member, target, reason);
+  const status = await addModAction(message.member, target, reason, "UNMUTE");
   if (status === "NOT_MUTED") return message.channel.send(`${target.user.tag} is not muted`);
   if (status) message.channel.send(`${target.user.tag} is unmuted`);
   else message.channel.send(`Failed to unmute ${target.user.tag}`);

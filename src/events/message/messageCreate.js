@@ -41,11 +41,13 @@ module.exports = async (client, message) => {
  * @param {Message} message
  */
 async function xpHandler(message) {
-  const key = `${message.guild.id}|${message.member.id}`;
+  const key = `${message.guildId}|${message.member.id}`;
+
+  // Ignore possible bot commands
 
   // Cooldown check to prevent Message Spamming
   if (message.client.xpCooldownCache.has(key)) {
-    const difference = Date.now() - message.client.xpCooldownCache.get(key) / 0.001;
+    const difference = Date.now() - message.client.xpCooldownCache.get(key) * 0.001;
     if (difference < message.client.config.XP_SYSTEM.COOLDOWN) {
       return incrementMessages(message.guildId, message.member.id); // if on cooldown only increment messages
     }

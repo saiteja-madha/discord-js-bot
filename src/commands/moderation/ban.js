@@ -1,6 +1,6 @@
 const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
-const { canInteract, banTarget } = require("@utils/modUtils");
+const { canInteract, addModAction } = require("@utils/modUtils");
 const { Message } = require("discord.js");
 
 module.exports = class BanCommand extends Command {
@@ -47,7 +47,7 @@ module.exports = class BanCommand extends Command {
 
 async function ban(message, target, reason) {
   if (!canInteract(message.member, target, "ban", message.channel)) return;
-  const status = await banTarget(message.member, target, reason);
+  const status = await addModAction(message.member, target, reason, "BAN");
   if (status) message.channel.send(`${target.user.tag} is banned from this server`);
   else message.channel.send(`Failed to ban ${target.user.tag}`);
 }

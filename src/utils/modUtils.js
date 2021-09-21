@@ -3,6 +3,7 @@ const { sendMessage } = require("@utils/botUtils");
 const { containsLink, timeformat } = require("@utils/miscUtils");
 const { addModLogToDb, removeMutes, getMuteInfo } = require("@schemas/modlog-schema");
 const { getSettings } = require("@schemas/guild-schema");
+const { addWarnings } = require("@schemas/profile-schema");
 const { EMOJIS, EMBED_COLORS } = require("@root/config");
 const { getRoleByName } = require("./guildUtils");
 
@@ -145,6 +146,33 @@ async function purgeMessages(message, type, amount, argument) {
       channel: message.channel,
       deletedCount: deletedMessages.size,
     });
+  }
+}
+
+/**
+ * warns the target and logs to the database, channel
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ */
+async function warnTarget(issuer, target, reason) {
+  const { guild } = issuer;
+  if (!memberInteract(guild.me, target)) return;
+
+  try {
+    await logModeration(issuer, target, reason, "Warn");
+    const profile = await addWarnings(guild.id, target.id, 1);
+    const settings = await getSettings(guild);
+
+    // check if max warnings are reached
+    if (profile.warnings > settings.max_warnings) {
+      await addModAction(guild.me, target, "Max warnings reached", settings.max_warn_action); // moderate
+      await addWarnings(guild.id, target.id, -profile.warnings); // reset warnings
+    }
+    return true;
+  } catch (ex) {
+    console.log(ex);
+    return false;
   }
 }
 
@@ -341,15 +369,47 @@ async function logModeration(issuer, target, reason, type, data = {}) {
   sendMessage(logChannel, { embeds: [embed] });
 }
 
+/**
+ *
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ * @param {"WARN"|"MUTE"|"UNMUTE"|"KICK"|"SOFTBAN"|"BAN"} action
+ */
+async function addModAction(issuer, target, reason, action) {
+  switch (action) {
+    case "WARN":
+      await warnTarget(issuer, target, reason);
+      break;
+
+    case "MUTE":
+      await muteTarget(issuer, target, reason);
+      break;
+
+    case "UNMUTE":
+      await unmuteTarget(issuer, target, reason);
+      break;
+
+    case "KICK":
+      await kickTarget(issuer, target, reason);
+      break;
+
+    case "SOFTBAN":
+      await softbanTarget(issuer, target, reason);
+      break;
+
+    case "BAN":
+      await banTarget(issuer, target, reason);
+      break;
+  }
+
+  return true;
+}
+
 module.exports = {
   memberInteract,
   canInteract,
   setupMutedRole,
   purgeMessages,
-  muteTarget,
-  unmuteTarget,
-  kickTarget,
-  softbanTarget,
-  banTarget,
-  logModeration,
+  addModAction,
 };
