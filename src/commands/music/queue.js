@@ -35,8 +35,12 @@ module.exports = class Skip extends Command {
 
     const embed = new MessageEmbed()
       .setTitle(`Music Queue`)
-      .setDescription(`${tracks.join('\n')}${queue.tracks.length > pageEnd ? `\n...${queue.tracks.length - pageEnd} more track(s)` : ''}`)
-      .addField('Now Playing', `🎶 | **${currentTrack.title}** ([link](${currentTrack.url}))`);
+      .setDescription(
+        `${tracks.join("\n")}${
+          queue.tracks.length > pageEnd ? `\n...${queue.tracks.length - pageEnd} more track(s)` : ""
+        }`
+      )
+      .addField("Now Playing", `🎶 | **${currentTrack.title}** ([link](${currentTrack.url}))`);
     return message.channel.send({ embeds: [embed] });
   }
 };
