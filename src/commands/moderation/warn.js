@@ -17,6 +17,7 @@ module.exports = class Warn extends Command {
       },
       contextMenu: {
         enabled: true,
+        userPermissions: ["KICK_MEMBERS"],
         type: "USER",
       },
     });
