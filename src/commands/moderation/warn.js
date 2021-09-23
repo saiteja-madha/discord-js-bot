@@ -54,7 +54,7 @@ module.exports = class Warn extends Command {
   async contextRun(interaction) {
     const target = (await interaction.guild.members.fetch(interaction.targetId)) || interaction.member;
     if (!canInteract(interaction.member, target, "warn")) {
-      interaction.followUp("Missing permission to warn this member");
+      return interaction.followUp("Missing permission to warn this member");
     }
     let status = await addModAction(interaction.member, target, "", "WARN");
     if (status) interaction.followUp(`${target.user.tag} is warned by ${interaction.member.user.tag}`);

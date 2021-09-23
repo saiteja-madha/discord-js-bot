@@ -59,7 +59,7 @@ module.exports = async (client, interaction) => {
 
     // Permission check
     if (!interaction.member.permissions.has(command.contextMenu.userPermissions || [])) {
-      interaction.reply({
+      return interaction.reply({
         content: `You do not have enough permissions to use this command`,
         ephemeral: true,
       });
