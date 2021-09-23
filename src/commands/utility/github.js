@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
 const { MESSAGES } = require("@root/config.js");
-const { getResponse } = require("@utils/httpUtils");
+const { getJson } = require("@utils/httpUtils");
 const outdent = require("outdent");
 
 module.exports = class GithubCommand extends Command {
@@ -28,8 +28,8 @@ module.exports = class GithubCommand extends Command {
   async messageRun(message, args) {
     const { author } = message;
 
-    const response = await getResponse(`https://api.github.com/users/${args}`);
-    if (response.status === 400) return message.reply("```No user found with that name```");
+    const response = await getJson(`https://api.github.com/users/${args}`);
+    if (response.status === 404) return message.reply("```No user found with that name```");
     if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
     const json = response.data;

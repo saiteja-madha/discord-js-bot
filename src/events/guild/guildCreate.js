@@ -8,7 +8,7 @@ const { registerGuild } = require("@schemas/guild-schema");
  */
 module.exports = async (client, guild) => {
   if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
-  console.log(`Guild Joined: ${guild.name} Members: ${guild.memberCount}`);
+  client.logger.log(`Guild Joined: ${guild.name} Members: ${guild.memberCount}`);
   await registerGuild(guild);
 
   if (!client.joinLeaveWebhook) return;

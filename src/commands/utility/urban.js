@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getResponse } = require("@utils/httpUtils");
+const { getJson } = require("@utils/httpUtils");
 const moment = require("moment");
 
 module.exports = class UrbanCommand extends Command {
@@ -36,7 +36,7 @@ module.exports = class UrbanCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await getResponse(`http://api.urbandictionary.com/v0/define?term=${args}`);
+    const response = await getJson(`http://api.urbandictionary.com/v0/define?term=${args}`);
     if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
     const json = response.data;
@@ -53,7 +53,7 @@ module.exports = class UrbanCommand extends Command {
   async interactionRun(interaction, options) {
     const word = options.getString("word");
 
-    const response = await getResponse(`http://api.urbandictionary.com/v0/define?term=${word}`);
+    const response = await getJson(`http://api.urbandictionary.com/v0/define?term=${word}`);
     if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
 
     const json = response.data;

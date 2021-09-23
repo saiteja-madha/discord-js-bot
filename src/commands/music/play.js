@@ -36,7 +36,7 @@ module.exports = class Play extends Command {
         searchEngine: QueryType.AUTO,
       });
     } catch (ex) {
-      console.log(ex);
+      this.client.logger.error("Music Play", ex);
       message.channel.send("Failed to fetch results");
     }
 

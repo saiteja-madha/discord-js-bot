@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
 const { EMOJIS, MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getResponse } = require("@utils/httpUtils");
+const { getJson } = require("@utils/httpUtils");
 const outdent = require("outdent");
 
 module.exports = class Pokedex extends Command {
@@ -36,7 +36,7 @@ module.exports = class Pokedex extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await getResponse(`https://pokeapi.glitch.me/v1/pokemon/${args}`);
+    const response = await getJson(`https://pokeapi.glitch.me/v1/pokemon/${args}`);
     if (response.status === 404) return message.reply("```The given pokemon is not found```");
     if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
@@ -54,7 +54,7 @@ module.exports = class Pokedex extends Command {
   async interactionRun(interaction, options) {
     const pokemon = options.getString("pokemon");
 
-    const response = await getResponse(`https://pokeapi.glitch.me/v1/pokemon/${pokemon}`);
+    const response = await getJson(`https://pokeapi.glitch.me/v1/pokemon/${pokemon}`);
     if (response.status === 404) return interaction.followUp("```The given pokemon is not found```");
     if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
 

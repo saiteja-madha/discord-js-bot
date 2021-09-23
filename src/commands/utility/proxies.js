@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
-const { getResponse } = require("@utils/httpUtils");
-const { Message } = require("discord.js");
+const { getBuffer } = require("@utils/httpUtils");
+const { Message, MessageAttachment } = require("discord.js");
 
 const PROXY_TYPES = ["all", "http", "socks4", "socks5"];
 
@@ -32,25 +32,16 @@ module.exports = class ProxiesCommand extends Command {
       else return message.reply("Incorrect proxy type. Available types: `http`, `socks4`, `socks5`");
     }
 
-    message.channel.send("Fetching proxies... Please wait").then(async (msg) => {
-      const response = await getResponse(
-        `https://api.proxyscrape.com/?request=displayproxies&proxytype=${type}&timeout=10000&country=all&anonymity=all&ssl=all`
-      );
+    const msg = await message.channel.send("Fetching proxies... Please wait");
+    const response = await getBuffer(
+      `https://api.proxyscrape.com/?request=displayproxies&proxytype=${type}&timeout=10000&country=all&anonymity=all&ssl=all`
+    );
 
-      if (!response.status) message.reply("Failed to fetch proxies");
-      if (response.data.length === 0) message.reply("Could not fetch data. Try again later");
+    if (!response.success || !response.buffer) message.reply("Failed to fetch proxies");
+    if (response.buffer.length === 0) message.reply("Could not fetch data. Try again later");
 
-      msg.delete().then(async () => {
-        message.reply({
-          content: `${type.toUpperCase()} Proxies fetched`,
-          files: [
-            {
-              name: `${type.toLowerCase()}_proxies.txt`,
-              attachment: Buffer.from(response.data),
-            },
-          ],
-        });
-      });
-    });
+    const attachment = new MessageAttachment(response.buffer, `${type.toLowerCase()}_proxies.txt`);
+    if (msg.deletable) await msg.delete();
+    message.reply({ content: `${type.toUpperCase()} Proxies fetched`, files: [attachment] });
   }
 };

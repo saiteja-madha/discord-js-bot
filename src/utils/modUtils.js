@@ -6,6 +6,7 @@ const { getSettings } = require("@schemas/guild-schema");
 const { addWarnings } = require("@schemas/profile-schema");
 const { EMOJIS, EMBED_COLORS } = require("@root/config");
 const { getRoleByName } = require("./guildUtils");
+const { error, debug } = require("../helpers/logger");
 
 /**
  * @param {GuildMember} issuer
@@ -74,7 +75,7 @@ async function setupMutedRole(guild) {
       }
     });
   } catch (ex) {
-    console.log(`Muted Role Creation Error: ${ex}`);
+    error("setupMutedRole", ex);
   }
   return mutedRole;
 }
@@ -134,7 +135,7 @@ async function purgeMessages(message, type, amount, argument) {
   try {
     deletedMessages = await channel.bulkDelete(toDelete, true);
   } catch (ex) {
-    console.log(ex);
+    error("purgeMessages", ex);
     sendMessage(channel, "Purge failed");
   }
 
@@ -171,7 +172,7 @@ async function warnTarget(issuer, target, reason) {
     }
     return true;
   } catch (ex) {
-    console.log(ex);
+    error("warnTarget", ex);
     return false;
   }
 }
@@ -216,7 +217,7 @@ async function muteTarget(issuer, target, reason) {
     await logModeration(issuer, target, reason, "Mute", { isPermanent: true });
     return true;
   } catch (ex) {
-    console.log(ex);
+    error("muteTarget", ex);
     return false;
   }
 }
@@ -240,7 +241,7 @@ async function unmuteTarget(issuer, target, reason) {
     await logModeration(issuer, target, reason, "Unmute");
     return true;
   } catch (ex) {
-    console.log(ex);
+    error("unmuteTarget", ex);
     return false;
   }
 }
@@ -258,7 +259,7 @@ async function kickTarget(issuer, target, reason) {
     await logModeration(issuer, target, reason, "Kick");
     return true;
   } catch (ex) {
-    console.log(ex);
+    error("kickTarget", ex);
     return false;
   }
 }
@@ -277,7 +278,7 @@ async function softbanTarget(issuer, target, reason) {
     await logModeration(issuer, target, reason, "Softban");
     return true;
   } catch (ex) {
-    console.log(ex);
+    error("softbanTarget", ex);
     return false;
   }
 }
@@ -298,7 +299,7 @@ async function banTarget(issuer, target, reason) {
     await logModeration(issuer, target, reason, "Ban");
     return true;
   } catch (ex) {
-    console.log(ex);
+    error(`banTarget`, ex);
     return false;
   }
 }

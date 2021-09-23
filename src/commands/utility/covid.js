@@ -1,7 +1,7 @@
 const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
 const { Command } = require("@src/structures");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getResponse } = require("@utils/httpUtils");
+const { getJson } = require("@utils/httpUtils");
 const timestampToDate = require("timestamp-to-date");
 
 module.exports = class CovidCommand extends Command {
@@ -37,7 +37,7 @@ module.exports = class CovidCommand extends Command {
    */
   async messageRun(message, args) {
     const country = args[0];
-    const response = await getResponse(`https://disease.sh/v2/countries/${country}`);
+    const response = await getJson(`https://disease.sh/v2/countries/${country}`);
 
     if (response.status === 404) return message.reply("```css\nCountry with the provided name is not found```");
     if (!response.success) return message.reply(MESSAGES.API_ERROR);
@@ -52,7 +52,7 @@ module.exports = class CovidCommand extends Command {
    */
   async interactionRun(interaction, options) {
     const country = options.getString("country");
-    const response = await getResponse(`https://disease.sh/v2/countries/${country}`);
+    const response = await getJson(`https://disease.sh/v2/countries/${country}`);
 
     if (response.status === 404) return interaction.followUp("```css\nCountry with the provided name is not found```");
     if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
