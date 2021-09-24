@@ -227,7 +227,7 @@ async function unmuteTarget(issuer, target, reason) {
   let mutedRole = getRoleByName(issuer.guild, "muted");
   try {
     await removeMutes(issuer.guild.id, target.id);
-    if (target.roles.cache.has(mutedRole)) await target.roles.remove(mutedRole);
+    if (hasMutedRole(target)) await target.roles.remove(mutedRole);
     await logModeration(issuer, target, reason, "Unmute");
     return true;
   } catch (ex) {
