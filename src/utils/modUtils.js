@@ -198,21 +198,12 @@ async function muteTarget(issuer, target, reason) {
   const previousMute = await getMuteInfo(issuer.guild.id, target.id);
 
   if (previousMute) {
-    // maybe role was manually removed (so delete mute data)
-    if (!hasMutedRole(target)) await removeMutes(target.guild.id, target.id);
-    else {
-      if (previousMute.data?.isPermanent) {
-        return "ALREADY_MUTED"; // already muted
-      }
-
-      if (previousMute.data?.expires) {
-        await removeMutes(target.guild.id, target.id);
-      }
-    }
+    if (previousMute.data?.isPermanent && hasMutedRole(target)) return "ALREADY_MUTED"; // already muted
+    await removeMutes(target.guild.id, target.id); // remove existing tempmute data
   }
 
   try {
-    await target.roles.add(mutedRole);
+    if (!hasMutedRole(target)) await target.roles.add(mutedRole);
     await logModeration(issuer, target, reason, "Mute", { isPermanent: true });
     return true;
   } catch (ex) {
@@ -379,31 +370,23 @@ async function logModeration(issuer, target, reason, type, data = {}) {
 async function addModAction(issuer, target, reason, action) {
   switch (action) {
     case "WARN":
-      await warnTarget(issuer, target, reason);
-      break;
+      return await warnTarget(issuer, target, reason);
 
     case "MUTE":
-      await muteTarget(issuer, target, reason);
-      break;
+      return await muteTarget(issuer, target, reason);
 
     case "UNMUTE":
-      await unmuteTarget(issuer, target, reason);
-      break;
+      return await unmuteTarget(issuer, target, reason);
 
     case "KICK":
-      await kickTarget(issuer, target, reason);
-      break;
+      return await kickTarget(issuer, target, reason);
 
     case "SOFTBAN":
-      await softbanTarget(issuer, target, reason);
-      break;
+      return await softbanTarget(issuer, target, reason);
 
     case "BAN":
-      await banTarget(issuer, target, reason);
-      break;
+      return await banTarget(issuer, target, reason);
   }
-
-  return true;
 }
 
 module.exports = {
