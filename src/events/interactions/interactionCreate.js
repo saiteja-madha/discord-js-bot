@@ -16,6 +16,14 @@ module.exports = async (client, interaction) => {
     // get the slash command
     const command = client.slashCommands.get(interaction.commandName);
 
+    // Permission check
+    if (!interaction.member.permissions.has(command.slashCommand.userPermissions || [])) {
+      interaction.reply({
+        content: `You do not have enough permissions to use this command`,
+        ephemeral: true,
+      });
+    }
+
     // cooldown check
     if (command.cooldown > 0) {
       const remaining = command.getRemainingCooldown(interaction.member.id);
@@ -48,6 +56,14 @@ module.exports = async (client, interaction) => {
 
     // get the context menu
     const command = client.contextMenus.get(interaction.commandName);
+
+    // Permission check
+    if (!interaction.member.permissions.has(command.contextMenu.userPermissions || [])) {
+      return interaction.reply({
+        content: `You do not have enough permissions to use this command`,
+        ephemeral: true,
+      });
+    }
 
     // cooldown check
     if (command.cooldown > 0) {
