@@ -1,15 +1,16 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
-const { BOT_INVITE, SUPPORT_SERVER, EMBED_COLORS } = require("@root/config.js");
+const { BOT_INVITE, SUPPORT_SERVER, DASH_URL, EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class BotInviteCommand extends Command {
   constructor(client) {
     super(client, {
-      name: "botinvite",
+      name: "invite",
       description: "get the bot's invite",
       command: {
         enabled: true,
         category: "INFORMATION",
+        aliases: ["dashboard", "support", "dash", "inv"],
       },
     });
   }
@@ -21,7 +22,8 @@ module.exports = class BotInviteCommand extends Command {
   async messageRun(message, args) {
     let desc = "";
     desc += `Support Server: [Join here](${SUPPORT_SERVER})\n`;
-    desc += `Invite Link: [Add me here](${BOT_INVITE})`;
+    desc += `Invite Link: [Add me here](${BOT_INVITE})\n`;
+    desc += `Dashboard Link: [View My Dashboard Here!](${DASH_URL})`;
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
@@ -30,10 +32,10 @@ module.exports = class BotInviteCommand extends Command {
 
     try {
       await message.author.send({ embeds: [embed] });
-      message.reply("Check your DM for my invite :envelope_with_arrow:");
+      message.reply("Check your DM for my information! :envelope_with_arrow:");
     } catch (ex) {
       console.log(ex);
-      message.reply("I cannot send you an invite! Is your DM open?");
+      message.reply("I cannot send you my information! Is your DM open?");
     }
   }
 };
