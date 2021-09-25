@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
+    "aki-api": "^6.0.8",
     "ascii-table": "0.0.9",
     "axios": "^0.21.1",
     "btoa": "^1.2.1",
@@ -37,6 +38,7 @@
     "node-fetch": "^2.6.1",
     "os": "^0.1.2",
     "outdent": "^0.8.0",
+    "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^13.1.0"
