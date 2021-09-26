@@ -259,7 +259,7 @@ class Command {
         this.client.cmdCooldownCache.delete(key);
         return 0;
       }
-      return remaining;
+      return this.cooldown - remaining;
     }
     return 0;
   }
