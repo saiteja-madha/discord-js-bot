@@ -1,11 +1,14 @@
 module.exports = {
   BOT_TOKEN: "", // Your discord bot token
   MONGO_CONNECTION: "", // URI of the mongo database
-  JOIN_LEAVE_WEBHOOK: "", // Webhook to which guild join/leave details will be sent
   OWNER_IDS: [], // Bot owner ID's
   PREFIX: "!", // Default prefix for the bot
   BOT_INVITE: "", // Your bot invite link
   SUPPORT_SERVER: "", // Your bot support server
+  WEBHOOKS: {
+    ERROR_LOGS: "", // Webhook to which error logs must be sent
+    JOIN_LEAVE_LOGS: "", // Webhook to which guild join/leave details will be sent
+  },
   DASHBOARD: {
     enabled: true, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url

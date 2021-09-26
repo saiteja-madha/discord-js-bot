@@ -1,18 +1,34 @@
-const chalk = require("chalk"),
+const { MessageEmbed, WebhookClient } = require("discord.js"),
+  chalk = require("chalk"),
   moment = require("moment"),
-  simpleLogger = require("simple-node-logger").createRollingFileLogger({
-    logDirectory: "./logs",
-    fileNamePattern: "roll-<DATE>.log",
-    dateFormat: "yyyy.MM.DD",
-  });
+  nodeLogger = require("simple-node-logger"),
+  config = require("@root/config");
+
+const simpleLogger = nodeLogger.createRollingFileLogger({
+  logDirectory: "./logs",
+  fileNamePattern: "roll-<DATE>.log",
+  dateFormat: "yyyy.MM.DD",
+});
 
 simpleLogger.setLevel("debug");
 
-/**
- * @param {String} content
- * @param {"log"|"success"|"warn"|"error"|"debug"} level
- * @param {} data
- */
+const errorWebhook = config.WEBHOOKS.ERROR_LOGS ? new WebhookClient({ url: config.WEBHOOKS.ERROR_LOGS }) : undefined;
+
+const sendWebhook = (content, err) => {
+  const embed = new MessageEmbed()
+    .setColor(config.EMBED_COLORS.ERROR_EMBED)
+    .setAuthor(err.name || "Error")
+    .setDescription("```js" + err.stack + "```")
+    .addField("Description", content)
+    .addField("Name", err.name)
+    .addField("Message", err.message);
+
+  errorWebhook.send({
+    username: "Logs",
+    embeds: [embed],
+  });
+};
+
 const sendLogs = (level, content, data) => {
   const timestamp = `${moment().format("yyyy-MM-DD HH:mm:ss:SSS")}`;
 
@@ -35,6 +51,7 @@ const sendLogs = (level, content, data) => {
     case "error":
       console.log(`[${chalk.cyan(timestamp)}] [${chalk.redBright(level)}] ${content}: ${data}`);
       simpleLogger.error(data ? data : content);
+      if (errorWebhook) sendWebhook(content, data);
       break;
 
     case "debug":
