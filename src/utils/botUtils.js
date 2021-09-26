@@ -78,6 +78,7 @@ const permissions = {
   ADMINISTRATOR: "Administrator",
   MANAGE_CHANNELS: "Manage channels",
   MANAGE_GUILD: "Manage server",
+  ADD_REACTIONS: "Add Reactions",
   VIEW_AUDIT_LOG: "View audit log",
   PRIORITY_SPEAKER: "Priority speaker",
   STREAM: "Video",
