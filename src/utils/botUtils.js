@@ -1,43 +1,42 @@
 const { MessagePayload, MessageOptions, User, BaseGuildTextChannel } = require("discord.js");
-const { getResponse } = require("@utils/httpUtils");
+const { getJson } = require("@utils/httpUtils");
 const config = require("@root/config.js");
+const { success, warn, error } = require("@src/helpers/logger");
 
 async function checkForUpdates() {
-  const response = await getResponse("https://api.github.com/repos/saiteja-madha/discord-js-bot/releases/latest");
-  if (!response.success) return console.log("\x1b[31m[Version Check] - Failed to check for bot updates\x1b[0m");
+  const response = await getJson("https://api.github.com/repos/saiteja-madha/discord-js-bot/releases/latest");
+  if (!response.success) return error("VersionCheck: Failed to check for bot updates");
   if (response.data) {
     if (require("@root/package.json").version.replace(/[^0-9]/g, "") >= response.data.tag_name.replace(/[^0-9]/g, "")) {
-      console.log("\x1b[32m[Version Check] - Your discord bot is up to date\x1b[0m");
+      success("VersionCheck: Your discord bot is up to date");
     } else {
-      console.log(`\x1b[33m[Version Check] - ${response.data.tag_name} update is available\x1b[0m`);
-      console.log("\x1b[32m[Download]:\x1b[0m https://github.com/saiteja-madha/discord-js-bot/releases/latest");
+      warn(`VersionCheck: ${response.data.tag_name} update is available`);
+      warn("download: https://github.com/saiteja-madha/discord-js-bot/releases/latest");
     }
   }
 }
 
 function validateConfig() {
   if (config.BOT_TOKEN === "") {
-    console.log("\x1b[31m[config.js]\x1b[0m - BOT_TOKEN cannot be empty");
+    error("config.js: BOT_TOKEN cannot be empty");
     process.exit();
   }
   if (config.MONGO_CONNECTION === "") {
-    console.log("\x1b[31m[config.js]\x1b[0m - MONGO_CONNECTION cannot be empty");
+    error("config.js:MONGO_CONNECTION cannot be empty");
     process.exit();
   }
-  if (config.OWNER_IDS.length === 0) console.log("\x1b[33m[config.js]\x1b[0m - OWNER_IDS are empty");
-  if (!config.API.IMAGE_API) {
-    console.log("\x1b[33m[config.js]\x1b[0m - IMAGE_API is not provided. Image commands will not work");
-  }
-  if (!config.BOT_INVITE) console.log("\x1b[33m[config.js]\x1b[0m - BOT_INVITE is not provided");
-  if (!config.SUPPORT_SERVER) console.log("\x1b[33m[config.js]\x1b[0m - SUPPORT_SERVER is not provided");
   if (isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS) || isNaN(config.CACHE_SIZE.MEMBERS)) {
-    console.log("\x1b[31m[config.js]\x1b[0m - CACHE_SIZE must be a positive integer");
+    error("config.js: CACHE_SIZE must be a positive integer");
     process.exit();
   }
   if (!config.PREFIX) {
-    console.log("\x1b[31m[config.js]\x1b[0m - PREFIX cannot be empty");
+    error("config.js: PREFIX cannot be empty");
     process.exit();
   }
+  if (config.OWNER_IDS.length === 0) warn("config.js: OWNER_IDS are empty");
+  if (!config.API.IMAGE_API) warn("config.js: IMAGE_API is not provided. Image commands will not work");
+  if (!config.BOT_INVITE) warn("config.js: BOT_INVITE is not provided");
+  if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 
 async function startupCheck() {
@@ -55,7 +54,7 @@ async function sendMessage(channel, message) {
   try {
     return await channel.send(message);
   } catch (ex) {
-    console.log(`[ERROR] - [sendMessage] - ${ex.message}`);
+    error(`sendMessage`, ex);
   }
 }
 
@@ -68,7 +67,7 @@ async function safeDM(user, message) {
   try {
     return await user.send(message);
   } catch (ex) {
-    console.log(`[ERROR] - [safeDM] - ${ex.message}`);
+    error(`safeDM`, ex);
   }
 }
 

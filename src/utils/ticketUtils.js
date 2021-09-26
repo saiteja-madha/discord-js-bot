@@ -4,6 +4,7 @@ const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const outdent = require("outdent");
 const { getSettings } = require("@schemas/guild-schema");
 const { sendMessage } = require("@utils/botUtils");
+const { error } = require("@src/helpers/logger");
 
 const PERMS = [
   "VIEW_CHANNEL",
@@ -117,7 +118,7 @@ async function closeTicket(channel, closedBy, reason) {
       message: "success",
     };
   } catch (ex) {
-    console.log(ex);
+    error("closeTicket", ex);
     return {
       success: false,
       message: "Unexpected error occurred",
@@ -209,7 +210,7 @@ async function openTicket(guild, user, title, supportRole) {
     user.send({ embeds: [dmEmbed] }).catch(() => {});
     return true;
   } catch (ex) {
-    console.log(ex);
+    error("openTicket", ex);
     return false;
   }
 }

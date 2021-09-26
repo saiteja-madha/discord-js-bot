@@ -37,7 +37,6 @@ module.exports = class BotInviteCommand extends Command {
       await message.author.send({ embeds: [embed] });
       message.reply("Check your DM for my information! :envelope_with_arrow:");
     } catch (ex) {
-      console.log(ex);
       message.reply("I cannot send you my information! Is your DM open?");
     }
   }

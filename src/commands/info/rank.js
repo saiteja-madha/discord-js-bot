@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { Message, MessageAttachment } = require("discord.js");
 const { API, EMBED_COLORS } = require("@root/config");
 const { getProfile, getTop100 } = require("@schemas/profile-schema");
-const { downloadImage } = require("@utils/httpUtils");
+const { getBuffer } = require("@utils/httpUtils");
 const { getSettings } = require("@schemas/guild-schema");
 const { resolveMember } = require("@utils/guildUtils");
 
@@ -54,10 +54,10 @@ module.exports = class Rank extends Command {
     url.searchParams.append("status", message.member.presence.status.toString());
     if (pos !== -1) url.searchParams.append("rank", pos);
 
-    const rankCard = await downloadImage(url.href);
-    if (!rankCard) return message.reply("Failed to generate rank-card");
+    const response = await getBuffer(url.href);
+    if (!response.success) return message.reply("Failed to generate rank-card");
 
-    const attachment = new MessageAttachment(rankCard, "rank.png");
+    const attachment = new MessageAttachment(response.buffer, "rank.png");
     message.channel.send({ files: [attachment] });
   }
 };

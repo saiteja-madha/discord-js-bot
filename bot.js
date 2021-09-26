@@ -13,13 +13,11 @@ client.loadCommands("src/commands");
 client.loadEvents("src/events");
 
 // catch client errors and warnings
-client.on("error", (error) => console.log("Client error: ", error));
-client.on("warn", (message) => console.log("Client warning: ", message));
+client.on("error", (err) => client.logger.error(`Client Error`, err));
+client.on("warn", (message) => client.logger.warn(`Client Warning: ${message}`));
 
 // find unhandled promise rejections
-process.on("unhandledRejection", (reason) => {
-  console.log("Unhandled Rejection at: ", reason.stack || reason);
-});
+process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
 (async () => {
   await startupCheck();

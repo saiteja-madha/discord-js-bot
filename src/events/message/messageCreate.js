@@ -28,7 +28,7 @@ module.exports = async (client, message) => {
         await cmd.execute(message, args, invoke, prefix);
       } catch (ex) {
         sendMessage(message.channel, "Oops! An error occurred while running the command");
-        console.log(ex);
+        client.logger.error("messageRun", ex);
       }
     }
   }

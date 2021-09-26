@@ -5,11 +5,11 @@ const { BotClient } = require("@src/structures");
  */
 function registerPlayerEvents(client) {
   client.player.on("error", (queue, error) => {
-    console.log(`[${queue.guild.name}] Error emitted from the queue: ${error.message}`);
+    client.logger.error(`[${queue.guild.name}] Error emitted from the queue`, error);
   });
 
   client.player.on("connectionError", (queue, error) => {
-    console.log(`[${queue.guild.name}] Error emitted from the connection: ${error.message}`);
+    client.logger.error(`[${queue.guild.name}] Error emitted from the connection`, error);
   });
 
   client.player.on("trackStart", (queue, track) => {

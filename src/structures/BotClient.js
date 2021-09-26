@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const Command = require("./command");
 mongoose.plugin(require("mongoose-lean-defaults").default);
 const { Player } = require("discord-player");
+const logger = require("../helpers/logger");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -43,6 +44,9 @@ module.exports = class BotClient extends Client {
 
     // Music Player
     this.player = new Player(this);
+
+    // Logger
+    this.logger = logger;
   }
 
   /**
@@ -56,7 +60,7 @@ module.exports = class BotClient extends Client {
       useFindAndModify: false,
     });
 
-    console.log("Database connection established");
+    this.logger.success("Mongoose: Database connection established");
   }
 
   /**
@@ -81,7 +85,7 @@ module.exports = class BotClient extends Client {
             table.addRow(file, this.config.EMOJIS.TICK);
           } catch (ex) {
             table.addRow(file, this.config.EMOJIS.X_MARK);
-            console.log(ex);
+            this.logger.error("readEvent", ex);
           }
         }
       });
@@ -142,9 +146,9 @@ module.exports = class BotClient extends Client {
       });
     };
     readCommands(directory);
-    console.log(`Loaded ${this.commands.length} commands`);
-    console.log(`Loaded ${this.slashCommands.size} slash commands`);
-    console.log(`Loaded ${this.contextMenus.size} contexts`);
+    this.logger.log(`Loaded ${this.commands.length} commands`);
+    this.logger.log(`Loaded ${this.slashCommands.size} slash commands`);
+    this.logger.log(`Loaded ${this.contextMenus.size} contexts`);
   }
 
   /**
@@ -205,7 +209,7 @@ module.exports = class BotClient extends Client {
       throw new Error(`Did you provide a valid guildId to register slash commands`);
     }
 
-    console.log("Successfully registered slash commands");
+    this.logger.success("Successfully registered slash commands");
   }
 
   /**

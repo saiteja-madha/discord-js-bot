@@ -26,8 +26,8 @@ module.exports = class InvitesImportCommand extends Command {
 
     invites.forEach(async (invite) => {
       const user = invite.inviter;
-      if (!user || invite.uses === 0) return; // console.log("No inviter");
-      if (target && user.id !== target.id) return; // console.log("Skipping non user");
+      if (!user || invite.uses === 0) return; // No inviter
+      if (target && user.id !== target.id) return; // Skipping non user
       await incrementInvites(message.guild.id, user.id, "ADDED", invite.uses);
     });
 
