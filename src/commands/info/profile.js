@@ -58,12 +58,12 @@ const buildEmbed = async (guild, target) => {
     .addField("Cash", `${userData?.coins || 0} ${EMOJIS.CURRENCY}`, true)
     .addField("Bank", `${userData?.bank || 0} ${EMOJIS.CURRENCY}`, true)
     .addField("Net Worth", `${(userData?.coins || 0) + (userData?.bank || 0)}${EMOJIS.CURRENCY}`, true)
-    .addField("Messages*", `${settings.ranking.enabled ? (profile?.messages || 0) + " " : "Not Tracked"}`, true)
+    .addField("Reputation", `${userData?.reputation?.received || 0}`, true)
+    .addField("Daily Streak", `${userData?.daily?.streak || 0}`, true)
     .addField("XP*", `${settings.ranking.enabled ? (profile?.xp || 0) + " " : "Not Tracked"}`, true)
     .addField("Level*", `${settings.ranking.enabled ? (profile?.level || 0) + " " : "Not Tracked"}`, true)
     .addField("Strikes*", (profile?.strikes || 0) + " ", true)
     .addField("Warnings*", (profile?.warnings || 0) + " ", true)
-    .addField("Reputation", `${userData?.reputation?.received || 0}`, true)
     .addField("Avatar-URL", user.displayAvatarURL({ format: "png" }))
     .setFooter("Fields marked (*) are guild specific");
 };
