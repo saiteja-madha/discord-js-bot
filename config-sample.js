@@ -6,7 +6,6 @@ module.exports = {
   PREFIX: "!", // Default prefix for the bot
   BOT_INVITE: "", // Your bot invite link
   SUPPORT_SERVER: "", // Your bot support server
-  DASH_URL: "", //Your bots Dashboard url!
   DASHBOARD: {
     enabled: true, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url

@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
-    "aki-api": "^6.0.8",
     "ascii-table": "0.0.9",
     "axios": "^0.21.1",
     "btoa": "^1.2.1",

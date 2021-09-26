@@ -1,16 +1,16 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
-const { BOT_INVITE, SUPPORT_SERVER, DASH_URL, EMBED_COLORS } = require("@root/config.js");
+const { BOT_INVITE, SUPPORT_SERVER, DASHBOARD, EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class BotInviteCommand extends Command {
   constructor(client) {
     super(client, {
-      name: "invite",
+      name: "botinvite",
       description: "get the bot's invite",
       command: {
         enabled: true,
         category: "INFORMATION",
-        aliases: ["dashboard", "support", "dash", "inv"],
+        aliases: ["dashboard", "support", "dash"],
       },
     });
   }
@@ -23,7 +23,10 @@ module.exports = class BotInviteCommand extends Command {
     let desc = "";
     desc += `Support Server: [Join here](${SUPPORT_SERVER})\n`;
     desc += `Invite Link: [Add me here](${BOT_INVITE})\n`;
-    desc += `Dashboard Link: [View My Dashboard Here!](${DASH_URL})`;
+
+    if (DASHBOARD.enabled) {
+      desc += `Dashboard Link: [View My Dashboard Here!](${DASHBOARD.baseURL})`;
+    }
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
