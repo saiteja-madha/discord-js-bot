@@ -1,6 +1,6 @@
 {
   "name": "discord-js-bot",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "A multipurpose discord bot built using discord-js",
   "main": "bot.js",
   "author": "Sai Teja M",
@@ -39,6 +39,7 @@
     "os": "^0.1.2",
     "outdent": "^0.8.0",
     "simple-node-logger": "^21.8.12",
+    "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^13.1.0"

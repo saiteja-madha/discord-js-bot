@@ -70,10 +70,10 @@ module.exports = {
       member_id: targetId,
       type: "MUTE",
       "data.current": true,
-    }),
+    }).lean({ defaults: true }),
 
   removeMutes: async (guildId, targetId) =>
-    Model.updateOne(
+    Model.updateMany(
       {
         guild_id: guildId,
         member_id: targetId,
