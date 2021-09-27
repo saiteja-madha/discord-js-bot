@@ -36,7 +36,7 @@ router.get("/callback", async (req, res) => {
     method: "POST",
     body: params.toString(),
     headers: {
-      Authorization: `Basic ${btoa(`${req.client.user.id}:${req.client.config.DASHBOARD.secret}`)}`,
+      Authorization: `Basic ${btoa(`${req.client.user.id}:${process.env.BOT_SECRET}`)}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
   });

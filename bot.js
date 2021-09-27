@@ -1,3 +1,4 @@
+require("dotenv").config();
 require("module-alias/register");
 
 const path = require("path");
@@ -23,5 +24,5 @@ process.on("unhandledRejection", (err) => client.logger.error(`Unhandled excepti
   await startupCheck();
   if (client.config.DASHBOARD.enabled) await launch(client);
   await client.initializeMongoose();
-  await client.login(client.config.BOT_TOKEN);
+  await client.login(process.env.BOT_TOKEN);
 })();

@@ -38,8 +38,8 @@ module.exports = class BotClient extends Client {
     this.antiScamCache = new Collection(); // store message data for anti_scam feature
 
     // initialize webhook for sending guild join/leave details
-    this.joinLeaveWebhook = this.config.JOIN_LEAVE_WEBHOOK
-      ? new WebhookClient({ url: this.config.JOIN_LEAVE_WEBHOOK })
+    this.joinLeaveWebhook = process.env.JOIN_LEAVE_LOGS
+      ? new WebhookClient({ url: process.env.JOIN_LEAVE_LOGS })
       : undefined;
 
     // Music Player
@@ -53,7 +53,7 @@ module.exports = class BotClient extends Client {
    * Initialize mongoose connection and keep it alive
    */
   async initializeMongoose() {
-    await mongoose.connect(this.config.MONGO_CONNECTION, {
+    await mongoose.connect(process.env.MONGO_CONNECTION, {
       keepAlive: true,
       useNewUrlParser: true,
       useUnifiedTopology: true,

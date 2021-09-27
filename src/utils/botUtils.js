@@ -17,12 +17,12 @@ async function checkForUpdates() {
 }
 
 function validateConfig() {
-  if (config.BOT_TOKEN === "") {
-    error("config.js: BOT_TOKEN cannot be empty");
+  if (process.env.BOT_TOKEN === "") {
+    error("env: BOT_TOKEN cannot be empty");
     process.exit();
   }
-  if (config.MONGO_CONNECTION === "") {
-    error("config.js:MONGO_CONNECTION cannot be empty");
+  if (process.env.MONGO_CONNECTION === "") {
+    error("env: MONGO_CONNECTION cannot be empty");
     process.exit();
   }
   if (isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS) || isNaN(config.CACHE_SIZE.MEMBERS)) {
@@ -34,7 +34,6 @@ function validateConfig() {
     process.exit();
   }
   if (config.OWNER_IDS.length === 0) warn("config.js: OWNER_IDS are empty");
-  if (!config.API.IMAGE_API) warn("config.js: IMAGE_API is not provided. Image commands will not work");
   if (!config.BOT_INVITE) warn("config.js: BOT_INVITE is not provided");
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }

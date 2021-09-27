@@ -1,35 +1,23 @@
 module.exports = {
-  BOT_TOKEN: "", // Your discord bot token
-  MONGO_CONNECTION: "", // URI of the mongo database
   OWNER_IDS: [], // Bot owner ID's
   PREFIX: "!", // Default prefix for the bot
   BOT_INVITE: "", // Your bot invite link
   SUPPORT_SERVER: "", // Your bot support server
-  WEBHOOKS: {
-    ERROR_LOGS: "", // Webhook to which error logs must be sent
-    JOIN_LEAVE_LOGS: "", // Webhook to which guild join/leave details will be sent
-  },
   DASHBOARD: {
     enabled: true, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
-    secret: "xxxxxxxxxxx", // bot secret
     port: "8080", // port to run the bot on
-    expressSessionPassword: "discordbot", // random password string
   },
   INTERACTIONS: {
-    SLASH: true, // Should the interactions be enabled
-    CONTEXT: true, // Should contexts be enabled
+    SLASH: false, // Should the interactions be enabled
+    CONTEXT: false, // Should contexts be enabled
     GLOBAL: false, // Should the interactions be registered globally
     TEST_GUILD_ID: "xxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
   XP_SYSTEM: {
     COOLDOWN: 5, // Cooldown in seconds between messages
     DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
-  },
-  API: {
-    IMAGE_API: "https://discord-js-image-manipulation.herokuapp.com", // Image commands won't work without this
-    WEATHERSTACK_KEY: "", // https://weatherstack.com/
   },
   MISCELLANEOUS: {
     DAILY_COINS: 100, // coins to be received by daily command
@@ -49,7 +37,7 @@ module.exports = {
     SOFTBAN_EMBED: "#AF4448",
     BAN_EMBED: "#D32F2F",
   },
-  /* Unicode Emojis Used */
+  /* Various Emojis Used */
   EMOJIS: {
     ARROW: "❯",
     ARROW_BULLET: "»",

@@ -12,7 +12,7 @@ const simpleLogger = nodeLogger.createRollingFileLogger({
 
 simpleLogger.setLevel("debug");
 
-const errorWebhook = config.WEBHOOKS.ERROR_LOGS ? new WebhookClient({ url: config.WEBHOOKS.ERROR_LOGS }) : undefined;
+const errorWebhook = process.env.ERROR_LOGS ? new WebhookClient({ url: process.env.ERROR_LOGS }) : undefined;
 
 const sendWebhook = (content, err) => {
   const embed = new MessageEmbed()
@@ -20,7 +20,6 @@ const sendWebhook = (content, err) => {
     .setAuthor(err.name || "Error")
     .setDescription("```js" + err.stack + "```")
     .addField("Description", content)
-    .addField("Name", err.name)
     .addField("Message", err.message);
 
   errorWebhook.send({

@@ -1,10 +1,12 @@
 const { Command } = require("@src/structures");
 const { Message, MessageAttachment } = require("discord.js");
-const { API, EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 const { getProfile, getTop100 } = require("@schemas/profile-schema");
 const { getBuffer } = require("@utils/httpUtils");
 const { getSettings } = require("@schemas/guild-schema");
 const { resolveMember } = require("@utils/guildUtils");
+
+const IMAGE_API_BASE = "https://discord-js-image-manipulation.herokuapp.com";
 
 module.exports = class Rank extends Command {
   constructor(client) {
@@ -43,7 +45,7 @@ module.exports = class Rank extends Command {
 
     const xpNeeded = profile.level * profile.level * 100;
 
-    const url = new URL(`${API.IMAGE_API}/utils/rank-card`);
+    const url = new URL(`${IMAGE_API_BASE}/utils/rank-card`);
     url.searchParams.append("name", user.username);
     url.searchParams.append("discriminator", user.discriminator);
     url.searchParams.append("avatar", user.displayAvatarURL({ format: "png", size: 128 }));
