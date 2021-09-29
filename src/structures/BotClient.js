@@ -5,8 +5,8 @@ const Ascii = require("ascii-table");
 const mongoose = require("mongoose");
 const Command = require("./Command");
 mongoose.plugin(require("mongoose-lean-defaults").default);
-const { Player } = require("discord-player");
 const logger = require("../helpers/logger");
+const { Manager } = require("erela.js");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -46,7 +46,15 @@ module.exports = class BotClient extends Client {
       : undefined;
 
     // Music Player
-    this.player = new Player(this);
+    this.musicManager = new Manager({
+      nodes: this.config.MUSIC.NODES,
+      send: (id, payload) => {
+        const guild = this.guilds.cache.get(id);
+        if (guild) guild.shard.send(payload);
+      },
+      autoPlay: true,
+    });
+    this.on("raw", (d) => this.musicManager.updateVoiceState(d));
 
     // Logger
     this.logger = logger;

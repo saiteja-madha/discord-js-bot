@@ -21,12 +21,16 @@ module.exports = class Pause extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const queue = message.client.player.getQueue(message.guildId);
-    if (!queue || !queue.playing) return message.channel.send("No music is being played!");
+    const player = message.client.musicManager.get(message.guild.id);
+    if (!player) return message.reply("No music is being played!");
 
-    const paused = queue.setPaused(true);
+    const { channel } = message.member.voice;
 
-    const embed = new MessageEmbed().setDescription(paused ? "🎵 | Music Paused | ⏸" : "🎵 |  Music Already Paused");
-    return message.channel.send({ embeds: [embed] });
+    if (!channel) return message.reply("you need to join a voice channel.");
+    if (channel.id !== player.voiceChannel) return message.reply("you're not in the same voice channel.");
+    if (player.paused) return message.reply("the player is already paused.");
+
+    player.pause(true);
+    return message.reply("paused the player.");
   }
 };

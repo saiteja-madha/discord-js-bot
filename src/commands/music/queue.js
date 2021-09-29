@@ -21,26 +21,30 @@ module.exports = class Skip extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const queue = message.client.player.getQueue(message.guildId);
-    if (!queue || !queue.playing) return message.channel.send("No music is being played!");
-    if (!args[0] || isNaN(args[0])) args[0] = 1;
+    const player = message.client.musicManager.get(message.guild.id);
+    if (!player) return message.reply("there is no player for this guild.");
 
-    const pageStart = 10 * (args[0] - 1);
-    const pageEnd = pageStart + 10;
-    const currentTrack = queue.current;
+    const queue = player.queue;
+    const embed = new MessageEmbed().setAuthor(`Queue for ${message.guild.name}`);
 
-    const tracks = queue.tracks.slice(pageStart, pageEnd).map((m, i) => {
-      return `${i + pageStart + 1}. **${m.title}** ([link](${m.url}))`;
-    });
+    // change for the amount of tracks per page
+    const multiple = 10;
+    const page = args.length && Number(args[0]) ? Number(args[0]) : 1;
 
-    const embed = new MessageEmbed()
-      .setTitle(`Music Queue`)
-      .setDescription(
-        `${tracks.join("\n")}${
-          queue.tracks.length > pageEnd ? `\n...${queue.tracks.length - pageEnd} more track(s)` : ""
-        }`
-      )
-      .addField("Now Playing", `🎶 | **${currentTrack.title}** ([link](${currentTrack.url}))`);
-    return message.channel.send({ embeds: [embed] });
+    const end = page * multiple;
+    const start = end - multiple;
+
+    const tracks = queue.slice(start, end);
+
+    if (queue.current) embed.addField("Current", `[${queue.current.title}](${queue.current.uri})`);
+
+    if (!tracks.length) embed.setDescription(`No tracks in ${page > 1 ? `page ${page}` : "the queue"}.`);
+    else embed.setDescription(tracks.map((track, i) => `${start + ++i} - [${track.title}](${track.uri})`).join("\n"));
+
+    const maxPages = Math.ceil(queue.length / multiple);
+
+    embed.setFooter(`Page ${page > maxPages ? maxPages : page} of ${maxPages}`);
+
+    return message.reply(embed);
   }
 };

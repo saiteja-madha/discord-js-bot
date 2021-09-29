@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
+const { Message } = require("discord.js");
 
 module.exports = class Skip extends Command {
   constructor(client) {
@@ -20,20 +20,5 @@ module.exports = class Skip extends Command {
    * @param {Message} message
    * @param {string[]} args
    */
-  async messageRun(message, args) {
-    const queue = message.client.player.getQueue(message.guildId);
-    if (!queue || !queue.playing) return message.channel.send("No music is being played!");
-
-    const progress = queue.createProgressBar();
-    const perc = queue.getPlayerTimestamp();
-
-    const embed = new MessageEmbed()
-      .setTitle("Currently Playing")
-      .setDescription(
-        `🎶 | **${queue.current.title}**! (\`${
-          perc.progress == "Infinity" ? "Live" : perc.progress + "%"
-        }\`)\n\n${progress.replace(/ 0:00/g, " ◉ LIVE")}`
-      );
-    return message.channel.send({ embeds: [embed] });
-  }
+  async messageRun(message, args) {}
 };

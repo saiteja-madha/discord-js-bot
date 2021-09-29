@@ -9,6 +9,9 @@ const { getSettings } = require("@schemas/guild-schema");
 module.exports = async (client) => {
   client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
 
+  // Initialize Music Manager
+  client.musicManager.init(client.user.id);
+
   // Update Bot Presence
   updatePresence(client);
   setInterval(() => updatePresence(client), 10 * 60 * 1000);

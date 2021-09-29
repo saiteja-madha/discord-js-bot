@@ -22,22 +22,21 @@ module.exports = class Volume extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { channel } = message;
-    const volume = args[0];
+    const player = message.client.musicManager.get(message.guild.id);
 
-    const queue = this.client.player.getQueue(message.guild);
-    if (!queue || !queue.playing) return channel.send("No music currently playing !");
+    if (!player) return message.reply("there is no player for this guild.");
+    if (!args.length) return message.reply(`the player volume is \`${player.volume}\`.`);
 
-    if (!volume) return channel.send(`Current volume is \`${queue.volume}\`%!`);
-    if (isNaN(volume) || volume < 1 || volume > 100) return channel.send("Volume must be a number between 1 and 100!");
+    const { channel } = message.member.voice;
 
-    if (!message.member.voice.channel) return channel.send("You're not in a voice channel !");
+    if (!channel) return message.reply("you need to join a voice channel.");
+    if (channel.id !== player.voiceChannel) return message.reply("you're not in the same voice channel.");
 
-    if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id)
-      return channel.send("We are not in the same voice channel!");
+    const volume = Number(args[0]);
 
-    const success = queue.setVolume(volume);
-    if (success) channel.send(`Volume set to \`${parseInt(volume)}%\` !`);
-    else channel.send("Failed to set volume");
+    if (!volume || volume < 1 || volume > 100) return message.reply("you need to give me a volume between 1 and 100.");
+
+    player.setVolume(volume);
+    return message.reply(`set the player volume to \`${volume}\`.`);
   }
 };
