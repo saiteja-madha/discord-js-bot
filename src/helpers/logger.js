@@ -17,10 +17,11 @@ const errorWebhook = process.env.ERROR_LOGS ? new WebhookClient({ url: process.e
 const sendWebhook = (content, err) => {
   const embed = new MessageEmbed()
     .setColor(config.EMBED_COLORS.ERROR_EMBED)
-    .setAuthor(err.name || "Error")
-    .setDescription("```js" + err.stack + "```")
-    .addField("Description", content)
-    .addField("Message", err.message);
+    .setAuthor(err?.name || "Error")
+    .setDescription("```js" + err?.stack || err + "```");
+
+  if (err?.description) embed.addField("Description", content);
+  if (err?.message) embed.addField("Message", err?.message);
 
   errorWebhook.send({
     username: "Logs",

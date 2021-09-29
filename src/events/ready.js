@@ -7,7 +7,7 @@ const { getSettings } = require("@schemas/guild-schema");
  * @param {BotClient} client
  */
 module.exports = async (client) => {
-  client.logger.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
+  client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
 
   // Update Bot Presence
   updatePresence(client);
