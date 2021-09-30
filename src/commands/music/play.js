@@ -93,8 +93,8 @@ module.exports = class Play extends Command {
           .setAuthor("Added Playlist to queue")
           .setDescription(res.playlist.name)
           .addField("Enqueued", `${res.tracks.length} songs`, true)
-          .addField("Playlist duration", prettyMs(res.playlist.duration, { colonNotation: true }) + "`", true)
-          .setFooter(`Requested By: ${track.requester.tag}`);
+          .addField("Playlist duration", "`" + prettyMs(res.playlist.duration, { colonNotation: true }) + "`", true)
+          .setFooter(`Requested By: ${res.tracks[0].requester.tag}`);
 
         break;
 
