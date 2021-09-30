@@ -1,3 +1,4 @@
+require("dotenv").config();
 require("module-alias/register");
 
 const path = require("path");
@@ -13,17 +14,22 @@ client.loadCommands("src/commands");
 client.loadEvents("src/events");
 
 // catch client errors and warnings
-client.on("error", (error) => console.log("Client error: ", error));
-client.on("warn", (message) => console.log("Client warning: ", message));
+client.on("error", (err) => client.logger.error(`Client Error`, err));
+client.on("warn", (message) => client.logger.warn(`Client Warning: ${message}`));
 
 // find unhandled promise rejections
-process.on("unhandledRejection", (reason) => {
-  console.log("Unhandled Rejection at: ", reason.stack || reason);
-});
+process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
 (async () => {
   await startupCheck();
-  if (client.config.DASHBOARD.enabled) await launch(client);
+  if (client.config.DASHBOARD.enabled) {
+    client.logger.log("Launching dashboard");
+    try {
+      await launch(client);
+    } catch (ex) {
+      client.logger.error("Failed to launch dashboard", ex);
+    }
+  }
   await client.initializeMongoose();
-  await client.login(client.config.BOT_TOKEN);
+  await client.login(process.env.BOT_TOKEN);
 })();

@@ -38,6 +38,7 @@ class Command {
    * @property {boolean} enabled - Whether the slash command is enabled or not
    * @property {boolean} ephemeral - Whether the reply should be ephemeral
    * @property {"MESSAGE"|"USER"} type - Type of context menu
+   * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command.
    * @property {ApplicationCommandOptionData[]} options - command options
    */
 

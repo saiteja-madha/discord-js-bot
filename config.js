@@ -1,7 +1,4 @@
 module.exports = {
-  BOT_TOKEN: "", // Your discord bot token
-  MONGO_CONNECTION: "", // URI of the mongo database
-  JOIN_LEAVE_WEBHOOK: "", // Webhook to which guild join/leave details will be sent
   OWNER_IDS: [], // Bot owner ID's
   PREFIX: "!", // Default prefix for the bot
   BOT_INVITE: "", // Your bot invite link
@@ -10,13 +7,11 @@ module.exports = {
     enabled: true, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
-    secret: "xxxxxxxxxxx", // bot secret
     port: "8080", // port to run the bot on
-    expressSessionPassword: "discordbot", // random password string
   },
   INTERACTIONS: {
-    SLASH: true, // Should the interactions be enabled
-    CONTEXT: true, // Should contexts be enabled
+    SLASH: false, // Should the interactions be enabled
+    CONTEXT: false, // Should contexts be enabled
     GLOBAL: false, // Should the interactions be registered globally
     TEST_GUILD_ID: "xxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
@@ -24,12 +19,29 @@ module.exports = {
     COOLDOWN: 5, // Cooldown in seconds between messages
     DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
   },
-  API: {
-    IMAGE_API: "https://discord-js-image-manipulation.herokuapp.com", // Image commands won't work without this
-    WEATHERSTACK_KEY: "", // https://weatherstack.com/
-  },
   MISCELLANEOUS: {
     DAILY_COINS: 100, // coins to be received by daily command
+  },
+  MUSIC: {
+    MAX_SEARCH_RESULTS: 5,
+    NODES: [
+      {
+        host: "disbotlistlavalink.ml",
+        port: 443,
+        password: "LAVA",
+        identifier: "DBL Lavalink",
+        retryDelay: 3000,
+        secure: true,
+      },
+      {
+        host: "lava.link",
+        port: 80,
+        password: "anything as a password",
+        identifier: "Something Host",
+        retryDelay: 3000,
+        secure: false,
+      },
+    ],
   },
   /* Bot Embed Colors */
   EMBED_COLORS: {
@@ -46,7 +58,7 @@ module.exports = {
     SOFTBAN_EMBED: "#AF4448",
     BAN_EMBED: "#D32F2F",
   },
-  /* Unicode Emojis Used */
+  /* Various Emojis Used */
   EMOJIS: {
     ARROW: "❯",
     ARROW_BULLET: "»",

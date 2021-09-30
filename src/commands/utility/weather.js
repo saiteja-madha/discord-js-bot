@@ -1,7 +1,9 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
-const { MESSAGES, EMBED_COLORS, API } = require("@root/config.js");
-const { getResponse } = require("@utils/httpUtils");
+const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
+const { getJson } = require("@utils/httpUtils");
+
+const API_KEY = process.env.WEATHERSTACK_KEY;
 
 module.exports = class WeatherCommand extends Command {
   constructor(client) {
@@ -37,9 +39,7 @@ module.exports = class WeatherCommand extends Command {
   async messageRun(message, args) {
     const place = args.join(" ");
 
-    const response = await getResponse(
-      `http://api.weatherstack.com/current?access_key=${API.WEATHERSTACK_KEY}&query=${place}`
-    );
+    const response = await getJson(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=${place}`);
     if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
     const json = response.data;
@@ -56,9 +56,7 @@ module.exports = class WeatherCommand extends Command {
   async interactionRun(interaction, options) {
     const place = options.getString("place");
 
-    const response = await getResponse(
-      `http://api.weatherstack.com/current?access_key=${API.WEATHERSTACK_KEY}&query=${place}`
-    );
+    const response = await getJson(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=${place}`);
     if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
 
     const json = response.data;

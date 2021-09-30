@@ -42,7 +42,7 @@ async function updateCounterChannels(client) {
         }
       }
     } catch (ex) {
-      console.log(`Error updating counter channels for guildId: ${guildId}`, ex);
+      client.logger.error(`Error updating counter channels for guildId: ${guildId}`, ex);
     } finally {
       // remove guildId from cache
       const i = client.counterUpdateQueue.indexOf(guild.id);
@@ -74,7 +74,7 @@ async function init(client) {
     count += 1;
   });
 
-  console.log(`GUILDS with counter channels: ${count}`);
+  client.logger.log(`GUILDS with counter channels: ${count}`);
 
   // run the scheduler every 10 minutes
   setInterval(() => updateCounterChannels(client), 10 * 60 * 60);

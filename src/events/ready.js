@@ -7,15 +7,21 @@ const { getSettings } = require("@schemas/guild-schema");
  * @param {BotClient} client
  */
 module.exports = async (client) => {
-  console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
+  client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
+
+  // Initialize Music Manager
+  client.logger.log("Initializing music manager");
+  client.musicManager.init(client.user.id);
 
   // Update Bot Presence
   updatePresence(client);
   setInterval(() => updatePresence(client), 10 * 60 * 1000);
 
   // Register Interactions
-  if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions();
-  else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
+  if (client.config.INTERACTIONS.SLASH || client.config.INTERACTIONS.CONTEXT) {
+    if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions();
+    else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
+  }
 
   // register player events
   musicHandler.registerPlayerEvents(client);

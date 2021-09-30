@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getResponse } = require("@utils/httpUtils");
+const { getJson } = require("@utils/httpUtils");
 
 module.exports = class CatCommand extends Command {
   constructor(client) {
@@ -22,7 +22,7 @@ module.exports = class CatCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await getResponse("https://api.thecatapi.com/v1/images/search");
+    const response = await getJson("https://api.thecatapi.com/v1/images/search");
     if (!response.success) return message.reply(MESSAGES.API_ERROR);
 
     const image = response.data[0]?.url;

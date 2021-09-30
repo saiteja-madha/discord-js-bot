@@ -1,5 +1,7 @@
+const { EMBED_COLORS } = require("@root/config");
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
+const { Message, MessageEmbed } = require("discord.js");
+const prettyMs = require("pretty-ms");
 
 module.exports = class Skip extends Command {
   constructor(client) {
@@ -21,19 +23,19 @@ module.exports = class Skip extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const queue = message.client.player.getQueue(message.guildId);
-    if (!queue || !queue.playing) return message.channel.send("No music is being played!");
+    const player = message.client.musicManager.get(message.guild.id);
+    if (!player || !player.queue.current) return message.channel.send("No music is being played!");
 
-    const progress = queue.createProgressBar();
-    const perc = queue.getPlayerTimestamp();
+    let track = player.queue.current;
 
     const embed = new MessageEmbed()
-      .setTitle("Currently Playing")
-      .setDescription(
-        `🎶 | **${queue.current.title}**! (\`${
-          perc.progress == "Infinity" ? "Live" : perc.progress + "%"
-        }\`)\n\n${progress.replace(/ 0:00/g, " ◉ LIVE")}`
-      );
-    return message.channel.send({ embeds: [embed] });
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setThumbnail(track.displayThumbnail("hqdefault"))
+      .setAuthor("Now playing")
+      .setDescription(`[${track.title}](${track.uri})`)
+      .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
+      .addField("Added By", track.requester.tag || "NA", true);
+
+    message.channel.send({ embeds: [embed] });
   }
 };

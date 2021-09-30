@@ -6,7 +6,7 @@ const {
   CommandInteractionOptionResolver,
 } = require("discord.js");
 const { Command } = require("@src/structures");
-const { downloadImage } = require("@utils/httpUtils");
+const { getBuffer } = require("@utils/httpUtils");
 const { getImageFromCommand, getGenerator } = require("@utils/imageUtils");
 const { EMBED_COLORS } = require("@root/config.js");
 
@@ -85,11 +85,11 @@ module.exports = class Generator extends Command {
 
     // use invoke as an endpoint
     const url = getGenerator(invoke.toLowerCase(), image);
-    const buffer = await downloadImage(url);
+    const response = await getBuffer(url);
 
-    if (!buffer) return message.reply("Failed to generate image");
+    if (!response.success) return message.reply("Failed to generate image");
 
-    const attachment = new MessageAttachment(buffer, "attachment.png");
+    const attachment = new MessageAttachment(response.buffer, "attachment.png");
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
       .setImage("attachment://attachment.png")
@@ -114,9 +114,11 @@ module.exports = class Generator extends Command {
     if (!image) image = author.displayAvatarURL({ size: 256, format: "png" });
 
     const url = getGenerator(generator, image);
-    const buffer = await downloadImage(url);
+    const response = await getBuffer(url);
 
-    const attachment = new MessageAttachment(buffer, "attachment.png");
+    if (!response.success) return interaction.followUp("Failed to generate image");
+
+    const attachment = new MessageAttachment(response.buffer, "attachment.png");
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
       .setImage("attachment://attachment.png")

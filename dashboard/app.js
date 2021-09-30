@@ -28,7 +28,7 @@ module.exports.launch = async (client) => {
     .use(express.static(path.join(__dirname, "/public"))) // Set the css and js folder to ./public
     .set("views", path.join(__dirname, "/views")) // Set the ejs templates to ./views
     .set("port", config.DASHBOARD.port) // Set the dashboard port
-    .use(session({ secret: config.DASHBOARD.expressSessionPassword, resave: false, saveUninitialized: false })) // Set the express session password and configuration
+    .use(session({ secret: process.env.SESSION_PASSWORD, resave: false, saveUninitialized: false })) // Set the express session password and configuration
     .use(async function (req, res, next) {
       req.user = req.session.user;
       req.client = client;
@@ -56,6 +56,6 @@ module.exports.launch = async (client) => {
 
   /* Start */
   app.listen(app.get("port"), () => {
-    console.log("Dashboard is listening on port " + app.get("port"));
+    client.logger.success("Dashboard is listening on port " + app.get("port"));
   });
 };

@@ -5,4 +5,5 @@ module.exports = {
   inviteHandler: require("./invite-handler"),
   musicHandler: require("./music-handler"),
   reactionHandler: require("./reaction-handler"),
+  xpHandler: require("./xp-handler"),
 };

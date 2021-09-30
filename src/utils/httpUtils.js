@@ -1,60 +1,59 @@
-const axios = require("axios").default;
 const ISO6391 = require("iso-639-1");
 const sourcebin = require("sourcebin_js");
+const { error, debug } = require("@src/helpers/logger");
+const fetch = require("node-fetch");
+const gTranslate = require("@vitalets/google-translate-api");
 
-/**
- * @param {String} url
- */
-async function getResponse(url) {
+async function getJson(url) {
   try {
-    const res = await axios.get(url);
+    const response = await fetch(url);
+    const json = await response.json();
     return {
-      success: true,
-      status: res.status,
-      data: res.data,
+      success: response.status === 200 ? true : false,
+      status: response.status,
+      data: json,
     };
-  } catch (error) {
-    if (error.response?.status !== 404) {
-      console.log(`[AXIOS ERROR]\nURL: ${url}\n${error}\n`);
-    }
+  } catch (ex) {
+    debug(`Url: ${url}`);
+    error(`getJson`, ex);
     return {
       success: false,
-      status: error.response?.status,
-      data: error.response?.data,
     };
   }
 }
 
-/**
- * @param {String} url
- */
-async function downloadImage(url) {
+async function getBuffer(url) {
   try {
-    const res = await axios.get(url, { responseType: "stream" });
-    return res.data;
-  } catch (error) {
-    console.log(`[AXIOS ERROR]\nURL: ${url}\n${error}\n`);
+    const response = await fetch(url);
+    const buffer = await response.buffer();
+    return {
+      success: response.status === 200 ? true : false,
+      status: response.status,
+      buffer,
+    };
+  } catch (ex) {
+    debug(`Url: ${url}`);
+    error(`getBuffer`, ex);
+    return {
+      success: false,
+    };
   }
 }
 
-/**
- * @param {String} input
- * @param {String} outputCode
- */
-async function translate(input, outputCode) {
-  const response = await getResponse(
-    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${outputCode}&dt=t&q=${input}`
-  );
-
-  if (response.success && response.status === 200) {
+async function translate(content, outputCode) {
+  try {
+    const response = await gTranslate(content, { to: outputCode });
     return {
-      input: response.data[0][0][1],
-      output: response.data[0][0][0],
-      inputCode: response.data[2],
+      input: response.from.text.value,
+      output: response.text,
+      inputCode: response.from.language.iso,
       outputCode,
-      inputLang: ISO6391.getName(response.data[2]),
+      inputLang: ISO6391.getName(response.from.language.iso),
       outputLang: ISO6391.getName(outputCode),
     };
+  } catch (ex) {
+    error("translate", ex);
+    debug(`Content - ${content} OutputCode: ${outputCode}`);
   }
 }
 
@@ -73,15 +72,19 @@ async function postToBin(content, title) {
         description: " ",
       }
     );
-    return response.url;
+    return {
+      url: response.url,
+      short: response.short,
+      raw: `https://cdn.sourceb.in/bins/${response.key}/0`,
+    };
   } catch (ex) {
-    console.log(ex);
+    error(`postToBin`, ex);
   }
 }
 
 module.exports = {
-  getResponse,
-  downloadImage,
   translate,
   postToBin,
+  getJson,
+  getBuffer,
 };

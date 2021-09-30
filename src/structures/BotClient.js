@@ -3,9 +3,10 @@ const path = require("path");
 const fs = require("fs");
 const Ascii = require("ascii-table");
 const mongoose = require("mongoose");
-const Command = require("./command");
+const Command = require("./Command");
 mongoose.plugin(require("mongoose-lean-defaults").default);
-const { Player } = require("discord-player");
+const logger = require("../helpers/logger");
+const { Manager } = require("erela.js");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -24,6 +25,9 @@ module.exports = class BotClient extends Client {
 
     this.config = require("@root/config"); // load the config file
 
+    /**
+     * @type {Command[]}
+     */
     this.commands = []; // store actual command
     this.commandIndex = new Collection(); // store (alias, arrayIndex) pair
     this.slashCommands = new Collection(); // store slash commands
@@ -37,26 +41,39 @@ module.exports = class BotClient extends Client {
     this.antiScamCache = new Collection(); // store message data for anti_scam feature
 
     // initialize webhook for sending guild join/leave details
-    this.joinLeaveWebhook = this.config.JOIN_LEAVE_WEBHOOK
-      ? new WebhookClient({ url: this.config.JOIN_LEAVE_WEBHOOK })
+    this.joinLeaveWebhook = process.env.JOIN_LEAVE_LOGS
+      ? new WebhookClient({ url: process.env.JOIN_LEAVE_LOGS })
       : undefined;
 
     // Music Player
-    this.player = new Player(this);
+    this.musicManager = new Manager({
+      nodes: this.config.MUSIC.NODES,
+      send: (id, payload) => {
+        const guild = this.guilds.cache.get(id);
+        if (guild) guild.shard.send(payload);
+      },
+      autoPlay: true,
+    });
+    this.on("raw", (d) => this.musicManager.updateVoiceState(d));
+
+    // Logger
+    this.logger = logger;
   }
 
   /**
    * Initialize mongoose connection and keep it alive
    */
   async initializeMongoose() {
-    await mongoose.connect(this.config.MONGO_CONNECTION, {
+    this.logger.log(`Connecting to MongoDb...`);
+
+    await mongoose.connect(process.env.MONGO_CONNECTION, {
       keepAlive: true,
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
     });
 
-    console.log("Database connection established");
+    this.logger.success("Mongoose: Database connection established");
   }
 
   /**
@@ -64,7 +81,9 @@ module.exports = class BotClient extends Client {
    * @param {string} directory directory containing the event files
    */
   loadEvents(directory) {
+    this.logger.log(`Loading events...`);
     const table = new Ascii().setHeading("EVENT", "Status");
+    let events = 0;
 
     const readEvents = (dir) => {
       const files = fs.readdirSync(path.join(__appRoot, dir));
@@ -81,13 +100,16 @@ module.exports = class BotClient extends Client {
             table.addRow(file, this.config.EMOJIS.TICK);
           } catch (ex) {
             table.addRow(file, this.config.EMOJIS.X_MARK);
-            console.log(ex);
+            this.logger.error("readEvent", ex);
+          } finally {
+            events += 1;
           }
         }
       });
     };
     readEvents(directory);
     console.log(table.toString());
+    this.logger.success(`Loaded ${events} events`);
   }
 
   /**
@@ -128,6 +150,7 @@ module.exports = class BotClient extends Client {
    * @param {string} directory
    */
   loadCommands(directory) {
+    this.logger.log(`Loading commands...`);
     const readCommands = (dir) => {
       const files = fs.readdirSync(path.join(__appRoot, dir));
       files.forEach((file) => {
@@ -137,14 +160,18 @@ module.exports = class BotClient extends Client {
         } else {
           const CommandClass = require(path.join(__appRoot, dir, file));
           const command = new CommandClass(this);
-          this.loadCommand(command);
+          try {
+            this.loadCommand(command);
+          } catch (ex) {
+            this.logger.error(`Failed to load ${command.name}`);
+          }
         }
       });
     };
     readCommands(directory);
-    console.log(`Loaded ${this.commands.length} commands`);
-    console.log(`Loaded ${this.slashCommands.size} slash commands`);
-    console.log(`Loaded ${this.contextMenus.size} contexts`);
+    this.logger.success(`Loaded ${this.commands.length} commands`);
+    this.logger.success(`Loaded ${this.slashCommands.size} slash commands`);
+    this.logger.success(`Loaded ${this.contextMenus.size} contexts`);
   }
 
   /**
@@ -205,7 +232,7 @@ module.exports = class BotClient extends Client {
       throw new Error(`Did you provide a valid guildId to register slash commands`);
     }
 
-    console.log("Successfully registered slash commands");
+    this.logger.success("Successfully registered slash commands");
   }
 
   /**

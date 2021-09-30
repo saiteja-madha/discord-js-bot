@@ -6,7 +6,6 @@
     "paths": {
       "@root/*": ["./*"],
       "@commands/*": ["./src/commands/*"],
-      "@database/*": ["./src/database/*"],
       "@features/*": ["./src/features/*"],
       "@schemas/*": ["./src/schemas/*"],
       "@src/*": ["./src/*"],

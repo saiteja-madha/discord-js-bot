@@ -8,10 +8,6 @@ const ReqString = {
 const Schema = mongoose.Schema({
   guild_id: ReqString,
   member_id: ReqString,
-  messages: {
-    type: Number,
-    default: 0,
-  },
   xp: {
     type: Number,
     default: 0,
@@ -54,28 +50,13 @@ module.exports = {
         member_id: memberId,
       },
       {
-        $inc: {
-          xp,
-          messages: 1,
-        },
+        $inc: { xp },
       },
       {
         upsert: true,
         new: true,
       }
     ).lean({ defaults: true }),
-
-  incrementMessages: async (guildId, memberId) =>
-    Model.updateOne(
-      {
-        guild_id: guildId,
-        member_id: memberId,
-      },
-      {
-        $inc: { messages: 1 },
-      },
-      { upsert: true }
-    ),
 
   setLevel: async (guildId, memberId, level, xp) =>
     Model.updateOne(

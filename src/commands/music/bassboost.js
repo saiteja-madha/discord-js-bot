@@ -1,5 +1,12 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
+const { Message } = require("discord.js");
+
+const levels = {
+  none: 0.0,
+  low: 0.1,
+  medium: 0.15,
+  high: 0.25,
+};
 
 module.exports = class Bassboost extends Command {
   constructor(client) {
@@ -8,6 +15,8 @@ module.exports = class Bassboost extends Command {
       description: "Toggles bassboost",
       command: {
         enabled: true,
+        minArgsCount: 1,
+        usage: "<none|low|medium|high>",
         category: "MUSIC",
       },
       slashCommand: {
@@ -21,17 +30,20 @@ module.exports = class Bassboost extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const queue = message.client.player.getQueue(message.guildId);
-    if (!queue || !queue.playing) return message.channel.send("No music is being played!");
+    const player = message.client.musicManager.get(message.guildId);
+    if (!player) return message.reply("No music is being played!");
 
-    await queue.setFilters({
-      bassboost: !queue.getFiltersEnabled().includes("bassboost"),
-      normalizer2: !queue.getFiltersEnabled().includes("bassboost"),
-    });
+    const { channel } = message.member.voice;
 
-    const embed = new MessageEmbed().setDescription(
-      `🎵 | Bassboost ${queue.getFiltersEnabled().includes("bassboost") ? "Enabled | ✅" : "Disabled | ❌"}`
-    );
-    return message.channel.send({ embeds: [embed] });
+    if (!channel) return message.reply("You need to join a voice channel.");
+    if (channel.id !== player.voiceChannel) return message.reply("You're not in the same voice channel.");
+
+    let level = "none";
+    if (args.length && args[0].toLowerCase() in levels) level = args[0].toLowerCase();
+
+    const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
+    player.setEQ(...bands);
+
+    return message.channel.send(`> Set the bassboost level to ${level}`);
   }
 };

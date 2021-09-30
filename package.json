@@ -7,8 +7,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "nodemon .",
-    "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ."
   },
   "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
   "repository": {
@@ -16,17 +15,17 @@
     "url": "saiteja-madha/discord-js-bot"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.5.3",
+    "@vitalets/google-translate-api": "^7.0.0",
     "ascii-table": "0.0.9",
-    "axios": "^0.21.1",
     "btoa": "^1.2.1",
+    "chalk": "^4.1.2",
     "country-language": "^0.1.7",
-    "discord-player": "^5.1.0",
     "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
+    "erela.js": "^2.3.3",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
-    "ffmpeg-static": "^4.4.0",
     "fixedsize-map": "^1.0.1",
     "fs": "0.0.1-security",
     "iso-639-1": "^2.1.9",
@@ -37,6 +36,9 @@
     "node-fetch": "^2.6.1",
     "os": "^0.1.2",
     "outdent": "^0.8.0",
+    "pretty-ms": "^7.0.1",
+    "simple-node-logger": "^21.8.12",
+    "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^13.1.0"
@@ -56,7 +58,6 @@
   "_moduleAliases": {
     "@root": ".",
     "@commands": "src/commands/",
-    "@database": "src/database/",
     "@features": "src/features/",
     "@schemas": "src/schemas/",
     "@src": "src/",
