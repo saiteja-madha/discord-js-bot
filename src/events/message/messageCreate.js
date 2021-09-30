@@ -16,6 +16,7 @@ module.exports = async (client, message) => {
   // check for bot mentions
   if (message.content.includes(`${client.user.id}`)) message.reply(`My prefix is \`${settings.prefix}\``);
 
+  let isCommand = false;
   if (message.content.startsWith(prefix)) {
     const args = message.content.replace(`${prefix}`, "").split(/\s+/);
     const invoke = args.shift().toLowerCase();
@@ -23,6 +24,7 @@ module.exports = async (client, message) => {
 
     // command is found
     if (cmd) {
+      isCommand = true;
       try {
         await cmd.execute(message, args, invoke, prefix);
       } catch (ex) {
@@ -30,11 +32,11 @@ module.exports = async (client, message) => {
         client.logger.error("messageRun", ex);
       }
     }
+  }
 
-    // if not a command
-    else {
-      await automodHandler.performAutomod(message, settings);
-      if (settings.ranking.enabled) xpHandler.handleXp(message);
-    }
+  // if not a command
+  if (!isCommand) {
+    await automodHandler.performAutomod(message, settings);
+    if (settings.ranking.enabled) xpHandler.handleXp(message);
   }
 };
