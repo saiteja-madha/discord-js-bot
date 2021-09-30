@@ -5,7 +5,7 @@ const { MessageEmbed } = require("discord.js");
  * @param {BotClient} client
  */
 exports.registerPlayerEvents = (client) => {
-  client.musicManager.on("nodeConnect", (node) => client.logger.log(`Node "${node.options.identifier}" connected.`));
+  client.musicManager.on("nodeConnect", (node) => client.logger.log(`Node "${node.options.identifier}" connected`));
 
   client.musicManager.on("nodeError", (node, error) =>
     client.logger.error(`Node "${node.options.identifier}" encountered an error: ${error.message}.`, error)
@@ -30,7 +30,7 @@ exports.registerPlayerEvents = (client) => {
   });
 
   client.musicManager.on("nodeReconnect", (node) => {
-    client.logger.warn(`Node "${node.options.identifier}" reconnected.`);
+    client.logger.warn(`Node "${node.options.identifier}" is reconnecting`);
   });
 
   client.musicManager.on("trackError", (player, track, ex) => {

@@ -49,7 +49,7 @@ const sendLogs = (level, content, data) => {
       break;
 
     case "error":
-      console.log(`[${chalk.cyan(timestamp)}] [${chalk.redBright(level)}] ${content}: ${data}`);
+      console.log(`[${chalk.cyan(timestamp)}] [${chalk.redBright(level)}] ${content} ${data ? ": " + data : ""}`);
       simpleLogger.error(data ? data : content);
       if (errorWebhook) sendWebhook(content, data);
       break;

@@ -7,8 +7,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "nodemon .",
-    "start": "node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ."
   },
   "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
   "repository": {
@@ -59,7 +58,6 @@
   "_moduleAliases": {
     "@root": ".",
     "@commands": "src/commands/",
-    "@database": "src/database/",
     "@features": "src/features/",
     "@schemas": "src/schemas/",
     "@src": "src/",

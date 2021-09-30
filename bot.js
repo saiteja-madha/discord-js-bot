@@ -22,7 +22,14 @@ process.on("unhandledRejection", (err) => client.logger.error(`Unhandled excepti
 
 (async () => {
   await startupCheck();
-  if (client.config.DASHBOARD.enabled) await launch(client);
+  if (client.config.DASHBOARD.enabled) {
+    client.logger.log("Launching dashboard");
+    try {
+      await launch(client);
+    } catch (ex) {
+      client.logger.error("Failed to launch dashboard", ex);
+    }
+  }
   await client.initializeMongoose();
   await client.login(process.env.BOT_TOKEN);
 })();

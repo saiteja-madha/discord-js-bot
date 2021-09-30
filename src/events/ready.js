@@ -10,7 +10,7 @@ module.exports = async (client) => {
   client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
 
   // Initialize Music Manager
-  client.logger.log("Initializing music manager...");
+  client.logger.log("Initializing music manager");
   client.musicManager.init(client.user.id);
 
   // Update Bot Presence
