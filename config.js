@@ -73,7 +73,7 @@ module.exports = {
   },
   /* Maximum number of keys that can be stored */
   CACHE_SIZE: {
-    GUILDS: 10,
+    GUILDS: 100,
     USERS: 1000,
     MEMBERS: 1000,
   },
