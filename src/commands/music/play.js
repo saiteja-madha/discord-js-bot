@@ -14,9 +14,7 @@ module.exports = class Play extends Command {
         usage: "<song-name>",
         minArgsCount: 1,
         category: "MUSIC",
-      },
-      slashCommand: {
-        enabled: false,
+        botPermissions: ["EMBED_LINKS"],
       },
     });
   }

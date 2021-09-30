@@ -11,9 +11,6 @@ module.exports = class Volume extends Command {
         usage: "<1-100>",
         category: "MUSIC",
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

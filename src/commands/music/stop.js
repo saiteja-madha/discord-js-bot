@@ -10,9 +10,6 @@ module.exports = class Stop extends Command {
         enabled: true,
         category: "MUSIC",
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

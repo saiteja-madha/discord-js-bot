@@ -7,13 +7,12 @@ module.exports = class Skip extends Command {
   constructor(client) {
     super(client, {
       name: "np",
-      description: "SHow what is playing currently",
+      description: "Show what is playing currently",
       command: {
         enabled: true,
+        aliases: ["nowplaying"],
         category: "MUSIC",
-      },
-      slashCommand: {
-        enabled: false,
+        botPermissions: ["EMBED_LINKS"],
       },
     });
   }

@@ -19,9 +19,6 @@ module.exports = class Bassboost extends Command {
         usage: "<none|low|medium|high>",
         category: "MUSIC",
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

@@ -10,9 +10,6 @@ module.exports = class Pause extends Command {
         enabled: true,
         category: "MUSIC",
       },
-      slashCommand: {
-        enabled: false,
-      },
     });
   }
 

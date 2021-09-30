@@ -10,9 +10,7 @@ module.exports = class Queue extends Command {
       command: {
         enabled: true,
         category: "MUSIC",
-      },
-      slashCommand: {
-        enabled: false,
+        botPermissions: ["EMBED_LINKS"],
       },
     });
   }
