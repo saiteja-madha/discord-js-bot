@@ -19,11 +19,11 @@ async function checkForUpdates() {
 function validateConfig() {
   log("Validating config.js and environment variables");
   // Validate .env file
-  if (process.env.BOT_TOKEN === "") {
+  if (!process.env.BOT_TOKEN) {
     error("env: BOT_TOKEN cannot be empty");
     process.exit();
   }
-  if (process.env.MONGO_CONNECTION === "") {
+  if (!process.env.MONGO_CONNECTION) {
     error("env: MONGO_CONNECTION cannot be empty");
     process.exit();
   }
