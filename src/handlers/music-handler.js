@@ -1,38 +1,43 @@
 const { BotClient } = require("@src/structures");
+const { MessageEmbed } = require("discord.js");
 
 /**
  * @param {BotClient} client
  */
-function registerPlayerEvents(client) {
-  client.player.on("error", (queue, error) => {
-    client.logger.error(`[${queue.guild.name}] Error emitted from the queue`, error);
+exports.registerPlayerEvents = (client) => {
+  client.musicManager.on("nodeConnect", (node) => client.logger.log(`Node "${node.options.identifier}" connected.`));
+
+  client.musicManager.on("nodeError", (node, error) =>
+    client.logger.error(`Node "${node.options.identifier}" encountered an error: ${error.message}.`, error)
+  );
+
+  client.musicManager.on("trackStart", (player, track) => {
+    const channel = client.channels.cache.get(player.textChannel);
+    const embed = new MessageEmbed()
+      .setAuthor("Now Playing")
+      .setThumbnail(track.displayThumbnail("hqdefault"))
+      .setColor(client.config.EMBED_COLORS.BOT_EMBED)
+      .setDescription(`[${track.title}](${track.uri})`)
+      .setFooter(`Requested By: ${track.requester.tag}`);
+
+    channel.send({ embeds: [embed] });
   });
 
-  client.player.on("connectionError", (queue, error) => {
-    client.logger.error(`[${queue.guild.name}] Error emitted from the connection`, error);
+  client.musicManager.on("queueEnd", (player) => {
+    const channel = client.channels.cache.get(player.textChannel);
+    channel.send("Queue has ended.");
+    player.destroy();
   });
 
-  client.player.on("trackStart", (queue, track) => {
-    queue.metadata.send(`🎶 | Started playing: **${track.title}** in **${queue.connection.channel.name}**!`);
+  client.musicManager.on("nodeReconnect", (node) => {
+    client.logger.warn(`Node "${node.options.identifier}" reconnected.`);
   });
 
-  client.player.on("trackAdd", (queue, track) => {
-    queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
+  client.musicManager.on("trackError", (player, track, ex) => {
+    client.logger.error(`Track Error ${ex.error}`, ex.exception);
+    client.logger.debug({
+      player,
+      track,
+    });
   });
-
-  client.player.on("botDisconnect", (queue) => {
-    queue.metadata.send("❌ | I was manually disconnected from the voice channel, clearing queue!");
-  });
-
-  client.player.on("channelEmpty", (queue) => {
-    queue.metadata.send("❌ | Nobody is in the voice channel, leaving...");
-  });
-
-  client.player.on("queueEnd", (queue) => {
-    queue.metadata.send("✅ | Queue finished!");
-  });
-}
-
-module.exports = {
-  registerPlayerEvents,
 };

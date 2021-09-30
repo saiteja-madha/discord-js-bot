@@ -22,6 +22,27 @@ module.exports = {
   MISCELLANEOUS: {
     DAILY_COINS: 100, // coins to be received by daily command
   },
+  MUSIC: {
+    MAX_SEARCH_RESULTS: 5,
+    NODES: [
+      {
+        host: "disbotlistlavalink.ml",
+        port: 443,
+        password: "LAVA",
+        identifier: "DBL Lavalink",
+        retryDelay: 3000,
+        secure: true,
+      },
+      {
+        host: "lava.link",
+        port: 80,
+        password: "anything as a password",
+        identifier: "Something Host",
+        retryDelay: 3000,
+        secure: false,
+      },
+    ],
+  },
   /* Bot Embed Colors */
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",
