@@ -1,0 +1,2 @@
+language = "nodejs"
+run = "node_modules/.bin/node bot.js"
