@@ -24,19 +24,20 @@ module.exports = class Volume extends Command {
   async messageRun(message, args) {
     const player = message.client.musicManager.get(message.guild.id);
 
-    if (!player) return message.reply("there is no player for this guild.");
-    if (!args.length) return message.reply(`the player volume is \`${player.volume}\`.`);
+    if (!player) return message.channel.send("No music is being played!");
+    if (!args.length) return message.channel.send(`> The player volume is \`${player.volume}\`.`);
 
-    const { channel } = message.member.voice;
+    const { channel: voice } = message.member.voice;
 
-    if (!channel) return message.reply("you need to join a voice channel.");
-    if (channel.id !== player.voiceChannel) return message.reply("you're not in the same voice channel.");
+    if (!voice) return message.channel.send("You need to join a voice channel.");
+    if (voice.id !== player.voiceChannel) return message.channel.send("You're not in the same voice channel.");
 
     const volume = Number(args[0]);
 
-    if (!volume || volume < 1 || volume > 100) return message.reply("you need to give me a volume between 1 and 100.");
+    if (!volume || volume < 1 || volume > 100)
+      return message.channel.send("you need to give me a volume between 1 and 100.");
 
     player.setVolume(volume);
-    return message.reply(`set the player volume to \`${volume}\`.`);
+    return message.channel.send(`> Music player volume to \`${volume}\`.`);
   }
 };

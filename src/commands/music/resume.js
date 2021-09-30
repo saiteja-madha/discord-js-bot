@@ -22,15 +22,15 @@ module.exports = class Resume extends Command {
    */
   async messageRun(message, args) {
     const player = message.client.musicManager.get(message.guild.id);
-    if (!player) return message.reply("there is no player for this guild.");
+    if (!player) return message.channel.send("No music is being played!");
 
-    const { channel } = message.member.voice;
+    const { channel: voice } = message.member.voice;
 
-    if (!channel) return message.reply("you need to join a voice channel.");
-    if (channel.id !== player.voiceChannel) return message.reply("you're not in the same voice channel.");
-    if (!player.paused) return message.reply("the player is already resumed.");
+    if (!voice) return message.channel.send("You need to join a voice channel.");
+    if (voice.id !== player.voiceChannel) return message.channel.send("You're not in the same voice channel.");
+    if (!player.paused) return message.channel.send("The player is already resumed");
 
     player.pause(false);
-    return message.reply("resumed the player.");
+    return message.channel.send("Resumed the player");
   }
 };

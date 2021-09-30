@@ -1,7 +1,8 @@
+const { EMBED_COLORS } = require("@root/config");
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
 
-module.exports = class Skip extends Command {
+module.exports = class Queue extends Command {
   constructor(client) {
     super(client, {
       name: "queue",
@@ -22,10 +23,10 @@ module.exports = class Skip extends Command {
    */
   async messageRun(message, args) {
     const player = message.client.musicManager.get(message.guild.id);
-    if (!player) return message.reply("there is no player for this guild.");
+    if (!player) return message.channel.send("There is no music playing in this guild.");
 
     const queue = player.queue;
-    const embed = new MessageEmbed().setAuthor(`Queue for ${message.guild.name}`);
+    const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setAuthor(`Queue for ${message.guild.name}`);
 
     // change for the amount of tracks per page
     const multiple = 10;
@@ -45,6 +46,6 @@ module.exports = class Skip extends Command {
 
     embed.setFooter(`Page ${page > maxPages ? maxPages : page} of ${maxPages}`);
 
-    return message.reply(embed);
+    return message.channel.send({ embeds: [embed] });
   }
 };

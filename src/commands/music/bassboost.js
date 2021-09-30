@@ -44,6 +44,6 @@ module.exports = class Bassboost extends Command {
     const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
     player.setEQ(...bands);
 
-    return message.channel.send(`Set the bassboost level to ${level}`);
+    return message.channel.send(`> Set the bassboost level to ${level}`);
   }
 };

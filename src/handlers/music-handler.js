@@ -28,4 +28,16 @@ exports.registerPlayerEvents = (client) => {
     channel.send("Queue has ended.");
     player.destroy();
   });
+
+  client.musicManager.on("nodeReconnect", (node) => {
+    client.logger.warn(`Node "${node.options.identifier}" reconnected.`);
+  });
+
+  client.musicManager.on("trackError", (player, track, ex) => {
+    client.logger.error(`Track Error ${ex.error}`, ex.exception);
+    client.logger.debug({
+      player,
+      track,
+    });
+  });
 };

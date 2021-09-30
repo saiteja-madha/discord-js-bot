@@ -1,6 +1,8 @@
 /* eslint-disable no-case-declarations */
+const { EMBED_COLORS } = require("@root/config");
 const { Command } = require("@src/structures");
 const { Message, MessageEmbed } = require("discord.js");
+const prettyMs = require("pretty-ms");
 
 module.exports = class Play extends Command {
   constructor(client) {
@@ -31,7 +33,7 @@ module.exports = class Play extends Command {
     let player = message.client.musicManager.get(guild.id);
 
     if (player && member.voice.channel !== guild.me.voice.channel) {
-      return channel.send("You must be in the same voice channel");
+      return channel.send("You must be in the same voice channel as mine");
     }
 
     player = message.client.musicManager.create({
@@ -55,14 +57,13 @@ module.exports = class Play extends Command {
       return channel.send("There was an error while searching");
     }
 
-    let embed = new MessageEmbed().setColor(this.client.config.EMBED_COLORS.BOT_EMBED);
+    let embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED);
     let track;
 
     switch (res.loadType) {
       case "NO_MATCHES":
         if (!player.queue.current) player.destroy();
-        embed.setDescription("No results found");
-        break;
+        return channel.send(`No results found matching ${query}`);
 
       case "TRACK_LOADED":
         track = res.tracks[0];
@@ -73,8 +74,12 @@ module.exports = class Play extends Command {
 
         embed
           .setThumbnail(track.displayThumbnail("hqdefault"))
-          .setDescription(`**Added Song to queue**\n[${track.title}](${track.uri})`)
+          .setAuthor("Added Song to queue")
+          .setDescription(`[${track.title}](${track.uri})`)
+          .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
           .setFooter(`Requested By: ${track.requester.tag}`);
+
+        if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
 
         break;
 
@@ -84,9 +89,12 @@ module.exports = class Play extends Command {
           player.play();
         }
 
-        embed.setDescription(
-          `**Added Playlist to queue**\nPlaylist: **${res.playlist.name}**\n${res.tracks.length} Songs`
-        );
+        embed
+          .setAuthor("Added Playlist to queue")
+          .setDescription(res.playlist.name)
+          .addField("Enqueued", `${res.tracks.length} songs`, true)
+          .addField("Playlist duration", prettyMs(res.playlist.duration, { colonNotation: true }) + "`", true)
+          .setFooter(`Requested By: ${track.requester.tag}`);
 
         break;
 
@@ -104,7 +112,7 @@ module.exports = class Play extends Command {
         embed
           .setAuthor("Search Results")
           .setDescription(results)
-          .setFooter("Enter the song number you wish to add to queue");
+          .setFooter("Please enter song number you wish to add to queue. Type 'end' to cancel");
 
         channel.send({ embeds: [embed] });
 
@@ -138,8 +146,12 @@ module.exports = class Play extends Command {
 
         embed
           .setThumbnail(track.displayThumbnail("hqdefault"))
-          .setDescription(`**Added Song to queue**\n[${track.title}](${track.uri})`)
+          .setAuthor("Added Song to queue")
+          .setDescription(`[${track.title}](${track.uri})`)
+          .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
           .setFooter(`Requested By: ${track.requester.tag}`);
+
+        if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
     }
 
     channel.send({ embeds: [embed] });
