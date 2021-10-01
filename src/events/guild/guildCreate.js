@@ -19,7 +19,7 @@ module.exports = async (client, guild) => {
     .setColor(client.config.EMBED_COLORS.SUCCESS_EMBED)
     .addField("Name", guild.name, false)
     .addField("ID", guild.id, false)
-    .addField("Owner", `${client.users.cache.get(guild.ownerId)} [\`${guild.ownerId}\`]`, false)
+    .addField("Owner", `${client.users.cache.get(guild.ownerId).tag} [\`${guild.ownerId}\`]`, false)
     .addField("Members", `\`\`\`yaml\n${guild.memberCount}\`\`\``, false)
     .setFooter(`Guild #${client.guilds.cache.size}`);
 
