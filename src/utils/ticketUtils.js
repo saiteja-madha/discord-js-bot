@@ -95,7 +95,7 @@ async function closeTicket(channel, closedBy, reason) {
     ${EMOJIS.ARROW} **Opened By:** ${ticketDetails.user ? ticketDetails.user.tag : "User left"}
     ${EMOJIS.ARROW} **Closed By:** ${closedBy ? closedBy.tag : "User left"}
     ${EMOJIS.ARROW} **Reason:** ${reason != null ? reason : "No reason provided"}
-    ${logsUrl == null ? "" : `\n[View Logs](${logsUrl})`}
+    ${logsUrl == null ? "" : `\n[View Logs](${logsUrl.url})`}
     `;
 
     if (channel.deletable) await channel.delete();
