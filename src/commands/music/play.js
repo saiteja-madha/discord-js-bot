@@ -134,8 +134,8 @@ module.exports = class Play extends Command {
         }
 
         const index = Number(first) - 1;
-        if (index < 0 || index > max - 1)
-          return message.reply(`the number you provided too small or too big (1-${max}).`);
+        if (isNaN(index) || index < 0 || index > max - 1)
+          return message.reply(`You must provide a valid number input between (1-${max}).`);
 
         track = res.tracks[index];
 
