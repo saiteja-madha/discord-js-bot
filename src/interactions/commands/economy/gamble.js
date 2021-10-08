@@ -1,40 +1,40 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
+const { SlashCommand } = require("@src/structures");
+const { MessageEmbed, CommandInteraction } = require("discord.js");
 const { getUser, addCoins } = require("@schemas/user-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const { getRandomInt } = require("@utils/miscUtils");
 
-module.exports = class Gamble extends Command {
+module.exports = class Gamble extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "gamble",
       description: "try your luck by gambling",
-      command: {
-        enabled: true,
-        usage: "<amount>",
-        minArgsCount: 1,
-        aliases: ["slot"],
-        category: "ECONOMY",
-        botPermissions: ["EMBED_LINKS"],
-      },
+      enabled: true,
+      options: [
+        {
+          name: "coins",
+          description: "number of coins to bet",
+          required: true,
+          type: "INTEGER",
+        },
+      ],
     });
   }
 
   /**
-   * @param {Message} message
-   * @param {string[]} args
+   * @param {CommandInteraction} interaction
    */
-  async messageRun(message, args) {
-    const { member } = message;
-    const betAmount = args[0];
+  async run(interaction) {
+    const user = interaction.user;
+    const betAmount = interaction.options.getInteger("coins");
 
-    if (isNaN(betAmount)) return message.reply("Bet amount needs to be a valid number input");
-    if (betAmount < 0) return message.reply("Bet amount cannot be negative");
-    if (betAmount < 10) return message.reply("Bet amount cannot be less than 10");
+    if (isNaN(betAmount)) return interaction.followUp("Bet amount needs to be a valid number input");
+    if (betAmount < 0) return interaction.followUp("Bet amount cannot be negative");
+    if (betAmount < 10) return interaction.followUp("Bet amount cannot be less than 10");
 
-    const economy = await getUser(member.id);
+    const economy = await getUser(user.id);
     if (!economy || economy?.coins < betAmount)
-      return message.reply(
+      return interaction.followUp(
         `You do not have sufficient coins to gamble!\n**Coin balance:** ${economy?.coins || 0}${EMOJIS.CURRENCY}`
       );
 
@@ -58,15 +58,15 @@ module.exports = class Gamble extends Command {
     const result = (reward > 0 ? `You won: ${reward}` : `You lost: ${betAmount}`) + EMOJIS.CURRENCY;
     const balance = reward - betAmount;
 
-    const remaining = await addCoins(member.id, balance);
+    const remaining = await addCoins(user.id, balance);
     const embed = new MessageEmbed()
-      .setAuthor(member.displayName, member.user.displayAvatarURL())
+      .setAuthor(user.username, user.displayAvatarURL())
       .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
       .setThumbnail("https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif")
       .setDescription(str)
       .setFooter(`${result}\nUpdated balance: ${remaining?.coins}${EMOJIS.CURRENCY}`);
 
-    message.channel.send({ embeds: [embed] });
+    return interaction.followUp({ embeds: [embed] });
   }
 };
 
