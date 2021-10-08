@@ -1,12 +1,12 @@
 const { MessageEmbed, MessageAttachment, CommandInteraction } = require("discord.js");
-const { Command } = require("@src/structures");
+const { SlashCommand } = require("@src/structures");
 const { getBuffer } = require("@utils/httpUtils");
 const { getFilter } = require("@utils/imageUtils");
 const { EMBED_COLORS } = require("@root/config.js");
 
 const availableFilters = ["blur", "burn", "gay", "greyscale", "invert", "pixelate", "sepia", "sharpen"];
 
-module.exports = class Filters extends Command {
+module.exports = class Filters extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "filter",
@@ -39,7 +39,7 @@ module.exports = class Filters extends Command {
   /**
    * @param {CommandInteraction} interaction
    */
-  async interactionRun(interaction) {
+  async run(interaction) {
     const author = interaction.user;
     const user = interaction.options.getUser("user");
     const imageLink = interaction.options.getString("link");

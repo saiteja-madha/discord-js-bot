@@ -1,60 +1,32 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
+const { SlashCommand } = require("@src/structures");
+const { MessageEmbed, CommandInteraction } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 
 const API_KEY = process.env.WEATHERSTACK_KEY;
 
-module.exports = class WeatherCommand extends Command {
+module.exports = class WeatherCommand extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "weather",
       description: "get weather information",
-      cooldown: 5,
-      command: {
-        enabled: true,
-        usage: "<place>",
-        minArgsCount: 1,
-        category: "UTILITY",
-        botPermissions: ["EMBED_LINKS"],
-      },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "place",
-            description: "country/city name to get weather information for",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
+      enabled: true,
+      options: [
+        {
+          name: "place",
+          description: "country/city name to get weather information for",
+          type: "STRING",
+          required: true,
+        },
+      ],
     });
   }
 
   /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
-  async messageRun(message, args) {
-    const place = args.join(" ");
-
-    const response = await getJson(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=${place}`);
-    if (!response.success) return message.reply(MESSAGES.API_ERROR);
-
-    const json = response.data;
-    if (!json.request) return message.reply(`No city found matching \`${place}\``);
-
-    const embed = buildEmbed(json);
-    message.channel.send({ embeds: [embed] });
-  }
-
-  /**
    * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
    */
-  async interactionRun(interaction, options) {
-    const place = options.getString("place");
+  async run(interaction) {
+    const place = interaction.options.getString("place");
 
     const response = await getJson(`http://api.weatherstack.com/current?access_key=${API_KEY}&query=${place}`);
     if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
@@ -63,7 +35,7 @@ module.exports = class WeatherCommand extends Command {
     if (!json.request) return interaction.followUp(`No city found matching \`${place}\``);
 
     const embed = buildEmbed(json);
-    interaction.followUp({ embeds: [embed] });
+    return interaction.followUp({ embeds: [embed] });
   }
 };
 
