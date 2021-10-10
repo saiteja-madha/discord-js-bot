@@ -11,6 +11,7 @@ module.exports = class CatCommand extends SlashCommand {
       name: "animal",
       description: "shows a random animal image",
       enabled: true,
+      cooldown: 5,
       options: [
         {
           name: "name",

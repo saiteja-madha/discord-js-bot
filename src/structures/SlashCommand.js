@@ -14,10 +14,11 @@ module.exports = class SlashCommand {
    * @typedef {Object} CommandData
    * @property {string} name - The name of the command (must be lowercase)
    * @property {string} description - A short description of the command
-   * @property {boolean} enabled - Whether the slash command is enabled or not
-   * @property {boolean} ephemeral - Whether the reply should be ephemeral
-   * @property {ApplicationCommandOptionData[]} options - Command options
-   * @property {PermissionResolvable[]} userPermissions - Permissions required by the user to use the command.
+   * @property {boolean} [enabled] - Whether the slash command is enabled or not
+   * @property {boolean} [ephemeral] - Whether the reply should be ephemeral
+   * @property {ApplicationCommandOptionData[]} [options] - Command options
+   * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command.
+   * @property {number} [cooldown] - Command cooldown in seconds
    */
 
   /**
@@ -25,14 +26,16 @@ module.exports = class SlashCommand {
    * @param {CommandData} data - The command information
    */
   constructor(client, data) {
+    this.constructor.validateInfo(client, data);
     if (typeof this.run !== "function") throw new Error("Missing run() method");
     this.client = client;
     this.name = data.name;
     this.description = data.description;
-    this.enabled = data.enabled || true;
-    this.ephemeral = data.ephemeral || false;
+    this.enabled = Object.prototype.hasOwnProperty.call(data, "enabled") ? data.enabled : true;
+    this.ephemeral = Object.prototype.hasOwnProperty.call(data, "ephemeral") ? data.ephemeral : false;
     this.options = data.options || [];
     this.userPermissions = data.userPermissions || [];
+    this.cooldown = data.cooldown || 0;
   }
 
   /**
@@ -94,5 +97,43 @@ module.exports = class SlashCommand {
   parsePermissions(perms) {
     const permissionWord = `permission${perms.length > 1 ? "s" : ""}`;
     return perms.map((perm) => `\`${permissions[perm]}\``).join(", ") + permissionWord;
+  }
+
+  /**
+   * Validates constructor parameters
+   * @param {BotClient} client
+   * @param {CommandData} data
+   */
+  static validateInfo(client, data) {
+    if (!client) throw new Error("A client must be specified");
+    if (typeof data !== "object") {
+      throw new TypeError("Command data must be an object");
+    }
+    if (typeof data.name !== "string" || data.name !== data.name.toLowerCase()) {
+      throw new Error("Command name must be a lowercase string.");
+    }
+    if (typeof data.description !== "string") {
+      throw new TypeError("Command description must be a string.");
+    }
+    if (Object.prototype.hasOwnProperty.call(data, "enabled") && typeof data.enabled !== "boolean") {
+      throw new TypeError("Command enabled must be a boolean value");
+    }
+    if (Object.prototype.hasOwnProperty.call(data, "ephemeral") && typeof data.ephemeral !== "boolean") {
+      throw new TypeError("Command enabled must be a boolean value");
+    }
+    if (data.options && !Array.isArray(data.options)) {
+      throw new TypeError("Command options must be a array");
+    }
+    if (Object.prototype.hasOwnProperty.call(data, "cooldown") && typeof data.cooldown !== "number") {
+      throw new TypeError("Command cooldown must be a number");
+    }
+    if (data.userPermissions) {
+      if (!Array.isArray(data.userPermissions)) {
+        throw new TypeError("Command userPermissions must be an Array of permission key strings.");
+      }
+      for (const perm of data.userPermissions) {
+        if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
+      }
+    }
   }
 };

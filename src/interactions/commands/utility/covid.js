@@ -10,6 +10,7 @@ module.exports = class CovidCommand extends SlashCommand {
       name: "covid",
       description: "get covid statistics for a country",
       enabled: true,
+      cooldown: 10,
       options: [
         {
           name: "country",

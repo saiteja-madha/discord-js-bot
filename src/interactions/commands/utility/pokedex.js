@@ -4,12 +4,13 @@ const { EMOJIS, MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const outdent = require("outdent");
 
-module.exports = class Pokedex extends SlashCommand {
+module.exports = class PokedexCommand extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "pokedex",
       description: "shows pokemon information",
       enabled: true,
+      cooldown: 10,
       options: [
         {
           name: "pokemon",

@@ -1,36 +1,35 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
+const { SlashCommand } = require("@src/structures");
+const { MessageEmbed, CommandInteraction } = require("discord.js");
 const { MESSAGES } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const outdent = require("outdent");
 
-module.exports = class GithubCommand extends Command {
+module.exports = class GithubCommand extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "github",
       description: "shows github statistics of a user",
+      enabled: true,
       cooldown: 10,
-      command: {
-        enabled: true,
-        aliases: ["git"],
-        usage: "<username>",
-        minArgsCount: 1,
-        category: "UTILITY",
-        botPermissions: ["EMBED_LINKS"],
-      },
+      options: [
+        {
+          name: "username",
+          description: "github username",
+          type: "STRING",
+          required: true,
+        },
+      ],
     });
   }
 
   /**
-   * @param {Message} message
-   * @param {string[]} args
+   * @param {CommandInteraction} interaction
    */
-  async messageRun(message, args) {
-    const { author } = message;
-
-    const response = await getJson(`https://api.github.com/users/${args}`);
-    if (response.status === 404) return message.reply("```No user found with that name```");
-    if (!response.success) return message.reply(MESSAGES.API_ERROR);
+  async run(interaction) {
+    const target = interaction.options.getString("username");
+    const response = await getJson(`https://api.github.com/users/${target}`);
+    if (response.status === 404) return interaction.followUp("```No user found with that name```");
+    if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
 
     const json = response.data;
     const {
@@ -63,9 +62,9 @@ module.exports = class GithubCommand extends Command {
       .setDescription(`**Bio**:\n${bio}`)
       .setImage(avatarUrl)
       .setColor(0x6e5494)
-      .setFooter(`Requested by ${author.tag}`);
+      .setFooter(`Requested by ${interaction.user.tag}`);
 
-    message.channel.send({ embeds: [embed] });
+    interaction.followUp({ embeds: [embed] });
   }
 };
 

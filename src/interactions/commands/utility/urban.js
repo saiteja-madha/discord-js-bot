@@ -10,6 +10,7 @@ module.exports = class UrbanCommand extends SlashCommand {
       name: "urban",
       description: "searches the urban dictionary",
       enabled: true,
+      cooldown: 5,
       options: [
         {
           name: "word",

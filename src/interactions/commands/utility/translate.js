@@ -15,6 +15,7 @@ module.exports = class TranslateCommand extends SlashCommand {
       name: "translate",
       description: "translate from one language to other",
       enabled: true,
+      cooldown: 10,
       options: [
         {
           name: "language",

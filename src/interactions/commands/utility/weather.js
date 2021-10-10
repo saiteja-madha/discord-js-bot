@@ -11,6 +11,7 @@ module.exports = class WeatherCommand extends SlashCommand {
       name: "weather",
       description: "get weather information",
       enabled: true,
+      cooldown: 5,
       options: [
         {
           name: "place",
