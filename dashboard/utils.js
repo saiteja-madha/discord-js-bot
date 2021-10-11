@@ -40,7 +40,7 @@ async function fetchUser(userData, client, query) {
   }
   const user = await client.users.fetch(userData.id);
   const userDb = await getUser(user.id);
-  const userInfos = { ...user.toJSON(), ...userDb, ...userData, ...user.presence };
+  const userInfos = { ...user, ...userDb, ...userData, ...user.presence };
   return userInfos;
 }
 
