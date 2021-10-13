@@ -165,7 +165,7 @@ module.exports = class SlashCommand {
         if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
       }
     }
-    if (data.category !== "NONE") {
+    if (data.category) {
       if (!Object.prototype.hasOwnProperty.call(CommandCategory, data.category)) {
         throw new Error(`Not a valid category ${data.category}`);
       }

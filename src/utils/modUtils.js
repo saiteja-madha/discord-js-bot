@@ -1,4 +1,4 @@
-const { Message, Guild, GuildMember, TextChannel, Collection, MessageEmbed } = require("discord.js");
+const { Guild, GuildMember, TextChannel, Collection, MessageEmbed, BaseGuildTextChannel } = require("discord.js");
 const { sendMessage } = require("@utils/botUtils");
 const { containsLink, timeformat } = require("@utils/miscUtils");
 const { addModLogToDb, removeMutes, getMuteInfo } = require("@schemas/modlog-schema");
@@ -6,7 +6,9 @@ const { getSettings } = require("@schemas/guild-schema");
 const { addWarnings } = require("@schemas/profile-schema");
 const { EMOJIS, EMBED_COLORS } = require("@root/config");
 const { getRoleByName } = require("./guildUtils");
-const { error, debug } = require("../helpers/logger");
+const { error } = require("../helpers/logger");
+
+const purgePerms = ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"];
 
 /**
  * @param {GuildMember} issuer
@@ -82,14 +84,23 @@ async function setupMutedRole(guild) {
 
 /**
  * Delete the specified number of messages matching the type
- * @param {Message} message
+ * @param {string} messageId
+ * @param {GuildMember} issuer
+ * @param {BaseGuildTextChannel} channel
  * @param {"ATTACHMENT"|"BOT"|"LINK"|"TOKEN"|"USER"|"ALL"} type
  * @param {Number} amount
  */
-async function purgeMessages(message, type, amount, argument) {
-  const { channel } = message;
+async function purgeMessages(issuer, channel, type, amount, argument) {
+  if (!channel.permissionsFor(issuer).has(purgePerms)) {
+    return `You do not have permissions to Read Message History & Manage Messages in ${channel}`;
+  }
+
+  if (!channel.permissionsFor(issuer.guild.me).has(purgePerms)) {
+    return `I do not have permissions to Read Message History & Manage Messages in ${channel}`;
+  }
+
   const toDelete = new Collection();
-  const messages = await channel.messages.fetch({ limit: amount }, false, true);
+  const messages = await channel.messages.fetch({ limit: amount }, { cache: false, force: true });
 
   messages.every((msg) => {
     if (toDelete.size === amount) return false;
@@ -127,26 +138,20 @@ async function purgeMessages(message, type, amount, argument) {
     return true;
   });
 
-  if (toDelete.size === 0) {
-    return sendMessage(channel, "Not found messages that can be purged!");
-  }
+  if (toDelete.size === 0) return `Could not fetch any messages that can be cleaned`;
 
-  let deletedMessages;
   try {
-    deletedMessages = await channel.bulkDelete(toDelete, true);
-  } catch (ex) {
-    error("purgeMessages", ex);
-    sendMessage(channel, "Purge failed");
-  }
-
-  if (deletedMessages) {
-    const sentMsg = await sendMessage(channel, `Successfully purged ${deletedMessages.size} messages`);
-    sentMsg.delete({ timeout: 3000 }).catch(() => {});
-    await logModeration(message.member, "", "", "Purge", {
+    const deletedMessages = await channel.bulkDelete(toDelete, true);
+    await logModeration(issuer, "", "", "Purge", {
       purgeType: type,
-      channel: message.channel,
+      channel: channel,
       deletedCount: deletedMessages.size,
     });
+
+    return `Successfully deleted ${deletedMessages} messages`;
+  } catch (ex) {
+    error("purgeMessages", ex);
+    return `Oops! Failed to delete messages`;
   }
 }
 
@@ -158,7 +163,9 @@ async function purgeMessages(message, type, amount, argument) {
  */
 async function warnTarget(issuer, target, reason) {
   const { guild } = issuer;
-  if (!memberInteract(guild.me, target)) return;
+
+  if (!memberInteract(issuer, target)) return `Oops! You cannot warn ${target.user.tag}`;
+  if (!memberInteract(guild.me, target)) return `Oops! I cannot warn ${target.user.tag}`;
 
   try {
     await logModeration(issuer, target, reason, "Warn");
@@ -170,10 +177,11 @@ async function warnTarget(issuer, target, reason) {
       await addModAction(guild.me, target, "Max warnings reached", settings.max_warn_action); // moderate
       await addWarnings(guild.id, target.id, -profile.warnings); // reset warnings
     }
-    return true;
+
+    return `${target.user.tag} is warned! ${profile.warnings}/${settings.max_warnings} warnings`;
   } catch (ex) {
     error("warnTarget", ex);
-    return false;
+    return `Failed to warn ${target.user.tag}`;
   }
 }
 
@@ -193,9 +201,14 @@ function hasMutedRole(target) {
  * @param {string} reason
  */
 async function muteTarget(issuer, target, reason) {
-  if (!memberInteract(issuer.guild.me, target)) return;
+  if (!memberInteract(issuer, target)) return `Oops! You cannot mute ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot mute ${target.user.tag}`;
 
   let mutedRole = getRoleByName(issuer.guild, "muted");
+
+  if (!mutedRole) return "NO_MUTED_ROLE";
+  if (!mutedRole.editable) return "NO_MUTED_PERMISSION";
+
   const previousMute = await getMuteInfo(issuer.guild.id, target.id);
 
   if (previousMute) {
@@ -206,10 +219,10 @@ async function muteTarget(issuer, target, reason) {
   try {
     if (!hasMutedRole(target)) await target.roles.add(mutedRole);
     await logModeration(issuer, target, reason, "Mute", { isPermanent: true });
-    return true;
+    return `${target.user.tag} is now muted on this server`;
   } catch (ex) {
     error("muteTarget", ex);
-    return false;
+    return `Failed to mute ${target.user.tag}`;
   }
 }
 
@@ -220,7 +233,8 @@ async function muteTarget(issuer, target, reason) {
  * @param {string} reason
  */
 async function unmuteTarget(issuer, target, reason) {
-  if (!memberInteract(issuer.guild.me, target)) return;
+  if (!memberInteract(issuer, target)) return `Oops! You cannot unmute ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot unmute ${target.user.tag}`;
 
   const previousMute = await getMuteInfo(issuer.guild.id, target.id);
   if (!previousMute && !hasMutedRole(target)) return "NOT_MUTED";
@@ -230,10 +244,10 @@ async function unmuteTarget(issuer, target, reason) {
     await removeMutes(issuer.guild.id, target.id);
     if (hasMutedRole(target)) await target.roles.remove(mutedRole);
     await logModeration(issuer, target, reason, "Unmute");
-    return true;
+    return `${target.user.tag} is now unmuted`;
   } catch (ex) {
     error("unmuteTarget", ex);
-    return false;
+    return `Failed to unmute ${target.user.tag}`;
   }
 }
 
@@ -244,33 +258,35 @@ async function unmuteTarget(issuer, target, reason) {
  * @param {string} reason
  */
 async function kickTarget(issuer, target, reason) {
-  if (!memberInteract(issuer.guild.me, target)) return;
+  if (!memberInteract(issuer, target)) return `Oops! You cannot kick ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot kick ${target.user.tag}`;
   try {
     await target.kick(reason);
     await logModeration(issuer, target, reason, "Kick");
-    return true;
+    return `${target.user.tag} is kicked from this server`;
   } catch (ex) {
     error("kickTarget", ex);
-    return false;
+    return `Failed to kick ${target.user.tag}`;
   }
 }
 
 /**
- * Softbans the target and logs to the database, channel
+ * Softban's the target and logs to the database, channel
  * @param {GuildMember} issuer
  * @param {GuildMember} target
  * @param {string} reason
  */
 async function softbanTarget(issuer, target, reason) {
-  if (!memberInteract(issuer.guild.me, target)) return;
+  if (!memberInteract(issuer, target)) return `Oops! You cannot softban ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot softban ${target.user.tag}`;
   try {
     await target.ban({ days: 7, reason });
     await issuer.guild.members.unban(target.user);
     await logModeration(issuer, target, reason, "Softban");
-    return true;
+    return `${target.user.tag} is soft-banned from this server`;
   } catch (ex) {
     error("softbanTarget", ex);
-    return false;
+    return `Failed to softban ${target.user.tag}`;
   }
 }
 
@@ -281,17 +297,18 @@ async function softbanTarget(issuer, target, reason) {
  * @param {string} reason
  */
 async function banTarget(issuer, target, reason) {
-  if (!memberInteract(issuer.guild.me, target)) return;
+  if (!memberInteract(issuer, target)) return `Oops! You cannot ban ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot ban ${target.user.tag}`;
   try {
     await target.ban({
       days: 0,
       reason,
     });
     await logModeration(issuer, target, reason, "Ban");
-    return true;
+    return `${target.user.tag} is banned from this server`;
   } catch (ex) {
     error(`banTarget`, ex);
-    return false;
+    return `Failed to ban ${target.user.tag}`;
   }
 }
 
