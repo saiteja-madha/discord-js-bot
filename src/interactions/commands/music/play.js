@@ -10,6 +10,7 @@ module.exports = class Play extends SlashCommand {
       name: "play",
       description: "play a song from youtube",
       enabled: true,
+      category: "MUSIC",
       options: [
         {
           name: "query",

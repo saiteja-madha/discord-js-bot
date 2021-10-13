@@ -7,6 +7,7 @@ module.exports = class Stop extends SlashCommand {
       name: "stop",
       description: "stop the music player",
       enabled: true,
+      category: "MUSIC",
     });
   }
 
@@ -25,6 +26,6 @@ module.exports = class Stop extends SlashCommand {
     if (channel.id !== player.voiceChannel) return interaction.followUp("You're not in the same voice channel.");
 
     player.destroy();
-    return interaction.followUp("The music player is stopped");
+    await interaction.followUp("The music player is stopped");
   }
 };

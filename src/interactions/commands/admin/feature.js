@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
-const { xpSystem, inviteTracking } = require("@schemas/guild-schema");
+const { xpSystem, inviteTracking, flagTranslation } = require("@schemas/guild-schema");
 const { cacheGuildInvites } = require("@src/handlers/invite-handler");
 
 module.exports = class FeaturesCommand extends SlashCommand {
@@ -10,51 +10,45 @@ module.exports = class FeaturesCommand extends SlashCommand {
       description: "enable or disable features in the server",
       enabled: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       ephemeral: true,
       options: [
         {
           name: "xp",
-          description: "enable or disable xp tracking in this guild",
+          description: "configure xp tracking in this guild",
           type: "SUB_COMMAND",
           options: [
             {
-              name: "status",
-              description: "configuration status",
-              type: "STRING",
+              name: "enabled",
+              description: "enable or disable xp tracking",
+              type: "BOOLEAN",
               required: true,
-              choices: [
-                {
-                  name: "ON",
-                  value: "ON",
-                },
-                {
-                  name: "OFF",
-                  value: "OFF",
-                },
-              ],
             },
           ],
         },
         {
           name: "invite",
-          description: "enable or disable invite tracking in this guild",
+          description: "configure invite tracking in this guild",
           type: "SUB_COMMAND",
           options: [
             {
-              name: "status",
-              description: "configuration status",
-              type: "STRING",
+              name: "enabled",
+              description: "enable or disable invite tracking",
+              type: "BOOLEAN",
               required: true,
-              choices: [
-                {
-                  name: "ON",
-                  value: "ON",
-                },
-                {
-                  name: "OFF",
-                  value: "OFF",
-                },
-              ],
+            },
+          ],
+        },
+        {
+          name: "flag_tr",
+          description: "configure translation by flags in this guild",
+          type: "SUB_COMMAND",
+          options: [
+            {
+              name: "enabled",
+              description: "enable or disable flag translation",
+              type: "BOOLEAN",
+              required: true,
             },
           ],
         },
@@ -70,14 +64,14 @@ module.exports = class FeaturesCommand extends SlashCommand {
 
     // XP Tracker
     if (sub === "xp") {
-      const status = interaction.options.getString("status") === "ON" ? true : false;
+      const status = interaction.options.getBoolean("enabled");
       await xpSystem(interaction.guildId, status);
-      interaction.followUp(`Configuration saved! XP System is now ${status ? "enabled" : "disabled"}`);
+      await interaction.followUp(`Configuration saved! XP System is now ${status ? "enabled" : "disabled"}`);
     }
 
     // Invite Tracker
     else if (sub === "invite") {
-      const status = interaction.options.getString("status") === "ON" ? true : false;
+      const status = interaction.options.getBoolean("enabled");
 
       if (status) {
         if (!interaction.guild.me.permissions.has(["MANAGE_GUILD", "MANAGE_CHANNELS"])) {
@@ -104,7 +98,14 @@ module.exports = class FeaturesCommand extends SlashCommand {
       }
 
       await inviteTracking(interaction.guildId, status);
-      interaction.followUp(`Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`);
+      await interaction.followUp(`Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`);
+    }
+
+    // flag translation
+    else if (sub === "flag_tr") {
+      const status = interaction.options.getBoolean("enabled");
+      await flagTranslation(interaction.guildId, status);
+      await interaction.followUp(`Configuration saved! Flag translation is now ${status ? "enabled" : "disabled"}`);
     }
   }
 };

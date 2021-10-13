@@ -4,11 +4,6 @@ module.exports = {
     image: "https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/512/Settings-icon.png",
     emoji: "\u2699",
   },
-  AUTOMOD: {
-    name: "Automod",
-    image: "https://cdn3.iconfinder.com/data/icons/web-marketing-1-3/48/30-512.png",
-    emoji: "\uD83D\uDEE1",
-  },
   ECONOMY: {
     name: "Economy",
     image: "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-11/128/coins-icon.png",

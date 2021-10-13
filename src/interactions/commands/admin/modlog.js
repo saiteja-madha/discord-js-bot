@@ -11,6 +11,7 @@ module.exports = class ModLog extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       options: [
         {
           name: "channel",
@@ -37,6 +38,6 @@ module.exports = class ModLog extends SlashCommand {
     }
 
     await modLogChannel(interaction.guildId, targetChannel?.id);
-    return interaction.followUp(`Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`);
+    await interaction.followUp(`Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`);
   }
 };

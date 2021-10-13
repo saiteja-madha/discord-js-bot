@@ -9,6 +9,7 @@ module.exports = class Skip extends SlashCommand {
       name: "np",
       description: "Show what is playing currently",
       enabled: true,
+      category: "MUSIC",
     });
   }
 
@@ -29,6 +30,6 @@ module.exports = class Skip extends SlashCommand {
       .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
       .addField("Added By", track.requester.tag || "NA", true);
 
-    interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };

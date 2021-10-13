@@ -12,6 +12,7 @@ module.exports = class Filters extends SlashCommand {
       name: "filter",
       description: "add filter to the provided image",
       enabled: true,
+      category: "IMAGE",
       options: [
         {
           name: "name",
@@ -61,6 +62,6 @@ module.exports = class Filters extends SlashCommand {
       .setImage("attachment://attachment.png")
       .setFooter(`Requested by: ${author.tag}`);
 
-    interaction.followUp({ embeds: [embed], files: [attachment] });
+    await interaction.followUp({ embeds: [embed], files: [attachment] });
   }
 };

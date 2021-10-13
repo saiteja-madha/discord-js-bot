@@ -11,6 +11,7 @@ module.exports = class Counter extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       options: [
         {
           name: "type",
@@ -74,7 +75,6 @@ module.exports = class Counter extends SlashCommand {
     if (type === "bots") await db.setBotCountChannel(interaction.guildId, vc.id, name);
 
     await db.updateBotCount(interaction.guildId, stats[1], false);
-
-    return interaction.followUp("Configuration saved! Counter channel created");
+    await interaction.followUp("Configuration saved! Counter channel created");
   }
 };

@@ -10,6 +10,7 @@ module.exports = class LeaderBoard extends SlashCommand {
       name: "lb",
       description: "display the XP leaderboard",
       enabled: true,
+      category: "INFORMATION",
       options: [
         {
           name: "type",
@@ -59,6 +60,6 @@ module.exports = class LeaderBoard extends SlashCommand {
       .setDescription(collector)
       .setFooter(`Requested by ${user.tag}`);
 
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };

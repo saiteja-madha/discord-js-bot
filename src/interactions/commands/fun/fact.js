@@ -6,11 +6,11 @@ const { getJson } = require("@utils/httpUtils");
 const animals = ["cat", "dog", "panda", "fox", "red_panda", "koala", "bird", "raccoon", "kangaroo"];
 const BASE_URL = "https://some-random-api.ml/animal";
 
-module.exports = class AnimalCommand extends SlashCommand {
+module.exports = class FactCommand extends SlashCommand {
   constructor(client) {
     super(client, {
-      name: "animal",
-      description: "shows a random animal image",
+      name: "facts",
+      description: "get a random animal facts",
       enabled: true,
       cooldown: 5,
       category: "FUN",
@@ -35,10 +35,11 @@ module.exports = class AnimalCommand extends SlashCommand {
     const response = await getJson(`${BASE_URL}/${choice}`);
     if (!response.success) return MESSAGES.API_ERROR;
 
-    const imageUrl = response.data?.image;
+    const fact = response.data?.fact;
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
-      .setImage(imageUrl)
+      .setAuthor(`Fact: ${choice}`)
+      .setDescription(fact)
       .setFooter(`Requested by ${interaction.user.tag}`);
 
     await interaction.followUp({ embeds: [embed] });

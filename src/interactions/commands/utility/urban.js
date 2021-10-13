@@ -11,6 +11,7 @@ module.exports = class UrbanCommand extends SlashCommand {
       description: "searches the urban dictionary",
       enabled: true,
       cooldown: 5,
+      category: "UTILITY",
       options: [
         {
           name: "word",
@@ -35,7 +36,7 @@ module.exports = class UrbanCommand extends SlashCommand {
     if (!json.list[0]) return interaction.followUp(`Nothing found matching \`${word}\``);
 
     const embed = buildEmbed(json);
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };
 

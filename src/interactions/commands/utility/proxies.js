@@ -11,6 +11,7 @@ module.exports = class ProxiesCommand extends SlashCommand {
       description: "fetch various proxies",
       enabled: true,
       cooldown: 10,
+      category: "UTILITY",
       options: [
         {
           name: "type",
@@ -38,6 +39,6 @@ module.exports = class ProxiesCommand extends SlashCommand {
     if (response.buffer.length === 0) return interaction.editReply("Could not fetch data. Try again later");
 
     const attachment = new MessageAttachment(response.buffer, `${type.toLowerCase()}_proxies.txt`);
-    return interaction.editReply({ content: `${type.toUpperCase()} Proxies fetched`, files: [attachment] });
+    await interaction.editReply({ content: `${type.toUpperCase()} Proxies fetched`, files: [attachment] });
   }
 };

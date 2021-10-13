@@ -14,6 +14,7 @@ module.exports = class Info extends SlashCommand {
       description: "shows information about the user",
       enabled: true,
       ephemeral: false,
+      category: "INFORMATION",
       options: [
         {
           name: "user",
@@ -129,7 +130,7 @@ module.exports = class Info extends SlashCommand {
       return interaction.followUp("Incorrect subcommand");
     }
 
-    return interaction.followUp(response);
+    await interaction.followUp(response);
   }
 };
 

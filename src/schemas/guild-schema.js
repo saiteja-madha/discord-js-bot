@@ -68,11 +68,6 @@ const Schema = mongoose.Schema({
   },
   flag_translation: {
     enabled: Boolean,
-    channels: [
-      {
-        type: String,
-      },
-    ],
   },
   modlog_channel: String,
   max_warnings: {
@@ -250,13 +245,6 @@ module.exports = {
     await Model.updateOne({ _id }, { "flag_translation.enabled": status });
     if (cache.contains(_id)) {
       cache.get(_id).flag_translation.enabled = status;
-    }
-  },
-
-  setFlagTrChannels: async (_id, channels) => {
-    await Model.updateOne({ _id }, { "flag_translation.channels": channels });
-    if (cache.contains(_id)) {
-      cache.get(_id).flag_translation.channels = channels;
     }
   },
 

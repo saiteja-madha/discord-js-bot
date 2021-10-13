@@ -12,6 +12,7 @@ module.exports = class ReactionRole extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       options: [
         {
           name: "add",
@@ -92,7 +93,7 @@ module.exports = class ReactionRole extends SlashCommand {
       response = await this.removerr(targetChannel, messageId);
     }
 
-    return interaction.followUp(response);
+    await interaction.followUp(response);
   }
 
   /**

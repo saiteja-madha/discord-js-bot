@@ -11,6 +11,7 @@ module.exports = class PokedexCommand extends SlashCommand {
       description: "shows pokemon information",
       enabled: true,
       cooldown: 10,
+      category: "UTILITY",
       options: [
         {
           name: "pokemon",
@@ -36,7 +37,7 @@ module.exports = class PokedexCommand extends SlashCommand {
     if (!json) return;
     const embed = buildEmbed(json);
 
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };
 

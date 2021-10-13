@@ -16,6 +16,7 @@ module.exports = class TranslateCommand extends SlashCommand {
       description: "translate from one language to other",
       enabled: true,
       cooldown: 10,
+      category: "UTILITY",
       options: [
         {
           name: "language",
@@ -45,7 +46,7 @@ module.exports = class TranslateCommand extends SlashCommand {
     if (!data) return interaction.followUp("Failed to translate your text");
 
     const embed = buildEmbed(interaction.user, data);
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };
 

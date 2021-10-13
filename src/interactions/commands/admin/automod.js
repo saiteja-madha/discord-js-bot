@@ -13,6 +13,7 @@ module.exports = class Automod extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       options: [
         {
           name: "status",

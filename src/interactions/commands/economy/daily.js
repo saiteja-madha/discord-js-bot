@@ -9,6 +9,8 @@ module.exports = class Daily extends SlashCommand {
     super(client, {
       name: "daily",
       description: "receive a daily bonus",
+      enabled: true,
+      category: "ECONOMY",
     });
   }
 

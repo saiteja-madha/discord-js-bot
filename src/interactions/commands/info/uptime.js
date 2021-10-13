@@ -9,6 +9,7 @@ module.exports = class Uptime extends SlashCommand {
       description: "shows bot's uptime",
       enabled: true,
       ephemeral: true,
+      category: "INFORMATION",
     });
   }
 
@@ -16,6 +17,6 @@ module.exports = class Uptime extends SlashCommand {
    * @param {CommandInteraction} interaction
    */
   async run(interaction) {
-    interaction.followUp(`My Uptime: \`${timeformat(process.uptime())}\``);
+    await interaction.followUp(`My Uptime: \`${timeformat(process.uptime())}\``);
   }
 };

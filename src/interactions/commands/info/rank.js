@@ -13,6 +13,7 @@ module.exports = class Rank extends SlashCommand {
       name: "rank",
       description: "shows members rank in this server",
       enabled: true,
+      category: "INFORMATION",
       options: [
         {
           name: "user",
@@ -62,6 +63,6 @@ module.exports = class Rank extends SlashCommand {
     if (!response.success) return interaction.followUp("Failed to generate rank-card");
 
     const attachment = new MessageAttachment(response.buffer, "rank.png");
-    interaction.followUp({ files: [attachment] });
+    await interaction.followUp({ files: [attachment] });
   }
 };

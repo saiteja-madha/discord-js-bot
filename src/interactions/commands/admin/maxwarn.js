@@ -11,6 +11,7 @@ module.exports = class MaxWarn extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       options: [
         {
           name: "limit",
@@ -87,7 +88,7 @@ module.exports = class MaxWarn extends SlashCommand {
       }
 
       await maxWarnAction(interaction.guildId, action);
-      return interaction.followUp(`Configuration saved! Automod action is set to ${action}`);
+      await interaction.followUp(`Configuration saved! Automod action is set to ${action}`);
     }
   }
 };

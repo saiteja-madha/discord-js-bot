@@ -12,6 +12,7 @@ module.exports = class Welcome extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       options: [
         {
           name: "status",
@@ -151,14 +152,14 @@ module.exports = class Welcome extends SlashCommand {
     else if (sub === "desc") {
       const content = interaction.options.getString("content");
       await db.setDescription(interaction.guild.id, content, "welcome");
-      interaction.followUp("Configuration saved! Welcome message updated");
+      return interaction.followUp("Configuration saved! Welcome message updated");
     }
 
     // Thumbnail
     else if (sub === "thumbnail") {
       const status = interaction.options.getString("status") === "ON" ? true : false;
       await db.setThumbnail(interaction.guild.id, status, "welcome");
-      interaction.followUp("Configuration saved! Welcome message updated");
+      return interaction.followUp("Configuration saved! Welcome message updated");
     }
 
     // Color
@@ -167,14 +168,14 @@ module.exports = class Welcome extends SlashCommand {
       if (!isHex(color)) return interaction.followUp("Oops! That doesn't look like a valid HEX Color code");
 
       await db.setColor(interaction.guild.id, color, "welcome");
-      interaction.followUp("Configuration saved! Welcome message updated");
+      return interaction.followUp("Configuration saved! Welcome message updated");
     }
 
     // Footer
     else if (sub === "footer") {
       const content = interaction.options.getString("content");
       await db.setFooter(interaction.guild.id, content, "welcome");
-      interaction.followUp("Configuration saved! Welcome message updated");
+      return interaction.followUp("Configuration saved! Welcome message updated");
     }
 
     // return

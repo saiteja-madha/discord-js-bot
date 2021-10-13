@@ -9,6 +9,7 @@ module.exports = class PasteCommand extends SlashCommand {
       description: "Paste something in sourceb.in",
       enabled: true,
       cooldown: 10,
+      category: "UTILITY",
       options: [
         {
           name: "title",
@@ -40,6 +41,6 @@ module.exports = class PasteCommand extends SlashCommand {
       .setAuthor("Paste links")
       .setDescription(`🔸 Normal: ${response.url}\n🔹 Raw: ${response.raw}`);
 
-    interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };

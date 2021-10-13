@@ -8,6 +8,7 @@ module.exports = class Ping extends SlashCommand {
       description: "shows the current ping from the bot to the discord servers",
       enabled: true,
       ephemeral: true,
+      category: "INFORMATION",
     });
   }
 
@@ -15,6 +16,6 @@ module.exports = class Ping extends SlashCommand {
    * @param {CommandInteraction} interaction
    */
   async run(interaction) {
-    interaction.followUp(`🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``);
+    await interaction.followUp(`🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``);
   }
 };

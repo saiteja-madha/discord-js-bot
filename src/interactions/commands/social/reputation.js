@@ -8,12 +8,13 @@ module.exports = class Reputation extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "rep",
-      description: "give reputation to a user",
+      description: "reputation commands",
       enabled: true,
+      category: "SOCIAL",
       options: [
         {
-          name: "status",
-          description: "check reputation",
+          name: "count",
+          description: "check reputation for a user",
           type: "SUB_COMMAND",
           options: [
             {
@@ -48,7 +49,7 @@ module.exports = class Reputation extends SlashCommand {
     const sub = interaction.options.getSubcommand();
 
     // status
-    if (sub === "status") {
+    if (sub === "count") {
       const target = interaction.options.getUser("user") || interaction.user;
       const userData = await getUser(target.id);
 

@@ -10,6 +10,7 @@ module.exports = class SetPrefix extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      category: "ADMIN",
       options: [
         {
           name: "prefix",
@@ -29,6 +30,6 @@ module.exports = class SetPrefix extends SlashCommand {
     if (newPrefix.length > 2) return interaction.followUp("Prefix length cannot exceed `2` characters");
 
     await setPrefix(interaction.guildId, newPrefix);
-    return interaction.followUp(`New prefix has been set to \`${newPrefix}\``);
+    await interaction.followUp(`New prefix has been set to \`${newPrefix}\``);
   }
 };

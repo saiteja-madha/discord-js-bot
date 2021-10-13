@@ -7,6 +7,7 @@ module.exports = class Volume extends SlashCommand {
       name: "volume",
       description: "set the music player volume",
       enabled: true,
+      category: "MUSIC",
       options: [
         {
           name: "volume",
@@ -38,6 +39,6 @@ module.exports = class Volume extends SlashCommand {
     if (volume < 1 || volume > 100) return interaction.followUp("you need to give me a volume between 1 and 100.");
 
     player.setVolume(volume);
-    return interaction.followUp(`> Music player volume to \`${volume}\`.`);
+    await interaction.followUp(`> Music player volume to \`${volume}\`.`);
   }
 };

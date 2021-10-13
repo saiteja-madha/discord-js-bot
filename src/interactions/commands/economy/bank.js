@@ -1,7 +1,7 @@
 const { CommandInteraction, CommandInteractionOptionResolver, User, MessageEmbed } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
 const { EMBED_COLORS, EMOJIS } = require("@root/config");
-const { getUser, depositCoins } = require("@schemas/user-schema");
+const { getUser, depositCoins, addCoins } = require("@schemas/user-schema");
 
 module.exports = class Bank extends SlashCommand {
   constructor(client) {
@@ -9,6 +9,7 @@ module.exports = class Bank extends SlashCommand {
       name: "bank",
       description: "access to bank operations",
       enabled: true,
+      category: "ECONOMY",
       options: [
         {
           name: "balance",
@@ -49,6 +50,25 @@ module.exports = class Bank extends SlashCommand {
             },
           ],
         },
+        {
+          name: "transfer",
+          description: "transfer coins to other user",
+          type: "SUB_COMMAND",
+          options: [
+            {
+              name: "user",
+              description: "the user to whom coins must be transferred",
+              type: "USER",
+              required: true,
+            },
+            {
+              name: "coins",
+              description: "the amount of coins to transfer",
+              type: "INTEGER",
+              required: true,
+            },
+          ],
+        },
       ],
     });
   }
@@ -79,7 +99,12 @@ module.exports = class Bank extends SlashCommand {
       response = await withdraw(interaction.user, coins);
     }
 
-    return interaction.followUp(response);
+    // transfer
+    else if (sub === "transfer") {
+      response = await transfer(interaction);
+    }
+
+    await interaction.followUp(response);
   }
 };
 
@@ -143,6 +168,40 @@ const deposit = async (user, coins) => {
     .addField("Wallet", `${newBal?.coins || 0}${EMOJIS.CURRENCY}`, true)
     .addField("Bank", `${newBal?.bank || 0}${EMOJIS.CURRENCY}`, true)
     .addField("Net Worth", `${(newBal?.coins || 0) + (newBal?.bank || 0)}${EMOJIS.CURRENCY}`, true);
+
+  return { embeds: [embed] };
+};
+
+/**
+ *
+ * @param {CommandInteraction} interaction
+ */
+const transfer = async (interaction) => {
+  const self = interaction.user;
+  const target = interaction.options.getUser("user");
+  const coins = interaction.options.getInteger("coins");
+
+  if (isNaN(coins) || coins <= 0) return "Please enter a valid amount of coins to transfer";
+  if (target.user.bot) return "You cannot transfer coins to bots!";
+  if (target.id === interaction.user.id) return "You cannot transfer coins to self!";
+
+  const economy = await getUser(self.id);
+
+  if (!economy || economy?.coins < coins) {
+    return `Insufficient coin balance! You only have ${economy?.coins || 0}${EMOJIS.CURRENCY}`;
+  }
+
+  const src = await addCoins(self.id, -coins);
+  const des = await addCoins(target.id, coins);
+
+  const embed = new MessageEmbed()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setAuthor("Updated Balance")
+    .setDescription(
+      `**${self.username}:** ${src.coins}${EMOJIS.CURRENCY}\n` +
+        `**${target.username}:** ${des.coins}${EMOJIS.CURRENCY}`
+    )
+    .setTimestamp(Date.now());
 
   return { embeds: [embed] };
 };

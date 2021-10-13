@@ -37,6 +37,7 @@ module.exports = class Generator extends SlashCommand {
       name: "generator",
       description: "image meme generator",
       enabled: true,
+      category: "IMAGE",
       options: [
         {
           name: "name",
@@ -86,6 +87,6 @@ module.exports = class Generator extends SlashCommand {
       .setImage("attachment://attachment.png")
       .setFooter(`Requested by: ${author.tag}`);
 
-    interaction.followUp({ embeds: [embed], files: [attachment] });
+    await interaction.followUp({ embeds: [embed], files: [attachment] });
   }
 };

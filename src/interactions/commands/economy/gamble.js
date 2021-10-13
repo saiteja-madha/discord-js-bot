@@ -10,6 +10,7 @@ module.exports = class Gamble extends SlashCommand {
       name: "gamble",
       description: "try your luck by gambling",
       enabled: true,
+      category: "ECONOMY",
       options: [
         {
           name: "coins",

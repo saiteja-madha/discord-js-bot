@@ -8,6 +8,7 @@ module.exports = class Queue extends SlashCommand {
       name: "queue",
       description: "Shows the current music queue",
       enabled: true,
+      category: "MUSIC",
       options: [
         {
           name: "page",
@@ -47,6 +48,6 @@ module.exports = class Queue extends SlashCommand {
 
     embed.setFooter(`Page ${page > maxPages ? maxPages : page} of ${maxPages}`);
 
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };

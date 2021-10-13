@@ -4,6 +4,7 @@ const fs = require("fs");
 const Ascii = require("ascii-table");
 const mongoose = require("mongoose");
 const Command = require("./Command");
+const SlashCommand = require("./SlashCommand");
 mongoose.plugin(require("mongoose-lean-defaults").default);
 const logger = require("../helpers/logger");
 const { Manager } = require("erela.js");
@@ -30,6 +31,10 @@ module.exports = class BotClient extends Client {
      */
     this.commands = []; // store actual command
     this.commandIndex = new Collection(); // store (alias, arrayIndex) pair
+
+    /**
+     * @type {Collection<string,SlashCommand>}
+     */
     this.slashCommands = new Collection(); // store slash commands
     this.contextMenus = new Collection(); // store contextMenus
     this.counterUpdateQueue = []; // store guildId's that needs counter update
@@ -189,17 +194,17 @@ module.exports = class BotClient extends Client {
    * @param {string} [guildId]
    */
   async registerInteractions(guildId) {
+    const current = await this.application.commands.fetch();
     const toRegister = [];
 
     // filter slash commands
     if (this.config.INTERACTIONS.SLASH) {
-      this.commands
-        .filter((cmd) => cmd.slashCommand?.enabled)
+      this.slashCommands
         .map((cmd) => ({
           name: cmd.name,
           description: cmd.description,
           type: "CHAT_INPUT",
-          options: cmd.slashCommand.options,
+          options: cmd.options,
         }))
         .forEach((s) => toRegister.push(s));
     }
@@ -259,5 +264,47 @@ module.exports = class BotClient extends Client {
       if (!found) throw new Error(`No global slash command found matching ${command}`);
       await found.delete();
     }
+  }
+
+  /**
+   * Load all slash commands from the specified directory
+   * @param {string} directory
+   */
+  loadSlashCommands(directory) {
+    this.logger.log(`Loading slash commands...`);
+    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
+      const file = filePath.replace(/^.*[\\/]/, "");
+      try {
+        const cmdClass = require(filePath);
+        const cmd = new cmdClass(this);
+        if (!cmd.enabled) return this.logger.debug(`Skipping command ${cmd.name}. Disabled!`);
+        if (this.slashCommands.has(cmd.name)) throw new Error(`Slash command already exists with that name`);
+        this.slashCommands.set(cmd.name, cmd);
+      } catch (ex) {
+        this.logger.error(`Slash Command: Failed to load ${file} Reason: ${ex.message}`);
+      }
+    });
+    this.logger.success(`Loaded ${this.slashCommands.size} slash commands`);
+  }
+
+  /**
+   * @param {string} directory
+   */
+  getAbsoluteFilePaths(directory) {
+    const filePaths = [];
+    const readCommands = (dir) => {
+      const files = fs.readdirSync(path.join(__appRoot, dir));
+      files.forEach((file) => {
+        const stat = fs.lstatSync(path.join(__appRoot, dir, file));
+        if (stat.isDirectory()) {
+          readCommands(path.join(dir, file));
+        } else {
+          const filePath = path.join(__appRoot, dir, file);
+          filePaths.push(filePath);
+        }
+      });
+    };
+    readCommands(directory);
+    return filePaths;
   }
 };

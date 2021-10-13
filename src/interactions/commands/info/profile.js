@@ -11,6 +11,7 @@ module.exports = class Profile extends SlashCommand {
       name: "profile",
       description: "shows members profile",
       enabled: true,
+      category: "INFORMATION",
       options: [
         {
           name: "user",
@@ -50,6 +51,6 @@ module.exports = class Profile extends SlashCommand {
       .addField("Avatar-URL", user.displayAvatarURL({ format: "png" }))
       .setFooter("Fields marked (*) are guild specific");
 
-    interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };

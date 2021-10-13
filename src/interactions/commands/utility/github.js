@@ -11,6 +11,7 @@ module.exports = class GithubCommand extends SlashCommand {
       description: "shows github statistics of a user",
       enabled: true,
       cooldown: 10,
+      category: "UTILITY",
       options: [
         {
           name: "username",
@@ -64,7 +65,7 @@ module.exports = class GithubCommand extends SlashCommand {
       .setColor(0x6e5494)
       .setFooter(`Requested by ${interaction.user.tag}`);
 
-    interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };
 

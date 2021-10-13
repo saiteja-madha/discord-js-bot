@@ -7,6 +7,7 @@ module.exports = class Resume extends SlashCommand {
       name: "resume",
       description: "Resumes the paused song",
       enabled: true,
+      category: "MUSIC",
     });
   }
 
@@ -27,6 +28,6 @@ module.exports = class Resume extends SlashCommand {
     if (!player.paused) return interaction.followUp("The player is already resumed");
 
     player.pause(false);
-    return interaction.followUp("Resumed the player");
+    await interaction.followUp("Resumed the player");
   }
 };

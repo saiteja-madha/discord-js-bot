@@ -11,6 +11,7 @@ module.exports = class CovidCommand extends SlashCommand {
       description: "get covid statistics for a country",
       enabled: true,
       cooldown: 10,
+      category: "UTILITY",
       options: [
         {
           name: "country",
@@ -33,7 +34,7 @@ module.exports = class CovidCommand extends SlashCommand {
     if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
 
     const embed = buildEmbed(response);
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };
 

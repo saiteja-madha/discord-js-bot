@@ -12,6 +12,7 @@ module.exports = class WeatherCommand extends SlashCommand {
       description: "get weather information",
       enabled: true,
       cooldown: 5,
+      category: "UTILITY",
       options: [
         {
           name: "place",
@@ -36,7 +37,7 @@ module.exports = class WeatherCommand extends SlashCommand {
     if (!json.request) return interaction.followUp(`No city found matching \`${place}\``);
 
     const embed = buildEmbed(json);
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };
 

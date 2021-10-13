@@ -9,8 +9,9 @@ module.exports = class Flip extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "flip",
-      description: "flip",
+      description: "flip a coin or a message",
       enabled: true,
+      category: "FUN",
       options: [
         {
           name: "coin",
@@ -49,18 +50,18 @@ module.exports = class Flip extends SlashCommand {
         .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
         .setDescription(`${interaction.user.username}, started a coin toss`);
 
-      const coinMsg = await interaction.followUp({ embeds: [embed] });
+      await interaction.followUp({ embeds: [embed] });
 
       setTimeout(() => {
         const newEmbed = new MessageEmbed().setDescription("The coin is in the air");
-        coinMsg.edit({ embeds: [newEmbed] }).catch(() => {});
+        interaction.editReply({ embeds: [newEmbed] }).catch(() => {});
       }, 2000);
 
       setTimeout(() => {
         const newEmbed = new MessageEmbed()
           .setDescription(`>> **${toss} Wins** <<`)
           .setImage(toss === "HEAD" ? "https://i.imgur.com/HavOS7J.png" : "https://i.imgur.com/u1pmQMV.png");
-        coinMsg.edit({ embeds: [newEmbed] }).catch(() => {});
+        interaction.editReply({ embeds: [newEmbed] }).catch(() => {});
       }, 2000);
     }
 

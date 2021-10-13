@@ -9,6 +9,7 @@ module.exports = class BigEmojiCommand extends SlashCommand {
       name: "bigemoji",
       description: "enlarge an emoji",
       enabled: true,
+      category: "UTILITY",
       options: [
         {
           name: "emoji",
@@ -40,6 +41,6 @@ module.exports = class BigEmojiCommand extends SlashCommand {
     if (!parsed[0]) return interaction.followUp("Not a valid emoji");
 
     embed.setImage(parsed[0].url);
-    return interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   }
 };

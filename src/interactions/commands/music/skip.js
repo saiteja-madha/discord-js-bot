@@ -7,6 +7,7 @@ module.exports = class Skip extends SlashCommand {
       name: "skip",
       description: "Skip the current song",
       enabled: true,
+      category: "MUSIC",
     });
   }
 
@@ -29,6 +30,6 @@ module.exports = class Skip extends SlashCommand {
     const { title } = player.queue.current;
 
     player.stop();
-    return interaction.followUp(`${title} was skipped.`);
+    await interaction.followUp(`${title} was skipped.`);
   }
 };

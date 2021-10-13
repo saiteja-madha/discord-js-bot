@@ -14,6 +14,7 @@ module.exports = class Bassboost extends SlashCommand {
       name: "bassboost",
       description: "set bassboost level",
       enabled: true,
+      category: "MUSIC",
       options: [
         {
           name: "level",
@@ -62,6 +63,6 @@ module.exports = class Bassboost extends SlashCommand {
     const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
     player.setEQ(...bands);
 
-    return interaction.followUp(`> Set the bassboost level to ${level}`);
+    await interaction.followUp(`> Set the bassboost level to ${level}`);
   }
 };
