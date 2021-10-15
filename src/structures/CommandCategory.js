@@ -1,18 +1,18 @@
 module.exports = {
   ADMIN: {
-    name: "Admin",
+    name: "Configuration",
     image: "https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/512/Settings-icon.png",
-    emoji: "\u2699",
+    emoji: ":settings:898484858937049088",
   },
   ECONOMY: {
     name: "Economy",
     image: "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-11/128/coins-icon.png",
-    emoji: "\uD83E\uDE99",
+    emoji: ":economy:898460864695390250",
   },
   FUN: {
     name: "Fun",
     image: "https://icons.iconarchive.com/icons/flameia/aqua-smiles/128/make-fun-icon.png",
-    emoji: "\uD83D\uDE02",
+    emoji: ":fun:898462449190207568",
   },
   IMAGE: {
     name: "Image",
@@ -22,22 +22,25 @@ module.exports = {
   INVITE: {
     name: "Invite",
     image: "https://cdn4.iconfinder.com/data/icons/general-business/150/Invite-512.png",
-    emoji: "\uD83D\uDCE8",
+    emoji: ":invite:898462905677279272",
   },
   INFORMATION: {
     name: "Information",
     image: "https://icons.iconarchive.com/icons/graphicloads/100-flat/128/information-icon.png",
-    emoji: "\uD83E\uDEA7",
+    emoji: ":information:898463682810486784",
   },
   MODERATION: {
     name: "Moderation",
     image: "https://icons.iconarchive.com/icons/lawyerwordpress/law/128/Gavel-Law-icon.png",
-    emoji: "\uD83D\uDD28",
+    emoji: ":moderation:898464312736243713",
   },
   MUSIC: {
     name: "Music",
     image: "https://icons.iconarchive.com/icons/wwalczyszyn/iwindows/256/Music-Library-icon.png",
-    emoji: "🎵",
+    emoji: ":music:898484828322799646",
+  },
+  OWNER: {
+    name: "Owner",
   },
   SOCIAL: {
     name: "Social",
@@ -47,7 +50,7 @@ module.exports = {
   TICKET: {
     name: "Ticket",
     image: "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/512/ticket-icon.png",
-    emoji: "🎫",
+    emoji: ":ticket:898485373783662592",
   },
   UTILITY: {
     name: "Utility",

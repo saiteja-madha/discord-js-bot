@@ -7,7 +7,7 @@ const { EMBED_COLORS } = require("@root/config");
 module.exports = class Reputation extends SlashCommand {
   constructor(client) {
     super(client, {
-      name: "rep",
+      name: "reputation",
       description: "reputation commands",
       enabled: true,
       category: "SOCIAL",

@@ -10,8 +10,9 @@ global.__appRoot = path.resolve(__dirname);
 
 // initialize client
 const client = new BotClient();
-client.loadCommands("src/commands");
 client.loadEvents("src/events");
+client.loadSlashCommands("src/interactions/commands");
+client.loadContexts("src/interactions/contexts");
 
 // catch client errors and warnings
 client.on("error", (err) => client.logger.error(`Client Error`, err));

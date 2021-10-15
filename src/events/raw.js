@@ -1,0 +1,9 @@
+const { BotClient } = require("@src/structures");
+
+/**
+ * @param {BotClient} client
+ * @param {any} data
+ */
+module.exports = async (client, data) => {
+  client.musicManager.updateVoiceState(data);
+};

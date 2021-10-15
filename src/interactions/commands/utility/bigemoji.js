@@ -29,7 +29,7 @@ module.exports = class BigEmojiCommand extends SlashCommand {
     const custom = Util.parseEmoji(emoji);
 
     const embed = new MessageEmbed()
-      .setTitle("❯ Big Emoji ❮")
+      .setAuthor("❯ Big Emoji ❮")
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setFooter(`Requested by ${interaction.user.tag}`);
 

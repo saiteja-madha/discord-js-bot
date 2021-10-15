@@ -57,9 +57,8 @@
     "multipurpose"
   ],
   "_moduleAliases": {
+    "@interactions": "src/interactions/",
     "@root": ".",
-    "@commands": "src/commands/",
-    "@features": "src/features/",
     "@schemas": "src/schemas/",
     "@src": "src/",
     "@utils": "src/utils/"

@@ -1,6 +1,6 @@
 const { SlashCommand, CommandCategory } = require("@src/structures");
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, CommandInteraction } = require("discord.js");
-const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
+const { EMOJIS, EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 
 const CMDS_PER_PAGE = 5;
 const TIMEOUT_IN_SECONDS = 10;
@@ -83,7 +83,7 @@ module.exports = class HelpCommand extends SlashCommand {
         "**About Me:**\n" +
           `Hello I am ${interaction.guild.me.displayName}!\n` +
           "A cool multipurpose discord bot which can serve all your needs\n\n" +
-          `**Invite Me:** [Here](${BOT_INVITE})\n` +
+          `**Invite Me:** [Here](${interaction.client.getInvite()})\n` +
           `**Support Server:** [Join](${SUPPORT_SERVER})`
       );
 

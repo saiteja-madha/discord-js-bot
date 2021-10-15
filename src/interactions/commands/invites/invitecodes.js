@@ -9,6 +9,7 @@ module.exports = class InviteCodes extends SlashCommand {
       description: "list all your invites codes in this guild",
       enabled: true,
       category: "INVITE",
+      botPermissions: ["MANAGE_GUILD"],
       options: [
         {
           name: "user",

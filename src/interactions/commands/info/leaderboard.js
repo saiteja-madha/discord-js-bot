@@ -7,7 +7,7 @@ const { getTop100 } = require("@schemas/profile-schema");
 module.exports = class LeaderBoard extends SlashCommand {
   constructor(client) {
     super(client, {
-      name: "lb",
+      name: "leaderboard",
       description: "display the XP leaderboard",
       enabled: true,
       category: "INFORMATION",

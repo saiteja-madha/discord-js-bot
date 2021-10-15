@@ -1,7 +1,6 @@
-const { CommandInteraction, GuildMember, MessageEmbed, User, Guild, Util } = require("discord.js");
+const { CommandInteraction, GuildMember, MessageEmbed, User, Guild, Util, Channel } = require("discord.js");
 const { SlashCommand, BotClient } = require("@src/structures");
-const { EMBED_COLORS, EMOJIS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config");
-const { Channel } = require("diagnostics_channel");
+const { EMBED_COLORS, EMOJIS, SUPPORT_SERVER } = require("@root/config");
 const { outdent } = require("outdent");
 const moment = require("moment");
 const os = require("os");
@@ -368,7 +367,7 @@ const botStats = (client) => {
     )
     .addField("Node Js version", process.versions.node, false)
     .addField("Uptime", "```" + timeformat(process.uptime()) + "```", false)
-    .addField("INVITE:", `[Add Me here!](${BOT_INVITE})`, true)
+    .addField("INVITE:", `[Add Me here!](${client.getInvite()})`, true)
     .addField("SUPPORT:", `[Discord!](${SUPPORT_SERVER})`, true);
 
   return { embeds: [embed] };

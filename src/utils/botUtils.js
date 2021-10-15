@@ -57,7 +57,6 @@ function validateConfig() {
     }
   }
   if (config.OWNER_IDS.length === 0) warn("config.js: OWNER_IDS are empty");
-  if (!config.BOT_INVITE) warn("config.js: BOT_INVITE is not provided");
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 
@@ -72,9 +71,9 @@ async function startupCheck() {
  */
 async function sendMessage(channel, message) {
   if (!channel || !message) return;
-  if (!channel.permissionsFor(channel.guild?.me).has("SEND_MESSAGES")) return;
+  if (!channel.permissionsFor(channel.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])) return;
   try {
-    return await channel.send(message);
+    return channel.send(message);
   } catch (ex) {
     error(`sendMessage`, ex);
   }
@@ -87,7 +86,7 @@ async function sendMessage(channel, message) {
 async function safeDM(user, message) {
   if (!user || !message) return;
   try {
-    return await user.send(message);
+    return user.send(message);
   } catch (ex) {
     error(`safeDM`, ex);
   }

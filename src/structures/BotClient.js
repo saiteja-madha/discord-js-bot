@@ -3,8 +3,8 @@ const path = require("path");
 const fs = require("fs");
 const Ascii = require("ascii-table");
 const mongoose = require("mongoose");
-const Command = require("./Command");
 const SlashCommand = require("./SlashCommand");
+const BaseContext = require("./BaseContext");
 mongoose.plugin(require("mongoose-lean-defaults").default);
 const logger = require("../helpers/logger");
 const { Manager } = require("erela.js");
@@ -27,20 +27,19 @@ module.exports = class BotClient extends Client {
     this.config = require("@root/config"); // load the config file
 
     /**
-     * @type {Command[]}
-     */
-    this.commands = []; // store actual command
-    this.commandIndex = new Collection(); // store (alias, arrayIndex) pair
-
-    /**
      * @type {Collection<string,SlashCommand>}
      */
     this.slashCommands = new Collection(); // store slash commands
-    this.contextMenus = new Collection(); // store contextMenus
+
+    /**
+     * @type {Collection<string,BaseContext>}
+     */
+    this.contexts = new Collection(); // store contexts
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 
     // initialize cache
     this.cmdCooldownCache = new Collection(); // store message cooldowns for commands
+    this.ctxCooldownCache = new Collection(); // store message cooldowns for commands
     this.xpCooldownCache = new Collection(); // store message cooldowns for xp
     this.inviteCache = new Collection(); // store invite data for invite tracking
     this.antiScamCache = new Collection(); // store message data for anti_scam feature
@@ -59,7 +58,6 @@ module.exports = class BotClient extends Client {
       },
       autoPlay: true,
     });
-    this.on("raw", (d) => this.musicManager.updateVoiceState(d));
 
     // Logger
     this.logger = logger;
@@ -90,72 +88,83 @@ module.exports = class BotClient extends Client {
     const table = new Ascii().setHeading("EVENT", "Status");
     let events = 0;
 
-    const readEvents = (dir) => {
-      const files = fs.readdirSync(path.join(__appRoot, dir));
-      files.forEach((file) => {
-        const stat = fs.lstatSync(path.join(__appRoot, dir, file));
-        if (stat.isDirectory()) {
-          readEvents(path.join(dir, file));
-        } else {
-          const eventName = file.split(".")[0];
-          const event = require(path.join(__appRoot, dir, file));
-          try {
-            this.on(eventName, event.bind(null, this));
-            delete require.cache[require.resolve(path.join(__appRoot, dir, file))];
-            table.addRow(file, this.config.EMOJIS.TICK);
-          } catch (ex) {
-            table.addRow(file, this.config.EMOJIS.X_MARK);
-            this.logger.error("readEvent", ex);
-          } finally {
-            events += 1;
-          }
-        }
-      });
-    };
-    readEvents(directory);
+    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
+      const file = filePath.replace(/^.*[\\/]/, "");
+      try {
+        const eventName = file.split(".")[0];
+        const event = require(filePath);
+        this.on(eventName, event.bind(null, this));
+        delete require.cache[require.resolve(filePath)];
+        table.addRow(file, this.config.EMOJIS.TICK);
+      } catch (ex) {
+        table.addRow(file, this.config.EMOJIS.X_MARK);
+        this.logger.error("readEvent", ex);
+      } finally {
+        events += 1;
+      }
+    });
+
     console.log(table.toString());
     this.logger.success(`Loaded ${events} events`);
   }
 
   /**
-   * Register command file in the client
-   * @param {Command} cmd
+   * Load all slash commands from the specified directory
+   * @param {string} directory
    */
-  loadCommand(cmd) {
-    const index = this.commands.length;
-    if (cmd.command.enabled) {
-      if (this.commandIndex.has(cmd.name)) {
-        throw new Error(`Command ${cmd.name} already registered`);
+  loadSlashCommands(directory) {
+    this.logger.log(`Loading slash commands...`);
+    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
+      const file = filePath.replace(/^.*[\\/]/, "");
+      try {
+        const cmdClass = require(filePath);
+        if (!(cmdClass.prototype instanceof SlashCommand)) return;
+        const cmd = new cmdClass(this);
+        if (!cmd.enabled) return this.logger.debug(`Skipping command ${cmd.name}. Disabled!`);
+        if (this.slashCommands.has(cmd.name)) throw new Error(`Slash command already exists with that name`);
+        this.slashCommands.set(cmd.name, cmd);
+      } catch (ex) {
+        this.logger.error(`Slash Command: Failed to load ${file} Reason: ${ex.message}`);
       }
-      cmd.command.aliases.forEach((alias) => {
-        if (this.commandIndex.has(alias)) throw new Error(`Alias ${alias} already registered`);
-        this.commandIndex.set(alias.toLowerCase(), index);
-      });
-      this.commandIndex.set(cmd.name.toLowerCase(), index);
-      this.commands.push(cmd);
-    }
-
-    if (cmd.slashCommand?.enabled) {
-      if (this.slashCommands.has(cmd.name)) {
-        throw new Error(`Slash Command ${cmd.name} already registered`);
-      }
-      this.slashCommands.set(cmd.name, cmd);
-    }
-
-    if (cmd.contextMenu?.enabled) {
-      if (this.contextMenus.has(cmd.name)) {
-        throw new Error(`Context Menu ${cmd.name} already registered`);
-      }
-      this.contextMenus.set(cmd.name, cmd);
-    }
+    });
+    if (this.slashCommands.size > 100) throw new Error("A maximum of 100 SLASH commands can be enabled");
+    this.logger.success(`Loaded ${this.slashCommands.size} slash commands`);
   }
 
   /**
-   * Load all commands from the specified directory
+   * Load all contexts from the specified directory
    * @param {string} directory
    */
-  loadCommands(directory) {
-    this.logger.log(`Loading commands...`);
+  loadContexts(directory) {
+    this.logger.log(`Loading contexts...`);
+    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
+      const file = filePath.replace(/^.*[\\/]/, "");
+      try {
+        const ctxClass = require(filePath);
+        const ctx = new ctxClass(this);
+        if (!ctx.enabled) return this.logger.debug(`Skipping context ${ctx.name}. Disabled!`);
+        if (this.contexts.has(ctx.name)) throw new Error(`Context already exists with that name`);
+        this.contexts.set(ctx.name, ctx);
+      } catch (ex) {
+        this.logger.error(`Context: Failed to load ${file} Reason: ${ex.message}`);
+      }
+    });
+    const userContexts = this.contexts.filter((ctx) => ctx.type === "USER").size;
+    const messageContexts = this.contexts.filter((ctx) => ctx.type === "MESSAGE").size;
+
+    if (userContexts > 3) throw new Error("A maximum of 3 USER contexts can be enabled");
+    if (messageContexts > 3) throw new Error("A maximum of 3 MESSAGE contexts can be enabled");
+
+    this.logger.success(`Loaded ${userContexts} USER contexts`);
+    this.logger.success(`Loaded ${messageContexts} MESSAGE contexts`);
+  }
+
+  /**
+   * @param {string} directory
+   * @private
+   */
+  getAbsoluteFilePaths(directory) {
+    const filePaths = [];
     const readCommands = (dir) => {
       const files = fs.readdirSync(path.join(__appRoot, dir));
       files.forEach((file) => {
@@ -163,30 +172,15 @@ module.exports = class BotClient extends Client {
         if (stat.isDirectory()) {
           readCommands(path.join(dir, file));
         } else {
-          const CommandClass = require(path.join(__appRoot, dir, file));
-          const command = new CommandClass(this);
-          try {
-            this.loadCommand(command);
-          } catch (ex) {
-            this.logger.error(`Failed to load ${command.name}`);
-          }
+          const extension = file.split(".").at(-1);
+          if (extension !== "js") return;
+          const filePath = path.join(__appRoot, dir, file);
+          filePaths.push(filePath);
         }
       });
     };
     readCommands(directory);
-    this.logger.success(`Loaded ${this.commands.length} commands`);
-    this.logger.success(`Loaded ${this.slashCommands.size} slash commands`);
-    this.logger.success(`Loaded ${this.contextMenus.size} contexts`);
-  }
-
-  /**
-   * Find command matching the invoke
-   * @param {string} invoke
-   * @returns {Command|undefined}
-   */
-  getCommand(invoke) {
-    const index = this.commandIndex.get(invoke.toLowerCase());
-    return index !== undefined ? this.commands[index] : undefined;
+    return filePaths;
   }
 
   /**
@@ -194,7 +188,6 @@ module.exports = class BotClient extends Client {
    * @param {string} [guildId]
    */
   async registerInteractions(guildId) {
-    const current = await this.application.commands.fetch();
     const toRegister = [];
 
     // filter slash commands
@@ -211,11 +204,11 @@ module.exports = class BotClient extends Client {
 
     // filter contexts
     if (this.config.INTERACTIONS.CONTEXT) {
-      this.commands
-        .filter((cmd) => cmd.contextMenu?.enabled)
+      this.contexts
+        .filter((cmd) => cmd.enabled)
         .map((cmd) => ({
           name: cmd.name,
-          type: cmd.contextMenu.type,
+          type: cmd.type,
         }))
         .forEach((c) => toRegister.push(c));
     }
@@ -234,77 +227,41 @@ module.exports = class BotClient extends Client {
 
     // Throw an error
     else {
-      throw new Error(`Did you provide a valid guildId to register slash commands`);
+      throw new Error(`Did you provide a valid guildId to register interactions`);
     }
 
-    this.logger.success("Successfully registered slash commands");
+    this.logger.success("Successfully registered interactions");
   }
 
   /**
-   * Unregister the specified slash command
-   * @param {string} command - name of the slash command to be deleted
-   * @param {string} [guildId] - guild in which the command should be deleted
+   * Get bot's invite
    */
-  async unRegisterInteraction(command, guildId) {
-    if (guildId && typeof guildId === "string") {
-      const guild = this.guilds.cache.get(guildId);
-      if (!guild) throw new Error(`No guilds found matching ${guildId}`);
-
-      let existing = await guild.commands.fetch();
-      let found = existing.find((cmd) => cmd.name === command);
-
-      if (!found) {
-        throw new Error(`No slash command found matching ${command} in guild ${guild.name}`);
-      }
-      await found.delete();
-    }
-    if (!guildId) {
-      let existing = await this.application.commands.fetch();
-      let found = existing.find((cmd) => cmd.name === command);
-      if (!found) throw new Error(`No global slash command found matching ${command}`);
-      await found.delete();
-    }
-  }
-
-  /**
-   * Load all slash commands from the specified directory
-   * @param {string} directory
-   */
-  loadSlashCommands(directory) {
-    this.logger.log(`Loading slash commands...`);
-    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
-      const file = filePath.replace(/^.*[\\/]/, "");
-      try {
-        const cmdClass = require(filePath);
-        const cmd = new cmdClass(this);
-        if (!cmd.enabled) return this.logger.debug(`Skipping command ${cmd.name}. Disabled!`);
-        if (this.slashCommands.has(cmd.name)) throw new Error(`Slash command already exists with that name`);
-        this.slashCommands.set(cmd.name, cmd);
-      } catch (ex) {
-        this.logger.error(`Slash Command: Failed to load ${file} Reason: ${ex.message}`);
-      }
+  getInvite() {
+    return this.generateInvite({
+      scopes: ["bot", "applications.commands"],
+      permissions: [
+        "ADD_REACTIONS",
+        "ATTACH_FILES",
+        "BAN_MEMBERS",
+        "CHANGE_NICKNAME",
+        "CONNECT",
+        "DEAFEN_MEMBERS",
+        "EMBED_LINKS",
+        "KICK_MEMBERS",
+        "MANAGE_CHANNELS",
+        "MANAGE_GUILD",
+        "MANAGE_MESSAGES",
+        "MANAGE_NICKNAMES",
+        "MANAGE_ROLES",
+        "MOVE_MEMBERS",
+        "MUTE_MEMBERS",
+        "PRIORITY_SPEAKER",
+        "READ_MESSAGE_HISTORY",
+        "SEND_MESSAGES",
+        "SEND_MESSAGES_IN_THREADS",
+        "SPEAK",
+        "VIEW_CHANNEL",
+      ],
     });
-    this.logger.success(`Loaded ${this.slashCommands.size} slash commands`);
-  }
-
-  /**
-   * @param {string} directory
-   */
-  getAbsoluteFilePaths(directory) {
-    const filePaths = [];
-    const readCommands = (dir) => {
-      const files = fs.readdirSync(path.join(__appRoot, dir));
-      files.forEach((file) => {
-        const stat = fs.lstatSync(path.join(__appRoot, dir, file));
-        if (stat.isDirectory()) {
-          readCommands(path.join(dir, file));
-        } else {
-          const filePath = path.join(__appRoot, dir, file);
-          filePaths.push(filePath);
-        }
-      });
-    };
-    readCommands(directory);
-    return filePaths;
   }
 };

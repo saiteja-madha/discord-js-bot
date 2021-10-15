@@ -49,5 +49,7 @@ module.exports = class MuteCommand extends SlashCommand {
     if (response === "ALREADY_MUTED") {
       return interaction.followUp(`${target.user.tag} is already muted`);
     }
+
+    await interaction.followUp(response);
   }
 };

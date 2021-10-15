@@ -1,4 +1,4 @@
-const { CommandInteraction, CommandInteractionOptionResolver, User, MessageEmbed } = require("discord.js");
+const { CommandInteraction, User, MessageEmbed } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
 const { EMBED_COLORS, EMOJIS } = require("@root/config");
 const { getUser, depositCoins, addCoins } = require("@schemas/user-schema");
@@ -75,10 +75,9 @@ module.exports = class Bank extends SlashCommand {
 
   /**
    * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
    */
-  async run(interaction, options) {
-    const sub = options.getSubcommand();
+  async run(interaction) {
+    const sub = interaction.options.getSubcommand();
     if (!sub) return interaction.followUp("Not a valid subcommand");
     let response;
 
@@ -89,13 +88,13 @@ module.exports = class Bank extends SlashCommand {
 
     // deposit
     else if (sub === "deposit") {
-      const coins = options.getInteger("coins");
+      const coins = interaction.options.getInteger("coins");
       response = await deposit(interaction.user, coins);
     }
 
     // withdraw
     else if (sub === "withdraw") {
-      const coins = options.getInteger("coins");
+      const coins = interaction.options.getInteger("coins");
       response = await withdraw(interaction.user, coins);
     }
 

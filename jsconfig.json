@@ -5,8 +5,7 @@
     "baseUrl": "./",
     "paths": {
       "@root/*": ["./*"],
-      "@commands/*": ["./src/commands/*"],
-      "@features/*": ["./src/features/*"],
+      "@interactions/*": ["./src/interactions/*"],
       "@schemas/*": ["./src/schemas/*"],
       "@src/*": ["./src/*"],
       "@utils/*": ["./src/utils/*"]

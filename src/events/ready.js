@@ -18,10 +18,8 @@ module.exports = async (client) => {
   setInterval(() => updatePresence(client), 10 * 60 * 1000);
 
   // Register Interactions
-  if (client.config.INTERACTIONS.SLASH || client.config.INTERACTIONS.CONTEXT) {
-    if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions();
-    else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
-  }
+  if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions();
+  else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
 
   // register player events
   musicHandler.registerPlayerEvents(client);

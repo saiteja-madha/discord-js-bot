@@ -92,11 +92,17 @@ async function setupMutedRole(guild) {
  */
 async function purgeMessages(issuer, channel, type, amount, argument) {
   if (!channel.permissionsFor(issuer).has(purgePerms)) {
-    return `You do not have permissions to Read Message History & Manage Messages in ${channel}`;
+    return {
+      success: false,
+      message: `You do not have permissions to Read Message History & Manage Messages in ${channel}`,
+    };
   }
 
   if (!channel.permissionsFor(issuer.guild.me).has(purgePerms)) {
-    return `I do not have permissions to Read Message History & Manage Messages in ${channel}`;
+    return {
+      success: false,
+      message: `I do not have permissions to Read Message History & Manage Messages in ${channel}`,
+    };
   }
 
   const toDelete = new Collection();
@@ -138,7 +144,11 @@ async function purgeMessages(issuer, channel, type, amount, argument) {
     return true;
   });
 
-  if (toDelete.size === 0) return `Could not fetch any messages that can be cleaned`;
+  if (toDelete.size === 0)
+    return {
+      success: false,
+      message: "No messages found that can be cleaned",
+    };
 
   try {
     const deletedMessages = await channel.bulkDelete(toDelete, true);
@@ -148,10 +158,16 @@ async function purgeMessages(issuer, channel, type, amount, argument) {
       deletedCount: deletedMessages.size,
     });
 
-    return `Successfully deleted ${deletedMessages} messages`;
+    return {
+      success: true,
+      message: `Successful cleaned ${deletedMessages} messages`,
+    };
   } catch (ex) {
     error("purgeMessages", ex);
-    return `Oops! Failed to delete messages`;
+    return {
+      success: false,
+      message: `Oops! Failed to delete messages`,
+    };
   }
 }
 

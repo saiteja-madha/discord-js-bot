@@ -101,16 +101,16 @@ module.exports = class InvitesCommand extends SlashCommand {
 
     // add invites
     else if (sub === "add") {
-      const target = interaction.options.getUser("user");
+      const user = interaction.options.getUser("user");
       const amount = interaction.options.getInteger("invites");
 
-      const inviteData = await incrementInvites(interaction.guildId, target.id, "ADDED", amount);
+      const inviteData = await incrementInvites(interaction.guildId, user.id, "ADDED", amount);
 
       const embed = new MessageEmbed()
-        .setAuthor(`Added invites to ${target.user.username}`)
-        .setThumbnail(target.user.displayAvatarURL())
+        .setAuthor(`Added invites to ${user.username}`)
+        .setThumbnail(user.displayAvatarURL())
         .setColor(EMBED_COLORS.BOT_EMBED)
-        .setDescription(`${target.user.tag} now has ${getEffectiveInvites(inviteData)} invites`);
+        .setDescription(`${user.tag} now has ${getEffectiveInvites(inviteData)} invites`);
 
       await interaction.followUp({ embeds: [embed] });
       checkInviteRewards(interaction.guild, inviteData, true);
@@ -118,9 +118,9 @@ module.exports = class InvitesCommand extends SlashCommand {
 
     // remove invites
     else if (sub === "reset") {
-      const target = interaction.options.getUser("user");
-      await clearInvites(interaction.guildId, target.id);
-      return interaction.followUp(`Done! Invites cleared for \`${target.user.tag}\``);
+      const user = interaction.options.getUser("user");
+      await clearInvites(interaction.guildId, user.id);
+      return interaction.followUp(`Done! Invites cleared for \`${user.tag}\``);
     }
 
     // import
@@ -135,7 +135,7 @@ module.exports = class InvitesCommand extends SlashCommand {
         await incrementInvites(interaction.guildId, user.id, "ADDED", invite.uses);
       });
 
-      return interaction.followUp(`Done! Previous invites added to ${target ? target.user.tag : "all members"}`);
+      return interaction.followUp(`Done! Previous invites added to ${target ? target.tag : "all members"}`);
     }
   }
 };
