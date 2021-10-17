@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 const { SlashCommand } = require("@src/structures");
-const { CommandInteraction, MessageEmbed } = require("discord.js");
+const { CommandInteraction, MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const prettyMs = require("pretty-ms");
 
@@ -70,6 +70,7 @@ module.exports = class Play extends SlashCommand {
         track = res.tracks[0];
         player.queue.add(track);
         if (!player.playing && !player.paused && !player.queue.size) {
+          await interaction.followUp("> Adding song to queue");
           return player.play();
         }
 
@@ -99,63 +100,77 @@ module.exports = class Play extends SlashCommand {
         return interaction.followUp({ embeds: [embed] });
 
       case "SEARCH_RESULT":
-        let max = this.client.config.MUSIC.MAX_SEARCH_RESULTS,
-          collector;
-
+        let max = this.client.config.MUSIC.MAX_SEARCH_RESULTS;
         if (res.tracks.length < max) max = res.tracks.length;
 
-        const results = res.tracks
-          .slice(0, max)
-          .map((track, index) => `${this.client.config.EMOJIS.ARROW} ${++index}: ${track.title}`)
-          .join("\n");
+        const results = res.tracks.slice(0, max);
+        const options = results.map((result, index) => ({
+          label: result.title,
+          value: index.toString(),
+        }));
 
-        embed
-          .setAuthor("Search Results")
-          .setDescription(results)
-          .setFooter("Please enter song number you wish to add to queue. Type 'end' to cancel");
+        const menuRow = new MessageActionRow().addComponents(
+          new MessageSelectMenu()
+            .setCustomId("search-results")
+            .setPlaceholder("Choose Search Results")
+            .setMaxValues(max)
+            .addOptions(options)
+        );
 
-        await interaction.followUp("Results fetched");
-        await channel.send({ embeds: [embed] });
+        embed.setAuthor("Search Results").setDescription(`Please select the songs you wish to add to queue`);
 
-        try {
-          collector = await channel.awaitMessages({
-            filter: (m) => m.author.id === user.id,
-            max: 1,
-            time: 30e3,
-            errors: ["time"],
-          });
-        } catch (e) {
-          if (!player.queue.current) player.destroy();
-          return channel.send("you didn't provide a selection.");
-        }
+        await interaction.followUp({
+          embeds: [embed],
+          components: [menuRow],
+        });
 
-        const sentMsg = collector.first();
-        const content = sentMsg.content;
+        const collector = interaction.channel.createMessageComponentCollector({
+          filter: (reactor) => reactor.user.id === interaction.user.id,
+          idle: 30 * 1000,
+          dispose: true,
+        });
 
-        if (content.toLowerCase() === "end") {
-          if (!player.queue.current) player.destroy();
-          return sentMsg.reply("Cancelled selection.");
-        }
+        collector.on("collect", async (response) => {
+          const toAdd = [];
+          response.values.forEach((v) => toAdd.push(results[v]));
 
-        const index = Number(content) - 1;
-        if (isNaN(index) || index < 0 || index > max - 1) {
-          return sentMsg.reply(`You must provide a valid number input between (1-${max}).`);
-        }
+          // Only 1 song is selected
+          if (toAdd.length === 1) {
+            track = toAdd[0];
 
-        track = res.tracks[index];
+            player.queue.add(track);
+            if (!player.playing && !player.paused && !player.queue.size) {
+              await interaction.editReply("> Adding song to queue");
+              return player.play();
+            }
 
-        player.queue.add(track);
-        if (!player.playing && !player.paused && !player.queue.size) return player.play();
+            embed
+              .setThumbnail(track.displayThumbnail("hqdefault"))
+              .setAuthor("Added Song to queue")
+              .setDescription(`[${track.title}](${track.uri})`)
+              .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
+              .setFooter(`Requested By: ${track.requester.tag}`);
 
-        embed
-          .setThumbnail(track.displayThumbnail("hqdefault"))
-          .setAuthor("Added Song to queue")
-          .setDescription(`[${track.title}](${track.uri})`)
-          .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
-          .setFooter(`Requested By: ${track.requester.tag}`);
+            if (player.queue.totalSize > 0)
+              embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
 
-        if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
-        channel.send({ embeds: [embed] });
+            return interaction.editReply({ embeds: [embed], components: [] });
+          }
+
+          // Multiple songs were selected
+          player.queue.add(toAdd);
+          if (!player.playing && !player.paused && player.queue.totalSize === toAdd.length) {
+            player.play();
+          }
+
+          embed
+            .setDescription(`Added ${toAdd.length} songs to queue`)
+            .setFooter(`Requested By: ${res.tracks[0].requester.tag}`);
+
+          return interaction.editReply({ embeds: [embed], components: [] });
+        });
+
+        collector.on("end", () => interaction.editReply({ components: [] }));
     }
   }
 };
