@@ -1,4 +1,4 @@
-const { MessagePayload, MessageOptions, User, BaseGuildTextChannel } = require("discord.js");
+const { MessagePayload, MessageOptions, User, BaseGuildTextChannel, Message } = require("discord.js");
 const { getJson } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 const { success, warn, error, log } = require("@src/helpers/logger");
@@ -80,6 +80,21 @@ async function sendMessage(channel, message) {
 }
 
 /**
+ *
+ * @param {Message} message
+ * @param {string|MessagePayload|MessageOptions} content
+ */
+async function safeReply(message, content) {
+  if (!message || !content) return;
+  if (!message.channel.permissionsFor(message.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])) return;
+  try {
+    return message.reply(content);
+  } catch (ex) {
+    error(`safeReply`, ex);
+  }
+}
+
+/**
  * @param {User} user
  * @param {string|MessagePayload|MessageOptions} message
  */
@@ -135,6 +150,7 @@ const permissions = {
 module.exports = {
   permissions,
   sendMessage,
+  safeReply,
   safeDM,
   startupCheck,
 };
