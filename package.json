@@ -24,6 +24,9 @@
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "erela.js": "^2.3.3",
+    "erela.js-deezer": "^1.0.7",
+    "erela.js-facebook": "^1.0.4",
+    "erela.js-spotify": "^1.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fixedsize-map": "^1.0.1",
@@ -40,6 +43,7 @@
     "simple-node-logger": "^21.8.12",
     "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
+    "string-progressbar": "^1.0.4",
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^13.1.0"
   },

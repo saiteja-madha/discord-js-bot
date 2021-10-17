@@ -7,7 +7,7 @@ const SlashCommand = require("./SlashCommand");
 const BaseContext = require("./BaseContext");
 mongoose.plugin(require("mongoose-lean-defaults").default);
 const logger = require("../helpers/logger");
-const { Manager } = require("erela.js");
+const AudioManager = require("./AudioManager");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -50,14 +50,7 @@ module.exports = class BotClient extends Client {
       : undefined;
 
     // Music Player
-    this.musicManager = new Manager({
-      nodes: this.config.MUSIC.NODES,
-      send: (id, payload) => {
-        const guild = this.guilds.cache.get(id);
-        if (guild) guild.shard.send(payload);
-      },
-      autoPlay: true,
-    });
+    this.musicManager = new AudioManager(this);
 
     // Logger
     this.logger = logger;

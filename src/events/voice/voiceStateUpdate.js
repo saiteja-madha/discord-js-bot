@@ -16,6 +16,6 @@ module.exports = async (client, oldState, newState) => {
       // if 1 (you), wait 1 minute
       if (!oldState.channel.members.size - 1)
         // if there's still 1 member,
-        client.musicManager.get(oldState.guild.id).destroy();
+        client.musicManager.get(oldState.guild.id)?.destroy();
     }, 1 * 60 * 1000); // (check and disconnect after 1 min)
 };
