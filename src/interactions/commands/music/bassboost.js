@@ -51,12 +51,12 @@ module.exports = class Bassboost extends SlashCommand {
     const member = await interaction.guild.members.fetch(interaction.user.id);
 
     const player = interaction.client.musicManager.get(interaction.guildId);
-    if (!player) return interaction.followUp("No music is being played!");
+    if (!player) return interaction.followUp("🚫 No music is being played!");
 
     const { channel } = member.voice;
 
-    if (!channel) return interaction.followUp("You need to join a voice channel.");
-    if (channel.id !== player.voiceChannel) return interaction.followUp("You're not in the same voice channel.");
+    if (!channel) return interaction.followUp("🚫 You need to join a voice channel.");
+    if (channel.id !== player.voiceChannel) return interaction.followUp("🚫 You're not in the same voice channel.");
 
     let level = interaction.options.getString("level");
 

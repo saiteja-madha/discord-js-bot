@@ -8,7 +8,7 @@ module.exports = class Skip extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "np",
-      description: "Show what is playing currently",
+      description: "show's what track is currently being played",
       enabled: true,
       category: "MUSIC",
     });
@@ -19,7 +19,7 @@ module.exports = class Skip extends SlashCommand {
    */
   async run(interaction) {
     const player = interaction.client.musicManager.get(interaction.guildId);
-    if (!player || !player.queue.current) return interaction.followUp("No music is being played!");
+    if (!player || !player.queue.current) return interaction.followUp("🚫 No music is being played!");
 
     const track = player.queue.current;
     const end = track.duration > 6.048e8 ? "🔴 LIVE" : new Date(track.duration).toISOString().slice(11, 19);

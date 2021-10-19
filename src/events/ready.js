@@ -1,5 +1,5 @@
 const { BotClient } = require("@src/structures");
-const { counterHandler, inviteHandler, musicHandler } = require("@src/handlers");
+const { counterHandler, inviteHandler } = require("@src/handlers");
 const { loadReactionRoles } = require("@schemas/reactionrole-schema");
 const { getSettings } = require("@schemas/guild-schema");
 
@@ -20,9 +20,6 @@ module.exports = async (client) => {
   // Register Interactions
   if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions();
   else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
-
-  // register player events
-  musicHandler.registerPlayerEvents(client);
 
   // Load reaction roles to cache
   await loadReactionRoles();

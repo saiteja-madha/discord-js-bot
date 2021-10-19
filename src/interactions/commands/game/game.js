@@ -19,7 +19,6 @@ module.exports = class GameCommand extends SlashCommand {
           type: "SUB_COMMAND",
         },
       ],
-      userPermissions: ["READ_MESSAGE_HISTORY", "MANAGE_MESSAGES"],
     });
   }
 

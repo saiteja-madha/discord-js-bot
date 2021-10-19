@@ -6,7 +6,7 @@ module.exports = class Queue extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "queue",
-      description: "Shows the current music queue",
+      description: "displays the current music queue",
       enabled: true,
       category: "MUSIC",
       options: [
@@ -25,7 +25,7 @@ module.exports = class Queue extends SlashCommand {
    */
   async run(interaction) {
     const player = interaction.client.musicManager.get(interaction.guildId);
-    if (!player) return interaction.followUp("There is no music playing in this guild.");
+    if (!player) return interaction.followUp("🚫 There is no music playing in this guild.");
 
     const queue = player.queue;
     const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setAuthor(`Queue for ${interaction.guild.name}`);

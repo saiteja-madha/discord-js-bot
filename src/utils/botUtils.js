@@ -1,4 +1,4 @@
-const { MessagePayload, MessageOptions, User, BaseGuildTextChannel, Message } = require("discord.js");
+const { MessagePayload, MessageOptions, User, BaseGuildTextChannel, Message, GuildMember } = require("discord.js");
 const { getJson } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 const { success, warn, error, log } = require("@src/helpers/logger");
@@ -107,6 +107,22 @@ async function safeDM(user, message) {
   }
 }
 
+/**
+ * @param {GuildMember} member
+ * @param {import('erela.js').Player} player
+ */
+function checkMusic(member, player) {
+  if (!player) return `🚫 No music is being played!`;
+
+  // Check if user is in a voice channel
+  if (!member.voice?.channelId) return "🚫 You need to join my voice channel.";
+
+  // Check if user is in the same voice channel
+  if (member.voice?.channelId !== player.voiceChannel) return "🚫 You're not in the same voice channel.";
+
+  return true;
+}
+
 const permissions = {
   CREATE_INSTANT_INVITE: "Create instant invite",
   KICK_MEMBERS: "Kick members",
@@ -152,5 +168,6 @@ module.exports = {
   sendMessage,
   safeReply,
   safeDM,
+  checkMusic,
   startupCheck,
 };

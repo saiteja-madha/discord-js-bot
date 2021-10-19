@@ -86,6 +86,13 @@ module.exports = class BotClient extends Client {
       try {
         const eventName = file.split(".")[0];
         const event = require(filePath);
+
+        // music events
+        if (filePath.split("\\").at(-2) === "music") {
+          this.musicManager.on(eventName, event.bind(null, this));
+        }
+
+        // bot events
         this.on(eventName, event.bind(null, this));
         delete require.cache[require.resolve(filePath)];
         table.addRow(file, this.config.EMOJIS.TICK);

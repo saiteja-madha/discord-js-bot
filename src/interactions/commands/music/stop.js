@@ -1,11 +1,12 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
+const { checkMusic } = require("@utils/botUtils");
 
 module.exports = class Stop extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "stop",
-      description: "stop the music player",
+      description: "stop the music player and clear the entire music queue",
       enabled: true,
       category: "MUSIC",
     });
@@ -16,16 +17,12 @@ module.exports = class Stop extends SlashCommand {
    */
   async run(interaction) {
     const member = await interaction.guild.members.fetch(interaction.user.id);
-
     const player = interaction.client.musicManager.get(interaction.guildId);
-    if (!player) return interaction.followUp("No music is being played!");
 
-    const { channel } = member.voice;
-
-    if (!channel) return interaction.followUp("You need to join a voice channel.");
-    if (channel.id !== player.voiceChannel) return interaction.followUp("You're not in the same voice channel.");
+    const playable = checkMusic(member, player);
+    if (typeof playable !== "boolean") return interaction.followUp(playable);
 
     player.destroy();
-    await interaction.followUp("The music player is stopped");
+    await interaction.followUp("🎶 The music player is stopped and queue has been cleared");
   }
 };

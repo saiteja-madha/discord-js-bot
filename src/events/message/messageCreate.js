@@ -2,6 +2,7 @@ const { Message } = require("discord.js");
 const { BotClient } = require("@src/structures");
 const { automodHandler, xpHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/guild-schema");
+const { safeReply } = require("@utils/botUtils");
 
 /**
  * @param {BotClient} client
@@ -12,7 +13,7 @@ module.exports = async (client, message) => {
   const settings = await getSettings(message.guild);
 
   // check for bot mentions
-  if (message.content.includes(`${client.user.id}`)) message.reply(`My prefix is \`${settings.prefix}\``);
+  if (message.content.includes(`${client.user.id}`)) safeReply(message, `My prefix is \`${settings.prefix}\``);
 
   await automodHandler.performAutomod(message, settings);
   if (settings.ranking.enabled) xpHandler.handleXp(message);
