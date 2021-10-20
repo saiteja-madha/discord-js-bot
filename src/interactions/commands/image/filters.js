@@ -1,8 +1,9 @@
 const { MessageEmbed, MessageAttachment, CommandInteraction } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
 const { getBuffer } = require("@utils/httpUtils");
-const { getFilter } = require("@utils/imageUtils");
 const { EMBED_COLORS } = require("@root/config.js");
+
+const IMAGE_API_BASE = "https://discord-js-image-manipulation.herokuapp.com";
 
 const availableFilters = ["blur", "burn", "gay", "greyscale", "invert", "pixelate", "sepia", "sharpen"];
 
@@ -65,3 +66,13 @@ module.exports = class Filters extends SlashCommand {
     await interaction.followUp({ embeds: [embed], files: [attachment] });
   }
 };
+
+/**
+ * @param {String} genName
+ * @param {String} image
+ */
+function getFilter(filter, image) {
+  const endpoint = new URL(`${IMAGE_API_BASE}/filters/${filter}`);
+  endpoint.searchParams.append("image", image);
+  return endpoint.href;
+}

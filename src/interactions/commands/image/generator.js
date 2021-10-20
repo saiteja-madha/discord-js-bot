@@ -1,8 +1,9 @@
 const { MessageEmbed, MessageAttachment, CommandInteraction } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
 const { getBuffer } = require("@utils/httpUtils");
-const { getGenerator } = require("@utils/imageUtils");
 const { EMBED_COLORS } = require("@root/config.js");
+
+const IMAGE_API_BASE = "https://discord-js-image-manipulation.herokuapp.com";
 
 const availableGenerators = [
   "ad",
@@ -90,3 +91,13 @@ module.exports = class Generator extends SlashCommand {
     await interaction.followUp({ embeds: [embed], files: [attachment] });
   }
 };
+
+/**
+ * @param {String} genName
+ * @param {String} image
+ */
+function getGenerator(genName, image) {
+  const endpoint = new URL(`${IMAGE_API_BASE}/generators/${genName}`);
+  endpoint.searchParams.append("image", image);
+  return endpoint.href;
+}
