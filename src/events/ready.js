@@ -17,9 +17,8 @@ module.exports = async (client) => {
   updatePresence(client);
   setInterval(() => updatePresence(client), 10 * 60 * 1000);
 
-  // Register Interactions
-  if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions();
-  else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
+  // Register global Interactions
+  await client.registerGlobalInteractions();
 
   // Load reaction roles to cache
   await loadReactionRoles();
@@ -27,8 +26,11 @@ module.exports = async (client) => {
   // initialize counter Handler
   await counterHandler.init(client);
 
-  // cache invites for tracking enabled guilds
   client.guilds.cache.forEach(async (guild) => {
+    // register guild commands
+    client.registerGuildInteractions(guild);
+
+    // cache invites for tracking enabled guilds
     const settings = await getSettings(guild);
     if (settings.invite.tracking) inviteHandler.cacheGuildInvites(guild);
   });

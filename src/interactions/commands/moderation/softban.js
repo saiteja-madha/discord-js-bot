@@ -9,6 +9,7 @@ module.exports = class SoftBanCommand extends SlashCommand {
       description: "softban the specified member. Kicks and deletes messages",
       enabled: true,
       category: "MODERATION",
+      userPermissions: ["KICK_MEMBERS"],
       options: [
         {
           name: "user",

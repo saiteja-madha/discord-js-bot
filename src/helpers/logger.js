@@ -55,7 +55,6 @@ const sendLogs = (level, content, data) => {
       break;
 
     case "debug":
-      console.log(`[${chalk.cyan(timestamp)}] [${chalk.cyan(level)}] ${content} `);
       simpleLogger.debug(content);
       break;
 

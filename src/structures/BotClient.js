@@ -1,4 +1,4 @@
-const { Client, Collection, Intents, WebhookClient } = require("discord.js");
+const { Client, Collection, Intents, WebhookClient, Guild, ApplicationCommand } = require("discord.js");
 const path = require("path");
 const fs = require("fs");
 const Ascii = require("ascii-table");
@@ -184,53 +184,110 @@ module.exports = class BotClient extends Client {
   }
 
   /**
-   * Register slash command on startup
-   * @param {string} [guildId]
+   * Register Interactions Globally
    */
-  async registerInteractions(guildId) {
+  async registerGlobalInteractions() {
+    if (this.config.TEST_GUILD) {
+      return this.logger.log("Testing Mode: Skipping Global Commands");
+    }
+
     const toRegister = [];
 
-    // filter slash commands
-    if (this.config.INTERACTIONS.SLASH) {
+    // filter global commands
+    this.slashCommands
+      .filter((cmd) => cmd.userPermissions.length === 0)
+      .map((cmd) => ({
+        name: cmd.name,
+        description: cmd.description,
+        type: "CHAT_INPUT",
+        options: cmd.options,
+      }))
+      .forEach((s) => toRegister.push(s));
+
+    // add contexts
+    this.contexts
+      .filter((cmd) => cmd.enabled)
+      .map((cmd) => ({
+        name: cmd.name,
+        type: cmd.type,
+      }))
+      .forEach((c) => toRegister.push(c));
+
+    await this.application.commands.set(toRegister);
+    this.logger.success("Successfully registered global interactions");
+  }
+
+  /**
+   * Register guild specific slash commands
+   * @param {Guild} guild
+   */
+  async registerGuildInteractions(guild) {
+    if (!guild) throw new Error("No guild provided");
+
+    // if testing, only register in test guild
+    if (this.config.TEST_GUILD && this.config.TEST_GUILD !== guild.id) return;
+
+    // filter guild commands
+    const toRegister = Array.from(
       this.slashCommands
+        .filter((cmd) => this.config.TEST_GUILD || cmd.userPermissions.length > 0)
         .map((cmd) => ({
           name: cmd.name,
           description: cmd.description,
           type: "CHAT_INPUT",
           options: cmd.options,
+          defaultPermission: cmd.userPermissions.length > 0 ? false : true,
         }))
-        .forEach((s) => toRegister.push(s));
-    }
+    );
 
-    // filter contexts
-    if (this.config.INTERACTIONS.CONTEXT) {
-      this.contexts
-        .filter((cmd) => cmd.enabled)
-        .map((cmd) => ({
-          name: cmd.name,
-          type: cmd.type,
-        }))
-        .forEach((c) => toRegister.push(c));
-    }
+    const applicationCommands = await guild.commands.set(toRegister);
+    this.syncSlashPermissions(guild, applicationCommands);
+  }
 
-    // Register GLobally
-    if (!guildId) {
-      await this.application.commands.set(toRegister);
-    }
+  /**
+   * This function updates slash command permissions
+   * @param {Guild} guild
+   * @param {Collection<string, ApplicationCommand<{}>>} [applicationCommands]
+   */
+  async syncSlashPermissions(guild, applicationCommands) {
+    if (!guild) throw new Error("No guild provided");
+    if (!applicationCommands) applicationCommands = await guild.commands.fetch();
 
-    // Register for a specific guild
-    else if (guildId && typeof guildId === "string") {
-      const guild = this.guilds.cache.get(guildId);
-      if (!guild) throw new Error(`No guilds found matching ${guildId}`);
-      await guild.commands.set(toRegister);
-    }
+    const guildCommands = this.slashCommands.filter((cmd) => cmd.userPermissions.length > 0);
 
-    // Throw an error
-    else {
-      throw new Error(`Did you provide a valid guildId to register interactions`);
-    }
+    // Get guild roles that have the permissions mentioned in slash command
+    const getRoles = (cmdName) => {
+      const permissions = guildCommands.find((x) => x.name === cmdName)?.userPermissions;
+      if (!permissions || permissions.length === 0) return null;
+      return guild.roles.cache.filter((x) => x.permissions.has(permissions, false) && !x.managed);
+    };
 
-    this.logger.success("Successfully registered interactions");
+    const fullPermissions = applicationCommands.reduce((acc, appCmd) => {
+      const roles = getRoles(appCmd.name);
+      if (!roles) return acc;
+
+      const permissions = roles.reduce((a, role) => {
+        return [
+          ...a,
+          {
+            id: role.id,
+            type: "ROLE",
+            permission: true,
+          },
+        ];
+      }, []);
+
+      return [
+        ...acc,
+        {
+          id: appCmd.id,
+          permissions: permissions,
+        },
+      ];
+    }, []);
+
+    await guild.commands.permissions.set({ fullPermissions });
+    this.logger.debug(`Syncing slash command permissions in ${guild.id}`);
   }
 
   /**

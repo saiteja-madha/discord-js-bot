@@ -9,6 +9,7 @@ module.exports = class MuteCommand extends SlashCommand {
       description: "mutes the specified member",
       enabled: true,
       category: "MODERATION",
+      userPermissions: ["MUTE_MEMBERS"],
       options: [
         {
           name: "user",

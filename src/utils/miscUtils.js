@@ -5,47 +5,45 @@ const DISCORD_INVITE_PATTERN =
   /(https?:\/\/)?(www.)?(discord.(gg|io|me|li|link|plus)|discorda?p?p?.com\/invite|invite.gg|dsc.gg|urlcord.cf)\/[^\s/]+?(?=\b)/;
 
 /**
- * @param {String} text
+ * Returns true if provided text contains any link
+ * @param {string} text
  */
-function containsLink(text) {
-  return LINK_PATTERN.test(text);
-}
+exports.containsLink = (text) => LINK_PATTERN.test(text);
 
 /**
- * @param {String} text
+ * Returns true if provided text contains any discord invite
+ * @param {string} text
  */
-function containsDiscordInvite(text) {
-  return DISCORD_INVITE_PATTERN.test(text);
-}
+exports.containsDiscordInvite = (text) => DISCORD_INVITE_PATTERN.test(text);
 
 /**
- * @param {Number} max
+ * Get a random int within the provided range
+ * @param {string} max
  */
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+exports.getRandomInt = (max) => Math.floor(Math.random() * max);
 
 /**
- * @param {String} text
+ * Returns true if provided text is a HEX Value
+ * @param {string} text
  */
-function isHex(text) {
-  return /^#[0-9A-F]{6}$/i.test(text);
-}
+exports.isHex = (text) => /^#[0-9A-F]{6}$/i.test(text);
 
 /**
+ * Returns the number of hours between provided dates
  * @param {Date} dt2
  * @param {Date} dt1
  */
-function diffHours(dt2, dt1) {
+exports.diffHours = (dt2, dt1) => {
   let diff = (dt2.getTime() - dt1.getTime()) / 1000;
   diff /= 60 * 60;
   return Math.abs(Math.round(diff));
-}
+};
 
 /**
+ * Converts time to valid time string
  * @param {number} timeInSeconds
  */
-function timeformat(timeInSeconds) {
+exports.timeformat = (timeInSeconds) => {
   const days = Math.floor((timeInSeconds % 31536000) / 86400);
   const hours = Math.floor((timeInSeconds % 86400) / 3600);
   const minutes = Math.floor((timeInSeconds % 3600) / 60);
@@ -56,33 +54,39 @@ function timeformat(timeInSeconds) {
     (minutes > 0 ? `${minutes} minutes, ` : "") +
     (seconds > 0 ? `${seconds} seconds` : "")
   );
-}
+};
 
 /**
+ * Return time remaining until provided date
  * @param {Date} timeUntil
  */
-function getRemainingTime(timeUntil) {
+exports.getRemainingTime = (timeUntil) => {
   const seconds = Math.abs((timeUntil - new Date()) / 1000);
-  const time = timeformat(seconds);
-  return time;
-}
+  return this.timeformat(seconds);
+};
 
-function durationToMillis(dur) {
-  return (
-    dur
-      .split(":")
-      .map(Number)
-      .reduce((acc, curr) => curr + acc * 60) * 1000
-  );
-}
+/**
+ * Converts duration to milliseconds
+ * @param {string} duration
+ */
+exports.durationToMillis = (duration) =>
+  duration
+    .split(":")
+    .map(Number)
+    .reduce((acc, curr) => curr + acc * 60) * 1000;
 
-module.exports = {
-  containsLink,
-  containsDiscordInvite,
-  getRandomInt,
-  isHex,
-  diffHours,
-  timeformat,
-  getRemainingTime,
-  durationToMillis,
+/**
+ * Return true if 2 array elements are equal
+ * @param {Array} arr1
+ * @param {Array} arr2
+ */
+exports.compareArrays = (arr1, arr2) => {
+  if (arr1.length !== arr2.length) return false;
+  const uniqueValues = new Set([...arr1, ...arr2]);
+  for (const v of uniqueValues) {
+    const aCount = arr1.filter((e) => e === v).length;
+    const bCount = arr2.filter((e) => e === v).length;
+    if (aCount !== bCount) return false;
+  }
+  return true;
 };

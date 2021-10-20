@@ -10,6 +10,8 @@ module.exports = class MuteSetupCommand extends SlashCommand {
       description: "setup muted role",
       enabled: true,
       category: "ADMIN",
+      userPermissions: ["MUTE_MEMBERS"],
+      botPermissions: ["MANAGE_ROLES"],
     });
   }
 

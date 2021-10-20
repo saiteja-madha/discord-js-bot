@@ -9,6 +9,7 @@ module.exports = class Warn extends SlashCommand {
       description: "warns the specified member",
       enabled: true,
       category: "MODERATION",
+      userPermissions: ["KICK_MEMBERS"],
       options: [
         {
           name: "user",

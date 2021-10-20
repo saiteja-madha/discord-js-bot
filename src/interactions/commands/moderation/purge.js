@@ -10,6 +10,7 @@ module.exports = class PurgeCommand extends SlashCommand {
       description: "cleans messages from a channel",
       enabled: true,
       category: "MODERATION",
+      userPermissions: ["MANAGE_MESSAGES"],
       options: [
         {
           name: "all",
