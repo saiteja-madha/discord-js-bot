@@ -35,7 +35,7 @@ module.exports = class BanCommand extends SlashCommand {
     const reason = interaction.options.getString("reason");
     const target = await interaction.guild.members.fetch(user.id);
 
-    const response = await addModAction(interaction.guild.me, target, reason.length, "BAN");
+    const response = await addModAction(interaction.member, target, reason.length, "BAN");
     await interaction.followUp(response);
   }
 };

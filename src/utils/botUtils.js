@@ -1,4 +1,4 @@
-const { MessagePayload, MessageOptions, User, BaseGuildTextChannel, Message, GuildMember } = require("discord.js");
+const { MessagePayload, MessageOptions, User, TextBasedChannels, Message, GuildMember } = require("discord.js");
 const { getJson } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 const { success, warn, error, log } = require("@src/helpers/logger");
@@ -46,10 +46,6 @@ function validateConfig() {
     error("config.js: CACHE_SIZE must be a positive integer");
     process.exit();
   }
-  if (!config.PREFIX) {
-    error("config.js: PREFIX cannot be empty");
-    process.exit();
-  }
   if (config.DASHBOARD.enabled) {
     if (!config.DASHBOARD.baseURL || !config.DASHBOARD.failureURL || !config.DASHBOARD.port) {
       error("config.js: DASHBOARD details cannot be empty");
@@ -66,14 +62,14 @@ async function startupCheck() {
 }
 
 /**
- * @param {BaseGuildTextChannel} channel
- * @param {string | MessagePayload | MessageOptions} message
+ * @param {TextBasedChannels} channel
+ * @param {string|MessagePayload|MessageOptions} content
  */
-async function sendMessage(channel, message) {
-  if (!channel || !message) return;
-  if (!channel.permissionsFor(channel.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])) return;
+async function sendMessage(channel, content) {
+  if (!channel || !content) return;
+  if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])) return;
   try {
-    return channel.send(message);
+    return channel.send(content);
   } catch (ex) {
     error(`sendMessage`, ex);
   }
@@ -83,12 +79,21 @@ async function sendMessage(channel, message) {
  *
  * @param {Message} message
  * @param {string|MessagePayload|MessageOptions} content
+ * @param {number} [seconds]
  */
-async function safeReply(message, content) {
+async function safeReply(message, content, seconds) {
   if (!message || !content) return;
-  if (!message.channel.permissionsFor(message.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])) return;
+  if (
+    message.channel.type !== "DM" &&
+    !message.channel.permissionsFor(message.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])
+  )
+    return;
   try {
-    return message.reply(content);
+    if (!seconds) return message.reply(content);
+    else {
+      const reply = await message.reply(content);
+      setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds);
+    }
   } catch (ex) {
     error(`safeReply`, ex);
   }

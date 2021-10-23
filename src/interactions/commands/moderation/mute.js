@@ -35,7 +35,7 @@ module.exports = class MuteCommand extends SlashCommand {
     const reason = interaction.options.getString("reason");
     const target = await interaction.guild.members.fetch(user.id);
 
-    const response = await addModAction(interaction.guild.me, target, reason, "MUTE");
+    const response = await addModAction(interaction.member, target, reason, "MUTE");
 
     if (response === "NO_MUTED_ROLE") {
       return interaction.followUp(`Muted role doesn't exist! Create one or use /mutesetup to create one`);

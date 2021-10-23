@@ -13,7 +13,7 @@ module.exports = async (client, message) => {
   const settings = await getSettings(message.guild);
 
   // check for bot mentions
-  if (message.content.includes(`${client.user.id}`)) safeReply(message, `My prefix is \`${settings.prefix}\``);
+  if (message.content.includes(`${client.user.id}`)) safeReply(message, "Access my commands using `/`");
 
   await automodHandler.performAutomod(message, settings);
   if (settings.ranking.enabled) xpHandler.handleXp(message);

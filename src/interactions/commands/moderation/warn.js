@@ -35,7 +35,7 @@ module.exports = class Warn extends SlashCommand {
     const reason = interaction.options.getString("reason");
     const target = await interaction.guild.members.fetch(user.id);
 
-    const response = await addModAction(interaction.guild.me, target, reason, "WARN");
+    const response = await addModAction(interaction.member, target, reason, "WARN");
     await interaction.followUp(response);
   }
 };

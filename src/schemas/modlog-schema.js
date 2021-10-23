@@ -24,7 +24,7 @@ const Schema = mongoose.Schema(
         type: Boolean,
         required: false,
       },
-      current: {
+      active: {
         type: Boolean,
         required: false,
       },
@@ -46,18 +46,18 @@ module.exports = {
         tag: admin.user.tag,
       },
       type,
+      data: {
+        active: true,
+      },
     };
 
     if (type === "MUTE") {
-      toSave.data = {};
-
       if (data.expires) {
         const expires = new Date();
         expires.setMinutes(expires.getMinutes() + data.minutes);
         toSave.data.expires = expires;
       } else {
         toSave.data.isPermanent = true;
-        toSave.data.current = true;
       }
     }
 
@@ -69,7 +69,7 @@ module.exports = {
       guild_id: guildId,
       member_id: targetId,
       type: "MUTE",
-      "data.current": true,
+      "data.active": true,
     }).lean({ defaults: true }),
 
   removeMutes: async (guildId, targetId) =>
@@ -78,9 +78,9 @@ module.exports = {
         guild_id: guildId,
         member_id: targetId,
         type: "MUTE",
-        "data.current": true,
+        "data.active": true,
       },
-      { "data.current": false }
+      { "data.active": false }
     ),
 
   getWarnings: async (guildId, targetId) =>
@@ -88,5 +88,19 @@ module.exports = {
       guild_id: guildId,
       member_id: targetId,
       type: "WARN",
-    }),
+      "data.active": true,
+    }).lean({ defaults: true }),
+
+  clearWarnings: async (guildId, targetId) =>
+    Model.updateMany(
+      {
+        guild_id: guildId,
+        member_id: targetId,
+        type: "WARN",
+        "data.active": true,
+      },
+      {
+        "data.active": false,
+      }
+    ),
 };
