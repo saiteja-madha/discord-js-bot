@@ -63,6 +63,8 @@ module.exports = class BaseContext {
     } catch (ex) {
       interaction.followUp("Oops! An error occurred while running the command");
       this.client.logger.error("contextRun", ex);
+    } finally {
+      this.applyCooldown(interaction.user.id);
     }
   }
 
@@ -106,6 +108,7 @@ module.exports = class BaseContext {
    * Validates constructor parameters
    * @param {BotClient} client
    * @param {ContextData} data
+   * @private
    */
   static validateInfo(client, data) {
     if (!client) throw new Error("A client must be specified");

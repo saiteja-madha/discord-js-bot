@@ -6,7 +6,7 @@ module.exports = class OwnerCommands extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "owner",
-      description: "evaluates something",
+      description: "owner commands",
       enabled: true,
       category: "OWNER",
       options: [

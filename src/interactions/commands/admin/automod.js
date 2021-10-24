@@ -16,74 +16,6 @@ module.exports = class Automod extends SlashCommand {
       category: "ADMIN",
       options: [
         {
-          name: "status",
-          description: "Check automod configuration",
-          type: "SUB_COMMAND",
-        },
-        {
-          name: "strikes",
-          description: "Set maximum number of strikes before taking an action",
-          type: "SUB_COMMAND",
-          options: [
-            {
-              name: "amount",
-              description: "number of strikes (default 5)",
-              required: true,
-              type: "INTEGER",
-            },
-          ],
-        },
-        {
-          name: "action",
-          description: "Set action to be performed after receiving maximum strikes",
-          type: "SUB_COMMAND",
-          options: [
-            {
-              name: "action",
-              description: "action to perform",
-              type: "STRING",
-              required: true,
-              choices: [
-                {
-                  name: "MUTE",
-                  value: "MUTE",
-                },
-                {
-                  name: "KICK",
-                  value: "KICK",
-                },
-                {
-                  name: "BAN",
-                  value: "BAN",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "debug",
-          description: "Enable/disable automod for messages sent by admins & moderators",
-          type: "SUB_COMMAND",
-          options: [
-            {
-              name: "status",
-              description: "configuration status",
-              required: true,
-              type: "STRING",
-              choices: [
-                {
-                  name: "ON",
-                  value: "ON",
-                },
-                {
-                  name: "OFF",
-                  value: "OFF",
-                },
-              ],
-            },
-          ],
-        },
-        {
           name: "antighostping",
           description: "Log ghost mentions in your server",
           type: "SUB_COMMAND",
@@ -211,6 +143,81 @@ module.exports = class Automod extends SlashCommand {
               description: "configuration amount (0 to disable)",
               required: true,
               type: "INTEGER",
+            },
+          ],
+        },
+        {
+          name: "config",
+          description: "automod configuration",
+          type: "SUB_COMMAND_GROUP",
+          options: [
+            {
+              name: "status",
+              description: "Check automod configuration",
+              type: "SUB_COMMAND",
+            },
+            {
+              name: "strikes",
+              description: "Set maximum number of strikes before taking an action",
+              type: "SUB_COMMAND",
+              options: [
+                {
+                  name: "amount",
+                  description: "number of strikes (default 5)",
+                  required: true,
+                  type: "INTEGER",
+                },
+              ],
+            },
+            {
+              name: "action",
+              description: "Set action to be performed after receiving maximum strikes",
+              type: "SUB_COMMAND",
+              options: [
+                {
+                  name: "action",
+                  description: "action to perform",
+                  type: "STRING",
+                  required: true,
+                  choices: [
+                    {
+                      name: "MUTE",
+                      value: "MUTE",
+                    },
+                    {
+                      name: "KICK",
+                      value: "KICK",
+                    },
+                    {
+                      name: "BAN",
+                      value: "BAN",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              name: "debug",
+              description: "Enable/disable automod for messages sent by admins & moderators",
+              type: "SUB_COMMAND",
+              options: [
+                {
+                  name: "status",
+                  description: "configuration status",
+                  required: true,
+                  type: "STRING",
+                  choices: [
+                    {
+                      name: "ON",
+                      value: "ON",
+                    },
+                    {
+                      name: "OFF",
+                      value: "OFF",
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },

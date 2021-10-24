@@ -3,12 +3,18 @@ const { ApplicationCommandOptionData, PermissionResolvable, CommandInteraction, 
 const { permissions } = require("@utils/botUtils");
 const { timeformat } = require("@utils/miscUtils");
 const BotClient = require("./BotClient");
-const { EMBED_COLORS, EMOJIS } = require("@root/config");
+const { EMBED_COLORS, EMOJIS, OWNER_IDS } = require("@root/config");
 const CommandCategory = require("./CommandCategory");
 
 module.exports = class SlashCommand {
   /**
-   * @typedef {"ADMIN"|"ECONOMY"|"FUN"|"IMAGE"|"INFORMATION"|"INVITE"|"MODERATION"|"MUSIC"|"NONE"|"OWNER"|"SOCIAL"|"TICKET"|"UTILITY" } Category
+   * @typedef {Object} Validation
+   * @property {function} callback - The condition to validate
+   * @property {string} message - The message to be displayed if callback condition is not met
+   */
+
+  /**
+   * @typedef {"ADMIN"|"ANIME"|"ECONOMY"|"FUN"|"IMAGE"|"INFORMATION"|"INVITE"|"MODERATION"|"MUSIC"|"NONE"|"OWNER"|"SOCIAL"|"TICKET"|"UTILITY" } Category
    */
 
   /**
@@ -22,6 +28,7 @@ module.exports = class SlashCommand {
    * @property {PermissionResolvable[]} [botPermissions] - Permissions required by the bots to use the command
    * @property {number} [cooldown] - Command cooldown in seconds
    * @property {Category} [category] - Command category
+   * @property {Validation} [validation] - Custom validation to be done
    */
 
   /**
@@ -41,22 +48,30 @@ module.exports = class SlashCommand {
     this.botPermissions = data.botPermissions || [];
     this.cooldown = data.cooldown || 0;
     this.category = data.category || "NONE";
+    this.validation = data.validation;
   }
 
   /**
    * @param {CommandInteraction} interaction
    */
   async execute(interaction) {
-    if (this.cooldown > 0) {
-      const remaining = this.getRemainingCooldown(interaction.user.id);
-      if (remaining > 0) {
-        return interaction.reply({
-          content: `You are on cooldown. You can use the command after ${timeformat(remaining)}`,
-          ephemeral: true,
-        });
-      }
+    // callback validation
+    if (this.validation && !this.validation.callback(interaction)) {
+      return interaction.reply({
+        content: this.validation.message,
+        ephemeral: true,
+      });
     }
 
+    // Owner commands
+    if (this.category === "OWNER" && OWNER_IDS.includes(interaction.user.id)) {
+      return interaction.reply({
+        content: `This command can only accessible to bot owners`,
+        ephemeral: true,
+      });
+    }
+
+    // user permissions
     if (interaction.member && this.userPermissions.length > 0) {
       if (!interaction.member.permissions.has(this.userPermissions)) {
         return interaction.reply({
@@ -66,10 +81,22 @@ module.exports = class SlashCommand {
       }
     }
 
+    // bot permissions
     if (this.botPermissions.length > 0) {
       if (!interaction.guild.me.permissions.has(this.botPermissions)) {
         return interaction.reply({
           content: `I need ${this.parsePermissions(this.botPermissions)} for this command`,
+          ephemeral: true,
+        });
+      }
+    }
+
+    // cooldown check
+    if (this.cooldown > 0) {
+      const remaining = this.getRemainingCooldown(interaction.user.id);
+      if (remaining > 0) {
+        return interaction.reply({
+          content: `You are on cooldown. You can use the command in \`${timeformat(remaining)}\``,
           ephemeral: true,
         });
       }
@@ -81,6 +108,8 @@ module.exports = class SlashCommand {
     } catch (ex) {
       interaction.followUp("Oops! An error occurred while running the command");
       this.client.logger.error("interactionRun", ex);
+    } finally {
+      this.applyCooldown(interaction.user.id);
     }
   }
 
@@ -144,6 +173,7 @@ module.exports = class SlashCommand {
    * Validates constructor parameters
    * @param {BotClient} client
    * @param {CommandData} data
+   * @private
    */
   static validateInfo(client, data) {
     if (!client) throw new Error("A client must be specified");
@@ -187,6 +217,17 @@ module.exports = class SlashCommand {
     if (data.category) {
       if (!Object.prototype.hasOwnProperty.call(CommandCategory, data.category)) {
         throw new Error(`Not a valid category ${data.category}`);
+      }
+    }
+    if (data.validation) {
+      if (typeof data.validation !== "object") {
+        throw new Error("Validation must be an object");
+      }
+      if (typeof data.validation.callback !== "function") {
+        throw new Error("Validation.callback must be a function");
+      }
+      if (typeof data.validation.message !== "string") {
+        throw new Error("Validation.message must be a string");
       }
     }
   }

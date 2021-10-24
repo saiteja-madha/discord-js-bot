@@ -4,13 +4,13 @@ const { getRandomInt } = require("@utils/miscUtils");
 const { getJson } = require("@utils/httpUtils");
 const { EMBED_COLORS } = require("@root/config");
 
-module.exports = class FactCommand extends SlashCommand {
+module.exports = class MemeCommand extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "meme",
       description: "get a random meme",
       enabled: true,
-      cooldown: 5,
+      cooldown: 20,
       category: "FUN",
       options: [
         {
@@ -30,7 +30,7 @@ module.exports = class FactCommand extends SlashCommand {
     const choice = interaction.options.getString("category");
 
     const buttonRow = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId("regenBtn").setStyle("SECONDARY").setEmoji("🔁")
+      new MessageButton().setCustomId("regenMemeBtn").setStyle("SECONDARY").setEmoji("🔁")
     );
     const embed = await getRandomEmbed(choice);
 
@@ -41,12 +41,12 @@ module.exports = class FactCommand extends SlashCommand {
 
     const collector = interaction.channel.createMessageComponentCollector({
       filter: (reactor) => reactor.user.id === interaction.user.id,
-      idle: 30 * 1000,
+      time: this.cooldown * 1000,
       dispose: true,
     });
 
     collector.on("collect", async (response) => {
-      if (response.customId !== "regenBtn") return;
+      if (response.customId !== "regenMemeBtn") return;
       const embed = await getRandomEmbed(choice);
       await interaction.editReply({
         embeds: [embed],
@@ -83,7 +83,7 @@ const getRandomEmbed = async (choice) => {
   let memeNumComments = json[0].data.children[0].data.num_comments;
 
   return new MessageEmbed()
-    .setAuthor(memeTitle, memeUrl)
+    .setAuthor(memeTitle, null, memeUrl)
     .setImage(memeImage)
     .setColor("RANDOM")
     .setFooter(`👍 ${memeUpvotes} | 💬 ${memeNumComments}`);

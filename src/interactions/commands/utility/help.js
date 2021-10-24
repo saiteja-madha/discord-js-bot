@@ -3,7 +3,7 @@ const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, Comman
 const { EMOJIS, EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 
 const CMDS_PER_PAGE = 5;
-const TIMEOUT_IN_SECONDS = 10;
+const TIMEOUT_IN_SECONDS = 30;
 const cache = {};
 
 module.exports = class HelpCommand extends SlashCommand {
