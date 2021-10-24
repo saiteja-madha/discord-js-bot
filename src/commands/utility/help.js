@@ -67,8 +67,10 @@ async function sendHelpMenu(message, prefix) {
   // Buttons Row
   let components = [];
   components.push(
-    new MessageButton().setCustomId("previousbtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
-    new MessageButton().setCustomId("nextbtn").setEmoji("➡️").setStyle("SECONDARY").setDisabled(true)
+    new MessageButton().setCustomId("previousbtn").setEmoji("⬅️").setStyle("SUCCESS").setDisabled(true),
+    new MessageButton().setCustomId("nextbtn").setEmoji("➡️").setStyle("SUCCESS").setDisabled(true),
+    new MessageButton().setLabel("Invite Me").setStyle("LINK").setURL(`${BOT_INVITE}`).setDisabled(false),
+    new MessageButton().setLabel("Support Server").setStyle("LINK").setURL(`${SUPPORT_SERVER}`).setDisabled(false)
   );
 
   let buttonsRow = new MessageActionRow().addComponents(components);
@@ -92,7 +94,7 @@ async function sendHelpMenu(message, prefix) {
   const collector = message.channel.createMessageComponentCollector({
     filter: (interaction) => interaction.user.id === message.author.id,
     message: sentMsg,
-    idle: 20 * 1000,
+    idle: 999999999,
     dispose: true,
   });
 
