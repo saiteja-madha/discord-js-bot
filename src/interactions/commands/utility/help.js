@@ -70,8 +70,10 @@ module.exports = class HelpCommand extends SlashCommand {
     // Buttons Row
     let components = [];
     components.push(
-      new MessageButton().setCustomId("previousBtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
-      new MessageButton().setCustomId("nextBtn").setEmoji("➡️").setStyle("SECONDARY").setDisabled(true)
+    new MessageButton().setCustomId("previousbtn").setEmoji("⬅️").setStyle("SUCCESS").setDisabled(true),
+    new MessageButton().setCustomId("nextbtn").setEmoji("➡️").setStyle("SUCCESS").setDisabled(true),
+    new MessageButton().setLabel("Invite Me").setStyle("LINK").setURL(`${BOT_INVITE}`).setDisabled(false),
+    new MessageButton().setLabel("Support Server").setStyle("LINK").setURL(`${SUPPORT_SERVER}`).setDisabled(false)
     );
 
     let buttonsRow = new MessageActionRow().addComponents(components);
@@ -94,7 +96,7 @@ module.exports = class HelpCommand extends SlashCommand {
 
     const collector = interaction.channel.createMessageComponentCollector({
       filter: (reactor) => reactor.user.id === interaction.user.id,
-      idle: TIMEOUT_IN_SECONDS * 1000,
+      idle: TIMEOUT_IN_SECONDS * 9999999,
       dispose: true,
     });
 
