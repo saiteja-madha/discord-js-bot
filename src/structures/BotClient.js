@@ -8,6 +8,7 @@ const BaseContext = require("./BaseContext");
 mongoose.plugin(require("mongoose-lean-defaults").default);
 const logger = require("../helpers/logger");
 const AudioManager = require("./AudioManager");
+const { OWNER_IDS } = require("@root/config");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -194,13 +195,14 @@ module.exports = class BotClient extends Client {
     const toRegister = [];
 
     // filter global commands
-    this.slashCommands
-      .filter((cmd) => cmd.userPermissions.length === 0)
+    const globalCmds = this.slashCommands.filter((cmd) => cmd.userPermissions.length === 0);
+    globalCmds
       .map((cmd) => ({
         name: cmd.name,
         description: cmd.description,
         type: "CHAT_INPUT",
         options: cmd.options,
+        defaultPermission: cmd.category === "OWNER" ? false : true,
       }))
       .forEach((s) => toRegister.push(s));
 
@@ -213,8 +215,32 @@ module.exports = class BotClient extends Client {
       }))
       .forEach((c) => toRegister.push(c));
 
-    await this.application.commands.set(toRegister);
+    const applicationCommands = await this.application.commands.set(toRegister);
     this.logger.success("Successfully registered global interactions");
+
+    // Add owner permissions
+    if (OWNER_IDS.length > 0) {
+      const permissions = OWNER_IDS.map((id) => ({
+        id: id,
+        type: "USER",
+        permission: true,
+      }));
+
+      const fullPermissions = applicationCommands.reduce((acc, appCmd) => {
+        if (globalCmds.find((c) => c.name === appCmd.name && c.category === "OWNER")) {
+          return [
+            ...acc,
+            {
+              id: appCmd.id,
+              permissions: permissions,
+            },
+          ];
+        } else return acc;
+      }, []);
+
+      await this.application.commands.permissions.set({ fullPermissions });
+      this.logger.log("Syncing global slash command owner permissions");
+    }
   }
 
   /**
