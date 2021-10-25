@@ -2,7 +2,7 @@ const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
 const prettyMs = require("pretty-ms");
 const { durationToMillis } = require("@utils/miscUtils");
-const { checkMusic } = require("@utils/botUtils");
+const { musicValidations } = require("@utils/botUtils");
 
 module.exports = class Volume extends SlashCommand {
   constructor(client) {
@@ -11,6 +11,7 @@ module.exports = class Volume extends SlashCommand {
       description: "sets the playing track's position to the specified position",
       enabled: true,
       category: "MUSIC",
+      validations: musicValidations,
       options: [
         {
           name: "time",
@@ -26,11 +27,7 @@ module.exports = class Volume extends SlashCommand {
    * @param {CommandInteraction} interaction
    */
   async run(interaction) {
-    const member = await interaction.guild.members.fetch(interaction.user.id);
     const player = interaction.client.musicManager?.get(interaction.guildId);
-
-    const playable = checkMusic(member, player);
-    if (typeof playable !== "boolean") return interaction.followUp(playable);
 
     const time = interaction.options.getString("time");
     const seekTo = durationToMillis(time);

@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
-const { checkMusic } = require("@utils/botUtils");
+const { musicValidations } = require("@utils/botUtils");
 
 module.exports = class Volume extends SlashCommand {
   constructor(client) {
@@ -9,6 +9,7 @@ module.exports = class Volume extends SlashCommand {
       description: "change or set the music player volume",
       enabled: true,
       category: "MUSIC",
+      validations: musicValidations,
       options: [
         {
           name: "amount",
@@ -24,11 +25,7 @@ module.exports = class Volume extends SlashCommand {
    * @param {CommandInteraction} interaction
    */
   async run(interaction) {
-    const member = await interaction.guild.members.fetch(interaction.user.id);
     const player = interaction.client.musicManager.get(interaction.guildId);
-
-    const playable = checkMusic(member, player);
-    if (typeof playable !== "boolean") return interaction.followUp(playable);
 
     const volume = interaction.options.getInteger("amount");
     if (!volume) return interaction.followUp(`> The player volume is \`${player.volume}\`.`);

@@ -39,10 +39,12 @@ module.exports = class NSFW extends SlashCommand {
       enabled: true,
       category: "ANIME",
       cooldown: 20,
-      validation: {
-        callback: (interaction) => interaction.channel?.nsfw,
-        message: "This command can only be used in nsfw channel",
-      },
+      validations: [
+        {
+          callback: (interaction) => interaction.channel?.nsfw,
+          message: "This command can only be used in nsfw channel",
+        },
+      ],
       options: [
         {
           name: "category",

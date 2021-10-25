@@ -1,5 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
+const { musicValidations } = require("@utils/botUtils");
 
 const levels = {
   none: 0.0,
@@ -15,6 +16,7 @@ module.exports = class Bassboost extends SlashCommand {
       description: "set bassboost level",
       enabled: true,
       category: "MUSIC",
+      validations: musicValidations,
       options: [
         {
           name: "level",
@@ -48,15 +50,7 @@ module.exports = class Bassboost extends SlashCommand {
    * @param {CommandInteraction} interaction
    */
   async run(interaction) {
-    const member = await interaction.guild.members.fetch(interaction.user.id);
-
     const player = interaction.client.musicManager.get(interaction.guildId);
-    if (!player) return interaction.followUp("🚫 No music is being played!");
-
-    const { channel } = member.voice;
-
-    if (!channel) return interaction.followUp("🚫 You need to join a voice channel.");
-    if (channel.id !== player.voiceChannel) return interaction.followUp("🚫 You're not in the same voice channel.");
 
     let level = interaction.options.getString("level");
 

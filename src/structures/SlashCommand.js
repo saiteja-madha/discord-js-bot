@@ -28,7 +28,7 @@ module.exports = class SlashCommand {
    * @property {PermissionResolvable[]} [botPermissions] - Permissions required by the bots to use the command
    * @property {number} [cooldown] - Command cooldown in seconds
    * @property {Category} [category] - Command category
-   * @property {Validation} [validation] - Custom validation to be done
+   * @property {Validation[]} [validations] - Custom validations to be done
    */
 
   /**
@@ -48,19 +48,21 @@ module.exports = class SlashCommand {
     this.botPermissions = data.botPermissions || [];
     this.cooldown = data.cooldown || 0;
     this.category = data.category || "NONE";
-    this.validation = data.validation;
+    this.validations = data.validations || [];
   }
 
   /**
    * @param {CommandInteraction} interaction
    */
   async execute(interaction) {
-    // callback validation
-    if (this.validation && !this.validation.callback(interaction)) {
-      return interaction.reply({
-        content: this.validation.message,
-        ephemeral: true,
-      });
+    // callback validations
+    for (const validation of this.validations) {
+      if (!validation.callback(interaction)) {
+        return interaction.reply({
+          content: validation.message,
+          ephemeral: true,
+        });
+      }
     }
 
     // Owner commands
@@ -219,15 +221,17 @@ module.exports = class SlashCommand {
         throw new Error(`Not a valid category ${data.category}`);
       }
     }
-    if (data.validation) {
-      if (typeof data.validation !== "object") {
+    if (data.validations) {
+      if (!Array.isArray(data.validations)) {
         throw new Error("Validation must be an object");
       }
-      if (typeof data.validation.callback !== "function") {
-        throw new Error("Validation.callback must be a function");
-      }
-      if (typeof data.validation.message !== "string") {
-        throw new Error("Validation.message must be a string");
+      for (const validation of data.validations) {
+        if (typeof validation.callback !== "function") {
+          throw new Error("Validation.callback must be a function");
+        }
+        if (typeof validation.message !== "string") {
+          throw new Error("Validation.message must be a string");
+        }
       }
     }
   }
