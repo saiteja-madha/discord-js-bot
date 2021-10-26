@@ -1,7 +1,7 @@
-const { sendMessage } = require("@root/src/utils/botUtils");
-const { purgeMessages } = require("@root/src/utils/modUtils");
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
+const { sendMessage } = require("@utils/botUtils");
+const { purgeMessages } = require("@utils/modUtils");
 
 module.exports = class PurgeCommand extends SlashCommand {
   constructor(client) {
@@ -190,13 +190,15 @@ module.exports = class PurgeCommand extends SlashCommand {
         return interaction.followUp("Oops! Not a valid command selection");
     }
 
+    // if purge was unsuccessful
     if (!response.success) {
       return interaction.followUp(response.message);
     }
 
-    if (channel.id !== interaction.channelId) await interaction.followUp(response);
+    // check if interaction was deleted by purge
+    if (channel.id !== interaction.channelId) await interaction.followUp(response.message);
     else {
-      await sendMessage(channel, response.message);
+      await sendMessage(channel, response.message, 5);
     }
   }
 };

@@ -160,7 +160,7 @@ async function purgeMessages(issuer, channel, type, amount, argument) {
 
     return {
       success: true,
-      message: `Successful cleaned ${deletedMessages} messages`,
+      message: `Successful cleaned ${deletedMessages.size} messages`,
     };
   } catch (ex) {
     error("purgeMessages", ex);

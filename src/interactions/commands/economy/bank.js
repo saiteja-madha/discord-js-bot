@@ -181,8 +181,8 @@ const transfer = async (interaction) => {
   const coins = interaction.options.getInteger("coins");
 
   if (isNaN(coins) || coins <= 0) return "Please enter a valid amount of coins to transfer";
-  if (target.user.bot) return "You cannot transfer coins to bots!";
-  if (target.id === interaction.user.id) return "You cannot transfer coins to self!";
+  if (target.bot) return "You cannot transfer coins to bots!";
+  if (target.id === self.id) return "You cannot transfer coins to self!";
 
   const economy = await getUser(self.id);
 

@@ -15,7 +15,7 @@ module.exports = async (client, guild) => {
   if (!client.joinLeaveWebhook) return;
 
   const embed = new MessageEmbed()
-    .setTitle("Guild Left")
+    .setAuthor("Guild Left")
     .setThumbnail(guild.iconURL())
     .setColor(client.config.EMBED_COLORS.ERROR_EMBED)
     .addField("Name", guild.name, false)

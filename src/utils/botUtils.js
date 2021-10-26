@@ -64,19 +64,21 @@ async function startupCheck() {
 /**
  * @param {TextBasedChannels} channel
  * @param {string|MessagePayload|MessageOptions} content
+ * @param {number} [seconds]
  */
-async function sendMessage(channel, content) {
+async function sendMessage(channel, content, seconds) {
   if (!channel || !content) return;
   if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])) return;
   try {
-    return channel.send(content);
+    if (!seconds) return channel.send(content);
+    const reply = await channel.send(content);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
     error(`sendMessage`, ex);
   }
 }
 
 /**
- *
  * @param {Message} message
  * @param {string|MessagePayload|MessageOptions} content
  * @param {number} [seconds]
@@ -90,10 +92,8 @@ async function safeReply(message, content, seconds) {
     return;
   try {
     if (!seconds) return message.reply(content);
-    else {
-      const reply = await message.reply(content);
-      setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds);
-    }
+    const reply = await message.reply(content);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
     error(`safeReply`, ex);
   }
@@ -102,11 +102,14 @@ async function safeReply(message, content, seconds) {
 /**
  * @param {User} user
  * @param {string|MessagePayload|MessageOptions} message
+ * @param {number} [seconds]
  */
-async function safeDM(user, message) {
+async function safeDM(user, message, seconds) {
   if (!user || !message) return;
   try {
-    return user.send(message);
+    if (!seconds) return user.send(message);
+    const reply = await user.send(message);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
     error(`safeDM`, ex);
   }
