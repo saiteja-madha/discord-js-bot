@@ -3,6 +3,7 @@ const { BotClient } = require("@src/structures");
 const { cacheInvite } = require("@src/handlers/invite-handler");
 
 /**
+ * Emitted when an invite is created.
  * @param {BotClient} client
  * @param {Invite} invite
  */

@@ -2,6 +2,7 @@ const { Interaction } = require("discord.js");
 const { BotClient } = require("@src/structures");
 
 /**
+ * Emitted when an interaction is created.
  * @param {BotClient} client
  * @param {Interaction} interaction
  */

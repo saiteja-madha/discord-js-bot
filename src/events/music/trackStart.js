@@ -1,14 +1,14 @@
-const { BotClient } = require("@src/structures");
 const { MessageEmbed } = require("discord.js");
 const prettyMs = require("pretty-ms");
 
 /**
- *
- * @param {BotClient} client
+ * Emitted when a track starts.
+ * @param {import("@src/structures").BotClient} client
  * @param {import("erela.js").Player} player
  * @param {import("erela.js").Track} track
+ * @param {import("erela.js").TrackStartEvent} payload
  */
-module.exports = (client, player, track) => {
+module.exports = (client, player, track, payload) => {
   const channel = client.channels.cache.get(player.textChannel);
 
   const embed = new MessageEmbed()

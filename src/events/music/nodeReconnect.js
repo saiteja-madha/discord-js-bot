@@ -1,8 +1,6 @@
-const { BotClient } = require("@src/structures");
-
 /**
- *
- * @param {BotClient} client
+ * Emitted when a Node reconnects.
+ * @param {import("@src/structures").BotClient} client
  * @param {import("erela.js").Node} node
  */
 module.exports = (client, node) => {

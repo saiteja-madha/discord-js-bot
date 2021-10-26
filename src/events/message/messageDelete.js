@@ -4,6 +4,7 @@ const { getSettings } = require("@schemas/guild-schema");
 const { sendMessage } = require("@utils/botUtils");
 
 /**
+ * Emitted whenever a message is deleted.
  * @param {BotClient} client
  * @param {Message | PartialMessage} message
  */

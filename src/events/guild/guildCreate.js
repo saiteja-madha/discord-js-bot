@@ -3,6 +3,7 @@ const { BotClient } = require("@src/structures");
 const { registerGuild } = require("@schemas/guild-schema");
 
 /**
+ * Emitted whenever the client joins a guild.
  * @param {BotClient} client
  * @param {Guild} guild
  */

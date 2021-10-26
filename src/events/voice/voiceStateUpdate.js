@@ -2,6 +2,7 @@ const { BotClient } = require("@src/structures");
 const { VoiceState } = require("discord.js");
 
 /**
+ * Emitted whenever a member changes voice state
  * @param {BotClient} client
  * @param {VoiceState} oldState
  * @param {VoiceState} newState

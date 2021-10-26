@@ -4,6 +4,7 @@ const { getConfig, updateBotCount } = require("@schemas/counter-schema");
 const { inviteHandler, greetingHandler } = require("@src/handlers");
 
 /**
+ * Emitted whenever a member leaves a guild, or is kicked.
  * @param {BotClient} client
  * @param {GuildMember|PartialGuildMember} member
  */

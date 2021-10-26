@@ -3,6 +3,7 @@ const { BotClient } = require("@src/structures");
 const { updateGuildLeft } = require("@schemas/guild-schema");
 
 /**
+ * Emitted whenever a guild kicks the client or the guild is deleted/left.
  * @param {BotClient} client
  * @param {Guild} guild
  */

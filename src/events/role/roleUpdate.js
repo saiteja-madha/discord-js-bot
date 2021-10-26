@@ -3,7 +3,7 @@ const { BotClient } = require("@src/structures");
 const { compareArrays } = require("@utils/miscUtils");
 
 /**
- *
+ * Emitted whenever a guild role is updated.
  * @param {BotClient} client
  * @param {Role} oldRole
  * @param {Role} newRole

@@ -1,8 +1,6 @@
-const { BotClient } = require("@src/structures");
-
 /**
  *
- * @param {BotClient} client
+ * @param {import("@src/structures").BotClient} client
  * @param {import("erela.js").Player} player
  * @param {import("erela.js").Track} track
  * @param {import("erela.js").TrackExceptionEvent} ex

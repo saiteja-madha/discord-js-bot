@@ -3,6 +3,7 @@ const { reactionHandler } = require("@src/handlers");
 const { BotClient } = require("@src/structures");
 
 /**
+ * Emitted whenever a reaction is removed from a cached message.
  * @param {BotClient} client
  * @param {MessageReaction|PartialMessageReaction} reaction
  * @param {User} user
@@ -10,8 +11,8 @@ const { BotClient } = require("@src/structures");
 module.exports = async (client, reaction, user) => {
   if (reaction.partial) {
     try {
-      await reaction.fetch()
-    } catch(ex) {
+      await reaction.fetch();
+    } catch (ex) {
       return; // Possibly deleted
     }
   }

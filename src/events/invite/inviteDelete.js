@@ -2,6 +2,7 @@ const { Invite } = require("discord.js");
 const { BotClient } = require("@src/structures");
 
 /**
+ * Emitted when an invite is deleted.
  * @param {BotClient} client
  * @param {Invite} invite
  */

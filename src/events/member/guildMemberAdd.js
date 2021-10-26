@@ -5,6 +5,7 @@ const { getConfig, updateBotCount } = require("@schemas/counter-schema");
 const { getSettings } = require("@root/src/schemas/guild-schema");
 
 /**
+ * Emitted whenever a user joins a guild.
  * @param {BotClient} client
  * @param {GuildMember} member
  */

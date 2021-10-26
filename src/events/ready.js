@@ -4,6 +4,7 @@ const { loadReactionRoles } = require("@schemas/reactionrole-schema");
 const { getSettings } = require("@schemas/guild-schema");
 
 /**
+ * Emitted when the client becomes ready to start working.
  * @param {BotClient} client
  */
 module.exports = async (client) => {

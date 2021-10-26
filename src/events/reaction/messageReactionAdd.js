@@ -4,6 +4,7 @@ const { reactionHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/guild-schema");
 
 /**
+ * Emitted whenever a reaction is added to a cached message.
  * @param {BotClient} client
  * @param {MessageReaction|PartialMessageReaction} reaction
  * @param {User|PartialUser} user

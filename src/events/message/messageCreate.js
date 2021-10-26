@@ -5,6 +5,7 @@ const { getSettings } = require("@schemas/guild-schema");
 const { safeReply } = require("@utils/botUtils");
 
 /**
+ * Emitted whenever a message is created.
  * @param {BotClient} client
  * @param {Message} message
  */
