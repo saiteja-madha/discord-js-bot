@@ -52,6 +52,12 @@ module.exports = {
     KICK_EMBED: "#FF7961",
     SOFTBAN_EMBED: "#AF4448",
     BAN_EMBED: "#D32F2F",
+    VMUTE_EMBED: "#102027",
+    VUNMUTE_EMBED: "#4B636E",
+    DEAFEN_EMBED: "#102027",
+    UNDEAFEN_EMBED: "#4B636E",
+    DISCONNECT_EMBED: "RANDOM",
+    MOVE_EMBED: "RANDOM",
   },
   /* Various Emojis Used */
   EMOJIS: {

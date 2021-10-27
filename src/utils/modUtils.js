@@ -1,4 +1,12 @@
-const { Guild, GuildMember, TextChannel, Collection, MessageEmbed, BaseGuildTextChannel } = require("discord.js");
+const {
+  Guild,
+  GuildMember,
+  Collection,
+  MessageEmbed,
+  BaseGuildTextChannel,
+  VoiceChannel,
+  StageChannel,
+} = require("discord.js");
 const { sendMessage } = require("@utils/botUtils");
 const { containsLink, timeformat } = require("@utils/miscUtils");
 const { addModLogToDb, removeMutes, getMuteInfo } = require("@schemas/modlog-schema");
@@ -19,27 +27,6 @@ function memberInteract(issuer, target) {
   if (guild.ownerId === issuer.id) return true;
   if (guild.ownerId === target.id) return false;
   return issuer.roles.highest.position > target.roles.highest.position;
-}
-
-/**
- * Checks if both moderator and bot can interact with the target
- * @param {GuildMember} mod
- * @param {GuildMember} target
- * @param {String} action
- * @param {TextChannel} channel
- */
-function canInteract(mod, target, action, channel) {
-  if (!memberInteract(mod, target)) {
-    sendMessage(channel, `Oops! You cannot \`${action}\` ${target.user.tag}`);
-    return false;
-  }
-
-  if (!target.manageable) {
-    sendMessage(channel, `Oops! I cannot \`${action}\` ${target.user.tag}`);
-    return false;
-  }
-
-  return true;
 }
 
 /**
@@ -329,6 +316,144 @@ async function banTarget(issuer, target, reason) {
 }
 
 /**
+ * Voice mutes the target and logs to the database, channel
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ */
+async function vMuteTarget(issuer, target, reason) {
+  if (!memberInteract(issuer, target)) return `Oops! You cannot voice mute ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot voice mute ${target.user.tag}`;
+  if (!target.voice.channel) return `${target.user.tag} is not in any voice channel`;
+  if (target.voice.mute) return `${target.user.tag} is already muted`;
+
+  try {
+    await target.voice.setMute(true, reason);
+    await logModeration(issuer, target, reason, "Vmute");
+    return `${target.user.tag} is voice muted in this server`;
+  } catch (ex) {
+    error(`vMuteTarget`, ex);
+    return `Failed to voice mute ${target.user.tag}`;
+  }
+}
+
+/**
+ * Voice unmutes the target and logs to the database, channel
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ */
+async function vUnmuteTarget(issuer, target, reason) {
+  if (!memberInteract(issuer, target)) return `Oops! You cannot unmute ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot unmute ${target.user.tag}`;
+  if (!target.voice.channel) return `${target.user.tag} is not in any voice channel`;
+  if (!target.voice.mute) return `${target.user.tag} is not muted`;
+
+  try {
+    await target.voice.setMute(false, reason);
+    await logModeration(issuer, target, reason, "Vmute");
+    return `${target.user.tag} is unmuted in this server`;
+  } catch (ex) {
+    error(`vUnmuteTarget`, ex);
+    return `Failed to unmute ${target.user.tag}`;
+  }
+}
+
+/**
+ * Deafens the target and logs to the database, channel
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ */
+async function deafenTarget(issuer, target, reason) {
+  if (!memberInteract(issuer, target)) return `Oops! You cannot deafen ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot deafen ${target.user.tag}`;
+  if (!target.voice.channel) return `${target.user.tag} is not in any voice channel`;
+  if (target.voice.deaf) return `${target.user.tag} is already deafened`;
+
+  try {
+    await target.voice.setDeaf(true, reason);
+    await logModeration(issuer, target, reason, "Vmute");
+    return `${target.user.tag} is deafened in this server`;
+  } catch (ex) {
+    error(`deafenTarget`, ex);
+    return `Failed to deafen ${target.user.tag}`;
+  }
+}
+
+/**
+ * UnDeafens the target and logs to the database, channel
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ */
+async function unDeafenTarget(issuer, target, reason) {
+  if (!memberInteract(issuer, target)) return `Oops! You cannot undeafen ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot undeafen ${target.user.tag}`;
+  if (!target.voice.channel) return `${target.user.tag} is not in any voice channel`;
+  if (!target.voice.deaf) return `${target.user.tag} is not deafened`;
+
+  try {
+    await target.voice.setDeaf(false, reason);
+    await logModeration(issuer, target, reason, "unDeafen");
+    return `${target.user.tag} is undeafen in this server`;
+  } catch (ex) {
+    error(`unDeafenTarget`, ex);
+    return `Failed to undeafen ${target.user.tag}`;
+  }
+}
+
+/**
+ * Disconnects the target from voice channel and logs to the database, channel
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ */
+async function disconnectTarget(issuer, target, reason) {
+  if (!memberInteract(issuer, target)) return `Oops! You cannot disconnect ${target.user.tag} from VC`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot disconnect ${target.user.tag} from VC`;
+  if (!target.voice.channel) return `${target.user.tag} is not in any voice channel`;
+
+  try {
+    await target.voice.disconnect(reason);
+    await logModeration(issuer, target, reason, "Disconnect");
+    return `${target.user.tag} is disconnected from voice channel`;
+  } catch (ex) {
+    error(`unDeafenTarget`, ex);
+    return `Failed to disconnect ${target.user.tag} from voice channel`;
+  }
+}
+
+/**
+ * Moves the target to another voice channel and logs to the database, channel
+ * @param {GuildMember} issuer
+ * @param {GuildMember} target
+ * @param {string} reason
+ * @param {VoiceChannel|StageChannel} channel
+ */
+async function moveTarget(issuer, target, reason, channel) {
+  if (!memberInteract(issuer, target)) return `Oops! You cannot move ${target.user.tag}`;
+  if (!memberInteract(issuer.guild.me, target)) return `Oops! I cannot move ${target.user.tag}`;
+  if (!target.voice?.channel) return `${target.user.tag} is not in any voice channel`;
+  if (target.voice.channelId === channel.id) return `${target.user.tag} is already in ${channel.name}`;
+
+  if (!channel.permissionsFor(target).has(["VIEW_CHANNEL", "CONNECT"])) {
+    return `${target.user.tag} doesn't have enough permissions to connect to ${channel.name}`;
+  }
+
+  try {
+    await target.voice.setChannel(channel, reason);
+    await logModeration(issuer, target, reason, "Move", {
+      channel,
+    });
+    return `${target.user.tag} is moved to ${channel.name}`;
+  } catch (ex) {
+    error(`moveTarget`, ex);
+    return `Failed to move ${target.user.tag} to ${channel.name}`;
+  }
+}
+
+/**
  * Send logs to the configured channel and stores in the database
  * @param {string} type
  * @param {GuildMember} issuer
@@ -375,6 +500,30 @@ async function logModeration(issuer, target, reason, type, data = {}) {
     case "BAN":
       embed.setColor(EMBED_COLORS.BAN_EMBED);
       break;
+
+    case "VMUTE":
+      embed.setColor(EMBED_COLORS.VMUTE_EMBED);
+      break;
+
+    case "VUNMUTE":
+      embed.setColor(EMBED_COLORS.VUNMUTE_EMBED);
+      break;
+
+    case "DEAFEN":
+      embed.setColor(EMBED_COLORS.DEAFEN_EMBED);
+      break;
+
+    case "UNDEAFEN":
+      embed.setColor(EMBED_COLORS.UNDEAFEN_EMBED);
+      break;
+
+    case "DISCONNECT":
+      embed.setColor(EMBED_COLORS.DISCONNECT_EMBED);
+      break;
+
+    case "MOVE":
+      embed.setColor(EMBED_COLORS.MOVE_EMBED);
+      break;
   }
 
   if (type.toUpperCase() !== "PURGE") {
@@ -388,6 +537,7 @@ async function logModeration(issuer, target, reason, type, data = {}) {
 
     if (data.isPermanent) embed.addField("IsPermanent", EMOJIS.TICK, true);
     if (data.minutes) embed.addField("Expires In", timeformat(data.minutes * 60), true);
+    if (data.channel) embed.addField("Moved to", data.channel.name, true);
   }
 
   await addModLogToDb(issuer, target, reason, type.toUpperCase(), data);
@@ -395,37 +545,55 @@ async function logModeration(issuer, target, reason, type, data = {}) {
 }
 
 /**
- *
+ * Add a moderation action
  * @param {GuildMember} issuer
  * @param {GuildMember} target
  * @param {string} reason
- * @param {"WARN"|"MUTE"|"UNMUTE"|"KICK"|"SOFTBAN"|"BAN"} action
+ * @param {"WARN"|"MUTE"|"UNMUTE"|"KICK"|"SOFTBAN"|"BAN"|"VMUTE"|"VUNMUTE"|"DEAFEN"|"UNDEAFEN"|"DISCONNECT"|"MOVE"} action
+ * @param {any} data
  */
-async function addModAction(issuer, target, reason, action) {
+async function addModAction(issuer, target, reason, action, data) {
   switch (action) {
     case "WARN":
-      return await warnTarget(issuer, target, reason);
+      return warnTarget(issuer, target, reason);
 
     case "MUTE":
-      return await muteTarget(issuer, target, reason);
+      return muteTarget(issuer, target, reason);
 
     case "UNMUTE":
-      return await unmuteTarget(issuer, target, reason);
+      return unmuteTarget(issuer, target, reason);
 
     case "KICK":
-      return await kickTarget(issuer, target, reason);
+      return kickTarget(issuer, target, reason);
 
     case "SOFTBAN":
-      return await softbanTarget(issuer, target, reason);
+      return softbanTarget(issuer, target, reason);
 
     case "BAN":
-      return await banTarget(issuer, target, reason);
+      return banTarget(issuer, target, reason);
+
+    case "VMUTE":
+      return vMuteTarget(issuer, target, reason);
+
+    case "VUNMUTE":
+      return vUnmuteTarget(issuer, target, reason);
+
+    case "DEAFEN":
+      return deafenTarget(issuer, target, reason);
+
+    case "UNDEAFEN":
+      return unDeafenTarget(issuer, target, reason);
+
+    case "DISCONNECT":
+      return disconnectTarget(issuer, target, reason);
+
+    case "MOVE":
+      return moveTarget(issuer, target, reason, data);
   }
 }
 
 module.exports = {
   memberInteract,
-  canInteract,
   setupMutedRole,
   purgeMessages,
   addModAction,
