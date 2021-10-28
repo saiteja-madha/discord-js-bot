@@ -13,6 +13,9 @@ module.exports = async (client, message) => {
   if (!message.guild || message.author.bot) return;
   const settings = await getSettings(message.guild);
 
+  // return if no settings
+  if (!settings) return;
+
   // check for bot mentions
   if (message.content.includes(`${client.user.id}`)) safeReply(message, "Access my commands using `/`", 5);
 
