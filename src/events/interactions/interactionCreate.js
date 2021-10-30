@@ -1,5 +1,6 @@
 const { Interaction } = require("discord.js");
 const { BotClient } = require("@src/structures");
+const { handleTicketOpen, handleTicketClose } = require("@src/handlers/ticket-handler");
 
 /**
  * Emitted when an interaction is created.
@@ -25,5 +26,20 @@ module.exports = async (client, interaction) => {
     const context = client.contexts.get(interaction.commandName);
     if (context) await context.execute(interaction);
     else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
+  }
+
+  // Custom Buttons
+  else if (interaction.isButton()) {
+    // ticket create
+    if (interaction.customId === "TICKET_CREATE") {
+      await interaction.deferReply({ ephemeral: true });
+      await handleTicketOpen(interaction);
+    }
+
+    // ticket close
+    if (interaction.customId === "TICKET_CLOSE") {
+      await interaction.deferReply({ ephemeral: true });
+      await handleTicketClose(interaction);
+    }
   }
 };

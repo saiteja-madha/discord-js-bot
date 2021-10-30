@@ -21,10 +21,6 @@ module.exports = async (client, reaction, user) => {
   const { message, emoji } = reaction;
   if (user.bot) return;
 
-  // Ticketing
-  if (emoji.name === client.config.EMOJIS.TICKET_OPEN) await reactionHandler.handleNewTicket(reaction, user);
-  if (emoji.name === client.config.EMOJIS.TICKET_CLOSE) await reactionHandler.handleCloseTicket(reaction, user);
-
   // Reaction Roles
   const reactionRole = reactionHandler.getRole(reaction);
   if (reactionRole) {

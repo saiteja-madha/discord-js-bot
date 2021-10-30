@@ -1,23 +1,15 @@
-const { Channel, Guild, GuildMember, BaseGuildTextChannel, MessageEmbed, User } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
-const outdent = require("outdent");
+const { EMBED_COLORS } = require("@root/config.js");
 const { getSettings } = require("@schemas/guild-schema");
-const { sendMessage } = require("@utils/botUtils");
+const { sendMessage, safeDM } = require("@utils/botUtils");
 const { error } = require("@src/helpers/logger");
 
-const PERMS = [
-  "VIEW_CHANNEL",
-  "SEND_MESSAGES",
-  "EMBED_LINKS",
-  "READ_MESSAGE_HISTORY",
-  "ADD_REACTIONS",
-  "MANAGE_CHANNELS",
-  "MANAGE_MESSAGES",
-];
+const OPEN_PERMS = ["MANAGE_CHANNELS"];
+const CLOSE_PERMS = ["MANAGE_CHANNELS", "READ_MESSAGE_HISTORY"];
 
 /**
- * @param {Channel} channel
+ * @param {import('discord.js').Channel} channel
  */
 function isTicketChannel(channel) {
   return (
@@ -29,14 +21,15 @@ function isTicketChannel(channel) {
 }
 
 /**
- * @param {Guild} guild
+ * @param {import('discord.js').Guild} guild
  */
 function getTicketChannels(guild) {
   return guild.channels.cache.filter((ch) => isTicketChannel(ch));
 }
 
 /**
- * @param {GuildMember} member
+ * @param {import('discord.js').Guild} guild
+ * @param {string} userId
  */
 function getExistingTicketChannel(guild, userId) {
   const tktChannels = getTicketChannels(guild);
@@ -44,7 +37,7 @@ function getExistingTicketChannel(guild, userId) {
 }
 
 /**
- * @param {BaseGuildTextChannel} channel
+ * @param {import('discord.js').BaseGuildTextChannel} channel
  */
 async function parseTicketDetails(channel) {
   if (!channel.topic) return;
@@ -59,19 +52,13 @@ async function parseTicketDetails(channel) {
 }
 
 /**
- * @param {BaseGuildTextChannel} channel
- * @param {User} closedBy
- * @param {String} reason
+ * @param {import('discord.js').BaseGuildTextChannel} channel
+ * @param {import('discord.js').User} closedBy
+ * @param {string} [reason]
  */
 async function closeTicket(channel, closedBy, reason) {
-  if (
-    !channel.deletable ||
-    !channel.permissionsFor(channel.guild.me).has(["MANAGE_CHANNELS", "READ_MESSAGE_HISTORY", "MANAGE_MESSAGES"])
-  ) {
-    return {
-      success: false,
-      message: "Missing permissions",
-    };
+  if (!channel.deletable || !channel.permissionsFor(channel.guild.me).has(CLOSE_PERMS)) {
+    return "MISSING_PERMISSIONS";
   }
 
   try {
@@ -90,67 +77,61 @@ async function closeTicket(channel, closedBy, reason) {
     const logsUrl = await postToBin(content, `Ticket Logs for ${channel.name}`);
     const ticketDetails = await parseTicketDetails(channel);
 
-    const desc = outdent`
-    ${EMOJIS.ARROW} **Title:** ${ticketDetails.title}
-    ${EMOJIS.ARROW} **Opened By:** ${ticketDetails.user ? ticketDetails.user.tag : "User left"}
-    ${EMOJIS.ARROW} **Closed By:** ${closedBy ? closedBy.tag : "User left"}
-    ${EMOJIS.ARROW} **Reason:** ${reason != null ? reason : "No reason provided"}
-    ${logsUrl == null ? "" : `\n[View Logs](${logsUrl.url})`}
-    `;
+    const components = [];
+    if (logsUrl) {
+      components.push(
+        new MessageActionRow().addComponents(
+          new MessageButton().setLabel("Transcript").setURL(logsUrl.short).setStyle("LINK")
+        )
+      );
+    }
 
     if (channel.deletable) await channel.delete();
-    const embed = new MessageEmbed()
-      .setAuthor("Ticket Closed")
-      .setColor(EMBED_COLORS.TICKET_CLOSE)
-      .setDescription(desc);
 
-    // send embed to user
-    if (ticketDetails.user) ticketDetails.user.send({ embeds: [embed] }).catch(() => {});
+    const embed = new MessageEmbed().setAuthor("Ticket Closed").setColor(EMBED_COLORS.TICKET_CLOSE);
+    if (reason) embed.addField("Reason", reason, false);
+    embed
+      .setDescription(`**Title:** ${ticketDetails.title}`)
+      .addField("Opened By", ticketDetails.user ? ticketDetails.user.tag : "User left", true)
+      .addField("Closed By", closedBy ? closedBy.tag : "User left", true);
 
     // send embed to log channel
     if (config.ticket.log_channel) {
       const logChannel = channel.guild.channels.cache.get(config.ticket.log_channel);
-      sendMessage(logChannel, { embeds: [embed] });
+      sendMessage(logChannel, { embeds: [embed], components });
     }
 
-    return {
-      success: true,
-      message: "success",
-    };
+    // send embed to user
+    if (ticketDetails.user) {
+      const dmEmbed = embed
+        .setDescription(`**Server:** ${channel.guild.name}\n**Title:** ${ticketDetails.title}`)
+        .setThumbnail(channel.guild.iconURL());
+      safeDM(ticketDetails.user, { embeds: [dmEmbed], components });
+    }
+
+    return "SUCCESS";
   } catch (ex) {
     error("closeTicket", ex);
-    return {
-      success: false,
-      message: "Unexpected error occurred",
-    };
+    return "ERROR";
   }
 }
 
 /**
- * @param {Guild} guild
- * @param {User} author
+ * @param {import('discord.js').Guild} guild
+ * @param {import('discord.js').User} user
+ * @param {Object} config
  */
-async function closeAllTickets(guild, author) {
-  const channels = getTicketChannels(guild);
-  let success = 0;
-  let failed = 0;
+async function openTicket(guild, user, config) {
+  if (!guild.me.permissions.has(OPEN_PERMS)) return "MISSING_PERMISSIONS";
 
-  channels.forEach(async (ch) => {
-    const status = await closeTicket(ch, author, "Force close all open tickets");
-    if (status.success) success += 1;
-    else failed += 1;
-  });
+  const alreadyExists = getExistingTicketChannel(guild, user.id);
+  if (alreadyExists) return "ALREADY_EXISTS";
 
-  return [success, failed];
-}
+  const settings = await getSettings(guild);
+  const existing = getTicketChannels(guild).size;
+  if (existing > settings.ticket.limit) return "TOO_MANY_TICKETS";
 
-/**
- * @param {Guild} guild
- * @param {User} user
- */
-async function openTicket(guild, user, title, supportRole) {
   try {
-    const existing = getTicketChannels(guild).size;
     const ticketNumber = (existing + 1).toString();
     const permissionOverwrites = [
       {
@@ -167,61 +148,56 @@ async function openTicket(guild, user, title, supportRole) {
       },
     ];
 
-    if (supportRole) {
+    if (config.support_role) {
       permissionOverwrites.push({
-        id: supportRole,
+        id: config.support_role,
         allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
       });
     }
 
     const tktChannel = await guild.channels.create(`tіcket-${ticketNumber}`, {
       type: "GUILD_TEXT",
-      topic: `tіcket|${user.id}|${title}`,
+      topic: `tіcket|${user.id}|${config.title}`,
       permissionOverwrites,
     });
 
     const embed = new MessageEmbed()
       .setAuthor(`Ticket #${ticketNumber}`)
       .setDescription(
-        outdent`
-      Hello ${user.toString()}
-      Support will be with you shortly
-        
-      **Ticket Reason:**
-      ${title}`
+        `Hello ${user.toString()}\nSupport will be with you shortly\n\n**Ticket Reason:**\n${config.title}`
       )
-      .setFooter("To close your ticket react to the lock below");
+      .setFooter("You may close your ticket anytime by clicking the button below");
 
-    const sent = await sendMessage(tktChannel, { content: user.toString(), embeds: [embed] });
-    await sent.react(EMOJIS.TICKET_CLOSE);
+    let buttonsRow = new MessageActionRow().addComponents(
+      new MessageButton().setLabel("Close Ticket").setCustomId("TICKET_CLOSE").setEmoji("🔒").setStyle("PRIMARY")
+    );
 
-    const desc = outdent`
-    ${EMOJIS.ARROW} **Server Name:** ${guild.name}
-    ${EMOJIS.ARROW} **Title:** ${title}
-    ${EMOJIS.ARROW} **Ticket:** #${ticketNumber}
-    
-    [View Channel](${sent.url})
-  `;
+    const sent = await sendMessage(tktChannel, { content: user.toString(), embeds: [embed], components: [buttonsRow] });
+
     const dmEmbed = new MessageEmbed()
       .setColor(EMBED_COLORS.TICKET_CREATE)
       .setAuthor("Ticket Created")
-      .setDescription(desc);
+      .setThumbnail(guild.iconURL())
+      .setDescription(`**Server:** ${guild.name}\n**Title:** ${config.title}`);
 
-    user.send({ embeds: [dmEmbed] }).catch(() => {});
-    return true;
+    const row = new MessageActionRow().addComponents(
+      new MessageButton().setLabel("View Channel").setURL(sent.url).setStyle("LINK")
+    );
+
+    safeDM(user, { embeds: [dmEmbed], components: [row] });
+
+    return "SUCCESS";
   } catch (ex) {
     error("openTicket", ex);
-    return false;
+    return "FAILED";
   }
 }
 
-// eslint-disable-next-line max-len
 module.exports = {
-  PERMS,
+  CLOSE_PERMS,
   getTicketChannels,
   getExistingTicketChannel,
   isTicketChannel,
   closeTicket,
-  closeAllTickets,
   openTicket,
 };

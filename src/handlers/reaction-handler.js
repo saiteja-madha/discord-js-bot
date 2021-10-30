@@ -1,8 +1,5 @@
 const { MessageReaction, User, MessageEmbed, Message, ReactionEmoji } = require("discord.js");
 const { getReactionRole } = require("@schemas/reactionrole-schema");
-const { getSettings } = require("@schemas/guild-schema");
-const { getConfig } = require("@schemas/ticket-schema");
-const ticketUtils = require("@utils/ticketUtils");
 const { sendMessage } = require("@utils/botUtils");
 const { isTranslated, logTranslation } = require("@schemas/trlogs-schema");
 const data = require("@src/data.json");
@@ -19,49 +16,6 @@ function getRole(reaction) {
   const emote = emoji.id ? emoji.id : emoji.toString();
   const found = rr.find((doc) => doc.emote === emote);
   if (found) return message.guild.roles.cache.get(found.role_id);
-}
-
-/**
- * @param {MessageReaction} reaction
- * @param {User} user
- */
-async function handleNewTicket(reaction, user) {
-  const { message } = reaction;
-
-  try {
-    const settings = await getSettings(message.guild);
-    const config = await getConfig(message.guildId, message.channelId, message.id);
-    if (!config) return;
-
-    // check if user already has an open ticket
-    const alreadyExists = ticketUtils.getExistingTicketChannel(message.guild, user.id);
-    if (alreadyExists) return await reaction.users.remove(user.id);
-
-    // check if ticket limit is reached
-    const existing = ticketUtils.getTicketChannels(message.guild).size;
-    if (existing > settings.ticket.limit) {
-      const sent = await sendMessage(message.channel, "Ticket limit reached! Try again later");
-      setTimeout(() => {
-        if (sent.deletable) sent.delete().catch(() => {});
-      }, 3000);
-      return;
-    }
-
-    await ticketUtils.openTicket(message.guild, user, config.title, config.support_role);
-  } finally {
-    await reaction.users.remove(user.id);
-  }
-}
-
-/**
- * @param {MessageReaction} reaction
- * @param {User} user
- */
-async function handleCloseTicket(reaction, user) {
-  const { message } = reaction;
-  if (ticketUtils.isTicketChannel(message.channel)) {
-    await ticketUtils.closeTicket(message.channel, user, "Reacted with emoji");
-  }
 }
 
 /**
@@ -119,7 +73,5 @@ async function handleFlagReaction(emoji, message, user) {
 
 module.exports = {
   getRole,
-  handleNewTicket,
-  handleCloseTicket,
   handleFlagReaction,
 };
