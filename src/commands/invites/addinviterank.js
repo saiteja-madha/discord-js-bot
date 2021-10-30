@@ -36,11 +36,11 @@ module.exports = class AddInvitesCommand extends Command {
 
     let msg = "";
     if (exists) {
-      await removeInviteRank(message.guildId, role.id);
+      await removeInviteRank(message.guild.id, role.id);
       msg += "Previous configuration found for this role. Overwriting data\n";
     }
 
-    await addInviteRank(message.guildId, role.id, invites);
+    await addInviteRank(message.guild.id, role.id, invites);
     message.channel.send(`${msg}Success! Configuration saved.`);
   }
 };
