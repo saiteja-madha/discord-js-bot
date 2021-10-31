@@ -1,6 +1,6 @@
 const { ContextMenuInteraction, MessageEmbed } = require("discord.js");
 const { BaseContext } = require("@src/structures");
-const { EMOJIS, EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class Avatar extends BaseContext {
   constructor(client) {
@@ -30,12 +30,12 @@ module.exports = class Avatar extends BaseContext {
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setImage(x256)
       .setDescription(
-        `Links: ${EMOJIS.CIRCLE_BULLET} [x64](${x64}) ` +
-          `${EMOJIS.CIRCLE_BULLET} [x128](${x128}) ` +
-          `${EMOJIS.CIRCLE_BULLET} [x256](${x256}) ` +
-          `${EMOJIS.CIRCLE_BULLET} [x512](${x512}) ` +
-          `${EMOJIS.CIRCLE_BULLET} [x1024](${x1024}) ` +
-          `${EMOJIS.CIRCLE_BULLET} [x2048](${x2048}) `
+        `Links: • [x64](${x64}) ` +
+          `• [x128](${x128}) ` +
+          `• [x256](${x256}) ` +
+          `• [x512](${x512}) ` +
+          `• [x1024](${x1024}) ` +
+          `• [x2048](${x2048}) `
       );
 
     await interaction.followUp({ embeds: [embed] });

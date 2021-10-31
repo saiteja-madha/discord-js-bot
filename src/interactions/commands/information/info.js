@@ -1,6 +1,6 @@
 const { CommandInteraction, GuildMember, MessageEmbed, User, Guild, Util, Channel } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
-const { EMBED_COLORS, EMOJIS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 const { outdent } = require("outdent");
 const moment = require("moment");
 const botstats = require("./shared/botstats");
@@ -172,45 +172,45 @@ const channelInfo = (channel) => {
   };
 
   let desc = outdent`
-    ${EMOJIS.ARROW} ID: **${id}**
-    ${EMOJIS.ARROW} Name: **${name}**
-    ${EMOJIS.ARROW} Type: **${channelTypes[type] || type}**
-    ${EMOJIS.ARROW} Category: **${parent || "NA"}**
-    ${EMOJIS.ARROW} Topic: **${topic || "No topic set"}**\n
+    ❯ ID: **${id}**
+    ❯ Name: **${name}**
+    ❯ Type: **${channelTypes[type] || type}**
+    ❯ Category: **${parent || "NA"}**
+    ❯ Topic: **${topic || "No topic set"}**\n
     `;
 
   if (type === "GUILD_TEXT") {
     const { rateLimitPerUser, nsfw } = channel;
     desc += outdent`
-      ${EMOJIS.ARROW} Position: **${position}**
-      ${EMOJIS.ARROW} Slowmode: **${rateLimitPerUser}**
-      ${EMOJIS.ARROW} isNSFW: **${nsfw ? EMOJIS.TICK : EMOJIS.X_MARK}**
+      ❯ Position: **${position}**
+      ❯ Slowmode: **${rateLimitPerUser}**
+      ❯ isNSFW: **${nsfw ? "✓" : "✕"}**
       `;
   }
 
   if (type === "GUILD_PUBLIC_THREAD" || type === "GUILD_PRIVATE_THREAD") {
     const { ownerId, archived, locked } = channel;
     desc += outdent`
-      ${EMOJIS.ARROW} Owner Id: **${ownerId}**
-      ${EMOJIS.ARROW} Is Archived: **${archived ? EMOJIS.TICK : EMOJIS.X_MARK}**
-      ${EMOJIS.ARROW} Is Locked: **${locked ? EMOJIS.TICK : EMOJIS.X_MARK}**
+      ❯ Owner Id: **${ownerId}**
+      ❯ Is Archived: **${archived ? "✓" : "✕"}**
+      ❯ Is Locked: **${locked ? "✓" : "✕"}**
       `;
   }
 
   if (type === "GUILD_NEWS" || type === "GUILD_NEWS_THREAD") {
     const { nsfw } = channel;
     desc += outdent`
-      ${EMOJIS.ARROW} isNSFW: **${nsfw ? EMOJIS.TICK : EMOJIS.X_MARK}**
+      ❯ isNSFW: **${nsfw ? "✓" : "✕"}**
       `;
   }
 
   if (type === "GUILD_VOICE" || type === "GUILD_STAGE_VOICE ") {
     const { bitrate, userLimit, full } = channel;
     desc += outdent`
-      ${EMOJIS.ARROW} Position: **${position}**
-      ${EMOJIS.ARROW} Bitrate: **${bitrate}**
-      ${EMOJIS.ARROW} User Limit: **${userLimit}**
-      ${EMOJIS.ARROW} isFull: **${full ? EMOJIS.TICK : EMOJIS.X_MARK}**
+      ❯ Position: **${position}**
+      ❯ Bitrate: **${bitrate}**
+      ❯ User Limit: **${userLimit}**
+      ❯ isFull: **${full ? "✓" : "✕"}**
       `;
   }
 
@@ -269,10 +269,10 @@ const guildInfo = async (guild) => {
   }
 
   let desc = "";
-  desc = `${desc + EMOJIS.ARROW} **Id:** ${id}\n`;
-  desc = `${desc + EMOJIS.ARROW} **Name:** ${name}\n`;
-  desc = `${desc + EMOJIS.ARROW} **Owner:** ${owner.user.tag}\n`;
-  desc = `${desc + EMOJIS.ARROW} **Region:** ${preferredLocale}\n`;
+  desc = `${desc + "❯"} **Id:** ${id}\n`;
+  desc = `${desc + "❯"} **Name:** ${name}\n`;
+  desc = `${desc + "❯"} **Owner:** ${owner.user.tag}\n`;
+  desc = `${desc + "❯"} **Region:** ${preferredLocale}\n`;
   desc += "\n";
 
   const embed = new MessageEmbed()
@@ -317,12 +317,12 @@ const avatar = (user) => {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setImage(x256)
     .setDescription(
-      `Links: ${EMOJIS.CIRCLE_BULLET} [x64](${x64}) ` +
-        `${EMOJIS.CIRCLE_BULLET} [x128](${x128}) ` +
-        `${EMOJIS.CIRCLE_BULLET} [x256](${x256}) ` +
-        `${EMOJIS.CIRCLE_BULLET} [x512](${x512}) ` +
-        `${EMOJIS.CIRCLE_BULLET} [x1024](${x1024}) ` +
-        `${EMOJIS.CIRCLE_BULLET} [x2048](${x2048}) `
+      `Links: • [x64](${x64}) ` +
+        `• [x128](${x128}) ` +
+        `• [x256](${x256}) ` +
+        `• [x512](${x512}) ` +
+        `• [x1024](${x1024}) ` +
+        `• [x2048](${x2048}) `
     );
 
   return {

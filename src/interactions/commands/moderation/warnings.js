@@ -1,7 +1,7 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction, MessageEmbed } = require("discord.js");
 const { getWarnings, clearWarnings } = require("@schemas/modlog-schema");
-const { EMBED_COLORS, EMOJIS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class Warnings extends SlashCommand {
   constructor(client) {
@@ -55,7 +55,7 @@ module.exports = class Warnings extends SlashCommand {
       if (!warnings?.length) return interaction.followUp(`No warnings for ${target.tag}`);
       let collector = "";
       warnings.forEach(
-        (war, i) => (collector += `${EMOJIS.ARROW} **#${i + 1}:** ${war.reason || "No reason"} [By ${war.admin.tag}]`)
+        (war, i) => (collector += `❯ **#${i + 1}:** ${war.reason || "No reason"} [By ${war.admin.tag}]`)
       );
       const embed = new MessageEmbed()
         .setAuthor(`Warnings for ${target.username}`)

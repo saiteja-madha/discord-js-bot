@@ -1,7 +1,7 @@
 const { SlashCommand } = require("@src/structures");
 const { MessageEmbed, CommandInteraction } = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
-const { EMBED_COLORS, EMOJIS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class InviteRanks extends SlashCommand {
   constructor(client) {
@@ -25,7 +25,7 @@ module.exports = class InviteRanks extends SlashCommand {
     settings.invite.ranks.forEach((data) => {
       const roleName = interaction.guild.roles.cache.get(data._id)?.toString();
       if (roleName) {
-        str += `${EMOJIS.ARROW} ${roleName}: ${data.invites} invites\n`;
+        str += `❯ ${roleName}: ${data.invites} invites\n`;
       }
     });
 

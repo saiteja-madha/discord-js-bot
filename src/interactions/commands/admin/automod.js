@@ -2,7 +2,7 @@ const { CommandInteraction, MessageEmbed } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
 const db = require("@schemas/guild-schema");
 const { getRoleByName } = require("@utils/guildUtils");
-const { EMOJIS, EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 const Ascii = require("ascii-table");
 
 module.exports = class Automod extends SlashCommand {
@@ -362,14 +362,14 @@ const automodStatus = async (guild) => {
     .addRow("Max Lines", automod.max_lines || "NA")
     .addRow("Max Mentions", automod.max_mentions || "NA")
     .addRow("Max Role Mentions", automod.max_role_mentions || "NA")
-    .addRow("AntiLinks", automod.anti_links ? EMOJIS.TICK : EMOJIS.X_MARK)
-    .addRow("AntiScam", automod.anti_scam ? EMOJIS.TICK : EMOJIS.X_MARK)
-    .addRow("AntiInvites", automod.anti_invites ? EMOJIS.TICK : EMOJIS.X_MARK)
-    .addRow("AntiGhostPing", automod.anti_ghostping ? EMOJIS.TICK : EMOJIS.X_MARK);
+    .addRow("AntiLinks", automod.anti_links ? "✓" : "✕")
+    .addRow("AntiScam", automod.anti_scam ? "✓" : "✕")
+    .addRow("AntiInvites", automod.anti_invites ? "✓" : "✕")
+    .addRow("AntiGhostPing", automod.anti_ghostping ? "✓" : "✕");
 
   const embed = new MessageEmbed()
     .setAuthor("Automod Configuration")
-    .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+    .setColor(EMBED_COLORS.TRANSPARENT)
     .setDescription("```" + table.toString() + "```");
 
   return { content: `**Log Channel:** ${logChannel}`, embeds: [embed] };

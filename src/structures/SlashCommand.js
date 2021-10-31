@@ -3,7 +3,7 @@ const { ApplicationCommandOptionData, PermissionResolvable, CommandInteraction, 
 const { permissions } = require("@utils/botUtils");
 const { timeformat } = require("@utils/miscUtils");
 const BotClient = require("./BotClient");
-const { EMBED_COLORS, EMOJIS, OWNER_IDS } = require("@root/config");
+const { EMBED_COLORS, OWNER_IDS } = require("@root/config");
 const CommandCategory = require("./CommandCategory");
 
 module.exports = class SlashCommand {
@@ -155,14 +155,14 @@ module.exports = class SlashCommand {
     const subCmds = this.options.filter((opt) => opt.type === "SUB_COMMAND");
     let desc = "";
 
-    desc += `**${EMOJIS.ARROW} Description**: ${this.description}\n`;
+    desc += `**❯ Description**: ${this.description}\n`;
     if (subCmds.length > 0) {
       const subCmdsString = subCmds.map((s) => s.name).join(", ");
-      desc += `**${EMOJIS.ARROW} SubCommands [${subCmds.length}]**: ${subCmdsString}\n`;
+      desc += `**❯ SubCommands [${subCmds.length}]**: ${subCmdsString}\n`;
     }
 
     if (this.cooldown) {
-      desc += `**${EMOJIS.ARROW} Cooldown:** ${timeformat(this.cooldown)}\n`;
+      desc += `**❯ Cooldown:** ${timeformat(this.cooldown)}\n`;
     }
 
     return new MessageEmbed()

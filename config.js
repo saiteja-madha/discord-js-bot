@@ -14,11 +14,8 @@ module.exports = {
     COOLDOWN: 5, // Cooldown in seconds between messages
     DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
   },
-  MISCELLANEOUS: {
-    DAILY_COINS: 100, // coins to be received by daily command
-  },
   MUSIC: {
-    MAX_SEARCH_RESULTS: 5,
+    MAX_SEARCH_RESULTS: 5, // max results to be fetched from youtube
     NODES: [
       {
         host: "disbotlistlavalink.ml",
@@ -38,39 +35,31 @@ module.exports = {
       },
     ],
   },
+  ECONOMY: {
+    DAILY_COINS: 100, // coins to be received by daily command
+    CURRENCY: "₪", // currency symbol
+  },
   /* Bot Embed Colors */
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",
-    TRANSPARENT_EMBED: "#36393F",
-    SUCCESS_EMBED: "#00A56A",
-    ERROR_EMBED: "#D61A3C",
-    WARNING_EMBED: "#F7E919",
+    TRANSPARENT: "#36393F",
+    SUCCESS: "#00A56A",
+    ERROR: "#D61A3C",
+    WARNING: "#F7E919",
     TICKET_CREATE: "#068ADD",
     TICKET_CLOSE: "#068ADD",
-    MUTE_EMBED: "#102027",
-    UNMUTE_EMBED: "#4B636E",
-    KICK_EMBED: "#FF7961",
-    SOFTBAN_EMBED: "#AF4448",
-    BAN_EMBED: "#D32F2F",
-    VMUTE_EMBED: "#102027",
-    VUNMUTE_EMBED: "#4B636E",
-    DEAFEN_EMBED: "#102027",
-    UNDEAFEN_EMBED: "#4B636E",
-    DISCONNECT_EMBED: "RANDOM",
-    MOVE_EMBED: "RANDOM",
-  },
-  /* Various Emojis Used */
-  EMOJIS: {
-    ARROW: "❯",
-    ARROW_BULLET: "»",
-    CIRCLE_BULLET: "•",
-    CUBE_BULLET: "❒",
-    WHITE_DIAMOND_SUIT: "♢",
-    TICK: "✓",
-    X_MARK: "✕",
-    CURRENCY: "₪",
-    TICKET_OPEN: "🎫",
-    TICKET_CLOSE: "🔒",
+    AUTOMOD: "#36393F",
+    MUTE_LOG: "#102027",
+    UNMUTE_LOG: "#4B636E",
+    KICK_LOG: "#FF7961",
+    SOFTBAN_LOG: "#AF4448",
+    BAN_LOG: "#D32F2F",
+    VMUTE_LOG: "#102027",
+    VUNMUTE_LOG: "#4B636E",
+    DEAFEN_LOG: "#102027",
+    UNDEAFEN_LOG: "#4B636E",
+    DISCONNECT_LOG: "RANDOM",
+    MOVE_LOG: "RANDOM",
   },
   /* Maximum number of keys that can be stored */
   CACHE_SIZE: {

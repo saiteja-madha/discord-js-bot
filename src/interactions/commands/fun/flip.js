@@ -47,7 +47,7 @@ module.exports = class Flip extends SlashCommand {
       const toss = items[Math.floor(Math.random() * items.length)];
 
       const embed = new MessageEmbed()
-        .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+        .setColor(EMBED_COLORS.TRANSPARENT)
         .setDescription(`${interaction.user.username}, started a coin toss`);
 
       await interaction.followUp({ embeds: [embed] });

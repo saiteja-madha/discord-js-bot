@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { MessageEmbed, CommandInteraction } = require("discord.js");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
+const { EMBED_COLORS } = require("@root/config.js");
 
 module.exports = class InviteCodes extends SlashCommand {
   constructor(client) {
@@ -34,7 +34,7 @@ module.exports = class InviteCodes extends SlashCommand {
 
     let str = "";
     reqInvites.forEach((inv) => {
-      str += `${EMOJIS.ARROW} [${inv.code}](${inv.url}) : ${inv.uses} uses\n`;
+      str += `❯ [${inv.code}](${inv.url}) : ${inv.uses} uses\n`;
     });
 
     const embed = new MessageEmbed()

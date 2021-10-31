@@ -37,7 +37,7 @@ module.exports = class FactCommand extends SlashCommand {
 
     const fact = response.data?.fact;
     const embed = new MessageEmbed()
-      .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+      .setColor(EMBED_COLORS.TRANSPARENT)
       .setAuthor(`Fact: ${choice}`)
       .setDescription(fact)
       .setFooter(`Requested by ${interaction.user.tag}`);

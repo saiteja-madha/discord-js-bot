@@ -97,9 +97,9 @@ module.exports = class BotClient extends Client {
         // bot events
         this.on(eventName, event.bind(null, this));
         delete require.cache[require.resolve(filePath)];
-        table.addRow(file, this.config.EMOJIS.TICK);
+        table.addRow(file, "✓");
       } catch (ex) {
-        table.addRow(file, this.config.EMOJIS.X_MARK);
+        table.addRow(file, "✕");
         this.logger.error("readEvent", ex);
       } finally {
         events += 1;

@@ -1,7 +1,7 @@
 const { SlashCommand } = require("@src/structures");
 const { MessageEmbed, CommandInteraction } = require("discord.js");
 const { getUser, addCoins } = require("@schemas/user-schema");
-const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
+const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
 const { getRandomInt } = require("@utils/miscUtils");
 
 module.exports = class Gamble extends SlashCommand {
@@ -36,7 +36,7 @@ module.exports = class Gamble extends SlashCommand {
     const economy = await getUser(user.id);
     if (!economy || economy?.coins < betAmount)
       return interaction.followUp(
-        `You do not have sufficient coins to gamble!\n**Coin balance:** ${economy?.coins || 0}${EMOJIS.CURRENCY}`
+        `You do not have sufficient coins to gamble!\n**Coin balance:** ${economy?.coins || 0}${ECONOMY.CURRENCY}`
       );
 
     const slot1 = getEmoji();
@@ -44,7 +44,7 @@ module.exports = class Gamble extends SlashCommand {
     const slot3 = getEmoji();
 
     const str = `
-    **Gamble Amount:** ${betAmount}${EMOJIS.CURRENCY}
+    **Gamble Amount:** ${betAmount}${ECONOMY.CURRENCY}
     **Multiplier:** 2x
     ╔══════════╗
     ║ ${getEmoji()} ║ ${getEmoji()} ║ ${getEmoji()} ‎‎‎‎║
@@ -56,16 +56,16 @@ module.exports = class Gamble extends SlashCommand {
     `;
 
     const reward = calculateReward(betAmount, slot1, slot2, slot3);
-    const result = (reward > 0 ? `You won: ${reward}` : `You lost: ${betAmount}`) + EMOJIS.CURRENCY;
+    const result = (reward > 0 ? `You won: ${reward}` : `You lost: ${betAmount}`) + ECONOMY.CURRENCY;
     const balance = reward - betAmount;
 
     const remaining = await addCoins(user.id, balance);
     const embed = new MessageEmbed()
       .setAuthor(user.username, user.displayAvatarURL())
-      .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+      .setColor(EMBED_COLORS.TRANSPARENT)
       .setThumbnail("https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif")
       .setDescription(str)
-      .setFooter(`${result}\nUpdated balance: ${remaining?.coins}${EMOJIS.CURRENCY}`);
+      .setFooter(`${result}\nUpdated balance: ${remaining?.coins}${ECONOMY.CURRENCY}`);
 
     return interaction.followUp({ embeds: [embed] });
   }

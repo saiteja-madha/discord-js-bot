@@ -64,7 +64,7 @@ async function performAutomod(message, settings) {
   // Anti links
   if (automod.anti_links) {
     if (containsLink(content)) {
-      embed.addField("Links Found", message.client.config.EMOJIS.TICK, true);
+      embed.addField("Links Found", "✓", true);
       shouldDelete = true;
       strikesTotal += 1;
     }
@@ -81,7 +81,7 @@ async function performAutomod(message, settings) {
           antiScamInfo.content === content &&
           Date.now() - antiScamInfo.timestamp < 2000
         ) {
-          embed.addField("AntiScam Detection", message.client.config.EMOJIS.TICK, true);
+          embed.addField("AntiScam Detection", "✓", true);
           shouldDelete = true;
           strikesTotal += 1;
         }
@@ -99,7 +99,7 @@ async function performAutomod(message, settings) {
   // Anti Invites
   if (!automod.anti_links && automod.anti_invites) {
     if (containsDiscordInvite(content)) {
-      embed.addField("Discord Invites", message.client.config.EMOJIS.TICK, true);
+      embed.addField("Discord Invites", "✓", true);
       shouldDelete = true;
       strikesTotal += 1;
     }
@@ -121,7 +121,7 @@ async function performAutomod(message, settings) {
     embed
       .setAuthor("Auto Moderation")
       .setThumbnail(author.displayAvatarURL())
-      .setColor(message.client.config.EMBED_COLORS.AUTOMOD)
+      .setColor(EMBED_COLORS.AUTOMOD)
       .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
       .setFooter(`By ${author.tag} | ${author.id}`, author.avatarURL());
 
@@ -129,7 +129,7 @@ async function performAutomod(message, settings) {
 
     // DM strike details
     const strikeEmbed = new MessageEmbed()
-      .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+      .setColor(EMBED_COLORS.AUTOMOD)
       .setThumbnail(message.guild.iconURL())
       .setAuthor("Auto Moderation")
       .setDescription(

@@ -16,7 +16,7 @@ const errorWebhook = process.env.ERROR_LOGS ? new WebhookClient({ url: process.e
 
 const sendWebhook = (content, err) => {
   const embed = new MessageEmbed()
-    .setColor(config.EMBED_COLORS.ERROR_EMBED)
+    .setColor(config.EMBED_COLORS.ERROR)
     .setAuthor(err?.name || "Error")
     .setDescription("```js\n" + err?.stack || err + "```");
 

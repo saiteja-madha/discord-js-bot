@@ -1,6 +1,6 @@
 const { CommandInteraction, User, MessageEmbed } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
-const { EMBED_COLORS, EMOJIS } = require("@root/config");
+const { EMBED_COLORS, ECONOMY } = require("@root/config");
 const { getUser, depositCoins, addCoins } = require("@schemas/user-schema");
 
 module.exports = class Bank extends SlashCommand {
@@ -117,9 +117,9 @@ const balance = async (user) => {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor(user.username)
     .setThumbnail(user.displayAvatarURL())
-    .addField("Wallet", `${economy?.coins || 0}${EMOJIS.CURRENCY}`, true)
-    .addField("Bank", `${economy?.bank || 0}${EMOJIS.CURRENCY}`, true)
-    .addField("Net Worth", `${(economy?.coins || 0) + (economy?.bank || 0)}${EMOJIS.CURRENCY}`, true);
+    .addField("Wallet", `${economy?.coins || 0}${ECONOMY.CURRENCY}`, true)
+    .addField("Bank", `${economy?.bank || 0}${ECONOMY.CURRENCY}`, true)
+    .addField("Net Worth", `${(economy?.coins || 0) + (economy?.bank || 0)}${ECONOMY.CURRENCY}`, true);
 
   return { embeds: [embed] };
 };
@@ -133,16 +133,16 @@ const withdraw = async (user, coins) => {
   const economy = await getUser(user.id);
   const available = economy?.bank || 0;
 
-  if (coins > available) return `You only have ${available}${EMOJIS.CURRENCY} coins in your bank`;
+  if (coins > available) return `You only have ${available}${ECONOMY.CURRENCY} coins in your bank`;
   const newBal = await depositCoins(user.id, -coins);
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor("New Balance")
     .setThumbnail(user.displayAvatarURL())
-    .addField("Wallet", `${newBal?.coins || 0}${EMOJIS.CURRENCY}`, true)
-    .addField("Bank", `${newBal?.bank || 0}${EMOJIS.CURRENCY}`, true)
-    .addField("Net Worth", `${(newBal?.coins || 0) + (newBal?.bank || 0)}${EMOJIS.CURRENCY}`, true);
+    .addField("Wallet", `${newBal?.coins || 0}${ECONOMY.CURRENCY}`, true)
+    .addField("Bank", `${newBal?.bank || 0}${ECONOMY.CURRENCY}`, true)
+    .addField("Net Worth", `${(newBal?.coins || 0) + (newBal?.bank || 0)}${ECONOMY.CURRENCY}`, true);
 
   return { embeds: [embed] };
 };
@@ -156,7 +156,7 @@ const deposit = async (user, coins) => {
   const economy = await getUser(user.id);
   const available = economy?.coins || 0;
 
-  if (coins > available) return `You only have ${available}${EMOJIS.CURRENCY} coins in your wallet`;
+  if (coins > available) return `You only have ${available}${ECONOMY.CURRENCY} coins in your wallet`;
 
   const newBal = await depositCoins(user.id, coins);
 
@@ -164,9 +164,9 @@ const deposit = async (user, coins) => {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor("New Balance")
     .setThumbnail(user.displayAvatarURL())
-    .addField("Wallet", `${newBal?.coins || 0}${EMOJIS.CURRENCY}`, true)
-    .addField("Bank", `${newBal?.bank || 0}${EMOJIS.CURRENCY}`, true)
-    .addField("Net Worth", `${(newBal?.coins || 0) + (newBal?.bank || 0)}${EMOJIS.CURRENCY}`, true);
+    .addField("Wallet", `${newBal?.coins || 0}${ECONOMY.CURRENCY}`, true)
+    .addField("Bank", `${newBal?.bank || 0}${ECONOMY.CURRENCY}`, true)
+    .addField("Net Worth", `${(newBal?.coins || 0) + (newBal?.bank || 0)}${ECONOMY.CURRENCY}`, true);
 
   return { embeds: [embed] };
 };
@@ -187,7 +187,7 @@ const transfer = async (interaction) => {
   const economy = await getUser(self.id);
 
   if (!economy || economy?.coins < coins) {
-    return `Insufficient coin balance! You only have ${economy?.coins || 0}${EMOJIS.CURRENCY}`;
+    return `Insufficient coin balance! You only have ${economy?.coins || 0}${ECONOMY.CURRENCY}`;
   }
 
   const src = await addCoins(self.id, -coins);
@@ -197,8 +197,8 @@ const transfer = async (interaction) => {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor("Updated Balance")
     .setDescription(
-      `**${self.username}:** ${src.coins}${EMOJIS.CURRENCY}\n` +
-        `**${target.username}:** ${des.coins}${EMOJIS.CURRENCY}`
+      `**${self.username}:** ${src.coins}${ECONOMY.CURRENCY}\n` +
+        `**${target.username}:** ${des.coins}${ECONOMY.CURRENCY}`
     )
     .setTimestamp(Date.now());
 

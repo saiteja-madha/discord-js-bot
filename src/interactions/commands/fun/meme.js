@@ -71,7 +71,7 @@ const getRandomEmbed = async (choice) => {
 
   const response = await getJson(`https://www.reddit.com/r/${rand}/random/.json`);
   if (!response.success) {
-    return new MessageEmbed().setColor(EMBED_COLORS.ERROR_EMBED).setDescription("Failed to fetch meme. Try again!");
+    return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
   }
 
   const json = response.data;

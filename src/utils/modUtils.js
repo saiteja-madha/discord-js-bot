@@ -1,18 +1,18 @@
 const {
-  Guild,
   GuildMember,
   Collection,
   MessageEmbed,
   BaseGuildTextChannel,
   VoiceChannel,
   StageChannel,
+  Guild,
 } = require("discord.js");
 const { sendMessage } = require("@utils/botUtils");
 const { containsLink, timeformat } = require("@utils/miscUtils");
 const { addModLogToDb, removeMutes, getMuteInfo } = require("@schemas/modlog-schema");
 const { getSettings } = require("@schemas/guild-schema");
 const { addWarnings } = require("@schemas/profile-schema");
-const { EMOJIS, EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 const { getRoleByName } = require("./guildUtils");
 const { error } = require("../helpers/logger");
 
@@ -482,47 +482,47 @@ async function logModeration(issuer, target, reason, type, data = {}) {
       break;
 
     case "MUTE":
-      embed.setColor(EMBED_COLORS.MUTE_EMBED);
+      embed.setColor(EMBED_COLORS.MUTE_LOG);
       break;
 
     case "UNMUTE":
-      embed.setColor(EMBED_COLORS.UNMUTE_EMBED);
+      embed.setColor(EMBED_COLORS.UNMUTE_LOG);
       break;
 
     case "KICK":
-      embed.setColor(EMBED_COLORS.KICK_EMBED);
+      embed.setColor(EMBED_COLORS.KICK_LOG);
       break;
 
     case "SOFTBAN":
-      embed.setColor(EMBED_COLORS.SOFTBAN_EMBED);
+      embed.setColor(EMBED_COLORS.SOFTBAN_LOG);
       break;
 
     case "BAN":
-      embed.setColor(EMBED_COLORS.BAN_EMBED);
+      embed.setColor(EMBED_COLORS.BAN_LOG);
       break;
 
     case "VMUTE":
-      embed.setColor(EMBED_COLORS.VMUTE_EMBED);
+      embed.setColor(EMBED_COLORS.VMUTE_LOG);
       break;
 
     case "VUNMUTE":
-      embed.setColor(EMBED_COLORS.VUNMUTE_EMBED);
+      embed.setColor(EMBED_COLORS.VUNMUTE_LOG);
       break;
 
     case "DEAFEN":
-      embed.setColor(EMBED_COLORS.DEAFEN_EMBED);
+      embed.setColor(EMBED_COLORS.DEAFEN_LOG);
       break;
 
     case "UNDEAFEN":
-      embed.setColor(EMBED_COLORS.UNDEAFEN_EMBED);
+      embed.setColor(EMBED_COLORS.UNDEAFEN_LOG);
       break;
 
     case "DISCONNECT":
-      embed.setColor(EMBED_COLORS.DISCONNECT_EMBED);
+      embed.setColor(EMBED_COLORS.DISCONNECT_LOG);
       break;
 
     case "MOVE":
-      embed.setColor(EMBED_COLORS.MOVE_EMBED);
+      embed.setColor(EMBED_COLORS.MOVE_LOG);
       break;
   }
 
@@ -535,7 +535,7 @@ async function logModeration(issuer, target, reason, type, data = {}) {
       .addField("Reason", reason || "No reason provided", true)
       .setTimestamp(Date.now());
 
-    if (data.isPermanent) embed.addField("IsPermanent", EMOJIS.TICK, true);
+    if (data.isPermanent) embed.addField("IsPermanent", "✓", true);
     if (data.minutes) embed.addField("Expires In", timeformat(data.minutes * 60), true);
     if (data.channel) embed.addField("Moved to", data.channel.name, true);
   }

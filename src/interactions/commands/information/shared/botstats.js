@@ -1,6 +1,6 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { EMOJIS, EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config");
+const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config");
 const { timeformat } = require("@utils/miscUtils");
 const os = require("os");
 const { outdent } = require("outdent");
@@ -30,10 +30,10 @@ module.exports = (client) => {
   const overallUsage = `${Math.floor(((os.totalmem() - os.freemem()) / os.totalmem()) * 100)}%`;
 
   let desc = "";
-  desc = `${desc + EMOJIS.CUBE_BULLET} Total guilds: ${guilds}\n`;
-  desc = `${desc + EMOJIS.CUBE_BULLET} Total users: ${users}\n`;
-  desc = `${desc + EMOJIS.CUBE_BULLET} Total channels: ${channels}\n`;
-  desc = `${desc + EMOJIS.CUBE_BULLET} Websocket Ping: ${client.ws.ping} ms\n`;
+  desc += `❒ Total guilds: ${guilds}\n`;
+  desc += `❒ Total users: ${users}\n`;
+  desc += `❒ Total channels: ${channels}\n`;
+  desc += `❒ Websocket Ping: ${client.ws.ping} ms\n`;
   desc += "\n";
 
   const embed = new MessageEmbed()
@@ -44,27 +44,27 @@ module.exports = (client) => {
     .addField(
       "CPU:",
       outdent`
-        ${EMOJIS.ARROW} **OS:** ${platform} [${architecture}]
-        ${EMOJIS.ARROW} **Cores:** ${cores}
-        ${EMOJIS.ARROW} **Usage:** ${cpuUsage}
+        ❯ **OS:** ${platform} [${architecture}]
+        ❯ **Cores:** ${cores}
+        ❯ **Usage:** ${cpuUsage}
         `,
       true
     )
     .addField(
       "Bot's RAM:",
       outdent`
-        ${EMOJIS.ARROW} **Used:** ${botUsed}
-        ${EMOJIS.ARROW} **Available:** ${botAvailable}
-        ${EMOJIS.ARROW} **Usage:** ${botUsage}
+        ❯ **Used:** ${botUsed}
+        ❯ **Available:** ${botAvailable}
+        ❯ **Usage:** ${botUsage}
         `,
       true
     )
     .addField(
       "Overall RAM:",
       outdent`
-      ${EMOJIS.ARROW} **Used:** ${overallUsed}
-      ${EMOJIS.ARROW} **Available:** ${overallAvailable}
-      ${EMOJIS.ARROW} **Usage:** ${overallUsage}
+      ❯ **Used:** ${overallUsed}
+      ❯ **Available:** ${overallAvailable}
+      ❯ **Usage:** ${overallUsage}
       `,
       true
     )

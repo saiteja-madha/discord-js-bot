@@ -59,7 +59,7 @@ module.exports = class Filters extends SlashCommand {
 
     const attachment = new MessageAttachment(response.buffer, "attachment.png");
     const embed = new MessageEmbed()
-      .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+      .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
       .setFooter(`Requested by: ${author.tag}`);
 

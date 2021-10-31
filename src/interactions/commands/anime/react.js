@@ -87,7 +87,7 @@ const genReaction = async (author, category) => {
     return new MessageEmbed().setImage(imageUrl).setColor("RANDOM").setFooter(`Requested By ${author.tag}`);
   } catch (ex) {
     return new MessageEmbed()
-      .setColor(EMBED_COLORS.ERROR_EMBED)
+      .setColor(EMBED_COLORS.ERROR)
       .setDescription("Failed to fetch meme. Try again!")
       .setFooter(`Requested By ${author.tag}`);
   }

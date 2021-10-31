@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction, MessageEmbed } = require("discord.js");
-const { EMBED_COLORS, EMOJIS } = require("@root/config");
+const { EMBED_COLORS, ECONOMY } = require("@root/config");
 const { getSettings } = require("@schemas/guild-schema");
 const { getProfile } = require("@schemas/profile-schema");
 const { getUser } = require("@schemas/user-schema");
@@ -39,9 +39,9 @@ module.exports = class Profile extends SlashCommand {
       .addField("User Tag", user.tag, true)
       .addField("ID", user.id, true)
       .addField("Discord Registered", user.createdAt.toDateString(), false)
-      .addField("Cash", `${userData?.coins || 0} ${EMOJIS.CURRENCY}`, true)
-      .addField("Bank", `${userData?.bank || 0} ${EMOJIS.CURRENCY}`, true)
-      .addField("Net Worth", `${(userData?.coins || 0) + (userData?.bank || 0)}${EMOJIS.CURRENCY}`, true)
+      .addField("Cash", `${userData?.coins || 0} ${ECONOMY.CURRENCY}`, true)
+      .addField("Bank", `${userData?.bank || 0} ${ECONOMY.CURRENCY}`, true)
+      .addField("Net Worth", `${(userData?.coins || 0) + (userData?.bank || 0)}${ECONOMY.CURRENCY}`, true)
       .addField("Reputation", `${userData?.reputation?.received || 0}`, true)
       .addField("Daily Streak", `${userData?.daily?.streak || 0}`, true)
       .addField("XP*", `${settings.ranking.enabled ? (profile?.xp || 0) + " " : "Not Tracked"}`, true)

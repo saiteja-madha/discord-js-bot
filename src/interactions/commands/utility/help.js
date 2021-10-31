@@ -1,6 +1,6 @@
 const { SlashCommand, CommandCategory } = require("@src/structures");
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, CommandInteraction } = require("discord.js");
-const { EMOJIS, EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
+const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 
 const CMDS_PER_PAGE = 5;
 const TIMEOUT_IN_SECONDS = 30;
@@ -159,7 +159,7 @@ module.exports = class HelpCommand extends SlashCommand {
     if (category === "IMAGE") {
       interaction.client.slashCommands
         .filter((cmd) => cmd.category === category)
-        .forEach((cmd) => (collector += `\`/${cmd.name}\`\n ${EMOJIS.ARROW} ${cmd.description}\n\n`));
+        .forEach((cmd) => (collector += `\`/${cmd.name}\`\n ❯ ${cmd.description}\n\n`));
 
       const availableFilters = interaction.client.slashCommands
         .get("filter")
@@ -209,8 +209,8 @@ module.exports = class HelpCommand extends SlashCommand {
         const subCmds = cmd.options.filter((opt) => opt.type === "SUB_COMMAND");
         const subCmdsString = subCmds.map((s) => s.name).join(", ");
 
-        return `\`/${cmd.name}\`\n ${EMOJIS.ARROW} **Description**: ${cmd.description}\n ${
-          subCmds == 0 ? "" : EMOJIS.ARROW + ` **SubCommands [${subCmds.length}]**: ${subCmdsString}\n`
+        return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
+          subCmds == 0 ? "" : `❯ **SubCommands [${subCmds.length}]**: ${subCmdsString}\n`
         } `;
       });
 

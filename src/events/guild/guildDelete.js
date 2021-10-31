@@ -17,7 +17,7 @@ module.exports = async (client, guild) => {
   const embed = new MessageEmbed()
     .setAuthor("Guild Left")
     .setThumbnail(guild.iconURL())
-    .setColor(client.config.EMBED_COLORS.ERROR_EMBED)
+    .setColor(client.config.EMBED_COLORS.ERROR)
     .addField("Name", guild.name, false)
     .addField("ID", guild.id, false)
     .addField("Owner", `${client.users.cache.get(guild.ownerId).tag} [\`${guild.ownerId}\`]`, false)
