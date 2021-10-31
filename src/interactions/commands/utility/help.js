@@ -1,9 +1,9 @@
 const { SlashCommand, CommandCategory } = require("@src/structures");
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, CommandInteraction } = require("discord.js");
-const { EMOJIS, EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
+const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 
 const CMDS_PER_PAGE = 5;
-const TIMEOUT_IN_SECONDS = 10;
+const TIMEOUT_IN_SECONDS = 30;
 const cache = {};
 
 module.exports = class HelpCommand extends SlashCommand {
@@ -70,10 +70,8 @@ module.exports = class HelpCommand extends SlashCommand {
     // Buttons Row
     let components = [];
     components.push(
-    new MessageButton().setCustomId("previousbtn").setEmoji("⬅️").setStyle("SUCCESS").setDisabled(true),
-    new MessageButton().setCustomId("nextbtn").setEmoji("➡️").setStyle("SUCCESS").setDisabled(true),
-    new MessageButton().setLabel("Invite Me").setStyle("LINK").setURL(`${BOT_INVITE}`).setDisabled(false),
-    new MessageButton().setLabel("Support Server").setStyle("LINK").setURL(`${SUPPORT_SERVER}`).setDisabled(false)
+      new MessageButton().setCustomId("previousBtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
+      new MessageButton().setCustomId("nextBtn").setEmoji("➡️").setStyle("SECONDARY").setDisabled(true)
     );
 
     let buttonsRow = new MessageActionRow().addComponents(components);
@@ -96,7 +94,7 @@ module.exports = class HelpCommand extends SlashCommand {
 
     const collector = interaction.channel.createMessageComponentCollector({
       filter: (reactor) => reactor.user.id === interaction.user.id,
-      idle: TIMEOUT_IN_SECONDS * 9999999,
+      idle: TIMEOUT_IN_SECONDS * 1000,
       dispose: true,
     });
 
@@ -161,7 +159,7 @@ module.exports = class HelpCommand extends SlashCommand {
     if (category === "IMAGE") {
       interaction.client.slashCommands
         .filter((cmd) => cmd.category === category)
-        .forEach((cmd) => (collector += `\`/${cmd.name}\`\n ${EMOJIS.ARROW} ${cmd.description}\n\n`));
+        .forEach((cmd) => (collector += `\`/${cmd.name}\`\n ❯ ${cmd.description}\n\n`));
 
       const availableFilters = interaction.client.slashCommands
         .get("filter")
@@ -211,8 +209,8 @@ module.exports = class HelpCommand extends SlashCommand {
         const subCmds = cmd.options.filter((opt) => opt.type === "SUB_COMMAND");
         const subCmdsString = subCmds.map((s) => s.name).join(", ");
 
-        return `\`/${cmd.name}\`\n ${EMOJIS.ARROW} **Description**: ${cmd.description}\n ${
-          subCmds == 0 ? "" : EMOJIS.ARROW + ` **SubCommands [${subCmds.length}]**: ${subCmdsString}\n`
+        return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
+          subCmds == 0 ? "" : `❯ **SubCommands [${subCmds.length}]**: ${subCmdsString}\n`
         } `;
       });
 
