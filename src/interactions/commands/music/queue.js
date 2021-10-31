@@ -6,7 +6,7 @@ module.exports = class Queue extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "queue",
-      description: "displays the current music queue",
+      description: "🎵 displays the current music queue",
       enabled: true,
       category: "MUSIC",
       options: [

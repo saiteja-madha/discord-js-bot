@@ -6,7 +6,7 @@ module.exports = class LoopCommand extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "loop",
-      description: "loops the song or queue",
+      description: "🎵 loops the song or queue",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,

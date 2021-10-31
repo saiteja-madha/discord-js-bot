@@ -8,7 +8,7 @@ module.exports = class Skip extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "np",
-      description: "show's what track is currently being played",
+      description: "🎵 show's what track is currently being played",
       enabled: true,
       category: "MUSIC",
     });

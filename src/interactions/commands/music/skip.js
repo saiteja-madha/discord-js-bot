@@ -6,7 +6,7 @@ module.exports = class Skip extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "skip",
-      description: "Skip the current song",
+      description: "🎵 skip the current song",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,

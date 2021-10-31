@@ -6,7 +6,7 @@ module.exports = class Pause extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "pause",
-      description: "Pause the current song",
+      description: "🎵 pause the current song",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,

@@ -6,7 +6,7 @@ module.exports = class Stop extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "stop",
-      description: "stop the music player and clear the entire music queue",
+      description: "🎵 stop the music player and clear the entire music queue",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,

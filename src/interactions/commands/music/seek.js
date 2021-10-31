@@ -8,7 +8,7 @@ module.exports = class Volume extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "seek",
-      description: "sets the playing track's position to the specified position",
+      description: "🎵 sets the playing track's position to the specified position",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,

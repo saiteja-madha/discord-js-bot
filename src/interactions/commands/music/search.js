@@ -8,7 +8,7 @@ module.exports = class Play extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "search",
-      description: "search a song from youtube",
+      description: "🎵 search a song from youtube",
       enabled: true,
       category: "MUSIC",
       options: [

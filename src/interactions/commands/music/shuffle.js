@@ -6,7 +6,7 @@ module.exports = class ShuffleCommand extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "shuffle",
-      description: "shuffle the queue",
+      description: "🎵 shuffle the queue",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,

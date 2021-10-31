@@ -13,7 +13,7 @@ module.exports = class Bassboost extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "bassboost",
-      description: "set bassboost level",
+      description: "🎵 set bassboost level",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,

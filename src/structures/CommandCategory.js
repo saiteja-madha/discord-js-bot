@@ -1,11 +1,13 @@
 module.exports = {
   ADMIN: {
-    name: "Configuration",
-    image: "https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/512/Settings-icon.png",
+    name: "Admin",
+    image: "https://icons.iconarchive.com/icons/dakirby309/simply-styled/256/Settings-icon.png",
     emoji: "⚙️",
   },
   ANIME: {
     name: "Anime",
+    image: "https://wallpaperaccess.com/full/5680679.jpg",
+    emoji: "🎨",
   },
   ECONOMY: {
     name: "Economy",
@@ -44,6 +46,8 @@ module.exports = {
   },
   OWNER: {
     name: "Owner",
+    image: "https://www.pinclipart.com/picdir/middle/531-5318253_web-designing-icon-png-clipart.png",
+    emoji: "🤴",
   },
   SOCIAL: {
     name: "Social",
@@ -53,7 +57,7 @@ module.exports = {
   TICKET: {
     name: "Ticket",
     image: "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/512/ticket-icon.png",
-    emoji: ":ticket:898485373783662592",
+    emoji: "🎫",
   },
   UTILITY: {
     name: "Utility",

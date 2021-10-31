@@ -6,7 +6,7 @@ module.exports = class Volume extends SlashCommand {
   constructor(client) {
     super(client, {
       name: "volume",
-      description: "change or set the music player volume",
+      description: "🎵 change or set the music player volume",
       enabled: true,
       category: "MUSIC",
       validations: musicValidations,
