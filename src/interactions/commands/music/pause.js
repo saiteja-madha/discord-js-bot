@@ -21,6 +21,6 @@ module.exports = class Pause extends SlashCommand {
     if (player.paused) return interaction.followUp("The player is already paused.");
 
     player.pause(true);
-    await interaction.followUp("> ⏸️ Paused the music player.");
+    await interaction.followUp("⏸️ Paused the music player.");
   }
 };

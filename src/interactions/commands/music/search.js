@@ -11,6 +11,7 @@ module.exports = class Play extends SlashCommand {
       description: "🎵 search a song from youtube",
       enabled: true,
       category: "MUSIC",
+      botPermissions: ["SEND_MESSAGES", "EMBED_LINKS"],
       options: [
         {
           name: "query",

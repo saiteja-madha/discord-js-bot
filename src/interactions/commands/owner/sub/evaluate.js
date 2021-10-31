@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = (input) => {
   const embed = new MessageEmbed();
@@ -8,14 +9,16 @@ module.exports = (input) => {
     if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
 
     embed
-      .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
-      .addField("📤 Output", `\`\`\`js\n${output.length > 1024 ? "Too large to display." : output}\`\`\``)
-      .setColor("RANDOM");
+      .setAuthor("📤 Output")
+      .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
+      .setColor("RANDOM")
+      .setTimestamp(Date.now());
   } catch (err) {
     embed
-      .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
-      .addField("📤 Output", `\`\`\`js\n${err.length > 1024 ? "Too large to display." : err}\`\`\``)
-      .setColor("ORANGE");
+      .setAuthor("📤 Error")
+      .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
+      .setColor(EMBED_COLORS.ERROR)
+      .setTimestamp(Date.now());
   }
 
   return embed;

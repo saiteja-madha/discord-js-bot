@@ -68,7 +68,9 @@ async function startupCheck() {
  */
 async function sendMessage(channel, content, seconds) {
   if (!channel || !content) return;
-  if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])) return;
+  const perms = ["VIEW_CHANNEL", "SEND_MESSAGES"];
+  if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
+  if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(perms)) return;
   try {
     if (!seconds) return channel.send(content);
     const reply = await channel.send(content);
@@ -85,11 +87,9 @@ async function sendMessage(channel, content, seconds) {
  */
 async function safeReply(message, content, seconds) {
   if (!message || !content) return;
-  if (
-    message.channel.type !== "DM" &&
-    !message.channel.permissionsFor(message.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES"])
-  )
-    return;
+  const perms = ["VIEW_CHANNEL", "SEND_MESSAGES"];
+  if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
+  if (message.channel.type !== "DM" && !message.channel.permissionsFor(message.guild.me).has(perms)) return;
   try {
     if (!seconds) return message.reply(content);
     const reply = await message.reply(content);
