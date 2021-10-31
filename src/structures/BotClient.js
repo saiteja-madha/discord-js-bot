@@ -23,6 +23,7 @@ module.exports = class BotClient extends Client {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
       partials: ["USER", "MESSAGE", "REACTION"],
+      restRequestTimeout: 20000,
     });
 
     this.config = require("@root/config"); // load the config file

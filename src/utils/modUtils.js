@@ -93,51 +93,51 @@ async function purgeMessages(issuer, channel, type, amount, argument) {
   }
 
   const toDelete = new Collection();
-  const messages = await channel.messages.fetch({ limit: amount }, { cache: false, force: true });
-
-  messages.every((msg) => {
-    if (toDelete.size === amount) return false;
-    const { id } = msg;
-
-    switch (type) {
-      case "ATTACHMENT":
-        if (msg.attachments.size > 0) toDelete.set(id, msg);
-        break;
-
-      case "BOT":
-        if (msg.author.bot) toDelete.set(id, msg);
-        break;
-
-      case "LINK":
-        if (containsLink(msg.content)) toDelete.set(id, msg);
-        break;
-
-      case "TOKEN":
-        if (msg.content.includes(argument)) toDelete.set(id, msg);
-        break;
-
-      case "USER":
-        if (argument.includes(msg.author.id)) toDelete.set(id, msg);
-        break;
-
-      case "ALL":
-        toDelete.set(id, msg);
-        break;
-
-      default:
-        return;
-    }
-
-    return true;
-  });
-
-  if (toDelete.size === 0)
-    return {
-      success: false,
-      message: "No messages found that can be cleaned",
-    };
 
   try {
+    const messages = await channel.messages.fetch({ limit: amount }, { cache: false, force: true });
+    messages.every((msg) => {
+      if (toDelete.size === amount) return false;
+      const { id } = msg;
+
+      switch (type) {
+        case "ATTACHMENT":
+          if (msg.attachments.size > 0) toDelete.set(id, msg);
+          break;
+
+        case "BOT":
+          if (msg.author.bot) toDelete.set(id, msg);
+          break;
+
+        case "LINK":
+          if (containsLink(msg.content)) toDelete.set(id, msg);
+          break;
+
+        case "TOKEN":
+          if (msg.content.includes(argument)) toDelete.set(id, msg);
+          break;
+
+        case "USER":
+          if (argument.includes(msg.author.id)) toDelete.set(id, msg);
+          break;
+
+        case "ALL":
+          toDelete.set(id, msg);
+          break;
+
+        default:
+          return;
+      }
+
+      return true;
+    });
+
+    if (toDelete.size === 0)
+      return {
+        success: false,
+        message: "No messages found that can be cleaned",
+      };
+
     const deletedMessages = await channel.bulkDelete(toDelete, true);
     await logModeration(issuer, "", "", "Purge", {
       purgeType: type,
