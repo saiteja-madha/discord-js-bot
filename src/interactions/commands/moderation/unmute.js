@@ -36,6 +36,11 @@ module.exports = class UnmuteCommand extends SlashCommand {
     const target = await interaction.guild.members.fetch(user.id);
 
     const response = await addModAction(interaction.member, target, reason, "UNMUTE");
+
+    if (response === "NOT_MUTED") {
+      return interaction.followUp(`${user.tag} is not muted.`);
+    }
+
     await interaction.followUp(response);
   }
 };

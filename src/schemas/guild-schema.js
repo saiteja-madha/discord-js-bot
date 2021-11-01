@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { CACHE_SIZE, PREFIX } = require("@root/config.js");
+const { CACHE_SIZE } = require("@root/config.js");
 const FixedSizeMap = require("fixedsize-map");
 
 const cache = new FixedSizeMap(CACHE_SIZE.GUILDS);
@@ -18,10 +18,6 @@ const Schema = mongoose.Schema({
     },
     joinedAt: Date,
     leftAt: Date,
-  },
-  prefix: {
-    type: String,
-    default: PREFIX,
   },
   ranking: {
     enabled: Boolean,
@@ -118,13 +114,6 @@ module.exports = {
 
   updateGuildLeft: async (guild) =>
     Model.updateOne({ _id: guild.id }, { "data.leftAt": new Date() }).then(cache.remove(guild.id)),
-
-  setPrefix: async (_id, prefix) => {
-    await Model.updateOne({ _id }, { prefix });
-    if (cache.contains(_id)) {
-      cache.get(_id).prefix = prefix;
-    }
-  },
 
   xpSystem: async (_id, status) => {
     await Model.updateOne({ _id }, { "ranking.enabled": status });

@@ -53,10 +53,11 @@ module.exports = class Warnings extends SlashCommand {
     if (sub === "view") {
       const warnings = await getWarnings(interaction.guildId, target.id);
       if (!warnings?.length) return interaction.followUp(`No warnings for ${target.tag}`);
-      let collector = "";
-      warnings.forEach(
-        (war, i) => (collector += `❯ **#${i + 1}:** ${war.reason || "No reason"} [By ${war.admin.tag}]`)
-      );
+
+      const collector = warnings
+        .map((doc, i) => `**#${i + 1}** ${doc.reason || "No reason"} [By ${doc.admin.tag}]`)
+        .join("\n");
+
       const embed = new MessageEmbed()
         .setAuthor(`Warnings for ${target.username}`)
         .setThumbnail(target.displayAvatarURL())
