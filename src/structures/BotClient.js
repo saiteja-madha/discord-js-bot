@@ -1,7 +1,7 @@
-const { Client, Collection, Intents, WebhookClient, Guild, ApplicationCommand } = require("discord.js");
+const { Client, Collection, Intents, WebhookClient } = require("discord.js");
 const path = require("path");
 const fs = require("fs");
-const Ascii = require("ascii-table");
+const { table } = require("table");
 const mongoose = require("mongoose");
 const SlashCommand = require("./SlashCommand");
 const BaseContext = require("./BaseContext");
@@ -41,7 +41,7 @@ module.exports = class BotClient extends Client {
 
     // initialize cache
     this.cmdCooldownCache = new Collection(); // store message cooldowns for commands
-    this.ctxCooldownCache = new Collection(); // store message cooldowns for commands
+    this.ctxCooldownCache = new Collection(); // store message cooldowns for contexts
     this.xpCooldownCache = new Collection(); // store message cooldowns for xp
     this.inviteCache = new Collection(); // store invite data for invite tracking
     this.antiScamCache = new Collection(); // store message data for anti_scam feature
@@ -80,8 +80,10 @@ module.exports = class BotClient extends Client {
    */
   loadEvents(directory) {
     this.logger.log(`Loading events...`);
-    const table = new Ascii().setHeading("EVENT", "Status");
-    let events = 0;
+    let success = 0;
+    let failed = 0;
+    const clientEvents = [];
+    const musicEvents = [];
 
     this.getAbsoluteFilePaths(directory).forEach((filePath) => {
       const file = filePath.replace(/^.*[\\/]/, "");
@@ -92,22 +94,46 @@ module.exports = class BotClient extends Client {
         // music events
         if (filePath.split("\\").at(-2) === "music") {
           this.musicManager.on(eventName, event.bind(null, this));
+          musicEvents.push([file, "✓"]);
         }
 
         // bot events
-        this.on(eventName, event.bind(null, this));
+        else {
+          this.on(eventName, event.bind(null, this));
+          clientEvents.push([file, "✓"]);
+        }
+
         delete require.cache[require.resolve(filePath)];
-        table.addRow(file, "✓");
+        success += 1;
       } catch (ex) {
-        table.addRow(file, "✕");
+        failed += 1;
         this.logger.error("readEvent", ex);
-      } finally {
-        events += 1;
       }
     });
 
-    console.log(table.toString());
-    this.logger.success(`Loaded ${events} events`);
+    console.log(
+      table(clientEvents, {
+        header: {
+          alignment: "center",
+          content: "Bot Events",
+        },
+        singleLine: true,
+        columns: [{ width: 25 }, { width: 5, alignment: "center" }],
+      })
+    );
+
+    console.log(
+      table(musicEvents, {
+        header: {
+          alignment: "center",
+          content: "Music Events",
+        },
+        singleLine: true,
+        columns: [{ width: 25 }, { width: 5, alignment: "center" }],
+      })
+    );
+
+    this.logger.log(`Loaded ${success + failed} events. Success (${success}) Failed (${failed})`);
   }
 
   /**
@@ -246,7 +272,7 @@ module.exports = class BotClient extends Client {
 
   /**
    * Register guild specific slash commands
-   * @param {Guild} guild
+   * @param {import("discord.js").Guild} guild
    */
   async registerGuildInteractions(guild) {
     if (!guild) throw new Error("No guild provided");
@@ -273,8 +299,8 @@ module.exports = class BotClient extends Client {
 
   /**
    * This function updates slash command permissions
-   * @param {Guild} guild
-   * @param {Collection<string, ApplicationCommand<{}>>} [applicationCommands]
+   * @param {import("discord.js").Guild} guild
+   * @param {Collection<string, import("discord.js").ApplicationCommand<{}>>} [applicationCommands]
    */
   async syncSlashPermissions(guild, applicationCommands) {
     if (!guild) throw new Error("No guild provided");

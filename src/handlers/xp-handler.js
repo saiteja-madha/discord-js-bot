@@ -1,4 +1,3 @@
-const { Message } = require("discord.js");
 const { incrementXP, setLevel } = require("@schemas/profile-schema");
 const { getRandomInt } = require("@utils/miscUtils");
 const { sendMessage } = require("@utils/botUtils");
@@ -7,9 +6,9 @@ const xpToAdd = () => getRandomInt(19) + 1;
 
 /**
  * This function adds random xp to the message author
- * @param {Message} message
+ * @param {import("discord.js").Message} message
  */
-exports.handleXp = async (message) => {
+async function handleXp(message) {
   const key = `${message.guildId}|${message.member.id}`;
 
   // Ignore possible bot commands
@@ -42,4 +41,8 @@ exports.handleXp = async (message) => {
 
     sendMessage(lvlUpChannel, lvlUpMessage);
   }
+}
+
+module.exports = {
+  handleXp,
 };

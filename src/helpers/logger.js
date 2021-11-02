@@ -44,7 +44,7 @@ const sendLogs = (level, content, data) => {
       break;
 
     case "warn":
-      console.log(`[${chalk.cyan(timestamp)}] [${chalk.yellow("warning")}] ${content} `);
+      console.log(`[${chalk.cyan(timestamp)}] [${chalk.yellow("warn")}] ${content} `);
       simpleLogger.warn(content);
       break;
 
