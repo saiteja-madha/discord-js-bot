@@ -1,5 +1,5 @@
 const { MessageEmbed, GuildMember } = require("discord.js");
-const { getConfig, setChannel } = require("@schemas/greeting-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { sendMessage } = require("@utils/botUtils");
 
 const getEffectiveInvites = (data = {}) =>
@@ -37,23 +37,34 @@ const parse = async (content, member, inviterData = {}) => {
 
 /**
  * @param {GuildMember} member
+ * @param {"WELCOME"|"FAREWELL"} type
  * @param {Object} config
  * @param {Object} inviterData
  */
-const buildEmbed = async (member, config, inviterData) => {
+const buildGreeting = async (member, type, config, inviterData) => {
   if (!config) return;
+  let content;
 
+  // build content
+  if (config.content) content = await parse(config.content, member, inviterData);
+
+  // build embed
   const embed = new MessageEmbed();
-  if (config.description) {
-    embed.setDescription(await parse(config.description, member, inviterData));
-  }
-  if (config.color) embed.setColor(config.color);
-  if (config.thumbnail) embed.setThumbnail(member.user.displayAvatarURL());
-  if (config.footer) {
-    embed.setFooter(await parse(config.footer, member, inviterData));
+  if (config.embed.description) embed.setDescription(await parse(config.embed.description, member, inviterData));
+  if (config.embed.color) embed.setColor(config.embed.color);
+  if (config.embed.thumbnail) embed.setThumbnail(member.user.displayAvatarURL());
+  if (config.embed.footer) {
+    embed.setFooter(await parse(config.embed.footer, member, inviterData));
   }
 
-  return embed;
+  // set default message
+  if (!config.content && !config.embed.description && !config.embed.footer) {
+    content =
+      type === "WELCOME" ? `Welcome to the server, ${member.displayName}` : `${member.displayName} has left the server`;
+    return { content };
+  }
+
+  return { content, embeds: [embed] };
 };
 
 /**
@@ -62,22 +73,17 @@ const buildEmbed = async (member, config, inviterData) => {
  * @param {Object} inviterData
  */
 async function sendWelcome(member, inviterData = {}) {
-  const config = (await getConfig(member.guild.id))?.welcome;
+  const config = (await getSettings(member.guild))?.welcome;
   if (!config || !config.enabled) return;
 
   // check if channel exists
   const channel = member.guild.channels.cache.get(config.channel_id);
-  if (!channel) {
-    return setChannel(member.guild.id, null, "welcome");
-  }
+  if (!channel) return;
 
-  // set default description
-  if (!config.embed.description) {
-    config.embed.description = "Welcome to the server {member:name}";
-  }
+  // build welcome message
+  const response = await buildGreeting(member, "WELCOME", config, inviterData);
 
-  const embed = await buildEmbed(member, config.embed, inviterData);
-  sendMessage(channel, { embeds: [embed] });
+  sendMessage(channel, response);
 }
 
 /**
@@ -86,24 +92,21 @@ async function sendWelcome(member, inviterData = {}) {
  * @param {Object} inviterData
  */
 async function sendFarewell(member, inviterData = {}) {
-  const config = (await getConfig(member.guild.id))?.farewell;
+  const config = (await getSettings(member.guild))?.farewell;
   if (!config || !config.enabled) return;
 
   // check if channel exists
   const channel = member.guild.channels.cache.get(config.channel_id);
-  if (!channel) return setChannel(member.guild.id, null, "farewell");
+  if (!channel) return;
 
-  // set default description
-  if (!config.embed.description) {
-    config.embed.description = "Goodbye {member:tag}!";
-  }
+  // build farewell message
+  const response = await buildGreeting(member, "FAREWELL", config, inviterData);
 
-  const embed = await buildEmbed(member, config.embed, inviterData);
-  sendMessage(channel, { embeds: [embed] });
+  sendMessage(channel, response);
 }
 
 module.exports = {
+  buildGreeting,
   sendWelcome,
   sendFarewell,
-  buildEmbed,
 };

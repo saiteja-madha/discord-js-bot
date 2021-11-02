@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const { setTicketLogChannel, setTicketLimit } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { createNewTicket } = require("@schemas/ticket-schema");
 const { canSendEmbeds } = require("@utils/guildUtils");
 const { isTicketChannel, closeTicket, getTicketChannels, CLOSE_PERMS } = require("@utils/ticketUtils");
@@ -120,6 +120,7 @@ module.exports = class TicketCommand extends SlashCommand {
    */
   async run(interaction) {
     const sub = interaction.options.getSubcommand();
+    const settings = await getSettings(interaction.guild);
 
     if (sub === "setup") {
       if (!interaction.guild.me.permissions.has("MANAGE_CHANNELS")) {
@@ -170,7 +171,9 @@ module.exports = class TicketCommand extends SlashCommand {
         return interaction.followUp(`Oops! I do have have permission to send embed to ${target}`);
       }
 
-      await setTicketLogChannel(interaction.guildId, target.id);
+      settings.ticket.log_channel = target.id;
+      await settings.save();
+
       return interaction.followUp(`Configuration saved! Ticket logs will be sent to ${target.toString()}`);
     }
 
@@ -178,7 +181,8 @@ module.exports = class TicketCommand extends SlashCommand {
     else if (sub === "limit") {
       const limit = interaction.options.getInteger("amount");
       if (Number.parseInt(limit, 10) < 5) return interaction.followUp("Ticket limit cannot be less than 5");
-      await setTicketLimit(interaction.guildId, limit);
+      settings.ticket.limit = limit;
+      await settings.save();
       return interaction.followUp(`Configuration saved. You can now have a maximum of \`${limit}\` open tickets`);
     }
 

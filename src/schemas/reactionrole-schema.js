@@ -28,7 +28,6 @@ module.exports = {
   loadReactionRoles: async () => {
     cache.clear();
     (await Model.find().lean({ defaults: true })).forEach((doc) => {
-      // eslint-disable-next-line camelcase
       const { guild_id, channel_id, message_id, roles } = doc;
       const key = getKey(guild_id, channel_id, message_id);
       cache.set(key, roles);

@@ -1,8 +1,10 @@
-const { CommandInteraction, Guild, GuildMember } = require("discord.js");
+const { CommandInteraction } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
-const db = require("@schemas/greeting-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { isHex } = require("@utils/miscUtils");
-const { buildEmbed } = require("@src/handlers/greeting-handler");
+const { buildGreeting } = require("@src/handlers/greeting-handler");
+const { sendMessage } = require("@utils/botUtils");
+const { canSendEmbeds } = require("@utils/guildUtils");
 
 module.exports = class Farewell extends SlashCommand {
   constructor(client) {
@@ -51,6 +53,7 @@ module.exports = class Farewell extends SlashCommand {
               name: "channel",
               description: "channel name",
               type: "CHANNEL",
+              channelTypes: ["GUILD_TEXT"],
               required: true,
             },
           ],
@@ -128,77 +131,69 @@ module.exports = class Farewell extends SlashCommand {
     const sub = interaction.options.getSubcommand();
     if (!sub) return interaction.followUp("Not a valid subcommand");
 
+    const settings = await getSettings(interaction.guild);
+
     if (sub === "status") {
       const status = interaction.options.getString("status") === "ON" ? true : false;
-      await db.setStatus(interaction.guildId, status, "farewell");
-      return interaction.followUp("Configuration saved! Farewell message disabled");
+      settings.farewell.enabled = status;
+      await settings.save();
+      return interaction.followUp(`Configuration saved! Farewell message ${status ? "enabled" : "disabled"}`);
     }
 
-    // Preview
-    else if (sub === "preview") {
-      const data = farewellPreview(interaction.guild, interaction.member);
-      return interaction.followUp(data);
-    }
-
-    // Channel
-    else if (sub === "channel") {
+    if (sub === "channel") {
       const target = interaction.options.getChannel("channel");
-      if (target.type !== "GUILD_TEXT") return interaction.followUp("Target channel must be of type text");
-      await db.setChannel(interaction.guildId, null, "farewell");
+      if (!canSendEmbeds(target)) {
+        return interaction.followUp(
+          "Ugh! I cannot send greeting to that channel? I need the `Write Messages` and `Embed Links` permissions in " +
+            target.toString()
+        );
+      }
+      settings.farewell.channel_id = target.id;
+      await settings.save();
       return interaction.followUp(`Configuration saved! Farewell message is set to ${target}`);
     }
 
-    // Description
-    else if (sub === "desc") {
+    if (sub === "desc") {
       const content = interaction.options.getString("content");
-      await db.setDescription(interaction.guild.id, content, "farewell");
-      interaction.followUp("Configuration saved! Farewell message updated");
+      settings.farewell.embed.description = content;
+      await settings.save();
+      return interaction.followUp("Configuration saved! Farewell message updated");
     }
 
-    // Thumbnail
-    else if (sub === "thumbnail") {
+    if (sub === "thumbnail") {
       const status = interaction.options.getString("status") === "ON" ? true : false;
-      await db.setThumbnail(interaction.guild.id, status, "farewell");
-      interaction.followUp("Configuration saved! Farewell message updated");
+      settings.farewell.embed.thumbnail = status;
+      await settings.save();
+      return interaction.followUp("Configuration saved! Farewell message updated");
     }
 
-    // Color
-    else if (sub === "color") {
+    if (sub === "color") {
       const color = interaction.options.getString("color");
       if (!isHex(color)) return interaction.followUp("Oops! That doesn't look like a valid HEX Color code");
-
-      await db.setColor(interaction.guild.id, color, "farewell");
-      interaction.followUp("Configuration saved! Farewell message updated");
+      settings.farewell.embed.color = color;
+      await settings.save();
+      return interaction.followUp("Configuration saved! Farewell message updated");
     }
 
-    // Footer
-    else if (sub === "footer") {
+    if (sub === "footer") {
       const content = interaction.options.getString("content");
-      await db.setFooter(interaction.guild.id, content, "farewell");
-      interaction.followUp("Configuration saved! Farewell message updated");
+      settings.farewell.embed.footer = content;
+      await settings.save();
+      return interaction.followUp("Configuration saved! Farewell message updated");
+    }
+
+    if (sub === "preview") {
+      if (!settings.farewell?.enabled) return interaction.followUp("Farewell message not enabled in this server");
+      const targetChannel = interaction.guild.channels.cache.get(settings.farewell.channel_id);
+      if (!targetChannel) return interaction.followUp("No channel is configured to send farewell message");
+
+      await interaction.followUp(`Sending farewell preview to ${targetChannel.toString()}`);
+
+      const response = await buildGreeting(interaction.member, "FAREWELL", settings.farewell);
+      return sendMessage(targetChannel, response);
     }
 
     // return
     else return interaction.followUp("Not a valid sub-command");
   }
-};
-
-/**
- * @param {Guild} guild
- * @param {GuildMember} member
- */
-const farewellPreview = async (guild, member) => {
-  const config = (await db.getConfig(guild.id))?.farewell;
-  if (!config || !config.enabled) return "Farewell message not enabled in this server";
-
-  const targetChannel = guild.channels.cache.get(config.channel_id);
-  if (!config.embed.description) {
-    config.embed.description = "Goodbye {member:tag}!";
-  }
-
-  const embed = await buildEmbed(member, config?.embed);
-  return {
-    content: `Target Channel: ${targetChannel ? targetChannel.toString() : "Not found"}`,
-    embeds: [embed],
-  };
 };

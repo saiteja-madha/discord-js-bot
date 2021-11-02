@@ -1,13 +1,28 @@
-const { MessageReaction, User, MessageEmbed, Message, ReactionEmoji } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { getReactionRole } = require("@schemas/reactionrole-schema");
 const { sendMessage } = require("@utils/botUtils");
 const { isTranslated, logTranslation } = require("@schemas/trlogs-schema");
 const data = require("@src/data.json");
 const { getCountryLanguages } = require("country-language");
 const { translate } = require("@utils/httpUtils");
+const { timeformat } = require("../utils/miscUtils");
+
+const TRANSLATE_COOLDOWN = 120;
+
+const getTranslationCooldown = (user) => {
+  if (user.client.flagTranslateCache.has(user.id)) {
+    const remaining = (Date.now() - user.client.flagTranslateCache.get(user.id)) * 0.001;
+    if (remaining > TRANSLATE_COOLDOWN) {
+      user.client.flagTranslateCache.delete(user.id);
+      return 0;
+    }
+    return TRANSLATE_COOLDOWN - remaining;
+  }
+  return 0;
+};
 
 /**
- * @param {MessageReaction} reaction
+ * @param {import("discord.js").MessageReaction} reaction
  */
 function getRole(reaction) {
   const { message, emoji } = reaction;
@@ -19,16 +34,17 @@ function getRole(reaction) {
 }
 
 /**
- * @param {ReactionEmoji} emoji
- * @param {Message} message
- * @param {User} user
+ * @param {string} emoji
+ * @param {import("discord.js").Message} message
+ * @param {import("discord.js").User} user
  */
-async function handleFlagReaction(emoji, message, user) {
-  const l1 = emoji.name[0] + emoji.name[1];
-  const l2 = emoji.name[2] + emoji.name[3];
-  const countryCode = data.UNICODE_LETTER[l1] + data.UNICODE_LETTER[l2];
+async function handleFlagReaction(countryCode, message, user) {
+  // cooldown check
+  const remaining = getTranslationCooldown(user);
+  if (remaining > 0) {
+    return sendMessage(message.channel, `${user} You must wait ${timeformat(remaining)} before translating again!`, 5);
+  }
 
-  if (!countryCode) return;
   if (await isTranslated(message, countryCode)) return;
 
   getCountryLanguages(countryCode, async (err, languages) => {
@@ -59,14 +75,24 @@ async function handleFlagReaction(emoji, message, user) {
 
     if (translated === 0) return;
 
-    const head = `Original Message: [here](${message.url})\nSource Language: ${src}\n\n`;
+    const btnRow = new MessageActionRow().addComponents(
+      new MessageButton({
+        url: message.url,
+        label: "Original Message",
+        style: "LINK",
+      })
+    );
+
     const embed = new MessageEmbed()
       .setColor(message.client.config.EMBED_COLORS.BOT_EMBED)
-      .setAuthor("Translation")
-      .setDescription(head + desc)
+      .setAuthor(`Translation from ${src}`)
+      .setDescription(desc)
       .setFooter(`Requested by ${user.tag}`, user.displayAvatarURL());
 
-    sendMessage(message.channel, { embeds: [embed] });
+    sendMessage(message.channel, { embeds: [embed], components: [btnRow] }).then(
+      () => user.client.flagTranslateCache.set(user.id, Date.now()) // set cooldown
+    );
+
     logTranslation(message, countryCode);
   });
 }

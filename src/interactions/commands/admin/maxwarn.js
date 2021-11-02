@@ -1,7 +1,7 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
 const { getRoleByName } = require("@utils/guildUtils");
-const { maxWarnings, maxWarnAction } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 module.exports = class MaxWarn extends SlashCommand {
   constructor(client) {
@@ -64,15 +64,16 @@ module.exports = class MaxWarn extends SlashCommand {
     const sub = interaction.options.getSubcommand();
     if (!sub) return interaction.followUp("Not a valid subcommand");
 
-    //
+    const settings = await getSettings(interaction.guild);
+
     if (sub === "limit") {
-      let strikes = interaction.options.getInteger("amount");
-      await maxWarnings(interaction.guildId, strikes);
-      return interaction.followUp(`Configuration saved! Maximum warnings is set to ${strikes}`);
+      let limit = interaction.options.getInteger("amount");
+      settings.max_warn.limit = limit;
+      await settings.save();
+      return interaction.followUp(`Configuration saved! Maximum warnings is set to ${limit}`);
     }
 
-    //
-    else if (sub === "action") {
+    if (sub === "action") {
       let action = interaction.options.getString("action");
       if (action === "MUTE") {
         let mutedRole = getRoleByName(interaction.guild, "muted");
@@ -87,8 +88,9 @@ module.exports = class MaxWarn extends SlashCommand {
         }
       }
 
-      await maxWarnAction(interaction.guildId, action);
-      await interaction.followUp(`Configuration saved! Automod action is set to ${action}`);
+      settings.max_warn.action = action;
+      await settings.save();
+      return interaction.followUp(`Configuration saved! Automod action is set to ${action}`);
     }
   }
 };

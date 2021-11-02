@@ -1,6 +1,6 @@
 const { Guild, MessageEmbed } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { registerGuild } = require("@schemas/guild-schema");
+const { getSettings: registerGuild } = require("@schemas/guild-schema");
 
 /**
  * Emitted whenever the client joins a guild.

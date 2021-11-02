@@ -2,6 +2,7 @@ const { MessageReaction, PartialMessageReaction, User, PartialUser } = require("
 const { BotClient } = require("@src/structures");
 const { reactionHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/guild-schema");
+const { getCountryFromFlag } = require("@utils/miscUtils");
 
 /**
  * Emitted whenever a reaction is added to a cached message.
@@ -29,8 +30,12 @@ module.exports = async (client, reaction, user) => {
     await member.roles.add(reactionRole);
   }
 
-  // Translation by flags
-  if (emoji.name?.length === 4 && message.content && (await getSettings(message.guild)).flag_translation.enabled) {
-    reactionHandler.handleFlagReaction(emoji, message, user);
+  // Handle Reaction Emojis
+  if (!emoji.id) {
+    // Translation By Flags
+    if (message.content && (await getSettings(message.guild)).flag_translation.enabled) {
+      const countryCode = getCountryFromFlag(emoji.name);
+      if (countryCode) reactionHandler.handleFlagReaction(countryCode, message, user);
+    }
   }
 };

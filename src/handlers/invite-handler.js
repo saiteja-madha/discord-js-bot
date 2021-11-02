@@ -1,4 +1,4 @@
-const { Collection, Guild, GuildMember, User } = require("discord.js");
+const { Collection } = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
 const db = require("@schemas/invite-schema");
 
@@ -14,7 +14,7 @@ const cacheInvite = (invite, isVanity) => ({
 
 /**
  * This function caches all invites for the provided guild
- * @param {Guild} guild
+ * @param {import("discord.js").Guild} guild
  */
 async function cacheGuildInvites(guild) {
   if (!guild.me.permissions.has("MANAGE_GUILD")) return new Collection();
@@ -32,8 +32,8 @@ async function cacheGuildInvites(guild) {
 
 /**
  * Add roles to inviter based on invites count
- * @param {Guild} guild
- * @param {object} inviterData
+ * @param {import("discord.js").Guild} guild
+ * @param {Object} inviterData
  * @param {boolean} isAdded
  */
 const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
@@ -57,7 +57,7 @@ const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
 
 /**
  * Track inviter by comparing new invites with cached invites
- * @param {GuildMember} member
+ * @param {import("discord.js").GuildMember} member
  */
 async function trackJoinedMember(member) {
   const { guild } = member;
@@ -103,8 +103,8 @@ async function trackJoinedMember(member) {
 
 /**
  * Fetch inviter data from database
- * @param {Guild} guild
- * @param {User} user
+ * @param {import("discord.js").Guild} guild
+ * @param {import("discord.js").User} user
  */
 async function trackLeftMember(guild, user) {
   const settings = await getSettings(guild);

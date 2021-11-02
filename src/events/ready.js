@@ -24,17 +24,33 @@ module.exports = async (client) => {
   // Load reaction roles to cache
   await loadReactionRoles();
 
-  // initialize counter Handler
-  await counterHandler.init(client);
+  let counterGuilds, inviteGuilds;
+  counterGuilds = inviteGuilds = 0;
 
-  client.guilds.cache.forEach(async (guild) => {
+  for (const guild of client.guilds.cache.values()) {
     // register guild commands
     client.registerGuildInteractions(guild);
 
-    // cache invites for tracking enabled guilds
     const settings = await getSettings(guild);
-    if (settings.invite.tracking) inviteHandler.cacheGuildInvites(guild);
-  });
+
+    // initialize counters
+    if (settings.counters.length > 0) {
+      ++counterGuilds;
+      await counterHandler.init(guild, settings);
+    }
+
+    // cache invites for tracking enabled guilds
+    if (settings.invite.tracking) {
+      ++inviteGuilds;
+      inviteHandler.cacheGuildInvites(guild);
+    }
+  }
+
+  setInterval(() => counterHandler.updateCounterChannels(client), 10 * 60 * 60);
+
+  client.logger.log(`Guilds with invite tracking: ${inviteGuilds}`);
+  client.logger.log(`Guilds with counter channels: ${counterGuilds}`);
+  client.logger.log(`Ready to serve ${client.guilds.cache.size} guilds!`);
 };
 
 /**

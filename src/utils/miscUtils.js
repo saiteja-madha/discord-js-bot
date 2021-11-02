@@ -1,3 +1,6 @@
+const { countryCodeExists } = require("country-language");
+const data = require("@src/data.json");
+
 const LINK_PATTERN =
   /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
@@ -89,4 +92,18 @@ exports.compareArrays = (arr1, arr2) => {
     if (aCount !== bCount) return false;
   }
   return true;
+};
+
+/**
+ * Returns country code from flag emoji or null if not found
+ * @param {string} emoji
+ */
+exports.getCountryFromFlag = (emoji) => {
+  if (emoji.length === 4) {
+    const l1 = emoji[0] + emoji[1];
+    const l2 = emoji[2] + emoji[3];
+    const countryCode = data.UNICODE_LETTER[l1] + data.UNICODE_LETTER[l2];
+    if (countryCodeExists(countryCode)) return countryCode;
+  }
+  return null;
 };

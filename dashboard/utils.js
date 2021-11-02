@@ -1,13 +1,6 @@
 const { getUser } = require("@schemas/user-schema");
 const Discord = require("discord.js");
 const { getSettings } = require("@schemas/guild-schema");
-const { getConfig } = require("@schemas/greeting-schema");
-
-async function fetchGreeting(guildID, client, guilds) {
-  const guild = client.guilds.cache.get(guildID);
-  const settings = (await getConfig(guildID)) || { welcome: {}, farewell: {} };
-  return { ...guild, ...settings, ...guilds.find((g) => g.id === guild.id) };
-}
 
 async function fetchGuild(guildID, client, guilds) {
   const guild = client.guilds.cache.get(guildID);
@@ -44,4 +37,4 @@ async function fetchUser(userData, client, query) {
   return userInfos;
 }
 
-module.exports = { fetchGuild, fetchGreeting, fetchUser };
+module.exports = { fetchGuild, fetchUser };

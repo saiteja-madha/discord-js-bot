@@ -1,7 +1,7 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
 const { canSendEmbeds } = require("@utils/guildUtils");
-const { modLogChannel } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 module.exports = class ModLog extends SlashCommand {
   constructor(client) {
@@ -37,7 +37,9 @@ module.exports = class ModLog extends SlashCommand {
         );
     }
 
-    await modLogChannel(interaction.guildId, targetChannel?.id);
+    const settings = await getSettings(interaction.guild);
+    settings.modlog_channel = targetChannel?.id;
+    await settings.save();
     await interaction.followUp(`Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`);
   }
 };

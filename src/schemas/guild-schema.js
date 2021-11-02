@@ -4,7 +4,7 @@ const FixedSizeMap = require("fixedsize-map");
 
 const cache = new FixedSizeMap(CACHE_SIZE.GUILDS);
 
-const Schema = mongoose.Schema({
+const Schema = new mongoose.Schema({
   _id: {
     type: String,
     required: true,
@@ -18,6 +18,10 @@ const Schema = mongoose.Schema({
     },
     joinedAt: Date,
     leftAt: Date,
+    bots: {
+      type: Number,
+      default: 0,
+    },
   },
   ranking: {
     enabled: Boolean,
@@ -66,195 +70,73 @@ const Schema = mongoose.Schema({
     enabled: Boolean,
   },
   modlog_channel: String,
-  max_warnings: {
-    type: Number,
-    default: 5,
+  max_warn: {
+    action: {
+      type: String,
+      default: "BAN",
+    },
+    limit: {
+      type: Number,
+      default: 5,
+    },
   },
-  max_warn_action: {
-    type: String,
-    default: "BAN",
+  counters: [
+    {
+      _id: false,
+      counter_type: String,
+      name: String,
+      channel_id: String,
+      additional_data: String,
+    },
+  ],
+  welcome: {
+    enabled: Boolean,
+    channel_id: String,
+    content: String,
+    embed: {
+      description: String,
+      color: String,
+      thumbnail: Boolean,
+      footer: String,
+    },
+  },
+  farewell: {
+    enabled: Boolean,
+    channel_id: String,
+    content: String,
+    embed: {
+      description: String,
+      color: String,
+      thumbnail: Boolean,
+      footer: String,
+    },
   },
 });
 
 const Model = mongoose.model("guild", Schema);
 
-async function registerGuild(guild) {
-  if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
-  const guildData = await Model.findOneAndUpdate(
-    { _id: guild.id },
-    {
-      "data.name": guild.name,
-      "data.region": guild.preferredLocale,
-      "data.owner.id": guild.ownerId,
-      "data.owner.tag": guild.members.cache.get(guild.ownerId).user.tag,
-      "data.joinedAt": guild.joinedAt,
-    },
-    { upsert: true, new: true }
-  ).lean({ defaults: true });
-  return guildData;
-}
-
 module.exports = {
   getSettings: async (guild) => {
-    if (!guild) return;
     if (cache.contains(guild.id)) return cache.get(guild.id);
 
-    let guildData = await Model.findOne({ _id: guild.id }).lean({ defaults: true });
-    if (guildData) {
-      cache.add(guild.id, guildData);
-      return guildData;
+    let guildData = await Model.findOne({ _id: guild.id });
+    if (!guildData) {
+      guildData = new Model({
+        _id: guild.id,
+        data: {
+          name: guild.name,
+          region: guild.preferredLocale,
+          owner: {
+            id: guild.ownerId,
+            tag: guild.members.cache.get(guild.ownerId).user.tag,
+          },
+          joinedAt: guild.joinedAt,
+        },
+      });
     }
 
-    guildData = await registerGuild(guild);
+    await guildData.save();
     cache.add(guild.id, guildData);
     return guildData;
-  },
-
-  registerGuild,
-
-  updateGuildLeft: async (guild) =>
-    Model.updateOne({ _id: guild.id }, { "data.leftAt": new Date() }).then(cache.remove(guild.id)),
-
-  xpSystem: async (_id, status) => {
-    await Model.updateOne({ _id }, { "ranking.enabled": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).ranking.enabled = status;
-    }
-  },
-
-  setTicketLogChannel: async (_id, channelId) => {
-    await Model.updateOne({ _id }, { "ticket.log_channel": channelId });
-    if (cache.contains(_id)) {
-      cache.get(_id).ticket.log_channel = channelId;
-    }
-  },
-
-  setTicketLimit: async (_id, limit) => {
-    await Model.updateOne({ _id }, { "ticket.limit": limit });
-    if (cache.contains(_id)) {
-      cache.get(_id).ticket.limit = limit;
-    }
-  },
-
-  maxStrikes: async (_id, strikes) => {
-    await Model.updateOne({ _id }, { "automod.strikes": strikes });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.strikes = strikes;
-    }
-  },
-
-  automodAction: async (_id, action) => {
-    await Model.updateOne({ _id }, { "automod.action": action });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.action = action;
-    }
-  },
-
-  automodDebug: async (_id, status) => {
-    await Model.updateOne({ _id }, { "automod.debug": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.debug = status;
-    }
-  },
-
-  antiLinks: async (_id, status) => {
-    await Model.updateOne({ _id }, { "automod.anti_links": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.anti_links = status;
-    }
-  },
-
-  antiScam: async (_id, status) => {
-    await Model.updateOne({ _id }, { "automod.anti_scam": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.anti_scam = status;
-    }
-  },
-
-  antiInvites: async (_id, status) => {
-    await Model.updateOne({ _id }, { "automod.anti_invites": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.anti_invites = status;
-    }
-  },
-
-  antiGhostPing: async (_id, status) => {
-    await Model.updateOne({ _id }, { "automod.anti_ghostping": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.anti_ghostping = status;
-    }
-  },
-
-  maxMentions: async (_id, amount) => {
-    await Model.updateOne({ _id }, { "automod.max_mentions": amount });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.max_mentions = amount;
-    }
-  },
-
-  maxRoleMentions: async (_id, amount) => {
-    await Model.updateOne({ _id }, { "automod.max_role_mentions": amount });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.max_role_mentions = amount;
-    }
-  },
-
-  maxLines: async (_id, amount) => {
-    await Model.updateOne({ _id }, { "automod.max_lines": amount });
-    if (cache.contains(_id)) {
-      cache.get(_id).automod.max_lines = amount;
-    }
-  },
-
-  inviteTracking: async (_id, status) => {
-    await Model.updateOne({ _id }, { "invite.tracking": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).invite.tracking = status;
-    }
-  },
-
-  addInviteRank: async (_id, roleId, invites) => {
-    const toPush = {
-      _id: roleId,
-      invites,
-    };
-
-    await Model.updateOne({ _id }, { $push: { "invite.ranks": toPush } });
-    if (cache.contains(_id)) {
-      cache.get(_id).invite.ranks.push(toPush);
-    }
-  },
-
-  removeInviteRank: async (_id, roleId) => {
-    await Model.updateOne({ _id }, { $pull: { "invite.ranks": { _id: roleId } } });
-    cache.remove(_id);
-  },
-
-  flagTranslation: async (_id, status) => {
-    await Model.updateOne({ _id }, { "flag_translation.enabled": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).flag_translation.enabled = status;
-    }
-  },
-
-  modLogChannel: async (_id, channelId) => {
-    await Model.updateOne({ _id }, { modlog_channel: channelId });
-    if (cache.contains(_id)) {
-      cache.get(_id).modlog_channel = channelId;
-    }
-  },
-
-  maxWarnings: async (_id, amount) => {
-    await Model.updateOne({ _id }, { max_warnings: amount });
-    if (cache.contains(_id)) {
-      cache.get(_id).max_warnings = amount;
-    }
-  },
-
-  maxWarnAction: async (_id, action) => {
-    await Model.updateOne({ _id }, { max_warn_action: action });
-    if (cache.contains(_id)) {
-      cache.get(_id).max_warn_action = action;
-    }
   },
 };

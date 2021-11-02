@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
-const { inviteTracking, getSettings, removeInviteRank, addInviteRank } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/guild-schema");
 const { cacheGuildInvites } = require("@src/handlers/invite-handler");
 
 module.exports = class InviteSystem extends SlashCommand {
@@ -74,6 +74,7 @@ module.exports = class InviteSystem extends SlashCommand {
    */
   async run(interaction) {
     const sub = interaction.options.getSubcommand();
+    const settings = await getSettings(interaction.guild);
 
     // Invite Tracker
     if (sub === "enabled") {
@@ -103,12 +104,13 @@ module.exports = class InviteSystem extends SlashCommand {
         this.client.inviteCache.delete(interaction.guildId);
       }
 
-      await inviteTracking(interaction.guildId, status);
-      await interaction.followUp(`Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`);
+      settings.invite.tracking = status;
+      await settings.save();
+      return interaction.followUp(`Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`);
     }
 
     // ranks add
-    else if (sub === "add") {
+    if (sub === "add") {
       const settings = await getSettings(interaction.guild);
       const role = interaction.options.getRole("role");
       const invites = interaction.options.getInteger("invites");
@@ -116,23 +118,28 @@ module.exports = class InviteSystem extends SlashCommand {
       const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
       let msg = "";
       if (exists) {
-        await removeInviteRank(interaction.guildId, role.id);
+        exists.invites = invites;
         msg += "Previous configuration found for this role. Overwriting data\n";
       }
 
-      await addInviteRank(interaction.guildId, role.id, invites);
+      settings.invite.ranks.push({ _id: role.id, invites });
+      await settings.save();
       return interaction.followUp(`${msg}Success! Configuration saved.`);
     }
 
     // ranks remove
-    else if (sub === "remove") {
+    if (sub === "remove") {
       const settings = await getSettings(interaction.guild);
       const role = interaction.options.getRole("role");
 
       const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
       if (!exists) return interaction.followUp("No previous invite rank is configured found for this role");
 
-      await removeInviteRank(interaction.guildId, role.id);
+      // delete element from array
+      const i = settings.invite.ranks.findIndex((obj) => obj._id === role.id);
+      if (i > -1) settings.invite.ranks.splice(i, 1);
+
+      await settings.save();
       return interaction.followUp("Success! Configuration saved.");
     }
   }

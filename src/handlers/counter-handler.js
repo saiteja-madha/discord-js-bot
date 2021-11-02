@@ -1,7 +1,6 @@
 const { BotClient } = require("@src/structures");
 const { setVoiceChannelName, getMemberStats } = require("@utils/guildUtils");
-const { getCounterGuilds, updateBotCount } = require("@schemas/counter-schema");
-const { getConfig } = require("@schemas/counter-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 /**
  * Updates the counter channel for all the guildId's present in the update queue
@@ -13,33 +12,23 @@ async function updateCounterChannels(client) {
     if (!guild) return;
 
     try {
-      const config = await getConfig(guild.id);
-      if (!config) return;
+      const settings = await getSettings(guild);
 
       const all = guild.memberCount;
-      const bots = config.bot_count;
+      const bots = settings.data.bots;
       const members = all - bots;
 
-      if (config.tc_channel) {
-        const vc = guild.channels.cache.get(config.tc_channel);
-        if (vc) {
-          const tc = `${config.tc_name} : ${all}`;
-          setVoiceChannelName(vc, tc);
-        }
-      }
-      if (config.mc_channel) {
-        const vc = guild.channels.cache.get(config.mc_channel);
-        if (vc) {
-          const mc = `${config.mc_name} : ${members}`;
-          setVoiceChannelName(vc, mc);
-        }
-      }
-      if (config.bc_channel) {
-        const vc = guild.channels.cache.get(config.bc_channel);
-        if (vc) {
-          const bc = `${config.bc_name} : ${bots}`;
-          setVoiceChannelName(vc, bc);
-        }
+      for (const config of settings.counters) {
+        const chId = config.channel_id;
+        const vc = guild.channels.cache.get(chId);
+        if (!vc) continue;
+
+        let channelName;
+        if (config.counter_type === "TOTAL") channelName = `${config.name} : ${all}`;
+        if (config.counter_type === "MEMBERS") channelName = `${config.name} : ${members}`;
+        if (config.counter_type === "BOTS") channelName = `${config.name} : ${bots}`;
+
+        setVoiceChannelName(vc, channelName);
       }
     } catch (ex) {
       client.logger.error(`Error updating counter channels for guildId: ${guildId}`, ex);
@@ -52,32 +41,20 @@ async function updateCounterChannels(client) {
 }
 
 /**
- * Initialize guilds with counter channel enabled
- * @param {BotClient} client
+ * Initialize guild counters at startup
+ * @param {import("discord.js").Guild} guild
+ * @param {Object} settings
  */
-async function init(client) {
-  const data = await getCounterGuilds();
-  let count = 0;
-
-  data.forEach(async (doc) => {
-    const guildId = doc._id;
-    if (!client.guilds.cache.has(guildId)) return;
-
-    const guild = client.guilds.cache.get(guildId);
+async function init(guild, settings) {
+  if (settings.counters.find((doc) => ["MEMBERS", "BOTS"].includes(doc.counter_type))) {
     const stats = await getMemberStats(guild);
+    settings.data.bots = stats[1]; // update bot count in database
+    await settings.save();
+  }
 
-    // update bot count in database
-    await updateBotCount(guild.id, stats[1], false);
-
-    // schedule for update
-    if (!client.counterUpdateQueue.includes(guildId)) client.counterUpdateQueue.push(guildId);
-    count += 1;
-  });
-
-  client.logger.log(`GUILDS with counter channels: ${count}`);
-
-  // run the scheduler every 10 minutes
-  setInterval(() => updateCounterChannels(client), 10 * 60 * 60);
+  // schedule for update
+  if (!guild.client.counterUpdateQueue.includes(guild.id)) guild.client.counterUpdateQueue.push(guild.id);
+  return true;
 }
 
-module.exports = { init };
+module.exports = { init, updateCounterChannels };

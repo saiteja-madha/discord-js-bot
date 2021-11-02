@@ -1,7 +1,7 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
 const { getMemberStats } = require("@utils/guildUtils");
-const db = require("@schemas/counter-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 module.exports = class Counter extends SlashCommand {
   constructor(client) {
@@ -11,6 +11,7 @@ module.exports = class Counter extends SlashCommand {
       enabled: true,
       ephemeral: true,
       userPermissions: ["MANAGE_GUILD"],
+      botPermissions: ["MANAGE_CHANNELS"],
       category: "ADMIN",
       options: [
         {
@@ -21,15 +22,15 @@ module.exports = class Counter extends SlashCommand {
           choices: [
             {
               name: "all",
-              value: "total user count",
+              value: "ALL",
             },
             {
               name: "members",
-              value: "guild members count",
+              value: "MEMBERS",
             },
             {
               name: "bots",
-              value: "guild bots count",
+              value: "BOTS",
             },
           ],
         },
@@ -49,12 +50,14 @@ module.exports = class Counter extends SlashCommand {
   async run(interaction) {
     const type = interaction.options.getString("type");
     const name = interaction.options.getString("name");
-    let channelName = "";
+    let channelName = name;
+
+    const settings = await getSettings(interaction.guild);
 
     const stats = await getMemberStats(interaction.guild);
-    if (type === "all") channelName += ` : ${stats[0]}`;
-    else if (type === "members") channelName += ` : ${stats[2]}`;
-    else if (type === "bots") channelName += ` : ${stats[1]}`;
+    if (type === "ALL") channelName += ` : ${stats[0]}`;
+    else if (type === "MEMBERS") channelName += ` : ${stats[2]}`;
+    else if (type === "BOTS") channelName += ` : ${stats[1]}`;
 
     const vc = await interaction.guild.channels.create(channelName, {
       type: "GUILD_VOICE",
@@ -65,16 +68,25 @@ module.exports = class Counter extends SlashCommand {
         },
         {
           id: interaction.guild.me.roles.highest.id,
-          allow: ["VIEW_CHANNEL", "MANAGE_CHANNELS", "MANAGE_ROLES"],
+          allow: ["VIEW_CHANNEL", "MANAGE_CHANNELS"],
         },
       ],
     });
 
-    if (type === "all") await db.setTotalCountChannel(interaction.guildId, vc.id, name);
-    if (type === "members") await db.setMemberCountChannel(interaction.guildId, vc.id, name);
-    if (type === "bots") await db.setBotCountChannel(interaction.guildId, vc.id, name);
+    const exists = settings.counters.find((v) => v.counter_type === type);
+    if (exists) {
+      exists.name = name;
+      exists.channel_id = vc.id;
+    } else {
+      settings.counters.push({
+        counter_type: type,
+        channel_id: vc.id,
+        name,
+      });
+    }
 
-    await db.updateBotCount(interaction.guildId, stats[1], false);
+    settings.data.bots = stats[1];
+    await settings.save();
     await interaction.followUp("Configuration saved! Counter channel created");
   }
 };

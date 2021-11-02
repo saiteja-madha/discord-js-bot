@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
-const { xpSystem } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 module.exports = class XPSystem extends SlashCommand {
   constructor(client) {
@@ -27,7 +27,11 @@ module.exports = class XPSystem extends SlashCommand {
    */
   async run(interaction) {
     const status = interaction.options.getBoolean("enabled");
-    await xpSystem(interaction.guildId, status);
+
+    const settings = await getSettings(interaction.guild);
+    settings.ranking.enabled = status;
+    await settings.save();
+
     await interaction.followUp(`Configuration saved! XP System is now ${status ? "enabled" : "disabled"}`);
   }
 };

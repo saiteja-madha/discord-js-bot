@@ -1,6 +1,6 @@
 const { Guild, MessageEmbed } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { updateGuildLeft } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 /**
  * Emitted whenever a guild kicks the client or the guild is deleted/left.
@@ -10,7 +10,8 @@ const { updateGuildLeft } = require("@schemas/guild-schema");
 module.exports = async (client, guild) => {
   if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
   client.logger.log(`Guild Left: ${guild.name} Members: ${guild.memberCount}`);
-  await updateGuildLeft(guild);
+  const { data } = await getSettings(guild);
+  data.leftAt = new Date();
 
   if (!client.joinLeaveWebhook) return;
 

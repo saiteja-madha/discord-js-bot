@@ -1,9 +1,9 @@
 const { CommandInteraction, MessageEmbed } = require("discord.js");
 const { SlashCommand } = require("@src/structures");
-const db = require("@schemas/guild-schema");
 const { getRoleByName } = require("@utils/guildUtils");
 const { EMBED_COLORS } = require("@root/config");
-const Ascii = require("ascii-table");
+const { getSettings } = require("@schemas/guild-schema");
+const { table } = require("table");
 
 module.exports = class Automod extends SlashCommand {
   constructor(client) {
@@ -232,21 +232,21 @@ module.exports = class Automod extends SlashCommand {
     const sub = interaction.options.getSubcommand();
     if (!sub) return interaction.followUp("Not a valid subcommand");
 
-    //
+    const settings = await getSettings(interaction.guild);
+
     if (sub === "status") {
-      const messagePayload = await automodStatus(interaction.guild);
-      await interaction.followUp(messagePayload);
+      const messagePayload = await automodStatus(interaction.guild, settings);
+      return interaction.followUp(messagePayload);
     }
 
-    //
-    else if (sub === "strikes") {
+    if (sub === "strikes") {
       let strikes = interaction.options.getInteger("amount");
-      await db.maxStrikes(interaction.guildId, strikes);
-      await interaction.followUp(`Configuration saved! Maximum strikes is set to ${strikes}`);
+      settings.automod.strikes = strikes;
+      await settings.save();
+      return interaction.followUp(`Configuration saved! Maximum strikes is set to ${strikes}`);
     }
 
-    //
-    else if (sub === "action") {
+    if (sub === "action") {
       let action = interaction.options.getString("action");
       if (action === "MUTE") {
         let mutedRole = getRoleByName(interaction.guild, "muted");
@@ -261,29 +261,30 @@ module.exports = class Automod extends SlashCommand {
         }
       }
 
-      await db.automodAction(interaction.guildId, action);
-      interaction.followUp(`Configuration saved! Automod action is set to ${action}`);
+      settings.automod.action = action;
+      await settings.save();
+      return interaction.followUp(`Configuration saved! Automod action is set to ${action}`);
     }
 
-    //
-    else if (sub === "debug") {
+    if (sub === "debug") {
       let status = interaction.options.getString("status") === "ON" ? true : false;
-      await db.automodDebug(interaction.guildId, status);
+      settings.automod.debug = status;
+      await settings.save();
       interaction.followUp(`Configuration saved! Automod debug is now ${status ? "enabled" : "disabled"}`);
     }
 
-    //
-    else if (sub === "antighostping") {
+    if (sub === "antighostping") {
       let status = interaction.options.getString("status") === "ON" ? true : false;
-      await db.antiGhostPing(interaction.guildId, status);
+      settings.automod.anti_ghostping = status;
+      await settings.save();
       interaction.followUp(`Configuration saved! Antighost ping is now ${status ? "enabled" : "disabled"}`);
     }
 
-    //
-    else if (sub === "antiinvites") {
+    if (sub === "antiinvites") {
       let status = interaction.options.getString("status") === "ON" ? true : false;
-      await db.antiInvites(interaction.guildId, status);
-      interaction.followUp(
+      settings.automod.anti_invites = status;
+      await settings.save();
+      return interaction.followUp(
         `Messages ${
           status
             ? "with discord invites will now be automatically deleted"
@@ -292,27 +293,27 @@ module.exports = class Automod extends SlashCommand {
       );
     }
 
-    //
-    else if (sub === "antilinks") {
+    if (sub === "antilinks") {
       let status = interaction.options.getString("status") === "ON" ? true : false;
-      await db.antiLinks(interaction.guildId, status);
-      interaction.followUp(
+      settings.automod.anti_links = status;
+      await settings.save();
+      return interaction.followUp(
         `Messages ${status ? "with links will now be automatically deleted" : "will not be filtered for links now"}`
       );
     }
 
-    //
-    else if (sub === "antiscam") {
+    if (sub === "antiscam") {
       let status = interaction.options.getString("status") === "ON" ? true : false;
-      await db.antiScam(interaction.guildId, status);
-      interaction.followUp(`Antiscam detection is now ${status ? "enabled" : "disabled"}`);
+      settings.automod.anti_scam = status;
+      await settings.save();
+      return interaction.followUp(`Antiscam detection is now ${status ? "enabled" : "disabled"}`);
     }
 
-    //
-    else if (sub === "maxlines") {
+    if (sub === "maxlines") {
       const input = interaction.options.getInteger("amount");
-      await db.maxLines(interaction.guildId, input);
-      interaction.followUp(
+      settings.automod.max_lines = input;
+      await settings.save();
+      return interaction.followUp(
         `${
           input === 0
             ? "Maximum line limit is disabled"
@@ -321,11 +322,11 @@ module.exports = class Automod extends SlashCommand {
       );
     }
 
-    //
-    else if (sub === "maxmentions") {
+    if (sub === "maxmentions") {
       const input = interaction.options.getInteger("amount");
-      await db.maxMentions(interaction.guildId, input);
-      interaction.followUp(
+      settings.automod.max_mentions = input;
+      await settings.save();
+      return interaction.followUp(
         `${
           input === 0
             ? "Maximum user mentions limit is disabled"
@@ -334,11 +335,11 @@ module.exports = class Automod extends SlashCommand {
       );
     }
 
-    //
-    else if (sub === "maxrolementions") {
+    if (sub === "maxrolementions") {
       const input = interaction.options.getInteger("amount");
-      await db.maxMentions(interaction.guildId, input);
-      interaction.followUp(
+      settings.automod.max_role_mentions = input;
+      await settings.save();
+      return interaction.followUp(
         `${
           input === 0
             ? "Maximum role mentions limit is disabled"
@@ -349,28 +350,42 @@ module.exports = class Automod extends SlashCommand {
   }
 };
 
-const automodStatus = async (guild) => {
-  const settings = await db.getSettings(guild);
+const automodStatus = async (guild, settings) => {
   const { automod } = settings;
+  const row = [];
 
-  const table = new Ascii("").setHeading("Feature", "Status");
   const logChannel = settings.modlog_channel
     ? guild.channels.cache.get(settings.modlog_channel).toString()
     : "Not Configured";
 
-  table
-    .addRow("Max Lines", automod.max_lines || "NA")
-    .addRow("Max Mentions", automod.max_mentions || "NA")
-    .addRow("Max Role Mentions", automod.max_role_mentions || "NA")
-    .addRow("AntiLinks", automod.anti_links ? "✓" : "✕")
-    .addRow("AntiScam", automod.anti_scam ? "✓" : "✕")
-    .addRow("AntiInvites", automod.anti_invites ? "✓" : "✕")
-    .addRow("AntiGhostPing", automod.anti_ghostping ? "✓" : "✕");
+  row.push(["Max Lines", automod.max_lines || "NA"]);
+  row.push(["Max Mentions", automod.max_mentions || "NA"]);
+  row.push(["Max Role Mentions", automod.max_role_mentions || "NA"]);
+  row.push(["Anti-Links", automod.anti_links ? "✓" : "✕"]);
+  row.push(["Anti-Invites", automod.anti_invites ? "✓" : "✕"]);
+  row.push(["Anti-Scam", automod.anti_scam ? "✓" : "✕"]);
+  row.push(["Anti-Ghostping", automod.anti_ghostping ? "✓" : "✕"]);
+
+  const asciiTable = table(row, {
+    singleLine: true,
+    header: {
+      content: "Automod Configuration",
+      alignment: "center",
+    },
+    columns: [
+      {},
+      {
+        alignment: "center",
+      },
+    ],
+  });
 
   const embed = new MessageEmbed()
-    .setAuthor("Automod Configuration")
-    .setColor(EMBED_COLORS.TRANSPARENT)
-    .setDescription("```" + table.toString() + "```");
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription("```" + asciiTable + "```")
+    .addField("Log Channel", logChannel, true)
+    .addField("Max Strikes", automod.strikes.toString(), true)
+    .addField("Action", automod.action, true);
 
-  return { content: `**Log Channel:** ${logChannel}`, embeds: [embed] };
+  return { embeds: [embed] };
 };

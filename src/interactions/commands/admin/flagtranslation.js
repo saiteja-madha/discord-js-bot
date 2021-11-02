@@ -1,6 +1,6 @@
 const { SlashCommand } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
-const { flagTranslation } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/guild-schema");
 
 module.exports = class FlagTranslation extends SlashCommand {
   constructor(client) {
@@ -27,7 +27,11 @@ module.exports = class FlagTranslation extends SlashCommand {
    */
   async run(interaction) {
     const status = interaction.options.getBoolean("enabled");
-    await flagTranslation(interaction.guildId, status);
+    const settings = await getSettings(interaction.guild);
+
+    settings.flag_translation.enabled = status;
+    await settings.save();
+
     await interaction.followUp(`Configuration saved! Flag translation is now ${status ? "enabled" : "disabled"}`);
   }
 };
