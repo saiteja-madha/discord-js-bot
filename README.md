@@ -6,6 +6,10 @@
 
 > Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=752922609733337190&permissions=397602323830&scope=bot%20applications.commands)
 
+## Upcoming Changes
+v4 is a complete rewrite to slash commands and bug fixes<br>
+You can track progress [here](https://github.com/saiteja-madha/discord-js-bot/projects/10)
+
 ## Requirements
 
 - Node.js 16.6.0 or newer
