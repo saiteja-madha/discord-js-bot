@@ -67,8 +67,8 @@ module.exports = class Counter extends SlashCommand {
           deny: ["CONNECT"],
         },
         {
-          id: interaction.guild.me.roles.highest.id,
-          allow: ["VIEW_CHANNEL", "MANAGE_CHANNELS"],
+          id: interaction.guild.me.id,
+          allow: ["VIEW_CHANNEL", "MANAGE_CHANNELS", "CONNECT"],
         },
       ],
     });

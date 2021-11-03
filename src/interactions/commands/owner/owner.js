@@ -8,6 +8,7 @@ module.exports = class OwnerCommands extends SlashCommand {
       name: "owner",
       description: "owner commands",
       enabled: true,
+      ephemeral: true,
       category: "OWNER",
       options: [
         {

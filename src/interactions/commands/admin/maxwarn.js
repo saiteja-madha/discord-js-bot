@@ -88,6 +88,18 @@ module.exports = class MaxWarn extends SlashCommand {
         }
       }
 
+      if (action === "KICK") {
+        if (!interaction.guild.me.permissions.has("KICK_MEMBERS")) {
+          return interaction.followUp("I do not have permission to kick members");
+        }
+      }
+
+      if (action === "BAN") {
+        if (!interaction.guild.me.permissions.has("BAN_MEMBERS")) {
+          return interaction.followUp("I do not have permission to ban members");
+        }
+      }
+
       settings.max_warn.action = action;
       await settings.save();
       return interaction.followUp(`Configuration saved! Automod action is set to ${action}`);

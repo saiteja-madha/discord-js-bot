@@ -75,6 +75,7 @@ module.exports = class NSFW extends SlashCommand {
     const collector = interaction.channel.createMessageComponentCollector({
       filter: (reactor) => reactor.user.id === interaction.user.id,
       time: this.cooldown * 1000,
+      max: 3,
       dispose: true,
     });
 

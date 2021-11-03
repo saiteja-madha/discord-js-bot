@@ -1,5 +1,5 @@
 /**
- *
+ * Emitted when a track has an error during playback.
  * @param {import("@src/structures").BotClient} client
  * @param {import("erela.js").Player} player
  * @param {import("erela.js").Track} track
@@ -7,8 +7,5 @@
  */
 module.exports = (client, player, track, ex) => {
   client.logger.error(`Track Error ${ex.error}`, ex.exception);
-  client.logger.debug({
-    guild_id: player.guild,
-    track,
-  });
+  client.logger.debug(`[${player.guild}] Track Error: ${JSON.stringify(track)}`);
 };

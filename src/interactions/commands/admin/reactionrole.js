@@ -1,8 +1,8 @@
 const { SlashCommand } = require("@src/structures");
-const { CommandInteraction, Util, BaseGuildTextChannel } = require("discord.js");
-const { addReactionRole, removeReactionRole } = require("@schemas/reactionrole-schema");
+const { CommandInteraction, Util } = require("discord.js");
+const { addReactionRole, removeReactionRole, getReactionRoles } = require("@schemas/message-schema");
 
-const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
+const channelPerms = ["READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
 
 module.exports = class ReactionRole extends SlashCommand {
   constructor(client) {
@@ -41,7 +41,7 @@ module.exports = class ReactionRole extends SlashCommand {
             {
               name: "role",
               description: "role to be given for the selected emoji",
-              type: "MENTIONABLE",
+              type: "ROLE",
               required: true,
             },
           ],
@@ -75,84 +75,77 @@ module.exports = class ReactionRole extends SlashCommand {
    */
   async run(interaction) {
     const sub = interaction.options.getSubcommand();
-    let response;
 
-    // addrr
+    // add reaction role
     if (sub === "add") {
       const targetChannel = interaction.options.getChannel("channel");
-      const messageId = interaction.options.getString("messageId");
+      const messageId = interaction.options.getString("message_id");
       const reaction = interaction.options.getString("emoji");
-      const role = interaction.options.getMentionable("role");
-      response = await this.addrr(targetChannel, messageId, reaction, role);
+      const role = interaction.options.getRole("role");
+
+      if (!targetChannel.permissionsFor(interaction.guild.me).has(channelPerms)) {
+        return interaction.followUp(
+          `You need the following permissions in ${targetChannel.toString()}\n${this.parsePermissions(channelPerms)}`
+        );
+      }
+
+      let targetMessage;
+      try {
+        targetMessage = await targetChannel.messages.fetch(messageId);
+      } catch (ex) {
+        return interaction.followUp("Could not fetch message. Did you provide a valid messageId?");
+      }
+
+      const custom = Util.parseEmoji(reaction);
+      if (custom.id && !targetChannel.guild.emojis.cache.has(custom.id)) {
+        return interaction.followUp("This emoji does not belong to this server");
+      }
+
+      const emoji = custom.id ? custom.id : custom.name;
+
+      let reply = "";
+      const previousRoles = getReactionRoles(interaction.guildId, targetChannel.id, targetMessage.id);
+      if (previousRoles.length > 0) {
+        const found = previousRoles.find((rr) => rr.emote === emoji);
+        if (found) reply = "A role is already configured for this emoji. Overwriting data...\n";
+      }
+
+      try {
+        await targetMessage.react(emoji);
+      } catch (ex) {
+        return interaction.followUp(`Oops! Failed to react. Is this a valid emoji: ${reaction} ?`);
+      }
+
+      await addReactionRole(interaction.guildId, targetChannel.id, targetMessage.id, emoji, role.id);
+      return interaction.followUp((reply += "Done! Configuration saved"));
     }
 
-    // removerr
+    // remove reaction role
     else if (sub === "remove") {
       const targetChannel = interaction.options.getChannel("channel");
-      const messageId = interaction.options.getString("messageId");
-      response = await this.removerr(targetChannel, messageId);
+      const messageId = interaction.options.getString("message_id");
+
+      if (!targetChannel.permissionsFor(interaction.guild.me).has()) {
+        return interaction.followUp(
+          `You need the following permissions in ${targetChannel.toString()}\n${this.parsePermissions(channelPerms)}`
+        );
+      }
+
+      let targetMessage;
+      try {
+        targetMessage = await targetChannel.messages.fetch(messageId);
+      } catch (ex) {
+        return interaction.followUp("Could not fetch message. Did you provide a valid messageId?");
+      }
+
+      try {
+        await removeReactionRole(interaction.guildId, targetChannel.id, targetMessage.id);
+        targetMessage.reactions?.removeAll();
+      } catch (ex) {
+        return interaction.followUp("Oops! An unexpected error occurred. Try again later");
+      }
+
+      return interaction.followUp("Done! Configuration updated");
     }
-
-    await interaction.followUp(response);
-  }
-
-  /**
-   * @param {BaseGuildTextChannel} channel
-   * @param {string} messageId
-   * @param {string} emoji
-   * @param {string} role
-   */
-  async addrr(channel, messageId, reaction, role) {
-    if (!channel.permissionsFor(channel.guild.me).has()) {
-      return `You need the following permissions in ${channel.toString()}\n${this.parsePermissions(channelPerms)}`;
-    }
-
-    let targetMessage;
-    try {
-      targetMessage = await channel.messages.fetch(messageId);
-    } catch (ex) {
-      return "Could not fetch message. Did you provide a valid messageId?";
-    }
-
-    const custom = Util.parseEmoji(reaction);
-    if (custom.id && !channel.guild.emojis.cache.has(custom.id)) {
-      return "This emoji does not belong to this server";
-    }
-
-    const emoji = custom.id ? custom.id : custom.name;
-    try {
-      await targetMessage.react(emoji);
-    } catch (ex) {
-      return `Oops! Failed to react. Is this a valid emoji: ${reaction} ?`;
-    }
-
-    await addReactionRole(channel.guildId, channel.id, targetMessage.id, emoji, role.id);
-    return "Done! Configuration saved";
-  }
-
-  /**
-   * @param {BaseGuildTextChannel} channel
-   * @param {string} messageId
-   */
-  async removerr(channel, messageId) {
-    if (!channel.permissionsFor(channel.guild.me).has()) {
-      return `You need the following permissions in ${channel.toString()}\n${this.parsePermissions(channelPerms)}`;
-    }
-
-    let targetMessage;
-    try {
-      targetMessage = await channel.messages.fetch(messageId);
-    } catch (ex) {
-      return "Could not fetch message. Did you provide a valid messageId?";
-    }
-
-    try {
-      await removeReactionRole(channel.guildId, channel.id, targetMessage.id);
-      targetMessage.reactions?.removeAll();
-    } catch (ex) {
-      return "Oops! An unexpected error occurred. Try again later";
-    }
-
-    return "Done! Configuration updated";
   }
 };

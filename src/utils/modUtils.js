@@ -176,12 +176,12 @@ async function warnTarget(issuer, target, reason) {
     const settings = await getSettings(guild);
 
     // check if max warnings are reached
-    if (profile.warnings > settings.max_warnings) {
-      await addModAction(guild.me, target, "Max warnings reached", settings.max_warn_action); // moderate
+    if (profile.warnings >= settings.max_warn.limit) {
+      await addModAction(guild.me, target, "Max warnings reached", settings.max_warn.action); // moderate
       await addWarnings(guild.id, target.id, -profile.warnings); // reset warnings
     }
 
-    return `${target.user.tag} is warned! ${profile.warnings}/${settings.max_warnings} warnings`;
+    return `${target.user.tag} is warned! ${profile.warnings}/${settings.max_warn.limit} warnings`;
   } catch (ex) {
     error("warnTarget", ex);
     return `Failed to warn ${target.user.tag}`;

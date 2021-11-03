@@ -1,6 +1,6 @@
 const { BotClient } = require("@src/structures");
 const { counterHandler, inviteHandler } = require("@src/handlers");
-const { loadReactionRoles } = require("@schemas/reactionrole-schema");
+const { cacheReactionRoles } = require("@schemas/message-schema");
 const { getSettings } = require("@schemas/guild-schema");
 
 /**
@@ -22,7 +22,7 @@ module.exports = async (client) => {
   await client.registerGlobalInteractions();
 
   // Load reaction roles to cache
-  await loadReactionRoles();
+  await cacheReactionRoles(client);
 
   let counterGuilds, inviteGuilds;
   counterGuilds = inviteGuilds = 0;
@@ -46,7 +46,7 @@ module.exports = async (client) => {
     }
   }
 
-  setInterval(() => counterHandler.updateCounterChannels(client), 10 * 60 * 60);
+  setInterval(() => counterHandler.updateCounterChannels(client), 1 * 60 * 60);
 
   client.logger.log(`Guilds with invite tracking: ${inviteGuilds}`);
   client.logger.log(`Guilds with counter channels: ${counterGuilds}`);

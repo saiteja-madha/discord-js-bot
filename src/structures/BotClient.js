@@ -107,7 +107,7 @@ module.exports = class BotClient extends Client {
         success += 1;
       } catch (ex) {
         failed += 1;
-        this.logger.error("readEvent", ex);
+        this.logger.error(`loadEvent - ${file}`, ex);
       }
     });
 

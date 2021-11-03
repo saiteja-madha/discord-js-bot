@@ -42,7 +42,7 @@ module.exports = class BaseContext {
       const remaining = this.getRemainingCooldown(interaction.user.id);
       if (remaining > 0) {
         return interaction.reply({
-          content: `You are on cooldown. You can use the command after ${timeformat(remaining)}`,
+          content: `You are on cooldown. You can again use the command after ${timeformat(remaining)}`,
           ephemeral: true,
         });
       }

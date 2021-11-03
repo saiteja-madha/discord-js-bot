@@ -57,6 +57,7 @@ async function performAutomod(message, settings) {
     const count = content.split("\n").length;
     if (count > automod.max_lines) {
       embed.addField("New Lines", `${count}/${automod.max_lines}`, true);
+      shouldDelete = true;
       strikesTotal += Math.ceil((count - automod.max_lines) / automod.max_lines);
     }
   }
@@ -135,7 +136,7 @@ async function performAutomod(message, settings) {
       .setDescription(
         `You have received ${strikesTotal} strikes!\n\n` +
           `**Guild:** ${message.guild.name}\n` +
-          `**Total Strikes:** ${profile.strikes}/${automod.strikes}`
+          `**Total Strikes:** ${profile.strikes} out of ${automod.strikes}`
       );
     embed.fields.forEach((field) => strikeEmbed.addField(field.name, field.value, true));
     safeDM(message.author, { embeds: [strikeEmbed] });

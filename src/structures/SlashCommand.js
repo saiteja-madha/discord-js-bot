@@ -98,7 +98,7 @@ module.exports = class SlashCommand {
       const remaining = this.getRemainingCooldown(interaction.user.id);
       if (remaining > 0) {
         return interaction.reply({
-          content: `You are on cooldown. You can use the command in \`${timeformat(remaining)}\``,
+          content: `You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``,
           ephemeral: true,
         });
       }

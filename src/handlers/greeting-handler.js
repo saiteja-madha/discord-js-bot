@@ -60,7 +60,9 @@ const buildGreeting = async (member, type, config, inviterData) => {
   // set default message
   if (!config.content && !config.embed.description && !config.embed.footer) {
     content =
-      type === "WELCOME" ? `Welcome to the server, ${member.displayName}` : `${member.displayName} has left the server`;
+      type === "WELCOME"
+        ? `Welcome to the server, ${member.displayName} 🎉`
+        : `${member.displayName} has left the server 👋`;
     return { content };
   }
 

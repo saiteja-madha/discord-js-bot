@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 
-const ReqString = {
-  type: String,
-  required: true,
-};
-
 const Schema = mongoose.Schema({
-  id: ReqString,
+  _id: {
+    type: String,
+    required: true,
+  },
   logged: Boolean,
   coins: {
     type: Number,
@@ -42,24 +40,24 @@ const upsert = { upsert: true };
 const upsertNew = { upsert: true, new: true };
 
 module.exports = {
-  getUser: async (id) => Model.findOne({ id }).lean({ defaults: true }),
+  getUser: async (_id) => Model.findOne({ _id }).lean({ defaults: true }),
 
-  loggedIn: async (id, status) => Model.updateOne({ id }, { logged: status }, upsert),
+  loggedIn: async (_id, status) => Model.updateOne({ _id }, { logged: status }, upsert),
 
-  increaseReputation: async (id, targetId) => {
+  increaseReputation: async (_id, targetId) => {
     await Model.updateOne(
-      { id },
+      { _id },
       { $inc: { "reputation.given": 1 }, $set: { "reputation.timestamp": new Date() } },
       upsert
     );
-    await Model.updateOne({ id: targetId }, { $inc: { "reputation.received": 1 } }, upsert);
+    await Model.updateOne({ _id: targetId }, { $inc: { "reputation.received": 1 } }, upsert);
   },
 
-  addCoins: async (id, coins) => Model.findOneAndUpdate({ id }, { $inc: { coins } }, upsertNew),
+  addCoins: async (_id, coins) => Model.findOneAndUpdate({ _id }, { $inc: { coins } }, upsertNew),
 
-  depositCoins: async (id, coins) => {
+  depositCoins: async (_id, coins) => {
     return await Model.findOneAndUpdate(
-      { id },
+      { _id },
       {
         $inc: {
           coins: -coins,
@@ -70,9 +68,9 @@ module.exports = {
     );
   },
 
-  updateDailyStreak: async (id, coins, streak) =>
+  updateDailyStreak: async (_id, coins, streak) =>
     Model.findOneAndUpdate(
-      { id },
+      { _id },
       {
         $set: {
           "daily.streak": streak,

@@ -42,6 +42,7 @@ module.exports = class MemeCommand extends SlashCommand {
     const collector = interaction.channel.createMessageComponentCollector({
       filter: (reactor) => reactor.user.id === interaction.user.id,
       time: this.cooldown * 1000,
+      max: 3,
       dispose: true,
     });
 
@@ -75,16 +76,24 @@ const getRandomEmbed = async (choice) => {
   }
 
   const json = response.data;
-  let permalink = json[0].data.children[0].data.permalink;
-  let memeUrl = `https://reddit.com${permalink}`;
-  let memeImage = json[0].data.children[0].data.url;
-  let memeTitle = json[0].data.children[0].data.title;
-  let memeUpvotes = json[0].data.children[0].data.ups;
-  let memeNumComments = json[0].data.children[0].data.num_comments;
+  if (!Array.isArray(json) || json.length === 0) {
+    return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription(`No meme found matching ${choice}`);
+  }
 
-  return new MessageEmbed()
-    .setAuthor(memeTitle, null, memeUrl)
-    .setImage(memeImage)
-    .setColor("RANDOM")
-    .setFooter(`👍 ${memeUpvotes} | 💬 ${memeNumComments}`);
+  try {
+    let permalink = json[0].data.children[0].data.permalink;
+    let memeUrl = `https://reddit.com${permalink}`;
+    let memeImage = json[0].data.children[0].data.url;
+    let memeTitle = json[0].data.children[0].data.title;
+    let memeUpvotes = json[0].data.children[0].data.ups;
+    let memeNumComments = json[0].data.children[0].data.num_comments;
+
+    return new MessageEmbed()
+      .setAuthor(memeTitle, null, memeUrl)
+      .setImage(memeImage)
+      .setColor("RANDOM")
+      .setFooter(`👍 ${memeUpvotes} | 💬 ${memeNumComments}`);
+  } catch (error) {
+    return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
+  }
 };

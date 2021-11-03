@@ -115,6 +115,16 @@ module.exports = class InviteSystem extends SlashCommand {
       const role = interaction.options.getRole("role");
       const invites = interaction.options.getInteger("invites");
 
+      if (role.managed) {
+        return interaction.followUp("You cannot assign a bot role");
+      }
+
+      if (!role.editable) {
+        return interaction.followUp(
+          "I am missing permissions to move members to that role. Is that role below my highest role?"
+        );
+      }
+
       const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
       let msg = "";
       if (exists) {
@@ -131,6 +141,16 @@ module.exports = class InviteSystem extends SlashCommand {
     if (sub === "remove") {
       const settings = await getSettings(interaction.guild);
       const role = interaction.options.getRole("role");
+
+      if (role.managed) {
+        return interaction.followUp("You cannot assign a bot role");
+      }
+
+      if (!role.editable) {
+        return interaction.followUp(
+          "I am missing permissions to move members from that role. Is that role below my highest role?"
+        );
+      }
 
       const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
       if (!exists) return interaction.followUp("No previous invite rank is configured found for this role");

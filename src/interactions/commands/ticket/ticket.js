@@ -133,6 +133,10 @@ module.exports = class TicketCommand extends SlashCommand {
       const title = interaction.options.getString("title");
       const role = interaction.options.getRole("role");
 
+      if (role.managed) {
+        return interaction.followUp("You cannot assign a bot role");
+      }
+
       const color = interaction.options.getString("color");
       if (color && !isHex(color)) return interaction.followUp("Invalid Hex color");
 

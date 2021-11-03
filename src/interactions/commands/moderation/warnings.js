@@ -13,8 +13,8 @@ module.exports = class Warnings extends SlashCommand {
       userPermissions: ["KICK_MEMBERS"],
       options: [
         {
-          name: "view",
-          description: "view a members warnings",
+          name: "list",
+          description: "list a members warnings",
           type: "SUB_COMMAND",
           options: [
             {
@@ -50,7 +50,7 @@ module.exports = class Warnings extends SlashCommand {
     const target = interaction.options.getUser("user");
 
     // view
-    if (sub === "view") {
+    if (sub === "list") {
       const warnings = await getWarnings(interaction.guildId, target.id);
       if (!warnings?.length) return interaction.followUp(`No warnings for ${target.tag}`);
 

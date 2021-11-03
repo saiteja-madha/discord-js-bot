@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const { getReactionRole } = require("@schemas/reactionrole-schema");
+const { getReactionRoles } = require("@schemas/message-schema");
 const { sendMessage } = require("@utils/botUtils");
 const { isTranslated, logTranslation } = require("@schemas/trlogs-schema");
 const data = require("@src/data.json");
@@ -27,7 +27,7 @@ const getTranslationCooldown = (user) => {
 function getRole(reaction) {
   const { message, emoji } = reaction;
   if (!message || !message.channel) return;
-  const rr = getReactionRole(message.guildId, message.channel.id, message.id) || [];
+  const rr = getReactionRoles(message.guildId, message.channel.id, message.id);
   const emote = emoji.id ? emoji.id : emoji.toString();
   const found = rr.find((doc) => doc.emote === emote);
   if (found) return message.guild.roles.cache.get(found.role_id);

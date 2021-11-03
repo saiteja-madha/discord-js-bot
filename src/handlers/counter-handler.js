@@ -24,7 +24,7 @@ async function updateCounterChannels(client) {
         if (!vc) continue;
 
         let channelName;
-        if (config.counter_type === "TOTAL") channelName = `${config.name} : ${all}`;
+        if (config.counter_type === "ALL") channelName = `${config.name} : ${all}`;
         if (config.counter_type === "MEMBERS") channelName = `${config.name} : ${members}`;
         if (config.counter_type === "BOTS") channelName = `${config.name} : ${bots}`;
 
