@@ -90,7 +90,6 @@ const Schema = mongoose.Schema({
       counter_type: String,
       name: String,
       channel_id: String,
-      additional_data: String,
     },
   ],
   welcome: {
@@ -142,29 +141,5 @@ module.exports = {
     }
     cache.add(guild.id, guildData);
     return guildData;
-  },
-
-  inviteTracking: async (_id, status) => {
-    await Model.updateOne({ _id }, { "invite.tracking": status });
-    if (cache.contains(_id)) {
-      cache.get(_id).invite.tracking = status;
-    }
-  },
-
-  addInviteRank: async (_id, roleId, invites) => {
-    const toPush = {
-      _id: roleId,
-      invites,
-    };
-
-    await Model.updateOne({ _id }, { $push: { "invite.ranks": toPush } });
-    if (cache.contains(_id)) {
-      cache.get(_id).invite.ranks.push(toPush);
-    }
-  },
-
-  removeInviteRank: async (_id, roleId) => {
-    await Model.updateOne({ _id }, { $pull: { "invite.ranks": { _id: roleId } } });
-    cache.remove(_id);
   },
 };

@@ -1,9 +1,9 @@
 const { Collection, Guild, GuildMember, User } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
-const db = require("@schemas/invite-schema");
+const { getMember } = require("@schemas/Member");
 
-const getEffectiveInvites = (data = {}) =>
-  data.tracked_invites + data.added_invites - data.fake_invites - data.left_invites || 0;
+const getEffectiveInvites = (inviteData = {}) =>
+  inviteData.tracked + inviteData.added - inviteData.fake - inviteData.left || 0;
 
 const cacheInvite = (invite, isVanity) => ({
   code: invite.code,
@@ -36,13 +36,13 @@ async function cacheGuildInvites(guild) {
  * @param {object} inviterData
  * @param {boolean} isAdded
  */
-const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
+async function checkInviteRewards(guild, inviterData = {}, isAdded) {
   const settings = await getSettings(guild);
   if (settings.invite.ranks.length > 0 && inviterData?.member_id) {
     const inviter = await guild.members.fetch(inviterData?.member_id).catch(() => {});
     if (!inviter) return;
 
-    const invites = getEffectiveInvites(inviterData);
+    const invites = getEffectiveInvites(inviterData.invite_data);
     settings.invite.ranks.forEach((reward) => {
       if (isAdded) {
         if (invites + 1 >= reward.invites && inviter.roles.cache.has(reward._id)) {
@@ -53,7 +53,7 @@ const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
       }
     });
   }
-};
+}
 
 /**
  * Track inviter by comparing new invites with cached invites
@@ -93,8 +93,18 @@ async function trackJoinedMember(member) {
   let inviterData = {};
   if (usedInvite) {
     const inviterId = usedInvite.code === guild.vanityURLCode ? "VANITY" : usedInvite.inviterId;
-    await db.addInviter(guild.id, member.id, inviterId, usedInvite.code);
-    inviterData = await db.incrementInvites(guild.id, inviterId, "TRACKED");
+
+    // log invite data
+    const memberDb = await getMember(guild.id, member.id);
+    memberDb.invite_data.inviter = inviterId;
+    memberDb.invite_data.code = usedInvite.code;
+    await memberDb.save();
+
+    // increment inviter's invites
+    const inviterDb = await getMember(guild.id, inviterId);
+    inviterDb.invite_data.tracked += 1;
+    await inviterDb.save();
+    inviterData = inviterDb;
   }
 
   checkInviteRewards(guild, inviterData, true);
@@ -109,12 +119,15 @@ async function trackJoinedMember(member) {
 async function trackLeftMember(guild, user) {
   const settings = await getSettings(guild);
   if (!settings.invite.tracking) return;
-  const inviteData = (await db.getDetails(guild.id, user.id)) || {};
+  const inviteData = (await getMember(guild.id, user.id)).invite_data;
 
   let inviterData = {};
   if (inviteData.inviter_id) {
-    const inviterId = inviteData.inviter_id === "VANITY" ? "VANITY" : inviteData.inviter_id;
-    inviterData = await db.incrementInvites(guild.id, inviterId, "LEFT");
+    const inviterId = inviteData.inviter === "VANITY" ? "VANITY" : inviteData.inviter;
+    const inviterDb = await getMember(guild.id, inviterId);
+    inviterDb.invite_data.left += 1;
+    await inviterDb.save();
+    inviterData = inviterDb;
   }
 
   checkInviteRewards(guild, inviterData, false);

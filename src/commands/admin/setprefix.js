@@ -19,7 +19,7 @@ module.exports = class SetPrefix extends Command {
         ephemeral: true,
         options: [
           {
-            name: "newPrefix",
+            name: "newprefix",
             description: "the new prefix to set",
             type: "STRING",
             required: true,
@@ -43,7 +43,7 @@ module.exports = class SetPrefix extends Command {
    * @param {CommandInteraction} interaction
    */
   async interactionRun(interaction) {
-    const response = await setNewPrefix(interaction.guild, interaction.options.getString("newPrefix"));
+    const response = await setNewPrefix(interaction.guild, interaction.options.getString("newprefix"));
     await interaction.followUp(response);
   }
 };
@@ -53,4 +53,6 @@ async function setNewPrefix(guild, newPrefix) {
   const settings = await getSettings(guild);
   settings.prefix = newPrefix;
   await settings.save();
+
+  return `New prefix is set to \`${newPrefix}\``;
 }

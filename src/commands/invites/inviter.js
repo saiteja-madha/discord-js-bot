@@ -1,21 +1,32 @@
 const { Command } = require("@src/structures");
 const { getEffectiveInvites } = require("@src/handlers/invite-handler");
-const { getDetails } = require("@schemas/invite-schema");
 const { EMBED_COLORS } = require("@root/config.js");
-const { MessageEmbed, Message } = require("discord.js");
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const outdent = require("outdent");
 const { resolveMember } = require("@utils/guildUtils");
+const { getMember } = require("@schemas/Member");
 
 module.exports = class InviterCommand extends Command {
   constructor(client) {
     super(client, {
       name: "inviter",
       description: "shows inviter information",
+      category: "INVITE",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         usage: "[@member|id]",
-        category: "INVITE",
-        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "user",
+            description: "the user to get the inviter information for",
+            type: "USER",
+            required: false,
+          },
+        ],
       },
     });
   }
@@ -26,21 +37,38 @@ module.exports = class InviterCommand extends Command {
    */
   async messageRun(message, args) {
     const target = (await resolveMember(message, args[0])) || message.member;
+    const response = await getInviter(message, target);
+    await message.channel.send(response);
+  }
 
-    const inviteData = await getDetails(message.guild.id, target.id);
-    if (!inviteData || !inviteData.inviter_id) return message.reply(`Cannot track how \`${target.user.tag}\` joined`);
-
-    const inviter = await message.client.users.fetch(inviteData.inviter_id, false, true);
-    const inviterData = await getDetails(message.guild.id, inviteData.inviter_id);
-
-    const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setAuthor(`Invite data for ${target.displayName}`)
-      .setDescription(outdent`
-      Inviter: \`${inviter?.tag || "Deleted User"}\`
-      Inviter ID: \`${inviteData.inviter_id}\`
-      Invite Code: \`${inviteData.invite_code}\`
-      Inviter Invites: \`${getEffectiveInvites(inviterData)}\`
-      `);
-
-    message.channel.send({ embeds: [embed] });
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const user = interaction.options.getUser("user") || interaction.user;
+    const response = await getInviter(interaction, user);
+    await interaction.followUp(response);
   }
 };
+
+async function getInviter({ guild }, user) {
+  const inviteData = (await getMember(guild.id, user.id)).invite_data;
+  if (!inviteData || !inviteData.inviter) return `Cannot track how \`${user.tag}\` joined`;
+
+  const inviter = await guild.client.users.fetch(inviteData.inviter, false, true);
+  const inviterData = (await getMember(guild.id, inviteData.inviter)).invite_data;
+
+  const embed = new MessageEmbed()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setAuthor(`Invite data for ${user.username}`)
+    .setDescription(
+      outdent`
+      Inviter: \`${inviter?.tag || "Deleted User"}\`
+      Inviter ID: \`${inviteData.inviter}\`
+      Invite Code: \`${inviteData.code}\`
+      Inviter Invites: \`${getEffectiveInvites(inviterData)}\`
+      `
+    );
+
+  return { embeds: [embed] };
+}
