@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { inviteTracking } = require("@schemas/guild-schema");
+const { inviteTracking } = require("@schemas/Guild");
 const { cacheGuildInvites } = require("@src/handlers/invite-handler");
 const { Message } = require("discord.js");
 

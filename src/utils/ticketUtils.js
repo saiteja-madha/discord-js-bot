@@ -2,7 +2,7 @@ const { Channel, Guild, GuildMember, BaseGuildTextChannel, MessageEmbed, User } 
 const { postToBin } = require("@utils/httpUtils");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 const outdent = require("outdent");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 const { error } = require("@src/helpers/logger");
 

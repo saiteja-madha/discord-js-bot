@@ -2,7 +2,7 @@ const { getTop100 } = require("@schemas/profile-schema");
 const { Command } = require("@src/structures");
 const { Message, MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 
 module.exports = class LeaderBoard extends Command {
   constructor(client) {

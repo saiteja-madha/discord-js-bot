@@ -17,6 +17,12 @@ const BotClient = require("./BotClient");
 
 class Command {
   /**
+   * @typedef {Object} Validation
+   * @property {function} callback - The condition to validate
+   * @property {string} message - The message to be displayed if callback condition is not met
+   */
+
+  /**
    * @typedef {Object} SubCommand
    * @property {string} trigger - subcommand invoke
    * @property {string} description - subcommand description
@@ -48,14 +54,7 @@ class Command {
    * @property {string[]} [aliases] - Alternative names for the command (all must be lowercase)
    * @property {string} [usage=""] - The command usage format string
    * @property {number} [minArgsCount=0] - Minimum number of arguments the command takes (default is 0)
-   * @property {CommandCategory} category - The category this command belongs to
    * @property {SubCommand[]} [subcommands=[]] - List of subcommands
-   * @property {PermissionResolvable[]} [botPermissions] - Permissions required by the client to use the command.
-   * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command.
-   * @property {boolean} [guildOwnerOnly=false] - Whether or not the command is usable only by the guild owner
-   * @property {boolean} [botOwnerOnly=false] - Whether or not the command is usable only by the bot owner
-   * @property {boolean} [nsfw=false] - Whether the command is usable only in NSFW channels.
-   * @property {boolean} [hidden=false] - Whether the command should be hidden from the help command
    */
 
   /**
@@ -63,6 +62,9 @@ class Command {
    * @property {string} name - The name of the command (must be lowercase)
    * @property {string} description - A short description of the command
    * @property {number} cooldown - The command cooldown in seconds
+   * @property {CommandCategory} category - The category this command belongs to
+   * @property {PermissionResolvable[]} [botPermissions] - Permissions required by the client to use the command.
+   * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command
    * @property {CommandInfo} command - A short description of the command
    * @property {InteractionInfo} slashCommand - A short description of the command
    * @property {ContextInfo} contextMenu - A short description of the command
@@ -78,6 +80,9 @@ class Command {
     this.name = data.name;
     this.description = data.description;
     this.cooldown = data.cooldown || 0;
+    this.category = data.category || "NONE";
+    this.botPermissions = data.botPermissions || [];
+    this.userPermissions = data.userPermissions || [];
 
     /**
      * @type {CommandInfo}
@@ -86,14 +91,7 @@ class Command {
     this.command.aliases = data.command.aliases || [];
     this.command.usage = data.command.usage || "";
     this.command.minArgsCount = data.command.minArgsCount || 0;
-    this.command.category = data.command.category || "NONE";
     this.command.subcommands = data.command.subcommands || [];
-    this.command.botPermissions = data.command.botPermissions || [];
-    this.command.userPermissions = data.command.userPermissions || [];
-    this.command.guildOwnerOnly = data.command.guildOwnerOnly || false;
-    this.command.botOwnerOnly = data.command.botOwnerOnly || false;
-    this.command.nsfw = data.command.nsfw || false;
-    this.command.hidden = data.command.hidden || false;
 
     /**
      * @type {InteractionInfo}

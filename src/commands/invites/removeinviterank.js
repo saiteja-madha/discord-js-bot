@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { findMatchingRoles } = require("@utils/guildUtils");
-const { getSettings, removeInviteRank } = require("@schemas/guild-schema");
+const { getSettings, removeInviteRank } = require("@schemas/Guild");
 const { Message } = require("discord.js");
 
 module.exports = class AddInvitesCommand extends Command {

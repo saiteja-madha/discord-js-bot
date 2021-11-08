@@ -1,9 +1,9 @@
 const { MessageEmbed, Message } = require("discord.js");
 const { Command } = require("@src/structures");
 const { sendMessage } = require("@utils/botUtils");
-const { canSendEmbeds, findMatchingRoles } = require("@utils/guildUtils");
+const { canSendEmbeds, findMatchingRoles, getMatchingChannel } = require("@utils/guildUtils");
 const { isTicketChannel, closeTicket, closeAllTickets, PERMS } = require("@utils/ticketUtils");
-const { setTicketLogChannel, setTicketLimit } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const { createNewTicket } = require("@schemas/ticket-schema");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 
@@ -14,6 +14,8 @@ module.exports = class Ticket extends Command {
     super(client, {
       name: "ticket",
       description: "various ticketing commands",
+      category: "ADMIN",
+      userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
         minArgsCount: 1,
@@ -57,34 +59,63 @@ module.exports = class Ticket extends Command {
    * @param {Message} message
    * @param {string[]} args
    */
-  async messageRun(message, args, invoke, prefix) {
+  async messageRun(message, args) {
     const input = args[0].toLowerCase();
+    let response;
 
-    switch (input) {
-      case "setup":
-        return setupTicket(message);
-
-      case "log":
-        return setupLogChannel(message);
-
-      case "limit":
-        return setupLimit(message);
-
-      case "close":
-        return close(message);
-
-      case "closeall":
-        return closeAll(message);
-
-      case "add":
-        return addToTicket(message);
-
-      case "remove":
-        return removeFromTicket(message);
-
-      default:
-        this.sendUsage(message.channel, prefix, invoke, "Incorrect Input");
+    if (input === "setup") {
+      return await setupTicket(message);
     }
+
+    //
+    else if (input === "log") {
+      if (args.length < 2) return message.reply("Please provide a channel where ticket logs must be sent");
+      const target = getMatchingChannel(message.guild, args[1]);
+      if (target.length === 0) return message.reply("Could not find any matching channel");
+      response = await setupLogChannel(message);
+    }
+
+    //
+    else if (input === "limit") {
+      if (args.length < 2) return message.reply("Please provide a number");
+      const limit = args[1];
+      if (isNaN(limit)) return message.reply("Please provide a number input");
+      response = await setupLimit(message, limit);
+    }
+
+    //
+    else if (input === "close") {
+      response = await close(message);
+    }
+
+    //
+    else if (input === "closeall") {
+      await message.reply("Closing tickets ...");
+      response = await closeAll(message);
+      return message.editable ? message.edit(response) : message.channel.send(response);
+    }
+
+    //
+    else if (input === "add") {
+      if (args.length < 2) return message.reply("Please provide a user or role to add to the ticket");
+      let inputId;
+      if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
+      else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
+      else inputId = args[1];
+      response = await addToTicket(message, inputId);
+    }
+
+    //
+    else if (input === "remove") {
+      if (args.length < 2) return message.reply("Please provide a user or role to remove");
+      let inputId;
+      if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
+      else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
+      else inputId = args[1];
+      response = await removeFromTicket(message, inputId);
+    }
+
+    await message.reply(response);
   }
 };
 
@@ -164,93 +195,64 @@ async function setupTicket(message) {
 /**
  * @param {Message} message
  */
-async function setupLogChannel(message) {
-  if (message.mentions.channels.size === 0)
-    return message.reply("Incorrect Usage! You need to mention a channel name where ticket logs must be sent");
+async function setupLogChannel({ guild }, target) {
+  if (!canSendEmbeds(target)) return `Oops! I do have have permission to send embed to ${target}`;
 
-  const target = message.mentions.channels.first();
-  if (!canSendEmbeds(target))
-    return message.reply(`Oops! I do have have permission to send embed to ${target.toString()}`);
+  const settings = await getSettings(guild);
+  settings.ticket.log_channel = target.id;
+  await settings.save();
 
-  setTicketLogChannel(message.guildId, target.id).then(
-    message.channel.send(`Configuration saved! Newly created ticket logs will be sent to ${target.toString()}`)
-  );
+  return `Configuration saved! Ticket logs will be sent to ${target.toString()}`;
 }
 
-/**
- * @param {Message} message
- */
-async function setupLimit(message) {
-  const limit = message.args[1];
-  if (!limit || isNaN(limit))
-    return message.message.reply("Incorrect usage! You did not provide a valid integer input");
-  if (Number.parseInt(limit, 10) < 5) return message.message.reply("Ticket limit cannot be less than 5");
-  setTicketLimit(message.guild.id, limit).then(
-    message.reply(`Configuration saved. You can now have a maximum of \`${limit}\` open tickets`)
-  );
+async function setupLimit({ guild }, limit) {
+  if (Number.parseInt(limit, 10) < 5) return "Ticket limit cannot be less than 5";
+
+  const settings = await getSettings(guild);
+  settings.ticket.limit = limit;
+  await settings.save();
+
+  return `Configuration saved. You can now have a maximum of \`${limit}\` open tickets`;
 }
 
-/**
- * @param {Message} message
- */
-async function close(message) {
-  if (isTicketChannel(message.channel)) {
-    const status = await closeTicket(message.channel, message.author, "Closed by a moderator");
-    if (!status.success) message.message.reply(status.message);
-  } else {
-    message.message.reply("This command can only be used in ticket channels");
-  }
+async function close({ channel, author }) {
+  if (!isTicketChannel(channel)) return "This command can only be used in ticket channels";
+  const status = await closeTicket(channel, author, "Closed by a moderator");
+  if (!status.success) return status.message;
 }
 
-/**
- * @param {Message} message
- */
-async function closeAll(message) {
-  const reply = await message.reply("Closing...");
-  const stats = await closeAllTickets(message.guild);
-  if (reply?.editable) reply.edit(`Completed! Success: \`${stats[0]}\` Failed: \`${stats[1]}\``);
+async function closeAll({ guild }) {
+  const stats = await closeAllTickets(guild);
+  return `Completed! Success: \`${stats[0]}\` Failed: \`${stats[1]}\``;
 }
 
-/**
- * @param {Message} message
- */
-async function addToTicket(message) {
-  if (!isTicketChannel(message.channel))
-    return message.message.reply("This command can only be used in ticket channel");
-
-  const inputId = message.args[1];
-  if (!inputId || isNaN(inputId)) return message.reply("Oops! You need to input a valid userId/roleId");
+async function addToTicket({ channel }, inputId) {
+  if (!isTicketChannel(channel)) return "This command can only be used in ticket channel";
+  if (!inputId || isNaN(inputId)) return "Oops! You need to input a valid userId/roleId";
 
   try {
-    await message.channel.permissionOverwrites.create(inputId, {
+    await channel.permissionOverwrites.create(inputId, {
       VIEW_CHANNEL: true,
       SEND_MESSAGES: true,
     });
 
-    message.message.reply("Done");
+    return "Done";
   } catch (ex) {
-    message.reply("Failed to add user/role. Did you provide a valid ID?");
+    return "Failed to add user/role. Did you provide a valid ID?";
   }
 }
 
-/**
- * @param {Message} message
- */
-async function removeFromTicket(message) {
-  if (!isTicketChannel(message.channel))
-    return message.message.reply("This command can only be used in ticket channel");
-
-  const inputId = message.args[1];
-  if (!inputId || isNaN(inputId)) return message.reply("Oops! You need to input a valid userId/roleId");
+async function removeFromTicket({ channel }, inputId) {
+  if (!isTicketChannel(channel)) return "This command can only be used in ticket channel";
+  if (!inputId || isNaN(inputId)) return "Oops! You need to input a valid userId/roleId";
 
   try {
-    message.channel.permissionOverwrites.create(inputId, {
+    channel.permissionOverwrites.create(inputId, {
       VIEW_CHANNEL: false,
       SEND_MESSAGES: false,
     });
-
-    message.message.reply("Done");
+    return "Done";
   } catch (ex) {
-    message.reply("Failed to remove user/role. Did you provide a valid ID?");
+    return "Failed to remove user/role. Did you provide a valid ID?";
   }
 }

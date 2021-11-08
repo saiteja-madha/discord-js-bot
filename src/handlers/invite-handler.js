@@ -1,5 +1,5 @@
 const { Collection, Guild, GuildMember, User } = require("discord.js");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const db = require("@schemas/invite-schema");
 
 const getEffectiveInvites = (data = {}) =>

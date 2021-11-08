@@ -133,8 +133,17 @@ const permissions = {
   USE_EXTERNAL_STICKERS: "Use External Stickers",
 };
 
+/**
+ * @param {import("discord.js").PermissionResolvable[]} perms
+ */
+const parsePermissions = (perms) => {
+  const permissionWord = `permission${perms.length > 1 ? "s" : ""}`;
+  return perms.map((perm) => `\`${permissions[perm]}\``).join(", ") + permissionWord;
+};
+
 module.exports = {
   permissions,
+  parsePermissions,
   sendMessage,
   safeDM,
   startupCheck,

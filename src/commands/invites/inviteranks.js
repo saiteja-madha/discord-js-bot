@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message } = require("discord.js");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class InviteRanks extends Command {

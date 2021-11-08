@@ -3,7 +3,7 @@ const { Message, MessageAttachment } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const { getProfile, getTop100 } = require("@schemas/profile-schema");
 const { getBuffer } = require("@utils/httpUtils");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const { resolveMember } = require("@utils/guildUtils");
 
 const IMAGE_API_BASE = "https://discord-js-image-manipulation.herokuapp.com";

@@ -1,7 +1,7 @@
 const { MessageReaction, PartialMessageReaction, User, PartialUser } = require("discord.js");
 const { BotClient } = require("@src/structures");
 const { reactionHandler } = require("@src/handlers");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 
 /**
  * @param {BotClient} client

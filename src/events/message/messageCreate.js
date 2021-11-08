@@ -1,7 +1,7 @@
 const { Message } = require("discord.js");
 const { BotClient } = require("@src/structures");
 const { automodHandler, xpHandler } = require("@src/handlers");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
 /**

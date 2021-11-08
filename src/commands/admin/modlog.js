@@ -1,19 +1,32 @@
 const { Command } = require("@src/structures");
-const { modLogChannel } = require("@schemas/guild-schema");
-const { Message } = require("discord.js");
-const { canSendEmbeds } = require("@root/src/utils/guildUtils");
+const { getSettings } = require("@schemas/Guild");
+const { Message, CommandInteraction } = require("discord.js");
+const { canSendEmbeds } = require("@utils/guildUtils");
 
-module.exports = class SetPrefix extends Command {
+module.exports = class ModLog extends Command {
   constructor(client) {
     super(client, {
       name: "modlog",
       description: "enable or disable moderation logs",
+      category: "ADMIN",
+      userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
         usage: "<#channel|OFF>",
         minArgsCount: 1,
-        category: "ADMIN",
-        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: true,
+        ephemeral: true,
+        options: [
+          {
+            name: "channel",
+            description: "channels to send mod logs",
+            required: false,
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+          },
+        ],
       },
     });
   }
@@ -30,14 +43,30 @@ module.exports = class SetPrefix extends Command {
     else {
       if (message.mentions.channels.size === 0) return message.reply("Incorrect command usage");
       targetChannel = message.mentions.channels.first();
-
-      if (!canSendEmbeds(targetChannel))
-        return message.reply(
-          "Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel"
-        );
     }
 
-    await modLogChannel(message.guildId, targetChannel?.id);
-    message.channel.send(`Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`);
+    const response = await setChannel(message.guild, targetChannel);
+    return message.channel.send(response);
+  }
+
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const response = await setChannel(interaction.guild, interaction.options.getChannel("channel"));
+    return interaction.followUp(response);
   }
 };
+
+async function setChannel(guild, targetChannel) {
+  const settings = await getSettings(guild);
+
+  if (targetChannel) {
+    if (!canSendEmbeds(targetChannel))
+      return "Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";
+  }
+
+  settings.modlog_channel = targetChannel?.id;
+  await settings.save();
+  return `Configuration saved! Modlog channel ${targetChannel ? "updated" : "removed"}`;
+}

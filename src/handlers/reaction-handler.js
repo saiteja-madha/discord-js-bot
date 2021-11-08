@@ -1,6 +1,6 @@
 const { MessageReaction, User, MessageEmbed, Message, ReactionEmoji } = require("discord.js");
 const { getReactionRole } = require("@schemas/reactionrole-schema");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const { getConfig } = require("@schemas/ticket-schema");
 const ticketUtils = require("@utils/ticketUtils");
 const { sendMessage } = require("@utils/botUtils");

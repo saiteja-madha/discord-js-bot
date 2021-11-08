@@ -1,6 +1,8 @@
-const { removeReactionRole } = require("@root/src/schemas/reactionrole-schema");
 const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { removeReactionRole } = require("@schemas/reactionrole-schema");
+const { parsePermissions } = require("@utils/botUtils");
+const { getMatchingChannel } = require("@utils/guildUtils");
 
 const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
 
@@ -9,12 +11,31 @@ module.exports = class RemoveReactionRole extends Command {
     super(client, {
       name: "removerr",
       description: "remove configured reaction for the specified message",
+      category: "ADMIN",
+      userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
         usage: "<#channel> <messageid>",
         minArgsCount: 2,
-        category: "ADMIN",
-        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: true,
+        ephemeral: true,
+        options: [
+          {
+            name: "channel",
+            description: "channel where the message exists",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
+          },
+          {
+            name: "message_id",
+            description: "message id for which reaction roles was configured",
+            type: "STRING",
+            required: true,
+          },
+        ],
       },
     });
   }
@@ -24,28 +45,45 @@ module.exports = class RemoveReactionRole extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const targetChannel = message.mentions.channels.first();
-    if (!targetChannel) return message.reply("Incorrect usage! You need to mention a target channel");
-    if (!targetChannel.permissionsFor(message.guild.me).has()) {
-      return message.reply(
-        `You need the following permissions in ${targetChannel.toString()}\n${this.parsePermissions(channelPerms)}`
-      );
-    }
+    const targetChannel = getMatchingChannel(message.guild, args[0]);
+    if (targetChannel.length === 0) return message.reply(`No channels found matching ${args[0]}`);
 
-    let targetMessage;
-    try {
-      targetMessage = await targetChannel.messages.fetch(args[1]);
-    } catch (ex) {
-      return message.reply("Could not fetch message. Did you provide a valid messageId?");
-    }
+    const targetMessage = args[1];
+    const response = await removeRR(message.guild, targetChannel[0], targetMessage);
 
-    try {
-      await removeReactionRole(message.guild.id, targetChannel.id, targetMessage.id);
-      targetMessage.reactions?.removeAll();
-    } catch (ex) {
-      return message.reply("Oops! An unexpected error occurred. Try again later");
-    }
+    await message.reply(response);
+  }
 
-    message.channel.send("Done! Configuration updated");
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const targetChannel = interaction.options.getChannel("channel");
+    const messageId = interaction.options.getString("message_id");
+
+    const response = await removeRR(interaction.message.guild, targetChannel, messageId);
+    await interaction.followUp(response);
   }
 };
+
+async function removeRR(guild, channel, messageId) {
+  if (!channel.permissionsFor(guild.me).has()) {
+    return `You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`;
+  }
+
+  let targetMessage;
+  try {
+    targetMessage = await channel.messages.fetch(messageId);
+  } catch (ex) {
+    return "Could not fetch message. Did you provide a valid messageId?";
+  }
+
+  try {
+    await removeReactionRole(guild.id, channel.id, targetMessage.id);
+    await targetMessage.reactions?.removeAll();
+  } catch (ex) {
+    return "Oops! An unexpected error occurred. Try again later";
+  }
+
+  return "Done! Configuration updated";
+}

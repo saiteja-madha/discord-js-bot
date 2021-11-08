@@ -6,7 +6,7 @@ const { getSettings } = require("@schemas/guild-schema");
 const { addWarnings } = require("@schemas/profile-schema");
 const { EMOJIS, EMBED_COLORS } = require("@root/config");
 const { getRoleByName } = require("./guildUtils");
-const { error, debug } = require("../helpers/logger");
+const { error } = require("../helpers/logger");
 
 /**
  * @param {GuildMember} issuer
@@ -166,8 +166,8 @@ async function warnTarget(issuer, target, reason) {
     const settings = await getSettings(guild);
 
     // check if max warnings are reached
-    if (profile.warnings > settings.max_warnings) {
-      await addModAction(guild.me, target, "Max warnings reached", settings.max_warn_action); // moderate
+    if (profile.warnings > settings.max_warn.limit) {
+      await addModAction(guild.me, target, "Max warnings reached", settings.max_warn.action); // moderate
       await addWarnings(guild.id, target.id, -profile.warnings); // reset warnings
     }
     return true;

@@ -1,6 +1,6 @@
 const { Guild, MessageEmbed } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { updateGuildLeft } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 
 /**
  * @param {BotClient} client
@@ -9,7 +9,10 @@ const { updateGuildLeft } = require("@schemas/guild-schema");
 module.exports = async (client, guild) => {
   if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
   client.logger.log(`Guild Left: ${guild.name} Members: ${guild.memberCount}`);
-  await updateGuildLeft(guild);
+
+  const settings = await getSettings(guild);
+  settings.data.leftAt = new Date();
+  await settings.save();
 
   if (!client.joinLeaveWebhook) return;
 

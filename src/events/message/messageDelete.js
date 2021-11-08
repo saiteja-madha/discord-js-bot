@@ -1,6 +1,6 @@
 const { Message, PartialMessage, MessageEmbed } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { getSettings } = require("@schemas/guild-schema");
+const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
 /**
