@@ -4,7 +4,7 @@ const { EMBED_COLORS, EMOJIS } = require("@root/config");
 const { getProfile } = require("@schemas/profile-schema");
 const { getSettings } = require("@schemas/Guild");
 const { resolveMember } = require("@utils/guildUtils");
-const { getUser } = require("@schemas/user-schema");
+const { getUser } = require("@schemas/User");
 
 module.exports = class Profile extends Command {
   constructor(client) {

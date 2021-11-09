@@ -1,10 +1,4 @@
-const {
-  MessageEmbed,
-  MessageAttachment,
-  Message,
-  CommandInteraction,
-  CommandInteractionOptionResolver,
-} = require("discord.js");
+const { MessageEmbed, MessageAttachment, Message, CommandInteraction } = require("discord.js");
 const { Command } = require("@src/structures");
 const { getBuffer } = require("@utils/httpUtils");
 const { getImageFromCommand, getGenerator } = require("@utils/imageUtils");
@@ -43,11 +37,11 @@ module.exports = class Generator extends Command {
       name: "generator",
       description: "generates a meme for the provided image",
       cooldown: 5,
+      category: "IMAGE",
+      botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
       command: {
         enabled: true,
         aliases: availableGenerators,
-        category: "IMAGE",
-        botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
       },
       slashCommand: {
         enabled: true,
@@ -100,13 +94,12 @@ module.exports = class Generator extends Command {
 
   /**
    * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
    */
-  async interactionRun(interaction, options) {
+  async interactionRun(interaction) {
     const author = interaction.user;
-    const user = options.getUser("user");
-    const imageLink = options.getString("link");
-    const generator = options.getString("name");
+    const user = interaction.options.getUser("user");
+    const imageLink = interaction.options.getString("link");
+    const generator = interaction.options.getString("name");
 
     let image;
     if (user) image = user.displayAvatarURL({ size: 256, format: "png" });

@@ -1,14 +1,19 @@
 const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { musicValidations } = require("@utils/botUtils");
 
 module.exports = class Skip extends Command {
   constructor(client) {
     super(client, {
       name: "skip",
-      description: "Skip the current song",
+      description: "skip the current song",
+      category: "MUSIC",
+      validations: musicValidations,
       command: {
         enabled: true,
-        category: "MUSIC",
+      },
+      slashCommand: {
+        enabled: true,
       },
     });
   }
@@ -18,19 +23,22 @@ module.exports = class Skip extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const player = message.client.musicManager.get(message.guild.id);
-    if (!player) return message.channel.send("No music is being played!");
+    const response = skip(message);
+    await message.reply(response);
+  }
 
-    const { channel: voice } = message.member.voice;
-
-    if (!voice) return message.channel.send("You need to join a voice channel.");
-    if (voice.id !== player.voiceChannel) return message.channel.send("You're not in the same voice channel.");
-
-    if (!player.queue.current) return message.channel.send("There is no music playing.");
-
-    const { title } = player.queue.current;
-
-    player.stop();
-    return message.channel.send(`${title} was skipped.`);
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const response = skip(interaction.message);
+    await interaction.followUp(response);
   }
 };
+
+function skip({ client, guildId }) {
+  const player = client.musicManager.get(guildId);
+  const { title } = player.queue.current;
+  player.stop();
+  return `⏯️ ${title} was skipped.`;
+}

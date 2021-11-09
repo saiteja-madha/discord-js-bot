@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
-const { getUser, updateDailyStreak } = require("@schemas/user-schema");
-const { EMBED_COLORS, EMOJIS, MISCELLANEOUS } = require("@root/config.js");
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { getUser } = require("@schemas/User");
+const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
 const { diffHours, getRemainingTime } = require("@utils/miscUtils");
 
 module.exports = class DailyCommand extends Command {
@@ -9,10 +9,13 @@ module.exports = class DailyCommand extends Command {
     super(client, {
       name: "daily",
       description: "receive a daily bonus",
+      category: "ECONOMY",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
-        category: "ECONOMY",
-        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: true,
       },
     });
   }
@@ -22,33 +25,47 @@ module.exports = class DailyCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { member } = message;
+    const response = await daily(message.author);
+    await message.reply(response);
+  }
 
-    const user = await getUser(member.id);
-    let streak = 0;
-
-    if (user && user.daily.timestamp) {
-      const lastUpdated = new Date(user.daily.timestamp);
-      const difference = diffHours(new Date(), lastUpdated);
-      if (difference < 24) {
-        const nextUsage = lastUpdated.setHours(lastUpdated.getHours() + 24);
-        return message.reply(`You can again run this command in \`${getRemainingTime(nextUsage)}\``);
-      }
-      streak = user.daily.streak || streak;
-      if (difference < 48) streak += 1;
-      else streak = 0;
-    }
-
-    const updated = await updateDailyStreak(member.id, MISCELLANEOUS.DAILY_COINS, streak);
-
-    const embed = new MessageEmbed()
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setAuthor(member.displayName, member.user.displayAvatarURL())
-      .setDescription(
-        `You got ${MISCELLANEOUS.DAILY_COINS}${EMOJIS.CURRENCY} as your daily reward\n` +
-          `**Updated Balance:** ${updated?.coins || 0}${EMOJIS.CURRENCY}`
-      );
-
-    message.channel.send({ embeds: [embed] });
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const response = await daily(interaction.user);
+    await interaction.followUp(response);
   }
 };
+
+async function daily(user) {
+  const userDb = await getUser(user.id);
+  let streak = 0;
+
+  if (userDb.daily.timestamp) {
+    const lastUpdated = new Date(userDb.daily.timestamp);
+    const difference = diffHours(new Date(), lastUpdated);
+    if (difference < 24) {
+      const nextUsage = lastUpdated.setHours(lastUpdated.getHours() + 24);
+      return `You can again run this command in \`${getRemainingTime(nextUsage)}\``;
+    }
+    streak = userDb.daily.streak || streak;
+    if (difference < 48) streak += 1;
+    else streak = 0;
+  }
+
+  userDb.daily.streak = streak;
+  userDb.coins += ECONOMY.DAILY_COINS;
+  userDb.daily.timestamp = new Date();
+  await userDb.save();
+
+  const embed = new MessageEmbed()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setAuthor(user.username, user.displayAvatarURL())
+    .setDescription(
+      `You got ${ECONOMY.DAILY_COINS}${ECONOMY.CURRENCY} as your daily reward\n` +
+        `**Updated Balance:** ${userDb.coins}${ECONOMY.CURRENCY}`
+    );
+
+  return { embeds: [embed] };
+}

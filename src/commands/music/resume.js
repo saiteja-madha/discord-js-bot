@@ -1,14 +1,19 @@
 const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { musicValidations } = require("@utils/botUtils");
 
 module.exports = class Resume extends Command {
   constructor(client) {
     super(client, {
       name: "resume",
-      description: "Resumes the paused song",
+      description: "resumes the music player",
+      category: "MUSIC",
+      validations: musicValidations,
       command: {
         enabled: true,
-        category: "MUSIC",
+      },
+      slashCommand: {
+        enabled: true,
       },
     });
   }
@@ -18,16 +23,22 @@ module.exports = class Resume extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const player = message.client.musicManager.get(message.guild.id);
-    if (!player) return message.channel.send("No music is being played!");
+    const response = resumePlayer(message);
+    await message.reply(response);
+  }
 
-    const { channel: voice } = message.member.voice;
-
-    if (!voice) return message.channel.send("You need to join a voice channel.");
-    if (voice.id !== player.voiceChannel) return message.channel.send("You're not in the same voice channel.");
-    if (!player.paused) return message.channel.send("The player is already resumed");
-
-    player.pause(false);
-    return message.channel.send("Resumed the player");
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const response = resumePlayer(interaction);
+    await interaction.followUp(response);
   }
 };
+
+function resumePlayer({ client, guildId }) {
+  const player = client.musicManager.get(guildId);
+  if (!player.paused) return "The player is already resumed";
+  player.pause(false);
+  return "▶️ Resumed the music player";
+}

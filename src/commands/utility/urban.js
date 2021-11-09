@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const moment = require("moment");
@@ -10,12 +10,12 @@ module.exports = class UrbanCommand extends Command {
       name: "urban",
       description: "searches the urban dictionary",
       cooldown: 5,
+      category: "UTILITY",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         usage: "<word>",
         minArgsCount: 1,
-        category: "UTILITY",
-        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
         enabled: true,
@@ -36,35 +36,28 @@ module.exports = class UrbanCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await getJson(`http://api.urbandictionary.com/v0/define?term=${args}`);
-    if (!response.success) return message.reply(MESSAGES.API_ERROR);
-
-    const json = response.data;
-    if (!json.list[0]) return message.reply(`Nothing found matching \`${args}\``);
-
-    const embed = buildEmbed(json);
-    message.channel.send({ embeds: [embed] });
+    const word = args.join(" ");
+    const response = await urban(word);
+    await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
    */
-  async interactionRun(interaction, options) {
-    const word = options.getString("word");
-
-    const response = await getJson(`http://api.urbandictionary.com/v0/define?term=${word}`);
-    if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
-
-    const json = response.data;
-    if (!json.list[0]) return interaction.followUp(`Nothing found matching \`${word}\``);
-
-    const embed = buildEmbed(json);
-    interaction.followUp({ embeds: [embed] });
+  async interactionRun(interaction) {
+    const word = interaction.options.getString("word");
+    const response = await urban(word);
+    await interaction.followUp(response);
   }
 };
 
-const buildEmbed = (json) => {
+async function urban(word) {
+  const response = await getJson(`http://api.urbandictionary.com/v0/define?term=${word}`);
+  if (!response.success) return MESSAGES.API_ERROR;
+
+  const json = response.data;
+  if (!json.list[0]) return `Nothing found matching \`${word}\``;
+
   const data = json.list[0];
   const embed = new MessageEmbed()
     .setTitle(data.word)
@@ -77,5 +70,5 @@ const buildEmbed = (json) => {
     .addField("Example", data.example, false)
     .setFooter(`Created ${moment(data.written_on).fromNow()}`);
 
-  return embed;
-};
+  return { embeds: [embed] };
+}

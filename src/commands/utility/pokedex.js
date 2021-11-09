@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { EMOJIS, MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const outdent = require("outdent");
@@ -9,13 +9,13 @@ module.exports = class Pokedex extends Command {
     super(client, {
       name: "pokedex",
       description: "shows pokemon information",
+      category: "UTILITY",
+      botPermissions: ["EMBED_LINKS"],
       cooldown: 5,
       command: {
         enabled: true,
         usage: "<pokemon>",
         minArgsCount: 1,
-        category: "UTILITY",
-        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
         enabled: true,
@@ -36,37 +36,28 @@ module.exports = class Pokedex extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await getJson(`https://pokeapi.glitch.me/v1/pokemon/${args}`);
-    if (response.status === 404) return message.reply("```The given pokemon is not found```");
-    if (!response.success) return message.reply(MESSAGES.API_ERROR);
-
-    const json = response.data[0];
-    if (!json) return;
-    const embed = buildEmbed(json);
-
-    message.channel.send({ embeds: [embed] });
+    const pokemon = args.join(" ");
+    const response = await pokedex(pokemon);
+    await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
    */
-  async interactionRun(interaction, options) {
-    const pokemon = options.getString("pokemon");
-
-    const response = await getJson(`https://pokeapi.glitch.me/v1/pokemon/${pokemon}`);
-    if (response.status === 404) return interaction.followUp("```The given pokemon is not found```");
-    if (!response.success) return interaction.followUp(MESSAGES.API_ERROR);
-
-    const json = response.data[0];
-    if (!json) return;
-    const embed = buildEmbed(json);
-
-    interaction.followUp({ embeds: [embed] });
+  async interactionRun(interaction) {
+    const pokemon = interaction.options.getString("pokemon");
+    const response = await pokedex(pokemon);
+    await interaction.followUp(response);
   }
 };
 
-const buildEmbed = (json) => {
+async function pokedex(pokemon) {
+  const response = await getJson(`https://pokeapi.glitch.me/v1/pokemon/${pokemon}`);
+  if (response.status === 404) return "```The given pokemon is not found```";
+  if (!response.success) return MESSAGES.API_ERROR;
+
+  const json = response.data[0];
+
   const embed = new MessageEmbed()
     .setTitle(`Pokédex - ${json.name}`)
     .setColor(EMBED_COLORS.BOT_EMBED)
@@ -93,5 +84,5 @@ const buildEmbed = (json) => {
     )
     .setFooter(json.description);
 
-  return embed;
-};
+  return { embeds: [embed] };
+}

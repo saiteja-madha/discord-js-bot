@@ -2,16 +2,18 @@ const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { musicValidations } = require("@utils/botUtils");
 
-module.exports = class Volume extends Command {
+module.exports = class Shuffle extends Command {
   constructor(client) {
     super(client, {
-      name: "volume",
-      description: "set the music player volume",
+      name: "shuffle",
+      description: "shuffle the queue",
       category: "MUSIC",
       validations: musicValidations,
       command: {
         enabled: true,
-        usage: "<1-100>",
+      },
+      slashCommand: {
+        enabled: true,
       },
     });
   }
@@ -21,8 +23,7 @@ module.exports = class Volume extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const amount = args[0];
-    const response = volume(message, amount);
+    const response = shuffle(message);
     await message.reply(response);
   }
 
@@ -30,18 +31,13 @@ module.exports = class Volume extends Command {
    * @param {CommandInteraction} interaction
    */
   async interactionRun(interaction) {
-    const amount = interaction.options.getInteger("amount");
-    const response = volume(interaction, amount);
+    const response = shuffle(interaction);
     await interaction.followUp(response);
   }
 };
 
-function volume({ client, guildId }, volume) {
+function shuffle({ client, guildId }) {
   const player = client.musicManager.get(guildId);
-
-  if (!volume) return `> The player volume is \`${player.volume}\`.`;
-  if (volume < 1 || volume > 100) return "you need to give me a volume between 1 and 100.";
-
-  player.setVolume(volume);
-  return `🎶 Music player volume is set to \`${volume}\`.`;
+  player.queue.shuffle();
+  return "🎶 Queue has been shuffled";
 }

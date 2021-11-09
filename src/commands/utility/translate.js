@@ -1,4 +1,4 @@
-const { MessageEmbed, Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { Command } = require("@src/structures");
 const { EMBED_COLORS } = require("@root/config.js");
 const { translate } = require("@utils/httpUtils");
@@ -15,13 +15,13 @@ module.exports = class TranslateCommand extends Command {
       name: "translate",
       description: "translate from one language to other",
       cooldown: 20,
+      category: "UTILITY",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         aliases: ["tr"],
         usage: "<iso-code> <message>",
         minArgsCount: 2,
-        category: "UTILITY",
-        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
         enabled: true,
@@ -49,7 +49,6 @@ module.exports = class TranslateCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { author } = message;
     let embed = new MessageEmbed();
     const outputCode = args.shift();
 
@@ -65,35 +64,30 @@ module.exports = class TranslateCommand extends Command {
     const input = args.join(" ");
     if (!input) message.reply("Provide some valid translation text");
 
-    const data = await translate(input, outputCode);
-    if (!data) return message.reply("Failed to translate your text");
-
-    embed = buildEmbed(author, data);
-    message.channel.send({ embeds: [embed] });
+    const response = await getTranslation(message.author, input, outputCode);
+    await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
    */
-  async interactionRun(interaction, options) {
-    const outputCode = options.getString("language");
-    const input = options.getString("text");
-
-    const data = await translate(input, outputCode);
-    if (!data) return interaction.followUp("Failed to translate your text");
-
-    const embed = buildEmbed(interaction.user, data);
-    interaction.followUp({ embeds: [embed] });
+  async interactionRun(interaction) {
+    const outputCode = interaction.options.getString("language");
+    const input = interaction.options.getString("text");
+    const response = await getTranslation(interaction.user, input, outputCode);
+    await interaction.followUp(response);
   }
 };
 
-const buildEmbed = (author, data) => {
+async function getTranslation(author, input, outputCode) {
+  const data = await translate(input, outputCode);
+  if (!data) return "Failed to translate your text";
+
   const embed = new MessageEmbed()
     .setAuthor(`${author.username} says`, author.avatarURL())
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(data.output)
     .setFooter(`${data.inputLang} (${data.inputCode}) ⟶ ${data.outputLang} (${data.outputCode})`);
 
-  return embed;
-};
+  return { embeds: [embed] };
+}

@@ -141,10 +141,27 @@ const parsePermissions = (perms) => {
   return perms.map((perm) => `\`${permissions[perm]}\``).join(", ") + permissionWord;
 };
 
+const musicValidations = [
+  {
+    callback: ({ client, guildId }) => client.musicManager.get(guildId),
+    message: "🚫 No music is being played!",
+  },
+  {
+    callback: ({ member }) => member.voice?.channelId,
+    message: "🚫 You need to join my voice channel.",
+  },
+  {
+    callback: ({ member, client, guildId }) =>
+      member.voice?.channelId === client.musicManager.get(guildId).voiceChannel,
+    message: "🚫 You're not in the same voice channel.",
+  },
+];
+
 module.exports = {
   permissions,
   parsePermissions,
   sendMessage,
   safeDM,
   startupCheck,
+  musicValidations,
 };
