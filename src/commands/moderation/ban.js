@@ -1,20 +1,37 @@
-const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
-const { canInteract, addModAction } = require("@utils/modUtils");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { banTarget } = require("@utils/modUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class BanCommand extends Command {
   constructor(client) {
     super(client, {
       name: "ban",
-      description: "bans the specified member(s)",
+      description: "bans the specified member",
+      category: "MODERATION",
+      botPermissions: ["BAN_MEMBERS"],
+      userPermissions: ["BAN_MEMBERS"],
       command: {
         enabled: true,
-        usage: "<ID|@member(s)> [reason]",
+        usage: "<ID|@member> [reason]",
         minArgsCount: 1,
-        category: "MODERATION",
-        botPermissions: ["BAN_MEMBERS"],
-        userPermissions: ["BAN_MEMBERS"],
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "user",
+            description: "the target member",
+            type: "USER",
+            required: true,
+          },
+          {
+            name: "reason",
+            description: "reason for ban",
+            type: "STRING",
+            required: false,
+          },
+        ],
       },
     });
   }
@@ -24,30 +41,30 @@ module.exports = class BanCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { content } = message;
-    const mentions = message.mentions.members;
+    const target = await resolveMember(message, args[0], true);
+    if (!target) return message.reply(`No user found matching ${args[0]}`);
+    const reason = message.content.split(args[0])[1].trim();
+    const response = await ban(message.member, target, reason);
+    await message.reply(response);
+  }
 
-    // !ban ID <reason>
-    if (mentions.size === 0) {
-      const target = await resolveMember(message, args[0], true);
-      if (!target) return message.reply(`No user found matching ${args[0]}`);
-      const reason = content.split(args[0])[1].trim();
-      return ban(message, target, reason);
-    }
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const user = interaction.options.getUser("user");
+    const reason = interaction.options.getString("reason");
+    const target = await interaction.guild.members.fetch(user.id);
 
-    // !ban @m1 @m2 ... <reason>
-    const regex = /<@!?(\d+)>/g;
-    const matches = content.match(regex);
-    const lastMatch = matches[matches.length - 1];
-    const reason = content.split(lastMatch)[1].trim();
-
-    mentions.forEach(async (target) => await ban(message, target, reason));
+    const response = await ban(interaction.member, target, reason);
+    await interaction.followUp(response);
   }
 };
 
-async function ban(message, target, reason) {
-  if (!canInteract(message.member, target, "ban", message.channel)) return;
-  const status = await addModAction(message.member, target, reason, "BAN");
-  if (status) message.channel.send(`${target.user.tag} is banned from this server`);
-  else message.channel.send(`Failed to ban ${target.user.tag}`);
+async function ban(issuer, target, reason) {
+  const response = await banTarget(issuer, target, reason);
+  if (typeof response === "boolean") return `${target.user.tag} is banned!`;
+  if (response === "BOT_PERM") return `I do not have permission to ban ${target.user.tag}`;
+  else if (response === "MEMBER_PERM") return `You do not have permission to ban ${target.user.tag}`;
+  else return `Failed to ban ${target.user.tag}`;
 }

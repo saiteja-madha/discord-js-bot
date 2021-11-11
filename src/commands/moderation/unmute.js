@@ -1,20 +1,20 @@
 const { Command } = require("@src/structures");
-const { canInteract, addModAction } = require("@utils/modUtils");
-const { getRoleByName, resolveMember } = require("@utils/guildUtils");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { unmuteTarget } = require("@utils/modUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class UnmuteCommand extends Command {
   constructor(client) {
     super(client, {
       name: "unmute",
-      description: "umutes the specified member(s)",
+      description: "umutes the specified member",
+      botPermissions: ["MANAGE_ROLES"],
+      userPermissions: ["MUTE_MEMBERS"],
+      category: "MODERATION",
       command: {
         enabled: true,
-        usage: "<@member(s)> [reason]",
+        usage: "<@member> [reason]",
         minArgsCount: 1,
-        category: "MODERATION",
-        botPermissions: ["MANAGE_ROLES"],
-        userPermissions: ["KICK_MEMBERS"],
       },
     });
   }
@@ -24,38 +24,31 @@ module.exports = class UnmuteCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const { content } = message;
-    const mentions = message.mentions.members;
+    const target = await resolveMember(message, args[0], true);
+    if (!target) return message.reply(`No user found matching ${args[0]}`);
+    const reason = message.content.split(args[0])[1].trim();
+    const response = await unmute(message.member, target, reason);
+    await message.reply(response);
+  }
 
-    const mutedRole = getRoleByName(message.guild, "muted");
-    if (!mutedRole.editable) {
-      return message.reply(
-        "I do not have permission to move members to `Muted` role. Is that role below my highest role?"
-      );
-    }
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const user = interaction.options.getUser("user");
+    const reason = interaction.options.getString("reason");
+    const target = await interaction.guild.members.fetch(user.id);
 
-    // !unmute ID <reason>
-    if (mentions.size === 0) {
-      const target = await resolveMember(message, args[0], true);
-      if (!target) return message.reply(`No user found matching ${args[0]}`);
-      const reason = content.split(args[0])[1].trim();
-      return unmute(message, target, reason, mutedRole);
-    }
-
-    // !unmute @m1 @m2 ... <reason>
-    const regex = /<@!?(\d+)>/g;
-    const matches = content.match(regex);
-    const lastMatch = matches[matches.length - 1];
-    const reason = content.split(lastMatch)[1].trim();
-
-    mentions.forEach(async (target) => await unmute(message, target, reason));
+    const response = await unmute(interaction.member, target, reason);
+    await interaction.followUp(response);
   }
 };
 
-async function unmute(message, target, reason) {
-  if (!canInteract(message.member, target, "unmute", message.channel)) return;
-  const status = await addModAction(message.member, target, reason, "UNMUTE");
-  if (status === "NOT_MUTED") return message.channel.send(`${target.user.tag} is not muted`);
-  if (status) message.channel.send(`${target.user.tag} is unmuted`);
-  else message.channel.send(`Failed to unmute ${target.user.tag}`);
+async function unmute(issuer, target, reason) {
+  const response = await unmuteTarget(issuer, target, reason);
+  if (typeof response === "boolean") return `${target.user.tag} is not muted!`;
+  if (response === "BOT_PERM") return `I do not have permission to unmute ${target.user.tag}`;
+  else if (response === "MEMBER_PERM") return `You do not have permission to unmute ${target.user.tag}`;
+  else if (response === "NOT_MUTED") return `${target.user.tag} is not muted in this server`;
+  else `Failed to unmute ${target.user.tag}`;
 }

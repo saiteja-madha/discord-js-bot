@@ -36,6 +36,9 @@ const Schema = mongoose.Schema({
     left: { type: Number, default: 0 },
     added: { type: Number, default: 0 },
   },
+  mute: {
+    active: Boolean,
+  },
 });
 
 const Model = mongoose.model("members", Schema);
