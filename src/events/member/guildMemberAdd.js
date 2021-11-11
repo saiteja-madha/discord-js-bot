@@ -1,11 +1,9 @@
-const { GuildMember } = require("discord.js");
-const { BotClient } = require("@src/structures");
 const { inviteHandler, greetingHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
 
 /**
- * @param {BotClient} client
- * @param {GuildMember} member
+ * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').GuildMember} member
  */
 module.exports = async (client, member) => {
   if (!member || !member.guild) return;

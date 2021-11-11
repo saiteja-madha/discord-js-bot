@@ -1,10 +1,9 @@
-const { Guild, MessageEmbed } = require("discord.js");
-const { BotClient } = require("@src/structures");
+const { MessageEmbed } = require("discord.js");
 const { getSettings: registerGuild } = require("@schemas/Guild");
 
 /**
- * @param {BotClient} client
- * @param {Guild} guild
+ * @param {import('discord.js').BotClient} client
+ * @param {import('@src/structures').Guild} guild
  */
 module.exports = async (client, guild) => {
   if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });

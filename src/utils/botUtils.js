@@ -1,4 +1,3 @@
-const { MessagePayload, MessageOptions, User, BaseGuildTextChannel } = require("discord.js");
 const { getJson } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 const { success, warn, error, log } = require("@src/helpers/logger");
@@ -67,29 +66,37 @@ async function startupCheck() {
 }
 
 /**
- * @param {BaseGuildTextChannel} channel
- * @param {string | MessagePayload | MessageOptions} message
+ * @param {import('discord.js').TextBasedChannels} channel
+ * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} content
+ * @param {number} [seconds]
  */
-async function sendMessage(channel, message) {
-  if (!channel || !message) return;
-  if (!channel.permissionsFor(channel.guild?.me).has("SEND_MESSAGES")) return;
+async function sendMessage(channel, content, seconds) {
+  if (!channel || !content) return;
+  const perms = ["VIEW_CHANNEL", "SEND_MESSAGES"];
+  if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
+  if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(perms)) return;
   try {
-    return await channel.send(message);
+    if (!seconds) return channel.send(content);
+    const reply = await channel.send(content);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
     error(`sendMessage`, ex);
   }
 }
 
 /**
- * @param {User} user
- * @param {string|MessagePayload|MessageOptions} message
+ * @param {import('discord.js').User} user
+ * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} message
+ * @param {number} [seconds]
  */
-async function safeDM(user, message) {
+async function safeDM(user, message, seconds) {
   if (!user || !message) return;
   try {
-    return await user.send(message);
+    if (!seconds) return user.send(message);
+    const reply = await user.send(message);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
-    error(`safeDM`, ex);
+    /** Ignore */
   }
 }
 

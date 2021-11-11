@@ -17,11 +17,11 @@ module.exports = class Reputation extends Command {
         minArgsCount: 1,
         subcommands: [
           {
-            name: "view",
+            trigger: "view",
             description: "view reputation for a user",
           },
           {
-            name: "give",
+            trigger: "give",
             description: "give reputation to a user",
           },
         ],

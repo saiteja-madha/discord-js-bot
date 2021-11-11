@@ -1,10 +1,7 @@
-const { BotClient } = require("@src/structures");
-const { VoiceState } = require("discord.js");
-
 /**
- * @param {BotClient} client
- * @param {VoiceState} oldState
- * @param {VoiceState} newState
+ * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').VoiceState} oldState
+ * @param {import('discord.js').VoiceState} newState
  */
 module.exports = async (client, oldState, newState) => {
   // if nobody left the channel in question, return.

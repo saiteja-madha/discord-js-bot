@@ -1,12 +1,10 @@
-const { MessageReaction, PartialMessageReaction, User, PartialUser } = require("discord.js");
-const { BotClient } = require("@src/structures");
 const { reactionHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
 
 /**
- * @param {BotClient} client
- * @param {MessageReaction|PartialMessageReaction} reaction
- * @param {User|PartialUser} user
+ * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').MessageReaction|import('discord.js').PartialMessageReaction} reaction
+ * @param {import('discord.js').User|import('discord.js').PartialUser} user
  */
 module.exports = async (client, reaction, user) => {
   if (reaction.partial) {

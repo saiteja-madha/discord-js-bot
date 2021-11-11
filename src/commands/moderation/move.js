@@ -6,7 +6,7 @@ const move = require("./shared/move");
 module.exports = class DeafenCommand extends Command {
   constructor(client) {
     super(client, {
-      name: "deafen",
+      name: "move",
       description: "move specified member to voice channel",
       category: "MODERATION",
       userPermissions: ["DEAFEN_MEMBERS"],

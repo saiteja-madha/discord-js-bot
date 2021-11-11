@@ -1,53 +1,63 @@
 module.exports = {
   ADMIN: {
     name: "Admin",
-    image: "https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/512/Settings-icon.png",
-    emoji: "\u2699",
+    image: "https://icons.iconarchive.com/icons/dakirby309/simply-styled/256/Settings-icon.png",
+    emoji: "⚙️",
   },
   AUTOMOD: {
     name: "Automod",
-    image: "https://cdn3.iconfinder.com/data/icons/web-marketing-1-3/48/30-512.png",
-    emoji: "\uD83D\uDEE1",
+    image: "https://icons.iconarchive.com/icons/dakirby309/simply-styled/256/Settings-icon.png",
+    emoji: "⚙️",
+  },
+  ANIME: {
+    name: "Anime",
+    image: "https://wallpaperaccess.com/full/5680679.jpg",
+    emoji: "🎨",
   },
   ECONOMY: {
     name: "Economy",
     image: "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-11/128/coins-icon.png",
-    emoji: "\uD83E\uDE99",
+    emoji: "🪙",
   },
   FUN: {
     name: "Fun",
     image: "https://icons.iconarchive.com/icons/flameia/aqua-smiles/128/make-fun-icon.png",
-    emoji: "\uD83D\uDE02",
+    emoji: "😂",
   },
   IMAGE: {
     name: "Image",
     image: "https://icons.iconarchive.com/icons/dapino/summer-holiday/128/photo-icon.png",
-    emoji: "\uD83D\uDDBC",
+    emoji: "🖼️",
   },
   INVITE: {
     name: "Invite",
     image: "https://cdn4.iconfinder.com/data/icons/general-business/150/Invite-512.png",
-    emoji: "\uD83D\uDCE8",
+    emoji: "📨",
   },
   INFORMATION: {
     name: "Information",
     image: "https://icons.iconarchive.com/icons/graphicloads/100-flat/128/information-icon.png",
-    emoji: "\uD83E\uDEA7",
+    emoji: "🪧",
   },
   MODERATION: {
     name: "Moderation",
     image: "https://icons.iconarchive.com/icons/lawyerwordpress/law/128/Gavel-Law-icon.png",
-    emoji: "\uD83D\uDD28",
+    emoji: "🔨",
   },
   MUSIC: {
     name: "Music",
     image: "https://icons.iconarchive.com/icons/wwalczyszyn/iwindows/256/Music-Library-icon.png",
     emoji: "🎵",
   },
+  OWNER: {
+    name: "Owner",
+    image: "https://www.pinclipart.com/picdir/middle/531-5318253_web-designing-icon-png-clipart.png",
+    emoji: "🤴",
+  },
   SOCIAL: {
     name: "Social",
     image: "https://icons.iconarchive.com/icons/dryicons/aesthetica-2/128/community-users-icon.png",
-    emoji: "\uD83E\uDEC2",
+    emoji: "🫂",
   },
   TICKET: {
     name: "Ticket",
@@ -57,6 +67,6 @@ module.exports = {
   UTILITY: {
     name: "Utility",
     image: "https://icons.iconarchive.com/icons/blackvariant/button-ui-system-folders-alt/128/Utilities-icon.png",
-    emoji: "\uD83D\uDEE0",
+    emoji: "🛠",
   },
 };

@@ -1,19 +1,8 @@
-const {
-  PermissionResolvable,
-  Client,
-  MessageEmbed,
-  BaseGuildTextChannel,
-  Message,
-  CommandInteraction,
-  CommandInteractionOptionResolver,
-  // eslint-disable-next-line no-unused-vars
-  ApplicationCommandOptionData,
-} = require("discord.js");
-
+const { MessageEmbed } = require("discord.js");
 const { permissions, sendMessage } = require("@utils/botUtils");
-const { EMOJIS, EMBED_COLORS, PREFIX } = require("@root/config.js");
+const { EMOJIS, EMBED_COLORS, PREFIX, OWNER_IDS } = require("@root/config.js");
 const { timeformat } = require("@utils/miscUtils");
-const BotClient = require("./BotClient");
+const CommandCategory = require("./CommandCategory");
 
 class Command {
   /**
@@ -36,16 +25,7 @@ class Command {
    * @typedef {Object} InteractionInfo
    * @property {boolean} enabled - Whether the slash command is enabled or not
    * @property {boolean} ephemeral - Whether the reply should be ephemeral
-   * @property {ApplicationCommandOptionData[]} options - command options
-   */
-
-  /**
-   * @typedef {Object} ContextInfo
-   * @property {boolean} enabled - Whether the slash command is enabled or not
-   * @property {boolean} ephemeral - Whether the reply should be ephemeral
-   * @property {"MESSAGE"|"USER"} type - Type of context menu
-   * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command.
-   * @property {ApplicationCommandOptionData[]} options - command options
+   * @property {import('discord.js').ApplicationCommandOptionData[]} options - command options
    */
 
   /**
@@ -63,15 +43,15 @@ class Command {
    * @property {string} description - A short description of the command
    * @property {number} cooldown - The command cooldown in seconds
    * @property {CommandCategory} category - The category this command belongs to
-   * @property {PermissionResolvable[]} [botPermissions] - Permissions required by the client to use the command.
-   * @property {PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command
+   * @property {import('discord.js').PermissionResolvable[]} [botPermissions] - Permissions required by the client to use the command.
+   * @property {import('discord.js').PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command
+   * @property {Validation[]} [validations] - List of validations to be run before the command is executed
    * @property {CommandInfo} command - A short description of the command
    * @property {InteractionInfo} slashCommand - A short description of the command
-   * @property {ContextInfo} contextMenu - A short description of the command
    */
 
   /**
-   * @param {BotClient} client - The discord client
+   * @param {import('discord.js').Client} client - The discord client
    * @param {CommandData} data - The command information
    */
   constructor(client, data) {
@@ -83,128 +63,168 @@ class Command {
     this.category = data.category || "NONE";
     this.botPermissions = data.botPermissions || [];
     this.userPermissions = data.userPermissions || [];
+    this.validations = data.validations || [];
 
     /**
      * @type {CommandInfo}
      */
-    this.command = data.command || {};
-    this.command.aliases = data.command.aliases || [];
-    this.command.usage = data.command.usage || "";
-    this.command.minArgsCount = data.command.minArgsCount || 0;
-    this.command.subcommands = data.command.subcommands || [];
+    if (data.command) {
+      if (data.command.enabled && typeof this.messageRun !== "function") {
+        throw new Error(`Command ${this.name} doesn't has a messageRun function`);
+      }
+
+      this.command = data.command;
+      this.command.enabled = Object.prototype.hasOwnProperty.call(data.command, "enabled")
+        ? data.command.enabled
+        : true;
+
+      this.command.aliases = data.command.aliases || [];
+      this.command.usage = data.command.usage || "";
+      this.command.minArgsCount = data.command.minArgsCount || 0;
+      this.command.subcommands = data.command.subcommands || [];
+    }
 
     /**
      * @type {InteractionInfo}
      */
     if (data.slashCommand) {
-      this.slashCommand = data.slashCommand;
-      this.slashCommand.enabled = data.slashCommand.enabled;
-      this.slashCommand.ephemeral = data.slashCommand.ephemeral || false;
-      this.slashCommand.options = data.slashCommand.options || [];
-    }
+      if (data.slashCommand.enabled && typeof this.interactionRun !== "function") {
+        throw new Error(`Command ${this.name} doesn't has a interactionRun function`);
+      }
 
-    /**
-     * @type {InteractionInfo}
-     */
-    if (data.contextMenu) {
-      this.contextMenu = data.contextMenu;
-      this.contextMenu.enabled = data.contextMenu.enabled;
-      this.contextMenu.ephemeral = data.contextMenu.ephemeral || false;
-      this.contextMenu.type = data.contextMenu.type;
+      this.slashCommand = data.slashCommand;
+      this.slashCommand.enabled = Object.prototype.hasOwnProperty.call(data.slashCommand, "enabled")
+        ? data.slashCommand.enabled
+        : false;
+
+      this.slashCommand.ephemeral = Object.prototype.hasOwnProperty.call(data.slashCommand, "ephemeral")
+        ? data.slashCommand.ephemeral
+        : false;
+
+      this.slashCommand.options = data.slashCommand.options || [];
     }
   }
 
   /**
    * Function that validates the message with the command options
-   * @param {Message} message
+   * @param {import('discord.js').Message} message
    * @param {string[]} args
    * @param {string} invoke
    * @param {string} prefix
    */
-  async execute(message, args, invoke, prefix) {
-    const { channel, guild, member } = message;
-    const options = this.command;
-
-    if (this.cooldown > 0) {
-      const remaining = this.getRemainingCooldown(member.id);
-      if (remaining > 0) {
-        return message.reply(`You are on cooldown. You can use the command after ${timeformat(remaining)}`);
+  async executeCommand(message, args, invoke, prefix) {
+    // callback validations
+    for (const validation of this.validations) {
+      if (!validation.callback(message)) {
+        return message.reply(validation.message);
       }
     }
 
-    // Return if bot cannot send message
-    if (!channel.permissionsFor(guild.me).has("SEND_MESSAGES")) return;
-
-    // Check Arguments
-    if (options.minArgsCount > 0 && args.length < options.minArgsCount) {
-      return this.sendUsage(channel, prefix, invoke, "Missing arguments");
+    // Owner commands
+    if (this.category === "OWNER" && !OWNER_IDS.includes(message.author.id)) {
+      return message.reply("This command can only accessible to bot owners");
     }
 
-    // Guild OwnerOnly check
-    if (options.guildOwnerOnly && guild.ownerId !== member.id) {
-      return message.reply(`The \`${this.name}\` command can only be used by the guild owner.`);
+    // user permissions
+    if (message.member && this.userPermissions.length > 0) {
+      if (!message.channel.permissionsFor(message.guild.me).has(this.userPermissions)) {
+        return message.reply(`You need ${this.parsePermissions(this.userPermissions)} for this command`);
+      }
     }
 
-    // Bot OwnerOnly check
-    if (options.botOwnerOnly && !this.client.config.OWNER_IDS.includes(member.id)) {
-      return message.reply(`The \`${this.name}\` command can only be used by the bot owner.`);
+    // bot permissions
+    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+    if (this.botPermissions.length > 0) {
+      if (!message.channel.permissionsFor(message.guild.me).has(this.botPermissions)) {
+        return message.reply(`I need ${this.parsePermissions(this.botPermissions)} for this command`);
+      }
     }
 
-    // NSFW command
-    if (options.nsfw && !channel.nsfw) {
-      return message.reply(`The \`${this.name}\` command can only be used in NSFW Channel.`);
+    // cooldown check
+    if (this.cooldown > 0) {
+      const remaining = this.getRemainingCooldown(message.author.id);
+      if (remaining > 0) {
+        return message.reply(`You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``);
+      }
     }
 
-    // Check user permissions
-    if (options.userPermissions.length > 0 && !channel.permissionsFor(member).has(options.userPermissions)) {
-      return message.reply(`You need ${this.constructor.parsePermissions(options.userPermissions)} for this command`);
+    try {
+      await this.messageRun(message, args, invoke, prefix);
+    } catch (ex) {
+      await message.reply("Oops! An error occurred while running the command");
+      this.client.logger.error("messageRun", ex);
+    } finally {
+      this.applyCooldown(message.author.id);
     }
-
-    // Check bot permissions
-    if (options.botPermissions.length > 0 && !channel.permissionsFor(guild.me).has(options.botPermissions)) {
-      return message.reply(`I need ${this.constructor.parsePermissions(options.botPermissions)} for this command`);
-    }
-
-    await this.messageRun(message, args, invoke, prefix);
-    this.applyCooldown(member.id);
   }
 
   /**
-   * Function that is called when command is sent
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {string} invoke
-   * @param {string} prefix
+   *
+   * @param {import('discord.js').CommandInteraction} interaction
    */
-  async messageRun(message, args, invoke, prefix) {
-    if (this.command.enabled) {
-      throw new Error(`${this.constructor.name} doesn't have a messageRun() method.`);
+  async executeInteraction(interaction) {
+    // callback validations
+    for (const validation of this.validations) {
+      if (!validation.callback(interaction)) {
+        return interaction.reply({
+          content: validation.message,
+          ephemeral: true,
+        });
+      }
+    }
+
+    // Owner commands
+    if (this.category === "OWNER" && !OWNER_IDS.includes(interaction.user.id)) {
+      return interaction.reply({
+        content: `This command can only accessible to bot owners`,
+        ephemeral: true,
+      });
+    }
+
+    // user permissions
+    if (interaction.member && this.userPermissions.length > 0) {
+      if (!interaction.member.permissions.has(this.userPermissions)) {
+        return interaction.reply({
+          content: `You need ${this.parsePermissions(this.userPermissions)} for this command`,
+          ephemeral: true,
+        });
+      }
+    }
+
+    // bot permissions
+    if (this.botPermissions.length > 0) {
+      if (!interaction.guild.me.permissions.has(this.botPermissions)) {
+        return interaction.reply({
+          content: `I need ${this.parsePermissions(this.botPermissions)} for this command`,
+          ephemeral: true,
+        });
+      }
+    }
+
+    // cooldown check
+    if (this.cooldown > 0) {
+      const remaining = this.getRemainingCooldown(interaction.user.id);
+      if (remaining > 0) {
+        return interaction.reply({
+          content: `You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``,
+          ephemeral: true,
+        });
+      }
+    }
+
+    try {
+      await interaction.deferReply({ ephemeral: this.slashCommand.ephemeral });
+      await this.interactionRun(interaction);
+    } catch (ex) {
+      await interaction.followUp("Oops! An error occurred while running the command");
+      this.client.logger.error("interactionRun", ex);
+    } finally {
+      this.applyCooldown(interaction.user.id);
     }
   }
 
   /**
-   * Function that is called when interaction is sent
-   * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
-   */
-  async interactionRun(interaction, options) {
-    if (this.slashCommand.enabled) {
-      throw new Error(`${this.constructor.name} doesn't have a interactionRun() method.`);
-    }
-  }
-
-  /**
-   * Function that is called when interaction is sent
-   * @param {CommandInteraction} interaction
-   */
-  async contextRun(interaction) {
-    if (this.contextMenu.enabled) {
-      throw new Error(`${this.constructor.name} doesn't have a contextRun() method.`);
-    }
-  }
-
-  /**
-   * @param {PermissionResolvable[]} perms
+   * @param {import('discord.js').PermissionResolvable[]} perms
    */
   static parsePermissions(perms) {
     const permissionWord = `permission${perms.length > 1 ? "s" : ""}`;
@@ -240,7 +260,7 @@ class Command {
 
   /**
    * send the commands usage embed
-   * @param {BaseGuildTextChannel} channel - channel where the embed must be sent
+   * @param {import('discord.js').BaseGuildTextChannel} channel - channel where the embed must be sent
    * @param {string} prefix - command prefix
    * @param {string} invoke - alias that was used to trigger this command
    * @param {string} title - the embed title
@@ -270,7 +290,7 @@ class Command {
 
   /**
    * Validates the constructor parameters
-   * @param {Client} client - Client to validate
+   * @param {import('discord.js').Client} client - Client to validate
    * @param {CommandData} data - Info to validate
    * @private
    */
@@ -288,13 +308,50 @@ class Command {
     if (data.cooldown && typeof data.cooldown !== "number") {
       throw new TypeError("Command cooldown must be a number");
     }
+    if (data.category) {
+      if (!Object.prototype.hasOwnProperty.call(CommandCategory, data.category)) {
+        throw new Error(`Not a valid category ${data.category}`);
+      }
+    }
+    if (data.userPermissions) {
+      if (!Array.isArray(data.userPermissions)) {
+        throw new TypeError("Command userPermissions must be an Array of permission key strings.");
+      }
+      for (const perm of data.userPermissions) {
+        if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
+      }
+    }
+    if (data.botPermissions) {
+      if (!Array.isArray(data.botPermissions)) {
+        throw new TypeError("Command botPermissions must be an Array of permission key strings.");
+      }
+      for (const perm of data.botPermissions) {
+        if (!permissions[perm]) throw new RangeError(`Invalid command botPermission: ${perm}`);
+      }
+    }
+    if (data.validations) {
+      if (!Array.isArray(data.validations)) {
+        throw new TypeError("Command validations must be an Array of validation Objects.");
+      }
+      for (const validation of data.validations) {
+        if (typeof validation !== "object") {
+          throw new TypeError("Command validations must be an object.");
+        }
+        if (typeof validation.callback !== "function") {
+          throw new TypeError("Command validation callback must be a function.");
+        }
+        if (typeof validation.message !== "string") {
+          throw new TypeError("Command validation message must be a string.");
+        }
+      }
+    }
 
     // Validate Command Details
     if (data.command) {
       if (typeof data.command !== "object") {
         throw new TypeError("Command.command must be an object");
       }
-      if (data.command.enabled && typeof data.command.enabled !== "boolean") {
+      if (Object.prototype.hasOwnProperty.call(data.command, "enabled") && typeof data.command.enabled !== "boolean") {
         throw new TypeError("Command.command enabled must be a boolean value");
       }
       if (
@@ -313,33 +370,18 @@ class Command {
       if (data.command.subcommands && !Array.isArray(data.command.subcommands)) {
         throw new TypeError("Command.command subcommands must be an array");
       }
-      if (data.command.botPermissions) {
-        if (!Array.isArray(data.command.botPermissions)) {
-          throw new TypeError("Command.command botPermissions must be an Array of permission key strings.");
+      if (data.command.subcommands) {
+        for (const sub of data.command.subcommands) {
+          if (typeof sub !== "object") {
+            throw new TypeError("Command.command subcommands must be an array of objects");
+          }
+          if (typeof sub.trigger !== "string") {
+            throw new TypeError("Command.command subcommand trigger must be a string");
+          }
+          if (typeof sub.description !== "string") {
+            throw new TypeError("Command.command subcommand description must be a string");
+          }
         }
-        for (const perm of data.command.botPermissions) {
-          if (!permissions[perm]) throw new RangeError(`Invalid command clientPermission: ${perm}`);
-        }
-      }
-      if (data.command.userPermissions) {
-        if (!Array.isArray(data.command.userPermissions)) {
-          throw new TypeError("Command.command userPermissions must be an Array of permission key strings.");
-        }
-        for (const perm of data.command.userPermissions) {
-          if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
-        }
-      }
-      if (data.command.guildOwnerOnly && typeof data.command.guildOwnerOnly !== "boolean") {
-        throw new TypeError("Command.command guildOwnerOnly must be a boolean value");
-      }
-      if (data.command.botOwnerOnly && typeof data.command.botOwnerOnly !== "boolean") {
-        throw new TypeError("Command.command botOwnerOnly must be a boolean value");
-      }
-      if (data.command.nsfw && typeof data.command.nsfw !== "boolean") {
-        throw new TypeError("Command.command nsfw must be a boolean value");
-      }
-      if (data.command.hidden && typeof data.command.hidden !== "boolean") {
-        throw new TypeError("Command.command hidden must be a boolean value");
       }
     }
 
@@ -348,30 +390,20 @@ class Command {
       if (typeof data.slashCommand !== "object") {
         throw new TypeError("Command.slashCommand must be an object");
       }
-      if (data.slashCommand.enabled && typeof data.slashCommand.enabled !== "boolean") {
+      if (
+        Object.prototype.hasOwnProperty.call(data.slashCommand, "enabled") &&
+        typeof data.slashCommand.enabled !== "boolean"
+      ) {
         throw new TypeError("Command.slashCommand enabled must be a boolean value");
       }
-      if (data.slashCommand.ephemeral && typeof data.slashCommand.ephemeral !== "boolean") {
+      if (
+        Object.prototype.hasOwnProperty.call(data.slashCommand, "ephemeral") &&
+        typeof data.slashCommand.ephemeral !== "boolean"
+      ) {
         throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
       }
       if (data.slashCommand.options && !Array.isArray(data.slashCommand.options)) {
         throw new TypeError("Command.slashCommand options must be a array");
-      }
-    }
-
-    // Validate Context Menu
-    if (data.contextMenu) {
-      if (typeof data.contextMenu !== "object") {
-        throw new TypeError("Command.contextMenu must be an object");
-      }
-      if (data.contextMenu.enabled && typeof data.contextMenu.enabled !== "boolean") {
-        throw new TypeError("Command.contextMenu enabled must be a boolean value");
-      }
-      if (data.contextMenu.ephemeral && typeof data.contextMenu.ephemeral !== "boolean") {
-        throw new TypeError("Command.slashCommand ephemeral must be a boolean value");
-      }
-      if (data.contextMenu.enabled && !["MESSAGE", "USER"].includes(data.contextMenu.type)) {
-        throw new TypeError("Command.contextMenu type must be a either MESSAGE or USER");
       }
     }
   }
