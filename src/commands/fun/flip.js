@@ -115,7 +115,7 @@ module.exports = class FlipCommand extends Command {
 };
 
 const firstEmbed = (user) =>
-  new MessageEmbed().setColor(EMBED_COLORS.TRANSPARENT_EMBED).setDescription(`${user.username}, started a coin toss`);
+  new MessageEmbed().setColor(EMBED_COLORS.TRANSPARENT).setDescription(`${user.username}, started a coin toss`);
 
 const secondEmbed = () => new MessageEmbed().setDescription("The coin is in the air");
 

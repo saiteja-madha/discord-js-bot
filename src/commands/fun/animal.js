@@ -61,7 +61,7 @@ async function getAnimal(user, choice) {
 
   const imageUrl = response.data?.image;
   const embed = new MessageEmbed()
-    .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
+    .setColor(EMBED_COLORS.TRANSPARENT)
     .setImage(imageUrl)
     .setFooter(`Requested by ${user.tag}`);
 

@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
-const { EMOJIS, MESSAGES, EMBED_COLORS } = require("@root/config.js");
+const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const outdent = require("outdent");
 
@@ -64,22 +64,22 @@ async function pokedex(pokemon) {
     .setThumbnail(json.sprite)
     .setDescription(
       outdent`
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **ID**: ${json.number}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Name**: ${json.name}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Species**: ${json.species}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Type(s)**: ${json.types}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Abilities(normal)**: ${json.abilities.normal}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Abilities(hidden)**: ${json.abilities.hidden}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Egg group(s)**: ${json.eggGroups}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Gender**: ${json.gender}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Height**: ${json.height} foot tall
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Weight**: ${json.weight}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Current Evolution Stage**: ${json.family.evolutionStage}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Evolution Line**: ${json.family.evolutionLine}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Is Starter?**: ${json.starter}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Is Legendary?**: ${json.legendary}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Is Mythical?**: ${json.mythical}
-            ${EMOJIS.WHITE_DIAMOND_SUIT} **Is Generation?**: ${json.gen}
+            ♢ **ID**: ${json.number}
+            ♢ **Name**: ${json.name}
+            ♢ **Species**: ${json.species}
+            ♢ **Type(s)**: ${json.types}
+            ♢ **Abilities(normal)**: ${json.abilities.normal}
+            ♢ **Abilities(hidden)**: ${json.abilities.hidden}
+            ♢ **Egg group(s)**: ${json.eggGroups}
+            ♢ **Gender**: ${json.gender}
+            ♢ **Height**: ${json.height} foot tall
+            ♢ **Weight**: ${json.weight}
+            ♢ **Current Evolution Stage**: ${json.family.evolutionStage}
+            ♢ **Evolution Line**: ${json.family.evolutionLine}
+            ♢ **Is Starter?**: ${json.starter}
+            ♢ **Is Legendary?**: ${json.legendary}
+            ♢ **Is Mythical?**: ${json.mythical}
+            ♢ **Is Generation?**: ${json.gen}
             `
     )
     .setFooter(json.description);

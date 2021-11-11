@@ -54,7 +54,7 @@ module.exports = class TranslateCommand extends Command {
 
     if (!GOOGLE_TRANSLATE[outputCode]) {
       embed
-        .setColor(EMBED_COLORS.WARNING_EMBED)
+        .setColor(EMBED_COLORS.WARNING)
         .setDescription(
           "Invalid translation code. Visit [here](https://cloud.google.com/translate/docs/languages) to see list of supported translation codes"
         );

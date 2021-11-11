@@ -1,9 +1,9 @@
 const { Command } = require("@src/structures");
 const { getRoleByName } = require("@utils/guildUtils");
 const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
-const Ascii = require("ascii-table");
-const { EMOJIS, EMBED_COLORS } = require("@root/config.js");
+const { EMBED_COLORS } = require("@root/config.js");
 const { getSettings } = require("@schemas/Guild");
+const { table } = require("table");
 
 module.exports = class AutomodConfigCommand extends Command {
   constructor(client) {
@@ -170,27 +170,42 @@ module.exports = class AutomodConfigCommand extends Command {
 
 async function getStatus(settings, guild) {
   const { automod } = settings;
+  const row = [];
 
-  const table = new Ascii("").setHeading("Feature", "Status");
   const logChannel = settings.modlog_channel
     ? guild.channels.cache.get(settings.modlog_channel).toString()
     : "Not Configured";
 
-  table
-    .addRow("Max Lines", automod.max_lines || "NA")
-    .addRow("Max Mentions", automod.max_mentions || "NA")
-    .addRow("Max Role Mentions", automod.max_role_mentions || "NA")
-    .addRow("AntiLinks", automod.anti_links ? EMOJIS.TICK : EMOJIS.X_MARK)
-    .addRow("AntiScam", automod.anti_scam ? EMOJIS.TICK : EMOJIS.X_MARK)
-    .addRow("AntiInvites", automod.anti_invites ? EMOJIS.TICK : EMOJIS.X_MARK)
-    .addRow("AntiGhostPing", automod.anti_ghostping ? EMOJIS.TICK : EMOJIS.X_MARK);
+  row.push(["Max Lines", automod.max_lines || "NA"]);
+  row.push(["Max Mentions", automod.max_mentions || "NA"]);
+  row.push(["Max Role Mentions", automod.max_role_mentions || "NA"]);
+  row.push(["Anti-Links", automod.anti_links ? "✓" : "✕"]);
+  row.push(["Anti-Invites", automod.anti_invites ? "✓" : "✕"]);
+  row.push(["Anti-Scam", automod.anti_scam ? "✓" : "✕"]);
+  row.push(["Anti-Ghostping", automod.anti_ghostping ? "✓" : "✕"]);
+
+  const asciiTable = table(row, {
+    singleLine: true,
+    header: {
+      content: "Automod Configuration",
+      alignment: "center",
+    },
+    columns: [
+      {},
+      {
+        alignment: "center",
+      },
+    ],
+  });
 
   const embed = new MessageEmbed()
-    .setAuthor("Automod Configuration")
-    .setColor(EMBED_COLORS.TRANSPARENT_EMBED)
-    .setDescription("```" + table.toString() + "```");
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription("```" + asciiTable + "```")
+    .addField("Log Channel", logChannel, true)
+    .addField("Max Strikes", automod.strikes.toString(), true)
+    .addField("Action", automod.action, true);
 
-  return { content: `**Log Channel:** ${logChannel}`, embeds: [embed] };
+  return { embeds: [embed] };
 }
 
 async function setStrikes(settings, strikes) {

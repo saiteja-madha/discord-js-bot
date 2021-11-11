@@ -16,7 +16,7 @@ const errorWebhook = process.env.ERROR_LOGS ? new WebhookClient({ url: process.e
 
 const sendWebhook = (content, err) => {
   const embed = new MessageEmbed()
-    .setColor(config.EMBED_COLORS.ERROR_EMBED)
+    .setColor(config.EMBED_COLORS.ERROR)
     .setAuthor(err?.name || "Error")
     .setDescription("```js\n" + err?.stack || err + "```");
 
@@ -44,7 +44,7 @@ const sendLogs = (level, content, data) => {
       break;
 
     case "warn":
-      console.log(`[${chalk.cyan(timestamp)}] [${chalk.yellow("warning")}] ${content} `);
+      console.log(`[${chalk.cyan(timestamp)}] [${chalk.yellow("warn")}] ${content} `);
       simpleLogger.warn(content);
       break;
 
@@ -55,7 +55,6 @@ const sendLogs = (level, content, data) => {
       break;
 
     case "debug":
-      console.log(`[${chalk.cyan(timestamp)}] [${chalk.cyan(level)}] ${content} `);
       simpleLogger.debug(content);
       break;
 
