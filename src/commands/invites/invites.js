@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { getEffectiveInvites } = require("@src/handlers/invite-handler");
+const { getEffectiveInvites } = require("@src/handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");

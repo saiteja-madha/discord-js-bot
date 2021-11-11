@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { isHex } = require("@utils/miscUtils");
-const { buildGreeting } = require("@src/handlers/greeting-handler");
+const { buildGreeting } = require("@src/handlers/greeting");
 const { Message, CommandInteraction } = require("discord.js");
 const { canSendEmbeds } = require("@utils/guildUtils");
 const { getSettings } = require("@schemas/Guild");

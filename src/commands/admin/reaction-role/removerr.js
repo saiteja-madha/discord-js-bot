@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
-const { removeReactionRole } = require("@schemas/reactionrole-schema");
+const { removeReactionRole } = require("@schemas/Message");
 const { parsePermissions } = require("@utils/botUtils");
 const { getMatchingChannel } = require("@utils/guildUtils");
 

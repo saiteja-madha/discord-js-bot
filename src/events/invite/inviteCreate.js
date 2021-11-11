@@ -1,6 +1,6 @@
 const { Invite } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { cacheInvite } = require("@src/handlers/invite-handler");
+const { cacheInvite } = require("@src/handlers/invite");
 
 /**
  * @param {BotClient} client

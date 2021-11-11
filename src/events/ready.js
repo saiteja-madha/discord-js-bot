@@ -1,6 +1,6 @@
 const { BotClient } = require("@src/structures");
 const { counterHandler, inviteHandler, musicHandler } = require("@src/handlers");
-const { loadReactionRoles } = require("@schemas/reactionrole-schema");
+const { cacheReactionRoles } = require("@schemas/Message");
 const { getSettings } = require("@schemas/Guild");
 
 /**
@@ -27,7 +27,7 @@ module.exports = async (client) => {
   musicHandler.registerPlayerEvents(client);
 
   // Load reaction roles to cache
-  await loadReactionRoles();
+  await cacheReactionRoles();
 
   for (const guild of client.guilds.cache.values()) {
     const settings = await getSettings(guild);

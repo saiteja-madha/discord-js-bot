@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { getSettings } = require("@schemas/Guild");
-const { cacheGuildInvites } = require("@src/handlers/invite-handler");
+const { cacheGuildInvites } = require("@src/handlers/invite");
 const { Message, CommandInteraction } = require("discord.js");
 
 module.exports = class InviteTracker extends Command {

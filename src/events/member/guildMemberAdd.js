@@ -1,6 +1,6 @@
 const { GuildMember } = require("discord.js");
 const { BotClient } = require("@src/structures");
-const { inviteHandler, greetingHandler } = require("@root/src/handlers");
+const { inviteHandler, greetingHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
 
 /**

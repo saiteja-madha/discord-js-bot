@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { findMatchingRoles, getMatchingChannel } = require("@utils/guildUtils");
-const { addReactionRole, getReactionRole } = require("@schemas/reactionrole-schema");
+const { addReactionRole, getReactionRoles } = require("@schemas/Message");
 const { Util, Message, CommandInteraction } = require("discord.js");
 const { parsePermissions } = require("@utils/botUtils");
 
@@ -112,7 +112,7 @@ async function addRR(guild, channel, messageId, reaction, role) {
   }
 
   let reply;
-  const previousRoles = getReactionRole(guild, channel.id, targetMessage.id);
+  const previousRoles = getReactionRoles(guild, channel.id, targetMessage.id);
   if (previousRoles.length > 0) {
     const found = previousRoles.find((rr) => rr.emote === emoji);
     if (found) reply = "A role is already configured for this emoji. Overwriting data...\n";

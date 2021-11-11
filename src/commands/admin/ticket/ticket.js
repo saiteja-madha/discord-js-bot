@@ -4,7 +4,7 @@ const { sendMessage } = require("@utils/botUtils");
 const { canSendEmbeds, findMatchingRoles, getMatchingChannel } = require("@utils/guildUtils");
 const { isTicketChannel, closeTicket, closeAllTickets, PERMS } = require("@utils/ticketUtils");
 const { getSettings } = require("@schemas/Guild");
-const { createNewTicket } = require("@schemas/ticket-schema");
+const { createNewTicket } = require("@schemas/Message");
 const { EMBED_COLORS, EMOJIS } = require("@root/config.js");
 
 const SETUP_TIMEOUT = 30 * 1000;
