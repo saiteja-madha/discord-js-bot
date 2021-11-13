@@ -1,19 +1,38 @@
-const { Command, CommandCategory } = require("@src/structures");
-const { EMOJIS, EMBED_COLORS, BOT_INVITE, SUPPORT_SERVER } = require("@root/config.js");
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, Message, MessageButton } = require("discord.js");
+const { Command, CommandCategory, BotClient } = require("@src/structures");
+const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
+const {
+  MessageEmbed,
+  MessageActionRow,
+  MessageSelectMenu,
+  Message,
+  MessageButton,
+  CommandInteraction,
+} = require("discord.js");
 
-const MAX_CMDS_PER_EMBED = 7;
+const CMDS_PER_PAGE = 5;
+const TIMEOUT_IN_SECONDS = 20;
 
 module.exports = class HelpCommand extends Command {
   constructor(client) {
     super(client, {
       name: "help",
       description: "command help menu",
+      category: "UTILITY",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         usage: "[command]",
-        category: "UTILITY",
-        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "command",
+            description: "name of the command",
+            required: false,
+            type: "STRING",
+          },
+        ],
       },
     });
   }
@@ -29,7 +48,9 @@ module.exports = class HelpCommand extends Command {
 
     // !help
     if (!trigger) {
-      return sendHelpMenu(message, prefix);
+      const response = await getHelpMenu(message);
+      const sentMsg = await message.reply(response);
+      return waiter(sentMsg, message.author.id, prefix);
     }
 
     // check if command help (!help cat)
@@ -39,13 +60,36 @@ module.exports = class HelpCommand extends Command {
     // No matching command/category found
     message.reply("No matching command or module found");
   }
+
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    let cmdName = interaction.options.getString("command");
+
+    // !help
+    if (!cmdName) {
+      const response = await getHelpMenu(interaction);
+      const sentMsg = await interaction.followUp(response);
+      return waiter(sentMsg, interaction.user.id);
+    }
+
+    // check if command help (!help cat)
+    const cmd = this.client.slashCommands.get(cmdName);
+    if (cmd) {
+      const embed = cmd.getSlashUsage();
+      return interaction.followUp({ embeds: [embed] });
+    }
+
+    // No matching command/category found
+    return interaction.followUp("No matching command found");
+  }
 };
 
 /**
- * @param {Message} message
- * @param {string} prefix
+ * @param {CommandInteraction} interaction
  */
-async function sendHelpMenu(message, prefix) {
+async function getHelpMenu({ client, guild }) {
   // Menu Row
   const options = [];
   const keys = Object.keys(CommandCategory);
@@ -67,93 +111,174 @@ async function sendHelpMenu(message, prefix) {
   // Buttons Row
   let components = [];
   components.push(
-    new MessageButton().setCustomId("previousbtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
-    new MessageButton().setCustomId("nextbtn").setEmoji("➡️").setStyle("SECONDARY").setDisabled(true)
+    new MessageButton().setCustomId("previousBtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
+    new MessageButton().setCustomId("nextBtn").setEmoji("➡️").setStyle("SECONDARY").setDisabled(true)
   );
 
   let buttonsRow = new MessageActionRow().addComponents(components);
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setThumbnail(message.client.user.displayAvatarURL())
+    .setThumbnail(client.user.displayAvatarURL())
     .setDescription(
       "**About Me:**\n" +
-        `Hello I am ${message.guild.me.displayName}!\n` +
+        `Hello I am ${guild.me.displayName}!\n` +
         "A cool multipurpose discord bot which can serve all your needs\n\n" +
-        `**Invite Me:** [Here](${BOT_INVITE})\n` +
+        `**Invite Me:** [Here](${client.getInvite()})\n` +
         `**Support Server:** [Join](${SUPPORT_SERVER})`
     );
 
-  const sentMsg = await message.channel.send({
+  return {
     embeds: [embed],
     components: [menuRow, buttonsRow],
-  });
+  };
+}
 
-  const collector = message.channel.createMessageComponentCollector({
-    filter: (interaction) => interaction.user.id === message.author.id,
-    message: sentMsg,
-    idle: 20 * 1000,
+/**
+ * @param {Message} msg
+ * @param {string} userId
+ * @param {string} prefix
+ */
+const waiter = (msg, userId, prefix) => {
+  const collector = msg.channel.createMessageComponentCollector({
+    filter: (reactor) => reactor.user.id === userId,
+    idle: TIMEOUT_IN_SECONDS * 1000,
+    max: 10,
     dispose: true,
   });
 
   let arrEmbeds = [];
   let currentPage = 0;
+  let menuRow = msg.components[0];
+  let buttonsRow = msg.components[1];
 
-  collector.on("collect", async (interaction) => {
-    await interaction.deferUpdate();
+  collector.on("collect", async (response) => {
+    await response.deferUpdate();
 
-    switch (interaction.customId) {
-      case "help-menu":
-        arrEmbeds = getCategoryEmbeds(message, interaction.values[0].toUpperCase(), prefix);
-        components = [];
+    switch (response.customId) {
+      case "help-menu": {
+        const cat = response.values[0].toUpperCase();
+        arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix) : getSlashCategoryEmbeds(msg.client, cat);
         currentPage = 0;
         buttonsRow.components.forEach((button) => button.setDisabled(arrEmbeds.length > 1 ? false : true));
-
-        await sentMsg.edit({
-          embeds: [arrEmbeds[currentPage]],
-          components: [menuRow, buttonsRow],
-        });
+        await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] });
         break;
+      }
 
-      case "previousbtn":
+      case "previousBtn":
         if (currentPage !== 0) {
           --currentPage;
-          await sentMsg.edit({
-            embeds: [arrEmbeds[currentPage]],
-            components: [menuRow, buttonsRow],
-          });
+          await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] });
         }
         break;
 
-      case "nextbtn":
+      case "nextBtn":
         if (currentPage < arrEmbeds.length - 1) {
           currentPage++;
-          await sentMsg.edit({
-            embeds: [arrEmbeds[currentPage]],
-            components: [menuRow, buttonsRow],
-          });
+          await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] });
         }
         break;
     }
   });
 
   collector.on("end", () => {
-    if (sentMsg && sentMsg.editable) sentMsg.edit({ components: [] });
+    return msg.edit({ components: [] });
   });
-}
+};
 
 /**
- * Returns an array of message embeds for a particular command category
- * @param {Message} message
- * @param {String} category
+ * Returns an array of message embeds for a particular command category [SLASH COMMANDS]
+ * @param {BotClient} client
+ * @param {string} category
  */
-function getCategoryEmbeds(message, category, prefix) {
+function getSlashCategoryEmbeds(client, category) {
   let collector = "";
 
   // For IMAGE Category
   if (category === "IMAGE") {
-    message.client.commands
-      .filter((cmd) => cmd.command.category === category)
+    client.slashCommands
+      .filter((cmd) => cmd.category === category)
+      .forEach((cmd) => (collector += `\`/${cmd.name}\`\n ❯ ${cmd.description}\n\n`));
+
+    const availableFilters = client.slashCommands
+      .get("filter")
+      .slashCommand.options[0].choices.map((ch) => ch.name)
+      .join(", ");
+
+    const availableGens = client.slashCommands
+      .get("generator")
+      .slashCommand.options[0].choices.map((ch) => ch.name)
+      .join(", ");
+
+    collector +=
+      "\n**Available Filters:**\n" + `${availableFilters}` + `*\n\n**Available Generators**\n` + `${availableGens}`;
+
+    const embed = new MessageEmbed()
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setThumbnail(CommandCategory[category].image)
+      .setAuthor(`${category} Commands`)
+      .setDescription(collector);
+
+    return [embed];
+  }
+
+  // For REMAINING Categories
+  const commands = Array.from(client.slashCommands.filter((cmd) => cmd.category === category).values());
+
+  if (commands.length === 0) {
+    const embed = new MessageEmbed()
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setThumbnail(CommandCategory[category].image)
+      .setAuthor(`${category} Commands`)
+      .setDescription("No commands in this category");
+
+    return [embed];
+  }
+
+  const arrSplitted = [];
+  const arrEmbeds = [];
+
+  while (commands.length) {
+    let toAdd = commands.splice(0, commands.length > CMDS_PER_PAGE ? CMDS_PER_PAGE : commands.length);
+
+    toAdd = toAdd.map((cmd) => {
+      const subCmds = cmd.slashCommand.options.filter((opt) => opt.type === "SUB_COMMAND");
+      const subCmdsString = subCmds.map((s) => s.name).join(", ");
+
+      return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
+        subCmds == 0 ? "" : `❯ **SubCommands [${subCmds.length}]**: ${subCmdsString}\n`
+      } `;
+    });
+
+    arrSplitted.push(toAdd);
+  }
+
+  arrSplitted.forEach((item, index) => {
+    const embed = new MessageEmbed()
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setThumbnail(CommandCategory[category].image)
+      .setAuthor(`${category} Commands`)
+      .setDescription(item.join("\n"))
+      .setFooter(`page ${index + 1} of ${arrSplitted.length}`);
+    arrEmbeds.push(embed);
+  });
+
+  return arrEmbeds;
+}
+
+/**
+ * Returns an array of message embeds for a particular command category [MESSAGE COMMANDS]
+ * @param {BotClient} client
+ * @param {string} category
+ * @param {string} prefix
+ */
+function getMsgCategoryEmbeds(client, category, prefix) {
+  let collector = "";
+
+  // For IMAGE Category
+  if (category === "IMAGE") {
+    client.commands
+      .filter((cmd) => cmd.category === category)
       .forEach((cmd) =>
         cmd.command.aliases.forEach((alias) => {
           collector += `\`${alias}\`, `;
@@ -177,7 +302,7 @@ function getCategoryEmbeds(message, category, prefix) {
   }
 
   // For REMAINING Categories
-  const commands = message.client.commands.filter((cmd) => cmd.command.category === category);
+  const commands = client.commands.filter((cmd) => cmd.category === category);
 
   if (commands.length === 0) {
     const embed = new MessageEmbed()
@@ -193,8 +318,8 @@ function getCategoryEmbeds(message, category, prefix) {
   const arrEmbeds = [];
 
   while (commands.length) {
-    let toAdd = commands.splice(0, commands.length > MAX_CMDS_PER_EMBED ? MAX_CMDS_PER_EMBED : commands.length);
-    toAdd = toAdd.map((cmd) => `**${cmd.name}**\n ${EMOJIS.ARROW} ${cmd.description}`);
+    let toAdd = commands.splice(0, commands.length > CMDS_PER_PAGE ? CMDS_PER_PAGE : commands.length);
+    toAdd = toAdd.map((cmd) => `\`${prefix}${cmd.name}\`\n ❯ ${cmd.description}\n`);
     arrSplitted.push(toAdd);
   }
 
