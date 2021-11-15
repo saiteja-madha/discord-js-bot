@@ -1,6 +1,7 @@
+const { Message } = require("discord.js");
 const { Command } = require("@src/structures");
 const { purgeMessages } = require("@utils/modUtils");
-const { Message } = require("discord.js");
+const { sendMessage } = require("@utils/botUtils");
 
 module.exports = class PurgeToken extends Command {
   constructor(client) {
@@ -34,7 +35,7 @@ module.exports = class PurgeToken extends Command {
     const response = await purgeMessages(message.member, message.channel, "TOKEN", amount, token);
 
     if (typeof response === "number") {
-      return message.reply(`Successfully deleted ${response} messages`);
+      return sendMessage(message.channel, `Successfully deleted ${response} messages`, 5);
     } else if (response === "BOT_PERM") {
       return message.reply("I don't have `Read Message History` & `Manage Messages` to delete messages");
     } else if (response === "MEMBER_PERM") {
