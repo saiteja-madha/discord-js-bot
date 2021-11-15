@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { musicValidations } = require("@utils/botUtils");
 const prettyMs = require("pretty-ms");
-const { timeformat } = require("@utils/miscUtils");
+const { durationToMillis } = require("@utils/miscUtils");
 
 module.exports = class Seek extends Command {
   constructor(client) {
@@ -13,9 +13,18 @@ module.exports = class Seek extends Command {
       validations: musicValidations,
       command: {
         enabled: true,
+        usage: "<duration>",
       },
       slashCommand: {
         enabled: true,
+        options: [
+          {
+            name: "time",
+            description: "The time you want to seek to.",
+            type: "STRING",
+            required: true,
+          },
+        ],
       },
     });
   }
@@ -42,12 +51,12 @@ module.exports = class Seek extends Command {
 
 function seekTo({ client, guildId }, time) {
   const player = client.musicManager?.get(guildId);
-  const seekTo = timeformat(time);
+  const seekTo = durationToMillis(time);
 
   if (seekTo > player.queue.current.duration) {
     return "The duration you provide exceeds the duration of the current track";
   }
 
   player.seek(seekTo);
-  `Seeked to ${prettyMs(seekTo, { colonNotation: true, secondsDecimalDigits: 0 })}`;
+  return `Seeked to ${prettyMs(seekTo, { colonNotation: true, secondsDecimalDigits: 0 })}`;
 }

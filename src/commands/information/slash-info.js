@@ -1,12 +1,11 @@
 const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
-const { resolveMember, getMatchingChannel } = require("@utils/guildUtils");
-const user = require("./sub/user");
-const channelInfo = require("./sub/channel");
-const guildInfo = require("./sub/guild");
-const avatar = require("./sub/avatar");
-const emojiInfo = require("./sub/emoji");
-const botInfo = require("./sub/botstats");
+const { CommandInteraction } = require("discord.js");
+const user = require("./shared/user");
+const channelInfo = require("./shared/channel");
+const guildInfo = require("./shared/guild");
+const avatar = require("./shared/avatar");
+const emojiInfo = require("./shared/emoji");
+const botInfo = require("./shared/botstats");
 
 module.exports = class InfoCommand extends Command {
   constructor(client) {
@@ -16,33 +15,7 @@ module.exports = class InfoCommand extends Command {
       category: "INFORMATION",
       botPermissions: ["EMBED_LINKS"],
       command: {
-        enabled: true,
-        subcommands: [
-          {
-            trigger: "user [@user]",
-            description: "get user information",
-          },
-          {
-            trigger: "channel [#channel]",
-            description: "get channel information",
-          },
-          {
-            trigger: "guild",
-            description: "get guild information",
-          },
-          {
-            trigger: "bot",
-            description: "get bot information",
-          },
-          {
-            trigger: "avatar [@user]",
-            description: "get avatar information",
-          },
-          {
-            trigger: "emoji <emoji>",
-            description: "get emoji information",
-          },
-        ],
+        enabled: false,
       },
       slashCommand: {
         enabled: true,
@@ -112,70 +85,6 @@ module.exports = class InfoCommand extends Command {
         ],
       },
     });
-  }
-
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
-  async messageRun(message, args) {
-    const sub = args[0].toLowerCase();
-    let response;
-
-    // user
-    if (sub === "user") {
-      let target = message.member;
-      if (args.length > 1) target = (await resolveMember(message, args[1])) || message.member;
-      response = user(target);
-    }
-
-    // channel
-    else if (sub === "channel") {
-      let targetChannel;
-
-      if (message.mentions.channels.size > 0) {
-        targetChannel = message.mentions.channels.first();
-      } else if (args.length > 0) {
-        const search = args.join(" ");
-        const tcByName = getMatchingChannel(message.guild, search);
-        if (tcByName.length === 0) return message.reply(`No channels found matching \`${search}\`!`);
-        if (tcByName.length > 1) return message.reply(`Multiple channels found matching \`${search}\`!`);
-        [targetChannel] = tcByName;
-      } else {
-        targetChannel = message.channel;
-      }
-
-      response = channelInfo(targetChannel);
-    }
-
-    // guild
-    else if (sub === "guild") {
-      response = await guildInfo(message.guild);
-    }
-
-    // bot
-    else if (sub === "bot") {
-      response = botInfo(message.client);
-    }
-
-    // avatar
-    else if (sub === "avatar") {
-      const target = (await resolveMember(message, args[0])) || message.member;
-      response = avatar(target.user);
-    }
-
-    // emoji
-    else if (sub === "emoji") {
-      const emoji = args[0];
-      response = emojiInfo(emoji, message.guild);
-    }
-
-    // Do nothing
-    else {
-      return;
-    }
-
-    await message.reply(response);
   }
 
   /**

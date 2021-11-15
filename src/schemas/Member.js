@@ -45,6 +45,7 @@ const Model = mongoose.model("members", Schema);
 
 module.exports = {
   getMember: async (guildId, memberId) => {
+    if (isNaN(parseInt(guildId))) console.log("============ERROR===========");
     const key = `${guildId}|${memberId}`;
     if (cache.contains(key)) return cache.get(key);
 

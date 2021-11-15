@@ -8,12 +8,23 @@ module.exports = class Play extends Command {
     super(client, {
       name: "play",
       description: "play a song from youtube",
+      category: "MUSIC",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         usage: "<song-name>",
         minArgsCount: 1,
-        category: "MUSIC",
-        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "query",
+            description: "song name or url",
+            type: "STRING",
+            required: true,
+          },
+        ],
       },
     });
   }

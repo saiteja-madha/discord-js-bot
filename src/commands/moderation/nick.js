@@ -16,11 +16,11 @@ module.exports = class NickCommand extends Command {
         minArgsCount: 2,
         subcommands: [
           {
-            trigger: "set <name>",
+            trigger: "set <@member> <name>",
             description: "sets the nickname of the specified member",
           },
           {
-            trigger: "reset",
+            trigger: "reset <@member>",
             description: "reset a members nickname",
           },
         ],
@@ -73,9 +73,9 @@ module.exports = class NickCommand extends Command {
     const sub = args[0].toLowerCase();
 
     if (sub === "set") {
-      const target = await resolveMember(message, args.shift());
+      const target = await resolveMember(message, args[1]);
       if (!target) return message.reply("Could not find matching member");
-      const name = args && args.join(" ");
+      const name = args.slice(2).join(" ");
       if (!name) return message.reply("Please specify a nickname");
 
       const response = await nickname(message, target, name);
@@ -84,7 +84,7 @@ module.exports = class NickCommand extends Command {
 
     //
     else if (sub === "reset") {
-      const target = await resolveMember(message, args.shift());
+      const target = await resolveMember(message, args[1]);
       if (!target) return message.reply("Could not find matching member");
 
       const response = await nickname(message, target);

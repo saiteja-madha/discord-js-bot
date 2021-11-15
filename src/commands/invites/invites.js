@@ -4,6 +4,7 @@ const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
+const { getSettings } = require("@schemas/Guild");
 
 module.exports = class InvitesCommand extends Command {
   constructor(client) {
@@ -37,7 +38,7 @@ module.exports = class InvitesCommand extends Command {
   async messageRun(message, args) {
     const target = (await resolveMember(message, args[0])) || message.member;
     const response = await getInvites(message, target);
-    await message.channel.send(response);
+    await message.reply(response);
   }
 
   /**
@@ -51,6 +52,9 @@ module.exports = class InvitesCommand extends Command {
 };
 
 async function getInvites({ guild }, user) {
+  const settings = await getSettings(guild);
+  if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
+
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
 
   const embed = new MessageEmbed()

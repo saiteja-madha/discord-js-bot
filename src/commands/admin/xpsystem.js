@@ -11,7 +11,7 @@ module.exports = class XPSystem extends Command {
       userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
-        usage: "<ON|OFF>",
+        usage: "<on|off>",
         minArgsCount: 1,
       },
       slashCommand: {

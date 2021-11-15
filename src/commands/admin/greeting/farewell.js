@@ -171,7 +171,7 @@ module.exports = class Farewell extends Command {
 
     // preview
     if (type === "preview") {
-      response = await sendPreview(message);
+      response = await sendPreview(settings, message.member);
     }
 
     // status
@@ -270,7 +270,7 @@ async function sendPreview(settings, member) {
   const targetChannel = member.guild.channels.cache.get(settings.farewell.channel);
   if (!targetChannel) return "No channel is configured to send farewell message";
 
-  const response = await buildGreeting(member, "WELCOME", settings.farewell);
+  const response = await buildGreeting(member, "FAREWELL", settings.farewell);
   await sendMessage(targetChannel, response);
 
   return `Sent farewell preview to ${targetChannel.toString()}`;

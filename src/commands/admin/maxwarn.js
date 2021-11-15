@@ -19,7 +19,7 @@ module.exports = class MaxWarn extends Command {
             description: "set max warnings a member can receive before taking an action",
           },
           {
-            trigger: "action <MUTE|KICK|BAN>",
+            trigger: "action <mute|kick|ban>",
             description: "set action to performed after receiving maximum warnings",
           },
         ],
@@ -83,9 +83,8 @@ module.exports = class MaxWarn extends Command {
 
     let response;
     if (input === "limit") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1)
-        return message.reply("Max Warnings must be a valid number greater than 0");
+      const max = parseInt(args[1]);
+      if (isNaN(max) || max < 1) return message.reply("Max Warnings must be a valid number greater than 0");
       response = await setLimit(message.guild, max);
     }
 

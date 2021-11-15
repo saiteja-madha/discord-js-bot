@@ -14,6 +14,7 @@ module.exports = class ResetInvites extends Command {
       command: {
         enabled: true,
         usage: "<@member>",
+        aliases: ["clearinvites"],
         minArgsCount: 1,
       },
       slashCommand: {
@@ -52,7 +53,7 @@ module.exports = class ResetInvites extends Command {
 };
 
 async function clearInvites({ guild }, user) {
-  const memberDb = await getMember(guild, user.id);
+  const memberDb = await getMember(guild.id, user.id);
   memberDb.invite_data.added = 0;
   await memberDb.save();
   return `Done! Invites cleared for \`${user.tag}\``;

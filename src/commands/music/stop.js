@@ -12,6 +12,9 @@ module.exports = class Stop extends Command {
       command: {
         enabled: true,
       },
+      slashCommand: {
+        enabled: true,
+      },
     });
   }
 

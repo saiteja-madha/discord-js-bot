@@ -12,7 +12,7 @@ module.exports = class ModLog extends Command {
       userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
-        usage: "<#channel|OFF>",
+        usage: "<#channel|off>",
         minArgsCount: 1,
       },
       slashCommand: {

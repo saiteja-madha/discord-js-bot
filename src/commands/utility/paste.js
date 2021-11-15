@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
 
-module.exports = class CatCommand extends Command {
+module.exports = class PasteCommand extends Command {
   constructor(client) {
     super(client, {
       name: "paste",

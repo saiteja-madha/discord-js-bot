@@ -16,6 +16,8 @@ module.exports = class FactCommand extends Command {
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
+        usage: "<animal>",
+        minArgsCount: 1,
       },
       slashCommand: {
         enabled: true,

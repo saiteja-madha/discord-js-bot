@@ -164,7 +164,7 @@ module.exports = class AutomodConfigCommand extends Command {
       response = await setAction(settings, interaction.guild, interaction.options.getString("action"));
     else if (sub === "debug") response = await setDebug(settings, interaction.options.getString("status"));
 
-    interaction.reply(response);
+    await interaction.followUp(response);
   }
 };
 

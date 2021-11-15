@@ -7,7 +7,7 @@ module.exports = {
   AUTOMOD: {
     name: "Automod",
     image: "https://icons.iconarchive.com/icons/dakirby309/simply-styled/256/Settings-icon.png",
-    emoji: "⚙️",
+    emoji: "🤖",
   },
   ANIME: {
     name: "Anime",

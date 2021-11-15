@@ -44,12 +44,12 @@ module.exports = class AddInvitesCommand extends Command {
    */
   async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
-    const amount = args[1];
+    const amount = parseInt(args[1]);
 
     if (!target) return message.reply("Incorrect syntax. You must mention a target");
     if (isNaN(amount)) return message.reply("Invite amount must be a number");
 
-    const response = await addInvites(message, target.user, amount);
+    const response = await addInvites(message, target.user, parseInt(amount));
     await message.reply(response);
   }
 
@@ -67,7 +67,7 @@ module.exports = class AddInvitesCommand extends Command {
 async function addInvites({ guild }, user, amount) {
   if (user.bot) return "Oops! You cannot add invites to bots";
 
-  const memberDb = await getMember(guild, user.id);
+  const memberDb = await getMember(guild.id, user.id);
   memberDb.invite_data.added += amount;
   await memberDb.save();
 

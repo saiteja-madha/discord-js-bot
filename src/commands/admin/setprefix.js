@@ -35,7 +35,7 @@ module.exports = class SetPrefix extends Command {
    */
   async messageRun(message, args) {
     const newPrefix = args[0];
-    const response = await setNewPrefix(message.guildId, newPrefix);
+    const response = await setNewPrefix(message.guild, newPrefix);
     await message.reply(response);
   }
 

@@ -61,13 +61,13 @@ module.exports = class RemoveReactionRole extends Command {
     const targetChannel = interaction.options.getChannel("channel");
     const messageId = interaction.options.getString("message_id");
 
-    const response = await removeRR(interaction.message.guild, targetChannel, messageId);
+    const response = await removeRR(interaction.guild, targetChannel, messageId);
     await interaction.followUp(response);
   }
 };
 
 async function removeRR(guild, channel, messageId) {
-  if (!channel.permissionsFor(guild.me).has()) {
+  if (!channel.permissionsFor(guild.me).has(channelPerms)) {
     return `You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`;
   }
 

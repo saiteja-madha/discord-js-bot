@@ -15,13 +15,14 @@ module.exports = class Reputation extends Command {
       command: {
         enabled: true,
         minArgsCount: 1,
+        aliases: ["reputation"],
         subcommands: [
           {
-            trigger: "view",
+            trigger: "view [user]",
             description: "view reputation for a user",
           },
           {
-            trigger: "give",
+            trigger: "give [user]",
             description: "give reputation to a user",
           },
         ],
@@ -72,7 +73,7 @@ module.exports = class Reputation extends Command {
     if (sub === "view") {
       let target = message.author;
       if (args.length > 1) {
-        const resolved = await resolveMember(message, args[1]);
+        const resolved = (await resolveMember(message, args[1])) || message.member;
         if (resolved) target = resolved.user;
       }
       response = await viewReputation(target);

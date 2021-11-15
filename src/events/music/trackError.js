@@ -6,6 +6,6 @@
  * @param {import("erela.js").TrackExceptionEvent} ex
  */
 module.exports = (client, player, track, ex) => {
-  client.logger.error(`Track Error ${ex.error}`, ex.exception);
-  client.logger.debug(`[${player.guild}] Track Error: ${JSON.stringify(track)}`);
+  client.logger.error(`Track Error ${ex.error}`);
+  client.logger.debug(`[${player.guild}] Track Error`);
 };

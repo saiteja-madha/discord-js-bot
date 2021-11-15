@@ -199,9 +199,9 @@ module.exports = class Ticket extends Command {
 
     // Close all tickets
     else if (input === "closeall") {
-      await message.reply("Closing tickets ...");
+      let sent = await message.reply("Closing tickets ...");
       response = await closeAll(message);
-      return message.editable ? message.edit(response) : message.channel.send(response);
+      return sent.editable ? sent.edit(response) : message.channel.send(response);
     }
 
     // Add user to ticket

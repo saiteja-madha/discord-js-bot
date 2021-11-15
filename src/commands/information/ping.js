@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { Message, CommandInteraction, CommandInteractionOptionResolver } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
 
 module.exports = class PingCommand extends Command {
   constructor(client) {
@@ -28,9 +28,8 @@ module.exports = class PingCommand extends Command {
 
   /**
    * @param {CommandInteraction} interaction
-   * @param {CommandInteractionOptionResolver} options
    */
-  async interactionRun(interaction, options) {
+  async interactionRun(interaction) {
     interaction.followUp(`🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``);
   }
 };

@@ -171,7 +171,7 @@ module.exports = class Welcome extends Command {
 
     // preview
     if (type === "preview") {
-      response = await sendPreview(message);
+      response = await sendPreview(settings, message.member);
     }
 
     // status

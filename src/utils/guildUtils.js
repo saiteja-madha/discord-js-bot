@@ -1,4 +1,4 @@
-const { Guild, TextChannel, VoiceChannel, Message } = require("discord.js");
+const { Guild, TextChannel, VoiceChannel, Message, Role } = require("discord.js");
 
 const ROLE_MENTION = /<?@?&?(\d{17,20})>?/;
 const MEMBER_MENTION = /<?@?!?(\d{17,20})>?/;
@@ -74,6 +74,7 @@ async function getMemberStats(guild) {
 /**
  * @param {Guild} guild
  * @param {String} query
+ * @return {Role[]}
  */
 function findMatchingRoles(guild, query) {
   if (!guild || !query || typeof query !== "string") return;

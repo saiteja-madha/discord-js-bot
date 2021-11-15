@@ -42,7 +42,7 @@ module.exports = class Queue extends Command {
    */
   async interactionRun(interaction) {
     const page = interaction.options.getInteger("page");
-    const response = getQueue(interaction.message, page);
+    const response = getQueue(interaction, page);
     await interaction.followUp(response);
   }
 };

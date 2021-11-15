@@ -1,10 +1,9 @@
-const { BotClient } = require("@src/structures");
 const { setVoiceChannelName, getMemberStats } = require("@utils/guildUtils");
 const { getSettings } = require("@schemas/Guild");
 
 /**
  * Updates the counter channel for all the guildId's present in the update queue
- * @param {BotClient} client
+ * @param {import('@src/structures').BotClient} client
  */
 async function updateCounterChannels(client) {
   client.counterUpdateQueue.forEach(async (guildId) => {

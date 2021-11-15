@@ -1,5 +1,6 @@
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { Command } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class Eval extends Command {
   constructor(client) {
@@ -8,7 +9,7 @@ module.exports = class Eval extends Command {
       description: "evaluates something",
       command: {
         enabled: true,
-        usage: "1+1",
+        usage: "<script>",
         minArgsCount: 1,
         category: "OWNER",
         botOwnerOnly: true,
@@ -16,7 +17,7 @@ module.exports = class Eval extends Command {
         botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
-        enabled: false,
+        enabled: true,
         options: [
           {
             name: "input",
@@ -36,27 +37,39 @@ module.exports = class Eval extends Command {
   async messageRun(message, args) {
     const input = args.join(" ");
     if (!input) return message.reply("Please provide code to eval");
-    if (!input.toLowerCase().includes("token")) {
-      const embed = new MessageEmbed();
+    const response = evaluate(input);
+    await message.reply(response);
+  }
 
-      try {
-        let output = eval(input);
-        if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
-
-        embed
-          .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
-          .addField("📤 Output", `\`\`\`js\n${output.length > 1024 ? "Too large to display." : output}\`\`\``)
-          .setColor("RANDOM");
-      } catch (err) {
-        embed
-          .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
-          .addField("📤 Output", `\`\`\`js\n${err.length > 1024 ? "Too large to display." : err}\`\`\``)
-          .setColor("ORANGE");
-      }
-
-      message.channel.send({ embeds: [embed] });
-    } else {
-      message.channel.send("my token: ||screw you||");
-    }
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const input = interaction.options.getString("expression");
+    const response = evaluate(input);
+    await interaction.followUp(response);
   }
 };
+
+async function evaluate(input) {
+  const embed = new MessageEmbed();
+
+  try {
+    let output = eval(input);
+    if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
+
+    embed
+      .setAuthor("📤 Output")
+      .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
+      .setColor("RANDOM")
+      .setTimestamp(Date.now());
+  } catch (err) {
+    embed
+      .setAuthor("📤 Error")
+      .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
+      .setColor(EMBED_COLORS.ERROR)
+      .setTimestamp(Date.now());
+  }
+
+  return { embeds: [embed] };
+}

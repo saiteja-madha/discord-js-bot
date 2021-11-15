@@ -1,5 +1,6 @@
 const { reactionHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
+const { getCountryFromFlag } = require("@utils/miscUtils");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -18,10 +19,6 @@ module.exports = async (client, reaction, user) => {
   const { message, emoji } = reaction;
   if (user.bot) return;
 
-  // Ticketing
-  if (emoji.name === client.config.EMOJIS.TICKET_OPEN) await reactionHandler.handleNewTicket(reaction, user);
-  if (emoji.name === client.config.EMOJIS.TICKET_CLOSE) await reactionHandler.handleCloseTicket(reaction, user);
-
   // Reaction Roles
   const reactionRole = reactionHandler.getRole(reaction);
   if (reactionRole) {
@@ -30,8 +27,12 @@ module.exports = async (client, reaction, user) => {
     await member.roles.add(reactionRole);
   }
 
-  // Translation by flags
-  if (emoji.name?.length === 4 && message.content && (await getSettings(message.guild)).flag_translation.enabled) {
-    reactionHandler.handleFlagReaction(emoji, message, user);
+  // Handle Reaction Emojis
+  if (!emoji.id) {
+    // Translation By Flags
+    if (message.content && (await getSettings(message.guild)).flag_translation.enabled) {
+      const countryCode = getCountryFromFlag(emoji.name);
+      if (countryCode) reactionHandler.handleFlagReaction(countryCode, message, user);
+    }
   }
 };

@@ -1,33 +1,18 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
+const { MessageEmbed, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
 const { timeformat } = require("@utils/miscUtils");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config.js");
-const botstats = require("./sub/botstats");
+const botstats = require("./shared/botstats");
 
 module.exports = class BotCommand extends Command {
   constructor(client) {
     super(client, {
       name: "bot",
       description: "bot related commands",
-      cooldown: 5,
       category: "INFORMATION",
       botPermissions: ["EMBED_LINKS"],
       command: {
-        enabled: true,
-        subcommands: [
-          {
-            trigger: "invite",
-            description: "get bot's invite information",
-          },
-          {
-            trigger: "stats",
-            description: "get bot's statistics",
-          },
-          {
-            trigger: "uptime",
-            description: "get bot's uptime",
-          },
-        ],
+        enabled: false,
       },
       slashCommand: {
         enabled: true,
@@ -50,39 +35,6 @@ module.exports = class BotCommand extends Command {
         ],
       },
     });
-  }
-
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
-  async messageRun(message, args) {
-    const sub = args[0].toLowerCase();
-
-    // Invite
-    if (sub === "invite") {
-      const response = botInvite(message.client);
-      try {
-        await message.author.send(response);
-        return message.reply("Check your DM for my information! :envelope_with_arrow:");
-      } catch (ex) {
-        return message.reply("I cannot send you my information! Is your DM open?");
-      }
-    }
-
-    // Stats
-    else if (sub === "stats") {
-      const response = botstats(message.client);
-      return message.reply(response);
-    }
-
-    // Uptime
-    else if (sub === "uptime") {
-      return message.reply(`I've been online for ${timeformat(process.uptime())}!`);
-    }
-
-    //
-    else return;
   }
 
   /**

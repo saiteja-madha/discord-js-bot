@@ -10,7 +10,7 @@ const ReqString = {
 };
 
 const Schema = mongoose.Schema({
-  id: ReqString,
+  _id: ReqString,
   logged: Boolean,
   coins: {
     type: Number,

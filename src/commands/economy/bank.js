@@ -15,6 +15,7 @@ module.exports = class BankCommand extends Command {
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
+        minArgsCount: 1,
         subcommands: [
           {
             trigger: "balance",
@@ -114,14 +115,14 @@ module.exports = class BankCommand extends Command {
 
     //
     else if (sub === "deposit") {
-      const coins = args.length && args[1];
+      const coins = args.length && parseInt(args[1]);
       if (isNaN(coins)) return message.reply("Provide a valid number of coins you wish to deposit");
       response = await deposit(message.author, coins);
     }
 
     //
     else if (sub === "withdraw") {
-      const coins = args.length && args[1];
+      const coins = args.length && parseInt(args[1]);
       if (isNaN(coins)) return message.reply("Provide a valid number of coins you wish to withdraw");
       response = await withdraw(message.author, coins);
     }
@@ -129,10 +130,11 @@ module.exports = class BankCommand extends Command {
     //
     else if (sub === "transfer") {
       if (args.length < 3) return message.reply("Provide a valid user and coins to transfer");
-      const user = await resolveMember(message, args[1], true);
-      const coins = args[2];
+      const target = await resolveMember(message, args[1], true);
+      if (!target) return message.reply("Provide a valid user to transfer coins to");
+      const coins = parseInt(args[2]);
       if (isNaN(coins)) return message.reply("Provide a valid number of coins you wish to transfer");
-      response = await transfer(message.author, user, coins);
+      response = await transfer(message.author, target.user, coins);
     }
 
     //
@@ -169,7 +171,9 @@ module.exports = class BankCommand extends Command {
 
     // transfer
     else if (sub === "transfer") {
-      response = await transfer(interaction);
+      const user = interaction.options.getUser("user");
+      const coins = interaction.options.getInteger("coins");
+      response = await transfer(interaction, user, coins);
     }
 
     await interaction.followUp(response);

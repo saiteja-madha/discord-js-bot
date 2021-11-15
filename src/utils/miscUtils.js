@@ -1,3 +1,6 @@
+const { countryCodeExists } = require("country-language");
+const data = require("@src/data.json");
+
 const LINK_PATTERN =
   /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
@@ -59,12 +62,36 @@ function timeformat(timeInSeconds) {
 }
 
 /**
+ * Converts duration to milliseconds
+ * @param {string} duration
+ */
+const durationToMillis = (duration) =>
+  duration
+    .split(":")
+    .map(Number)
+    .reduce((acc, curr) => curr + acc * 60) * 1000;
+
+/**
  * @param {Date} timeUntil
  */
 function getRemainingTime(timeUntil) {
   const seconds = Math.abs((timeUntil - new Date()) / 1000);
   const time = timeformat(seconds);
   return time;
+}
+
+/**
+ * Returns country code from flag emoji or null if not found
+ * @param {string} emoji
+ */
+function getCountryFromFlag(emoji) {
+  if (emoji.length === 4) {
+    const l1 = emoji[0] + emoji[1];
+    const l2 = emoji[2] + emoji[3];
+    const countryCode = data.UNICODE_LETTER[l1] + data.UNICODE_LETTER[l2];
+    if (countryCodeExists(countryCode)) return countryCode;
+  }
+  return null;
 }
 
 module.exports = {
@@ -74,5 +101,7 @@ module.exports = {
   isHex,
   diffHours,
   timeformat,
+  durationToMillis,
   getRemainingTime,
+  getCountryFromFlag,
 };

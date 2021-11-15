@@ -42,7 +42,7 @@ module.exports = class MemeCommand extends Command {
     );
     const embed = await getRandomEmbed(choice);
 
-    await message.reply({
+    const sentMsg = await message.reply({
       embeds: [embed],
       components: [buttonRow],
     });
@@ -57,7 +57,7 @@ module.exports = class MemeCommand extends Command {
     collector.on("collect", async (response) => {
       if (response.customId !== "regenMemeBtn") return;
       const embed = await getRandomEmbed(choice);
-      await message.edit({
+      await sentMsg.edit({
         embeds: [embed],
         components: [buttonRow],
       });
@@ -67,7 +67,7 @@ module.exports = class MemeCommand extends Command {
 
     collector.on("end", () => {
       buttonRow.components.forEach((button) => button.setDisabled(true));
-      return message.edit({
+      return sentMsg.edit({
         components: [buttonRow],
       });
     });

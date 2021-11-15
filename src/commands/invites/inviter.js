@@ -5,6 +5,7 @@ const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const outdent = require("outdent");
 const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
+const { getSettings } = require("@schemas/Guild");
 
 module.exports = class InviterCommand extends Command {
   constructor(client) {
@@ -37,7 +38,7 @@ module.exports = class InviterCommand extends Command {
    */
   async messageRun(message, args) {
     const target = (await resolveMember(message, args[0])) || message.member;
-    const response = await getInviter(message, target);
+    const response = await getInviter(message, target.user);
     await message.channel.send(response);
   }
 
@@ -52,6 +53,9 @@ module.exports = class InviterCommand extends Command {
 };
 
 async function getInviter({ guild }, user) {
+  const settings = await getSettings(guild);
+  if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
+
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
   if (!inviteData || !inviteData.inviter) return `Cannot track how \`${user.tag}\` joined`;
 

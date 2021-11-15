@@ -12,7 +12,7 @@ module.exports = class FlagTranslation extends Command {
       command: {
         enabled: true,
         minArgsCount: 1,
-        usage: "<ON|OFF>",
+        usage: "<on|off>",
       },
       slashCommand: {
         enabled: true,

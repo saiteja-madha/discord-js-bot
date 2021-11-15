@@ -46,7 +46,7 @@ module.exports = class UnmuteCommand extends Command {
 
 async function unmute(issuer, target, reason) {
   const response = await unmuteTarget(issuer, target, reason);
-  if (typeof response === "boolean") return `${target.user.tag} is not muted!`;
+  if (typeof response === "boolean") return `${target.user.tag} is unmuted!`;
   if (response === "BOT_PERM") return `I do not have permission to unmute ${target.user.tag}`;
   else if (response === "MEMBER_PERM") return `You do not have permission to unmute ${target.user.tag}`;
   else if (response === "NOT_MUTED") return `${target.user.tag} is not muted in this server`;

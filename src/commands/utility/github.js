@@ -62,13 +62,13 @@ async function getGithubUser(target, author) {
   const json = response.data;
   const {
     login: username,
-    name = " Not Provided",
+    name,
     id: githubId,
     avatar_url: avatarUrl,
     html_url: userPageLink,
     followers,
     following,
-    bio = "Not Provided",
+    bio,
     location,
     blog,
   } = json;
@@ -80,14 +80,14 @@ async function getGithubUser(target, author) {
     .setAuthor(`GitHub User: ${username}`, avatarUrl, userPageLink)
     .addField(
       "User Info",
-      outdent`**Real Name**: *${name}*
+      outdent`**Real Name**: *${name || "Not Provided"}*
         **Location**: *${location}*
         **GitHub ID**: *${githubId}*
         **Website**: *${website}*\n`,
       true
     )
     .addField("Social Stats", `**Followers**: *${followers}*\n**Following**: *${following}*`, true)
-    .setDescription(`**Bio**:\n${bio}`)
+    .setDescription(`**Bio**:\n${bio || "Not Provided"}`)
     .setImage(avatarUrl)
     .setColor(0x6e5494)
     .setFooter(`Requested by ${author.tag}`);

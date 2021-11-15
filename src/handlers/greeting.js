@@ -1,4 +1,4 @@
-const { MessageEmbed, GuildMember } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
@@ -7,7 +7,7 @@ const getEffectiveInvites = (data = {}) =>
 
 /**
  * @param {String} content
- * @param {GuildMember} member
+ * @param {import('discord.js').GuildMember} member
  * @param {Object} inviterData
  */
 const parse = async (content, member, inviterData = {}) => {
@@ -36,7 +36,7 @@ const parse = async (content, member, inviterData = {}) => {
 };
 
 /**
- * @param {GuildMember} member
+ * @param {import('discord.js').GuildMember} member
  * @param {"WELCOME"|"FAREWELL"} type
  * @param {Object} config
  * @param {Object} inviterData
@@ -60,7 +60,9 @@ const buildGreeting = async (member, type, config, inviterData) => {
   // set default message
   if (!config.content && !config.embed.description && !config.embed.footer) {
     content =
-      type === "WELCOME" ? `Welcome to the server, ${member.displayName} 🎉` : `${member.tag} has left the server 👋`;
+      type === "WELCOME"
+        ? `Welcome to the server, ${member.displayName} 🎉`
+        : `${member.user.tag} has left the server 👋`;
     return { content };
   }
 
@@ -69,7 +71,7 @@ const buildGreeting = async (member, type, config, inviterData) => {
 
 /**
  * Send welcome message
- * @param {GuildMember} member
+ * @param {import('discord.js').GuildMember} member
  * @param {Object} inviterData
  */
 async function sendWelcome(member, inviterData = {}) {
@@ -88,7 +90,7 @@ async function sendWelcome(member, inviterData = {}) {
 
 /**
  * Send farewell message
- * @param {GuildMember} member
+ * @param {import('discord.js').GuildMember} member
  * @param {Object} inviterData
  */
 async function sendFarewell(member, inviterData = {}) {

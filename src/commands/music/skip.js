@@ -31,7 +31,7 @@ module.exports = class Skip extends Command {
    * @param {CommandInteraction} interaction
    */
   async interactionRun(interaction) {
-    const response = skip(interaction.message);
+    const response = skip(interaction);
     await interaction.followUp(response);
   }
 };

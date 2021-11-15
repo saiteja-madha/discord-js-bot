@@ -17,7 +17,7 @@ module.exports = async (client, message) => {
   if (message.content.startsWith(prefix)) {
     const args = message.content.replace(`${prefix}`, "").split(/\s+/);
     const invoke = args.shift().toLowerCase();
-    const cmd = client.commands.get(invoke);
+    const cmd = client.getCommand(invoke);
 
     // command is found
     if (cmd) {

@@ -23,7 +23,7 @@ module.exports = async (client) => {
   }
 
   // Load reaction roles to cache
-  await cacheReactionRoles();
+  await cacheReactionRoles(client);
 
   for (const guild of client.guilds.cache.values()) {
     const settings = await getSettings(guild);

@@ -7,7 +7,7 @@ module.exports = class CounterSetup extends Command {
   constructor(client) {
     super(client, {
       name: "counter",
-      description: "setup counter channel in the guild. Counter types: `all/members/bots`",
+      description: "setup counter channel in the guild",
       category: "ADMIN",
       userPermissions: ["MANAGE_GUILD"],
       botPermissions: ["MANAGE_CHANNELS"],
@@ -27,7 +27,7 @@ module.exports = class CounterSetup extends Command {
             required: true,
             choices: [
               {
-                name: "all",
+                name: "users",
                 value: "USERS",
               },
               {
@@ -57,8 +57,8 @@ module.exports = class CounterSetup extends Command {
    */
   async messageRun(message, args) {
     const type = args[0].toLowerCase();
-    if (!type || !["all", "members", "bots"].includes(type)) {
-      return message.reply("Incorrect arguments are passed! Counter types: `all/members/bots`");
+    if (!type || !["users", "members", "bots"].includes(type)) {
+      return message.reply("Incorrect arguments are passed! Counter types: `users/members/bots`");
     }
     if (args.length < 2) return message.reply("Incorrect Usage! You did not provide name");
     args.shift();
@@ -84,9 +84,9 @@ async function setupCounter(guild, type, name) {
   let channelName = name;
 
   const stats = await getMemberStats(guild);
-  if (type === "USERS") channelName += ` : ${stats[0]}`;
-  else if (type === "MEMBERS") channelName += ` : ${stats[2]}`;
-  else if (type === "BOTS") channelName += ` : ${stats[1]}`;
+  if (type.toUpperCase() === "USERS") channelName += ` : ${stats[0]}`;
+  else if (type.toUpperCase() === "MEMBERS") channelName += ` : ${stats[2]}`;
+  else if (type.toUpperCase() === "BOTS") channelName += ` : ${stats[1]}`;
 
   const vc = await guild.channels.create(channelName, {
     type: "GUILD_VOICE",

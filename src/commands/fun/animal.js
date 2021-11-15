@@ -16,6 +16,8 @@ module.exports = class AnimalCommand extends Command {
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
+        usage: "<type>",
+        minArgsCount: 1,
       },
       slashCommand: {
         enabled: true,

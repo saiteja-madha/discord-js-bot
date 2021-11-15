@@ -45,7 +45,7 @@ module.exports = class InviteTracker extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const status = args[1].toLowerCase();
+    const status = args[0].toLowerCase();
     if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
     const response = await setStatus(message, status);
     await message.reply(response);

@@ -124,6 +124,9 @@ module.exports = class AddInvitesCommand extends Command {
 };
 
 async function addInviteRank({ guild }, role, invites) {
+  const settings = await getSettings(guild);
+  if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
+
   if (role.managed) {
     return "You cannot assign a bot role";
   }
@@ -132,7 +135,6 @@ async function addInviteRank({ guild }, role, invites) {
     return "I am missing permissions to move members to that role. Is that role below my highest role?";
   }
 
-  const settings = await getSettings(guild);
   const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
 
   let msg = "";
@@ -147,6 +149,9 @@ async function addInviteRank({ guild }, role, invites) {
 }
 
 async function removeInviteRank({ guild }, role) {
+  const settings = await getSettings(guild);
+  if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
+
   if (role.managed) {
     return "You cannot assign a bot role";
   }
@@ -155,7 +160,6 @@ async function removeInviteRank({ guild }, role) {
     return "I am missing permissions to move members from that role. Is that role below my highest role?";
   }
 
-  const settings = await getSettings(guild);
   const exists = settings.invite.ranks.find((obj) => obj._id === role.id);
   if (!exists) return "No previous invite rank is configured found for this role";
 

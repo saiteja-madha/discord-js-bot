@@ -86,7 +86,7 @@ module.exports = class AddReactionRole extends Command {
 };
 
 async function addRR(guild, channel, messageId, reaction, role) {
-  if (!channel.permissionsFor(guild.me).has()) {
+  if (!channel.permissionsFor(guild.me).has(channelPerms)) {
     return `You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`;
   }
 
@@ -95,6 +95,10 @@ async function addRR(guild, channel, messageId, reaction, role) {
     targetMessage = await channel.messages.fetch(messageId);
   } catch (ex) {
     return "Could not fetch message. Did you provide a valid messageId?";
+  }
+
+  if (role.managed) {
+    return "I cannot assign bot roles.";
   }
 
   if (guild.me.roles.highest.position < role.position) {
@@ -111,11 +115,11 @@ async function addRR(guild, channel, messageId, reaction, role) {
     return `Oops! Failed to react. Is this a valid emoji: ${reaction} ?`;
   }
 
-  let reply;
-  const previousRoles = getReactionRoles(guild, channel.id, targetMessage.id);
+  let reply = "";
+  const previousRoles = getReactionRoles(guild.id, channel.id, targetMessage.id);
   if (previousRoles.length > 0) {
     const found = previousRoles.find((rr) => rr.emote === emoji);
-    if (found) reply = "A role is already configured for this emoji. Overwriting data...\n";
+    if (found) reply = "A role is already configured for this emoji. Overwriting data,\n";
   }
 
   await addReactionRole(guild.id, channel.id, targetMessage.id, emoji, role.id);

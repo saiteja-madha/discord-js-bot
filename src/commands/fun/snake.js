@@ -7,7 +7,7 @@ module.exports = class SnakeCommand extends Command {
     super(client, {
       name: "snake",
       description: "play snake game on discord",
-      cooldown: 120,
+      cooldown: 300,
       category: "FUN",
       botPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "ADD_REACTIONS", "READ_MESSAGE_HISTORY", "MANAGE_MESSAGES"],
       command: {

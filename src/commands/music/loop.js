@@ -11,6 +11,7 @@ module.exports = class Loop extends Command {
       validations: musicValidations,
       command: {
         enabled: true,
+        minArgsCount: 1,
         usage: "<queue|track>",
       },
       slashCommand: {

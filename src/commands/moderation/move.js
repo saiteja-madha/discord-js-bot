@@ -28,16 +28,16 @@ module.exports = class DeafenCommand extends Command {
    */
   async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
-    if (!target) return message.reply(`No user found matching ${args.shift()}`);
+    if (!target) return message.reply(`No user found matching ${args[0]}`);
 
-    const channels = getMatchingChannel(message.guild, args.shift());
+    const channels = getMatchingChannel(message.guild, args[1]);
     if (!channels.length) return message.reply("No matching channels found");
     const targetChannel = channels.pop();
     if (!targetChannel.type === "GUILD_VOICE" && !targetChannel.type === "GUILD_STAGE_VOICE") {
       return message.reply("Target channel is not a voice channel");
     }
 
-    const reason = args.join(" ").trim();
+    const reason = args.slice(2).join(" ");
     const response = await move(message, target, reason, targetChannel);
     await message.reply(response);
   }

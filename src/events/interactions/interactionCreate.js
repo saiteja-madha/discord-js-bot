@@ -20,7 +20,7 @@ module.exports = async (client, interaction) => {
 
   // Context Menu
   else if (interaction.isContextMenu()) {
-    const context = client.contexts.get(interaction.commandName);
+    const context = client.contextMenus.get(interaction.commandName);
     if (context) await context.execute(interaction);
     else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
   }

@@ -26,7 +26,7 @@ module.exports = class LeaderBoard extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await getLeaderboard(message);
+    const response = await getLeaderboard(message, message.author);
     await message.reply(response);
   }
 
@@ -34,7 +34,7 @@ module.exports = class LeaderBoard extends Command {
    * @param {CommandInteraction} interaction
    */
   async interactionRun(interaction) {
-    const response = await getLeaderboard(interaction);
+    const response = await getLeaderboard(interaction, interaction.user);
     await interaction.followUp(response);
   }
 };

@@ -1,14 +1,17 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { getReactionRoles } = require("@schemas/Message");
-const { sendMessage } = require("@utils/botUtils");
 const { isTranslated, logTranslation } = require("@schemas/TranslateLog");
 const data = require("@src/data.json");
 const { getCountryLanguages } = require("country-language");
+const { sendMessage } = require("@utils/botUtils");
 const { translate } = require("@utils/httpUtils");
-const { timeformat } = require("../utils/miscUtils");
+const { timeformat } = require("@utils/miscUtils");
 
 const TRANSLATE_COOLDOWN = 120;
 
+/**
+ * @param {import('discord.js').User} user
+ */
 const getTranslationCooldown = (user) => {
   if (user.client.flagTranslateCache.has(user.id)) {
     const remaining = (Date.now() - user.client.flagTranslateCache.get(user.id)) * 0.001;
@@ -34,7 +37,7 @@ function getRole(reaction) {
 }
 
 /**
- * @param {string} emoji
+ * @param {string} countryCode
  * @param {import("discord.js").Message} message
  * @param {import("discord.js").User} user
  */

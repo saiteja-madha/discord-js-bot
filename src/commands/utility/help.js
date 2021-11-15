@@ -10,7 +10,7 @@ const {
 } = require("discord.js");
 
 const CMDS_PER_PAGE = 5;
-const TIMEOUT_IN_SECONDS = 20;
+const IDLE_TIMEOUT = 20;
 
 module.exports = class HelpCommand extends Command {
   constructor(client) {
@@ -142,8 +142,7 @@ async function getHelpMenu({ client, guild }) {
 const waiter = (msg, userId, prefix) => {
   const collector = msg.channel.createMessageComponentCollector({
     filter: (reactor) => reactor.user.id === userId,
-    idle: TIMEOUT_IN_SECONDS * 1000,
-    max: 10,
+    idle: IDLE_TIMEOUT * 1000,
     dispose: true,
   });
 
@@ -211,7 +210,7 @@ function getSlashCategoryEmbeds(client, category) {
       .join(", ");
 
     collector +=
-      "\n**Available Filters:**\n" + `${availableFilters}` + `*\n\n**Available Generators**\n` + `${availableGens}`;
+      "**Available Filters:**\n" + `${availableFilters}` + `*\n\n**Available Generators**\n` + `${availableGens}`;
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)

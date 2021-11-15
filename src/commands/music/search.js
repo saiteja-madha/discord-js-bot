@@ -15,6 +15,17 @@ module.exports = class Search extends Command {
         usage: "<song-name>",
         minArgsCount: 1,
       },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "query",
+            description: "song to search",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
     });
   }
 

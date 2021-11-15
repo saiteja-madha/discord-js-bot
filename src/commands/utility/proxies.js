@@ -8,7 +8,7 @@ module.exports = class ProxiesCommand extends Command {
   constructor(client) {
     super(client, {
       name: "proxies",
-      description: "fetch proxies. Available types: HTTP, SOCKS4, SOCKS5",
+      description: "fetch proxies. Available types: http, socks4, socks5",
       cooldown: 5,
       category: "UTILITY",
       botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],

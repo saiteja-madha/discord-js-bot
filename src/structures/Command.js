@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { permissions, sendMessage } = require("@utils/botUtils");
-const { EMOJIS, EMBED_COLORS, PREFIX, OWNER_IDS } = require("@root/config.js");
+const { EMBED_COLORS, PREFIX, OWNER_IDS } = require("@root/config.js");
 const { timeformat } = require("@utils/miscUtils");
 const CommandCategory = require("./CommandCategory");
 
@@ -51,7 +51,7 @@ class Command {
    */
 
   /**
-   * @param {import('discord.js').Client} client - The discord client
+   * @param {import('@src/structures').BotClient} client - The discord client
    * @param {CommandData} data - The command information
    */
   constructor(client, data) {
@@ -138,6 +138,13 @@ class Command {
       if (!message.channel.permissionsFor(message.guild.me).has(this.botPermissions)) {
         return message.reply(`I need ${this.parsePermissions(this.botPermissions)} for this command`);
       }
+    }
+
+    // min args count
+    if (args.length < this.command.minArgsCount) {
+      // return message.reply(`You need at least ${this.command.minArgsCount} arguments to use this command`);
+      this.sendUsage(message.channel, prefix, invoke);
+      return;
     }
 
     // cooldown check
@@ -237,20 +244,18 @@ class Command {
    * @param {string} invoke - alias that was used to trigger this command
    * @param {string} title - the embed title
    */
-  getUsageEmbed(prefix = PREFIX, invoke = this.name, title = "Command Usage") {
+  getCommandUsage(prefix = PREFIX, invoke = this.name, title = "Usage") {
     let desc = "";
     if (this.command.subcommands.length > 0) {
       this.command.subcommands.forEach((sub) => {
-        desc += `${EMOJIS.ARROW} \`${invoke} ${sub.trigger}\`: ${sub.description}\n`;
+        desc += `\`${prefix}${invoke} ${sub.trigger}\`\n❯ ${sub.description}\n\n`;
       });
+      if (this.cooldown) {
+        desc += `**Cooldown:** ${timeformat(this.cooldown)}`;
+      }
     } else {
-      desc += `**Usage:**\n\`\`\`css\n${prefix}${invoke} ${this.command.usage}\`\`\``;
-    }
-
-    if (this.description !== "") desc += `\n**Help:** ${this.description}`;
-
-    if (this.cooldown) {
-      desc += `\n**Cooldown:** ${timeformat(this.cooldown)}`;
+      desc += `\`\`\`css\n${prefix}${invoke} ${this.command.usage}\`\`\``;
+      if (this.cooldown) desc += `\n**Cooldown:** ${timeformat(this.cooldown)}`;
     }
 
     const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
@@ -265,9 +270,28 @@ class Command {
    * @param {string} invoke - alias that was used to trigger this command
    * @param {string} title - the embed title
    */
-  sendUsage(channel, prefix, invoke, title = "Command Usage") {
-    const embed = this.getUsageEmbed(prefix, invoke, title);
+  sendUsage(channel, prefix, invoke, title) {
+    const embed = this.getCommandUsage(prefix, invoke, title);
     sendMessage(channel, { embeds: [embed] });
+  }
+
+  getSlashUsage() {
+    let desc = "";
+    if (this.slashCommand.options.find((o) => o.type === "SUB_COMMAND")) {
+      const subCmds = this.slashCommand.options.filter((opt) => opt.type === "SUB_COMMAND");
+      subCmds.forEach((sub) => {
+        desc += `❯ \`${this.name} ${sub.name}\`: ${sub.description}\n`;
+      });
+    } else {
+      desc += `\`/${this.name}\`\n${this.description}\n`;
+    }
+
+    if (this.cooldown) {
+      desc += `\n**Cooldown:** ${timeformat(this.cooldown)}`;
+    }
+
+    const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
+    return embed;
   }
 
   getRemainingCooldown(memberId) {
@@ -290,7 +314,7 @@ class Command {
 
   /**
    * Validates the constructor parameters
-   * @param {import('discord.js').Client} client - Client to validate
+   * @param {import('@src/structures').BotClient} client - Client to validate
    * @param {CommandData} data - Info to validate
    * @private
    */
