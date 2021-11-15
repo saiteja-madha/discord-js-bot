@@ -56,7 +56,6 @@ function validateConfig() {
     }
   }
   if (config.OWNER_IDS.length === 0) warn("config.js: OWNER_IDS are empty");
-  if (!config.BOT_INVITE) warn("config.js: BOT_INVITE is not provided");
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 

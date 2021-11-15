@@ -14,7 +14,6 @@ module.exports = async (client, reaction, user) => {
     }
   }
   const { message } = reaction;
-  if (!message.content) return;
 
   const reactionRole = reactionHandler.getRole(reaction);
   if (reactionRole) {

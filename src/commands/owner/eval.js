@@ -7,14 +7,12 @@ module.exports = class Eval extends Command {
     super(client, {
       name: "eval",
       description: "evaluates something",
+      category: "OWNER",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         usage: "<script>",
         minArgsCount: 1,
-        category: "OWNER",
-        botOwnerOnly: true,
-        hidden: true,
-        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
         enabled: true,
@@ -37,7 +35,7 @@ module.exports = class Eval extends Command {
   async messageRun(message, args) {
     const input = args.join(" ");
     if (!input) return message.reply("Please provide code to eval");
-    const response = evaluate(input);
+    const response = await evaluate(input);
     await message.reply(response);
   }
 
@@ -46,7 +44,7 @@ module.exports = class Eval extends Command {
    */
   async interactionRun(interaction) {
     const input = interaction.options.getString("expression");
-    const response = evaluate(input);
+    const response = await evaluate(input);
     await interaction.followUp(response);
   }
 };

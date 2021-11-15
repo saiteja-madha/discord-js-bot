@@ -58,11 +58,11 @@ module.exports = {
     for (const doc of docs) {
       const guild = client.guilds.cache.get(doc.guild_id);
       if (!guild) {
-        await Model.deleteMany({ guild_id: doc.guild_id });
+        // await Model.deleteMany({ guild_id: doc.guild_id });
         continue;
       }
       if (!guild.channels.cache.has(doc.channel_id)) {
-        await Model.deleteMany({ guild_id: doc.guild_id, channel_id: doc.channel_id });
+        // await Model.deleteMany({ guild_id: doc.guild_id, channel_id: doc.channel_id });
         continue;
       }
       const key = getKey(doc.guild_id, doc.channel_id, doc.message_id);

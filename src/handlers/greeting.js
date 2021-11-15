@@ -2,9 +2,6 @@ const { MessageEmbed } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
-const getEffectiveInvites = (data = {}) =>
-  data.tracked_invites + data.added_invites - data.fake_invites - data.left_invites || 0;
-
 /**
  * @param {String} content
  * @param {import('discord.js').GuildMember} member
@@ -12,6 +9,9 @@ const getEffectiveInvites = (data = {}) =>
  */
 const parse = async (content, member, inviterData = {}) => {
   const inviteData = {};
+
+  const getEffectiveInvites = (inviteData = {}) =>
+    inviteData.tracked + inviteData.added - inviteData.fake - inviteData.left || 0;
 
   if (content.includes("{inviter:")) {
     const inviterId = inviterData.member_id || "NA";
@@ -32,7 +32,7 @@ const parse = async (content, member, inviterData = {}) => {
     .replaceAll(/{member:tag}/g, member.user.tag)
     .replaceAll(/{inviter:name}/g, inviteData.name)
     .replaceAll(/{inviter:tag}/g, inviteData.tag)
-    .replaceAll(/{invites}/g, getEffectiveInvites(inviterData));
+    .replaceAll(/{invites}/g, getEffectiveInvites(inviterData.invite_data));
 };
 
 /**

@@ -122,7 +122,7 @@ class Command {
 
     // Owner commands
     if (this.category === "OWNER" && !OWNER_IDS.includes(message.author.id)) {
-      return message.reply("This command can only accessible to bot owners");
+      return message.reply("This command is only accessible to bot owners");
     }
 
     // user permissions
@@ -183,7 +183,7 @@ class Command {
     // Owner commands
     if (this.category === "OWNER" && !OWNER_IDS.includes(interaction.user.id)) {
       return interaction.reply({
-        content: `This command can only accessible to bot owners`,
+        content: `This command is only accessible to bot owners`,
         ephemeral: true,
       });
     }
