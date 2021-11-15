@@ -38,27 +38,31 @@
                                 <form role="form" action="/manage/<%= guild.id %>/greeting" method="POST">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label>Description</label>
-                                            <% if(guild.welcome.embed?.description) {%>
-                                                <textarea rows="3" name="description" class="form-control" required><%- guild.welcome.embed?.description.replaceAll(/\\n/g, '&#10;') %></textarea>
+                                            <label>Content</label>
+                                            <% if(guild.welcome.embed.description || guild.welcome.content) {%>
+                                                <textarea rows="3" name="content" class="form-control"><%- guild.welcome.content?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                             <% } else { %>
-                                                <textarea rows="3" name="description" class="form-control" required placeholder="<%= 'Welcome to the server {member:name}' %>" ></textarea>
+                                                <textarea rows="3" name="content" class="form-control" placeholder="<%= 'Welcome to the server {member:name} 🎉' %>"></textarea>
                                             <% } %>
                                         </div>
                                         <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea rows="3" name="description" class="form-control"><%- guild.welcome.embed.description?.replaceAll(/\\n/g, '&#10;') %></textarea>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Footer</label>
-                                            <input type="text" name="footer" class="form-control" value="<%= guild.welcome.embed?.footer %>">
+                                            <input type="text" name="footer" class="form-control" value="<%= guild.welcome.embed.footer %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Hex Color</label>
-                                            <input type="text" name="hexcolor" class="form-control" value="<%= guild.welcome.embed?.color %>">
+                                            <input type="text" name="hexcolor" class="form-control" value="<%= guild.welcome.embed.color %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Channel</label>
                                             <select class="form-control" name="channel">
-                                                <% if(bot.channels.cache.has(guild.welcome.channel_id)){ %>
-                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.welcome.channel_id).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.welcome.channel_id && ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                <% if(bot.channels.cache.has(guild.welcome.channel)){ %>
+                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.welcome.channel).name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.welcome.channel && ch.type === "GUILD_TEXT").forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
                                                     <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").first().name %></option>
@@ -71,7 +75,7 @@
                                         <div class="form-group">
                                             <div class="checkbox">
                                                 <label>
-                                                    <% if(guild.welcome.embed?.thumbnail) { %>
+                                                    <% if(guild.welcome.embed.thumbnail) { %>
                                                         <input type="checkbox" name="thumbnail" checked>Thumbnail
                                                     <% } else { %>
                                                         <input type="checkbox" name="thumbnail">Thumbnail
@@ -101,27 +105,31 @@
                                 <form role="form" action="/manage/<%= guild.id %>/greeting" method="POST">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label>Description</label>
-                                            <% if(guild.farewell.embed?.description) {%>
-                                                <textarea rows="3" name="message" class="form-control" required><%- guild.farewell.embed?.description.replaceAll(/\\n/g, '&#10;') %></textarea>
+                                            <label>Content</label>
+                                            <% if(guild.farewell.embed.description || guild.farewell.content) {%>
+                                                <textarea rows="3" name="content" class="form-control"><%- guild.farewell.content?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                             <% } else { %>
-                                                <textarea rows="3" name="message" class="form-control" required placeholder="<%= 'Goodbye {member:tag}!' %>" ></textarea>
+                                                <textarea rows="3" name="content" class="form-control" placeholder="<%= '{member:tag} has left the server 👋' %>"></textarea>
                                             <% } %>
                                         </div>
                                         <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea rows="3" name="message" class="form-control"><%- guild.farewell.embed.description?.replaceAll(/\\n/g, '&#10;') %></textarea>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Footer</label>
-                                            <input type="text" name="footer" class="form-control" value="<%= guild.farewell.embed?.footer %>">
+                                            <input type="text" name="footer" class="form-control" value="<%= guild.farewell.embed.footer %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Hex Color</label>
-                                            <input type="text" name="hexcolor" class="form-control" value="<%= guild.farewell.embed?.color %>">
+                                            <input type="text" name="hexcolor" class="form-control" value="<%= guild.farewell.embed.color %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Channel</label>
                                             <select class="form-control" name="channel">
-                                                <% if(bot.channels.cache.has(guild.farewell.channel_id)){ %>
-                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.farewell.channel_id).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel_id && ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                <% if(bot.channels.cache.has(guild.farewell.channel)){ %>
+                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.farewell.channel).name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel && ch.type === "GUILD_TEXT").forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
                                                         <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").first().name %></option>
@@ -134,7 +142,7 @@
                                         <div class="form-group">
                                             <div class="checkbox">
                                                 <label>
-                                                    <% if(guild.farewell.embed?.thumbnail) { %>
+                                                    <% if(guild.farewell.embed.thumbnail) { %>
                                                         <input type="checkbox" name="thumbnail" checked>Thumbnail
                                                     <% } else { %>
                                                         <input type="checkbox" name="thumbnail">Thumbnail
