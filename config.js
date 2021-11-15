@@ -3,7 +3,7 @@ module.exports = {
   PREFIX: "!", // Default prefix for the bot
   SUPPORT_SERVER: "", // Your bot support server
   DASHBOARD: {
-    enabled: true, // enable or disable dashboard
+    enabled: false, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
     port: "8080", // port to run the bot on
@@ -26,7 +26,7 @@ module.exports = {
     DAILY_COINS: 100, // coins to be received by daily command
   },
   IMAGE: {
-    BASE_API: "",
+    BASE_API: "https://image-api.strangebot.xyz",
   },
   MUSIC: {
     MAX_SEARCH_RESULTS: 5,
@@ -44,14 +44,6 @@ module.exports = {
         port: 80,
         password: "anything as a password",
         identifier: "Something Host",
-        retryDelay: 3000,
-        secure: false,
-      },
-      {
-        host: "lava.strangebot.xyz",
-        port: 80,
-        password: "strangebot",
-        identifier: "Strange Lavalink",
         retryDelay: 3000,
         secure: false,
       },
