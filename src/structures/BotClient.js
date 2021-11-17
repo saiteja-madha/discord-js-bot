@@ -120,12 +120,13 @@ module.exports = class BotClient extends Client {
 
     this.getAbsoluteFilePaths(directory).forEach((filePath) => {
       const file = filePath.replace(/^.*[\\/]/, "");
+      const dirName = path.basename(path.dirname(filePath));
       try {
         const eventName = file.split(".")[0];
         const event = require(filePath);
 
         // music events
-        if (filePath.split("\\").at(-2) === "music") {
+        if (dirName === "music") {
           this.musicManager.on(eventName, event.bind(null, this));
           musicEvents.push([file, "✓"]);
         }
