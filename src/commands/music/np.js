@@ -41,7 +41,7 @@ module.exports = class Skip extends Command {
 
 function nowPlaying({ client, guildId }) {
   const player = client.musicManager.get(guildId);
-  if (!player || !player.queue.current) "🚫 No music is being played!";
+  if (!player || !player.queue.current) return "🚫 No music is being played!";
 
   const track = player.queue.current;
   const end = track.duration > 6.048e8 ? "🔴 LIVE" : new Date(track.duration).toISOString().slice(11, 19);

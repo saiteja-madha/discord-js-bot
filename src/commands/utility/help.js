@@ -58,7 +58,7 @@ module.exports = class HelpCommand extends Command {
     if (cmd) return cmd.sendUsage(message.channel, prefix, trigger);
 
     // No matching command/category found
-    message.reply("No matching command or module found");
+    message.reply("No matching command found");
   }
 
   /**

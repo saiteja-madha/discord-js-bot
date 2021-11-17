@@ -50,5 +50,5 @@ async function unmute(issuer, target, reason) {
   if (response === "BOT_PERM") return `I do not have permission to unmute ${target.user.tag}`;
   else if (response === "MEMBER_PERM") return `You do not have permission to unmute ${target.user.tag}`;
   else if (response === "NOT_MUTED") return `${target.user.tag} is not muted in this server`;
-  else `Failed to unmute ${target.user.tag}`;
+  else return `Failed to unmute ${target.user.tag}`;
 }

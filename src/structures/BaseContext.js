@@ -1,4 +1,4 @@
-const { permissions } = require("@utils/botUtils");
+const { permissions, parsePermissions } = require("@utils/botUtils");
 const { timeformat } = require("@utils/miscUtils");
 
 class BaseContext {
@@ -49,7 +49,7 @@ class BaseContext {
     if (interaction.member && this.userPermissions.length > 0) {
       if (!interaction.member.permissions.has(this.userPermissions)) {
         return interaction.reply({
-          content: `You need ${this.parsePermissions(this.userPermissions)} for this command`,
+          content: `You need ${parsePermissions(this.userPermissions)} for this command`,
           ephemeral: true,
         });
       }
@@ -90,16 +90,6 @@ class BaseContext {
   applyCooldown(memberId) {
     const key = this.name + "|" + memberId;
     this.client.ctxCooldownCache.set(key, Date.now());
-  }
-
-  /**
-   * Parse permissions to string
-   * @param {import('discord.js').PermissionResolvable[]|import('discord.js').PermissionResolvable} perms
-   */
-  parsePermissions(perms) {
-    if (typeof perms === "string") return `\`${permissions[perms]}\` permission`;
-    const permissionWord = ` permission${perms.length > 1 ? "s" : ""}`;
-    return perms.map((perm) => `\`${permissions[perm]}\``).join(", ") + permissionWord;
   }
 
   /**

@@ -353,7 +353,7 @@ async function runInteractiveSetup({ channel, guild, author }) {
       }
       role = roles[0];
       if (role.managed || guild.me.roles.highest.position < role.position) {
-        return reply.reply("I do not have permission to manage this role");
+        return reply.reply("Ticket setup has been cancelled. I do not have permission to manage this role");
       }
       await reply.reply(`Alright! \`${role.name}\` can now view the newly created tickets`);
     }

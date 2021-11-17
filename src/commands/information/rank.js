@@ -48,7 +48,7 @@ module.exports = class Rank extends Command {
     const user = interaction.options.getUser("user") || interaction.user;
     const member = await interaction.guild.members.fetch(user);
     const response = await getRank(interaction, member);
-    await interaction.channel.send(response);
+    await interaction.followUp(response);
   }
 };
 

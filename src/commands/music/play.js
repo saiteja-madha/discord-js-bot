@@ -97,8 +97,8 @@ async function play({ member, guild, channel }, user, query) {
       track = res.tracks[0];
       player.queue.add(track);
       if (!player.playing && !player.paused && !player.queue.size) {
-        await "> 🎶 Adding song to queue";
-        return player.play();
+        player.play();
+        return "> 🎶 Adding song to queue";
       }
 
       embed

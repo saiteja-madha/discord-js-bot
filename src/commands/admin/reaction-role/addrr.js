@@ -101,6 +101,10 @@ async function addRR(guild, channel, messageId, reaction, role) {
     return "I cannot assign bot roles.";
   }
 
+  if (guild.roles.everyone.id === role.id) {
+    return "You cannot assign the everyone role.";
+  }
+
   if (guild.me.roles.highest.position < role.position) {
     return "Oops! I cannot add/remove members to that role. Is that role higher than mine?";
   }

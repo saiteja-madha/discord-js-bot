@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { permissions, sendMessage } = require("@utils/botUtils");
+const { permissions, sendMessage, parsePermissions } = require("@utils/botUtils");
 const { EMBED_COLORS, PREFIX, OWNER_IDS } = require("@root/config.js");
 const { timeformat } = require("@utils/miscUtils");
 const CommandCategory = require("./CommandCategory");
@@ -128,7 +128,7 @@ class Command {
     // user permissions
     if (message.member && this.userPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.guild.me).has(this.userPermissions)) {
-        return message.reply(`You need ${this.parsePermissions(this.userPermissions)} for this command`);
+        return message.reply(`You need ${parsePermissions(this.userPermissions)} for this command`);
       }
     }
 
@@ -136,7 +136,7 @@ class Command {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
     if (this.botPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.guild.me).has(this.botPermissions)) {
-        return message.reply(`I need ${this.parsePermissions(this.botPermissions)} for this command`);
+        return message.reply(`I need ${parsePermissions(this.botPermissions)} for this command`);
       }
     }
 
@@ -192,7 +192,7 @@ class Command {
     if (interaction.member && this.userPermissions.length > 0) {
       if (!interaction.member.permissions.has(this.userPermissions)) {
         return interaction.reply({
-          content: `You need ${this.parsePermissions(this.userPermissions)} for this command`,
+          content: `You need ${parsePermissions(this.userPermissions)} for this command`,
           ephemeral: true,
         });
       }
@@ -202,7 +202,7 @@ class Command {
     if (this.botPermissions.length > 0) {
       if (!interaction.guild.me.permissions.has(this.botPermissions)) {
         return interaction.reply({
-          content: `I need ${this.parsePermissions(this.botPermissions)} for this command`,
+          content: `I need ${parsePermissions(this.botPermissions)} for this command`,
           ephemeral: true,
         });
       }
@@ -231,14 +231,6 @@ class Command {
   }
 
   /**
-   * @param {import('discord.js').PermissionResolvable[]} perms
-   */
-  static parsePermissions(perms) {
-    const permissionWord = `permission${perms.length > 1 ? "s" : ""}`;
-    return perms.map((perm) => `\`${permissions[perm]}\``).join(", ") + permissionWord;
-  }
-
-  /**
    * Build a usage embed for this command
    * @param {string} prefix - command prefix
    * @param {string} invoke - alias that was used to trigger this command
@@ -255,6 +247,7 @@ class Command {
       }
     } else {
       desc += `\`\`\`css\n${prefix}${invoke} ${this.command.usage}\`\`\``;
+      if (this.description !== "") desc += `\n**Help:** ${this.description}`;
       if (this.cooldown) desc += `\n**Cooldown:** ${timeformat(this.cooldown)}`;
     }
 

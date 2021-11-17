@@ -18,7 +18,7 @@ module.exports = class Reaction extends Command {
       command: {
         enabled: true,
         minArgsCount: 1,
-        usage: "react [category]",
+        usage: "[reaction]",
       },
       slashCommand: {
         enabled: true,

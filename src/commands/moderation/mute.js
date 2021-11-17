@@ -69,7 +69,7 @@ async function mute(issuer, target, reason) {
   else if (response === "ALREADY_MUTED") return `${target.user.tag} is already muted on this server`;
   else if (response === "NO_MUTED_ROLE")
     return "There is no muted role in this server. Create a `Muted` role or use `mutesetup` to automatically create one";
-  else if (response === "NO_MUTED_PERM")
+  else if (response === "NO_MUTED_PERMISSION")
     return "I do not have permission to move members to `Muted` role. Is that role below my highest role?";
-  else `Failed to mute ${target.user.tag}`;
+  else return `Failed to mute ${target.user.tag}`;
 }

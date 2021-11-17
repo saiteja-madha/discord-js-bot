@@ -131,6 +131,10 @@ async function addInviteRank({ guild }, role, invites) {
     return "You cannot assign a bot role";
   }
 
+  if (guild.roles.everyone.id === role.id) {
+    return "I cannot assign the everyone role.";
+  }
+
   if (!role.editable) {
     return "I am missing permissions to move members to that role. Is that role below my highest role?";
   }
@@ -154,6 +158,10 @@ async function removeInviteRank({ guild }, role) {
 
   if (role.managed) {
     return "You cannot assign a bot role";
+  }
+
+  if (guild.roles.everyone.id === role.id) {
+    return "You cannot assign the everyone role.";
   }
 
   if (!role.editable) {
