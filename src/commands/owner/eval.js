@@ -35,7 +35,13 @@ module.exports = class Eval extends Command {
   async messageRun(message, args) {
     const input = args.join(" ");
     if (!input) return message.reply("Please provide code to eval");
-    const response = await evaluate(input);
+    let response;
+    try {
+      const output = eval(input);
+      response = buildSuccessResponse(output);
+    } catch (ex) {
+      response = buildErrorResponse(ex);
+    }
     await message.reply(response);
   }
 
@@ -44,30 +50,37 @@ module.exports = class Eval extends Command {
    */
   async interactionRun(interaction) {
     const input = interaction.options.getString("expression");
-    const response = await evaluate(input);
+    let response;
+    try {
+      const output = eval(input);
+      response = buildSuccessResponse(output);
+    } catch (ex) {
+      response = buildErrorResponse(ex);
+    }
     await interaction.followUp(response);
   }
 };
 
-async function evaluate(input) {
+const buildSuccessResponse = (output) => {
   const embed = new MessageEmbed();
+  if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
 
-  try {
-    let output = eval(input);
-    if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
-
-    embed
-      .setAuthor("📤 Output")
-      .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
-      .setColor("RANDOM")
-      .setTimestamp(Date.now());
-  } catch (err) {
-    embed
-      .setAuthor("📤 Error")
-      .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
-      .setColor(EMBED_COLORS.ERROR)
-      .setTimestamp(Date.now());
-  }
+  embed
+    .setAuthor("📤 Output")
+    .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
+    .setColor("RANDOM")
+    .setTimestamp(Date.now());
 
   return { embeds: [embed] };
-}
+};
+
+const buildErrorResponse = (err) => {
+  const embed = new MessageEmbed();
+  embed
+    .setAuthor("📤 Error")
+    .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
+    .setColor(EMBED_COLORS.ERROR)
+    .setTimestamp(Date.now());
+
+  return { embeds: [embed] };
+};

@@ -15,7 +15,7 @@ async function handleXp(message) {
 
   // Cooldown check to prevent Message Spamming
   if (message.client.xpCooldownCache.has(key)) {
-    const difference = Date.now() - message.client.xpCooldownCache.get(key) * 0.001;
+    const difference = (Date.now() - message.client.xpCooldownCache.get(key)) * 0.001;
     if (difference < message.client.config.XP_SYSTEM.COOLDOWN) {
       return;
     }

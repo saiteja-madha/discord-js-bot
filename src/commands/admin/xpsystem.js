@@ -11,6 +11,7 @@ module.exports = class XPSystem extends Command {
       userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
+        aliases: ["xpsystem", "xptracking"],
         usage: "<on|off>",
         minArgsCount: 1,
       },
