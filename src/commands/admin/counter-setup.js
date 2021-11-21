@@ -75,7 +75,7 @@ module.exports = class CounterSetup extends Command {
     const type = interaction.options.getString("type");
     const name = interaction.options.getString("name");
 
-    const response = await setupCounter(interaction.guild, interaction.guild, type, name);
+    const response = await setupCounter(interaction.guild, type, name);
     return interaction.followUp(response);
   }
 };

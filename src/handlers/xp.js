@@ -38,17 +38,12 @@ async function handleXp(message) {
     memberDb.xp = xp;
     memberDb.level = level;
     let lvlUpMessage = message.client.config.XP_SYSTEM.DEFAULT_LVL_UP_MSG;
-    lvlUpMessage = lvlUpMessage.replace("{l}", level).replace("{m}", message.member.user);
+    lvlUpMessage = lvlUpMessage.replace("{l}", level).replace("{m}", message.member.user.toString());
     const lvlUpChannel = message.channel;
 
     sendMessage(lvlUpChannel, lvlUpMessage);
   }
-  memberDb.save().catch((ex) => {
-    message.client.logger.debug(
-      `$GuildId: ${message.guildId} MemberId: ${message.member.id} Failed to updated member's XP`
-    );
-    message.client.logger.error("UpdateXP", ex);
-  });
+  await memberDb.save();
 }
 
 module.exports = {

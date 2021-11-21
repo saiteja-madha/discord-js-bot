@@ -181,7 +181,7 @@ module.exports = class Ticket extends Command {
       if (args.length < 2) return message.reply("Please provide a channel where ticket logs must be sent");
       const target = getMatchingChannel(message.guild, args[1]);
       if (target.length === 0) return message.reply("Could not find any matching channel");
-      response = await setupLogChannel(message);
+      response = await setupLogChannel(message, target);
     }
 
     // Set limit

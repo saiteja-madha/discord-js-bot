@@ -143,6 +143,7 @@ async function resolveMember(message, query, exact = false) {
 /**
  * @param {Message} message
  */
+// eslint-disable-next-line no-unused-vars
 async function resolveMembers(message) {
   const regex = /<?@?!?(\d{17,20})>?/g;
   const targetMembers = [];

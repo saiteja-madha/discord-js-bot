@@ -2,8 +2,8 @@ const { MessageEmbed } = require("discord.js");
 const { getSettings: registerGuild } = require("@schemas/Guild");
 
 /**
- * @param {import('discord.js').BotClient} client
- * @param {import('@src/structures').Guild} guild
+ * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').Guild} guild
  */
 module.exports = async (client, guild) => {
   if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true });
@@ -15,7 +15,7 @@ module.exports = async (client, guild) => {
   const embed = new MessageEmbed()
     .setTitle("Guild Joined")
     .setThumbnail(guild.iconURL())
-    .setColor(client.config.EMBED_COLORS.SUCCESS_EMBED)
+    .setColor(client.config.EMBED_COLORS.SUCCESS)
     .addField("Name", guild.name, false)
     .addField("ID", guild.id, false)
     .addField("Owner", `${client.users.cache.get(guild.ownerId).tag} [\`${guild.ownerId}\`]`, false)
