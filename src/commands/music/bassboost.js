@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { musicValidations } = require("@utils/botUtils");
 
 const levels = {
   none: 0.0,
@@ -12,12 +13,42 @@ module.exports = class Bassboost extends Command {
   constructor(client) {
     super(client, {
       name: "bassboost",
-      description: "Toggles bassboost",
+      description: "set bassboost level",
+      category: "MUSIC",
+      validations: musicValidations,
       command: {
         enabled: true,
         minArgsCount: 1,
         usage: "<none|low|medium|high>",
-        category: "MUSIC",
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "level",
+            description: "bassboost level",
+            type: "STRING",
+            required: true,
+            choices: [
+              {
+                name: "none",
+                value: "none",
+              },
+              {
+                name: "low",
+                value: "low",
+              },
+              {
+                name: "medium",
+                value: "medium",
+              },
+              {
+                name: "high",
+                value: "high",
+              },
+            ],
+          },
+        ],
       },
     });
   }
@@ -27,20 +58,25 @@ module.exports = class Bassboost extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const player = message.client.musicManager.get(message.guildId);
-    if (!player) return message.reply("No music is being played!");
-
-    const { channel } = message.member.voice;
-
-    if (!channel) return message.reply("You need to join a voice channel.");
-    if (channel.id !== player.voiceChannel) return message.reply("You're not in the same voice channel.");
-
     let level = "none";
     if (args.length && args[0].toLowerCase() in levels) level = args[0].toLowerCase();
+    const response = setBassBoost(message, level);
+    await message.reply(response);
+  }
 
-    const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
-    player.setEQ(...bands);
-
-    return message.channel.send(`> Set the bassboost level to ${level}`);
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    let level = interaction.options.getString("level");
+    const response = setBassBoost(interaction, level);
+    await interaction.followUp(response);
   }
 };
+
+function setBassBoost({ client, guildId }, level) {
+  const player = client.musicManager.get(guildId);
+  const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
+  player.setEQ(...bands);
+  return `> Set the bassboost level to \`${level}\``;
+}

@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
-const { maxWarnings, maxWarnAction } = require("@schemas/guild-schema");
-const { Message } = require("discord.js");
+const { getSettings } = require("@schemas/Guild");
+const { Message, CommandInteraction } = require("discord.js");
 const { getRoleByName } = require("@utils/guildUtils");
 
 module.exports = class MaxWarn extends Command {
@@ -8,6 +8,8 @@ module.exports = class MaxWarn extends Command {
     super(client, {
       name: "maxwarn",
       description: "set max warnings configuration",
+      category: "ADMIN",
+      userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
         minArgsCount: 1,
@@ -17,12 +19,56 @@ module.exports = class MaxWarn extends Command {
             description: "set max warnings a member can receive before taking an action",
           },
           {
-            trigger: "action <MUTE|KICK|BAN>",
+            trigger: "action <mute|kick|ban>",
             description: "set action to performed after receiving maximum warnings",
           },
         ],
-        category: "ADMIN",
-        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: true,
+        ephemeral: true,
+        options: [
+          {
+            name: "limit",
+            description: "set max warnings a member can receive before taking an action",
+            type: "SUB_COMMAND",
+            options: [
+              {
+                name: "amount",
+                description: "max number of strikes",
+                type: "INTEGER",
+                required: true,
+              },
+            ],
+          },
+          {
+            name: "action",
+            description: "set action to performed after receiving maximum warnings",
+            type: "SUB_COMMAND",
+            options: [
+              {
+                name: "action",
+                description: "action to perform",
+                type: "STRING",
+                required: true,
+                choices: [
+                  {
+                    name: "MUTE",
+                    value: "MUTE",
+                  },
+                  {
+                    name: "KICK",
+                    value: "KICK",
+                  },
+                  {
+                    name: "BAN",
+                    value: "BAN",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     });
   }
@@ -31,47 +77,79 @@ module.exports = class MaxWarn extends Command {
    * @param {Message} message
    * @param {string[]} args
    */
-  async messageRun(message, args, invoke, prefix) {
-    const input = args[0].toUpperCase();
+  async messageRun(message, args) {
+    const input = args[0].toLowerCase();
+    if (!["limit", "action"].includes(input)) return message.reply("Invalid command usage");
 
-    // Limit configuration
-    if (input === "LIMIT") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1)
-        return message.reply("Max Warnings must be a valid number greater than 0");
-
-      await maxWarnings(message.guildId, max);
-      message.channel.send(`Configuration saved! Maximum warnings is set to ${max}`);
+    let response;
+    if (input === "limit") {
+      const max = parseInt(args[1]);
+      if (isNaN(max) || max < 1) return message.reply("Max Warnings must be a valid number greater than 0");
+      response = await setLimit(message.guild, max);
     }
 
-    // Action
-    else if (input === "ACTION") {
+    if (input === "action") {
       const action = args[1]?.toUpperCase();
-
-      if (!action) message.reply("Please choose an action. Action can be `Mute`/`Kick`/`Ban`");
-      if (!["MUTE", "KICK", "BAN"].includes(action))
+      if (!action || !["MUTE", "KICK", "BAN"].includes(action))
         return message.reply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
-
-      if (action === "MUTE") {
-        let mutedRole = getRoleByName(message.guild, "muted");
-        if (!mutedRole) {
-          return message.reply(`Muted role doesn't exist in this guild. Use \`${prefix}mute setup\` to create one`);
-        }
-
-        if (!mutedRole.editable) {
-          return message.reply(
-            "I do not have permission to move members to `Muted` role. Is that role below my highest role?"
-          );
-        }
-      }
-
-      await maxWarnAction(message.guildId, action);
-      message.channel.send(`Configuration saved! Max Warnings action is set to ${action}`);
+      response = await setAction(message.guild, action);
     }
 
-    // send usage
-    else {
-      return this.sendUsage(message.channel, prefix, invoke, "Incorrect Arguments");
+    await message.reply(response);
+  }
+
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const sub = interaction.options.getSubcommand();
+
+    let response;
+    if (sub === "limit") {
+      response = await setLimit(interaction.guild, interaction.options.getInteger("amount"));
     }
+
+    if (sub === "action") {
+      response = await setAction(interaction.guild, interaction.options.getString("action"));
+    }
+
+    await interaction.followUp(response);
   }
 };
+
+async function setLimit(guild, limit) {
+  const settings = await getSettings(guild);
+  settings.max_warn.limit = limit;
+  await settings.save();
+  return `Configuration saved! Maximum warnings is set to ${limit}`;
+}
+
+async function setAction(guild, action) {
+  if (action === "MUTE") {
+    let mutedRole = getRoleByName(guild, "muted");
+    if (!mutedRole) {
+      return `Muted role doesn't exist in this guild`;
+    }
+
+    if (!mutedRole.editable) {
+      return "I do not have permission to move members to `Muted` role. Is that role below my highest role?";
+    }
+  }
+
+  if (action === "KICK") {
+    if (!guild.me.permissions.has("KICK_MEMBERS")) {
+      return "I do not have permission to kick members";
+    }
+  }
+
+  if (action === "BAN") {
+    if (!guild.me.permissions.has("BAN_MEMBERS")) {
+      return "I do not have permission to ban members";
+    }
+  }
+
+  const settings = await getSettings(guild);
+  settings.max_warn.action = action;
+  await settings.save();
+  return `Configuration saved! Automod action is set to ${action}`;
+}

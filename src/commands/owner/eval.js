@@ -1,22 +1,21 @@
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { Command } = require("@src/structures");
-const { MessageEmbed } = require("discord.js");
+const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class Eval extends Command {
   constructor(client) {
     super(client, {
       name: "eval",
       description: "evaluates something",
+      category: "OWNER",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
-        usage: "1+1",
+        usage: "<script>",
         minArgsCount: 1,
-        category: "OWNER",
-        botOwnerOnly: true,
-        hidden: true,
-        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
-        enabled: false,
+        enabled: true,
         options: [
           {
             name: "input",
@@ -36,27 +35,52 @@ module.exports = class Eval extends Command {
   async messageRun(message, args) {
     const input = args.join(" ");
     if (!input) return message.reply("Please provide code to eval");
-    if (!input.toLowerCase().includes("token")) {
-      const embed = new MessageEmbed();
-
-      try {
-        let output = eval(input);
-        if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
-
-        embed
-          .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
-          .addField("📤 Output", `\`\`\`js\n${output.length > 1024 ? "Too large to display." : output}\`\`\``)
-          .setColor("RANDOM");
-      } catch (err) {
-        embed
-          .addField("📥 Input", `\`\`\`js\n${input.length > 1024 ? "Too large to display." : input}\`\`\``)
-          .addField("📤 Output", `\`\`\`js\n${err.length > 1024 ? "Too large to display." : err}\`\`\``)
-          .setColor("ORANGE");
-      }
-
-      message.channel.send({ embeds: [embed] });
-    } else {
-      message.channel.send("my token: ||screw you||");
+    let response;
+    try {
+      const output = eval(input);
+      response = buildSuccessResponse(output);
+    } catch (ex) {
+      response = buildErrorResponse(ex);
     }
+    await message.reply(response);
   }
+
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const input = interaction.options.getString("expression");
+    let response;
+    try {
+      const output = eval(input);
+      response = buildSuccessResponse(output);
+    } catch (ex) {
+      response = buildErrorResponse(ex);
+    }
+    await interaction.followUp(response);
+  }
+};
+
+const buildSuccessResponse = (output) => {
+  const embed = new MessageEmbed();
+  if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
+
+  embed
+    .setAuthor("📤 Output")
+    .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
+    .setColor("RANDOM")
+    .setTimestamp(Date.now());
+
+  return { embeds: [embed] };
+};
+
+const buildErrorResponse = (err) => {
+  const embed = new MessageEmbed();
+  embed
+    .setAuthor("📤 Error")
+    .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
+    .setColor(EMBED_COLORS.ERROR)
+    .setTimestamp(Date.now());
+
+  return { embeds: [embed] };
 };

@@ -1,11 +1,10 @@
-const { Message, PartialMessage, MessageEmbed } = require("discord.js");
-const { BotClient } = require("@src/structures");
-const { getSettings } = require("@schemas/guild-schema");
+const { MessageEmbed } = require("discord.js");
+const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
 /**
- * @param {BotClient} client
- * @param {Message | PartialMessage} message
+ * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').Message|import('discord.js').PartialMessage} message
  */
 module.exports = async (client, message) => {
   if (message.partial) return;

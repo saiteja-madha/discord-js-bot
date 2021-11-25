@@ -1,4 +1,3 @@
-const { MessagePayload, MessageOptions, User, BaseGuildTextChannel } = require("discord.js");
 const { getJson } = require("@utils/httpUtils");
 const config = require("@root/config.js");
 const { success, warn, error, log } = require("@src/helpers/logger");
@@ -57,7 +56,6 @@ function validateConfig() {
     }
   }
   if (config.OWNER_IDS.length === 0) warn("config.js: OWNER_IDS are empty");
-  if (!config.BOT_INVITE) warn("config.js: BOT_INVITE is not provided");
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 
@@ -67,29 +65,38 @@ async function startupCheck() {
 }
 
 /**
- * @param {BaseGuildTextChannel} channel
- * @param {string | MessagePayload | MessageOptions} message
+ * @param {import('discord.js').TextBasedChannels} channel
+ * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} content
+ * @param {number} [seconds]
  */
-async function sendMessage(channel, message) {
-  if (!channel || !message) return;
-  if (!channel.permissionsFor(channel.guild?.me).has("SEND_MESSAGES")) return;
+async function sendMessage(channel, content, seconds) {
+  if (!channel || !content) return;
+  const perms = ["VIEW_CHANNEL", "SEND_MESSAGES"];
+  if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
+  if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(perms)) return;
   try {
-    return await channel.send(message);
+    if (!seconds) return channel.send(content);
+    const reply = await channel.send(content);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
     error(`sendMessage`, ex);
   }
 }
 
 /**
- * @param {User} user
- * @param {string|MessagePayload|MessageOptions} message
+ * @param {import('discord.js').User} user
+ * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} message
+ * @param {number} [seconds]
  */
-async function safeDM(user, message) {
+async function safeDM(user, message, seconds) {
   if (!user || !message) return;
   try {
-    return await user.send(message);
+    const dm = await user.createDM();
+    if (!seconds) return dm.send(message);
+    const reply = await dm.send(message);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
-    error(`safeDM`, ex);
+    /** Ignore */
   }
 }
 
@@ -133,9 +140,35 @@ const permissions = {
   USE_EXTERNAL_STICKERS: "Use External Stickers",
 };
 
+/**
+ * @param {import("discord.js").PermissionResolvable[]} perms
+ */
+const parsePermissions = (perms) => {
+  const permissionWord = `permission${perms.length > 1 ? "s" : ""}`;
+  return perms.map((perm) => `\`${permissions[perm]}\``).join(", ") + permissionWord;
+};
+
+const musicValidations = [
+  {
+    callback: ({ client, guildId }) => client.musicManager.get(guildId),
+    message: "🚫 No music is being played!",
+  },
+  {
+    callback: ({ member }) => member.voice?.channelId,
+    message: "🚫 You need to join my voice channel.",
+  },
+  {
+    callback: ({ member, client, guildId }) =>
+      member.voice?.channelId === client.musicManager.get(guildId).voiceChannel,
+    message: "🚫 You're not in the same voice channel.",
+  },
+];
+
 module.exports = {
   permissions,
+  parsePermissions,
   sendMessage,
   safeDM,
   startupCheck,
+  musicValidations,
 };

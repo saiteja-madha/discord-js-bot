@@ -54,31 +54,13 @@
                                         <div class="form-group">
                                             <div class="checkbox">
                                                 <label>
-                                                    <% if(guild.flag_translation.enabled) { %>
+                                                    <% if(guild.flag_translation?.enabled) { %>
                                                         <input type="checkbox" name="flag_translation" checked>Flag Translation
                                                     <% } else { %>
                                                         <input type="checkbox" name="flag_translation">Flag Translation
                                                     <% } %>
                                                 </label>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Flag Translation Channels</label>
-                                            <select multiple class="form-control" name="channels">
-                                                <% if(guild.flag_translation.channels.length === 0) { %>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").forEach((ch) => { %>
-                                                        <option selected="selected"><%= ch.name %></option>
-                                                    <% }); %>
-                                                <% } else { %>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").forEach((ch) => { %>
-                                                        <% if(guild.flag_translation.channels.includes(ch.id)) { %>
-                                                            <option selected="selected"><%= ch.name %></option>
-                                                        <% } else { %>
-                                                            <option><%= ch.name %></option>
-                                                        <% } %>
-                                                    <% }); %>
-                                                <% } %>
-                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label>Moderation Logs</label>
@@ -114,7 +96,7 @@
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Ticket Limit</label>
-                                            <input type="number" name="limit" class="form-control" value="<%= guild.ticket.limit %>">
+                                            <input type="number" name="limit" class="form-control" placeholder="<%= guild.ticket.limit %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Ticket Logs</label>
@@ -180,7 +162,7 @@
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Max Strikes</label>
-                                            <input type="number" name="max_strikes" class="form-control" value="<%= guild.automod.strikes %>">
+                                            <input type="number" name="max_strikes" class="form-control" placeholder="<%= guild.automod.strikes %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Max Strikes Action</label>
@@ -199,15 +181,15 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Max Lines</label>
-                                            <input type="number" name="max_lines" class="form-control" value="<%= guild.automod.max_lines %>">
+                                            <input type="number" name="max_lines" class="form-control" placeholder="<%= guild.automod.max_lines %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Max Mentions</label>
-                                            <input type="number" name="max_mentions" class="form-control" value="<%= guild.automod.max_mentions %>">
+                                            <input type="number" name="max_mentions" class="form-control" placeholder="<%= guild.automod.max_mentions %>">
                                         </div>
                                         <div class="form-group">
                                             <label>Max Role Mentions</label>
-                                            <input type="number" name="max_role_mentions" class="form-control" value="<%= guild.automod.max_role_mentions %>">
+                                            <input type="number" name="max_role_mentions" class="form-control" placeholder="<%= guild.automod.max_role_mentions %>">
                                         </div>
                                         <div class="form-group">
                                             <div class="checkbox">

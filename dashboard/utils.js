@@ -1,18 +1,11 @@
-const { getUser } = require("@schemas/user-schema");
+const { getUser } = require("@schemas/User");
 const Discord = require("discord.js");
-const { getSettings } = require("@schemas/guild-schema");
-const { getConfig } = require("@schemas/greeting-schema");
-
-async function fetchGreeting(guildID, client, guilds) {
-  const guild = client.guilds.cache.get(guildID);
-  const settings = (await getConfig(guildID)) || { welcome: {}, farewell: {} };
-  return { ...guild, ...settings, ...guilds.find((g) => g.id === guild.id) };
-}
+const { getSettings } = require("@schemas/Guild");
 
 async function fetchGuild(guildID, client, guilds) {
   const guild = client.guilds.cache.get(guildID);
   const settings = await getSettings(guild);
-  return { ...guild, ...settings, ...guilds.find((g) => g.id === guild.id) };
+  return { ...guild, ...settings._doc, ...guilds.find((g) => g.id === guild.id) };
 }
 
 async function fetchUser(userData, client, query) {
@@ -39,9 +32,10 @@ async function fetchUser(userData, client, query) {
     }
   }
   const user = await client.users.fetch(userData.id);
+  user.displayAvatar = user.displayAvatarURL();
   const userDb = await getUser(user.id);
   const userInfos = { ...user, ...userDb, ...userData, ...user.presence };
   return userInfos;
 }
 
-module.exports = { fetchGuild, fetchGreeting, fetchUser };
+module.exports = { fetchGuild, fetchUser };

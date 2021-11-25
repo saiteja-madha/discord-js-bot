@@ -1,20 +1,23 @@
-const { GuildMember, PartialGuildMember } = require("discord.js");
-const { BotClient } = require("@src/structures");
-const { getConfig, updateBotCount } = require("@schemas/counter-schema");
 const { inviteHandler, greetingHandler } = require("@src/handlers");
+const { getSettings } = require("@schemas/Guild");
 
 /**
- * @param {BotClient} client
- * @param {GuildMember|PartialGuildMember} member
+ * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').GuildMember|import('discord.js').PartialGuildMember} member
  */
 module.exports = async (client, member) => {
   if (member.partial) await member.user.fetch();
   if (!member.guild) return;
-  const { guild } = member;
 
-  const counterConfig = await getConfig(guild.id);
-  if (counterConfig) {
-    if (member.user.bot) await updateBotCount(guild.id, -1, true);
+  const { guild } = member;
+  const settings = await getSettings(guild);
+
+  // Check for counter channel
+  if (settings.counters.find((doc) => ["MEMBERS", "BOTS"].includes(doc.counter_type))) {
+    if (member.user.bot) {
+      settings.data.bots -= 1;
+      await settings.save();
+    }
     if (!client.counterUpdateQueue.includes(guild.id)) client.counterUpdateQueue.push(guild.id);
   }
 

@@ -1,12 +1,9 @@
-const { Message } = require("discord.js");
-const { BotClient } = require("@src/structures");
 const { automodHandler, xpHandler } = require("@src/handlers");
-const { getSettings } = require("@schemas/guild-schema");
-const { sendMessage } = require("@utils/botUtils");
+const { getSettings } = require("@schemas/Guild");
 
 /**
- * @param {BotClient} client
- * @param {Message} message
+ * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').Message} message
  */
 module.exports = async (client, message) => {
   if (!message.guild || message.author.bot) return;
@@ -25,12 +22,7 @@ module.exports = async (client, message) => {
     // command is found
     if (cmd) {
       isCommand = true;
-      try {
-        await cmd.execute(message, args, invoke, prefix);
-      } catch (ex) {
-        sendMessage(message.channel, "Oops! An error occurred while running the command");
-        client.logger.error("messageRun", ex);
-      }
+      cmd.executeCommand(message, args, invoke, prefix);
     }
   }
 

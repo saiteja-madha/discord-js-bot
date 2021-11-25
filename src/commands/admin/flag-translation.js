@@ -1,35 +1,41 @@
 const { Command } = require("@src/structures");
-const db = require("@schemas/guild-schema");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { getSettings } = require("@schemas/Guild");
 
 module.exports = class FlagTranslation extends Command {
   constructor(client) {
     super(client, {
-      name: "flagtr",
-      description: "setup translation by reaction in the guild",
+      name: "flagtranslation",
+      description: "configure flag translation in the server",
+      category: "ADMIN",
+      userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
+        aliases: ["flagtr"],
         minArgsCount: 1,
-        subcommands: [
+        usage: "<on|off>",
+      },
+      slashCommand: {
+        enabled: true,
+        ephemeral: true,
+        options: [
           {
-            trigger: "<ON|OFF>",
-            description: "enable or disable translation by flags",
-          },
-          {
-            trigger: "status",
-            description: "flag translation status",
-          },
-          {
-            trigger: "add <#channel(s)>",
-            description: "add channels where flag translation must occur",
-          },
-          {
-            trigger: "remove <#channel(s)>",
-            description: "remove channels with flag translations enabled",
+            name: "status",
+            description: "enabled or disabled",
+            required: true,
+            type: "STRING",
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
           },
         ],
-        category: "ADMIN",
-        userPermissions: ["ADMINISTRATOR"],
       },
     });
   }
@@ -39,49 +45,28 @@ module.exports = class FlagTranslation extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const input = args[0].toLowerCase();
-    const mentions = message.mentions.channels.map((ch) => ch.id);
-    const settings = await db.getSettings(message.guild);
+    const status = args[0].toLowerCase();
+    if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
 
-    switch (input) {
-      case "add": {
-        if (mentions.size === 0) return message.reply("Incorrect usage! You need to mentions channels");
-        const toAdd = [...new Set([...mentions, ...settings.flag_translation.channels])];
-        await db.setFlagTrChannels(message.guildId, toAdd);
-        message.channel.send("Success! Configuration saved");
-        break;
-      }
+    const response = await setFlagTranslation(message.guild, status);
+    await message.reply(response);
+  }
 
-      case "remove": {
-        if (mentions.size === 0) return message.reply("Incorrect usage! You need to mentions channels");
-        const newIds = settings.flag_translation.channels.filter((item) => !mentions.includes(item));
-        await db.setFlagTrChannels(message.guildId, newIds);
-        message.channel.send("Success! Configuration saved");
-        break;
-      }
-
-      case "status": {
-        if (!settings.flag_translation.enabled)
-          return message.channel.send("Flag translation is disabled in this server");
-        const channels = settings.flag_translation.channels
-          .filter((id) => message.guild.channels.cache.has(id))
-          .map((id) => message.guild.channels.cache.get(id).toString())
-          .join(", ");
-
-        if (!channels) return message.channel.send("Flag translation is enabled in all channels");
-        message.channel.send(`Flag translation is enabled in following channels: \n${channels}`);
-        break;
-      }
-
-      default: {
-        let status;
-        if (input === "none" || input === "off" || input === "disable") status = false;
-        else if (input === "on" || input === "enable") status = true;
-        else return message.reply("Incorrect Command Usage");
-
-        await db.flagTranslation(message.guildId, status);
-        message.channel.send(`Configuration saved! Flag translation is now ${status ? "enabled" : "disabled"}`);
-      }
-    }
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const response = await setFlagTranslation(interaction.guild, interaction.options.getString("status"));
+    await interaction.followUp(response);
   }
 };
+
+async function setFlagTranslation(guild, input) {
+  const status = input.toLowerCase() === "on" ? true : false;
+
+  const settings = await getSettings(guild);
+  settings.flag_translation.enabled = status;
+  await settings.save();
+
+  return `Configuration saved! Flag translation is now ${status ? "enabled" : "disabled"}`;
+}

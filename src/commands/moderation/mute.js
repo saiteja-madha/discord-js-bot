@@ -1,20 +1,37 @@
 const { Command } = require("@src/structures");
-const { setupMutedRole, canInteract, addModAction } = require("@utils/modUtils");
-const { getRoleByName, resolveMember } = require("@utils/guildUtils");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { muteTarget } = require("@utils/modUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class MuteCommand extends Command {
   constructor(client) {
     super(client, {
       name: "mute",
-      description: "mutes the specified member(s)",
+      description: "mutes the specified member",
+      category: "MODERATION",
+      botPermissions: ["MANAGE_ROLES"],
+      userPermissions: ["MUTE_MEMBERS"],
       command: {
         enabled: true,
-        usage: "<@member(s)> [reason]",
+        usage: "<@member> [reason]",
         minArgsCount: 1,
-        category: "MODERATION",
-        botPermissions: ["MANAGE_ROLES"],
-        userPermissions: ["KICK_MEMBERS"],
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "user",
+            description: "the target member",
+            type: "USER",
+            required: true,
+          },
+          {
+            name: "reason",
+            description: "reason for mute",
+            type: "STRING",
+            required: false,
+          },
+        ],
       },
     });
   }
@@ -23,66 +40,36 @@ module.exports = class MuteCommand extends Command {
    * @param {Message} message
    * @param {string[]} args
    */
-  async messageRun(message, args, invoke, prefix) {
-    if (args[0].toLowerCase() === "setup") return muteSetup(message);
+  async messageRun(message, args) {
+    const target = await resolveMember(message, args[0], true);
+    if (!target) return message.reply(`No user found matching ${args[0]}`);
+    const reason = message.content.split(args[0])[1].trim();
+    const response = await mute(message.member, target, reason);
+    await message.reply(response);
+  }
 
-    const { content } = message;
-    const mentions = message.mentions.members;
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const user = interaction.options.getUser("user");
+    const reason = interaction.options.getString("reason");
+    const target = await interaction.guild.members.fetch(user.id);
 
-    let mutedRole = getRoleByName(message.guild, "muted");
-
-    if (!mutedRole) {
-      return message.reply(`Muted role doesn't exist! Use \`${prefix}mute setup\` to create one`);
-    }
-
-    if (!mutedRole.editable) {
-      return message.reply(
-        "I do not have permission to move members to `Muted` role. Is that role below my highest role?"
-      );
-    }
-
-    // !mute ID <reason>
-    if (mentions.size === 0) {
-      const target = await resolveMember(message, args[0], true);
-      if (!target) return message.reply(`No user found matching ${args[0]}`);
-      const reason = content.split(args[0])[1].trim();
-      return mute(message, target, reason);
-    }
-
-    // !mute @m1 @m2 ... <reason>
-    const regex = /<@!?(\d+)>/g;
-    const matches = content.match(regex);
-    const lastMatch = matches[matches.length - 1];
-    const reason = content.split(lastMatch)[1].trim();
-
-    mentions.forEach(async (target) => await mute(message, target, reason));
+    const response = await mute(interaction.member, target, reason);
+    await interaction.followUp(response);
   }
 };
 
-async function muteSetup(message) {
-  let mutedRole = getRoleByName(message.guild, "muted");
-  if (mutedRole) return message.reply("Muted role already exists");
-
-  if (!message.guild.me.permissions.has("MANAGE_GUILD")) {
-    return message.reply("I need `Manage Guild` permission to create a new `Muted` role!");
-  }
-
-  mutedRole = await setupMutedRole(message.guild);
-
-  if (!mutedRole) {
-    return message.reply(
-      `Something went wrong while setting up. Please make sure I have permission to edit/create roles, and modify every channel.
-          Alternatively, give me the \`Administrator\` permission for setting up`
-    );
-  }
-
-  await message.reply("Muted role is successfully setup");
-}
-
-async function mute(message, target, reason) {
-  if (!canInteract(message.member, target, "mute", message.channel)) return;
-  const status = await addModAction(message.member, target, reason, "MUTE");
-  if (status === "ALREADY_MUTED") return message.channel.send(`${target.user.tag} is already muted`);
-  if (status) message.channel.send(`${target.user.tag} is now muted on this server`);
-  else message.channel.send(`Failed to add muted role to ${target.user.tag}`);
+async function mute(issuer, target, reason) {
+  const response = await muteTarget(issuer, target, reason);
+  if (typeof response === "boolean") return `${target.user.tag} is now muted!`;
+  if (response === "BOT_PERM") return `I do not have permission to mute ${target.user.tag}`;
+  else if (response === "MEMBER_PERM") return `You do not have permission to mute ${target.user.tag}`;
+  else if (response === "ALREADY_MUTED") return `${target.user.tag} is already muted on this server`;
+  else if (response === "NO_MUTED_ROLE")
+    return "There is no muted role in this server. Create a `Muted` role or use `mutesetup` to automatically create one";
+  else if (response === "NO_MUTED_PERMISSION")
+    return "I do not have permission to move members to `Muted` role. Is that role below my highest role?";
+  else return `Failed to mute ${target.user.tag}`;
 }

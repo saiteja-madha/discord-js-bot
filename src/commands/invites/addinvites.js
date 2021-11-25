@@ -1,22 +1,39 @@
 const { Command } = require("@src/structures");
-const { getEffectiveInvites, checkInviteRewards } = require("@src/handlers/invite-handler");
-const { incrementInvites } = require("@schemas/invite-schema");
+const { getEffectiveInvites, checkInviteRewards } = require("@src/handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
-const { MessageEmbed, Message } = require("discord.js");
-const { resolveMember } = require("@root/src/utils/guildUtils");
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { resolveMember } = require("@utils/guildUtils");
+const { getMember } = require("@schemas/Member");
 
 module.exports = class AddInvitesCommand extends Command {
   constructor(client) {
     super(client, {
       name: "addinvites",
       description: "add invites to a member",
+      category: "INVITE",
+      userPermissions: ["MANAGE_GUILD"],
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         usage: "<@member|id> <invites>",
         minArgsCount: 2,
-        category: "INVITE",
-        botPermissions: ["EMBED_LINKS"],
-        userPermissions: ["ADMINISTRATOR"],
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "user",
+            description: "the user to give invites to",
+            type: "USER",
+            required: true,
+          },
+          {
+            name: "invites",
+            description: "the number of invites to give",
+            type: "INTEGER",
+            required: true,
+          },
+        ],
       },
     });
   }
@@ -27,20 +44,39 @@ module.exports = class AddInvitesCommand extends Command {
    */
   async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
-    const amount = args[1];
+    const amount = parseInt(args[1]);
 
     if (!target) return message.reply("Incorrect syntax. You must mention a target");
     if (isNaN(amount)) return message.reply("Invite amount must be a number");
 
-    const inviteData = await incrementInvites(message.guildId, target.id, "ADDED", amount);
+    const response = await addInvites(message, target.user, parseInt(amount));
+    await message.reply(response);
+  }
 
-    const embed = new MessageEmbed()
-      .setAuthor(`Added invites to ${target.user.username}`)
-      .setThumbnail(target.user.displayAvatarURL())
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setDescription(`${target.user.tag} now has ${getEffectiveInvites(inviteData)} invites`);
-
-    message.channel.send({ embeds: [embed] });
-    checkInviteRewards(message.guild, inviteData, true);
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const user = interaction.options.getUser("user");
+    const amount = interaction.options.getInteger("invites");
+    const response = await addInvites(interaction, user, amount);
+    await interaction.followUp(response);
   }
 };
+
+async function addInvites({ guild }, user, amount) {
+  if (user.bot) return "Oops! You cannot add invites to bots";
+
+  const memberDb = await getMember(guild.id, user.id);
+  memberDb.invite_data.added += amount;
+  await memberDb.save();
+
+  const embed = new MessageEmbed()
+    .setAuthor(`Added invites to ${user.username}`)
+    .setThumbnail(user.displayAvatarURL())
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription(`${user.tag} now has ${getEffectiveInvites(memberDb.invite_data)} invites`);
+
+  checkInviteRewards(guild, memberDb, true);
+  return { embeds: [embed] };
+}

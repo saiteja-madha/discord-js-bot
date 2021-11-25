@@ -1,10 +1,9 @@
-const { BotClient } = require("@src/structures");
-const { counterHandler, inviteHandler, musicHandler } = require("@src/handlers");
-const { loadReactionRoles } = require("@schemas/reactionrole-schema");
-const { getSettings } = require("@schemas/guild-schema");
+const { counterHandler, inviteHandler } = require("@src/handlers");
+const { cacheReactionRoles } = require("@schemas/Message");
+const { getSettings } = require("@schemas/Guild");
 
 /**
- * @param {BotClient} client
+ * @param {import('@src/structures').BotClient} client
  */
 module.exports = async (client) => {
   client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
@@ -23,24 +22,26 @@ module.exports = async (client) => {
     else await client.registerInteractions(client.config.INTERACTIONS.TEST_GUILD_ID);
   }
 
-  // register player events
-  musicHandler.registerPlayerEvents(client);
-
   // Load reaction roles to cache
-  await loadReactionRoles();
+  await cacheReactionRoles(client);
 
-  // initialize counter Handler
-  await counterHandler.init(client);
-
-  // cache invites for tracking enabled guilds
-  client.guilds.cache.forEach(async (guild) => {
+  for (const guild of client.guilds.cache.values()) {
     const settings = await getSettings(guild);
-    if (settings.invite.tracking) inviteHandler.cacheGuildInvites(guild);
-  });
+
+    // initialize counter
+    if (settings.counters.length > 0) {
+      await counterHandler.init(guild, settings);
+    }
+
+    // cache invites
+    if (settings.invite.tracking) {
+      inviteHandler.cacheGuildInvites(guild);
+    }
+  }
 };
 
 /**
- * @param {BotClient} client
+ * @param {import('@src/structures').BotClient} client
  */
 const updatePresence = (client) => {
   const guilds = client.guilds.cache;

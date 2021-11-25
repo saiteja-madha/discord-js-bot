@@ -1,15 +1,28 @@
 const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
+const { musicValidations } = require("@utils/botUtils");
 
 module.exports = class Volume extends Command {
   constructor(client) {
     super(client, {
       name: "volume",
       description: "set the music player volume",
+      category: "MUSIC",
+      validations: musicValidations,
       command: {
         enabled: true,
         usage: "<1-100>",
-        category: "MUSIC",
+      },
+      slashCommand: {
+        enabled: true,
+        options: [
+          {
+            name: "amount",
+            description: "Enter a value to set [0 to 100]",
+            type: "INTEGER",
+            required: false,
+          },
+        ],
       },
     });
   }
@@ -19,22 +32,27 @@ module.exports = class Volume extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const player = message.client.musicManager.get(message.guild.id);
+    const amount = args[0];
+    const response = volume(message, amount);
+    await message.reply(response);
+  }
 
-    if (!player) return message.channel.send("No music is being played!");
-    if (!args.length) return message.channel.send(`> The player volume is \`${player.volume}\`.`);
-
-    const { channel: voice } = message.member.voice;
-
-    if (!voice) return message.channel.send("You need to join a voice channel.");
-    if (voice.id !== player.voiceChannel) return message.channel.send("You're not in the same voice channel.");
-
-    const volume = Number(args[0]);
-
-    if (!volume || volume < 1 || volume > 100)
-      return message.channel.send("you need to give me a volume between 1 and 100.");
-
-    player.setVolume(volume);
-    return message.channel.send(`> Music player volume to \`${volume}\`.`);
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const amount = interaction.options.getInteger("amount");
+    const response = volume(interaction, amount);
+    await interaction.followUp(response);
   }
 };
+
+function volume({ client, guildId }, volume) {
+  const player = client.musicManager.get(guildId);
+
+  if (!volume) return `> The player volume is \`${player.volume}\`.`;
+  if (volume < 1 || volume > 100) return "you need to give me a volume between 1 and 100.";
+
+  player.setVolume(volume);
+  return `🎶 Music player volume is set to \`${volume}\`.`;
+}

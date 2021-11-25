@@ -1,11 +1,11 @@
 const { Message } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");
-
-const IMAGE_API_BASE = "https://discord-js-image-manipulation.herokuapp.com";
+const { IMAGE } = require("@root/config");
 
 /**
+ * Function to extract image url from discord message
  * @param {Message} message
- * @param {String[]} args
+ * @param {string[]} args
  */
 async function getImageFromCommand(message, args) {
   let url;
@@ -43,21 +43,23 @@ async function getImageFromCommand(message, args) {
 }
 
 /**
- * @param {String} genName
- * @param {String} image
+ * Function to generate endpoint url for image
+ * @param {string} genName
+ * @param {string} image
  */
 function getGenerator(genName, image) {
-  const endpoint = new URL(`${IMAGE_API_BASE}/generators/${genName}`);
+  const endpoint = new URL(`${IMAGE.BASE_API}/generators/${genName}`);
   endpoint.searchParams.append("image", image);
   return endpoint.href;
 }
 
 /**
- * @param {String} genName
- * @param {String} image
+ * Function to generate endpoint url for image
+ * @param {string} genName
+ * @param {string} image
  */
 function getFilter(filter, image) {
-  const endpoint = new URL(`${IMAGE_API_BASE}/filters/${filter}`);
+  const endpoint = new URL(`${IMAGE.BASE_API}/filters/${filter}`);
   endpoint.searchParams.append("image", image);
   return endpoint.href;
 }

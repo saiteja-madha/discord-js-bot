@@ -1,17 +1,20 @@
 const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
+const { Message, CommandInteraction } = require("discord.js");
 const SnakeGame = require("snakecord");
 
-module.exports = class SnackCommand extends Command {
+module.exports = class SnakeCommand extends Command {
   constructor(client) {
     super(client, {
       name: "snake",
-      description: "Play Snack Game on Discord",
-      cooldown: 120,
+      description: "play snake game on discord",
+      cooldown: 300,
+      category: "FUN",
+      botPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "ADD_REACTIONS", "READ_MESSAGE_HISTORY", "MANAGE_MESSAGES"],
       command: {
         enabled: true,
-        category: "FUN",
-        botPermissions: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_CHANNELS"],
+      },
+      slashCommand: {
+        enabled: true,
       },
     });
   }
@@ -21,13 +24,26 @@ module.exports = class SnackCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const snakeGame = new SnakeGame({
-      title: "Snake Game",
-      color: "BLUE",
-      timestamp: true,
-      gameOverTitle: "Game Over",
-    });
+    await message.reply("**Starting Snake Game**");
+    await startSnakeGame(message);
+  }
 
-    return snakeGame.newGame(message);
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    await interaction.followUp("**Starting Snake Game**");
+    await startSnakeGame(interaction);
   }
 };
+
+async function startSnakeGame(data) {
+  const snakeGame = new SnakeGame({
+    title: "Snake Game",
+    color: "BLUE",
+    timestamp: true,
+    gameOverTitle: "Game Over",
+  });
+
+  await snakeGame.newGame(data);
+}

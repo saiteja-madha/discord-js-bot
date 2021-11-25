@@ -1,18 +1,22 @@
 const { EMBED_COLORS } = require("@root/config");
 const { Command } = require("@src/structures");
-const { Message, MessageEmbed } = require("discord.js");
+const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
 const prettyMs = require("pretty-ms");
+const { splitBar } = require("string-progressbar");
 
 module.exports = class Skip extends Command {
   constructor(client) {
     super(client, {
       name: "np",
-      description: "Show what is playing currently",
+      description: "show's what track is currently being played",
+      category: "MUSIC",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         aliases: ["nowplaying"],
-        category: "MUSIC",
-        botPermissions: ["EMBED_LINKS"],
+      },
+      slashCommand: {
+        enabled: true,
       },
     });
   }
@@ -22,19 +26,41 @@ module.exports = class Skip extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const player = message.client.musicManager.get(message.guild.id);
-    if (!player || !player.queue.current) return message.channel.send("No music is being played!");
+    const response = nowPlaying(message);
+    await message.reply(response);
+  }
 
-    let track = player.queue.current;
-
-    const embed = new MessageEmbed()
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(track.displayThumbnail("hqdefault"))
-      .setAuthor("Now playing")
-      .setDescription(`[${track.title}](${track.uri})`)
-      .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
-      .addField("Added By", track.requester.tag || "NA", true);
-
-    message.channel.send({ embeds: [embed] });
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const response = nowPlaying(interaction);
+    await interaction.followUp(response);
   }
 };
+
+function nowPlaying({ client, guildId }) {
+  const player = client.musicManager.get(guildId);
+  if (!player || !player.queue.current) return "🚫 No music is being played!";
+
+  const track = player.queue.current;
+  const end = track.duration > 6.048e8 ? "🔴 LIVE" : new Date(track.duration).toISOString().slice(11, 19);
+
+  const embed = new MessageEmbed()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setThumbnail(track.displayThumbnail("hqdefault"))
+    .setAuthor("Now playing")
+    .setDescription(`[${track.title}](${track.uri})`)
+    .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
+    .addField("Added By", track.requester.tag || "NA", true)
+    .addField(
+      "\u200b",
+      new Date(player.position).toISOString().slice(11, 19) +
+        " [" +
+        splitBar(track.duration > 6.048e8 ? player.position : track.duration, player.position, 15)[0] +
+        "] " +
+        end,
+      false
+    );
+  return { embeds: [embed] };
+}

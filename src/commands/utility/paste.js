@@ -1,22 +1,36 @@
 const { Command } = require("@src/structures");
-const { MessageEmbed, Message } = require("discord.js");
+const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
 
-module.exports = class CatCommand extends Command {
+module.exports = class PasteCommand extends Command {
   constructor(client) {
     super(client, {
       name: "paste",
       description: "Paste something in sourceb.in",
       cooldown: 5,
+      category: "UTILITY",
+      botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
         minArgsCount: 2,
         usage: "<title> <content>",
-        category: "UTILITY",
-        botPermissions: ["EMBED_LINKS"],
       },
       slashCommand: {
-        enabled: false,
+        enabled: true,
+        options: [
+          {
+            name: "title",
+            description: "title for your content",
+            required: true,
+            type: "STRING",
+          },
+          {
+            name: "content",
+            description: "content to be posted to bin",
+            type: "STRING",
+            required: true,
+          },
+        ],
       },
     });
   }
@@ -26,13 +40,30 @@ module.exports = class CatCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await postToBin(args.splice(1).join(" "), args[0]);
-    if (!response) return message.channel.send("❌ Something went wrong");
+    const title = args.shift();
+    const content = args.join(" ");
+    const response = await paste(content, title);
+    await message.reply(response);
+  }
 
-    const embed = new MessageEmbed()
-      .setTitle("Paste links")
-      .setDescription(`🔸 Normal: ${response.url}\n🔹 Raw: ${response.raw}`);
-
-    message.channel.send({ embeds: [embed] });
+  /**
+   * @param {CommandInteraction} interaction
+   */
+  async interactionRun(interaction) {
+    const title = interaction.options.getString("title");
+    const content = interaction.options.getString("content");
+    const response = await paste(content, title);
+    await interaction.followUp(response);
   }
 };
+
+async function paste(content, title) {
+  const response = await postToBin(content, title);
+  if (!response) return "❌ Something went wrong";
+
+  const embed = new MessageEmbed()
+    .setAuthor("Paste links")
+    .setDescription(`🔸 Normal: ${response.url}\n🔹 Raw: ${response.raw}`);
+
+  return { embeds: [embed] };
+}
