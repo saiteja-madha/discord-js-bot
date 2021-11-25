@@ -39,7 +39,7 @@ module.exports = class InviterCommand extends Command {
   async messageRun(message, args) {
     const target = (await resolveMember(message, args[0])) || message.member;
     const response = await getInviter(message, target.user);
-    await message.channel.send(response);
+    await message.reply(response);
   }
 
   /**

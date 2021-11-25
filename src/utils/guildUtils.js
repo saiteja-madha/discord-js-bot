@@ -6,7 +6,7 @@ const CHANNEL_MENTION = /<?#?(\d{17,20})>?/;
 
 /**
  * @param {Guild} guild
- * @param {String} name
+ * @param {string} name
  */
 function getRoleByName(guild, name) {
   return guild.roles.cache.find((role) => role.name.toLowerCase() === name);
@@ -21,7 +21,7 @@ function canSendEmbeds(channel) {
 
 /**
  * @param {Guild} guild
- * @param {String} name
+ * @param {string} name
  */
 function getMatchingChannel(guild, query) {
   if (!guild || !query || typeof query !== "string") return;
@@ -51,7 +51,7 @@ function getMatchingChannel(guild, query) {
 
 /**
  * @param {VoiceChannel} vc
- * @param {String} name
+ * @param {string} name
  */
 async function setVoiceChannelName(vc, name) {
   if (vc.manageable) vc.setName(name).catch((err) => vc.client.logger.log("Set Name error: ", err));
@@ -73,7 +73,7 @@ async function getMemberStats(guild) {
 
 /**
  * @param {Guild} guild
- * @param {String} query
+ * @param {string} query
  * @return {Role[]}
  */
 function findMatchingRoles(guild, query) {
@@ -103,7 +103,7 @@ function findMatchingRoles(guild, query) {
 
 /**
  * @param {Message} message
- * @param {String} search
+ * @param {string} search
  * @param {Boolean} exact
  */
 async function resolveMember(message, query, exact = false) {

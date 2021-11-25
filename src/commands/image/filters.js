@@ -64,7 +64,7 @@ module.exports = class Filters extends Command {
       .setImage("attachment://attachment.png")
       .setFooter(`Requested by: ${message.author.tag}`);
 
-    message.channel.send({ embeds: [embed], files: [attachment] });
+    await message.reply({ embeds: [embed], files: [attachment] });
   }
 
   /**
@@ -92,6 +92,6 @@ module.exports = class Filters extends Command {
       .setImage("attachment://attachment.png")
       .setFooter(`Requested by: ${author.tag}`);
 
-    interaction.followUp({ embeds: [embed], files: [attachment] });
+    await interaction.followUp({ embeds: [embed], files: [attachment] });
   }
 };

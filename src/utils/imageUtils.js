@@ -3,8 +3,9 @@ const { resolveMember } = require("@utils/guildUtils");
 const { IMAGE } = require("@root/config");
 
 /**
+ * Function to extract image url from discord message
  * @param {Message} message
- * @param {String[]} args
+ * @param {string[]} args
  */
 async function getImageFromCommand(message, args) {
   let url;
@@ -42,8 +43,9 @@ async function getImageFromCommand(message, args) {
 }
 
 /**
- * @param {String} genName
- * @param {String} image
+ * Function to generate endpoint url for image
+ * @param {string} genName
+ * @param {string} image
  */
 function getGenerator(genName, image) {
   const endpoint = new URL(`${IMAGE.BASE_API}/generators/${genName}`);
@@ -52,8 +54,9 @@ function getGenerator(genName, image) {
 }
 
 /**
- * @param {String} genName
- * @param {String} image
+ * Function to generate endpoint url for image
+ * @param {string} genName
+ * @param {string} image
  */
 function getFilter(filter, image) {
   const endpoint = new URL(`${IMAGE.BASE_API}/filters/${filter}`);

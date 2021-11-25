@@ -114,7 +114,6 @@ module.exports = class MaxWarn extends Command {
     }
 
     await interaction.followUp(response);
-    interaction.options.data;
   }
 };
 

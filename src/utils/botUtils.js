@@ -91,8 +91,9 @@ async function sendMessage(channel, content, seconds) {
 async function safeDM(user, message, seconds) {
   if (!user || !message) return;
   try {
-    if (!seconds) return user.send(message);
-    const reply = await user.send(message);
+    const dm = await user.createDM();
+    if (!seconds) return dm.send(message);
+    const reply = await dm.send(message);
     setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
     /** Ignore */

@@ -45,20 +45,19 @@ const Model = mongoose.model("members", Schema);
 
 module.exports = {
   getMember: async (guildId, memberId) => {
-    if (isNaN(parseInt(guildId))) console.log("============ERROR===========");
     const key = `${guildId}|${memberId}`;
     if (cache.contains(key)) return cache.get(key);
 
-    let guildData = await Model.findOne({ guild_id: guildId, member_id: memberId });
-    if (!guildData) {
-      guildData = new Model({
+    let member = await Model.findOne({ guild_id: guildId, member_id: memberId });
+    if (!member) {
+      member = new Model({
         guild_id: guildId,
         member_id: memberId,
       });
     }
 
-    cache.add(key, guildData);
-    return guildData;
+    cache.add(key, member);
+    return member;
   },
 
   getTop100: async (guildId) =>

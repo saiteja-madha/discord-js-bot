@@ -4,6 +4,10 @@ const { error, debug } = require("@src/helpers/logger");
 const fetch = require("node-fetch");
 const gTranslate = require("@vitalets/google-translate-api");
 
+/**
+ * Returns JSON response from url
+ * @param {string} url
+ */
 async function getJson(url) {
   try {
     const response = await fetch(url);
@@ -22,6 +26,10 @@ async function getJson(url) {
   }
 }
 
+/**
+ * Returns buffer from url
+ * @param {string} url
+ */
 async function getBuffer(url) {
   try {
     const response = await fetch(url);
@@ -40,6 +48,11 @@ async function getBuffer(url) {
   }
 }
 
+/**
+ * Translates the provided content to the provided language code
+ * @param {string} content
+ * @param {string} outputCode
+ */
 async function translate(content, outputCode) {
   try {
     const response = await gTranslate(content, { to: outputCode });
@@ -57,6 +70,11 @@ async function translate(content, outputCode) {
   }
 }
 
+/**
+ * Posts the provided content to the BIN
+ * @param {string} content
+ * @param {string} title
+ */
 async function postToBin(content, title) {
   try {
     const response = await sourcebin.create(

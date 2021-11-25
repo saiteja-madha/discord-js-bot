@@ -14,6 +14,7 @@ module.exports = class FlipCommand extends Command {
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
+        minArgsCount: 1,
         subcommands: [
           {
             trigger: "coin",

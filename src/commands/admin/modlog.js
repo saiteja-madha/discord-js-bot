@@ -46,7 +46,7 @@ module.exports = class ModLog extends Command {
     }
 
     const response = await setChannel(message.guild, targetChannel);
-    return message.channel.send(response);
+    return message.reply(response);
   }
 
   /**

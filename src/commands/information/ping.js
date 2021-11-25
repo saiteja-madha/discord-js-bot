@@ -23,13 +23,13 @@ module.exports = class PingCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    message.reply(`🏓 Pong : \`${Math.floor(message.client.ws.ping)}ms\``);
+    await message.reply(`🏓 Pong : \`${Math.floor(message.client.ws.ping)}ms\``);
   }
 
   /**
    * @param {CommandInteraction} interaction
    */
   async interactionRun(interaction) {
-    interaction.followUp(`🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``);
+    await interaction.followUp(`🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``);
   }
 };

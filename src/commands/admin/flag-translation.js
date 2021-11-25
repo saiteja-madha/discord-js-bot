@@ -11,6 +11,7 @@ module.exports = class FlagTranslation extends Command {
       userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
+        aliases: ["flagtr"],
         minArgsCount: 1,
         usage: "<on|off>",
       },
@@ -61,7 +62,7 @@ module.exports = class FlagTranslation extends Command {
 };
 
 async function setFlagTranslation(guild, input) {
-  const status = input === "on" ? true : false;
+  const status = input.toLowerCase() === "on" ? true : false;
 
   const settings = await getSettings(guild);
   settings.flag_translation.enabled = status;

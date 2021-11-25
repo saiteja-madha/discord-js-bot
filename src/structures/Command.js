@@ -127,7 +127,7 @@ class Command {
 
     // user permissions
     if (message.member && this.userPermissions.length > 0) {
-      if (!message.channel.permissionsFor(message.guild.me).has(this.userPermissions)) {
+      if (!message.channel.permissionsFor(message.member).has(this.userPermissions)) {
         return message.reply(`You need ${parsePermissions(this.userPermissions)} for this command`);
       }
     }

@@ -8,20 +8,23 @@ const DISCORD_INVITE_PATTERN =
   /(https?:\/\/)?(www.)?(discord.(gg|io|me|li|link|plus)|discorda?p?p?.com\/invite|invite.gg|dsc.gg|urlcord.cf)\/[^\s/]+?(?=\b)/;
 
 /**
- * @param {String} text
+ * Checks if a string contains a URL
+ * @param {string} text
  */
 function containsLink(text) {
   return LINK_PATTERN.test(text);
 }
 
 /**
- * @param {String} text
+ * Checks if a string is a valid discord invite
+ * @param {string} text
  */
 function containsDiscordInvite(text) {
   return DISCORD_INVITE_PATTERN.test(text);
 }
 
 /**
+ * Returns a random number below a max
  * @param {Number} max
  */
 function getRandomInt(max) {
@@ -29,13 +32,15 @@ function getRandomInt(max) {
 }
 
 /**
- * @param {String} text
+ * Checks if a string is a valid Hex color
+ * @param {string} text
  */
 function isHex(text) {
   return /^#[0-9A-F]{6}$/i.test(text);
 }
 
 /**
+ * Returns hour difference between two dates
  * @param {Date} dt2
  * @param {Date} dt1
  */
@@ -46,6 +51,7 @@ function diffHours(dt2, dt1) {
 }
 
 /**
+ * Returns remaining time in days, hours, minutes and seconds
  * @param {number} timeInSeconds
  */
 function timeformat(timeInSeconds) {
@@ -72,6 +78,7 @@ const durationToMillis = (duration) =>
     .reduce((acc, curr) => curr + acc * 60) * 1000;
 
 /**
+ * Returns time remaining until provided date
  * @param {Date} timeUntil
  */
 function getRemainingTime(timeUntil) {

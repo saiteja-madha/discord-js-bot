@@ -48,7 +48,7 @@ module.exports = class XPSystem extends Command {
     const input = args[0].toLowerCase();
     if (!["on", "off"].includes(input)) return message.reply("Invalid status. Value must be `on/off`");
     const response = await setStatus(message.guild, input);
-    return message.channel.send(response);
+    return message.reply(response);
   }
 
   /**

@@ -36,9 +36,9 @@ module.exports = class CovidCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const country = args[0];
+    const country = args.join(" ");
     const response = await getCovid(country);
-    message.channel.send(response);
+    await message.reply(response);
   }
 
   /**
@@ -47,7 +47,7 @@ module.exports = class CovidCommand extends Command {
   async interactionRun(interaction) {
     const country = interaction.options.getString("country");
     const response = await getCovid(country);
-    interaction.followUp(response);
+    await interaction.followUp(response);
   }
 };
 

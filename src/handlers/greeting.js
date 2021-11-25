@@ -3,7 +3,7 @@ const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
 /**
- * @param {String} content
+ * @param {string} content
  * @param {import('discord.js').GuildMember} member
  * @param {Object} inviterData
  */
