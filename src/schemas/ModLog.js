@@ -37,7 +37,7 @@ module.exports = {
       guild_id: guildId,
       member_id: targetId,
       type: "WARN",
-    }).lean({ defaults: true }),
+    }).lean(),
 
   clearWarningLogs: async (guildId, targetId) =>
     Model.deleteMany({

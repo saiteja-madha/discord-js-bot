@@ -21,7 +21,7 @@ module.exports = {
       channel_id: message.channelId,
       message_id: message.id,
       emoji: code,
-    }).lean({ defaults: true }),
+    }).lean(),
 
   logTranslation: async (message, code) =>
     new Model({

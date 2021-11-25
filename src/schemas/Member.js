@@ -66,5 +66,5 @@ module.exports = {
     })
       .limit(100)
       .sort({ level: -1, xp: -1 })
-      .lean({ defaults: true }),
+      .lean(),
 };
