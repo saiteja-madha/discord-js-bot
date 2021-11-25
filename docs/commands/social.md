@@ -2,7 +2,7 @@
 description: 2 commands
 ---
 
-# 🧑🤝🧑 Social
+# 🧑 Social
 
 
 

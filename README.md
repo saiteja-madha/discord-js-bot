@@ -8,7 +8,7 @@
 >
 > Support Server: [Join Here](https://discord.gg/fE75UShbqB)
 >
-> Documentation URL: [Visit Here](https://strangebot.xyz)
+> Documentation URL: [Visit Here](https://docs.strangebot.xyz)
 
 ### Pre-requisites
 
