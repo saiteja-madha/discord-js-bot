@@ -12,6 +12,7 @@ module.exports = class Profile extends Command {
       category: "INFORMATION",
       command: {
         enabled: true,
+        usage: "[@member|id]",
       },
       slashCommand: {
         enabled: true,

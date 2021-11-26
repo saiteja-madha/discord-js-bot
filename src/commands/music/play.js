@@ -81,7 +81,7 @@ async function play({ member, guild, channel }, user, query) {
       throw res.exception;
     }
   } catch (err) {
-    this.client.logger.error("Search Exception", err);
+    guild.client.logger.error("Search Exception", err);
     return "There was an error while searching";
   }
 

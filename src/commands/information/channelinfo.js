@@ -12,6 +12,7 @@ module.exports = class ChannelInfo extends Command {
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
+        usage: "[#channel|id]",
         aliases: ["chinfo"],
       },
       slashCommand: {

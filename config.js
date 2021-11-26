@@ -22,7 +22,7 @@ module.exports = {
     DAILY_COINS: 100, // coins to be received by daily command
   },
   ECONOMY: {
-    CURRENCY: "",
+    CURRENCY: "₪",
     DAILY_COINS: 100, // coins to be received by daily command
   },
   IMAGE: {
