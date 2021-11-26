@@ -6,24 +6,30 @@ const { MUSIC } = require("@root/config");
 
 module.exports = class MusicManager extends Manager {
   constructor(client) {
-    super({
-      nodes: MUSIC.NODES,
-      autoPlay: true,
-      plugins: [
-        new Deezer({
-          albumLimit: 1,
-          playlistLimit: 1,
-        }),
+    const plugins = [
+      new Deezer({
+        albumLimit: 1,
+        playlistLimit: 1,
+      }),
 
-        new Facebook(),
+      new Facebook(),
+    ];
 
+    if (process.env.SPOTIFY_CLIENT_ID && process.env.SPOTIFY_CLIENT_SECRET) {
+      plugins.push(
         new Spotify({
           clientID: process.env.SPOTIFY_CLIENT_ID,
           clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
           albumLimit: 1,
           playlistLimit: 1,
-        }),
-      ],
+        })
+      );
+    }
+
+    super({
+      nodes: MUSIC.NODES,
+      autoPlay: true,
+      plugins,
 
       send: (id, payload) => {
         const guild = client.guilds.cache.get(id);
