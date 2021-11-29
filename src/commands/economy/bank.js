@@ -110,7 +110,8 @@ module.exports = class BankCommand extends Command {
     let response;
 
     if (sub === "balance") {
-      response = await balance(message.author);
+      const resolved = (await resolveMember(message, args[1])) || message.member;
+      response = await balance(resolved.user);
     }
 
     //

@@ -84,7 +84,7 @@ module.exports = class FlipCommand extends Command {
     }
 
     // else
-    await message.reply("Incorrect command usage");
+    else await message.reply("Incorrect command usage");
   }
 
   /**

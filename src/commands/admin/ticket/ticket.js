@@ -195,6 +195,7 @@ module.exports = class Ticket extends Command {
     // Close ticket
     else if (input === "close") {
       response = await close(message, message.author);
+      if (!response) return;
     }
 
     // Close all tickets
@@ -229,7 +230,7 @@ module.exports = class Ticket extends Command {
       return message.reply("Incorrect command usage");
     }
 
-    await message.reply(response);
+    if (response) await message.reply(response);
   }
 
   /**
@@ -296,7 +297,7 @@ module.exports = class Ticket extends Command {
       response = await removeFromTicket(interaction, user.id);
     }
 
-    await interaction.followUp(response);
+    if (response) await interaction.followUp(response);
   }
 };
 
@@ -411,10 +412,12 @@ async function setupLimit({ guild }, limit) {
   return `Configuration saved. You can now have a maximum of \`${limit}\` open tickets`;
 }
 
-async function close({ channel, author }) {
+async function close({ channel }, author) {
   if (!isTicketChannel(channel)) return "This command can only be used in ticket channels";
   const status = await closeTicket(channel, author, "Closed by a moderator");
-  if (!status.success) return status.message;
+  if (status === "MISSING_PERMISSIONS") return "I do not have permission to close tickets";
+  if (status === "ERROR") return "An error occurred while closing the ticket";
+  return null;
 }
 
 async function closeAll({ guild }) {

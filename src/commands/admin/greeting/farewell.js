@@ -176,8 +176,8 @@ module.exports = class Farewell extends Command {
 
     // status
     if (type === "status") {
-      const status = args[1].toLowerCase();
-      if (!status || !["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      const status = args[1]?.toUpperCase();
+      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
       response = await setStatus(settings, status);
     }
 
@@ -196,9 +196,9 @@ module.exports = class Farewell extends Command {
 
     // thumbnail
     if (type === "thumbnail") {
-      const status = args[1].toLowerCase();
-      if (!status || !["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
-      response = await setThumbnail(message, status);
+      const status = args[1]?.toUpperCase();
+      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      response = await setThumbnail(settings, status);
     }
 
     // color
@@ -212,7 +212,7 @@ module.exports = class Farewell extends Command {
     if (type === "footer") {
       if (args.length < 2) return message.reply("Insufficient arguments! Please provide valid content");
       const content = args.slice(1).join(" ");
-      response = await setFooter(message, content);
+      response = await setFooter(settings, content);
     }
 
     return message.reply(response);

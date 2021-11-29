@@ -10,7 +10,8 @@ const {
 } = require("discord.js");
 
 const CMDS_PER_PAGE = 5;
-const IDLE_TIMEOUT = 20;
+const IDLE_TIMEOUT = 30;
+const cache = {};
 
 module.exports = class HelpCommand extends Command {
   constructor(client) {
@@ -48,6 +49,9 @@ module.exports = class HelpCommand extends Command {
 
     // !help
     if (!trigger) {
+      if (cache[`${message.guildId}|${message.author.id}`]) {
+        return message.reply("You are already viewing the help menu.");
+      }
       const response = await getHelpMenu(message);
       const sentMsg = await message.reply(response);
       return waiter(sentMsg, message.author.id, prefix);
@@ -58,7 +62,7 @@ module.exports = class HelpCommand extends Command {
     if (cmd) return cmd.sendUsage(message.channel, prefix, trigger);
 
     // No matching command/category found
-    message.reply("No matching command found");
+    await message.reply("No matching command found");
   }
 
   /**
@@ -69,6 +73,9 @@ module.exports = class HelpCommand extends Command {
 
     // !help
     if (!cmdName) {
+      if (cache[`${interaction.guildId}|${interaction.user.id}`]) {
+        return interaction.followUp("You are already viewing the help menu.");
+      }
       const response = await getHelpMenu(interaction);
       const sentMsg = await interaction.followUp(response);
       return waiter(sentMsg, interaction.user.id);
@@ -82,7 +89,7 @@ module.exports = class HelpCommand extends Command {
     }
 
     // No matching command/category found
-    return interaction.followUp("No matching command found");
+    await interaction.followUp("No matching command found");
   }
 };
 
@@ -140,10 +147,14 @@ async function getHelpMenu({ client, guild }) {
  * @param {string} prefix
  */
 const waiter = (msg, userId, prefix) => {
+  // Add to cache
+  cache[`${msg.guildId}|${userId}`] = Date.now();
+
   const collector = msg.channel.createMessageComponentCollector({
     filter: (reactor) => reactor.user.id === userId,
     idle: IDLE_TIMEOUT * 1000,
     dispose: true,
+    time: 5 * 60 * 1000,
   });
 
   let arrEmbeds = [];
@@ -181,6 +192,7 @@ const waiter = (msg, userId, prefix) => {
   });
 
   collector.on("end", () => {
+    if (cache[`${msg.guildId}|${userId}`]) delete cache[`${msg.guildId}|${userId}`];
     return msg.edit({ components: [] });
   });
 };
