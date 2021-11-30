@@ -10,7 +10,7 @@ Migration to V13 will take a while, But once it is done, it is done forever!
 
 ### Guide
 
-* 1. Create a new repl. **Set the language as "Nix (Beta)" ** [Language Setup] ("https://imgur.com/4cxgFKg")
+* 1. Create a new repl. **Set the language as "Nix (Beta)" ** [Language Setup] (https://imgur.com/4cxgFKg)
 
 * 2. Go to the file "replit.nix" and copy the code below (You can get rid of cowsay if you want, but who doesnt love cowsay?) **Save this file, Replit does this automatically... Sometimes**
 ```
@@ -28,14 +28,14 @@ Migration to V13 will take a while, But once it is done, it is done forever!
 * 4. Create a new file named "test.js", its contents should look like this.
 
 ```console.log(process.version)```
-* 5. Run the replit. The console should output the correct Node version. (Anything around V16) [Something like this] ("https://imgur.com/dLq6N3e")
+* 5. Run the replit. The console should output the correct Node version. (Anything around V16) [Something like this] (https://imgur.com/dLq6N3e)
 
 ### Main part of Guide
 * 6. Clone the git repository. 
 
 ```git clone https://github.com/saiteja-madha/discord-js-bot.git```
 
-* 7. Move the contents of the cloned folder into the main directory. **Do this for all files** [Like this]("https://imgur.com/ki5ugSk")
+* 7. Move the contents of the cloned folder into the main directory. **Do this for all files** [Like this](https://imgur.com/ki5ugSk)
 
  (I do this by hand, There is probably a linux command I dont know that could do this for us.) 
 
