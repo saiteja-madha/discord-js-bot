@@ -28,7 +28,7 @@ Migration to V13 will take a while, But once it is done, it is done forever!
 * 4. Create a new file named "test.js", its contents should look like this.
 
 ```console.log(process.version)```
-* 5. Run the replit. The console should output the correct Node version. (Anything around V16) [Something like this] (https://imgur.com/dLq6N3e)
+* 5. Run the replit. The console should output the correct Node version. (Anything around V16) [Something like this](https://imgur.com/dLq6N3e)
 
 ### Main part of Guide
 * 6. Clone the git repository. 
@@ -47,4 +47,4 @@ Migration to V13 will take a while, But once it is done, it is done forever!
 
 ```run = "node ."```
 
-* 10. **Your Done!** Now all you have to do is edit the config.js file and add your env secrets.
+* 10. **Your Done!** Now all you have to do is edit the config.js file and add your env secrets. [Should look like this](https://imgur.com/AEhiHLk)
