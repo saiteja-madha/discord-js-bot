@@ -1,50 +1,71 @@
- ✍ Guides | Setting up Strangebot for Replit!
+# 🤖 About Me
 
-### Intro
+![Strange Bot](https://i.imgur.com/nFrS5wC.png)
 
-Replit does not automatically update node to the latest version. **This is a problem as Strangebot runs on Discord.js V13
+> An awesome multipurpose discord bot build using [discord.js v13](https://discord.js.org) with support for slash commands and context menus
 
-{% hint style="warning" %}
-Migration to V13 will take a while, But once it is done, it is done forever!
-{% endhint %}
+> Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client\_id=752922609733337190\&permissions=397602323830\&scope=bot%20applications.commands)
+>
+> Support Server: [Join Here](https://discord.gg/fE75UShbqB)
+>
+> Documentation URL: [Visit Here](https://docs.strangebot.xyz)
 
-### Guide
+### Pre-requisites
 
-* 1. Create a new repl. **Set the language as "Nix (Beta)" ** [Language Setup] (https://imgur.com/4cxgFKg)
+* [Node.js](https://nodejs.org/en/) v16.6.0 or higher
+* [Git](https://git-scm.com/downloads)
+* [MongoDB](https://www.mongodb.com)
 
-* 2. Go to the file "replit.nix" and copy the code below (You can get rid of cowsay if you want, but who doesnt love cowsay?) **Save this file, Replit does this automatically... Sometimes**
+### Getting Started
+
+* Open the terminal and run the following commands
+
 ```
-{ pkgs }: {
-    deps = [
-        pkgs.cowsay
-        pkgs.nodejs-16_x
-    ];
-}
+git clone https://github.com/saiteja-madha/discord-js-bot.git
+cd discord-js-bot
+npm install
 ```
-* 3. Go to the file ".replit" and change its contents to the code below. (We will change this later, this is just for our testing purposes)
 
-```run = "node test.js"```
+* Wait for all the dependencies to be installed
+* Rename `.env.example` to `.env` and fill the values
+* Optionally edit `config.js`
+* Type `npm run start` to start the bot
 
-* 4. Create a new file named "test.js", its contents should look like this.
+If you need any additional help, make sure to read our guides [here](docs/additional/installation.md)
 
-```console.log(process.version)```
-* 5. Run the replit. The console should output the correct Node version. (Anything around V16) [Something like this] (https://imgur.com/dLq6N3e)
+### Features
 
-### Main part of Guide
-* 6. Clone the git repository. 
+Strange is a feature-rich discord bot with new features constantly being updated! Current features include
 
-```git clone https://github.com/saiteja-madha/discord-js-bot.git```
+* **Auto-Moderation**: Power auto-moderation to keep your discord server clean
+* **Powerful Moderation with Logging**: Moderate and log every action you take
+* **Image Manipulation**: Have fun with various image `filters` and `generators`
+* **Economy & XP System**: Engage user interaction with the economy and Levelling system
+* **Invite Tracking**: Best invite tracking with configurable invite ranks
+* **Ticketing**: Support for creating multiple `ticket` channels
+* **Reaction Roles**: Support for creation of multiple custom reaction roles
+* **Greeting**: Highly Customizable welcome and farewell embeds
 
-* 7. Move the contents of the cloned folder into the main directory. **Do this for all files** [Like this](https://imgur.com/ki5ugSk)
+### Categories
 
- (I do this by hand, There is probably a linux command I dont know that could do this for us.) 
+Strange has an extensive list of all useful commands (**more than 100**) which are categorized as follows
 
-* 8. Go to the **Shell** and type 
+* **Automod**: `antighostping`, `antiinvites`, `antilinks`, `antiscam`, `maxlines`, `maxmentions`, ...
+* **Admin**: `welcome`, `farewell`, `reaction-roles`, ...
+* **Economy**: `daily`, `gamble`, `deposit`, `withdraw`, `transfer`, ...
+* **Fun**: `cat`, `doc`, `flipcoin`, `fliptext`, ...
+* **Information**: `avatar`, `roleinfo`, `channelinfo`, `guildinfo`, `profile`, ...
+* **Invites**: `inviter`, `invites`, `invitesimport`, `invitecodes`, ...
+* **Moderation**: `warn`, `kick`, `softban`, `ban`, `mute`, `unmute`, ...
+* **Music**: `play`, `pause`, `resume`, `stop`, `skip`, `queue`, `np`, ...
+* **Social**: `reputation list,` `give reputation,` ...
+* **Ticket**: setup, close, log, ...
+* **Utility**: `proxies`, `translation`, `weather`, `covid`, ...
 
-```npm i```
+A complete list of commands can be found in the [documentation](docs/commands/)
 
-* 9. Go to the ".replit" file and make sure it looks like this 
+### 🤝 Contributing
 
-```run = "node ."```
-
-* 10. **Your Done!** Now all you have to do is edit the config.js file and add your env secrets.
+* Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool discord bot projects
+* Feel free to [Fork](https://github.com/saiteja-madha/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
+* You can check all the planned features [here](https://github.com/saiteja-madha/discord-js-bot/projects) or make a request for one at our discord
