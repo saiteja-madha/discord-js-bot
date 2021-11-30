@@ -48,3 +48,11 @@ Migration to V13 will take a while, But once it is done, it is done forever!
 ```run = "node ."```
 
 * 10. **Your Done!** Now all you have to do is edit the config.js file and add your env secrets. [Should look like this](https://imgur.com/AEhiHLk)
+
+### Closing Remarks
+Good job, Your bot is done. 
+Replit is a really good host for discord bots as it allows for powerful machinery with low costs and 24/7 uptime. IMO, The hacker plan is the best plan for hosting a discord bot for beginners or even serious developers. 
+
+This guide was created by mid (mid#0002). My bot is available at https://www.beemo.best.
+
+Join the Strangebot support server for any further help.
