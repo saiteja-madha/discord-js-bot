@@ -10,7 +10,7 @@ Migration to V13 will take a while, But once it is done, it is done forever!
 
 ### Guide
 
-* 1. Create a new repl. **Set the language as "Nix (Beta)" ** [Language Setup](https://i.imgur.com/4cxgFKg.png-)
+* 1. Create a new repl. **Set the language as "Nix (Beta)" ** [Language Setup](https://i.imgur.com/4cxgFKg.png)
 
 * 2. Go to the file "replit.nix" and copy the code below (You can get rid of cowsay if you want, but who doesnt love cowsay?) **Save this file, Replit does this automatically... Sometimes**
 ```
