@@ -19,4 +19,5 @@
 ## Additional
 
 * [✍ Guides](additional/installation.md)
+  * [Replit](additional/replit.md)
 * [❓ FAQ](additional/faq.md)
