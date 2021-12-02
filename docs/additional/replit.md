@@ -2,7 +2,7 @@
 
 ### Intro
 
-Replit does not automatically update node to the latest version. **This is a problem as Strangebot runs on Discord.js V13
+Replit does not automatically update node to the latest version. **This is a problem as Strangebot runs on Discord.js V13**
 
 {% hint style="warning" %}
 Migration to V13 will take a while, But once it is done, it is done forever!
