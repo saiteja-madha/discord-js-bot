@@ -1,3 +1,5 @@
+const { MUSIC } = require("@root/config");
+
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').VoiceState} oldState
@@ -16,6 +18,6 @@ module.exports = async (client, oldState, newState) => {
       if (!oldState.channel.members.size - 1)
         // if there's still 1 member,
         client.musicManager.get(guild.id) && client.musicManager.get(guild.id).destroy();
-    }, 0.2 * 60 * 1000); // (check and disconnect after 1 min)
+    }, MUSIC.IDLE_TIME * 1000);
   }
 };
