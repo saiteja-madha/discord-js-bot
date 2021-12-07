@@ -10,12 +10,12 @@ module.exports = async (client, oldState, newState) => {
   if (oldState.channelId !== guild.me.voice.channelId || newState.channel) return;
 
   // otherwise, check how many people are in the channel now
-  if (!oldState.channel.members.size - 1) {
+  if (oldState.channel.members.size === 1) {
     setTimeout(() => {
       // if 1 (you), wait 1 minute
       if (!oldState.channel.members.size - 1)
         // if there's still 1 member,
         client.musicManager.get(guild.id) && client.musicManager.get(guild.id).destroy();
-    }, 1 * 60 * 1000); // (check and disconnect after 1 min)
+    }, 0.2 * 60 * 1000); // (check and disconnect after 1 min)
   }
 };
