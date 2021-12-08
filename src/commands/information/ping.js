@@ -6,9 +6,9 @@ module.exports = class PingCommand extends Command {
     super(client, {
       name: "ping",
       description: "shows the current ping from the bot to the discord servers",
+      category: "INFORMATION",
       command: {
         enabled: true,
-        category: "INFORMATION",
       },
       slashCommand: {
         enabled: true,
