@@ -303,10 +303,7 @@ async function setDescription(settings, desc) {
 
 async function setThumbnail(settings, status) {
   settings.welcome.embed.thumbnail = status.toUpperCase() === "ON" ? true : false;
-
-  settings.welcome.embed.thumbnail = null;
   await settings.save();
-
   return "Configuration saved! Welcome message updated";
 }
 
