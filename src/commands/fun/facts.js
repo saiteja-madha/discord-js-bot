@@ -17,6 +17,7 @@ module.exports = class FactCommand extends Command {
       command: {
         enabled: true,
         usage: "<animal>",
+        aliases: ["fact"],
         minArgsCount: 1,
       },
       slashCommand: {
@@ -61,10 +62,12 @@ async function getFact(user, choice) {
   const response = await getJson(`${BASE_URL}/${choice}`);
   if (!response.success) return MESSAGES.API_ERROR;
 
-  const imageUrl = response.data?.fact;
+  const fact = response.data?.fact;
+  const imageUrl = response.data?.image;
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.TRANSPARENT)
-    .setImage(imageUrl)
+    .setThumbnail(imageUrl)
+    .setDescription(fact)
     .setFooter(`Requested by ${user.tag}`);
 
   return { embeds: [embed] };
