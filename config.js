@@ -29,6 +29,7 @@ module.exports = {
     BASE_API: "https://image-api.strangebot.xyz",
   },
   MUSIC: {
+    IDLE_TIME: 60, // Time in seconds before the bot disconnects from the voice channel
     MAX_SEARCH_RESULTS: 5,
     NODES: [
       {

@@ -171,21 +171,21 @@ const waiter = (msg, userId, prefix) => {
         arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix) : getSlashCategoryEmbeds(msg.client, cat);
         currentPage = 0;
         buttonsRow.components.forEach((button) => button.setDisabled(arrEmbeds.length > 1 ? false : true));
-        await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] });
+        msg.editable && (await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] }));
         break;
       }
 
       case "previousBtn":
         if (currentPage !== 0) {
           --currentPage;
-          await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] });
+          msg.editable && (await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] }));
         }
         break;
 
       case "nextBtn":
         if (currentPage < arrEmbeds.length - 1) {
           currentPage++;
-          await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] });
+          msg.editable && (await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] }));
         }
         break;
     }
@@ -193,7 +193,7 @@ const waiter = (msg, userId, prefix) => {
 
   collector.on("end", () => {
     if (cache[`${msg.guildId}|${userId}`]) delete cache[`${msg.guildId}|${userId}`];
-    return msg.edit({ components: [] });
+    return msg.editable && msg.edit({ components: [] });
   });
 };
 

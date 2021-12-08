@@ -303,10 +303,7 @@ async function setDescription(settings, desc) {
 
 async function setThumbnail(settings, status) {
   settings.farewell.embed.thumbnail = status.toUpperCase() === "ON" ? true : false;
-
-  settings.farewell.embed.thumbnail = null;
   await settings.save();
-
   return "Configuration saved! Farewell message updated";
 }
 

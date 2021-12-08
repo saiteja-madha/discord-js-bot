@@ -75,7 +75,7 @@ async function sendMessage(channel, content, seconds) {
   if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
   if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(perms)) return;
   try {
-    if (!seconds) return channel.send(content);
+    if (!seconds) return await channel.send(content);
     const reply = await channel.send(content);
     setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
@@ -92,7 +92,7 @@ async function safeDM(user, message, seconds) {
   if (!user || !message) return;
   try {
     const dm = await user.createDM();
-    if (!seconds) return dm.send(message);
+    if (!seconds) return await dm.send(message);
     const reply = await dm.send(message);
     setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
   } catch (ex) {
