@@ -30,7 +30,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fixedsize-map": "^1.0.1",
-    "fs": "0.0.1-security",
+    "fs": "0.0.2",
     "iso-639-1": "^2.1.10",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
