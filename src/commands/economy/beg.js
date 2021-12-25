@@ -2,7 +2,6 @@ const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
-const { diffHours, getRemainingTime } = require("@utils/miscUtils");
 
 module.exports = class BegCommand extends Command {
   constructor(client) {
