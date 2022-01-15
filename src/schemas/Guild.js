@@ -137,6 +137,10 @@ module.exports = {
         },
       });
 
+      if (!guild.id) {
+        throw new Error("Guild ID is undefined");
+      }
+
       await guildData.save();
     }
     cache.add(guild.id, guildData);
