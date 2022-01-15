@@ -61,7 +61,7 @@ async function getLeaderboard({ guild }, author) {
     .setAuthor("XP Leaderboard")
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(collector)
-    .setFooter(`Requested by ${author.tag}`);
+    .setFooter({ text: `Requested by ${author.tag}` });
 
   return { embeds: [embed] };
 }

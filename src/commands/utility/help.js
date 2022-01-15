@@ -270,7 +270,7 @@ function getSlashCategoryEmbeds(client, category) {
       .setThumbnail(CommandCategory[category].image)
       .setAuthor(`${category} Commands`)
       .setDescription(item.join("\n"))
-      .setFooter(`page ${index + 1} of ${arrSplitted.length}`);
+      .setFooter({ text: `page ${index + 1} of ${arrSplitted.length}` });
     arrEmbeds.push(embed);
   });
 

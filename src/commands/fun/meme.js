@@ -142,7 +142,7 @@ async function getRandomEmbed(choice) {
       .setAuthor(memeTitle, null, memeUrl)
       .setImage(memeImage)
       .setColor("RANDOM")
-      .setFooter(`👍 ${memeUpvotes} | 💬 ${memeNumComments}`);
+      .setFooter({ text: `👍 ${memeUpvotes} | 💬 ${memeNumComments}` });
   } catch (error) {
     return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
   }

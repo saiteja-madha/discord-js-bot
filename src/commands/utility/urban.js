@@ -68,7 +68,7 @@ async function urban(word) {
     .addField("ID", data.defid.toString(), true)
     .addField("Likes / Dislikes", `👍 ${data.thumbs_up} | 👎 ${data.thumbs_down}`, true)
     .addField("Example", data.example, false)
-    .setFooter(`Created ${moment(data.written_on).fromNow()}`);
+    .setFooter({ text: `Created ${moment(data.written_on).fromNow()}` });
 
   return { embeds: [embed] };
 }

@@ -154,7 +154,7 @@ async function giveReputation(user, target) {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(`${target.toString()} +1 Rep!`)
-    .setFooter(`By ${user.tag}`)
+    .setFooter({ text: `By ${user.tag}` })
     .setTimestamp(Date.now());
 
   return { embeds: [embed] };

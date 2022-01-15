@@ -310,7 +310,7 @@ async function runInteractiveSetup({ channel, guild, author }) {
   const embed = new MessageEmbed()
     .setAuthor("Ticket Setup")
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setFooter("Type cancel to cancel setup");
+    .setFooter({ text: "Type cancel to cancel setup" });
 
   let targetChannel;
   let title;
@@ -371,7 +371,7 @@ async function setupTicket(guild, channel, title, role, color) {
     const embed = new MessageEmbed()
       .setAuthor("Support Ticket")
       .setDescription(title)
-      .setFooter("You can only have 1 open ticket at a time!");
+      .setFooter({ text: "You can only have 1 open ticket at a time!" });
 
     if (color) embed.setColor(color);
 

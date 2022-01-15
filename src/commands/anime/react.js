@@ -75,11 +75,14 @@ const genReaction = async (category, user) => {
       imageUrl = (await neko.sfw[category]()).url;
     }
 
-    return new MessageEmbed().setImage(imageUrl).setColor("RANDOM").setFooter(`Requested By ${user.tag}`);
+    return new MessageEmbed()
+      .setImage(imageUrl)
+      .setColor("RANDOM")
+      .setFooter({ text: `Requested By ${user.tag}` });
   } catch (ex) {
     return new MessageEmbed()
       .setColor(EMBED_COLORS.ERROR)
       .setDescription("Failed to fetch meme. Try again!")
-      .setFooter(`Requested By ${user.tag}`);
+      .setFooter({ text: `Requested By ${user.tag}` });
   }
 };

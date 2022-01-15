@@ -87,7 +87,7 @@ async function getTranslation(author, input, outputCode) {
     .setAuthor(`${author.username} says`, author.avatarURL())
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(data.output)
-    .setFooter(`${data.inputLang} (${data.inputCode}) ⟶ ${data.outputLang} (${data.outputCode})`);
+    .setFooter({ text: `${data.inputLang} (${data.inputCode}) ⟶ ${data.outputLang} (${data.outputCode})` });
 
   return { embeds: [embed] };
 }

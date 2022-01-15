@@ -121,7 +121,7 @@ async function gamble(user, betAmount) {
     .setColor(EMBED_COLORS.TRANSPARENT)
     .setThumbnail("https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif")
     .setDescription(str)
-    .setFooter(`${result}\nUpdated Wallet balance: ${userDb?.coins}${ECONOMY.CURRENCY}`);
+    .setFooter({ text: `${result}\nUpdated Wallet balance: ${userDb?.coins}${ECONOMY.CURRENCY}` });
 
   return { embeds: [embed] };
 }

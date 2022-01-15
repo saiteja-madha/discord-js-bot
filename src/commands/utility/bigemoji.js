@@ -56,7 +56,7 @@ function getEmoji(user, emoji) {
   const embed = new MessageEmbed()
     .setAuthor("❯ Big Emoji ❮")
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setFooter(`Requested by ${user.tag}`);
+    .setFooter({ text: `Requested by ${user.tag}` });
 
   if (custom.id) {
     embed.setImage(`https://cdn.discordapp.com/emojis/${custom.id}.${custom.animated ? "gif" : "png"}`);

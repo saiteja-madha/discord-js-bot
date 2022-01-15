@@ -69,7 +69,7 @@ function getQueue({ client, guild }, pgNo) {
 
   const maxPages = Math.ceil(queue.length / multiple);
 
-  embed.setFooter(`Page ${page > maxPages ? maxPages : page} of ${maxPages}`);
+  embed.setFooter({ text: `Page ${page > maxPages ? maxPages : page} of ${maxPages}` });
 
   return { embeds: [embed] };
 }

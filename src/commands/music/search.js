@@ -107,7 +107,7 @@ async function search({ member, guild, channel }, user, query) {
         .setAuthor("Added Song to queue")
         .setDescription(`[${track.title}](${track.uri})`)
         .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
-        .setFooter(`Requested By: ${track.requester.tag}`);
+        .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
       if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
       return { embeds: [embed] };
@@ -123,7 +123,7 @@ async function search({ member, guild, channel }, user, query) {
         .setDescription(res.playlist.name)
         .addField("Enqueued", `${res.tracks.length} songs`, true)
         .addField("Playlist duration", "`" + prettyMs(res.playlist.duration, { colonNotation: true }) + "`", true)
-        .setFooter(`Requested By: ${res.tracks[0].requester.tag}`);
+        .setFooter({ text: `Requested By: ${res.tracks[0].requester.tag}` });
 
       return { embeds: [embed] };
 
@@ -181,7 +181,7 @@ async function search({ member, guild, channel }, user, query) {
             .setAuthor("Added Song to queue")
             .setDescription(`[${track.title}](${track.uri})`)
             .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
-            .setFooter(`Requested By: ${track.requester.tag}`);
+            .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
           if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
 
@@ -196,7 +196,7 @@ async function search({ member, guild, channel }, user, query) {
 
         embed
           .setDescription(`🎶 Added ${toAdd.length} songs to queue`)
-          .setFooter(`Requested By: ${res.tracks[0].requester.tag}`);
+          .setFooter({ text: `Requested By: ${res.tracks[0].requester.tag}` });
 
         return sentMsg.edit({ embeds: [embed], components: [] });
       });

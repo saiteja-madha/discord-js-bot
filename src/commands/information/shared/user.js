@@ -15,7 +15,7 @@ module.exports = (member) => {
     .addField("Discord Registered", member.user.createdAt.toUTCString())
     .addField(`Roles [${member.roles.cache.size}]`, member.roles.cache.map((r) => r.name).join(", "), false)
     .addField("Avatar-URL", member.user.displayAvatarURL({ format: "png" }))
-    .setFooter(`Requested by ${member.user.tag}`)
+    .setFooter({ text: `Requested by ${member.user.tag}` })
     .setTimestamp(Date.now());
 
   return { embeds: [embed] };

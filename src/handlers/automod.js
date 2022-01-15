@@ -125,7 +125,10 @@ async function performAutomod(message, settings) {
       .setThumbnail(author.displayAvatarURL())
       .setColor(EMBED_COLORS.AUTOMOD)
       .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
-      .setFooter(`By ${author.tag} | ${author.id}`, author.avatarURL());
+      .setFooter({
+        text: `By ${author.tag} | ${author.id}`,
+        iconURL: author.avatarURL(),
+      });
 
     sendMessage(logChannel, { embeds: [embed] });
 
