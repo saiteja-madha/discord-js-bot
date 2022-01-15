@@ -24,6 +24,11 @@ module.exports = {
     image: "https://icons.iconarchive.com/icons/flameia/aqua-smiles/128/make-fun-icon.png",
     emoji: "😂",
   },
+  GIVEAWAY: {
+    name: "Giveaway",
+    image: "https://icons.iconarchive.com/icons/flameia/aqua-smiles/128/make-fun-icon.png",
+    emoji: "🎉",
+  },
   IMAGE: {
     name: "Image",
     image: "https://icons.iconarchive.com/icons/dapino/summer-holiday/128/photo-icon.png",

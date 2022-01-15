@@ -71,6 +71,7 @@ module.exports = {
     UNDEAFEN_LOG: "#4B636E",
     DISCONNECT_LOG: "RANDOM",
     MOVE_LOG: "RANDOM",
+    GIVEAWAYS: "#FF468A",
   },
   /* Maximum number of keys that can be stored */
   CACHE_SIZE: {
