@@ -50,11 +50,11 @@
     "twemoji-parser": "^13.1.0"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-plugin-jsdoc": "^36.0.8",
+    "eslint": "^8.6.0",
+    "eslint-plugin-jsdoc": "^37.6.1",
     "node": "^16.10.0",
-    "nodemon": "^2.0.12",
-    "prettier": "2.3.2"
+    "nodemon": "^2.0.15",
+    "prettier": "2.5.1"
   },
   "keywords": [
     "discord",
