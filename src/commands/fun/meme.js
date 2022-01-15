@@ -139,7 +139,7 @@ async function getRandomEmbed(choice) {
     let memeNumComments = json[0].data.children[0].data.num_comments;
 
     return new MessageEmbed()
-      .setAuthor(memeTitle, null, memeUrl)
+      .setAuthor({ name: memeTitle, url: memeUrl })
       .setImage(memeImage)
       .setColor("RANDOM")
       .setFooter({ text: `👍 ${memeUpvotes} | 💬 ${memeNumComments}` });

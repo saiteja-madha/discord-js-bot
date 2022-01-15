@@ -103,7 +103,7 @@ async function play({ member, guild, channel }, user, query) {
 
       embed
         .setThumbnail(track.displayThumbnail("hqdefault"))
-        .setAuthor("Added Song to queue")
+        .setAuthor({ name: "Added Song to queue" })
         .setDescription(`[${track.title}](${track.uri})`)
         .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
         .setFooter({ text: `Requested By: ${track.requester.tag}` });
@@ -118,7 +118,7 @@ async function play({ member, guild, channel }, user, query) {
       }
 
       embed
-        .setAuthor("Added Playlist to queue")
+        .setAuthor({ name: "Added Playlist to queue" })
         .setDescription(res.playlist.name)
         .addField("Enqueued", `${res.tracks.length} songs`, true)
         .addField("Playlist duration", "`" + prettyMs(res.playlist.duration, { colonNotation: true }) + "`", true)
@@ -136,7 +136,7 @@ async function play({ member, guild, channel }, user, query) {
 
       embed
         .setThumbnail(track.displayThumbnail("hqdefault"))
-        .setAuthor("Added Song to queue")
+        .setAuthor({ name: "Added Song to queue" })
         .setDescription(`[${track.title}](${track.uri})`)
         .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
         .setFooter({ text: `Requested By: ${track.requester.tag}` });

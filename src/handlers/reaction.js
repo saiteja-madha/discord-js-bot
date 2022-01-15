@@ -88,7 +88,7 @@ async function handleFlagReaction(countryCode, message, user) {
 
     const embed = new MessageEmbed()
       .setColor(message.client.config.EMBED_COLORS.BOT_EMBED)
-      .setAuthor(`Translation from ${src}`)
+      .setAuthor({ name: `Translation from ${src}` })
       .setDescription(desc)
       .setFooter({
         text: `Requested by ${user.tag}`,

@@ -61,7 +61,7 @@ async function daily(user) {
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setAuthor(user.username, user.displayAvatarURL())
+    .setAuthor({ name: user.username, iconURL: user.displayAvatarURL() })
     .setDescription(
       `You got ${ECONOMY.DAILY_COINS}${ECONOMY.CURRENCY} as your daily reward\n` +
         `**Updated Balance:** ${userDb.coins}${ECONOMY.CURRENCY}`

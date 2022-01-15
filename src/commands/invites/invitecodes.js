@@ -59,7 +59,7 @@ async function getInviteCodes({ guild }, user) {
   });
 
   const embed = new MessageEmbed()
-    .setAuthor(`Invite code for ${user.username}`)
+    .setAuthor({ name: `Invite code for ${user.username}` })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(str);
 

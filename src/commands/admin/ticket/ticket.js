@@ -308,7 +308,7 @@ async function runInteractiveSetup({ channel, guild, author }) {
   const filter = (m) => m.author.id === author.id;
 
   const embed = new MessageEmbed()
-    .setAuthor("Ticket Setup")
+    .setAuthor({ name: "Ticket Setup" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setFooter({ text: "Type cancel to cancel setup" });
 
@@ -369,7 +369,7 @@ async function runInteractiveSetup({ channel, guild, author }) {
 async function setupTicket(guild, channel, title, role, color) {
   try {
     const embed = new MessageEmbed()
-      .setAuthor("Support Ticket")
+      .setAuthor({ name: "Support Ticket" })
       .setDescription(title)
       .setFooter({ text: "You can only have 1 open ticket at a time!" });
 

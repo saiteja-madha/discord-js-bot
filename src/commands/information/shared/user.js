@@ -6,7 +6,10 @@ module.exports = (member) => {
   if (color === "#000000") color = EMBED_COLORS.BOT_EMBED;
 
   const embed = new MessageEmbed()
-    .setAuthor(`User information for ${member.displayName}`, member.user.displayAvatarURL())
+    .setAuthor({
+      name: `User information for ${member.displayName}`,
+      iconURL: member.user.displayAvatarURL(),
+    })
     .setThumbnail(member.user.displayAvatarURL())
     .setColor(color)
     .addField("User Tag", member.user.tag, true)

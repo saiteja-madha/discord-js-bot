@@ -54,7 +54,7 @@ function getEmoji(user, emoji) {
   const custom = Util.parseEmoji(emoji);
 
   const embed = new MessageEmbed()
-    .setAuthor("❯ Big Emoji ❮")
+    .setAuthor({ name: "❯ Big Emoji ❮" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setFooter({ text: `Requested by ${user.tag}` });
 

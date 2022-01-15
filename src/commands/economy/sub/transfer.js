@@ -23,7 +23,7 @@ module.exports = async (self, target, coins) => {
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setAuthor("Updated Balance")
+    .setAuthor({ name: "Updated Balance" })
     .setDescription(
       `**${self.username}:** ${userDb.coins}${ECONOMY.CURRENCY}\n` +
         `**${target.username}:** ${targetDb.coins}${ECONOMY.CURRENCY}`

@@ -252,7 +252,7 @@ class Command {
     }
 
     const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
-    if (title) embed.setAuthor(title);
+    if (title) embed.setAuthor({ name: title });
     return embed;
   }
 

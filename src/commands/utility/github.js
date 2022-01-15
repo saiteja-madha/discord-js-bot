@@ -77,7 +77,11 @@ async function getGithubUser(target, author) {
   if (website == null) website = "Not Provided";
 
   const embed = new MessageEmbed()
-    .setAuthor(`GitHub User: ${username}`, avatarUrl, userPageLink)
+    .setAuthor({
+      name: `GitHub User: ${username}`,
+      url: userPageLink,
+      iconURL: avatarUrl,
+    })
     .addField(
       "User Info",
       outdent`**Real Name**: *${name || "Not Provided"}*

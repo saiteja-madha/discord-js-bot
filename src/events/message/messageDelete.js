@@ -20,7 +20,7 @@ module.exports = async (client, message) => {
     if (!logChannel) return;
 
     const embed = new MessageEmbed()
-      .setAuthor("Ghost ping detected")
+      .setAuthor({ name: "Ghost ping detected" })
       .setDescription(
         `**Message:**\n${message.content}\n\n` +
           `**Author:** ${message.author.tag} \`${message.author.id}\`\n` +

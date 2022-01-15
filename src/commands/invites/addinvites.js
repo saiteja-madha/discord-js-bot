@@ -72,7 +72,7 @@ async function addInvites({ guild }, user, amount) {
   await memberDb.save();
 
   const embed = new MessageEmbed()
-    .setAuthor(`Added invites to ${user.username}`)
+    .setAuthor({ name: `Added invites to ${user.username}` })
     .setThumbnail(user.displayAvatarURL())
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(`${user.tag} now has ${getEffectiveInvites(memberDb.invite_data)} invites`);

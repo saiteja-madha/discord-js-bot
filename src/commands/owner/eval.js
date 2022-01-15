@@ -66,7 +66,7 @@ const buildSuccessResponse = (output) => {
   if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
 
   embed
-    .setAuthor("📤 Output")
+    .setAuthor({ name: "📤 Output" })
     .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
     .setColor("RANDOM")
     .setTimestamp(Date.now());
@@ -77,7 +77,7 @@ const buildSuccessResponse = (output) => {
 const buildErrorResponse = (err) => {
   const embed = new MessageEmbed();
   embed
-    .setAuthor("📤 Error")
+    .setAuthor({ name: "📤 Error" })
     .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
     .setColor(EMBED_COLORS.ERROR)
     .setTimestamp(Date.now());
