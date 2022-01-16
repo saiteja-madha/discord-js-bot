@@ -23,9 +23,9 @@ async function updateCounterChannels(client) {
         if (!vc) continue;
 
         let channelName;
-        if (config.counter_type === "USERS") channelName = `${config.name} : ${all}`;
-        if (config.counter_type === "MEMBERS") channelName = `${config.name} : ${members}`;
-        if (config.counter_type === "BOTS") channelName = `${config.name} : ${bots}`;
+        if (config.counter_type.toUpperCase() === "USERS") channelName = `${config.name} : ${all}`;
+        if (config.counter_type.toUpperCase() === "MEMBERS") channelName = `${config.name} : ${members}`;
+        if (config.counter_type.toUpperCase() === "BOTS") channelName = `${config.name} : ${bots}`;
 
         setVoiceChannelName(vc, channelName);
       }
@@ -45,7 +45,7 @@ async function updateCounterChannels(client) {
  * @param {Object} settings
  */
 async function init(guild, settings) {
-  if (settings.counters.find((doc) => ["MEMBERS", "BOTS"].includes(doc.counter_type))) {
+  if (settings.counters.find((doc) => ["MEMBERS", "BOTS"].includes(doc.counter_type.toUpperCase()))) {
     const stats = await getMemberStats(guild);
     settings.data.bots = stats[1]; // update bot count in database
     await settings.save();
