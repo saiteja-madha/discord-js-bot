@@ -9,14 +9,16 @@ module.exports = async (self, target, coins) => {
 
   const userDb = await getUser(self.id);
 
-  if (userDb.coins < coins) {
-    return `Insufficient coin balance! You only have ${userDb.coins}${ECONOMY.CURRENCY}`;
+  if (userDb.bank < coins) {
+    return `Insufficient bank balance! You only have ${userDb.bank}${ECONOMY.CURRENCY} in your bank account.${
+      userDb.coins > 0 && "\nYou must deposit your coins in bank before you can transfer"
+    } `;
   }
 
   const targetDb = await getUser(target.id);
 
-  userDb.coins -= coins;
-  targetDb.coins += coins;
+  userDb.bank -= coins;
+  targetDb.bank += coins;
 
   await userDb.save();
   await targetDb.save();
@@ -24,10 +26,7 @@ module.exports = async (self, target, coins) => {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: "Updated Balance" })
-    .setDescription(
-      `**${self.username}:** ${userDb.coins}${ECONOMY.CURRENCY}\n` +
-        `**${target.username}:** ${targetDb.coins}${ECONOMY.CURRENCY}`
-    )
+    .setDescription(`You have successfully transferred ${coins}${ECONOMY.CURRENCY} to ${target.tag}`)
     .setTimestamp(Date.now());
 
   return { embeds: [embed] };

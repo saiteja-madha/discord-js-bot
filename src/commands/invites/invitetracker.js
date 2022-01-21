@@ -81,7 +81,7 @@ async function setStatus({ guild }, input) {
 
     await cacheGuildInvites(guild);
   } else {
-    this.client.inviteCache.delete(guild.id);
+    guild.client.inviteCache.delete(guild.id);
   }
 
   const settings = await getSettings(guild);

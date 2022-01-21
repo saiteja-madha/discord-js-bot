@@ -12,7 +12,7 @@ module.exports = async (client, member) => {
   const settings = await getSettings(guild);
 
   // Check for counter channel
-  if (settings.counters.find((doc) => ["MEMBERS", "BOTS"].includes(doc.counter_type))) {
+  if (settings.counters.find((doc) => ["MEMBERS", "BOTS", "USERS"].includes(doc.counter_type.toUpperCase()))) {
     if (member.user.bot) {
       settings.data.bots += 1;
       await settings.save();

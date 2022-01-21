@@ -16,9 +16,15 @@ const parse = async (content, member, inviterData = {}) => {
   if (content.includes("{inviter:")) {
     const inviterId = inviterData.member_id || "NA";
     if (inviterId !== "VANITY" && inviterId !== "NA") {
-      const inviter = await member.guild.members.fetch(inviterId);
-      inviteData.name = inviter.displayName;
-      inviteData.tag = inviter.user.tag;
+      try {
+        const inviter = await member.client.users.fetch(inviterId);
+        inviteData.name = inviter.username;
+        inviteData.tag = inviter.tag;
+      } catch (ex) {
+        member.client.logger.error(`Parsing inviterId: ${inviterId}`, ex);
+        inviteData.name = "NA";
+        inviteData.tag = "NA";
+      }
     } else {
       inviteData.name = inviterId;
       inviteData.tag = inviterId;

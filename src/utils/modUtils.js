@@ -4,13 +4,14 @@ const { EMBED_COLORS } = require("@root/config");
 // Utils
 const { sendMessage } = require("@utils/botUtils");
 const { containsLink } = require("@utils/miscUtils");
-const { getRoleByName } = require("./guildUtils");
 const { error } = require("../helpers/logger");
 
 // Schemas
 const { getSettings } = require("@schemas/Guild");
 const { getMember } = require("@schemas/Member");
 const { addModLogToDb } = require("@schemas/ModLog");
+
+const DEFAULT_TIMEOUT_DAYS = 7;
 
 /**
  * @param {import('discord.js').GuildMember} issuer
@@ -32,7 +33,7 @@ function memberInteract(issuer, target) {
 async function addModAction(issuer, target, reason, action) {
   switch (action) {
     case "MUTE":
-      return muteTarget(issuer, target, reason);
+      return timeoutTarget(issuer, target, DEFAULT_TIMEOUT_DAYS * 24 * 60, reason);
 
     case "KICK":
       return kickTarget(issuer, target, reason);
@@ -72,12 +73,12 @@ async function logModeration(issuer, target, reason, type, data = {}) {
         .addField("Channel", `#${data.channel.name} [${data.channel.id}]`, false);
       break;
 
-    case "MUTE":
-      embed.setColor(EMBED_COLORS.MUTE_LOG);
+    case "TIMEOUT":
+      embed.setColor(EMBED_COLORS.TIMEOUT_LOG);
       break;
 
-    case "UNMUTE":
-      embed.setColor(EMBED_COLORS.UNMUTE_LOG);
+    case "UNTIMEOUT":
+      embed.setColor(EMBED_COLORS.UNTIMEOUT_LOG);
       break;
 
     case "KICK":
@@ -126,52 +127,14 @@ async function logModeration(issuer, target, reason, type, data = {}) {
       .addField("Reason", reason || "No reason provided", true)
       .setTimestamp(Date.now());
 
-    if (type.toUpperCase() === "MUTE") embed.addField("IsPermanent", "✓", true);
+    if (type.toUpperCase() === "TIMEOUT") {
+      embed.addField("Expires", `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`, true);
+    }
     if (type.toUpperCase() === "MOVE") embed.addField("Moved to", data.channel.name, true);
   }
 
   await addModLogToDb(issuer, target, reason, type.toUpperCase());
   sendMessage(logChannel, { embeds: [embed] });
-}
-
-/**
- * Setup muted role
- * @param {import('discord.js').Guild} guild
- */
-async function setupMutedRole(guild) {
-  let mutedRole;
-
-  try {
-    mutedRole = await guild.roles.create({
-      name: "Muted",
-      permissions: [],
-      color: 11,
-      position: guild.me.roles.highest.position,
-    });
-
-    guild.channels.cache.forEach(async (channel) => {
-      if (channel.type !== "GUILD_VOICE" && channel.type !== "GUILD_STAGE_VOICE") {
-        if (channel.permissionsFor(guild.me).has(["VIEW_CHANNEL", "MANAGE_CHANNELS"], true)) {
-          await channel.permissionOverwrites.create(mutedRole, {
-            SEND_MESSAGES: false,
-            ADD_REACTIONS: false,
-          });
-        }
-      }
-
-      if (channel.type === "GUILD_VOICE" || channel.type === "GUILD_STAGE_VOICE") {
-        if (channel.permissionsFor(guild.me).has(["VIEW_CHANNEL", "MANAGE_CHANNELS"], true)) {
-          await channel.permissionOverwrites.create(mutedRole, {
-            CONNECT: false,
-            SPEAK: false,
-          });
-        }
-      }
-    });
-  } catch (ex) {
-    error("setupMutedRole", ex);
-  }
-  return mutedRole;
 }
 
 /**
@@ -271,68 +234,45 @@ async function warnTarget(issuer, target, reason) {
 }
 
 /**
- * Checks if the target has the muted role
- * @param {import('discord.js').GuildMember} target
- */
-function hasMutedRole(target) {
-  let mutedRole = getRoleByName(target.guild, "muted");
-  return target.roles.cache.has(mutedRole.id);
-}
-
-/**
- * Mutes the target and logs to the database, channel
+ * Timeouts(aka mutes) the target and logs to the database, channel
  * @param {import('discord.js').GuildMember} issuer
  * @param {import('discord.js').GuildMember} target
+ * @param {number} minutes
  * @param {string} reason
  */
-async function muteTarget(issuer, target, reason) {
+async function timeoutTarget(issuer, target, minutes, reason) {
   if (!memberInteract(issuer, target)) return "MEMBER_PERM";
   if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
-
-  let mutedRole = getRoleByName(issuer.guild, "muted");
-
-  if (!mutedRole) return "NO_MUTED_ROLE";
-  if (!mutedRole.editable) return "NO_MUTED_PERMISSION";
-
-  const memberDb = await getMember(issuer.guild.id, target.id);
-  if (memberDb.mute?.active && hasMutedRole(target)) return "ALREADY_MUTED";
+  if (target.communicationDisabledUntilTimestamp - Date.now() > 0) return "ALREADY_TIMEOUT";
 
   try {
-    if (!hasMutedRole(target)) await target.roles.add(mutedRole);
-    memberDb.mute.active = true;
-    await memberDb.save();
-    logModeration(issuer, target, reason, "Mute", { isPermanent: true });
-
+    await target.timeout(minutes * 60 * 1000, reason);
+    logModeration(issuer, target, reason, "Timeout", { minutes });
     return true;
   } catch (ex) {
-    error("muteTarget", ex);
+    error("timeoutTarget", ex);
     return "ERROR";
   }
 }
 
 /**
- * Unmutes the target and logs to the database, channel
+ * UnTimeouts(aka mutes) the target and logs to the database, channel
  * @param {import('discord.js').GuildMember} issuer
  * @param {import('discord.js').GuildMember} target
+ * @param {number} minutes
  * @param {string} reason
  */
-async function unmuteTarget(issuer, target, reason) {
+async function unTimeoutTarget(issuer, target, reason) {
   if (!memberInteract(issuer, target)) return "MEMBER_PERM";
   if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+  if (target.communicationDisabledUntilTimestamp - Date.now() < 0) return "NO_TIMEOUT";
 
-  const memberDb = await getMember(issuer.guild.id, target.id);
-  if (!memberDb.mute?.active && !hasMutedRole(target)) return "NOT_MUTED";
-
-  let mutedRole = getRoleByName(issuer.guild, "muted");
   try {
-    if (hasMutedRole(target)) await target.roles.remove(mutedRole);
-    memberDb.mute.active = false;
-    await memberDb.save();
-
-    logModeration(issuer, target, reason, "Unmute");
+    await target.timeout(0, reason);
+    logModeration(issuer, target, reason, "UnTimeout");
     return true;
   } catch (ex) {
-    error("unmuteTarget", ex);
+    error("unTimeoutTarget", ex);
     return "ERROR";
   }
 }
@@ -543,9 +483,8 @@ module.exports = {
   addModAction,
   warnTarget,
   purgeMessages,
-  setupMutedRole,
-  muteTarget,
-  unmuteTarget,
+  timeoutTarget,
+  unTimeoutTarget,
   kickTarget,
   softbanTarget,
   banTarget,
