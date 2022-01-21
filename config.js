@@ -33,12 +33,20 @@ module.exports = {
     MAX_SEARCH_RESULTS: 5,
     NODES: [
       {
-        host: "disbotlistlavalink.ml",
-        port: 443,
-        password: "LAVA",
-        identifier: "DBL Lavalink",
+        host: "node02.lavalink.eu",
+        port: 2333,
+        password: "Raccoon",
+        identifier: "DE Node 2",
         retryDelay: 3000,
-        secure: true,
+        secure: false,
+      },
+      {
+        host: "node05.lavalink.eu",
+        port: 2333,
+        password: "Raccoon",
+        identifier: "DE Node 5",
+        retryDelay: 3000,
+        secure: false,
       },
       {
         host: "lava.link",
