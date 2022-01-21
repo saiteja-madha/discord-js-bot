@@ -8,6 +8,7 @@ const CHANNEL_MENTION = /<?#?(\d{17,20})>?/;
  * @param {Guild} guild
  * @param {string} name
  */
+// eslint-disable-next-line no-unused-vars
 function getRoleByName(guild, name) {
   return guild.roles.cache.find((role) => role.name.toLowerCase() === name);
 }
@@ -162,7 +163,6 @@ async function resolveMembers(message) {
 }
 
 module.exports = {
-  getRoleByName,
   canSendEmbeds,
   getMatchingChannel,
   setVoiceChannelName,

@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { getRoleByName } = require("@utils/guildUtils");
 const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { getSettings } = require("@schemas/Guild");
@@ -216,13 +215,8 @@ async function setStrikes(settings, strikes) {
 
 async function setAction(settings, guild, action) {
   if (action === "MUTE") {
-    let mutedRole = getRoleByName(guild, "muted");
-    if (!mutedRole) {
-      return `Muted role doesn't exist in this guild`;
-    }
-
-    if (!mutedRole.editable) {
-      return "I do not have permission to move members to `Muted` role. Is that role below my highest role?";
+    if (!guild.me.permissions.has("MODERATE_MEMBERS")) {
+      return "I do not permission to timeout members";
     }
   }
 
