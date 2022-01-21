@@ -35,7 +35,6 @@
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "mongoose": "^5.13.7",
-    "mongoose-lean-defaults": "^2.0.1",
     "nekos.life": "^2.0.9",
     "node-fetch": "^2.6.1",
     "os": "^0.1.2",

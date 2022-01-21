@@ -3,7 +3,6 @@ const path = require("path");
 const fs = require("fs");
 const { table } = require("table");
 const mongoose = require("mongoose");
-mongoose.plugin(require("mongoose-lean-defaults").default);
 const logger = require("../helpers/logger");
 const MusicManager = require("./MusicManager");
 const Command = require("./Command");
