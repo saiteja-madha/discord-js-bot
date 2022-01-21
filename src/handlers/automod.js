@@ -121,11 +121,14 @@ async function performAutomod(message, settings) {
 
     // send automod log
     embed
-      .setAuthor("Auto Moderation")
+      .setAuthor({ name: "Auto Moderation" })
       .setThumbnail(author.displayAvatarURL())
       .setColor(EMBED_COLORS.AUTOMOD)
       .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
-      .setFooter(`By ${author.tag} | ${author.id}`, author.avatarURL());
+      .setFooter({
+        text: `By ${author.tag} | ${author.id}`,
+        iconURL: author.avatarURL(),
+      });
 
     sendMessage(logChannel, { embeds: [embed] });
 
@@ -133,7 +136,7 @@ async function performAutomod(message, settings) {
     const strikeEmbed = new MessageEmbed()
       .setColor(EMBED_COLORS.AUTOMOD)
       .setThumbnail(message.guild.iconURL())
-      .setAuthor("Auto Moderation")
+      .setAuthor({ name: "Auto Moderation" })
       .setDescription(
         `You have received ${strikesTotal} strikes!\n\n` +
           `**Guild:** ${message.guild.name}\n` +

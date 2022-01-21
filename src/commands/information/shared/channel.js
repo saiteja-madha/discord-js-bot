@@ -58,7 +58,10 @@ module.exports = (channel) => {
       `;
   }
 
-  const embed = new MessageEmbed().setAuthor("Channel Details").setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
+  const embed = new MessageEmbed()
+    .setAuthor({ name: "Channel Details" })
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription(desc);
 
   return { embeds: [embed] };
 };

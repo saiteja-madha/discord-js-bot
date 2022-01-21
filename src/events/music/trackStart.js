@@ -13,12 +13,12 @@ module.exports = (client, player, track, payload) => {
   const channel = client.channels.cache.get(player.textChannel);
 
   const embed = new MessageEmbed()
-    .setAuthor("Now Playing")
+    .setAuthor({ name: "Now Playing" })
     .setThumbnail(track.displayThumbnail("hqdefault"))
     .setColor(client.config.EMBED_COLORS.BOT_EMBED)
     .setDescription(`[${track.title}](${track.uri})`)
     .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
-    .setFooter(`Requested By: ${track.requester.tag}`);
+    .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
   if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
   sendMessage(channel, { embeds: [embed] });

@@ -66,7 +66,7 @@ async function logModeration(issuer, target, reason, type, data = {}) {
   switch (type.toUpperCase()) {
     case "PURGE":
       embed
-        .setAuthor("Moderation Case - " + type)
+        .setAuthor({ name: `Moderation Case - ${type}` })
         .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
         .addField("Purge Type", data.purgeType, true)
         .addField("Messages", data.deletedCount.toString(), true)
@@ -120,7 +120,7 @@ async function logModeration(issuer, target, reason, type, data = {}) {
 
   if (type.toUpperCase() !== "PURGE") {
     embed
-      .setAuthor("Moderation Case - " + type)
+      .setAuthor({ name: `Moderation Case - ${type}` })
       .setThumbnail(target.user.displayAvatarURL())
       .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
       .addField("Member", `${target.displayName} [${target.id}]`, false)

@@ -88,11 +88,14 @@ const genNSFW = async (category, user) => {
   if (!category) category = "randomHentaiGif";
   try {
     const response = await neko.nsfw[category]();
-    return new MessageEmbed().setImage(response.url).setColor("RANDOM").setFooter(`Requested by ${user.tag}`);
+    return new MessageEmbed()
+      .setImage(response.url)
+      .setColor("RANDOM")
+      .setFooter({ text: `Requested by ${user.tag}` });
   } catch (ex) {
     return new MessageEmbed()
       .setColor(EMBED_COLORS.ERROR)
       .setDescription("Failed to fetch meme. Try again!")
-      .setFooter(`Requested by ${user.tag}`);
+      .setFooter({ text: `Requested by ${user.tag}` });
   }
 };

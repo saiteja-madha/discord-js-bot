@@ -24,8 +24,8 @@ module.exports = async (self, target, coins) => {
   await targetDb.save();
 
   const embed = new MessageEmbed()
-    .setColor(EMBED_COLORS.SUCCESS)
-    .setAuthor("Transaction Successful")
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setAuthor({ name: "Updated Balance" })
     .setDescription(`You have successfully transferred ${coins}${ECONOMY.CURRENCY} to ${target.tag}`)
     .setTimestamp(Date.now());
 

@@ -84,10 +84,13 @@ async function getTranslation(author, input, outputCode) {
   if (!data) return "Failed to translate your text";
 
   const embed = new MessageEmbed()
-    .setAuthor(`${author.username} says`, author.avatarURL())
+    .setAuthor({
+      name: `${author.username} says`,
+      iconURL: author.avatarURL(),
+    })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(data.output)
-    .setFooter(`${data.inputLang} (${data.inputCode}) ⟶ ${data.outputLang} (${data.outputCode})`);
+    .setFooter({ text: `${data.inputLang} (${data.inputCode}) ⟶ ${data.outputLang} (${data.outputCode})` });
 
   return { embeds: [embed] };
 }

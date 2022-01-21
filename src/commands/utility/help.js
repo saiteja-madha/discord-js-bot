@@ -227,7 +227,7 @@ function getSlashCategoryEmbeds(client, category) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor(`${category} Commands`)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(collector);
 
     return [embed];
@@ -240,7 +240,7 @@ function getSlashCategoryEmbeds(client, category) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor(`${category} Commands`)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription("No commands in this category");
 
     return [embed];
@@ -268,9 +268,9 @@ function getSlashCategoryEmbeds(client, category) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor(`${category} Commands`)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join("\n"))
-      .setFooter(`page ${index + 1} of ${arrSplitted.length}`);
+      .setFooter({ text: `page ${index + 1} of ${arrSplitted.length}` });
     arrEmbeds.push(embed);
   });
 
@@ -306,7 +306,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor(`${category} Commands`)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(collector);
 
     return [embed];
@@ -319,7 +319,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor(`${category} Commands`)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription("No commands in this category");
 
     return [embed];
@@ -338,7 +338,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor(`${category} Commands`)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join("\n"))
       .setFooter(
         `page ${index + 1} of ${arrSplitted.length} | Type ${prefix}help <command> for more command information`

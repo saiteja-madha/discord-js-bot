@@ -104,10 +104,10 @@ async function search({ member, guild, channel }, user, query) {
 
       embed
         .setThumbnail(track.displayThumbnail("hqdefault"))
-        .setAuthor("Added Song to queue")
+        .setAuthor({ name: "Added Song to queue" })
         .setDescription(`[${track.title}](${track.uri})`)
         .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
-        .setFooter(`Requested By: ${track.requester.tag}`);
+        .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
       if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
       return { embeds: [embed] };
@@ -119,11 +119,11 @@ async function search({ member, guild, channel }, user, query) {
       }
 
       embed
-        .setAuthor("Added Playlist to queue")
+        .setAuthor({ name: "Added Playlist to queue" })
         .setDescription(res.playlist.name)
         .addField("Enqueued", `${res.tracks.length} songs`, true)
         .addField("Playlist duration", "`" + prettyMs(res.playlist.duration, { colonNotation: true }) + "`", true)
-        .setFooter(`Requested By: ${res.tracks[0].requester.tag}`);
+        .setFooter({ text: `Requested By: ${res.tracks[0].requester.tag}` });
 
       return { embeds: [embed] };
 
@@ -145,7 +145,7 @@ async function search({ member, guild, channel }, user, query) {
           .addOptions(options)
       );
 
-      embed.setAuthor("Search Results").setDescription(`Please select the songs you wish to add to queue`);
+      embed.setAuthor({ name: "Search Results" }).setDescription(`Please select the songs you wish to add to queue`);
 
       const sentMsg = await channel.send({
         embeds: [embed],
@@ -178,10 +178,10 @@ async function search({ member, guild, channel }, user, query) {
 
           embed
             .setThumbnail(track.displayThumbnail("hqdefault"))
-            .setAuthor("Added Song to queue")
+            .setAuthor({ name: "Added Song to queue" })
             .setDescription(`[${track.title}](${track.uri})`)
             .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
-            .setFooter(`Requested By: ${track.requester.tag}`);
+            .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
           if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
 
@@ -196,7 +196,7 @@ async function search({ member, guild, channel }, user, query) {
 
         embed
           .setDescription(`🎶 Added ${toAdd.length} songs to queue`)
-          .setFooter(`Requested By: ${res.tracks[0].requester.tag}`);
+          .setFooter({ text: `Requested By: ${res.tracks[0].requester.tag}` });
 
         return sentMsg.edit({ embeds: [embed], components: [] });
       });

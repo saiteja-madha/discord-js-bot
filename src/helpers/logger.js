@@ -20,7 +20,7 @@ const sendWebhook = (content, err) => {
 
   const embed = new MessageEmbed()
     .setColor(config.EMBED_COLORS.ERROR)
-    .setAuthor(err?.name || "Error")
+    .setAuthor({ name: err?.name || "Error" })
     .setDescription("```js\n" + (errString.length > 4096 ? `${errString.substr(0, 4000)}...` : errString) + "\n```");
 
   if (err?.description) embed.addField("Description", content);

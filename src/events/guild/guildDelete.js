@@ -23,7 +23,7 @@ module.exports = async (client, guild) => {
     .addField("ID", guild.id, false)
     .addField("Owner", `${owner.username}#${owner.discriminator} [\`${owner.id}\`]`, false)
     .addField("Members", `\`\`\`yaml\n${guild.memberCount}\`\`\``, false)
-    .setFooter(`Guild #${client.guilds.cache.size}`);
+    .setFooter({ text: `Guild #${client.guilds.cache.size}` });
 
   client.joinLeaveWebhook.send({
     username: "Leave",

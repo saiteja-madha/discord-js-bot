@@ -62,7 +62,7 @@ async function paste(content, title) {
   if (!response) return "❌ Something went wrong";
 
   const embed = new MessageEmbed()
-    .setAuthor("Paste links")
+    .setAuthor({ name: "Paste links" })
     .setDescription(`🔸 Normal: ${response.url}\n🔹 Raw: ${response.raw}`);
 
   return { embeds: [embed] };

@@ -88,9 +88,12 @@ async function handleFlagReaction(countryCode, message, user) {
 
     const embed = new MessageEmbed()
       .setColor(message.client.config.EMBED_COLORS.BOT_EMBED)
-      .setAuthor(`Translation from ${src}`)
+      .setAuthor({ name: `Translation from ${src}` })
       .setDescription(desc)
-      .setFooter(`Requested by ${user.tag}`, user.displayAvatarURL());
+      .setFooter({
+        text: `Requested by ${user.tag}`,
+        iconURL: user.displayAvatarURL(),
+      });
 
     sendMessage(message.channel, { embeds: [embed], components: [btnRow] }).then(
       () => user.client.flagTranslateCache.set(user.id, Date.now()) // set cooldown
