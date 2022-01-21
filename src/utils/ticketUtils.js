@@ -183,7 +183,7 @@ async function openTicket(guild, user, config) {
       .setDescription(
         `Hello ${user.toString()}\nSupport will be with you shortly\n\n**Ticket Reason:**\n${config.title}`
       )
-      .setFooter("You may close your ticket anytime by clicking the button below");
+      .setFooter({ text: "You may close your ticket anytime by clicking the button below" });
 
     let buttonsRow = new MessageActionRow().addComponents(
       new MessageButton().setLabel("Close Ticket").setCustomId("TICKET_CLOSE").setEmoji("🔒").setStyle("PRIMARY")

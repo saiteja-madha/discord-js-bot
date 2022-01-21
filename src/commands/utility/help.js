@@ -340,9 +340,9 @@ function getMsgCategoryEmbeds(client, category, prefix) {
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join("\n"))
-      .setFooter(
-        `page ${index + 1} of ${arrSplitted.length} | Type ${prefix}help <command> for more command information`
-      );
+      .setFooter({
+        text: `page ${index + 1} of ${arrSplitted.length} | Type ${prefix}help <command> for more command information`,
+      });
     arrEmbeds.push(embed);
   });
 

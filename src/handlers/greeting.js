@@ -60,7 +60,7 @@ const buildGreeting = async (member, type, config, inviterData) => {
   if (config.embed.color) embed.setColor(config.embed.color);
   if (config.embed.thumbnail) embed.setThumbnail(member.user.displayAvatarURL());
   if (config.embed.footer) {
-    embed.setFooter(await parse(config.embed.footer, member, inviterData));
+    embed.setFooter({ text: await parse(config.embed.footer, member, inviterData) });
   }
 
   // set default message
