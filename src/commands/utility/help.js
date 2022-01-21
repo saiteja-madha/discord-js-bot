@@ -104,7 +104,7 @@ async function getHelpMenu({ client, guild }) {
     const value = CommandCategory[key];
     const data = {
       label: value.name,
-      value: value.name,
+      value: key,
       description: `View commands in ${value.name} category`,
       emoji: value.emoji,
     };
@@ -226,7 +226,7 @@ function getSlashCategoryEmbeds(client, category) {
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
+      .setThumbnail(CommandCategory[category]?.image)
       .setAuthor(`${category} Commands`)
       .setDescription(collector);
 
@@ -239,7 +239,7 @@ function getSlashCategoryEmbeds(client, category) {
   if (commands.length === 0) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
+      .setThumbnail(CommandCategory[category]?.image)
       .setAuthor(`${category} Commands`)
       .setDescription("No commands in this category");
 
@@ -267,7 +267,7 @@ function getSlashCategoryEmbeds(client, category) {
   arrSplitted.forEach((item, index) => {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
+      .setThumbnail(CommandCategory[category]?.image)
       .setAuthor(`${category} Commands`)
       .setDescription(item.join("\n"))
       .setFooter(`page ${index + 1} of ${arrSplitted.length}`);
@@ -305,7 +305,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
+      .setThumbnail(CommandCategory[category]?.image)
       .setAuthor(`${category} Commands`)
       .setDescription(collector);
 
@@ -318,7 +318,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
   if (commands.length === 0) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
+      .setThumbnail(CommandCategory[category]?.image)
       .setAuthor(`${category} Commands`)
       .setDescription("No commands in this category");
 
@@ -337,7 +337,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
   arrSplitted.forEach((item, index) => {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
+      .setThumbnail(CommandCategory[category]?.image)
       .setAuthor(`${category} Commands`)
       .setDescription(item.join("\n"))
       .setFooter(
