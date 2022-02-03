@@ -2,6 +2,7 @@ const { Command } = require("@src/structures");
 const { Message, CommandInteraction, MessageEmbed } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");
 const { getWarningLogs, clearWarningLogs } = require("@schemas/ModLog");
+const { getMember } = require("@schemas/Member");
 
 module.exports = class Warnings extends Command {
   constructor(client) {
@@ -135,6 +136,10 @@ async function listWarnings(target, { guildId }) {
 async function clearWarnings(target, { guildId }) {
   if (!target) return "No user provided";
   if (target.user.bot) return "Bots don't have warnings";
+
+  const memberDb = await getMember(guildId, target.id);
+  memberDb.warnings = 0;
+  await memberDb.save();
 
   await clearWarningLogs(guildId, target.id);
   return `${target.user.tag}'s warnings have been cleared`;
