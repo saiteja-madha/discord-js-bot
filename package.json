@@ -1,10 +1,13 @@
 {
   "name": "discord-js-bot",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "A multipurpose discord bot built using discord-js",
   "main": "bot.js",
   "author": "Sai Teja M",
   "license": "ISC",
+  "engines": {
+    "node": ">=16.6.0"
+  },
   "scripts": {
     "dev": "nodemon .",
     "start": "node ."
@@ -21,7 +24,7 @@
     "chalk": "^4.1.2",
     "country-language": "^0.1.7",
     "discord.js": "^13.6.0",
-    "dotenv": "^12.0.3",
+    "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "erela.js": "^2.3.3",
     "erela.js-deezer": "^1.0.7",
@@ -31,7 +34,7 @@
     "express-session": "^1.17.2",
     "fixedsize-map": "^1.0.1",
     "fs": "0.0.1-security",
-    "iso-639-1": "^2.1.11",
+    "iso-639-1": "^2.1.12",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "mongoose": "^5.13.7",
