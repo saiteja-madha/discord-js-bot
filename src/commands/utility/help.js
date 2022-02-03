@@ -193,6 +193,7 @@ const waiter = (msg, userId, prefix) => {
 
   collector.on("end", () => {
     if (cache[`${msg.guildId}|${userId}`]) delete cache[`${msg.guildId}|${userId}`];
+    if (!msg.guild || !msg.channel) return;
     return msg.editable && msg.edit({ components: [] });
   });
 };
