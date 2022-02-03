@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const { getSettings } = require("@schemas/Guild");
-const { getTop100 } = require("@schemas/Member");
+const { getXpLb, getInvitesLb } = require("@schemas/Member");
 
 module.exports = class LeaderBoard extends Command {
   constructor(client) {
@@ -14,9 +14,29 @@ module.exports = class LeaderBoard extends Command {
       command: {
         enabled: true,
         aliases: ["lb"],
+        minArgsCount: 1,
+        usage: "<xp|invite>",
       },
       slashCommand: {
         enabled: true,
+        options: [
+          {
+            name: "type",
+            description: "type of leaderboard to display",
+            required: true,
+            type: "STRING",
+            choices: [
+              {
+                name: "xp",
+                value: "xp",
+              },
+              {
+                name: "invite",
+                value: "invite",
+              },
+            ],
+          },
+        ],
       },
     });
   }
@@ -26,7 +46,12 @@ module.exports = class LeaderBoard extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = await getLeaderboard(message, message.author);
+    const type = args[0].toLowerCase();
+    let response;
+
+    if (type === "xp") response = await getXpLeaderboard(message, message.author);
+    else if (type === "invite") response = await getInviteLeaderboard(message, message.author);
+    else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
     await message.reply(response);
   }
 
@@ -34,19 +59,24 @@ module.exports = class LeaderBoard extends Command {
    * @param {CommandInteraction} interaction
    */
   async interactionRun(interaction) {
-    const response = await getLeaderboard(interaction, interaction.user);
+    const type = interaction.options.getString("type");
+    let response;
+
+    if (type === "xp") response = await getXpLeaderboard(interaction.message, interaction.author);
+    else if (type === "invite") response = await getInviteLeaderboard(interaction.message, interaction.author);
+    else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
+
     await interaction.followUp(response);
   }
 };
 
-async function getLeaderboard({ guild }, author) {
+async function getXpLeaderboard({ guild }, author) {
   const settings = await getSettings(guild);
   if (!settings.ranking.enabled) return "Ranking is disabled on this server";
 
-  const top100 = await getTop100(guild.id);
-  if (top100.length === 0) return "No users in the leaderboard";
+  const lb = await getXpLb(guild.id, 10);
+  if (lb.length === 0) return "No users in the leaderboard";
 
-  const lb = top100.splice(0, top100.length > 10 ? 9 : top100.length);
   let collector = "";
   for (let i = 0; i < lb.length; i++) {
     try {
@@ -59,6 +89,32 @@ async function getLeaderboard({ guild }, author) {
 
   const embed = new MessageEmbed()
     .setAuthor({ name: "XP Leaderboard" })
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription(collector)
+    .setFooter({ text: `Requested by ${author.tag}` });
+
+  return { embeds: [embed] };
+}
+
+async function getInviteLeaderboard({ guild }, author) {
+  const settings = await getSettings(guild);
+  if (!settings.invite.tracking) return "Invite tracking is disabled on this server";
+
+  const lb = await getInvitesLb(guild.id, 10);
+  if (lb.length === 0) return "No users in the leaderboard";
+
+  let collector = "";
+  for (let i = 0; i < lb.length; i++) {
+    try {
+      const user = await author.client.users.fetch(lb[i].member_id);
+      collector += `**#${(i + 1).toString()}** - ${user.tag} [${lb[i].invites}]\n`;
+    } catch (ex) {
+      // Ignore
+    }
+  }
+
+  const embed = new MessageEmbed()
+    .setAuthor({ name: "Invite Leaderboard" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(collector)
     .setFooter({ text: `Requested by ${author.tag}` });

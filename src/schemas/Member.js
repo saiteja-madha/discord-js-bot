@@ -60,11 +60,30 @@ module.exports = {
     return member;
   },
 
-  getTop100: async (guildId) =>
+  getXpLb: async (guildId, limit = 10) =>
     Model.find({
       guild_id: guildId,
     })
-      .limit(100)
+      .limit(limit)
       .sort({ level: -1, xp: -1 })
       .lean(),
+
+  getInvitesLb: async (guildId, limit = 10) =>
+    Model.aggregate([
+      { $match: { guild_id: guildId } },
+      {
+        $project: {
+          member_id: "$member_id",
+          invites: {
+            $subtract: [
+              { $add: ["$invite_data.tracked", "$invite_data.added"] },
+              { $add: ["$invite_data.left", "$invite_data.fake"] },
+            ],
+          },
+        },
+      },
+      { $match: { invites: { $ne: 0 } } },
+      { $sort: { invites: -1 } },
+      { $limit: limit },
+    ]),
 };
