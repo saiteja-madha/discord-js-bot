@@ -9,6 +9,7 @@ module.exports = class Warnings extends Command {
       name: "warnings",
       description: "list or clear user warnings",
       category: "MODERATION",
+      userPermissions: ["KICK_MEMBERS"],
       command: {
         enabled: true,
         minArgsCount: 1,
