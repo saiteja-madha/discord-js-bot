@@ -39,49 +39,47 @@ module.exports = class BegCommand extends Command {
 };
 
 async function beg(user) {
-    let users = [
-        "PewDiePie",
-        "T-Series",
-        "Sans",
-        "RLX",
-        "Pro Gamer 711",
-        "Zenitsu",
-        "Jake Paul",
-        "Kaneki Ken",
-        "KSI",
-        "Naruto",
-        "Mr. Beast",
-        "Ur Mom",
-        "A Broke Person",
-        "Giyu Tomiaka",
-        "Bejing Embacy",
-        "A Random Asian Mom", 
-        "Ur Step Sis",
-        "Jin Mori",
-        "Sakura (AKA Trash Can)",
-        "Hammy The Hamster",
-        "Kakashi Sensei",
-        "Minato",
-        "Tanjiro",
-        "ZHC",
-        "The IRS",
-        "Joe Mama"
-    ];
-     
+  let users = [
+    "PewDiePie",
+    "T-Series",
+    "Sans",
+    "RLX",
+    "Pro Gamer 711",
+    "Zenitsu",
+    "Jake Paul",
+    "Kaneki Ken",
+    "KSI",
+    "Naruto",
+    "Mr. Beast",
+    "Ur Mom",
+    "A Broke Person",
+    "Giyu Tomiaka",
+    "Bejing Embacy",
+    "A Random Asian Mom",
+    "Ur Step Sis",
+    "Jin Mori",
+    "Sakura (AKA Trash Can)",
+    "Hammy The Hamster",
+    "Kakashi Sensei",
+    "Minato",
+    "Tanjiro",
+    "ZHC",
+    "The IRS",
+    "Joe Mama",
+  ];
 
-    
-    let amount = Math.floor((Math.random() * `${ECONOMY.MAX_BEG_AMOUNT}`) + `${ECONOMY.MIN_BEG_AMOUNT}`);
-    const userDb = await getUser(user.id);
-    userDb.coins += amount;
-    await userDb.save();
+  let amount = Math.floor(Math.random() * `${ECONOMY.MAX_BEG_AMOUNT}` + `${ECONOMY.MIN_BEG_AMOUNT}`);
+  const userDb = await getUser(user.id);
+  userDb.coins += amount;
+  await userDb.save();
 
-    const embed = new MessageEmbed()
+  const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setAuthor(user.username, user.displayAvatarURL())
+    .setAuthor({ name: `${user.username}`, iconURL: user.displayAvatarURL() })
     .setDescription(
-        `**${users[Math.floor(Math.random() * users.length)]}** donated you **${amount}** ${ECONOMY.CURRENCY}\n` +
+      `**${users[Math.floor(Math.random() * users.length)]}** donated you **${amount}** ${ECONOMY.CURRENCY}\n` +
         `**Updated Balance:** **${userDb.coins}** ${ECONOMY.CURRENCY}`
     );
 
-    return { embeds: [embed] };
-  }
+  return { embeds: [embed] };
+}
