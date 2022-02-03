@@ -11,6 +11,12 @@ module.exports = async (client, member) => {
   const { guild } = member;
   const settings = await getSettings(guild);
 
+  // Autorole
+  if (settings.autorole) {
+    const role = guild.roles.cache.get(settings.autorole);
+    if (role) member.roles.add(role).catch((err) => {});
+  }
+
   // Check for counter channel
   if (settings.counters.find((doc) => ["MEMBERS", "BOTS", "USERS"].includes(doc.counter_type.toUpperCase()))) {
     if (member.user.bot) {

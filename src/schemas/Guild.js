@@ -114,6 +114,7 @@ const Schema = mongoose.Schema({
       footer: String,
     },
   },
+  autorole: String,
 });
 
 const Model = mongoose.model("guild", Schema);
