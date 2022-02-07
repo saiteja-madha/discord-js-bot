@@ -2,6 +2,12 @@ module.exports = {
   OWNER_IDS: [], // Bot owner ID's
   PREFIX: "!", // Default prefix for the bot
   SUPPORT_SERVER: "", // Your bot support server
+  PRESENCE: {
+    ENABLED: true, // Whether or not the bot should update its status
+    STATUS: "online", // The bot's status [online, idle, dnd, invisible]
+    TYPE: "WATCHING", // Status type for the bot [PLAYING | LISTENING | WATCHING | COMPETING]
+    MESSAGE: "{members} members in {servers} servers", // Your bot status message
+  },
   DASHBOARD: {
     enabled: false, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url
@@ -39,14 +45,6 @@ module.exports = {
         port: 2333,
         password: "Raccoon",
         identifier: "DE Node 2",
-        retryDelay: 3000,
-        secure: false,
-      },
-      {
-        host: "node05.lavalink.eu",
-        port: 2333,
-        password: "Raccoon",
-        identifier: "DE Node 5",
         retryDelay: 3000,
         secure: false,
       },
