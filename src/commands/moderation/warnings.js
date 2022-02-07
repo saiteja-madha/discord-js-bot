@@ -37,7 +37,7 @@ module.exports = class Warnings extends Command {
                 name: "user",
                 description: "the target member",
                 type: "USER",
-                required: false,
+                required: true,
               },
             ],
           },
@@ -113,7 +113,7 @@ module.exports = class Warnings extends Command {
       response = `Invalid subcommand ${sub}`;
     }
 
-    interaction.reply(response);
+    await interaction.followUp(response);
   }
 };
 
