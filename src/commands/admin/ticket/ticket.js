@@ -114,7 +114,7 @@ module.exports = class Ticket extends Command {
               {
                 name: "amount",
                 description: "max number of tickets",
-                type: "STRING",
+                type: "INTEGER",
                 required: true,
               },
             ],
