@@ -74,19 +74,28 @@ module.exports = class AutoRole extends Command {
     const sub = interaction.options.getSubcommand();
     let response;
 
+    // add
     if (sub === "add") {
-      const option = interaction.options.getRole("role") || interaction.options.getString("role_id");
+      let role = interaction.options.getRole("role");
+      if (!role) {
+        const role_id = interaction.options.getString("role_id");
+        if (!role_id) return interaction.followUp("Please provide a role or role id");
 
-      if (!option) {
-        response = "Please provide a role or a role id";
-      } else {
-        const roles = findMatchingRoles(interaction.guild, option);
-        if (roles.length === 0) response = "No matching roles found matching your query";
-        else response = await setAutoRole(interaction, roles[0]);
+        const roles = findMatchingRoles(interaction.guild, role_id);
+        if (roles.length === 0) return interaction.followUp("No matching roles found matching your query");
+        role = roles[0];
       }
-    } else if (sub === "remove") {
+
+      response = await setAutoRole(interaction, role);
+    }
+
+    // remove
+    else if (sub === "remove") {
       response = await setAutoRole(interaction, null);
-    } else response = "Invalid subcommand";
+    }
+
+    // default
+    else response = "Invalid subcommand";
 
     await interaction.followUp(response);
   }

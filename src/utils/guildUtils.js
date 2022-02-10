@@ -78,7 +78,7 @@ async function getMemberStats(guild) {
  * @return {Role[]}
  */
 function findMatchingRoles(guild, query) {
-  if (!guild || !query || typeof query !== "string") return;
+  if (!guild || !query || typeof query !== "string") return [];
 
   const patternMatch = query.match(ROLE_MENTION);
   if (patternMatch) {
