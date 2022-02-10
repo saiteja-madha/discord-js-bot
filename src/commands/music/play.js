@@ -102,12 +102,12 @@ async function play({ member, guild, channel }, user, query) {
       }
 
       embed
-        .setThumbnail(track.displayThumbnail("hqdefault"))
         .setAuthor({ name: "Added Song to queue" })
         .setDescription(`[${track.title}](${track.uri})`)
         .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
         .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
+      if (typeof track.displayThumbnail === "function") embed.setThumbnail(track.displayThumbnail("hqdefault"));
       if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
       return { embeds: [embed] };
 
@@ -135,7 +135,6 @@ async function play({ member, guild, channel }, user, query) {
       }
 
       embed
-        .setThumbnail(track.displayThumbnail("hqdefault"))
         .setAuthor({ name: "Added Song to queue" })
         .setDescription(`[${track.title}](${track.uri})`)
         .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
