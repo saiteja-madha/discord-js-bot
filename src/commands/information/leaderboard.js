@@ -62,8 +62,8 @@ module.exports = class LeaderBoard extends Command {
     const type = interaction.options.getString("type");
     let response;
 
-    if (type === "xp") response = await getXpLeaderboard(interaction.message, interaction.author);
-    else if (type === "invite") response = await getInviteLeaderboard(interaction.message, interaction.author);
+    if (type === "xp") response = await getXpLeaderboard(interaction, interaction.user);
+    else if (type === "invite") response = await getInviteLeaderboard(interaction, interaction.user);
     else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
 
     await interaction.followUp(response);
