@@ -9,6 +9,8 @@ const pause = require("./sub/pause");
 const resume = require("./sub/resume");
 const end = require("./sub/end");
 const reroll = require("./sub/reroll");
+const list = require("./sub/list");
+const edit = require("./sub/edit");
 
 module.exports = class Giveaway extends Command {
   constructor(client) {
@@ -41,16 +43,8 @@ module.exports = class Giveaway extends Command {
             description: "reroll a giveaway",
           },
           {
-            trigger: "status",
-            description: "check the status of a giveaway",
-          },
-          {
             trigger: "list",
             description: "list all giveaways",
-          },
-          {
-            trigger: "delete",
-            description: "delete a giveaway",
           },
           {
             trigger: "edit",
@@ -152,6 +146,42 @@ module.exports = class Giveaway extends Command {
               },
             ],
           },
+          {
+            name: "list",
+            description: "list all giveaways",
+            type: "SUB_COMMAND",
+          },
+          {
+            name: "edit",
+            description: "edit a giveaway",
+            type: "SUB_COMMAND",
+            options: [
+              {
+                name: "message_id",
+                description: "the message id of the giveaway",
+                type: "STRING",
+                required: true,
+              },
+              {
+                name: "add_duration",
+                description: "the number of minutes to add to the giveaway duration",
+                type: "INTEGER",
+                required: false,
+              },
+              {
+                name: "new_prize",
+                description: "the new prize",
+                type: "STRING",
+                required: false,
+              },
+              {
+                name: "new_winners",
+                description: "the new number of winners",
+                type: "INTEGER",
+                required: false,
+              },
+            ],
+          },
         ],
       },
     });
@@ -193,6 +223,19 @@ module.exports = class Giveaway extends Command {
       const messageId = args[1];
       response = await reroll(message.member, messageId);
     }
+
+    //
+    else if (sub === "list") {
+      response = await list(message.member);
+    }
+
+    //
+    else if (sub === "edit") {
+      return await runInteractiveEdit(message);
+    }
+
+    //
+    else response = "Not a valid sub command";
 
     await message.reply(response);
   }
@@ -237,6 +280,23 @@ module.exports = class Giveaway extends Command {
       const messageId = interaction.options.getString("message_id");
       response = await reroll(interaction.member, messageId);
     }
+
+    //
+    else if (sub === "list") {
+      response = await list(interaction.member);
+    }
+
+    //
+    else if (sub === "edit") {
+      const messageId = interaction.options.getString("message_id");
+      const addDuration = interaction.options.getInteger("add_duration");
+      const newPrize = interaction.options.getString("new_prize");
+      const newWinnerCount = interaction.options.getInteger("new_winners");
+      response = await edit(interaction.member, messageId, addDuration, newPrize, newWinnerCount);
+    }
+
+    //
+    else response = "Invalid subcommand";
 
     await interaction.followUp(response);
   }
@@ -328,6 +388,81 @@ async function runInteractiveSetup(message) {
     }
 
     const response = await start(message.member, targetChannel, duration, prize, winners, host);
+    await channel.send(response);
+  } catch (e) {
+    await channel.send({ embeds: [embed.setDescription("An error occurred while setting up the giveaway")] });
+  }
+}
+
+// Interactive Giveaway Update
+async function runInteractiveEdit(message) {
+  const { member, channel } = message;
+
+  const SETUP_TIMEOUT = 30 * 1000;
+
+  const filter = (m) => m.author.id === member.id;
+  const embed = new MessageEmbed()
+    .setAuthor("Giveaway Update")
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setFooter("Type `cancel` to cancel update!\nType `skip` to skip this step");
+
+  let messageId;
+  let addDuration;
+  let newPrize;
+  let newWinnerCount;
+
+  const waitFor = async (question) => {
+    await channel.send({ embeds: [embed.setDescription(question)] });
+    try {
+      let reply = (await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT, errors: ["time"] })).first();
+      if (reply.content.toLowerCase() === "cancel") {
+        await reply.reply("Giveaway update has been cancelled");
+        return false;
+      }
+
+      return reply;
+    } catch (err) {
+      await channel.send({
+        embeds: [embed.setDescription("No response received. Giveaway update has been cancelled")],
+      });
+      return false;
+    }
+  };
+
+  let reply;
+  try {
+    // wait for messageId
+    reply = await waitFor("Please enter the `messageId` of the existing giveaway");
+    if (reply === false) return;
+    messageId = reply.content;
+
+    // wait for addDuration
+    reply = await waitFor("Please specify the `duration to add` to the giveaway in minutes");
+    if (reply === false) return;
+    if (reply.content.toLowerCase() !== "skip") {
+      addDuration = reply.content;
+      if (isNaN(addDuration)) return reply.reply("Giveaway update has been cancelled. You did not specify a duration");
+    }
+
+    // wait for new prize
+    reply = await waitFor("Please specify the `new prize` of the giveaway");
+    if (reply.content.toLowerCase() !== "skip") {
+      if (reply === false) return;
+      newPrize = reply.content;
+    }
+
+    // winner count
+    reply = await waitFor("Please specify the `new number of winners`");
+    if (reply === false) return;
+    if (reply.content.toLowerCase() !== "skip") {
+      newWinnerCount = reply.content;
+      if (isNaN(newWinnerCount)) {
+        return reply.reply("Giveaway setup has been cancelled. You did not specify a number of winners");
+      }
+      newWinnerCount = parseInt(newWinnerCount);
+    }
+
+    const response = await edit(message.member, messageId, addDuration, newPrize, newWinnerCount);
     await channel.send(response);
   } catch (e) {
     await channel.send({ embeds: [embed.setDescription("An error occurred while setting up the giveaway")] });
