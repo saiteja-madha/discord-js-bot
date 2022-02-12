@@ -311,9 +311,9 @@ async function runInteractiveSetup(message) {
 
   const filter = (m) => m.author.id === member.id;
   const embed = new MessageEmbed()
-    .setAuthor("Giveaway Setup")
+    .setAuthor({ name: "Giveaway Setup" })
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setFooter("Type cancel to cancel setup");
+    .setFooter({ text: "Type cancel to cancel setup" });
 
   let targetChannel;
   let duration;
@@ -402,9 +402,9 @@ async function runInteractiveEdit(message) {
 
   const filter = (m) => m.author.id === member.id;
   const embed = new MessageEmbed()
-    .setAuthor("Giveaway Update")
+    .setAuthor({ name: "Giveaway Update" })
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setFooter("Type `cancel` to cancel update!\nType `skip` to skip this step");
+    .setFooter({ text: "Type `cancel` to cancel update!\nType `skip` to skip this step" });
 
   let messageId;
   let addDuration;
