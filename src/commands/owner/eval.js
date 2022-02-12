@@ -34,7 +34,10 @@ module.exports = class Eval extends Command {
    */
   async messageRun(message, args) {
     const input = args.join(" ");
+
     if (!input) return message.reply("Please provide code to eval");
+    if (input.toLowerCase().includes("token")) return message.reply("Don't try to hack me!");
+
     let response;
     try {
       const output = eval(input);
@@ -50,6 +53,8 @@ module.exports = class Eval extends Command {
    */
   async interactionRun(interaction) {
     const input = interaction.options.getString("expression");
+    if (input.toLowerCase().includes("token")) return interaction.followUp("Don't try to hack me!");
+
     let response;
     try {
       const output = eval(input);
