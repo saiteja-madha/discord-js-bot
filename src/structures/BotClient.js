@@ -7,6 +7,7 @@ const logger = require("../helpers/logger");
 const MusicManager = require("./MusicManager");
 const Command = require("./Command");
 const BaseContext = require("./BaseContext");
+const GiveawayManager = require("./GiveawayManager");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -61,6 +62,9 @@ module.exports = class BotClient extends Client {
 
     // Music Player
     this.musicManager = new MusicManager(this);
+
+    // Giveaways
+    this.giveawaysManager = new GiveawayManager(this);
 
     // Logger
     this.logger = logger;

@@ -274,10 +274,10 @@ class Command {
     if (this.slashCommand.options.find((o) => o.type === "SUB_COMMAND")) {
       const subCmds = this.slashCommand.options.filter((opt) => opt.type === "SUB_COMMAND");
       subCmds.forEach((sub) => {
-        desc += `❯ \`${this.name} ${sub.name}\`: ${sub.description}\n`;
+        desc += `\`/${this.name} ${sub.name}\`\n❯ ${sub.description}\n\n`;
       });
     } else {
-      desc += `\`/${this.name}\`\n${this.description}\n`;
+      desc += `\`/${this.name}\`\n\n**Help:** ${this.description}`;
     }
 
     if (this.cooldown) {
