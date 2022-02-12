@@ -77,7 +77,11 @@ async function getGithubUser(target, author) {
   if (website == null) website = "Not Provided";
 
   const embed = new MessageEmbed()
-    .setAuthor(`GitHub User: ${username}`, avatarUrl, userPageLink)
+    .setAuthor({
+      name: `GitHub User: ${username}`,
+      url: userPageLink,
+      iconURL: avatarUrl,
+    })
     .addField(
       "User Info",
       outdent`**Real Name**: *${name || "Not Provided"}*
@@ -90,7 +94,7 @@ async function getGithubUser(target, author) {
     .setDescription(`**Bio**:\n${bio || "Not Provided"}`)
     .setImage(avatarUrl)
     .setColor(0x6e5494)
-    .setFooter(`Requested by ${author.tag}`);
+    .setFooter({ text: `Requested by ${author.tag}` });
 
   return { embeds: [embed] };
 }

@@ -62,7 +62,7 @@ module.exports = class Filters extends Command {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
-      .setFooter(`Requested by: ${message.author.tag}`);
+      .setFooter({ text: `Requested by: ${message.author.tag}` });
 
     await message.reply({ embeds: [embed], files: [attachment] });
   }
@@ -90,7 +90,7 @@ module.exports = class Filters extends Command {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
-      .setFooter(`Requested by: ${author.tag}`);
+      .setFooter({ text: `Requested by: ${author.tag}` });
 
     await interaction.followUp({ embeds: [embed], files: [attachment] });
   }

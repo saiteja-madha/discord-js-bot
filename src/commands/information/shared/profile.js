@@ -25,7 +25,7 @@ module.exports = async ({ guild }, user) => {
     .addField("Strikes*", memberData.strikes + " ", true)
     .addField("Warnings*", memberData.warnings + " ", true)
     .addField("Avatar-URL", user.displayAvatarURL({ format: "png" }))
-    .setFooter("Fields marked (*) are guild specific");
+    .setFooter({ text: "Fields marked (*) are guild specific" });
 
   return { embeds: [embed] };
 };

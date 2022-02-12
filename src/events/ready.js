@@ -2,6 +2,7 @@ const { counterHandler, inviteHandler } = require("@src/handlers");
 const { cacheReactionRoles } = require("@schemas/Message");
 const { getSettings } = require("@schemas/Guild");
 const { updateCounterChannels } = require("@src/handlers/counter");
+const { PRESENCE } = require("@root/config");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -14,8 +15,10 @@ module.exports = async (client) => {
   client.musicManager.init(client.user.id);
 
   // Update Bot Presence
-  updatePresence(client);
-  setInterval(() => updatePresence(client), 10 * 60 * 1000);
+  if (PRESENCE.ENABLED) {
+    updatePresence(client);
+    setInterval(() => updatePresence(client), 10 * 60 * 1000);
+  }
 
   // Register Interactions
   if (client.config.INTERACTIONS.SLASH || client.config.INTERACTIONS.CONTEXT) {
@@ -47,15 +50,23 @@ module.exports = async (client) => {
  * @param {import('@src/structures').BotClient} client
  */
 const updatePresence = (client) => {
-  const guilds = client.guilds.cache;
-  const members = guilds.map((g) => g.memberCount).reduce((partial_sum, a) => partial_sum + a, 0);
+  let message = PRESENCE.MESSAGE;
+
+  if (message.includes("{servers}")) {
+    message = message.replaceAll("{servers}", client.guilds.cache.size);
+  }
+
+  if (message.includes("{members}")) {
+    const members = client.guilds.cache.map((g) => g.memberCount).reduce((partial_sum, a) => partial_sum + a, 0);
+    message = message.replaceAll("{members}", members);
+  }
 
   client.user.setPresence({
-    status: "online",
+    status: PRESENCE.STATUS,
     activities: [
       {
-        name: `${members} members in ${guilds.size} servers`,
-        type: "WATCHING",
+        name: message,
+        type: PRESENCE.TYPE,
       },
     ],
   });

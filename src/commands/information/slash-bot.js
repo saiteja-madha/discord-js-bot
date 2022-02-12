@@ -70,7 +70,7 @@ module.exports = class BotCommand extends Command {
 
 function botInvite(client) {
   const embed = new MessageEmbed()
-    .setAuthor("Invite")
+    .setAuthor({ name: "Invite" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription("Hey there! Thanks for considering to invite me\nUse the button below to navigate where you want");

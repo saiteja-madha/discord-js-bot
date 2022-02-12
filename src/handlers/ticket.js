@@ -1,11 +1,11 @@
-const { getConfig } = require("@schemas/Message");
+const { getTicketConfig } = require("@schemas/Message");
 const { closeTicket, openTicket } = require("@utils/ticketUtils");
 
 /**
  * @param {import("discord.js").ButtonInteraction} interaction
  */
 async function handleTicketOpen(interaction) {
-  const config = await getConfig(interaction.guildId, interaction.channelId, interaction.message.id);
+  const config = await getTicketConfig(interaction.guildId, interaction.channelId, interaction.message.id);
   if (!config) return;
 
   const status = await openTicket(interaction.guild, interaction.user, config.ticket);

@@ -25,16 +25,17 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("messages", Schema);
 
 // Cache
-const cache = new Map();
+const rrCache = new Map();
 const getKey = (guildId, channelId, messageId) => `${guildId}|${channelId}|${messageId}`;
 
 module.exports = {
-  getConfig: async (guildId, channelId, messageId) =>
+  getTicketConfig: async (guildId, channelId, messageId) =>
     Model.findOne({
       guild_id: guildId,
       channel_id: channelId,
       message_id: messageId,
-    }).lean({ defaults: true }),
+      ticket: { $exists: true },
+    }).lean(),
 
   createNewTicket: async (guildId, channelId, messageId, title, roleId) =>
     new Model({
@@ -49,10 +50,10 @@ module.exports = {
 
   cacheReactionRoles: async (client) => {
     // clear previous cache
-    cache.clear();
+    rrCache.clear();
 
     // load all docs from database
-    const docs = await Model.find().lean({ defaults: true });
+    const docs = await Model.find({ roles: { $exists: true, $ne: [] } }).lean();
 
     // validate and cache docs
     for (const doc of docs) {
@@ -66,11 +67,11 @@ module.exports = {
         continue;
       }
       const key = getKey(doc.guild_id, doc.channel_id, doc.message_id);
-      cache.set(key, doc.roles);
+      rrCache.set(key, doc.roles);
     }
   },
 
-  getReactionRoles: (guildId, channelId, messageId) => cache.get(getKey(guildId, channelId, messageId)) || [],
+  getReactionRoles: (guildId, channelId, messageId) => rrCache.get(getKey(guildId, channelId, messageId)) || [],
 
   addReactionRole: async (guildId, channelId, messageId, emote, roleId) => {
     const filter = { guild_id: guildId, channel_id: channelId, message_id: messageId };
@@ -86,11 +87,11 @@ module.exports = {
         },
       },
       { upsert: true, new: true }
-    ).lean({ defaults: true });
+    ).lean();
 
     // update cache
     const key = getKey(guildId, channelId, messageId);
-    cache.set(key, data.roles);
+    rrCache.set(key, data.roles);
   },
 
   removeReactionRole: async (guildId, channelId, messageId) => {
@@ -99,6 +100,6 @@ module.exports = {
       channel_id: channelId,
       message_id: messageId,
     });
-    cache.delete(getKey(guildId, channelId, messageId));
+    rrCache.delete(getKey(guildId, channelId, messageId));
   },
 };

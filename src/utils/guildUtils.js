@@ -8,6 +8,7 @@ const CHANNEL_MENTION = /<?#?(\d{17,20})>?/;
  * @param {Guild} guild
  * @param {string} name
  */
+// eslint-disable-next-line no-unused-vars
 function getRoleByName(guild, name) {
   return guild.roles.cache.find((role) => role.name.toLowerCase() === name);
 }
@@ -77,7 +78,7 @@ async function getMemberStats(guild) {
  * @return {Role[]}
  */
 function findMatchingRoles(guild, query) {
-  if (!guild || !query || typeof query !== "string") return;
+  if (!guild || !query || typeof query !== "string") return [];
 
   const patternMatch = query.match(ROLE_MENTION);
   if (patternMatch) {
@@ -162,7 +163,6 @@ async function resolveMembers(message) {
 }
 
 module.exports = {
-  getRoleByName,
   canSendEmbeds,
   getMatchingChannel,
   setVoiceChannelName,

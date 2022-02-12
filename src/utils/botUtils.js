@@ -138,6 +138,9 @@ const permissions = {
   USE_PUBLIC_THREADS: "Use Public Threads",
   USE_PRIVATE_THREADS: "Use Private Threads",
   USE_EXTERNAL_STICKERS: "Use External Stickers",
+  SEND_MESSAGES_IN_THREADS: "Send Messages In Threads",
+  START_EMBEDDED_ACTIVITIES: "Start Embedded Activities",
+  MODERATE_MEMBERS: "Moderate Members",
 };
 
 /**

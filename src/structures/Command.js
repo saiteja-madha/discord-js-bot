@@ -113,6 +113,8 @@ class Command {
    * @param {string} prefix
    */
   async executeCommand(message, args, invoke, prefix) {
+    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+
     // callback validations
     for (const validation of this.validations) {
       if (!validation.callback(message)) {
@@ -133,7 +135,6 @@ class Command {
     }
 
     // bot permissions
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
     if (this.botPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.guild.me).has(this.botPermissions)) {
         return message.reply(`I need ${parsePermissions(this.botPermissions)} for this command`);
@@ -252,7 +253,7 @@ class Command {
     }
 
     const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
-    if (title) embed.setAuthor(title);
+    if (title) embed.setAuthor({ name: title });
     return embed;
   }
 
@@ -273,10 +274,10 @@ class Command {
     if (this.slashCommand.options.find((o) => o.type === "SUB_COMMAND")) {
       const subCmds = this.slashCommand.options.filter((opt) => opt.type === "SUB_COMMAND");
       subCmds.forEach((sub) => {
-        desc += `❯ \`${this.name} ${sub.name}\`: ${sub.description}\n`;
+        desc += `\`/${this.name} ${sub.name}\`\n❯ ${sub.description}\n\n`;
       });
     } else {
-      desc += `\`/${this.name}\`\n${this.description}\n`;
+      desc += `\`/${this.name}\`\n\n**Help:** ${this.description}`;
     }
 
     if (this.cooldown) {

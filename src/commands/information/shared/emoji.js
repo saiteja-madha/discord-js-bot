@@ -9,7 +9,7 @@ module.exports = (emoji) => {
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setAuthor("Emoji Info")
+    .setAuthor({ name: "Emoji Info" })
     .setDescription(
       `**Id:** ${custom.id}\n` + `**Name:** ${custom.name}\n` + `**Animated:** ${custom.animated ? "Yes" : "No"}`
     )

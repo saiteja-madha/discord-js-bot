@@ -64,7 +64,7 @@ async function getInviter({ guild }, user) {
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setAuthor(`Invite data for ${user.username}`)
+    .setAuthor({ name: `Invite data for ${user.username}` })
     .setDescription(
       outdent`
       Inviter: \`${inviter?.tag || "Deleted User"}\`

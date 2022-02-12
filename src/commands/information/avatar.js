@@ -26,7 +26,7 @@ module.exports = class UserInfo extends Command {
    */
   async messageRun(message, args) {
     const target = (args.length && (await resolveMember(message, args[0]))) || message.member;
-    const response = avatarInfo(target);
+    const response = avatarInfo(target.user);
     await message.reply(response);
   }
 };

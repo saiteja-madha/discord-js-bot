@@ -114,6 +114,7 @@ const Schema = mongoose.Schema({
       footer: String,
     },
   },
+  autorole: String,
 });
 
 const Model = mongoose.model("guild", Schema);
@@ -136,6 +137,10 @@ module.exports = {
           joinedAt: guild.joinedAt,
         },
       });
+
+      if (!guild.id) {
+        throw new Error("Guild ID is undefined");
+      }
 
       await guildData.save();
     }

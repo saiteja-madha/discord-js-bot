@@ -14,7 +14,7 @@ module.exports = async (user, coins) => {
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setAuthor("New Balance")
+    .setAuthor({ name: "New Balance" })
     .setThumbnail(user.displayAvatarURL())
     .addField("Wallet", `${userDb.coins}${ECONOMY.CURRENCY}`, true)
     .addField("Bank", `${userDb.bank}${ECONOMY.CURRENCY}`, true)

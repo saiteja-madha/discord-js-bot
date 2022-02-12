@@ -119,7 +119,7 @@ async function viewReputation(target) {
   if (!userData) return `${target.tag} has no reputation yet`;
 
   const embed = new MessageEmbed()
-    .setAuthor(`Reputation for ${target.username}`)
+    .setAuthor({ name: `Reputation for ${target.username}` })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(target.displayAvatarURL())
     .addField("Given", userData.reputation?.given.toString(), true)
@@ -154,7 +154,7 @@ async function giveReputation(user, target) {
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(`${target.toString()} +1 Rep!`)
-    .setFooter(`By ${user.tag}`)
+    .setFooter({ text: `By ${user.tag}` })
     .setTimestamp(Date.now());
 
   return { embeds: [embed] };

@@ -104,7 +104,7 @@ async function getHelpMenu({ client, guild }) {
     const value = CommandCategory[key];
     const data = {
       label: value.name,
-      value: value.name,
+      value: key,
       description: `View commands in ${value.name} category`,
       emoji: value.emoji,
     };
@@ -193,6 +193,7 @@ const waiter = (msg, userId, prefix) => {
 
   collector.on("end", () => {
     if (cache[`${msg.guildId}|${userId}`]) delete cache[`${msg.guildId}|${userId}`];
+    if (!msg.guild || !msg.channel) return;
     return msg.editable && msg.edit({ components: [] });
   });
 };
@@ -226,8 +227,8 @@ function getSlashCategoryEmbeds(client, category) {
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
-      .setAuthor(`${category} Commands`)
+      .setThumbnail(CommandCategory[category]?.image)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(collector);
 
     return [embed];
@@ -239,8 +240,8 @@ function getSlashCategoryEmbeds(client, category) {
   if (commands.length === 0) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
-      .setAuthor(`${category} Commands`)
+      .setThumbnail(CommandCategory[category]?.image)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription("No commands in this category");
 
     return [embed];
@@ -267,10 +268,10 @@ function getSlashCategoryEmbeds(client, category) {
   arrSplitted.forEach((item, index) => {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
-      .setAuthor(`${category} Commands`)
+      .setThumbnail(CommandCategory[category]?.image)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join("\n"))
-      .setFooter(`page ${index + 1} of ${arrSplitted.length}`);
+      .setFooter({ text: `page ${index + 1} of ${arrSplitted.length}` });
     arrEmbeds.push(embed);
   });
 
@@ -305,8 +306,8 @@ function getMsgCategoryEmbeds(client, category, prefix) {
 
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
-      .setAuthor(`${category} Commands`)
+      .setThumbnail(CommandCategory[category]?.image)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(collector);
 
     return [embed];
@@ -318,8 +319,8 @@ function getMsgCategoryEmbeds(client, category, prefix) {
   if (commands.length === 0) {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
-      .setAuthor(`${category} Commands`)
+      .setThumbnail(CommandCategory[category]?.image)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription("No commands in this category");
 
     return [embed];
@@ -337,12 +338,12 @@ function getMsgCategoryEmbeds(client, category, prefix) {
   arrSplitted.forEach((item, index) => {
     const embed = new MessageEmbed()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category].image)
-      .setAuthor(`${category} Commands`)
+      .setThumbnail(CommandCategory[category]?.image)
+      .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join("\n"))
-      .setFooter(
-        `page ${index + 1} of ${arrSplitted.length} | Type ${prefix}help <command> for more command information`
-      );
+      .setFooter({
+        text: `page ${index + 1} of ${arrSplitted.length} | Type ${prefix}help <command> for more command information`,
+      });
     arrEmbeds.push(embed);
   });
 

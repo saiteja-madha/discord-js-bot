@@ -3,11 +3,11 @@ const path = require("path");
 const fs = require("fs");
 const { table } = require("table");
 const mongoose = require("mongoose");
-mongoose.plugin(require("mongoose-lean-defaults").default);
 const logger = require("../helpers/logger");
 const MusicManager = require("./MusicManager");
 const Command = require("./Command");
 const BaseContext = require("./BaseContext");
+const GiveawayManager = require("./GiveawayManager");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -63,6 +63,9 @@ module.exports = class BotClient extends Client {
     // Music Player
     this.musicManager = new MusicManager(this);
 
+    // Giveaways
+    this.giveawaysManager = new GiveawayManager(this);
+
     // Logger
     this.logger = logger;
   }
@@ -96,8 +99,11 @@ module.exports = class BotClient extends Client {
         if (stat.isDirectory()) {
           readCommands(path.join(dir, file));
         } else {
-          const extension = file.split(".").at(-1);
-          if (extension !== "js") return;
+          const extension = path.extname(file);
+          if (extension !== ".js") {
+            this.logger.debug(`getAbsoluteFilePaths - Skipping ${file}: not a js file`);
+            return;
+          }
           const filePath = path.join(__appRoot, dir, file);
           filePaths.push(filePath);
         }
@@ -119,10 +125,10 @@ module.exports = class BotClient extends Client {
     const musicEvents = [];
 
     this.getAbsoluteFilePaths(directory).forEach((filePath) => {
-      const file = filePath.replace(/^.*[\\/]/, "");
+      const file = path.basename(filePath);
       const dirName = path.basename(path.dirname(filePath));
       try {
-        const eventName = file.split(".")[0];
+        const eventName = path.basename(file, ".js");
         const event = require(filePath);
 
         // music events
@@ -217,7 +223,7 @@ module.exports = class BotClient extends Client {
   loadCommands(directory) {
     this.logger.log(`Loading commands...`);
     this.getAbsoluteFilePaths(directory).forEach((filePath) => {
-      const file = filePath.replace(/^.*[\\/]/, "");
+      const file = path.basename(filePath);
       try {
         const cmdClass = require(filePath);
         if (!(cmdClass.prototype instanceof Command)) return;
@@ -239,7 +245,7 @@ module.exports = class BotClient extends Client {
   loadContexts(directory) {
     this.logger.log(`Loading contexts...`);
     this.getAbsoluteFilePaths(directory).forEach((filePath) => {
-      const file = filePath.replace(/^.*[\\/]/, "");
+      const file = path.basename(filePath);
       try {
         const ctxClass = require(filePath);
         if (!(ctxClass.prototype instanceof BaseContext)) return;

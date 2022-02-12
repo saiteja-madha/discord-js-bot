@@ -56,8 +56,8 @@ module.exports = class CounterSetup extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const type = args[0].toLowerCase();
-    if (!type || !["users", "members", "bots"].includes(type)) {
+    const type = args[0].toUpperCase();
+    if (!type || !["USERS", "MEMBERS", "BOTS"].includes(type)) {
       return message.reply("Incorrect arguments are passed! Counter types: `users/members/bots`");
     }
     if (args.length < 2) return message.reply("Incorrect Usage! You did not provide name");
@@ -75,7 +75,7 @@ module.exports = class CounterSetup extends Command {
     const type = interaction.options.getString("type");
     const name = interaction.options.getString("name");
 
-    const response = await setupCounter(interaction.guild, type, name);
+    const response = await setupCounter(interaction.guild, type.toUpperCase(), name);
     return interaction.followUp(response);
   }
 };
@@ -84,9 +84,9 @@ async function setupCounter(guild, type, name) {
   let channelName = name;
 
   const stats = await getMemberStats(guild);
-  if (type.toUpperCase() === "USERS") channelName += ` : ${stats[0]}`;
-  else if (type.toUpperCase() === "MEMBERS") channelName += ` : ${stats[2]}`;
-  else if (type.toUpperCase() === "BOTS") channelName += ` : ${stats[1]}`;
+  if (type === "USERS") channelName += ` : ${stats[0]}`;
+  else if (type === "MEMBERS") channelName += ` : ${stats[2]}`;
+  else if (type === "BOTS") channelName += ` : ${stats[1]}`;
 
   const vc = await guild.channels.create(channelName, {
     type: "GUILD_VOICE",
@@ -104,7 +104,7 @@ async function setupCounter(guild, type, name) {
 
   const settings = await getSettings(guild);
 
-  const exists = settings.counters.find((v) => v.counter_type === type);
+  const exists = settings.counters.find((v) => v.counter_type.toUpperCase() === type);
   if (exists) {
     exists.name = name;
     exists.channel_id = vc.id;
