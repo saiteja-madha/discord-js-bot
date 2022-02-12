@@ -85,7 +85,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     if (channel.deletable) await channel.delete();
 
-    const embed = new MessageEmbed().setAuthor("Ticket Closed").setColor(EMBED_COLORS.TICKET_CLOSE);
+    const embed = new MessageEmbed().setAuthor({ name: "Ticket Closed" }).setColor(EMBED_COLORS.TICKET_CLOSE);
     if (reason) embed.addField("Reason", reason, false);
     embed
       .setDescription(`**Title:** ${ticketDetails.title}`)
@@ -179,11 +179,11 @@ async function openTicket(guild, user, config) {
     });
 
     const embed = new MessageEmbed()
-      .setAuthor(`Ticket #${ticketNumber}`)
+      .setAuthor({ name: `Ticket #${ticketNumber}` })
       .setDescription(
         `Hello ${user.toString()}\nSupport will be with you shortly\n\n**Ticket Reason:**\n${config.title}`
       )
-      .setFooter("You may close your ticket anytime by clicking the button below");
+      .setFooter({ text: "You may close your ticket anytime by clicking the button below" });
 
     let buttonsRow = new MessageActionRow().addComponents(
       new MessageButton().setLabel("Close Ticket").setCustomId("TICKET_CLOSE").setEmoji("🔒").setStyle("PRIMARY")
@@ -193,7 +193,7 @@ async function openTicket(guild, user, config) {
 
     const dmEmbed = new MessageEmbed()
       .setColor(EMBED_COLORS.TICKET_CREATE)
-      .setAuthor("Ticket Created")
+      .setAuthor({ name: "Ticket Created" })
       .setThumbnail(guild.iconURL())
       .setDescription(`**Server:** ${guild.name}\n**Title:** ${config.title}`);
 

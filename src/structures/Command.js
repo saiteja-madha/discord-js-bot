@@ -113,6 +113,8 @@ class Command {
    * @param {string} prefix
    */
   async executeCommand(message, args, invoke, prefix) {
+    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+
     // callback validations
     for (const validation of this.validations) {
       if (!validation.callback(message)) {
@@ -133,7 +135,6 @@ class Command {
     }
 
     // bot permissions
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
     if (this.botPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.guild.me).has(this.botPermissions)) {
         return message.reply(`I need ${parsePermissions(this.botPermissions)} for this command`);
@@ -252,7 +253,7 @@ class Command {
     }
 
     const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
-    if (title) embed.setAuthor(title);
+    if (title) embed.setAuthor({ name: title });
     return embed;
   }
 

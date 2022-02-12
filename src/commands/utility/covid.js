@@ -72,7 +72,7 @@ async function getCovid(country) {
     .addField("Critical stage", data?.critical.toString(), true)
     .addField("Cases per 1 million", data?.casesPerOneMillion.toString(), true)
     .addField("Deaths per 1 million", data?.deathsPerOneMillion.toString(), true)
-    .setFooter(`Last updated on ${mg}`);
+    .setFooter({ text: `Last updated on ${mg}` });
 
   return { embeds: [embed] };
 }

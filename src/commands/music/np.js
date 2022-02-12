@@ -48,8 +48,7 @@ function nowPlaying({ client, guildId }) {
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setThumbnail(track.displayThumbnail("hqdefault"))
-    .setAuthor("Now playing")
+    .setAuthor({ name: "Now playing" })
     .setDescription(`[${track.title}](${track.uri})`)
     .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
     .addField("Added By", track.requester.tag || "NA", true)
@@ -62,5 +61,8 @@ function nowPlaying({ client, guildId }) {
         end,
       false
     );
+
+  if (typeof track.displayThumbnail === "function") embed.setThumbnail(track.displayThumbnail("hqdefault"));
+
   return { embeds: [embed] };
 }

@@ -20,7 +20,7 @@ module.exports = async (client, message) => {
     if (!logChannel) return;
 
     const embed = new MessageEmbed()
-      .setAuthor("Ghost ping detected")
+      .setAuthor({ name: "Ghost ping detected" })
       .setDescription(
         `**Message:**\n${message.content}\n\n` +
           `**Author:** ${message.author.tag} \`${message.author.id}\`\n` +
@@ -29,7 +29,7 @@ module.exports = async (client, message) => {
       .addField("Members", members.size.toString(), true)
       .addField("Roles", roles.size.toString(), true)
       .addField("Everyone?", everyone.toString(), true)
-      .setFooter(`Sent at: ${message.createdAt}`);
+      .setFooter({ text: `Sent at: ${message.createdAt}` });
 
     sendMessage(logChannel, { embeds: [embed] });
   }

@@ -82,7 +82,7 @@ async function pokedex(pokemon) {
             ♢ **Is Generation?**: ${json.gen}
             `
     )
-    .setFooter(json.description);
+    .setFooter({ text: json.description });
 
   return { embeds: [embed] };
 }

@@ -155,7 +155,8 @@ module.exports = class BankCommand extends Command {
 
     // balance
     if (sub === "balance") {
-      response = await balance(interaction.user);
+      const user = interaction.options.getUser("user") || interaction.user;
+      response = await balance(user);
     }
 
     // deposit
@@ -174,7 +175,7 @@ module.exports = class BankCommand extends Command {
     else if (sub === "transfer") {
       const user = interaction.options.getUser("user");
       const coins = interaction.options.getInteger("coins");
-      response = await transfer(interaction, user, coins);
+      response = await transfer(interaction.user, user, coins);
     }
 
     await interaction.followUp(response);

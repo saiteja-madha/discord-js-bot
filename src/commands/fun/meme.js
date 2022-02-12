@@ -139,10 +139,10 @@ async function getRandomEmbed(choice) {
     let memeNumComments = json[0].data.children[0].data.num_comments;
 
     return new MessageEmbed()
-      .setAuthor(memeTitle, null, memeUrl)
+      .setAuthor({ name: memeTitle, url: memeUrl })
       .setImage(memeImage)
       .setColor("RANDOM")
-      .setFooter(`👍 ${memeUpvotes} | 💬 ${memeNumComments}`);
+      .setFooter({ text: `👍 ${memeUpvotes} | 💬 ${memeNumComments}` });
   } catch (error) {
     return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
   }

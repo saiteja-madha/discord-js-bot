@@ -2,6 +2,12 @@ module.exports = {
   OWNER_IDS: [], // Bot owner ID's
   PREFIX: "!", // Default prefix for the bot
   SUPPORT_SERVER: "", // Your bot support server
+  PRESENCE: {
+    ENABLED: true, // Whether or not the bot should update its status
+    STATUS: "online", // The bot's status [online, idle, dnd, invisible]
+    TYPE: "WATCHING", // Status type for the bot [PLAYING | LISTENING | WATCHING | COMPETING]
+    MESSAGE: "{members} members in {servers} servers", // Your bot status message
+  },
   DASHBOARD: {
     enabled: false, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url
@@ -24,6 +30,8 @@ module.exports = {
   ECONOMY: {
     CURRENCY: "₪",
     DAILY_COINS: 100, // coins to be received by daily command
+    MIN_BEG_AMOUNT: 100, // minimum coins to be received when beg command is used
+    MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
   IMAGE: {
     BASE_API: "https://image-api.strangebot.xyz",
@@ -33,19 +41,11 @@ module.exports = {
     MAX_SEARCH_RESULTS: 5,
     NODES: [
       {
-        host: "disbotlistlavalink.ml",
-        port: 443,
-        password: "LAVA",
-        identifier: "DBL Lavalink",
-        retryDelay: 3000,
-        secure: true,
-      },
-      {
-        host: "lava.link",
+        host: "lavalink.strangebot.xyz",
         port: 80,
-        password: "anything as a password",
-        identifier: "Something Host",
-        retryDelay: 3000,
+        password: "strangebot",
+        identifier: "Strange Link",
+        retryDelay: 5000,
         secure: false,
       },
     ],
@@ -60,8 +60,8 @@ module.exports = {
     AUTOMOD: "#36393F",
     TICKET_CREATE: "#068ADD",
     TICKET_CLOSE: "#068ADD",
-    MUTE_LOG: "#102027",
-    UNMUTE_LOG: "#4B636E",
+    TIMEOUT_LOG: "#102027",
+    UNTIMEOUT_LOG: "#4B636E",
     KICK_LOG: "#FF7961",
     SOFTBAN_LOG: "#AF4448",
     BAN_LOG: "#D32F2F",

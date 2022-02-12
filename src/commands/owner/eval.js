@@ -34,7 +34,10 @@ module.exports = class Eval extends Command {
    */
   async messageRun(message, args) {
     const input = args.join(" ");
+
     if (!input) return message.reply("Please provide code to eval");
+    if (input.toLowerCase().includes("token")) return message.reply("Don't try to hack me!");
+
     let response;
     try {
       const output = eval(input);
@@ -50,6 +53,8 @@ module.exports = class Eval extends Command {
    */
   async interactionRun(interaction) {
     const input = interaction.options.getString("expression");
+    if (input.toLowerCase().includes("token")) return interaction.followUp("Don't try to hack me!");
+
     let response;
     try {
       const output = eval(input);
@@ -66,7 +71,7 @@ const buildSuccessResponse = (output) => {
   if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
 
   embed
-    .setAuthor("📤 Output")
+    .setAuthor({ name: "📤 Output" })
     .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
     .setColor("RANDOM")
     .setTimestamp(Date.now());
@@ -77,7 +82,7 @@ const buildSuccessResponse = (output) => {
 const buildErrorResponse = (err) => {
   const embed = new MessageEmbed();
   embed
-    .setAuthor("📤 Error")
+    .setAuthor({ name: "📤 Error" })
     .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
     .setColor(EMBED_COLORS.ERROR)
     .setTimestamp(Date.now());

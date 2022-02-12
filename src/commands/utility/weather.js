@@ -78,7 +78,7 @@ async function weather(place) {
     .addField("Humidity", json.current?.humidity.toString() || "NA", true)
     .addField("Visual distance", `${json.current?.visibility} km`, true)
     .addField("UV", json.current?.uv_index.toString() || "NA", true)
-    .setFooter(`Last checked at ${json.current?.observation_time} GMT`);
+    .setFooter({ text: `Last checked at ${json.current?.observation_time} GMT` });
 
   return { embeds: [embed] };
 }
