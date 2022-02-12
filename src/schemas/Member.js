@@ -82,7 +82,7 @@ module.exports = {
           },
         },
       },
-      { $match: { invites: { $ne: 0 } } },
+      { $match: { invites: { $gt: 0 } } },
       { $sort: { invites: -1 } },
       { $limit: limit },
     ]),
