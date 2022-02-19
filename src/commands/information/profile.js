@@ -1,6 +1,5 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
-const { resolveMember } = require("@utils/guildUtils");
 const profile = require("./shared/profile");
 
 module.exports = class Profile extends Command {
@@ -33,7 +32,7 @@ module.exports = class Profile extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = (await resolveMember(message, args[0])) || message.member;
+    const target = (await message.guild.resolveMember(args[0])) || message.member;
     const response = await profile(message, target.user);
     await message.reply(response);
   }

@@ -2,7 +2,6 @@ const { Collection, MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 
 // Utils
-const { sendMessage } = require("@utils/botUtils");
 const { containsLink } = require("@utils/miscUtils");
 const { error } = require("../helpers/logger");
 
@@ -134,7 +133,7 @@ async function logModeration(issuer, target, reason, type, data = {}) {
   }
 
   await addModLogToDb(issuer, target, reason, type.toUpperCase());
-  sendMessage(logChannel, { embeds: [embed] });
+  logChannel.safeSend({ embeds: [embed] });
 }
 
 /**

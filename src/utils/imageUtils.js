@@ -1,5 +1,4 @@
 const { Message } = require("discord.js");
-const { resolveMember } = require("@utils/guildUtils");
 const { IMAGE } = require("@root/config");
 
 /**
@@ -33,7 +32,7 @@ async function getImageFromCommand(message, args) {
   }
 
   if (!url) {
-    const member = await resolveMember(message, args[0]);
+    const member = await message.guild.resolveMember(args[0]);
     if (member) url = member.user.displayAvatarURL({ size: 256, format: "png" });
   }
 

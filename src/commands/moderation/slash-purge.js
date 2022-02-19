@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
 const { purgeMessages } = require("@utils/modUtils");
-const { sendMessage } = require("@utils/botUtils");
 
 // SLASH COMMAND ONLY
 
@@ -203,7 +202,7 @@ module.exports = class PurgeCommand extends Command {
     if (typeof response === "number") {
       const message = `Successfully cleaned ${response} messages in ${channel}`;
       if (channel.id !== interaction.channelId) await interaction.followUp(message);
-      else await sendMessage(channel, message, 5);
+      else await channel.safeSend(message, 5);
       return;
     }
 

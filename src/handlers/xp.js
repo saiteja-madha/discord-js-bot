@@ -1,6 +1,5 @@
 const { getMember } = require("@schemas/Member");
 const { getRandomInt } = require("@utils/miscUtils");
-const { sendMessage } = require("@utils/botUtils");
 
 const xpToAdd = () => getRandomInt(19) + 1;
 
@@ -41,7 +40,7 @@ async function handleXp(message) {
     lvlUpMessage = lvlUpMessage.replace("{l}", level).replace("{m}", message.member.user.toString());
     const lvlUpChannel = message.channel;
 
-    sendMessage(lvlUpChannel, lvlUpMessage);
+    lvlUpChannel.safeSend(lvlUpMessage);
   }
   await memberDb.save();
 }

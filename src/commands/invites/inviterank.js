@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { findMatchingRoles } = require("@utils/guildUtils");
 const { getSettings } = require("@schemas/Guild");
 const { Message, CommandInteraction } = require("discord.js");
 
@@ -78,7 +77,7 @@ module.exports = class AddInvitesCommand extends Command {
       const invites = args[2];
 
       if (isNaN(invites)) return message.reply(`\`${invites}\` is not a valid number of invites?`);
-      const role = message.mentions.roles.first() || findMatchingRoles(message.guild, query)[0];
+      const role = message.mentions.roles.first() || message.guild.findMatchingRoles(query)[0];
       if (!role) return message.reply(`No roles found matching \`${query}\``);
 
       const response = await addInviteRank(message, role, invites);
@@ -88,7 +87,7 @@ module.exports = class AddInvitesCommand extends Command {
     //
     else if (sub === "remove") {
       const query = args[1];
-      const role = message.mentions.roles.first() || findMatchingRoles(message.guild, query)[0];
+      const role = message.mentions.roles.first() || message.guild.findMatchingRoles(query)[0];
       if (!role) return message.reply(`No roles found matching \`${query}\``);
       const response = await removeInviteRank(message, role);
       await message.reply(response);

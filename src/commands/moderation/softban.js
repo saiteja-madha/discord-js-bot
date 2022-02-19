@@ -1,4 +1,3 @@
-const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { softbanTarget } = require("@utils/modUtils");
@@ -41,7 +40,7 @@ module.exports = class SoftBan extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.reply(`No user found matching ${args[0]}`);
     const reason = message.content.split(args[0])[1].trim();
     const response = await softban(message.member, target, reason);

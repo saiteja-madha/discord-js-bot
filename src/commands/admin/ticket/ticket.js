@@ -7,8 +7,7 @@ const { getSettings } = require("@schemas/Guild");
 const { createNewTicket } = require("@schemas/Message");
 
 // Utils
-const { parsePermissions } = require("@utils/botUtils");
-const { canSendEmbeds, findMatchingRoles, getMatchingChannel } = require("@utils/guildUtils");
+const { parsePermissions, canSendEmbeds } = require("@utils/botUtils");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@utils/ticketUtils");
 const { isHex } = require("@utils/miscUtils");
 
@@ -179,7 +178,7 @@ module.exports = class Ticket extends Command {
     // log ticket
     else if (input === "log") {
       if (args.length < 2) return message.reply("Please provide a channel where ticket logs must be sent");
-      const target = getMatchingChannel(message.guild, args[1]);
+      const target = message.guild.findMatchingChannels(args[1]);
       if (target.length === 0) return message.reply("Could not find any matching channel");
       response = await setupLogChannel(message, target[0]);
     }
@@ -348,7 +347,7 @@ async function runInteractiveSetup({ channel, guild, author }) {
 
     if (query === "cancel") return reply.reply("Ticket setup has been cancelled");
     if (query !== "none") {
-      const roles = findMatchingRoles(guild, query);
+      const roles = guild.findMatchingRoles(query);
       if (roles.length === 0) {
         return reply.reply(`Uh oh, I couldn't find any roles called ${query}! Ticket setup has been cancelled`);
       }

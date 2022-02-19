@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { resolveMember } = require("@utils/guildUtils");
 const { Message, CommandInteraction } = require("discord.js");
 const { getMember } = require("@schemas/Member");
 
@@ -36,7 +35,7 @@ module.exports = class ResetInvites extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.reply("Incorrect syntax. You must mention a target");
     const response = await clearInvites(message, target.user);
     await message.reply(response);

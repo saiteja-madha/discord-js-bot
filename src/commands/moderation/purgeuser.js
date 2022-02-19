@@ -1,8 +1,6 @@
 const { Message } = require("discord.js");
 const { Command } = require("@src/structures");
 const { purgeMessages } = require("@utils/modUtils");
-const { sendMessage } = require("@utils/botUtils");
-const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class PurgeUser extends Command {
   constructor(client) {
@@ -26,7 +24,7 @@ module.exports = class PurgeUser extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0]);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.reply(`No users found matching ${args[0]}`);
     const amount = (args.length > 1 && args[1]) || 99;
 
@@ -38,7 +36,7 @@ module.exports = class PurgeUser extends Command {
     const response = await purgeMessages(message.member, message.channel, "USER", amount, target);
 
     if (typeof response === "number") {
-      return sendMessage(message.channel, `Successfully deleted ${response} messages`, 5);
+      return message.channel.safeSend(`Successfully deleted ${response} messages`, 5);
     } else if (response === "BOT_PERM") {
       return message.reply("I don't have `Read Message History` & `Manage Messages` to delete messages");
     } else if (response === "MEMBER_PERM") {

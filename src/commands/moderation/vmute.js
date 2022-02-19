@@ -1,6 +1,5 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const { resolveMember } = require("@utils/guildUtils");
 const vmute = require("./shared/vmute");
 
 module.exports = class VMuteCommand extends Command {
@@ -27,7 +26,7 @@ module.exports = class VMuteCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.reply(`No user found matching ${args[0]}`);
     const reason = message.content.split(args[0])[1].trim();
     const response = await vmute(message, target, reason);

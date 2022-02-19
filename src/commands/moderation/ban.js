@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { banTarget } = require("@utils/modUtils");
-const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class BanCommand extends Command {
   constructor(client) {
@@ -41,7 +40,7 @@ module.exports = class BanCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.reply(`No user found matching ${args[0]}`);
     const reason = message.content.split(args[0])[1].trim();
     const response = await ban(message.member, target, reason);

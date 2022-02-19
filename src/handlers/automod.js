@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const { sendMessage, safeDM } = require("@utils/botUtils");
 const { containsLink, containsDiscordInvite } = require("@utils/miscUtils");
 const { getMember } = require("@schemas/Member");
 const { addModAction } = require("@utils/modUtils");
@@ -110,7 +109,7 @@ async function performAutomod(message, settings) {
   if (shouldDelete && message.deletable) {
     message
       .delete()
-      .then(() => sendMessage(channel, "> Auto-Moderation! Message deleted", 5))
+      .then(() => channel.safeSend("> Auto-Moderation! Message deleted", 5))
       .catch(() => {});
   }
 
@@ -130,7 +129,7 @@ async function performAutomod(message, settings) {
         iconURL: author.avatarURL(),
       });
 
-    sendMessage(logChannel, { embeds: [embed] });
+    logChannel.safeSend({ embeds: [embed] });
 
     // DM strike details
     const strikeEmbed = new MessageEmbed()
@@ -143,7 +142,7 @@ async function performAutomod(message, settings) {
           `**Total Strikes:** ${memberDb.strikes} out of ${automod.strikes}`
       );
     embed.fields.forEach((field) => strikeEmbed.addField(field.name, field.value, true));
-    safeDM(message.author, { embeds: [strikeEmbed] });
+    message.author.safeDm({ embeds: [strikeEmbed] });
 
     // check if max strikes are received
     if (memberDb.strikes >= automod.strikes) {

@@ -2,7 +2,6 @@ const { Command } = require("@src/structures");
 const { getEffectiveInvites, checkInviteRewards } = require("@src/handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
-const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
 
 module.exports = class AddInvitesCommand extends Command {
@@ -43,7 +42,7 @@ module.exports = class AddInvitesCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     const amount = parseInt(args[1]);
 
     if (!target) return message.reply("Incorrect syntax. You must mention a target");

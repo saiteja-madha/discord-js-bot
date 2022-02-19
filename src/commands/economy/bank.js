@@ -1,4 +1,3 @@
-const { resolveMember } = require("@root/src/utils/guildUtils");
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const balance = require("./sub/balance");
@@ -110,7 +109,7 @@ module.exports = class BankCommand extends Command {
     let response;
 
     if (sub === "balance") {
-      const resolved = (await resolveMember(message, args[1])) || message.member;
+      const resolved = (await message.guild.resolveMember(args[1])) || message.member;
       response = await balance(resolved.user);
     }
 
@@ -131,7 +130,7 @@ module.exports = class BankCommand extends Command {
     //
     else if (sub === "transfer") {
       if (args.length < 3) return message.reply("Provide a valid user and coins to transfer");
-      const target = await resolveMember(message, args[1], true);
+      const target = await message.guild.resolveMember(args[1], true);
       if (!target) return message.reply("Provide a valid user to transfer coins to");
       const coins = parseInt(args[2]);
       if (isNaN(coins)) return message.reply("Provide a valid number of coins you wish to transfer");

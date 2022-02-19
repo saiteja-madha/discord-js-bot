@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
 const { timeoutTarget } = require("@utils/modUtils");
 const { Message, CommandInteraction } = require("discord.js");
-const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class Timeout extends Command {
   constructor(client) {
@@ -48,7 +47,7 @@ module.exports = class Timeout extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.reply(`No user found matching ${args[0]}`);
     const minutes = parseInt(args[1]);
     if (isNaN(minutes)) return message.reply("Invalid time. Provide time in minutes.");
