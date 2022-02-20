@@ -11,7 +11,7 @@ module.exports = class Automod extends Command {
       userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
-        minArgsCount: 1,
+        minArgsCount: 2,
         subcommands: [
           {
             trigger: "antighostping <ON|OFF>",
