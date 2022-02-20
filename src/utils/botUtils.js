@@ -59,11 +59,6 @@ function validateConfig() {
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 
-async function startupCheck() {
-  await checkForUpdates();
-  validateConfig();
-}
-
 const permissions = {
   CREATE_INSTANT_INVITE: "Create instant invite",
   KICK_MEMBERS: "Kick members",
@@ -138,7 +133,8 @@ function canSendEmbeds(channel) {
 module.exports = {
   permissions,
   parsePermissions,
-  startupCheck,
+  validateConfig,
+  checkForUpdates,
   musicValidations,
   canSendEmbeds,
 };

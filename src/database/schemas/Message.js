@@ -29,6 +29,8 @@ const rrCache = new Map();
 const getKey = (guildId, channelId, messageId) => `${guildId}|${channelId}|${messageId}`;
 
 module.exports = {
+  model: Model,
+
   getTicketConfig: async (guildId, channelId, messageId) =>
     Model.findOne({
       guild_id: guildId,

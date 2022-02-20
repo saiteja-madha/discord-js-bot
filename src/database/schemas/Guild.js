@@ -120,6 +120,8 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("guild", Schema);
 
 module.exports = {
+  model: Model,
+
   getSettings: async (guild) => {
     if (cache.contains(guild.id)) return cache.get(guild.id);
 
