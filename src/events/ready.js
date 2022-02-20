@@ -14,6 +14,10 @@ module.exports = async (client) => {
   client.logger.log("Initializing music manager");
   client.musicManager.init(client.user.id);
 
+  // Initialize Giveaways Manager
+  client.logger.log("Initializing giveaways manager");
+  client.giveawaysManager._init();
+
   // Update Bot Presence
   if (PRESENCE.ENABLED) {
     updatePresence(client);

@@ -5,14 +5,18 @@ const { EMBED_COLORS } = require("@root/config");
 // Explanation at: https://github.com/Androz2091/discord-giveaways/blob/master/examples/custom-databases/mongoose.js
 module.exports = class extends GiveawaysManager {
   constructor(client) {
-    super(client, {
-      default: {
-        botsCanWin: false,
-        embedColor: EMBED_COLORS.GIVEAWAYS,
-        embedColorEnd: EMBED_COLORS.GIVEAWAYS,
-        reaction: "🎁",
+    super(
+      client,
+      {
+        default: {
+          botsCanWin: false,
+          embedColor: EMBED_COLORS.GIVEAWAYS,
+          embedColorEnd: EMBED_COLORS.GIVEAWAYS,
+          reaction: "🎁",
+        },
       },
-    });
+      false
+    );
   }
 
   async getAllGiveaways() {
