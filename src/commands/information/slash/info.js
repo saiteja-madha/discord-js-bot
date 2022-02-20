@@ -1,11 +1,11 @@
 const { Command } = require("@src/structures");
 const { CommandInteraction } = require("discord.js");
-const user = require("./shared/user");
-const channelInfo = require("./shared/channel");
-const guildInfo = require("./shared/guild");
-const avatar = require("./shared/avatar");
-const emojiInfo = require("./shared/emoji");
-const botInfo = require("./shared/botstats");
+const user = require("../shared/user");
+const channelInfo = require("../shared/channel");
+const guildInfo = require("../shared/guild");
+const avatar = require("../shared/avatar");
+const emojiInfo = require("../shared/emoji");
+const botInfo = require("../shared/botstats");
 
 module.exports = class InfoCommand extends Command {
   constructor(client) {

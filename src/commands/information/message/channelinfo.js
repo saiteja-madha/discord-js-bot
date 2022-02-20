@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const channelInfo = require("./shared/channel");
+const channelInfo = require("../shared/channel");
 
 module.exports = class ChannelInfo extends Command {
   constructor(client) {

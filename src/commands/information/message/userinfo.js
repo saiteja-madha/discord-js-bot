@@ -1,18 +1,18 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const botstats = require("./shared/botstats");
+const userInfo = require("../shared/user");
 
-module.exports = class BotStats extends Command {
+module.exports = class UserInfo extends Command {
   constructor(client) {
     super(client, {
-      name: "botstats",
-      description: "shows bot information",
+      name: "userinfo",
+      description: "shows information about the user",
       category: "INFORMATION",
       botPermissions: ["EMBED_LINKS"],
-      cooldown: 5,
       command: {
         enabled: true,
-        aliases: ["botstat", "botinfo"],
+        usage: "[@member|id]",
+        aliases: ["uinfo", "memberinfo"],
       },
       slashCommand: {
         enabled: false,
@@ -25,7 +25,8 @@ module.exports = class BotStats extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = botstats(message.client);
+    const target = (await message.guild.resolveMember(args[0])) || message.member;
+    const response = userInfo(target);
     await message.reply(response);
   }
 };

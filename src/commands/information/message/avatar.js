@@ -1,18 +1,17 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const emojiInfo = require("./shared/emoji");
+const avatarInfo = require("../shared/avatar");
 
-module.exports = class EmojiInfo extends Command {
+module.exports = class UserInfo extends Command {
   constructor(client) {
     super(client, {
-      name: "emojiinfo",
-      description: "shows info about an emoji",
+      name: "avatar",
+      description: "shows a users avatar information",
       category: "INFORMATION",
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
-        usage: "<emoji>",
-        minArgsCount: 1,
+        usage: "[@member|id]",
       },
       slashCommand: {
         enabled: false,
@@ -25,8 +24,8 @@ module.exports = class EmojiInfo extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const emoji = args[0];
-    const response = emojiInfo(emoji);
+    const target = (await message.guild.resolveMember(args[0])) || message.member;
+    const response = avatarInfo(target.user);
     await message.reply(response);
   }
 };
