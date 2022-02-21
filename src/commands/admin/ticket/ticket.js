@@ -3,7 +3,6 @@ const { Command } = require("@src/structures");
 const { EMBED_COLORS } = require("@root/config.js");
 
 // Schemas
-const { getSettings } = require("@schemas/Guild");
 const { createNewTicket } = require("@schemas/Message");
 
 // Utils
@@ -162,8 +161,9 @@ module.exports = class Ticket extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     let response;
 
@@ -180,7 +180,7 @@ module.exports = class Ticket extends Command {
       if (args.length < 2) return message.reply("Please provide a channel where ticket logs must be sent");
       const target = message.guild.findMatchingChannels(args[1]);
       if (target.length === 0) return message.reply("Could not find any matching channel");
-      response = await setupLogChannel(message, target[0]);
+      response = await setupLogChannel(target[0], data.settings);
     }
 
     // Set limit
@@ -188,7 +188,7 @@ module.exports = class Ticket extends Command {
       if (args.length < 2) return message.reply("Please provide a number");
       const limit = args[1];
       if (isNaN(limit)) return message.reply("Please provide a number input");
-      response = await setupLimit(message, limit);
+      response = await setupLimit(message, limit, data.settings);
     }
 
     // Close ticket
@@ -234,8 +234,9 @@ module.exports = class Ticket extends Command {
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     let response;
 
@@ -265,13 +266,13 @@ module.exports = class Ticket extends Command {
     // Log channel
     else if (sub === "log") {
       const channel = interaction.options.getChannel("channel");
-      response = await setupLogChannel(interaction, channel);
+      response = await setupLogChannel(channel, data.settings);
     }
 
     // Limit
     else if (sub === "limit") {
       const limit = interaction.options.getInteger("amount");
-      response = await setupLimit(interaction, limit);
+      response = await setupLimit(interaction, limit, data.settings);
     }
 
     // Close
@@ -391,20 +392,18 @@ async function setupTicket(guild, channel, title, role, color) {
   }
 }
 
-async function setupLogChannel({ guild }, target) {
+async function setupLogChannel(target, settings) {
   if (!canSendEmbeds(target)) return `Oops! I do have have permission to send embed to ${target}`;
 
-  const settings = await getSettings(guild);
   settings.ticket.log_channel = target.id;
   await settings.save();
 
   return `Configuration saved! Ticket logs will be sent to ${target.toString()}`;
 }
 
-async function setupLimit({ guild }, limit) {
+async function setupLimit(limit, settings) {
   if (Number.parseInt(limit, 10) < 5) return "Ticket limit cannot be less than 5";
 
-  const settings = await getSettings(guild);
   settings.ticket.limit = limit;
   await settings.save();
 

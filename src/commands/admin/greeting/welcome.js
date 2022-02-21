@@ -3,7 +3,6 @@ const { isHex } = require("@utils/miscUtils");
 const { buildGreeting } = require("@src/handlers/greeting");
 const { Message, CommandInteraction } = require("discord.js");
 const { canSendEmbeds } = require("@utils/botUtils");
-const { getSettings } = require("@schemas/Guild");
 
 module.exports = class Welcome extends Command {
   constructor(client) {
@@ -162,10 +161,11 @@ module.exports = class Welcome extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const type = args[0].toLowerCase();
-    const settings = await getSettings(message.guild);
+    const settings = data.settings;
     let response;
 
     // preview
@@ -220,10 +220,11 @@ module.exports = class Welcome extends Command {
   /**
    *
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
-    const settings = await getSettings(interaction.guild);
+    const settings = data.settings;
 
     let response;
     switch (sub) {

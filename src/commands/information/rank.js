@@ -2,7 +2,6 @@ const { Command } = require("@src/structures");
 const { Message, MessageAttachment, CommandInteraction } = require("discord.js");
 const { EMBED_COLORS, IMAGE } = require("@root/config");
 const { getBuffer } = require("@utils/httpUtils");
-const { getSettings } = require("@schemas/Guild");
 const { getMember, getXpLb } = require("@schemas/Member");
 
 module.exports = class Rank extends Command {
@@ -34,28 +33,28 @@ module.exports = class Rank extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const member = (await message.guild.resolveMember(args[0])) || message.member;
-    const response = await getRank(message, member);
+    const response = await getRank(message, member, data.settings);
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const user = interaction.options.getUser("user") || interaction.user;
     const member = await interaction.guild.members.fetch(user);
-    const response = await getRank(interaction, member);
+    const response = await getRank(interaction, member, data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function getRank({ guild }, member) {
+async function getRank({ guild }, member, settings) {
   const { user } = member;
-
-  const settings = await getSettings(guild);
   if (!settings.ranking.enabled) return "Ranking is disabled on this server";
 
   const memberDb = await getMember(guild.id, user.id);

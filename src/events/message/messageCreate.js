@@ -21,10 +21,12 @@ module.exports = async (client, message) => {
     const invoke = args.shift().toLowerCase();
     const cmd = client.getCommand(invoke);
 
+    const data = { prefix, invoke, settings };
+
     // command is found
     if (cmd) {
       isCommand = true;
-      cmd.executeCommand(message, args, invoke, prefix);
+      cmd.executeCommand(message, args, data);
     }
   }
 

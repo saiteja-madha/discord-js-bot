@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { getSettings } = require("@schemas/Guild");
 const { Message, CommandInteraction } = require("discord.js");
 
 module.exports = class SetPrefix extends Command {
@@ -32,25 +31,26 @@ module.exports = class SetPrefix extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const newPrefix = args[0];
-    const response = await setNewPrefix(message.guild, newPrefix);
+    const response = await setNewPrefix(newPrefix, data.settings);
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
-    const response = await setNewPrefix(interaction.guild, interaction.options.getString("newprefix"));
+  async interactionRun(interaction, data) {
+    const response = await setNewPrefix(interaction.options.getString("newprefix"), data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function setNewPrefix(guild, newPrefix) {
+async function setNewPrefix(newPrefix, settings) {
   if (newPrefix.length > 2) return "Prefix length cannot exceed `2` characters";
-  const settings = await getSettings(guild);
   settings.prefix = newPrefix;
   await settings.save();
 

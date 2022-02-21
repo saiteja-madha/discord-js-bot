@@ -41,10 +41,9 @@ module.exports = class HelpCommand extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
-   * @param {string} invoke
-   * @param {string} prefix
+   * @param {object} data
    */
-  async messageRun(message, args, invoke, prefix) {
+  async messageRun(message, args, data) {
     let trigger = args[0];
 
     // !help
@@ -54,12 +53,12 @@ module.exports = class HelpCommand extends Command {
       }
       const response = await getHelpMenu(message);
       const sentMsg = await message.reply(response);
-      return waiter(sentMsg, message.author.id, prefix);
+      return waiter(sentMsg, message.author.id, data.prefix);
     }
 
     // check if command help (!help cat)
     const cmd = this.client.getCommand(trigger);
-    if (cmd) return cmd.sendUsage(message.channel, prefix, trigger);
+    if (cmd) return cmd.sendUsage(message.channel, data.prefix, trigger);
 
     // No matching command/category found
     await message.reply("No matching command found");

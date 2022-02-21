@@ -1,6 +1,5 @@
 const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
-const { getSettings } = require("@schemas/Guild");
 const { EMBED_COLORS } = require("@root/config");
 
 module.exports = class InviteRanks extends Command {
@@ -22,24 +21,24 @@ module.exports = class InviteRanks extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
-    const response = await getInviteRanks(message);
+  async messageRun(message, args, data) {
+    const response = await getInviteRanks(message, data.settings);
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
-    const response = await getInviteRanks(interaction);
+  async interactionRun(interaction, data) {
+    const response = await getInviteRanks(interaction, data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function getInviteRanks({ guild }) {
-  const settings = await getSettings(guild);
-
+async function getInviteRanks({ guild }, settings) {
   if (settings.invite.ranks.length === 0) return "No invite ranks configured in this server";
   let str = "";
 

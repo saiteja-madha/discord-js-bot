@@ -1,6 +1,5 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
-const { getSettings } = require("@schemas/Guild");
 
 module.exports = class FlagTranslation extends Command {
   constructor(client) {
@@ -43,28 +42,29 @@ module.exports = class FlagTranslation extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const status = args[0].toLowerCase();
     if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
 
-    const response = await setFlagTranslation(message.guild, status);
+    const response = await setFlagTranslation(status, data.settings);
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
-    const response = await setFlagTranslation(interaction.guild, interaction.options.getString("status"));
+  async interactionRun(interaction, data) {
+    const response = await setFlagTranslation(interaction.options.getString("status"), data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function setFlagTranslation(guild, input) {
+async function setFlagTranslation(input, settings) {
   const status = input.toLowerCase() === "on" ? true : false;
 
-  const settings = await getSettings(guild);
   settings.flag_translation.enabled = status;
   await settings.save();
 

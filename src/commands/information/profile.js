@@ -1,6 +1,5 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction, MessageEmbed } = require("discord.js");
-const { getSettings } = require("@schemas/Guild");
 const { getUser } = require("@schemas/User");
 const { getMember } = require("@schemas/Member");
 const { EMBED_COLORS, ECONOMY } = require("@root/config");
@@ -33,25 +32,26 @@ module.exports = class Profile extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const target = (await message.guild.resolveMember(args[0])) || message.member;
-    const response = await profile(message, target.user);
+    const response = await profile(message, target.user, data.settings);
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const user = interaction.options.getUser("user") || interaction.user;
-    const response = await profile(interaction, user);
+    const response = await profile(interaction, user, data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function profile({ guild }, user) {
-  const settings = await getSettings(guild);
+async function profile({ guild }, user, settings) {
   const memberData = await getMember(guild.id, user.id);
   const userData = await getUser(user.id);
 

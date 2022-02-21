@@ -74,11 +74,11 @@ module.exports = class Generator extends Command {
    * @param {Message} message
    * @param {string[]} args
    */
-  async messageRun(message, args, invoke) {
+  async messageRun(message, args, data) {
     const image = await getImageFromCommand(message, args);
 
     // use invoke as an endpoint
-    const url = getGenerator(invoke.toLowerCase(), image);
+    const url = getGenerator(data.invoke.toLowerCase(), image);
     const response = await getBuffer(url);
 
     if (!response.success) return message.reply("Failed to generate image");

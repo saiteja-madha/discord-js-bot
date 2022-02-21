@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { getSettings } = require("@schemas/Guild");
 const { Message, CommandInteraction } = require("discord.js");
 
 module.exports = class AutoRole extends Command {
@@ -50,17 +49,18 @@ module.exports = class AutoRole extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args.join(" ");
     let response;
 
     if (input.toLowerCase() === "off") {
-      response = await setAutoRole(message, null);
+      response = await setAutoRole(message, null, data.settings);
     } else {
       const roles = message.guild.findMatchingRoles(input);
       if (roles.length === 0) response = "No matching roles found matching your query";
-      else response = await setAutoRole(message, roles[0]);
+      else response = await setAutoRole(message, roles[0], data.settings);
     }
 
     await message.reply(response);
@@ -68,8 +68,9 @@ module.exports = class AutoRole extends Command {
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     let response;
 
@@ -85,12 +86,12 @@ module.exports = class AutoRole extends Command {
         role = roles[0];
       }
 
-      response = await setAutoRole(interaction, role);
+      response = await setAutoRole(interaction, role, data.settings);
     }
 
     // remove
     else if (sub === "remove") {
-      response = await setAutoRole(interaction, null);
+      response = await setAutoRole(interaction, null, data.settings);
     }
 
     // default
@@ -100,9 +101,7 @@ module.exports = class AutoRole extends Command {
   }
 };
 
-async function setAutoRole({ guild }, role) {
-  const settings = await getSettings(guild);
-
+async function setAutoRole({ guild }, role, settings) {
   if (role) {
     if (!guild.me.permissions.has("MANAGE_ROLES")) return "I don't have the `MANAGE_ROLES` permission";
     if (guild.me.roles.highest.position < role.position) return "I don't have the permissions to assign this role";
