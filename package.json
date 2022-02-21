@@ -30,7 +30,7 @@
     "erela.js": "^2.3.3",
     "erela.js-deezer": "^1.0.7",
     "erela.js-facebook": "^1.0.4",
-    "erela.js-spotify": "github:MenuDocs/erela.js-spotify",
+    "erela.js-spotify": "github:MenuDocs/erela.js-spotify#build",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "fixedsize-map": "^1.0.1",
