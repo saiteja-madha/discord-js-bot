@@ -159,6 +159,7 @@ async function search({ member, guild, channel }, user, query) {
       });
 
       collector.on("collect", async (response) => {
+        if (response.customId !== "search-results") return;
         const toAdd = [];
         response.values.forEach((v) => toAdd.push(results[v]));
 

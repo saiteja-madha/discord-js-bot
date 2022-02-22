@@ -56,13 +56,13 @@ module.exports = class MemeCommand extends Command {
 
     collector.on("collect", async (response) => {
       if (response.customId !== "regenMemeBtn") return;
+      await response.deferUpdate();
+
       const embed = await getRandomEmbed(choice);
       await sentMsg.edit({
         embeds: [embed],
         components: [buttonRow],
       });
-
-      await response.deferUpdate();
     });
 
     collector.on("end", () => {
@@ -98,13 +98,13 @@ module.exports = class MemeCommand extends Command {
 
     collector.on("collect", async (response) => {
       if (response.customId !== "regenMemeBtn") return;
+      await response.deferUpdate();
+
       const embed = await getRandomEmbed(choice);
       await interaction.editReply({
         embeds: [embed],
         components: [buttonRow],
       });
-
-      await response.deferUpdate();
     });
 
     collector.on("end", () => {

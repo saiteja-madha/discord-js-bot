@@ -162,6 +162,7 @@ const waiter = (msg, userId, prefix) => {
   let buttonsRow = msg.components[1];
 
   collector.on("collect", async (response) => {
+    if (!["help-menu", "previousBtn", "nextBtn"].includes(response.customId)) return;
     await response.deferUpdate();
 
     switch (response.customId) {
