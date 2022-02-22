@@ -214,6 +214,8 @@ module.exports = class Welcome extends Command {
       response = await setFooter(settings, content);
     }
 
+    //
+    else response = "Invalid command usage!";
     return message.reply(response);
   }
 

@@ -144,6 +144,8 @@ module.exports = class AutomodConfigCommand extends Command {
       response = await setDebug(settings, status);
     }
 
+    //
+    else response = "Invalid command usage!";
     await message.reply(response);
   }
 

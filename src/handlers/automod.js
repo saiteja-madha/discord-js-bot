@@ -129,7 +129,7 @@ async function performAutomod(message, settings) {
         iconURL: author.avatarURL(),
       });
 
-    logChannel.safeSend({ embeds: [embed] });
+    if (logChannel) logChannel.safeSend({ embeds: [embed] });
 
     // DM strike details
     const strikeEmbed = new MessageEmbed()
