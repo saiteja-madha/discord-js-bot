@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { getEffectiveInvites } = require("@src/handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
-const outdent = require("outdent");
+const { stripIndent } = require("common-tags");
 const { getMember } = require("@schemas/Member");
 
 module.exports = class InviterCommand extends Command {
@@ -65,7 +65,7 @@ async function getInviter({ guild }, user, settings) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: `Invite data for ${user.username}` })
     .setDescription(
-      outdent`
+      stripIndent`
       Inviter: \`${inviter?.tag || "Deleted User"}\`
       Inviter ID: \`${inviteData.inviter}\`
       Invite Code: \`${inviteData.code}\`
