@@ -64,6 +64,11 @@ module.exports = {
     image: "https://icons.iconarchive.com/icons/dryicons/aesthetica-2/128/community-users-icon.png",
     emoji: "🫂",
   },
+  SUGGESTION: {
+    name: "Suggestion",
+    image: "https://cdn-icons-png.flaticon.com/512/1484/1484815.png",
+    emoji: "📝",
+  },
   TICKET: {
     name: "Ticket",
     image: "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/512/ticket-icon.png",

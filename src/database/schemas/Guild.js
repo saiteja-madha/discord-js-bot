@@ -115,6 +115,9 @@ const Schema = mongoose.Schema({
     },
   },
   autorole: String,
+  suggestions: {
+    channel_id: String,
+  },
 });
 
 const Model = mongoose.model("guild", Schema);
