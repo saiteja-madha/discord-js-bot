@@ -187,28 +187,28 @@ module.exports = class Farewell extends Command {
     }
 
     // desc
-    if (type === "desc") {
+    else if (type === "desc") {
       if (args.length < 2) return message.reply("Insufficient arguments! Please provide valid content");
       const desc = args.slice(1).join(" ");
       response = await setDescription(settings, desc);
     }
 
     // thumbnail
-    if (type === "thumbnail") {
+    else if (type === "thumbnail") {
       const status = args[1]?.toUpperCase();
       if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
       response = await setThumbnail(settings, status);
     }
 
     // color
-    if (type === "color") {
+    else if (type === "color") {
       const color = args[1];
       if (!color || !isHex(color)) return message.reply("Invalid color. Value must be a valid hex color");
       response = await setColor(settings, color);
     }
 
     // footer
-    if (type === "footer") {
+    else if (type === "footer") {
       if (args.length < 2) return message.reply("Insufficient arguments! Please provide valid content");
       const content = args.slice(1).join(" ");
       response = await setFooter(settings, content);
