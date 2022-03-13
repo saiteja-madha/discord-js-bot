@@ -39,7 +39,6 @@ module.exports = class Eval extends Command {
     const input = args.join(" ");
 
     if (!input) return message.reply("Please provide code to eval");
-    if (input.toLowerCase().includes("token")) return message.reply("Don't try to hack me!");
 
     let response;
     try {
