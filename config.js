@@ -33,6 +33,16 @@ module.exports = {
     MIN_BEG_AMOUNT: 100, // minimum coins to be received when beg command is used
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
+  SUGGESTIONS: {
+    ENABLED: true, // Should the suggestion system be enabled
+    EMOJI: {
+      UP_VOTE: "⬆️",
+      DOWN_VOTE: "⬇️",
+    },
+    DEFAULT_EMBED: "#0099ff",
+    APPROVED_EMBED: "#00ff00",
+    DENIED_EMBED: "#ff0000",
+  },
   IMAGE: {
     BASE_API: "https://image-api.strangebot.xyz",
   },

@@ -23,16 +23,16 @@ module.exports = {
     // validate permissions
     if (!member.permissions.has("MANAGE_GUILD")) return "You don't have permission to approve suggestions!";
 
-    // validate document
-    const doc = await findSuggestion(guild.id, messageId);
-    if (!doc) return "Suggestion not found";
-    if (doc.status === "APPROVED") return "Suggestion already approved";
-
     // validate channel
     const settings = await getSettings(guild);
     if (!settings.suggestions.channel_id) return "Suggestions channel not set";
     const suggestionsChannel = guild.channels.cache.get(settings.suggestions.channel_id);
     if (!suggestionsChannel) return "Suggestions channel not found";
+
+    // validate document
+    const doc = await findSuggestion(guild.id, messageId);
+    if (!doc) return "Suggestion not found";
+    if (doc.status === "APPROVED") return "Suggestion already approved";
 
     let message;
     try {
