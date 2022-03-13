@@ -2,12 +2,15 @@ const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { Command } = require("@src/structures");
 const { EMBED_COLORS } = require("@root/config");
 
+// This dummy token will be replaced by the actual token
+const DUMMY_TOKEN = "MY_TOKEN_IS_SECRET";
+
 module.exports = class Eval extends Command {
   constructor(client) {
     super(client, {
       name: "eval",
       description: "evaluates something",
-      category: "OWNER",
+      // category: "OWNER",
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
@@ -41,7 +44,7 @@ module.exports = class Eval extends Command {
     let response;
     try {
       const output = eval(input);
-      response = buildSuccessResponse(output);
+      response = buildSuccessResponse(output, message.client);
     } catch (ex) {
       response = buildErrorResponse(ex);
     }
@@ -58,7 +61,7 @@ module.exports = class Eval extends Command {
     let response;
     try {
       const output = eval(input);
-      response = buildSuccessResponse(output);
+      response = buildSuccessResponse(output, interaction.client);
     } catch (ex) {
       response = buildErrorResponse(ex);
     }
@@ -66,11 +69,13 @@ module.exports = class Eval extends Command {
   }
 };
 
-const buildSuccessResponse = (output) => {
-  const embed = new MessageEmbed();
-  if (typeof output !== "string") output = require("util").inspect(output, { depth: 0 });
+const buildSuccessResponse = (output, client) => {
+  // Token protection
+  if (typeof output === "string") output.replaceAll(client.token, DUMMY_TOKEN);
+  if (typeof output !== "string")
+    output = require("util").inspect(output, { depth: 0 }).replaceAll(client.token, DUMMY_TOKEN);
 
-  embed
+  const embed = new MessageEmbed()
     .setAuthor({ name: "📤 Output" })
     .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
     .setColor("RANDOM")
