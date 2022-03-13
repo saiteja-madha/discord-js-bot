@@ -105,10 +105,14 @@ async function getInviteLeaderboard({ guild }, author, settings) {
   let collector = "";
   for (let i = 0; i < lb.length; i++) {
     try {
-      const user = await author.client.users.fetch(lb[i].member_id);
-      collector += `**#${(i + 1).toString()}** - ${user.tag} [${lb[i].invites}]\n`;
+      const memberId = lb[i].member_id;
+      if (memberId === "VANITY") collector += `**#${(i + 1).toString()}** - Vanity URL [${lb[i].invites}]\n`;
+      else {
+        const user = await author.client.users.fetch(lb[i].member_id);
+        collector += `**#${(i + 1).toString()}** - ${user.tag} [${lb[i].invites}]\n`;
+      }
     } catch (ex) {
-      // Ignore
+      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].invites}]\n`;
     }
   }
 
