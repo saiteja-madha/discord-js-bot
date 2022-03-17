@@ -175,7 +175,7 @@ module.exports = class Welcome extends Command {
     }
 
     // status
-    if (type === "status") {
+    else if (type === "status") {
       const status = args[1]?.toUpperCase();
       if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
       response = await setStatus(settings, status);

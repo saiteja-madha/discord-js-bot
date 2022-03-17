@@ -55,7 +55,6 @@ module.exports = class Eval extends Command {
    */
   async interactionRun(interaction) {
     const input = interaction.options.getString("expression");
-    if (input.toLowerCase().includes("token")) return interaction.followUp("Don't try to hack me!");
 
     let response;
     try {
@@ -70,9 +69,7 @@ module.exports = class Eval extends Command {
 
 const buildSuccessResponse = (output, client) => {
   // Token protection
-  if (typeof output === "string") output.replaceAll(client.token, DUMMY_TOKEN);
-  if (typeof output !== "string")
-    output = require("util").inspect(output, { depth: 0 }).replaceAll(client.token, DUMMY_TOKEN);
+  output = require("util").inspect(output, { depth: 0 }).replaceAll(client.token, DUMMY_TOKEN);
 
   const embed = new MessageEmbed()
     .setAuthor({ name: "📤 Output" })
