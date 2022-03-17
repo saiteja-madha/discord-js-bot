@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
+const { findMatchingRoles } = require("@utils/guildUtils");
 
 module.exports = class AutoRole extends Command {
   constructor(client) {
@@ -58,7 +59,7 @@ module.exports = class AutoRole extends Command {
     if (input.toLowerCase() === "off") {
       response = await setAutoRole(message, null, data.settings);
     } else {
-      const roles = message.guild.findMatchingRoles(input);
+      const roles = findMatchingRoles(message.guild, input);
       if (roles.length === 0) response = "No matching roles found matching your query";
       else response = await setAutoRole(message, roles[0], data.settings);
     }
@@ -81,7 +82,7 @@ module.exports = class AutoRole extends Command {
         const role_id = interaction.options.getString("role_id");
         if (!role_id) return interaction.followUp("Please provide a role or role id");
 
-        const roles = interaction.guild.findMatchingRoles(role_id);
+        const roles = findMatchingRoles(interaction.guild, role_id);
         if (roles.length === 0) return interaction.followUp("No matching roles found matching your query");
         role = roles[0];
       }

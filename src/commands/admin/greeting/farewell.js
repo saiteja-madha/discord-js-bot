@@ -2,7 +2,8 @@ const { Command } = require("@src/structures");
 const { isHex } = require("@utils/miscUtils");
 const { buildGreeting } = require("@src/handlers/greeting");
 const { Message, CommandInteraction } = require("discord.js");
-const { canSendEmbeds } = require("@utils/botUtils");
+const { canSendEmbeds } = require("@utils/guildUtils");
+const { sendMessage } = require("@utils/botUtils");
 
 module.exports = class Farewell extends Command {
   constructor(client) {
@@ -273,7 +274,7 @@ async function sendPreview(settings, member) {
   if (!targetChannel) return "No channel is configured to send farewell message";
 
   const response = await buildGreeting(member, "FAREWELL", settings.farewell);
-  await targetChannel.safeSend(response);
+  await sendMessage(targetChannel, response);
 
   return `Sent farewell preview to ${targetChannel.toString()}`;
 }

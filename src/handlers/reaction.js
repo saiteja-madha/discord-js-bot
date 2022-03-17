@@ -3,6 +3,7 @@ const { getReactionRoles } = require("@schemas/Message");
 const { isTranslated, logTranslation } = require("@schemas/TranslateLog");
 const data = require("@src/data.json");
 const { getCountryLanguages } = require("country-language");
+const { sendMessage } = require("@utils/botUtils");
 const { translate } = require("@utils/httpUtils");
 const { timeformat } = require("@utils/miscUtils");
 
@@ -44,7 +45,7 @@ async function handleFlagReaction(countryCode, message, user) {
   // cooldown check
   const remaining = getTranslationCooldown(user);
   if (remaining > 0) {
-    return message.channel.safeSend(`${user} You must wait ${timeformat(remaining)} before translating again!`, 5);
+    return sendMessage(message.channel, `${user} You must wait ${timeformat(remaining)} before translating again!`, 5);
   }
 
   if (await isTranslated(message, countryCode)) return;
@@ -94,7 +95,7 @@ async function handleFlagReaction(countryCode, message, user) {
         iconURL: user.displayAvatarURL(),
       });
 
-    message.channel.safeSend({ embeds: [embed], components: [btnRow] }).then(
+    sendMessage(message.channel, { embeds: [embed], components: [btnRow] }).then(
       () => user.client.flagTranslateCache.set(user.id, Date.now()) // set cooldown
     );
 

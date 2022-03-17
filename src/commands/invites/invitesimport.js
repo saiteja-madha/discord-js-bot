@@ -1,6 +1,7 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { getMember } = require("@schemas/Member");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class InvitesImportCommand extends Command {
   constructor(client) {
@@ -33,7 +34,7 @@ module.exports = class InvitesImportCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
+    const target = args.length > 0 && (await resolveMember(message, args[0]));
     const response = await importInvites(message, target?.user);
     await message.reply(response);
   }

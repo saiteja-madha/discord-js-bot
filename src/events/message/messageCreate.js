@@ -1,5 +1,6 @@
 const { automodHandler, xpHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
+const { sendMessage } = require("@utils/botUtils");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -12,7 +13,7 @@ module.exports = async (client, message) => {
 
   // check for bot mentions
   if (message.content.includes(`${client.user.id}`)) {
-    message.channel.safeSend(`My prefix is \`${settings.prefix}\``);
+    sendMessage(message.channel, `My prefix is \`${settings.prefix}\``);
   }
 
   let isCommand = false;

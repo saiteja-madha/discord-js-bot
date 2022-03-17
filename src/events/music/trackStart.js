@@ -1,5 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const prettyMs = require("pretty-ms");
+const { sendMessage } = require("@utils/botUtils");
 
 /**
  * Emitted when a track starts.
@@ -20,5 +21,5 @@ module.exports = (client, player, track, payload) => {
 
   if (typeof track.displayThumbnail === "function") embed.setThumbnail(track.displayThumbnail("hqdefault"));
   if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
-  channel.safeSend({ embeds: [embed] });
+  sendMessage(channel, { embeds: [embed] });
 };

@@ -2,6 +2,7 @@ const { Command } = require("@src/structures");
 const { Message, MessageAttachment, CommandInteraction } = require("discord.js");
 const { EMBED_COLORS, IMAGE } = require("@root/config");
 const { getBuffer } = require("@utils/httpUtils");
+const { resolveMember } = require("@utils/guildUtils");
 const { getMember, getXpLb } = require("@schemas/Member");
 
 module.exports = class Rank extends Command {
@@ -36,7 +37,7 @@ module.exports = class Rank extends Command {
    * @param {object} data
    */
   async messageRun(message, args, data) {
-    const member = (await message.guild.resolveMember(args[0])) || message.member;
+    const member = (await resolveMember(message, args[0])) || message.member;
     const response = await getRank(message, member, data.settings);
     await message.reply(response);
   }

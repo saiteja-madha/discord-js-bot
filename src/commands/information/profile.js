@@ -3,6 +3,7 @@ const { Message, CommandInteraction, MessageEmbed } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { getMember } = require("@schemas/Member");
 const { EMBED_COLORS, ECONOMY } = require("@root/config");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class Profile extends Command {
   constructor(client) {
@@ -35,7 +36,7 @@ module.exports = class Profile extends Command {
    * @param {object} data
    */
   async messageRun(message, args, data) {
-    const target = (await message.guild.resolveMember(args[0])) || message.member;
+    const target = (await resolveMember(message, args[0])) || message.member;
     const response = await profile(message, target.user, data.settings);
     await message.reply(response);
   }

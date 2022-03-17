@@ -3,6 +3,7 @@ const { getEffectiveInvites } = require("@src/handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { stripIndent } = require("common-tags");
+const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
 
 module.exports = class InviterCommand extends Command {
@@ -36,7 +37,7 @@ module.exports = class InviterCommand extends Command {
    * @param {object} data
    */
   async messageRun(message, args, data) {
-    const target = (await message.guild.resolveMember(args[0])) || message.member;
+    const target = (await resolveMember(message, args[0])) || message.member;
     const response = await getInviter(message, target.user, data.settings);
     await message.reply(response);
   }

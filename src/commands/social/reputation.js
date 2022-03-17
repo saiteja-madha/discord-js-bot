@@ -1,4 +1,5 @@
 const { Command } = require("@src/structures");
+const { resolveMember } = require("@utils/guildUtils");
 const { getUser } = require("@schemas/User");
 const { MessageEmbed, Message } = require("discord.js");
 const { diffHours, getRemainingTime } = require("@utils/miscUtils");
@@ -72,7 +73,7 @@ module.exports = class Reputation extends Command {
     if (sub === "view") {
       let target = message.author;
       if (args.length > 1) {
-        const resolved = (await message.guild.resolveMember(args[1])) || message.member;
+        const resolved = (await resolveMember(message, args[1])) || message.member;
         if (resolved) target = resolved.user;
       }
       response = await viewReputation(target);
@@ -80,7 +81,7 @@ module.exports = class Reputation extends Command {
 
     // give
     else if (sub === "give") {
-      const target = await message.guild.resolveMember(args[1], true);
+      const target = await resolveMember(message, args[1]);
       if (!target) return message.reply("Please provide a valid user to give reputation to");
       response = await giveReputation(message.author, target.user);
     }

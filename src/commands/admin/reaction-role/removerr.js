@@ -2,6 +2,7 @@ const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { removeReactionRole } = require("@schemas/Message");
 const { parsePermissions } = require("@utils/botUtils");
+const { getMatchingChannel } = require("@utils/guildUtils");
 
 const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
 
@@ -44,7 +45,7 @@ module.exports = class RemoveReactionRole extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const targetChannel = message.guild.findMatchingChannels(args[0]);
+    const targetChannel = getMatchingChannel(message.guild, args[0]);
     if (targetChannel.length === 0) return message.reply(`No channels found matching ${args[0]}`);
 
     const targetMessage = args[1];

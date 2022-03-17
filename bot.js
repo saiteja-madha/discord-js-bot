@@ -1,6 +1,5 @@
 require("dotenv").config();
 require("module-alias/register");
-require("@src/helpers/extenders");
 
 const path = require("path");
 const { validateConfig, checkForUpdates } = require("@utils/botUtils");

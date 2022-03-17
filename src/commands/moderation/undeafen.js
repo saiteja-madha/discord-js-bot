@@ -1,5 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
+const { resolveMember } = require("@utils/guildUtils");
 const undeafen = require("./shared/undeafen");
 
 module.exports = class UnDeafenCommand extends Command {
@@ -26,7 +27,7 @@ module.exports = class UnDeafenCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
+    const target = await resolveMember(message, args[0], true);
     if (!target) return message.reply(`No user found matching ${args[0]}`);
     const reason = message.content.split(args[0])[1].trim();
     const response = await undeafen(message, target, reason);

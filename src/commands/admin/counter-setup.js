@@ -1,5 +1,6 @@
 const { Message, CommandInteraction } = require("discord.js");
 const { Command } = require("@src/structures");
+const { getMemberStats } = require("@utils/guildUtils");
 
 module.exports = class CounterSetup extends Command {
   constructor(client) {
@@ -83,7 +84,7 @@ module.exports = class CounterSetup extends Command {
 async function setupCounter(guild, type, name, settings) {
   let channelName = name;
 
-  const stats = await guild.fetchMemberStats();
+  const stats = await getMemberStats(guild);
   if (type === "USERS") channelName += ` : ${stats[0]}`;
   else if (type === "MEMBERS") channelName += ` : ${stats[2]}`;
   else if (type === "BOTS") channelName += ` : ${stats[1]}`;

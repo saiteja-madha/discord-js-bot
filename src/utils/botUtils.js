@@ -59,6 +59,42 @@ function validateConfig() {
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 
+/**
+ * @param {import('discord.js').TextBasedChannels} channel
+ * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} content
+ * @param {number} [seconds]
+ */
+async function sendMessage(channel, content, seconds) {
+  if (!channel || !content) return;
+  const perms = ["VIEW_CHANNEL", "SEND_MESSAGES"];
+  if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
+  if (channel.type !== "DM" && !channel.permissionsFor(channel.guild.me).has(perms)) return;
+  try {
+    if (!seconds) return await channel.send(content);
+    const reply = await channel.send(content);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
+  } catch (ex) {
+    error(`sendMessage`, ex);
+  }
+}
+
+/**
+ * @param {import('discord.js').User} user
+ * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} message
+ * @param {number} [seconds]
+ */
+async function safeDM(user, message, seconds) {
+  if (!user || !message) return;
+  try {
+    const dm = await user.createDM();
+    if (!seconds) return await dm.send(message);
+    const reply = await dm.send(message);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
+  } catch (ex) {
+    /** Ignore */
+  }
+}
+
 const permissions = {
   CREATE_INSTANT_INVITE: "Create instant invite",
   KICK_MEMBERS: "Kick members",
@@ -126,15 +162,12 @@ const musicValidations = [
   },
 ];
 
-function canSendEmbeds(channel) {
-  return channel.permissionsFor(channel.guild.me).has(["SEND_MESSAGES", "EMBED_LINKS"]);
-}
-
 module.exports = {
   permissions,
   parsePermissions,
   validateConfig,
   checkForUpdates,
+  sendMessage,
+  safeDM,
   musicValidations,
-  canSendEmbeds,
 };

@@ -1,6 +1,7 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { memberInteract } = require("@utils/modUtils");
+const { resolveMember } = require("@utils/guildUtils");
 
 module.exports = class NickCommand extends Command {
   constructor(client) {
@@ -72,7 +73,7 @@ module.exports = class NickCommand extends Command {
     const sub = args[0].toLowerCase();
 
     if (sub === "set") {
-      const target = await message.guild.resolveMember(args[1], true);
+      const target = await resolveMember(message, args[1]);
       if (!target) return message.reply("Could not find matching member");
       const name = args.slice(2).join(" ");
       if (!name) return message.reply("Please specify a nickname");
@@ -83,7 +84,7 @@ module.exports = class NickCommand extends Command {
 
     //
     else if (sub === "reset") {
-      const target = await message.guild.resolveMember(args[1], true);
+      const target = await resolveMember(message, args[1]);
       if (!target) return message.reply("Could not find matching member");
 
       const response = await nickname(message, target);

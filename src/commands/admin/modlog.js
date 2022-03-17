@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
-const { canSendEmbeds } = require("@utils/botUtils");
+const { canSendEmbeds } = require("@utils/guildUtils");
 
 module.exports = class ModLog extends Command {
   constructor(client) {

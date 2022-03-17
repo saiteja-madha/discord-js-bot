@@ -2,6 +2,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
 const { EMBED_COLORS } = require("@root/config.js");
 const { getSettings } = require("@schemas/Guild");
+const { sendMessage, safeDM } = require("@utils/botUtils");
 const { error } = require("@src/helpers/logger");
 
 const OPEN_PERMS = ["MANAGE_CHANNELS"];
@@ -94,7 +95,7 @@ async function closeTicket(channel, closedBy, reason) {
     // send embed to log channel
     if (config.ticket.log_channel) {
       const logChannel = channel.guild.channels.cache.get(config.ticket.log_channel);
-      logChannel.safeSend({ embeds: [embed], components });
+      sendMessage(logChannel, { embeds: [embed], components });
     }
 
     // send embed to user
@@ -102,7 +103,7 @@ async function closeTicket(channel, closedBy, reason) {
       const dmEmbed = embed
         .setDescription(`**Server:** ${channel.guild.name}\n**Title:** ${ticketDetails.title}`)
         .setThumbnail(channel.guild.iconURL());
-      ticketDetails.user.safeDm({ embeds: [dmEmbed], components });
+      safeDM(ticketDetails.user, { embeds: [dmEmbed], components });
     }
 
     return "SUCCESS";
@@ -188,7 +189,7 @@ async function openTicket(guild, user, config) {
       new MessageButton().setLabel("Close Ticket").setCustomId("TICKET_CLOSE").setEmoji("🔒").setStyle("PRIMARY")
     );
 
-    const sent = await tktChannel.safeSend({ content: user.toString(), embeds: [embed], components: [buttonsRow] });
+    const sent = await sendMessage(tktChannel, { content: user.toString(), embeds: [embed], components: [buttonsRow] });
 
     const dmEmbed = new MessageEmbed()
       .setColor(EMBED_COLORS.TICKET_CREATE)
@@ -200,7 +201,7 @@ async function openTicket(guild, user, config) {
       new MessageButton().setLabel("View Channel").setURL(sent.url).setStyle("LINK")
     );
 
-    user.safeDm({ embeds: [dmEmbed], components: [row] });
+    safeDM(user, { embeds: [dmEmbed], components: [row] });
 
     return "SUCCESS";
   } catch (ex) {

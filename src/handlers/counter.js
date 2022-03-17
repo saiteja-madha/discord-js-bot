@@ -1,3 +1,4 @@
+const { setVoiceChannelName, getMemberStats } = require("@utils/guildUtils");
 const { getSettings } = require("@schemas/Guild");
 
 /**
@@ -26,7 +27,7 @@ async function updateCounterChannels(client) {
         if (config.counter_type.toUpperCase() === "MEMBERS") channelName = `${config.name} : ${members}`;
         if (config.counter_type.toUpperCase() === "BOTS") channelName = `${config.name} : ${bots}`;
 
-        if (vc.manageable) vc.setName(channelName).catch((err) => vc.client.logger.log("Set Name error: ", err));
+        setVoiceChannelName(vc, channelName);
       }
     } catch (ex) {
       client.logger.error(`Error updating counter channels for guildId: ${guildId}`, ex);
@@ -45,7 +46,7 @@ async function updateCounterChannels(client) {
  */
 async function init(guild, settings) {
   if (settings.counters.find((doc) => ["MEMBERS", "BOTS"].includes(doc.counter_type.toUpperCase()))) {
-    const stats = await guild.fetchMemberStats();
+    const stats = await getMemberStats(guild);
     settings.data.bots = stats[1]; // update bot count in database
     await settings.save();
   }

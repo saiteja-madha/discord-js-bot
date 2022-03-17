@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { permissions, parsePermissions } = require("@utils/botUtils");
+const { permissions, sendMessage, parsePermissions } = require("@utils/botUtils");
 const { EMBED_COLORS, PREFIX, OWNER_IDS } = require("@root/config.js");
 const { timeformat } = require("@utils/miscUtils");
 const CommandCategory = require("./CommandCategory");
@@ -267,7 +267,7 @@ class Command {
    */
   sendUsage(channel, prefix, invoke, title) {
     const embed = this.getCommandUsage(prefix, invoke, title);
-    channel.safeSend({ embeds: [embed] });
+    sendMessage(channel, { embeds: [embed] });
   }
 
   getSlashUsage() {
