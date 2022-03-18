@@ -159,7 +159,7 @@ class Command {
     try {
       await this.messageRun(message, args, data);
     } catch (ex) {
-      await message.channel.send("Oops! An error occurred while running the command");
+      await sendMessage(message.channel, "Oops! An error occurred while running the command");
       this.client.logger.error("messageRun", ex);
     } finally {
       this.applyCooldown(message.author.id);

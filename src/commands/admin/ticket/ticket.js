@@ -173,6 +173,9 @@ module.exports = class Ticket extends Command {
       if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
         return message.reply("I am missing `Manage Channels` to create ticket channels");
       }
+      if (!message.channel.permissionsFor(message.guild.me).has("EMBED_LINKS")) {
+        return message.reply("I am missing `Embed Links` permission to run an interactive setup");
+      }
       return runInteractiveSetup(message);
     }
 
