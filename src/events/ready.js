@@ -34,6 +34,7 @@ module.exports = async (client) => {
   await cacheReactionRoles(client);
 
   for (const guild of client.guilds.cache.values()) {
+    if (guild.ownerId) await client.users.fetch(guild.ownerId, { cache: true });
     const settings = await getSettings(guild);
 
     // initialize counter
