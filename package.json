@@ -52,6 +52,12 @@
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^13.1.0"
   },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "erlpack": "^0.1.4",
+    "utf-8-validate": "^5.0.8",
+    "zlib-sync": "^0.1.7"
+  },
   "devDependencies": {
     "eslint": "^8.9.0",
     "eslint-plugin-jsdoc": "^37.9.4",
