@@ -1,7 +1,7 @@
 {
   "name": "discord-js-bot",
-  "version": "4.1.0",
-  "description": "A multipurpose discord bot built using discord-js",
+  "version": "4.2.0",
+  "description": "An open-source, multipurpose discord bot built using discord-js",
   "main": "bot.js",
   "author": "Sai Teja M",
   "license": "ISC",
@@ -17,8 +17,11 @@
     "type": "git",
     "url": "git+https://github.com/saiteja-madha/discord-js-bot.git"
   },
+  "bugs": {
+    "url": "https://github.com/saiteja-madha/discord-js-bot/issues"
+  },
   "dependencies": {
-    "@vitalets/google-translate-api": "^7.0.0",
+    "@vitalets/google-translate-api": "^8.0.0",
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
     "chalk": "^4.1.2",
@@ -68,8 +71,11 @@
   "keywords": [
     "discord",
     "discord.js",
+    "discord-bot",
+    "open-source",
     "bot",
-    "multipurpose"
+    "multipurpose",
+    "multi-purpose-bot"
   ],
   "_moduleAliases": {
     "@root": ".",
@@ -78,8 +84,5 @@
     "@schemas": "src/database/schemas/",
     "@src": "src/",
     "@utils": "src/utils/"
-  },
-  "bugs": {
-    "url": "https://github.com/saiteja-madha/discord-js-bot/issues"
   }
 }

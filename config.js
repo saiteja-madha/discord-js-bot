@@ -51,10 +51,18 @@ module.exports = {
     MAX_SEARCH_RESULTS: 5,
     NODES: [
       {
-        host: "lavalink.strangebot.xyz",
-        port: 80,
-        password: "strangebot",
-        identifier: "Strange Link",
+        host: "ger.lavalink.mitask.tech",
+        port: 2333,
+        password: "lvserver",
+        identifier: "German Link",
+        retryDelay: 5000,
+        secure: false,
+      },
+      {
+        host: "usa.lavalink.mitask.tech",
+        port: 2333,
+        password: "lvserver",
+        identifier: "USA Link",
         retryDelay: 5000,
         secure: false,
       },
@@ -86,8 +94,8 @@ module.exports = {
   /* Maximum number of keys that can be stored */
   CACHE_SIZE: {
     GUILDS: 100,
-    USERS: 1000,
-    MEMBERS: 1000,
+    USERS: 10000,
+    MEMBERS: 10000,
   },
   MESSAGES: {
     API_ERROR: "Unexpected Backend Error! Try again later or contact support server",
