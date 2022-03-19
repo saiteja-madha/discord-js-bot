@@ -3,6 +3,7 @@ const { Command } = require("@src/structures");
 const { SUGGESTIONS } = require("@root/config");
 const { addSuggestion } = require("@schemas/Suggestions");
 const { stripIndent } = require("common-tags");
+const { sendMessage } = require("@utils/botUtils");
 
 module.exports = class Suggest extends Command {
   constructor(client) {
@@ -38,8 +39,8 @@ module.exports = class Suggest extends Command {
   async messageRun(message, args, data) {
     const suggestion = args.join(" ");
     const response = await suggest(message.member, suggestion, data.settings);
-    if (typeof response === "boolean") return message.safeReply("Your suggestion has been submitted!", 5);
-    else await message.safeReply(response);
+    if (typeof response === "boolean") return sendMessage(message.channel, "Your suggestion has been submitted!", 5);
+    else await message.reply(response);
   }
 
   /**
