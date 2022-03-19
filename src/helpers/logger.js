@@ -1,3 +1,4 @@
+const { inspect } = require("util");
 const { MessageEmbed, WebhookClient } = require("discord.js"),
   chalk = require("chalk"),
   moment = require("moment"),
@@ -53,7 +54,9 @@ const sendLogs = (level, content, data) => {
       break;
 
     case "error":
-      console.log(`[${chalk.cyan(timestamp)}] [${chalk.redBright(level)}] ${content} ${data ? ": " + data : ""}`);
+      console.log(
+        `[${chalk.cyan(timestamp)}] [${chalk.redBright(level)}] ${content} ${data ? ": " + inspect(data) : ""}`
+      );
       simpleLogger.error(data ? data : content);
       if (errorWebhook) sendWebhook(content, data);
       break;
