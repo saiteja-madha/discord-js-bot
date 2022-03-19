@@ -14,7 +14,11 @@ module.exports = class Suggestion extends Command {
         minArgsCount: 2,
         subcommands: [
           {
-            trigger: "channel <#channel|OFF>",
+            trigger: "status <on|off>",
+            description: "enable/disable suggestion system",
+          },
+          {
+            trigger: "channel <#channel>",
             description: "configure suggestion channel or disable it",
           },
           {
@@ -31,6 +35,29 @@ module.exports = class Suggestion extends Command {
         enabled: true,
         ephemeral: true,
         options: [
+          {
+            name: "status",
+            description: "enable or disable welcome message",
+            type: "SUB_COMMAND",
+            options: [
+              {
+                name: "status",
+                description: "enabled or disabled",
+                required: true,
+                type: "STRING",
+                choices: [
+                  {
+                    name: "ON",
+                    value: "ON",
+                  },
+                  {
+                    name: "OFF",
+                    value: "OFF",
+                  },
+                ],
+              },
+            ],
+          },
           {
             name: "channel",
             description: "configure suggestion channel or disable it",
@@ -85,17 +112,20 @@ module.exports = class Suggestion extends Command {
     const sub = args[0];
     let response;
 
+    // status
+    if (sub == "status") {
+      const status = args[1]?.toUpperCase();
+      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      response = await setStatus(data.settings, status);
+    }
+
     // channel
-    if (sub == "channel") {
+    else if (sub == "channel") {
       const input = args[1];
-      if (input.toLowerCase() == "off") {
-        response = await setChannel(data.settings, null);
-      } else {
-        let matched = message.guild.findMatchingChannels(input).filter((c) => c.type == "GUILD_TEXT");
-        if (matched.length == 0) response = `No matching channels found for ${input}`;
-        else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
-        else response = await setChannel(data.settings, matched[0]);
-      }
+      let matched = message.guild.findMatchingChannels(input).filter((c) => c.type == "GUILD_TEXT");
+      if (matched.length == 0) response = `No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      else response = await setChannel(data.settings, matched[0]);
     }
 
     // approve
@@ -123,8 +153,14 @@ module.exports = class Suggestion extends Command {
     const sub = interaction.options.getSubcommand();
     let response;
 
+    // status
+    if (sub == "status") {
+      const status = interaction.options.getString("status");
+      response = await setStatus(data.settings, status);
+    }
+
     // channel
-    if (sub == "channel") {
+    else if (sub == "channel") {
       const channel = interaction.options.getChannel("channel_name");
       response = await setChannel(data.settings, channel);
     }
@@ -146,6 +182,13 @@ module.exports = class Suggestion extends Command {
     await interaction.followUp(response);
   }
 };
+
+async function setStatus(settings, status) {
+  const enabled = status.toUpperCase() === "ON" ? true : false;
+  settings.suggestions.enabled = enabled;
+  await settings.save();
+  return `Suggestion system is now ${enabled ? "enabled" : "disabled"}`;
+}
 
 async function setChannel(settings, channel) {
   if (!channel) {

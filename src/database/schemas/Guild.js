@@ -116,6 +116,7 @@ const Schema = mongoose.Schema({
   },
   autorole: String,
   suggestions: {
+    enabled: Boolean,
     channel_id: String,
   },
 });

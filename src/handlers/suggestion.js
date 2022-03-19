@@ -6,12 +6,11 @@ const { MessageActionRow, MessageButton } = require("discord.js");
 /**
  * @param {import('discord.js').Message} message
  */
-const getStats = (message) => {
-  return [
-    message.reactions.cache.get(SUGGESTIONS.EMOJI.UP_VOTE).count - 1,
-    message.reactions.cache.get(SUGGESTIONS.EMOJI.DOWN_VOTE).count - 1,
-  ];
-};
+function getStats(message) {
+  const upVotes = message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE).count - 1;
+  const downVotes = message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE).count - 1;
+  return [upVotes, downVotes];
+}
 
 module.exports = {
   /**
@@ -36,7 +35,7 @@ module.exports = {
 
     let message;
     try {
-      message = await suggestionsChannel.messages.fetch(messageId);
+      message = await suggestionsChannel.messages.fetch(messageId, { force: true });
     } catch (err) {
       return "Suggestion message not found";
     }
@@ -86,16 +85,19 @@ module.exports = {
    * @param {string} messageId
    */
   async rejectSuggestion(guild, member, messageId) {
-    // validate document
-    const doc = await findSuggestion(guild.id, messageId);
-    if (!doc) return "Suggestion not found";
-    if (doc.is_rejected) return "Suggestion already rejected";
+    // validate permissions
+    if (!member.permissions.has("MANAGE_GUILD")) return "You don't have permission to approve suggestions!";
 
     // validate channel
     const settings = await getSettings(guild);
     if (!settings.suggestions.channel_id) return "Suggestions channel not set";
     const suggestionsChannel = guild.channels.cache.get(settings.suggestions.channel_id);
     if (!suggestionsChannel) return "Suggestions channel not found";
+
+    // validate document
+    const doc = await findSuggestion(guild.id, messageId);
+    if (!doc) return "Suggestion not found";
+    if (doc.is_rejected) return "Suggestion already rejected";
 
     let message;
     try {

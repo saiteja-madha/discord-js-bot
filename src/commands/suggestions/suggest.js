@@ -10,6 +10,7 @@ module.exports = class Suggest extends Command {
       name: "suggest",
       description: "create a suggestion",
       category: "SUGGESTION",
+      cooldown: 60,
       command: {
         enabled: true,
         usage: "<suggestion>",
@@ -54,9 +55,10 @@ module.exports = class Suggest extends Command {
 };
 
 async function suggest(member, suggestion, settings) {
-  if (!settings.suggestions.channel_id) return "Suggestions are disabled in this server! Channel not configured!";
+  if (!settings.suggestions.enabled) return "Suggestion system is disabled.";
+  if (!settings.suggestions.channel_id) return "Suggestion channel not configured!";
   const channel = member.guild.channels.cache.get(settings.suggestions.channel_id);
-  if (!channel) return "Suggestions are disabled in this server! Channel not found!";
+  if (!channel) return "Suggestion channel not found!";
 
   const embed = new MessageEmbed()
     .setAuthor({ name: "New Suggestion" })
@@ -64,11 +66,10 @@ async function suggest(member, suggestion, settings) {
     .setColor(SUGGESTIONS.DEFAULT_EMBED)
     .setDescription(
       stripIndent`
+        ${suggestion}
+
         **Submitter** 
         ${member.user.tag} [${member.id}]
-        
-        **Suggestion**
-        ${suggestion}
       `
     )
     .setTimestamp();
