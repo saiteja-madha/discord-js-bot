@@ -11,7 +11,7 @@ module.exports = class Suggest extends Command {
       name: "suggest",
       description: "create a suggestion",
       category: "SUGGESTION",
-      cooldown: 60,
+      cooldown: 20,
       command: {
         enabled: true,
         usage: "<suggestion>",
