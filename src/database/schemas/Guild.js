@@ -131,6 +131,7 @@ module.exports = {
 
     let guildData = await Model.findOne({ _id: guild.id });
     if (!guildData) {
+      await guild.fetchOwner({ cache: true });
       guildData = new Model({
         _id: guild.id,
         data: {
