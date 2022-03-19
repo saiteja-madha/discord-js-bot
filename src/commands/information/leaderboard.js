@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
-const { getSettings } = require("@schemas/Guild");
 const { getXpLb, getInvitesLb } = require("@schemas/Member");
 
 module.exports = class LeaderBoard extends Command {
@@ -44,34 +43,35 @@ module.exports = class LeaderBoard extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const type = args[0].toLowerCase();
     let response;
 
-    if (type === "xp") response = await getXpLeaderboard(message, message.author);
-    else if (type === "invite") response = await getInviteLeaderboard(message, message.author);
+    if (type === "xp") response = await getXpLeaderboard(message, message.author, data.settings);
+    else if (type === "invite") response = await getInviteLeaderboard(message, message.author, data.settings);
     else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const type = interaction.options.getString("type");
     let response;
 
-    if (type === "xp") response = await getXpLeaderboard(interaction, interaction.user);
-    else if (type === "invite") response = await getInviteLeaderboard(interaction, interaction.user);
+    if (type === "xp") response = await getXpLeaderboard(interaction, interaction.user, data.settings);
+    else if (type === "invite") response = await getInviteLeaderboard(interaction, interaction.user, data.settings);
     else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
 
     await interaction.followUp(response);
   }
 };
 
-async function getXpLeaderboard({ guild }, author) {
-  const settings = await getSettings(guild);
+async function getXpLeaderboard({ guild }, author, settings) {
   if (!settings.ranking.enabled) return "Ranking is disabled on this server";
 
   const lb = await getXpLb(guild.id, 10);
@@ -96,8 +96,7 @@ async function getXpLeaderboard({ guild }, author) {
   return { embeds: [embed] };
 }
 
-async function getInviteLeaderboard({ guild }, author) {
-  const settings = await getSettings(guild);
+async function getInviteLeaderboard({ guild }, author, settings) {
   if (!settings.invite.tracking) return "Invite tracking is disabled on this server";
 
   const lb = await getInvitesLb(guild.id, 10);
@@ -106,10 +105,14 @@ async function getInviteLeaderboard({ guild }, author) {
   let collector = "";
   for (let i = 0; i < lb.length; i++) {
     try {
-      const user = await author.client.users.fetch(lb[i].member_id);
-      collector += `**#${(i + 1).toString()}** - ${user.tag} [${lb[i].invites}]\n`;
+      const memberId = lb[i].member_id;
+      if (memberId === "VANITY") collector += `**#${(i + 1).toString()}** - Vanity URL [${lb[i].invites}]\n`;
+      else {
+        const user = await author.client.users.fetch(lb[i].member_id);
+        collector += `**#${(i + 1).toString()}** - ${user.tag} [${lb[i].invites}]\n`;
+      }
     } catch (ex) {
-      // Ignore
+      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].invites}]\n`;
     }
   }
 

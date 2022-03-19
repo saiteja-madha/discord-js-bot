@@ -18,11 +18,12 @@ const sendWebhook = (content, err) => {
   if (!content && !err) return;
   const errString = err?.stack || err;
 
-  const embed = new MessageEmbed()
-    .setColor(config.EMBED_COLORS.ERROR)
-    .setAuthor({ name: err?.name || "Error" })
-    .setDescription("```js\n" + (errString.length > 4096 ? `${errString.substr(0, 4000)}...` : errString) + "\n```");
+  const embed = new MessageEmbed().setColor(config.EMBED_COLORS.ERROR).setAuthor({ name: err?.name || "Error" });
 
+  if (errString)
+    embed.setDescription(
+      "```js\n" + (errString.length > 4096 ? `${errString.substr(0, 4000)}...` : errString) + "\n```"
+    );
   if (err?.description) embed.addField("Description", content);
   if (err?.message) embed.addField("Message", err?.message);
 

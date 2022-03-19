@@ -1,6 +1,5 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
-const { getSettings } = require("@schemas/Guild");
 
 module.exports = class Automod extends Command {
   constructor(client) {
@@ -11,7 +10,7 @@ module.exports = class Automod extends Command {
       userPermissions: ["MANAGE_GUILD"],
       command: {
         enabled: true,
-        minArgsCount: 1,
+        minArgsCount: 2,
         subcommands: [
           {
             trigger: "antighostping <ON|OFF>",
@@ -186,9 +185,10 @@ module.exports = class Automod extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
-    const settings = await getSettings(message.guild);
+  async messageRun(message, args, data) {
+    const settings = data.settings;
     const sub = args[0].toLowerCase();
 
     let response;
@@ -254,10 +254,11 @@ module.exports = class Automod extends Command {
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
-    const settings = await getSettings(interaction.guild);
+    const settings = data.settings;
 
     let response;
     if (sub == "antighostping") response = await antighostPing(settings, interaction.options.getString("status"));

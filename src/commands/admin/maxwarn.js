@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { getSettings } = require("@schemas/Guild");
 const { Message, CommandInteraction } = require("discord.js");
 
 module.exports = class MaxWarn extends Command {
@@ -75,8 +74,9 @@ module.exports = class MaxWarn extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     if (!["limit", "action"].includes(input)) return message.reply("Invalid command usage");
 
@@ -84,14 +84,14 @@ module.exports = class MaxWarn extends Command {
     if (input === "limit") {
       const max = parseInt(args[1]);
       if (isNaN(max) || max < 1) return message.reply("Max Warnings must be a valid number greater than 0");
-      response = await setLimit(message.guild, max);
+      response = await setLimit(max, data.settings);
     }
 
     if (input === "action") {
       const action = args[1]?.toUpperCase();
       if (!action || !["MUTE", "KICK", "BAN"].includes(action))
         return message.reply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
-      response = await setAction(message.guild, action);
+      response = await setAction(message.guild, action, data.settings);
     }
 
     await message.reply(response);
@@ -99,31 +99,31 @@ module.exports = class MaxWarn extends Command {
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
 
     let response;
     if (sub === "limit") {
-      response = await setLimit(interaction.guild, interaction.options.getInteger("amount"));
+      response = await setLimit(interaction.options.getInteger("amount"), data.settings);
     }
 
     if (sub === "action") {
-      response = await setAction(interaction.guild, interaction.options.getString("action"));
+      response = await setAction(interaction.options.getString("action"), data.settings);
     }
 
     await interaction.followUp(response);
   }
 };
 
-async function setLimit(guild, limit) {
-  const settings = await getSettings(guild);
+async function setLimit(limit, settings) {
   settings.max_warn.limit = limit;
   await settings.save();
   return `Configuration saved! Maximum warnings is set to ${limit}`;
 }
 
-async function setAction(guild, action) {
+async function setAction(guild, action, settings) {
   if (action === "MUTE") {
     if (!guild.me.permissions.has("MODERATE_MEMBERS")) {
       return "I do not permission to timeout members";
@@ -142,7 +142,6 @@ async function setAction(guild, action) {
     }
   }
 
-  const settings = await getSettings(guild);
   settings.max_warn.action = action;
   await settings.save();
   return `Configuration saved! Automod action is set to ${action}`;

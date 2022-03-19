@@ -1,7 +1,7 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");
-const avatarInfo = require("./shared/avatar");
+const avatarInfo = require("../shared/avatar");
 
 module.exports = class UserInfo extends Command {
   constructor(client) {

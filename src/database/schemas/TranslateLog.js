@@ -15,6 +15,8 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("logs-translation", Schema);
 
 module.exports = {
+  model: Model,
+
   isTranslated: async (message, code) =>
     Model.findOne({
       guild_id: message.guildId,

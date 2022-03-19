@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { MessageEmbed, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
 const { timeformat } = require("@utils/miscUtils");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config.js");
-const botstats = require("./shared/botstats");
+const botstats = require("../shared/botstats");
 
 module.exports = class BotCommand extends Command {
   constructor(client) {

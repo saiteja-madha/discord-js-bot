@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { getSettings } = require("@schemas/Guild");
 const { Message, CommandInteraction } = require("discord.js");
 const { canSendEmbeds } = require("@utils/guildUtils");
 
@@ -34,8 +33,9 @@ module.exports = class ModLog extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     let targetChannel;
 
@@ -45,22 +45,21 @@ module.exports = class ModLog extends Command {
       targetChannel = message.mentions.channels.first();
     }
 
-    const response = await setChannel(message.guild, targetChannel);
+    const response = await setChannel(targetChannel, data.settings);
     return message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
-    const response = await setChannel(interaction.guild, interaction.options.getChannel("channel"));
+  async interactionRun(interaction, data) {
+    const response = await setChannel(interaction.options.getChannel("channel"), data.settings);
     return interaction.followUp(response);
   }
 };
 
-async function setChannel(guild, targetChannel) {
-  const settings = await getSettings(guild);
-
+async function setChannel(targetChannel, settings) {
   if (targetChannel) {
     if (!canSendEmbeds(targetChannel))
       return "Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";

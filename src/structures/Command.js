@@ -3,6 +3,7 @@ const { permissions, sendMessage, parsePermissions } = require("@utils/botUtils"
 const { EMBED_COLORS, PREFIX, OWNER_IDS } = require("@root/config.js");
 const { timeformat } = require("@utils/miscUtils");
 const CommandCategory = require("./CommandCategory");
+const { getSettings } = require("@schemas/Guild");
 
 class Command {
   /**
@@ -109,10 +110,9 @@ class Command {
    * Function that validates the message with the command options
    * @param {import('discord.js').Message} message
    * @param {string[]} args
-   * @param {string} invoke
-   * @param {string} prefix
+   * @param {object} data
    */
-  async executeCommand(message, args, invoke, prefix) {
+  async executeCommand(message, args, data) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
 
     // callback validations
@@ -144,7 +144,7 @@ class Command {
     // min args count
     if (args.length < this.command.minArgsCount) {
       // return message.reply(`You need at least ${this.command.minArgsCount} arguments to use this command`);
-      this.sendUsage(message.channel, prefix, invoke);
+      this.sendUsage(message.channel, data.prefix, data.invoke);
       return;
     }
 
@@ -157,9 +157,9 @@ class Command {
     }
 
     try {
-      await this.messageRun(message, args, invoke, prefix);
+      await this.messageRun(message, args, data);
     } catch (ex) {
-      await message.channel.send("Oops! An error occurred while running the command");
+      await sendMessage(message.channel, "Oops! An error occurred while running the command");
       this.client.logger.error("messageRun", ex);
     } finally {
       this.applyCooldown(message.author.id);
@@ -222,7 +222,8 @@ class Command {
 
     try {
       await interaction.deferReply({ ephemeral: this.slashCommand.ephemeral });
-      await this.interactionRun(interaction);
+      const settings = await getSettings(interaction.guild);
+      await this.interactionRun(interaction, { settings });
     } catch (ex) {
       await interaction.followUp("Oops! An error occurred while running the command");
       this.client.logger.error("interactionRun", ex);

@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { getSettings } = require("@schemas/Guild");
 const { table } = require("table");
 
 module.exports = class AutomodConfigCommand extends Command {
@@ -113,10 +112,11 @@ module.exports = class AutomodConfigCommand extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
-    const settings = await getSettings(message.guild);
+    const settings = data.settings;
 
     let response;
     if (input === "status") {
@@ -144,15 +144,18 @@ module.exports = class AutomodConfigCommand extends Command {
       response = await setDebug(settings, status);
     }
 
+    //
+    else response = "Invalid command usage!";
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
-    const settings = await getSettings(interaction.guild);
+    const settings = data.settings;
 
     let response;
 

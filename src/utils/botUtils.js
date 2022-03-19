@@ -59,11 +59,6 @@ function validateConfig() {
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 
-async function startupCheck() {
-  await checkForUpdates();
-  validateConfig();
-}
-
 /**
  * @param {import('discord.js').TextBasedChannels} channel
  * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} content
@@ -170,8 +165,9 @@ const musicValidations = [
 module.exports = {
   permissions,
   parsePermissions,
+  validateConfig,
+  checkForUpdates,
   sendMessage,
   safeDM,
-  startupCheck,
   musicValidations,
 };

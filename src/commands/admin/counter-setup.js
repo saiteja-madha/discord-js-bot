@@ -1,7 +1,6 @@
 const { Message, CommandInteraction } = require("discord.js");
 const { Command } = require("@src/structures");
 const { getMemberStats } = require("@utils/guildUtils");
-const { getSettings } = require("@schemas/Guild");
 
 module.exports = class CounterSetup extends Command {
   constructor(client) {
@@ -54,8 +53,9 @@ module.exports = class CounterSetup extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const type = args[0].toUpperCase();
     if (!type || !["USERS", "MEMBERS", "BOTS"].includes(type)) {
       return message.reply("Incorrect arguments are passed! Counter types: `users/members/bots`");
@@ -64,23 +64,24 @@ module.exports = class CounterSetup extends Command {
     args.shift();
     let channelName = args.join(" ");
 
-    const response = await setupCounter(message.guild, type, channelName);
+    const response = await setupCounter(message.guild, type, channelName, data.settings);
     return message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const type = interaction.options.getString("type");
     const name = interaction.options.getString("name");
 
-    const response = await setupCounter(interaction.guild, type.toUpperCase(), name);
+    const response = await setupCounter(interaction.guild, type.toUpperCase(), name, data.settings);
     return interaction.followUp(response);
   }
 };
 
-async function setupCounter(guild, type, name) {
+async function setupCounter(guild, type, name, settings) {
   let channelName = name;
 
   const stats = await getMemberStats(guild);
@@ -101,8 +102,6 @@ async function setupCounter(guild, type, name) {
       },
     ],
   });
-
-  const settings = await getSettings(guild);
 
   const exists = settings.counters.find((v) => v.counter_type.toUpperCase() === type);
   if (exists) {

@@ -2,10 +2,9 @@ const { Command } = require("@src/structures");
 const { getEffectiveInvites } = require("@src/handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
-const outdent = require("outdent");
+const { stripIndent } = require("common-tags");
 const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
-const { getSettings } = require("@schemas/Guild");
 
 module.exports = class InviterCommand extends Command {
   constructor(client) {
@@ -35,25 +34,26 @@ module.exports = class InviterCommand extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const target = (await resolveMember(message, args[0])) || message.member;
-    const response = await getInviter(message, target.user);
+    const response = await getInviter(message, target.user, data.settings);
     await message.reply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const user = interaction.options.getUser("user") || interaction.user;
-    const response = await getInviter(interaction, user);
+    const response = await getInviter(interaction, user, data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function getInviter({ guild }, user) {
-  const settings = await getSettings(guild);
+async function getInviter({ guild }, user, settings) {
   if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
 
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
@@ -66,7 +66,7 @@ async function getInviter({ guild }, user) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: `Invite data for ${user.username}` })
     .setDescription(
-      outdent`
+      stripIndent`
       Inviter: \`${inviter?.tag || "Deleted User"}\`
       Inviter ID: \`${inviteData.inviter}\`
       Invite Code: \`${inviteData.code}\`

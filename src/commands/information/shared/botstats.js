@@ -2,7 +2,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config");
 const { timeformat } = require("@utils/miscUtils");
 const os = require("os");
-const { outdent } = require("outdent");
+const { stripIndent } = require("common-tags");
 
 module.exports = (client) => {
   // STATS
@@ -39,7 +39,7 @@ module.exports = (client) => {
     .setDescription(desc)
     .addField(
       "CPU:",
-      outdent`
+      stripIndent`
         ❯ **OS:** ${platform} [${architecture}]
         ❯ **Cores:** ${cores}
         ❯ **Usage:** ${cpuUsage}
@@ -48,7 +48,7 @@ module.exports = (client) => {
     )
     .addField(
       "Bot's RAM:",
-      outdent`
+      stripIndent`
         ❯ **Used:** ${botUsed}
         ❯ **Available:** ${botAvailable}
         ❯ **Usage:** ${botUsage}
@@ -57,7 +57,7 @@ module.exports = (client) => {
     )
     .addField(
       "Overall RAM:",
-      outdent`
+      stripIndent`
       ❯ **Used:** ${overallUsed}
       ❯ **Available:** ${overallAvailable}
       ❯ **Usage:** ${overallUsage}

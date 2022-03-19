@@ -1,18 +1,18 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const botstats = require("./shared/botstats");
+const emojiInfo = require("../shared/emoji");
 
-module.exports = class BotStats extends Command {
+module.exports = class EmojiInfo extends Command {
   constructor(client) {
     super(client, {
-      name: "botstats",
-      description: "shows bot information",
+      name: "emojiinfo",
+      description: "shows info about an emoji",
       category: "INFORMATION",
       botPermissions: ["EMBED_LINKS"],
-      cooldown: 5,
       command: {
         enabled: true,
-        aliases: ["botstat", "botinfo"],
+        usage: "<emoji>",
+        minArgsCount: 1,
       },
       slashCommand: {
         enabled: false,
@@ -25,7 +25,8 @@ module.exports = class BotStats extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const response = botstats(message.client);
+    const emoji = args[0];
+    const response = emojiInfo(emoji);
     await message.reply(response);
   }
 };

@@ -139,7 +139,7 @@ async function logModeration(issuer, target, reason, type, data = {}) {
 
 /**
  * Delete the specified number of messages matching the type
- * @param {import('discord.js').import('discord.js').GuildMember} issuer
+ * @param {import('discord.js').GuildMember} issuer
  * @param {import('discord.js').BaseGuildTextChannel} channel
  * @param {"ATTACHMENT"|"BOT"|"LINK"|"TOKEN"|"USER"|"ALL"} type
  * @param {Number} amount

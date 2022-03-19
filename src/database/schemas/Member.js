@@ -44,6 +44,8 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("members", Schema);
 
 module.exports = {
+  model: Model,
+
   getMember: async (guildId, memberId) => {
     const key = `${guildId}|${memberId}`;
     if (cache.contains(key)) return cache.get(key);

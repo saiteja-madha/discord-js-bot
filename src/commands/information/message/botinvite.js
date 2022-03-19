@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const botinvite = require("./shared/botinvite");
+const botinvite = require("../shared/botinvite");
 
 module.exports = class BotInvite extends Command {
   constructor(client) {
