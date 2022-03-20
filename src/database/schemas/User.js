@@ -43,8 +43,6 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("user", Schema);
 
 module.exports = {
-  model: Model,
-
   getUser: async (userId) => {
     const cached = cache.get(userId);
     if (cached) return cached;

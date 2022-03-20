@@ -1,6 +1,7 @@
 const { Command } = require("@src/structures");
 const { Message, CommandInteraction } = require("discord.js");
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
+const { getMatchingChannels } = require("@utils/guildUtils");
 
 module.exports = class Suggestion extends Command {
   constructor(client) {
@@ -122,7 +123,7 @@ module.exports = class Suggestion extends Command {
     // channel
     else if (sub == "channel") {
       const input = args[1];
-      let matched = message.guild.findMatchingChannels(input).filter((c) => c.type == "GUILD_TEXT");
+      let matched = getMatchingChannels(message.guild, input).filter((c) => c.type == "GUILD_TEXT");
       if (matched.length == 0) response = `No matching channels found for ${input}`;
       else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
       else response = await setChannel(data.settings, matched[0]);

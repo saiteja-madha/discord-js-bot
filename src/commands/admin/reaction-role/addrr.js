@@ -1,5 +1,5 @@
 const { Command } = require("@src/structures");
-const { findMatchingRoles, getMatchingChannel } = require("@utils/guildUtils");
+const { findMatchingRoles, getMatchingChannels } = require("@utils/guildUtils");
 const { addReactionRole, getReactionRoles } = require("@schemas/Message");
 const { Util, Message, CommandInteraction } = require("discord.js");
 const { parsePermissions } = require("@utils/botUtils");
@@ -57,7 +57,7 @@ module.exports = class AddReactionRole extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    const targetChannel = getMatchingChannel(message.guild, args[0]);
+    const targetChannel = getMatchingChannels(message.guild, args[0]);
     if (targetChannel.length === 0) return message.reply(`No channels found matching ${args[0]}`);
 
     const targetMessage = args[1];

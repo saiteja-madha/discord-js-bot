@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const { resolveMember, getMatchingChannel } = require("@utils/guildUtils");
+const { resolveMember, getMatchingChannels } = require("@utils/guildUtils");
 const move = require("./shared/move");
 
 module.exports = class DeafenCommand extends Command {
@@ -30,7 +30,7 @@ module.exports = class DeafenCommand extends Command {
     const target = await resolveMember(message, args[0], true);
     if (!target) return message.reply(`No user found matching ${args[0]}`);
 
-    const channels = getMatchingChannel(message.guild, args[1]);
+    const channels = getMatchingChannels(message.guild, args[1]);
     if (!channels.length) return message.reply("No matching channels found");
     const targetChannel = channels.pop();
     if (!targetChannel.type === "GUILD_VOICE" && !targetChannel.type === "GUILD_STAGE_VOICE") {

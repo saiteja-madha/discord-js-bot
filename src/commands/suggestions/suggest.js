@@ -48,10 +48,10 @@ module.exports = class Suggest extends Command {
    * @param {object} data
    */
   async interactionRun(interaction, data) {
-    const suggestion = interaction.args.join(" ");
+    const suggestion = interaction.options.getString("suggestion");
     const response = await suggest(interaction.member, suggestion, data.settings);
-    if (typeof response === "boolean") interaction.deferReply("Your suggestion has been submitted!");
-    else await interaction.deferReply(response);
+    if (typeof response === "boolean") interaction.followUp("Your suggestion has been submitted!");
+    else await interaction.followUp(response);
   }
 };
 

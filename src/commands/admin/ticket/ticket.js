@@ -7,7 +7,7 @@ const { createNewTicket } = require("@schemas/Message");
 
 // Utils
 const { parsePermissions } = require("@utils/botUtils");
-const { canSendEmbeds, findMatchingRoles, getMatchingChannel } = require("@utils/guildUtils");
+const { canSendEmbeds, findMatchingRoles, getMatchingChannels } = require("@utils/guildUtils");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@utils/ticketUtils");
 const { isHex } = require("@utils/miscUtils");
 
@@ -182,7 +182,7 @@ module.exports = class Ticket extends Command {
     // log ticket
     else if (input === "log") {
       if (args.length < 2) return message.reply("Please provide a channel where ticket logs must be sent");
-      const target = getMatchingChannel(message.guild, args[1]);
+      const target = getMatchingChannels(message.guild, args[1]);
       if (target.length === 0) return message.reply("Could not find any matching channel");
       response = await setupLogChannel(target[0], data.settings);
     }

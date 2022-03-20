@@ -22,12 +22,12 @@ module.exports = {
 
   schemas: {
     Giveaways: require("./schemas/Giveaways"),
-    Guild: require("./schemas/Guild").model,
-    Member: require("./schemas/Member").model,
+    Guild: require("./schemas/Guild"),
+    Member: require("./schemas/Member"),
     Message: require("./schemas/Message").model,
     ModLog: require("./schemas/ModLog").model,
     TranslateLog: require("./schemas/TranslateLog").model,
-    User: require("./schemas/User").model,
+    User: require("./schemas/User"),
     Suggestions: require("./schemas/Suggestions").model,
   },
 };
