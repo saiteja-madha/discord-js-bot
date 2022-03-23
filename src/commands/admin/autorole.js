@@ -64,7 +64,7 @@ module.exports = class AutoRole extends Command {
       else response = await setAutoRole(message, roles[0], data.settings);
     }
 
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

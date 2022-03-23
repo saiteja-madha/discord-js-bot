@@ -121,32 +121,26 @@ module.exports = class AutomodConfigCommand extends Command {
     let response;
     if (input === "status") {
       response = await getStatus(settings, message.guild);
-    }
-
-    else if (input === "strikes") {
+    } else if (input === "strikes") {
       const strikes = args[1];
       if (isNaN(strikes) || Number.parseInt(strikes) < 1) {
-        return message.reply("Strikes must be a valid number greater than 0");
+        return message.safeReply("Strikes must be a valid number greater than 0");
       }
       response = await setStrikes(settings, strikes);
-    }
-
-    else if (input === "action") {
+    } else if (input === "action") {
       const action = args[1].toUpperCase();
       if (!action || !["MUTE", "KICK", "BAN"].includes(action))
-        return message.reply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
+        return message.safeReply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
       response = await setAction(settings, message.guild, action);
-    }
-
-    else if (input === "debug") {
+    } else if (input === "debug") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setDebug(settings, status);
     }
 
     //
     else response = "Invalid command usage!";
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

@@ -177,7 +177,8 @@ module.exports = class Welcome extends Command {
     // status
     else if (type === "status") {
       const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!status || !["ON", "OFF"].includes(status))
+        return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setStatus(settings, status);
     }
 
@@ -189,7 +190,7 @@ module.exports = class Welcome extends Command {
 
     // desc
     else if (type === "desc") {
-      if (args.length < 2) return message.reply("Insufficient arguments! Please provide valid content");
+      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
       const desc = args.slice(1).join(" ");
       response = await setDescription(settings, desc);
     }
@@ -197,27 +198,28 @@ module.exports = class Welcome extends Command {
     // thumbnail
     else if (type === "thumbnail") {
       const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!status || !["ON", "OFF"].includes(status))
+        return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setThumbnail(settings, status);
     }
 
     // color
     else if (type === "color") {
       const color = args[1];
-      if (!color || !isHex(color)) return message.reply("Invalid color. Value must be a valid hex color");
+      if (!color || !isHex(color)) return message.safeReply("Invalid color. Value must be a valid hex color");
       response = await setColor(settings, color);
     }
 
     // footer
     else if (type === "footer") {
-      if (args.length < 2) return message.reply("Insufficient arguments! Please provide valid content");
+      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
       const content = args.slice(1).join(" ");
       response = await setFooter(settings, content);
     }
 
     //
     else response = "Invalid command usage!";
-    return message.reply(response);
+    return message.safeReply(response);
   }
 
   /**

@@ -38,7 +38,7 @@ module.exports = class Pokedex extends Command {
   async messageRun(message, args) {
     const pokemon = args.join(" ");
     const response = await pokedex(pokemon);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

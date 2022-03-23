@@ -40,7 +40,7 @@ module.exports = class Suggest extends Command {
     const suggestion = args.join(" ");
     const response = await suggest(message.member, suggestion, data.settings);
     if (typeof response === "boolean") return sendMessage(message.channel, "Your suggestion has been submitted!", 5);
-    else await message.reply(response);
+    else await message.safeReply(response);
   }
 
   /**

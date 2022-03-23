@@ -25,7 +25,7 @@ module.exports = class InviteRanks extends Command {
    */
   async messageRun(message, args, data) {
     const response = await getInviteRanks(message, data.settings);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

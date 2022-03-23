@@ -23,7 +23,7 @@ module.exports = class PingCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    await message.reply(`🏓 Pong : \`${Math.floor(message.client.ws.ping)}ms\``);
+    await message.safeReply(`🏓 Pong : \`${Math.floor(message.client.ws.ping)}ms\``);
   }
 
   /**

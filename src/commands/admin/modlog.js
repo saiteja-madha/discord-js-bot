@@ -41,12 +41,12 @@ module.exports = class ModLog extends Command {
 
     if (input === "none" || input === "off" || input === "disable") targetChannel = null;
     else {
-      if (message.mentions.channels.size === 0) return message.reply("Incorrect command usage");
+      if (message.mentions.channels.size === 0) return message.safeReply("Incorrect command usage");
       targetChannel = message.mentions.channels.first();
     }
 
     const response = await setChannel(targetChannel, data.settings);
-    return message.reply(response);
+    return message.safeReply(response);
   }
 
   /**

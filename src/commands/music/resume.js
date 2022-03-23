@@ -24,7 +24,7 @@ module.exports = class Resume extends Command {
    */
   async messageRun(message, args) {
     const response = resumePlayer(message);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

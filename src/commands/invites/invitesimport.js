@@ -36,7 +36,7 @@ module.exports = class InvitesImportCommand extends Command {
   async messageRun(message, args) {
     const target = args.length > 0 && (await resolveMember(message, args[0]));
     const response = await importInvites(message, target?.user);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

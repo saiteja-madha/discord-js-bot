@@ -77,26 +77,26 @@ module.exports = class AddInvitesCommand extends Command {
       const query = args[1];
       const invites = args[2];
 
-      if (isNaN(invites)) return message.reply(`\`${invites}\` is not a valid number of invites?`);
+      if (isNaN(invites)) return message.safeReply(`\`${invites}\` is not a valid number of invites?`);
       const role = message.mentions.roles.first() || findMatchingRoles(message.guild, query)[0];
-      if (!role) return message.reply(`No roles found matching \`${query}\``);
+      if (!role) return message.safeReply(`No roles found matching \`${query}\``);
 
       const response = await addInviteRank(message, role, invites, data.settings);
-      await message.reply(response);
+      await message.safeReply(response);
     }
 
     //
     else if (sub === "remove") {
       const query = args[1];
       const role = message.mentions.roles.first() || findMatchingRoles(message.guild, query)[0];
-      if (!role) return message.reply(`No roles found matching \`${query}\``);
+      if (!role) return message.safeReply(`No roles found matching \`${query}\``);
       const response = await removeInviteRank(message, role, data.settings);
-      await message.reply(response);
+      await message.safeReply(response);
     }
 
     //
     else {
-      await message.reply("Incorrect command usage!");
+      await message.safeReply("Incorrect command usage!");
     }
   }
 

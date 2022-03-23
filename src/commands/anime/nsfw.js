@@ -71,7 +71,7 @@ module.exports = class NSFW extends Command {
   async messageRun(message, args) {
     const choice = args.join(" ");
     const embed = await genNSFW(choice, message.author);
-    await message.reply({ embeds: [embed] });
+    await message.safeReply({ embeds: [embed] });
   }
 
   /**

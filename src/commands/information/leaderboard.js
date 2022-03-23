@@ -52,7 +52,7 @@ module.exports = class LeaderBoard extends Command {
     if (type === "xp") response = await getXpLeaderboard(message, message.author, data.settings);
     else if (type === "invite") response = await getInviteLeaderboard(message, message.author, data.settings);
     else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

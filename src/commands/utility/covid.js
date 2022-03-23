@@ -38,7 +38,7 @@ module.exports = class CovidCommand extends Command {
   async messageRun(message, args) {
     const country = args.join(" ");
     const response = await getCovid(country);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

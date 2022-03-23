@@ -38,7 +38,7 @@ module.exports = class Profile extends Command {
   async messageRun(message, args, data) {
     const target = (await resolveMember(message, args[0])) || message.member;
     const response = await profile(message, target.user, data.settings);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

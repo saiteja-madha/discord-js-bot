@@ -23,6 +23,6 @@ module.exports = class BotInvite extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    await message.reply(`My Uptime: \`${timeformat(process.uptime())}\``);
+    await message.safeReply(`My Uptime: \`${timeformat(process.uptime())}\``);
   }
 };

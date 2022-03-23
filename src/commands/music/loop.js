@@ -46,7 +46,7 @@ module.exports = class Loop extends Command {
     const input = args[0].toLowerCase();
     const type = input === "queue" ? "queue" : "track";
     const response = toggleLoop(message, type);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

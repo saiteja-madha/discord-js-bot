@@ -36,14 +36,14 @@ module.exports = class ChannelInfo extends Command {
     else if (args.length > 0) {
       const search = args.join(" ");
       const tcByName = getMatchingChannels(message.guild, search);
-      if (tcByName.length === 0) return message.reply(`No channels found matching \`${search}\`!`);
-      if (tcByName.length > 1) return message.reply(`Multiple channels found matching \`${search}\`!`);
+      if (tcByName.length === 0) return message.safeReply(`No channels found matching \`${search}\`!`);
+      if (tcByName.length > 1) return message.safeReply(`Multiple channels found matching \`${search}\`!`);
       [targetChannel] = tcByName;
     } else {
       targetChannel = message.channel;
     }
 
     const response = channelInfo(targetChannel);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 };

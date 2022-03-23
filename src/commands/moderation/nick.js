@@ -74,21 +74,21 @@ module.exports = class NickCommand extends Command {
 
     if (sub === "set") {
       const target = await resolveMember(message, args[1]);
-      if (!target) return message.reply("Could not find matching member");
+      if (!target) return message.safeReply("Could not find matching member");
       const name = args.slice(2).join(" ");
-      if (!name) return message.reply("Please specify a nickname");
+      if (!name) return message.safeReply("Please specify a nickname");
 
       const response = await nickname(message, target, name);
-      return message.reply(response);
+      return message.safeReply(response);
     }
 
     //
     else if (sub === "reset") {
       const target = await resolveMember(message, args[1]);
-      if (!target) return message.reply("Could not find matching member");
+      if (!target) return message.safeReply("Could not find matching member");
 
       const response = await nickname(message, target);
-      return message.reply(response);
+      return message.safeReply(response);
     }
   }
 

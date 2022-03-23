@@ -80,11 +80,11 @@ module.exports = class FlipCommand extends Command {
       if (args.length < 2) return message.channel.send("Please enter a text");
       const input = args.join(" ");
       const response = await flipText(input);
-      await message.reply(response);
+      await message.safeReply(response);
     }
 
     // else
-    else await message.reply("Incorrect command usage");
+    else await message.safeReply("Incorrect command usage");
   }
 
   /**

@@ -38,7 +38,7 @@ module.exports = class Eval extends Command {
   async messageRun(message, args) {
     const input = args.join(" ");
 
-    if (!input) return message.reply("Please provide code to eval");
+    if (!input) return message.safeReply("Please provide code to eval");
 
     let response;
     try {
@@ -47,7 +47,7 @@ module.exports = class Eval extends Command {
     } catch (ex) {
       response = buildErrorResponse(ex);
     }
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

@@ -26,6 +26,6 @@ module.exports = class BotStats extends Command {
    */
   async messageRun(message, args) {
     const response = botstats(message.client);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 };

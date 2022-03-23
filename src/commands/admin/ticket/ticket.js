@@ -171,27 +171,27 @@ module.exports = class Ticket extends Command {
     // Setup
     if (input === "setup") {
       if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
-        return message.reply("I am missing `Manage Channels` to create ticket channels");
+        return message.safeReply("I am missing `Manage Channels` to create ticket channels");
       }
       if (!message.channel.permissionsFor(message.guild.me).has("EMBED_LINKS")) {
-        return message.reply("I am missing `Embed Links` permission to run an interactive setup");
+        return message.safeReply("I am missing `Embed Links` permission to run an interactive setup");
       }
       return runInteractiveSetup(message);
     }
 
     // log ticket
     else if (input === "log") {
-      if (args.length < 2) return message.reply("Please provide a channel where ticket logs must be sent");
+      if (args.length < 2) return message.safeReply("Please provide a channel where ticket logs must be sent");
       const target = getMatchingChannels(message.guild, args[1]);
-      if (target.length === 0) return message.reply("Could not find any matching channel");
+      if (target.length === 0) return message.safeReply("Could not find any matching channel");
       response = await setupLogChannel(target[0], data.settings);
     }
 
     // Set limit
     else if (input === "limit") {
-      if (args.length < 2) return message.reply("Please provide a number");
+      if (args.length < 2) return message.safeReply("Please provide a number");
       const limit = args[1];
-      if (isNaN(limit)) return message.reply("Please provide a number input");
+      if (isNaN(limit)) return message.safeReply("Please provide a number input");
       response = await setupLimit(message, limit, data.settings);
     }
 
@@ -203,14 +203,14 @@ module.exports = class Ticket extends Command {
 
     // Close all tickets
     else if (input === "closeall") {
-      let sent = await message.reply("Closing tickets ...");
+      let sent = await message.safeReply("Closing tickets ...");
       response = await closeAll(message);
       return sent.editable ? sent.edit(response) : message.channel.send(response);
     }
 
     // Add user to ticket
     else if (input === "add") {
-      if (args.length < 2) return message.reply("Please provide a user or role to add to the ticket");
+      if (args.length < 2) return message.safeReply("Please provide a user or role to add to the ticket");
       let inputId;
       if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
       else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
@@ -220,7 +220,7 @@ module.exports = class Ticket extends Command {
 
     // Remove user from ticket
     else if (input === "remove") {
-      if (args.length < 2) return message.reply("Please provide a user or role to remove");
+      if (args.length < 2) return message.safeReply("Please provide a user or role to remove");
       let inputId;
       if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
       else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
@@ -230,10 +230,10 @@ module.exports = class Ticket extends Command {
 
     // Invalid input
     else {
-      return message.reply("Incorrect command usage");
+      return message.safeReply("Incorrect command usage");
     }
 
-    if (response) await message.reply(response);
+    if (response) await message.safeReply(response);
   }
 
   /**

@@ -42,11 +42,11 @@ module.exports = class Reaction extends Command {
   async messageRun(message, args) {
     const category = args[0].toLowerCase();
     if (!choices.includes(category)) {
-      return message.reply(`Invalid choice: \`${category}\`.\nAvailable reactions: ${choices.join(", ")}`);
+      return message.safeReply(`Invalid choice: \`${category}\`.\nAvailable reactions: ${choices.join(", ")}`);
     }
 
     const embed = await genReaction(category, message.author);
-    await message.reply({ embeds: [embed] });
+    await message.safeReply({ embeds: [embed] });
   }
 
   /**

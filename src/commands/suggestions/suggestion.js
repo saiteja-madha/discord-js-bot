@@ -116,7 +116,8 @@ module.exports = class Suggestion extends Command {
     // status
     if (sub == "status") {
       const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!status || !["ON", "OFF"].includes(status))
+        return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setStatus(data.settings, status);
     }
 
@@ -143,7 +144,7 @@ module.exports = class Suggestion extends Command {
 
     // else
     else response = "Not a valid subcommand";
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

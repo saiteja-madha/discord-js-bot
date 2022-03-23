@@ -34,7 +34,7 @@ module.exports = class Volume extends Command {
   async messageRun(message, args) {
     const amount = args[0];
     const response = volume(message, amount);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

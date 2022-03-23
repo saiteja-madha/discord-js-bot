@@ -61,7 +61,7 @@ module.exports = class Bassboost extends Command {
     let level = "none";
     if (args.length && args[0].toLowerCase() in levels) level = args[0].toLowerCase();
     const response = setBassBoost(message, level);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

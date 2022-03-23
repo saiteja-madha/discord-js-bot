@@ -46,12 +46,12 @@ module.exports = class RemoveReactionRole extends Command {
    */
   async messageRun(message, args) {
     const targetChannel = getMatchingChannels(message.guild, args[0]);
-    if (targetChannel.length === 0) return message.reply(`No channels found matching ${args[0]}`);
+    if (targetChannel.length === 0) return message.safeReply(`No channels found matching ${args[0]}`);
 
     const targetMessage = args[1];
     const response = await removeRR(message.guild, targetChannel[0], targetMessage);
 
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

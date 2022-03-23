@@ -36,7 +36,7 @@ module.exports = class Play extends Command {
   async messageRun(message, args) {
     const query = args.join(" ");
     const response = await play(message, message.author, query);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

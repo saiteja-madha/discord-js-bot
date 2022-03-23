@@ -39,7 +39,7 @@ module.exports = class GithubCommand extends Command {
   async messageRun(message, args) {
     const username = args.join(" ");
     const response = await getGithubUser(username, message.author);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

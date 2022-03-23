@@ -46,10 +46,10 @@ module.exports = class FlagTranslation extends Command {
    */
   async messageRun(message, args, data) {
     const status = args[0].toLowerCase();
-    if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+    if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
 
     const response = await setFlagTranslation(status, data.settings);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

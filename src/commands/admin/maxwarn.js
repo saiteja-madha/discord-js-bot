@@ -78,23 +78,23 @@ module.exports = class MaxWarn extends Command {
    */
   async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
-    if (!["limit", "action"].includes(input)) return message.reply("Invalid command usage");
+    if (!["limit", "action"].includes(input)) return message.safeReply("Invalid command usage");
 
     let response;
     if (input === "limit") {
       const max = parseInt(args[1]);
-      if (isNaN(max) || max < 1) return message.reply("Max Warnings must be a valid number greater than 0");
+      if (isNaN(max) || max < 1) return message.safeReply("Max Warnings must be a valid number greater than 0");
       response = await setLimit(max, data.settings);
     }
 
     if (input === "action") {
       const action = args[1]?.toUpperCase();
       if (!action || !["MUTE", "KICK", "BAN"].includes(action))
-        return message.reply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
+        return message.safeReply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
       response = await setAction(message.guild, action, data.settings);
     }
 
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

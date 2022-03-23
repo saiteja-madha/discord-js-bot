@@ -42,7 +42,7 @@ module.exports = class MemeCommand extends Command {
     );
     const embed = await getRandomEmbed(choice);
 
-    const sentMsg = await message.reply({
+    const sentMsg = await message.safeReply({
       embeds: [embed],
       components: [buttonRow],
     });

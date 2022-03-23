@@ -37,7 +37,7 @@ module.exports = class BigEmoji extends Command {
   async messageRun(message, args) {
     const emoji = args[0];
     const response = getEmoji(message.author, emoji);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

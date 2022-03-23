@@ -27,6 +27,6 @@ module.exports = class EmojiInfo extends Command {
   async messageRun(message, args) {
     const emoji = args[0];
     const response = emojiInfo(emoji);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 };

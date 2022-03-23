@@ -38,7 +38,7 @@ module.exports = class InvitesCommand extends Command {
   async messageRun(message, args, data) {
     const target = (await resolveMember(message, args[0])) || message.member;
     const response = await getInvites(message, target.user, data.settings);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

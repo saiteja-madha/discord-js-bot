@@ -39,7 +39,7 @@ module.exports = class Rank extends Command {
   async messageRun(message, args, data) {
     const member = (await resolveMember(message, args[0])) || message.member;
     const response = await getRank(message, member, data.settings);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

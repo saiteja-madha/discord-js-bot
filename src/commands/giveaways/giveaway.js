@@ -198,7 +198,7 @@ module.exports = class Giveaway extends Command {
     //
     if (sub === "start") {
       if (!message.channel.permissionsFor(message.guild.me).has("EMBED_LINKS")) {
-        return message.reply("I am missing `Embed Links` permission to run an interactive setup");
+        return message.safeReply("I am missing `Embed Links` permission to run an interactive setup");
       }
       return await runInteractiveSetup(message);
     }
@@ -240,7 +240,7 @@ module.exports = class Giveaway extends Command {
     //
     else response = "Not a valid sub command";
 
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

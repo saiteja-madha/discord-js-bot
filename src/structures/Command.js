@@ -118,32 +118,32 @@ class Command {
     // callback validations
     for (const validation of this.validations) {
       if (!validation.callback(message)) {
-        return message.reply(validation.message);
+        return message.safeReply(validation.message);
       }
     }
 
     // Owner commands
     if (this.category === "OWNER" && !OWNER_IDS.includes(message.author.id)) {
-      return message.reply("This command is only accessible to bot owners");
+      return message.safeReply("This command is only accessible to bot owners");
     }
 
     // user permissions
     if (message.member && this.userPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.member).has(this.userPermissions)) {
-        return message.reply(`You need ${parsePermissions(this.userPermissions)} for this command`);
+        return message.safeReply(`You need ${parsePermissions(this.userPermissions)} for this command`);
       }
     }
 
     // bot permissions
     if (this.botPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.guild.me).has(this.botPermissions)) {
-        return message.reply(`I need ${parsePermissions(this.botPermissions)} for this command`);
+        return message.safeReply(`I need ${parsePermissions(this.botPermissions)} for this command`);
       }
     }
 
     // min args count
     if (args.length < this.command.minArgsCount) {
-      // return message.reply(`You need at least ${this.command.minArgsCount} arguments to use this command`);
+      // return message.safeReply(`You need at least ${this.command.minArgsCount} arguments to use this command`);
       this.sendUsage(message.channel, data.prefix, data.invoke);
       return;
     }
@@ -152,7 +152,7 @@ class Command {
     if (this.cooldown > 0) {
       const remaining = this.getRemainingCooldown(message.author.id);
       if (remaining > 0) {
-        return message.reply(`You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``);
+        return message.safeReply(`You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``);
       }
     }
 

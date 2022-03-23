@@ -194,28 +194,28 @@ module.exports = class Automod extends Command {
     let response;
     if (sub == "antighostping") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await antighostPing(settings, status);
     }
 
     //
     else if (sub === "antiinvites") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await antiInvites(settings, status);
     }
 
     //
     else if (sub == "antilinks") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await antilinks(settings, status);
     }
 
     //
     else if (sub == "antiscam") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await antiScam(settings, status);
     }
 
@@ -223,7 +223,7 @@ module.exports = class Automod extends Command {
     else if (sub === "maxlines") {
       const max = args[1];
       if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.reply("Max Lines must be a valid number greater than 0");
+        return message.safeReply("Max Lines must be a valid number greater than 0");
       }
       response = await maxLines(settings, max);
     }
@@ -232,7 +232,7 @@ module.exports = class Automod extends Command {
     else if (sub === "maxmentions") {
       const max = args[1];
       if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.reply("Max Mentions must be a valid number greater than 0");
+        return message.safeReply("Max Mentions must be a valid number greater than 0");
       }
       response = await maxMentions(settings, max);
     }
@@ -241,7 +241,7 @@ module.exports = class Automod extends Command {
     else if (sub === "maxrolementions") {
       const max = args[1];
       if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.reply("Max Role Mentions must be a valid number greater than 0");
+        return message.safeReply("Max Role Mentions must be a valid number greater than 0");
       }
       response = await maxRoleMentions(settings, max);
     }
@@ -249,7 +249,7 @@ module.exports = class Automod extends Command {
     //
     else response = "Invalid command usage!";
 
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

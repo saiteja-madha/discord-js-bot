@@ -58,14 +58,14 @@ module.exports = class TranslateCommand extends Command {
         .setDescription(
           "Invalid translation code. Visit [here](https://cloud.google.com/translate/docs/languages) to see list of supported translation codes"
         );
-      return message.reply({ embeds: [embed] });
+      return message.safeReply({ embeds: [embed] });
     }
 
     const input = args.join(" ");
-    if (!input) message.reply("Provide some valid translation text");
+    if (!input) message.safeReply("Provide some valid translation text");
 
     const response = await getTranslation(message.author, input, outputCode);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

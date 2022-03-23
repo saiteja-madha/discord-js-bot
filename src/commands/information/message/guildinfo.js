@@ -26,6 +26,6 @@ module.exports = class GuildInfo extends Command {
    */
   async messageRun(message, args) {
     const response = await guildInfo(message.guild);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 };

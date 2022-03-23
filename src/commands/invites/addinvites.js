@@ -46,11 +46,11 @@ module.exports = class AddInvitesCommand extends Command {
     const target = await resolveMember(message, args[0], true);
     const amount = parseInt(args[1]);
 
-    if (!target) return message.reply("Incorrect syntax. You must mention a target");
-    if (isNaN(amount)) return message.reply("Invite amount must be a number");
+    if (!target) return message.safeReply("Incorrect syntax. You must mention a target");
+    if (isNaN(amount)) return message.safeReply("Invite amount must be a number");
 
     const response = await addInvites(message, target.user, parseInt(amount));
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

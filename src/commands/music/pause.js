@@ -24,7 +24,7 @@ module.exports = class Pause extends Command {
    */
   async messageRun(message, args) {
     const response = pause(message);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

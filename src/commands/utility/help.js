@@ -49,10 +49,10 @@ module.exports = class HelpCommand extends Command {
     // !help
     if (!trigger) {
       if (cache[`${message.guildId}|${message.author.id}`]) {
-        return message.reply("You are already viewing the help menu.");
+        return message.safeReply("You are already viewing the help menu.");
       }
       const response = await getHelpMenu(message);
-      const sentMsg = await message.reply(response);
+      const sentMsg = await message.safeReply(response);
       return waiter(sentMsg, message.author.id, data.prefix);
     }
 
@@ -61,7 +61,7 @@ module.exports = class HelpCommand extends Command {
     if (cmd) return cmd.sendUsage(message.channel, data.prefix, trigger);
 
     // No matching command/category found
-    await message.reply("No matching command found");
+    await message.safeReply("No matching command found");
   }
 
   /**
