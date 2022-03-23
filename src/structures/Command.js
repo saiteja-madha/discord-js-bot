@@ -171,6 +171,8 @@ class Command {
    * @param {import('discord.js').CommandInteraction} interaction
    */
   async executeInteraction(interaction) {
+    if (!interaction.channel.permissionsFor(interaction.guild.me).has("VIEW_CHANNEL")) return;
+
     // callback validations
     for (const validation of this.validations) {
       if (!validation.callback(interaction)) {
@@ -201,7 +203,7 @@ class Command {
 
     // bot permissions
     if (this.botPermissions.length > 0) {
-      if (!interaction.guild.me.permissions.has(this.botPermissions)) {
+      if (!interaction.channel.permissionsFor(interaction.guild.me).has(this.botPermissions)) {
         return interaction.reply({
           content: `I need ${parsePermissions(this.botPermissions)} for this command`,
           ephemeral: true,
