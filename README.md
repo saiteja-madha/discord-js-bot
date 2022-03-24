@@ -2,7 +2,7 @@
 
 ![Strange Bot](https://i.imgur.com/nFrS5wC.png)
 
-> An awesome multipurpose discord bot build using [discord.js v13](https://discord.js.org) with support for slash commands and context menus
+> An awesome multipurpose discord bot built using [discord.js v13](https://discord.js.org) with support for slash commands and context menus
 
 > Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client\_id=752922609733337190\&permissions=397602323830\&scope=bot%20applications.commands)
 >
@@ -10,7 +10,7 @@
 >
 > Documentation URL: [Visit Here](https://docs.strangebot.xyz)
 
-### Pre-requisites
+### Prerequisites
 
 * [Node.js](https://nodejs.org/en/) v16.6.0 or higher
 * [Git](https://git-scm.com/downloads)
