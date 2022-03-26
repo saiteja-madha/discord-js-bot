@@ -20,6 +20,8 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("mod-logs", Schema);
 
 module.exports = {
+  model: Model,
+
   addModLogToDb: async (admin, target, reason, type) =>
     await new Model({
       guild_id: admin.guild.id,

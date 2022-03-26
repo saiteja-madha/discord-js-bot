@@ -3,12 +3,11 @@ const { Command } = require("@src/structures");
 const { EMBED_COLORS } = require("@root/config.js");
 
 // Schemas
-const { getSettings } = require("@schemas/Guild");
 const { createNewTicket } = require("@schemas/Message");
 
 // Utils
 const { parsePermissions } = require("@utils/botUtils");
-const { canSendEmbeds, findMatchingRoles, getMatchingChannel } = require("@utils/guildUtils");
+const { canSendEmbeds, findMatchingRoles, getMatchingChannels } = require("@utils/guildUtils");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@utils/ticketUtils");
 const { isHex } = require("@utils/miscUtils");
 
@@ -163,33 +162,37 @@ module.exports = class Ticket extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     let response;
 
     // Setup
     if (input === "setup") {
       if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
-        return message.reply("I am missing `Manage Channels` to create ticket channels");
+        return message.safeReply("I am missing `Manage Channels` to create ticket channels");
+      }
+      if (!message.channel.permissionsFor(message.guild.me).has("EMBED_LINKS")) {
+        return message.safeReply("I am missing `Embed Links` permission to run an interactive setup");
       }
       return runInteractiveSetup(message);
     }
 
     // log ticket
     else if (input === "log") {
-      if (args.length < 2) return message.reply("Please provide a channel where ticket logs must be sent");
-      const target = getMatchingChannel(message.guild, args[1]);
-      if (target.length === 0) return message.reply("Could not find any matching channel");
-      response = await setupLogChannel(message, target[0]);
+      if (args.length < 2) return message.safeReply("Please provide a channel where ticket logs must be sent");
+      const target = getMatchingChannels(message.guild, args[1]);
+      if (target.length === 0) return message.safeReply("Could not find any matching channel");
+      response = await setupLogChannel(target[0], data.settings);
     }
 
     // Set limit
     else if (input === "limit") {
-      if (args.length < 2) return message.reply("Please provide a number");
+      if (args.length < 2) return message.safeReply("Please provide a number");
       const limit = args[1];
-      if (isNaN(limit)) return message.reply("Please provide a number input");
-      response = await setupLimit(message, limit);
+      if (isNaN(limit)) return message.safeReply("Please provide a number input");
+      response = await setupLimit(message, limit, data.settings);
     }
 
     // Close ticket
@@ -200,14 +203,14 @@ module.exports = class Ticket extends Command {
 
     // Close all tickets
     else if (input === "closeall") {
-      let sent = await message.reply("Closing tickets ...");
+      let sent = await message.safeReply("Closing tickets ...");
       response = await closeAll(message);
       return sent.editable ? sent.edit(response) : message.channel.send(response);
     }
 
     // Add user to ticket
     else if (input === "add") {
-      if (args.length < 2) return message.reply("Please provide a user or role to add to the ticket");
+      if (args.length < 2) return message.safeReply("Please provide a user or role to add to the ticket");
       let inputId;
       if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
       else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
@@ -217,7 +220,7 @@ module.exports = class Ticket extends Command {
 
     // Remove user from ticket
     else if (input === "remove") {
-      if (args.length < 2) return message.reply("Please provide a user or role to remove");
+      if (args.length < 2) return message.safeReply("Please provide a user or role to remove");
       let inputId;
       if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
       else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
@@ -227,16 +230,17 @@ module.exports = class Ticket extends Command {
 
     // Invalid input
     else {
-      return message.reply("Incorrect command usage");
+      return message.safeReply("Incorrect command usage");
     }
 
-    if (response) await message.reply(response);
+    if (response) await message.safeReply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     let response;
 
@@ -266,13 +270,13 @@ module.exports = class Ticket extends Command {
     // Log channel
     else if (sub === "log") {
       const channel = interaction.options.getChannel("channel");
-      response = await setupLogChannel(interaction, channel);
+      response = await setupLogChannel(channel, data.settings);
     }
 
     // Limit
     else if (sub === "limit") {
       const limit = interaction.options.getInteger("amount");
-      response = await setupLimit(interaction, limit);
+      response = await setupLimit(interaction, limit, data.settings);
     }
 
     // Close
@@ -392,20 +396,18 @@ async function setupTicket(guild, channel, title, role, color) {
   }
 }
 
-async function setupLogChannel({ guild }, target) {
+async function setupLogChannel(target, settings) {
   if (!canSendEmbeds(target)) return `Oops! I do have have permission to send embed to ${target}`;
 
-  const settings = await getSettings(guild);
   settings.ticket.log_channel = target.id;
   await settings.save();
 
   return `Configuration saved! Ticket logs will be sent to ${target.toString()}`;
 }
 
-async function setupLimit({ guild }, limit) {
+async function setupLimit(limit, settings) {
   if (Number.parseInt(limit, 10) < 5) return "Ticket limit cannot be less than 5";
 
-  const settings = await getSettings(guild);
   settings.ticket.limit = limit;
   await settings.save();
 

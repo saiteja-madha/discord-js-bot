@@ -24,7 +24,7 @@ module.exports = class Shuffle extends Command {
    */
   async messageRun(message, args) {
     const response = shuffle(message);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

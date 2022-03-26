@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { getSettings } = require("@schemas/Guild");
 const { Message, CommandInteraction } = require("discord.js");
 
 module.exports = class XPSystem extends Command {
@@ -43,27 +42,28 @@ module.exports = class XPSystem extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
-    if (!["on", "off"].includes(input)) return message.reply("Invalid status. Value must be `on/off`");
-    const response = await setStatus(message.guild, input);
-    return message.reply(response);
+    if (!["on", "off"].includes(input)) return message.safeReply("Invalid status. Value must be `on/off`");
+    const response = await setStatus(input, data.settings);
+    return message.safeReply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
-    const response = await setStatus(interaction.guild, interaction.options.getString("status"));
+  async interactionRun(interaction, data) {
+    const response = await setStatus(interaction.options.getString("status"), data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function setStatus(guild, input) {
+async function setStatus(input, settings) {
   const status = input.toLowerCase() === "on" ? true : false;
 
-  const settings = await getSettings(guild);
   settings.ranking.enabled = status;
   await settings.save();
 

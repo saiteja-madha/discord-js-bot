@@ -41,13 +41,13 @@ module.exports = class ProxiesCommand extends Command {
 
     if (args[0]) {
       if (PROXY_TYPES.includes(args[0].toLowerCase())) type = args[0].toLowerCase();
-      else return message.reply("Incorrect proxy type. Available types: `http`, `socks4`, `socks5`");
+      else return message.safeReply("Incorrect proxy type. Available types: `http`, `socks4`, `socks5`");
     }
 
     const msg = await message.channel.send("Fetching proxies... Please wait");
     const response = await getProxies(type);
     if (msg.deletable) await msg.delete();
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

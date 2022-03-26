@@ -3,7 +3,6 @@ const { isHex } = require("@utils/miscUtils");
 const { buildGreeting } = require("@src/handlers/greeting");
 const { Message, CommandInteraction } = require("discord.js");
 const { canSendEmbeds } = require("@utils/guildUtils");
-const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
 module.exports = class Farewell extends Command {
@@ -163,10 +162,11 @@ module.exports = class Farewell extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const type = args[0].toLowerCase();
-    const settings = await getSettings(message.guild);
+    const settings = data.settings;
     let response;
 
     // preview
@@ -175,9 +175,10 @@ module.exports = class Farewell extends Command {
     }
 
     // status
-    if (type === "status") {
+    else if (type === "status") {
       const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!status || !["ON", "OFF"].includes(status))
+        return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setStatus(settings, status);
     }
 
@@ -188,43 +189,47 @@ module.exports = class Farewell extends Command {
     }
 
     // desc
-    if (type === "desc") {
-      if (args.length < 2) return message.reply("Insufficient arguments! Please provide valid content");
+    else if (type === "desc") {
+      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
       const desc = args.slice(1).join(" ");
       response = await setDescription(settings, desc);
     }
 
     // thumbnail
-    if (type === "thumbnail") {
+    else if (type === "thumbnail") {
       const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!status || !["ON", "OFF"].includes(status))
+        return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setThumbnail(settings, status);
     }
 
     // color
-    if (type === "color") {
+    else if (type === "color") {
       const color = args[1];
-      if (!color || !isHex(color)) return message.reply("Invalid color. Value must be a valid hex color");
+      if (!color || !isHex(color)) return message.safeReply("Invalid color. Value must be a valid hex color");
       response = await setColor(settings, color);
     }
 
     // footer
-    if (type === "footer") {
-      if (args.length < 2) return message.reply("Insufficient arguments! Please provide valid content");
+    else if (type === "footer") {
+      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
       const content = args.slice(1).join(" ");
       response = await setFooter(settings, content);
     }
 
-    return message.reply(response);
+    //
+    else response = "Invalid command usage!";
+    return message.safeReply(response);
   }
 
   /**
    *
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
-    const settings = await getSettings(interaction.guild);
+    const settings = data.settings;
 
     let response;
     switch (sub) {

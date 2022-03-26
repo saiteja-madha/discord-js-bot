@@ -69,14 +69,14 @@ module.exports = class Warnings extends Command {
 
     if (sub === "list") {
       const target = (await resolveMember(message, args[1], true)) || message.member;
-      if (!target) return message.reply(`No user found matching ${args[1]}`);
+      if (!target) return message.safeReply(`No user found matching ${args[1]}`);
       response = await listWarnings(target, message);
     }
 
     //
     else if (sub === "clear") {
       const target = await resolveMember(message, args[1], true);
-      if (!target) return message.reply(`No user found matching ${args[1]}`);
+      if (!target) return message.safeReply(`No user found matching ${args[1]}`);
       response = await clearWarnings(target, message);
     }
 
@@ -85,7 +85,7 @@ module.exports = class Warnings extends Command {
       response = `Invalid subcommand ${sub}`;
     }
 
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

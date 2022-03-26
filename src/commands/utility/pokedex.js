@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
-const outdent = require("outdent");
+const { stripIndent } = require("common-tags");
 
 module.exports = class Pokedex extends Command {
   constructor(client) {
@@ -38,7 +38,7 @@ module.exports = class Pokedex extends Command {
   async messageRun(message, args) {
     const pokemon = args.join(" ");
     const response = await pokedex(pokemon);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**
@@ -63,7 +63,7 @@ async function pokedex(pokemon) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(json.sprite)
     .setDescription(
-      outdent`
+      stripIndent`
             ♢ **ID**: ${json.number}
             ♢ **Name**: ${json.name}
             ♢ **Species**: ${json.species}

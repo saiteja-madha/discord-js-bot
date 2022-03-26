@@ -14,14 +14,22 @@ module.exports = async (client, guild) => {
 
   if (!client.joinLeaveWebhook) return;
 
-  const owner = await client.users.fetch(guild.ownerId);
+  let ownerTag;
+  const ownerId = guild.ownerId || settings.data.owner.id;
+  try {
+    const owner = await client.users.fetch(guild.ownerId);
+    ownerTag = owner.tag;
+  } catch (err) {
+    ownerTag = settings.data.owner.tag;
+  }
+
   const embed = new MessageEmbed()
     .setTitle("Guild Left")
     .setThumbnail(guild.iconURL())
     .setColor(client.config.EMBED_COLORS.ERROR)
-    .addField("Name", guild.name, false)
+    .addField("Name", guild.name || "NA", false)
     .addField("ID", guild.id, false)
-    .addField("Owner", `${owner.username}#${owner.discriminator} [\`${owner.id}\`]`, false)
+    .addField("Owner", `${ownerTag} [\`${ownerId}\`]`, false)
     .addField("Members", `\`\`\`yaml\n${guild.memberCount}\`\`\``, false)
     .setFooter({ text: `Guild #${client.guilds.cache.size}` });
 

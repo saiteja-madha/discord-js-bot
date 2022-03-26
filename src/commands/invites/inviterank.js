@@ -1,6 +1,5 @@
 const { Command } = require("@src/structures");
 const { findMatchingRoles } = require("@utils/guildUtils");
-const { getSettings } = require("@schemas/Guild");
 const { Message, CommandInteraction } = require("discord.js");
 
 module.exports = class AddInvitesCommand extends Command {
@@ -69,62 +68,63 @@ module.exports = class AddInvitesCommand extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const sub = args[0].toLowerCase();
 
     if (sub === "add") {
       const query = args[1];
       const invites = args[2];
 
-      if (isNaN(invites)) return message.reply(`\`${invites}\` is not a valid number of invites?`);
+      if (isNaN(invites)) return message.safeReply(`\`${invites}\` is not a valid number of invites?`);
       const role = message.mentions.roles.first() || findMatchingRoles(message.guild, query)[0];
-      if (!role) return message.reply(`No roles found matching \`${query}\``);
+      if (!role) return message.safeReply(`No roles found matching \`${query}\``);
 
-      const response = await addInviteRank(message, role, invites);
-      await message.reply(response);
+      const response = await addInviteRank(message, role, invites, data.settings);
+      await message.safeReply(response);
     }
 
     //
     else if (sub === "remove") {
       const query = args[1];
       const role = message.mentions.roles.first() || findMatchingRoles(message.guild, query)[0];
-      if (!role) return message.reply(`No roles found matching \`${query}\``);
-      const response = await removeInviteRank(message, role);
-      await message.reply(response);
+      if (!role) return message.safeReply(`No roles found matching \`${query}\``);
+      const response = await removeInviteRank(message, role, data.settings);
+      await message.safeReply(response);
     }
 
     //
     else {
-      await message.reply("Incorrect command usage!");
+      await message.safeReply("Incorrect command usage!");
     }
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     //
     if (sub === "add") {
       const role = interaction.options.getRole("role");
       const invites = interaction.options.getInteger("invites");
 
-      const response = await addInviteRank(interaction, role, invites);
+      const response = await addInviteRank(interaction, role, invites, data.settings);
       await interaction.followUp(response);
     }
 
     //
     else if (sub === "remove") {
       const role = interaction.options.getRole("role");
-      const response = await removeInviteRank(interaction, role);
+      const response = await removeInviteRank(interaction, role, data.settings);
       await interaction.followUp(response);
     }
   }
 };
 
-async function addInviteRank({ guild }, role, invites) {
-  const settings = await getSettings(guild);
+async function addInviteRank({ guild }, role, invites, settings) {
   if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
 
   if (role.managed) {
@@ -152,8 +152,7 @@ async function addInviteRank({ guild }, role, invites) {
   return `${msg}Success! Configuration saved.`;
 }
 
-async function removeInviteRank({ guild }, role) {
-  const settings = await getSettings(guild);
+async function removeInviteRank({ guild }, role, settings) {
   if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
 
   if (role.managed) {

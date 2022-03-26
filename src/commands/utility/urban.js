@@ -38,7 +38,7 @@ module.exports = class UrbanCommand extends Command {
   async messageRun(message, args) {
     const word = args.join(" ");
     const response = await urban(word);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

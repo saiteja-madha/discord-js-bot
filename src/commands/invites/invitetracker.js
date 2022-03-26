@@ -1,5 +1,4 @@
 const { Command } = require("@src/structures");
-const { getSettings } = require("@schemas/Guild");
 const { cacheGuildInvites } = require("@src/handlers/invite");
 const { Message, CommandInteraction } = require("discord.js");
 
@@ -43,25 +42,27 @@ module.exports = class InviteTracker extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const status = args[0].toLowerCase();
-    if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
-    const response = await setStatus(message, status);
-    await message.reply(response);
+    if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+    const response = await setStatus(message, status, data.settings);
+    await message.safeReply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const status = interaction.options.getString("status");
-    const response = await setStatus(interaction, status);
+    const response = await setStatus(interaction, status, data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function setStatus({ guild }, input) {
+async function setStatus({ guild }, input, settings) {
   const status = input.toUpperCase() === "ON" ? true : false;
 
   if (status) {
@@ -84,7 +85,6 @@ async function setStatus({ guild }, input) {
     guild.client.inviteCache.delete(guild.id);
   }
 
-  const settings = await getSettings(guild);
   settings.invite.tracking = status;
   await settings.save();
 

@@ -1,6 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message } = require("discord.js");
-const emojiInfo = require("./shared/emoji");
+const emojiInfo = require("../shared/emoji");
 
 module.exports = class EmojiInfo extends Command {
   constructor(client) {
@@ -27,6 +27,6 @@ module.exports = class EmojiInfo extends Command {
   async messageRun(message, args) {
     const emoji = args[0];
     const response = emojiInfo(emoji);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 };

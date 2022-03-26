@@ -4,7 +4,6 @@ const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
-const { getSettings } = require("@schemas/Guild");
 
 module.exports = class InvitesCommand extends Command {
   constructor(client) {
@@ -34,25 +33,26 @@ module.exports = class InvitesCommand extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const target = (await resolveMember(message, args[0])) || message.member;
-    const response = await getInvites(message, target.user);
-    await message.reply(response);
+    const response = await getInvites(message, target.user, data.settings);
+    await message.safeReply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const user = interaction.options.getUser("user") || interaction.user;
-    const response = await getInvites(interaction, user);
+    const response = await getInvites(interaction, user, data.settings);
     await interaction.followUp(response);
   }
 };
 
-async function getInvites({ guild }, user) {
-  const settings = await getSettings(guild);
+async function getInvites({ guild }, user, settings) {
   if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
 
   const inviteData = (await getMember(guild.id, user.id)).invite_data;

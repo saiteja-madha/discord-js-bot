@@ -2,12 +2,12 @@ const { Client, Collection, Intents, WebhookClient } = require("discord.js");
 const path = require("path");
 const fs = require("fs");
 const { table } = require("table");
-const mongoose = require("mongoose");
 const logger = require("../helpers/logger");
 const MusicManager = require("./MusicManager");
 const Command = require("./Command");
 const BaseContext = require("./BaseContext");
 const GiveawayManager = require("./GiveawayManager");
+const { schemas } = require("@src/database/mongoose");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -68,22 +68,9 @@ module.exports = class BotClient extends Client {
 
     // Logger
     this.logger = logger;
-  }
 
-  /**
-   * Initialize mongoose connection and keep it alive
-   */
-  async initializeMongoose() {
-    this.logger.log(`Connecting to MongoDb...`);
-
-    await mongoose.connect(process.env.MONGO_CONNECTION, {
-      keepAlive: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    });
-
-    this.logger.success("Mongoose: Database connection established");
+    // Database
+    this.database = schemas;
   }
 
   /**

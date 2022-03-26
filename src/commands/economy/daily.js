@@ -26,7 +26,7 @@ module.exports = class DailyCommand extends Command {
    */
   async messageRun(message, args) {
     const response = await daily(message.author);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

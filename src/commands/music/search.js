@@ -36,7 +36,7 @@ module.exports = class Search extends Command {
   async messageRun(message, args) {
     const query = args.join(" ");
     const response = await search(message, message.author, query);
-    if (response) await message.reply(response);
+    if (response) await message.safeReply(response);
   }
 
   /**
@@ -159,6 +159,7 @@ async function search({ member, guild, channel }, user, query) {
       });
 
       collector.on("collect", async (response) => {
+        if (response.customId !== "search-results") return;
         const toAdd = [];
         response.values.forEach((v) => toAdd.push(results[v]));
 

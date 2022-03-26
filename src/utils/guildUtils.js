@@ -23,9 +23,10 @@ function canSendEmbeds(channel) {
 /**
  * @param {Guild} guild
  * @param {string} name
+ * @returns {[import("discord.js").GuildBasedChannel]}
  */
-function getMatchingChannel(guild, query) {
-  if (!guild || !query || typeof query !== "string") return;
+function getMatchingChannels(guild, query) {
+  if (!guild || !query || typeof query !== "string") return [];
 
   const patternMatch = query.match(CHANNEL_MENTION);
   if (patternMatch) {
@@ -164,7 +165,7 @@ async function resolveMembers(message) {
 
 module.exports = {
   canSendEmbeds,
-  getMatchingChannel,
+  getMatchingChannels,
   setVoiceChannelName,
   getMemberStats,
   findMatchingRoles,

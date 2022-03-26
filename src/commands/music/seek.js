@@ -36,7 +36,7 @@ module.exports = class Seek extends Command {
   async messageRun(message, args) {
     const time = args.join(" ");
     const response = seekTo(message, time);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

@@ -1,7 +1,7 @@
 {
   "name": "discord-js-bot",
-  "version": "4.1.0",
-  "description": "A multipurpose discord bot built using discord-js",
+  "version": "4.2.0",
+  "description": "An open-source, multipurpose discord bot built using discord-js",
   "main": "bot.js",
   "author": "Sai Teja M",
   "license": "ISC",
@@ -17,32 +17,35 @@
     "type": "git",
     "url": "git+https://github.com/saiteja-madha/discord-js-bot.git"
   },
+  "bugs": {
+    "url": "https://github.com/saiteja-madha/discord-js-bot/issues"
+  },
   "dependencies": {
-    "@vitalets/google-translate-api": "^7.0.0",
+    "@vitalets/google-translate-api": "^8.0.0",
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
     "chalk": "^4.1.2",
+    "common-tags": "^1.8.2",
     "country-language": "^0.1.7",
-    "discord-giveaways": "^5.0.1",
+    "discord-giveaways": "^5.1.1",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "erela.js": "^2.3.3",
     "erela.js-deezer": "^1.0.7",
     "erela.js-facebook": "^1.0.4",
-    "erela.js-spotify": "^1.2.0",
-    "express": "^4.17.2",
+    "erela.js-spotify": "github:MenuDocs/erela.js-spotify#build",
+    "express": "^4.17.3",
     "express-session": "^1.17.2",
     "fixedsize-map": "^1.0.1",
-    "fs": "0.0.1-security",
-    "iso-639-1": "^2.1.12",
+    "fs": "0.0.2",
+    "iso-639-1": "^2.1.13",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "mongoose": "^5.13.7",
     "nekos.life": "^2.0.9",
     "node-fetch": "^2.6.1",
     "os": "^0.1.2",
-    "outdent": "^0.8.0",
     "pretty-ms": "^7.0.1",
     "simple-node-logger": "^21.8.12",
     "snakecord": "^1.0.9",
@@ -52,9 +55,15 @@
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^13.1.0"
   },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "erlpack": "^0.1.4",
+    "utf-8-validate": "^5.0.8",
+    "zlib-sync": "^0.1.7"
+  },
   "devDependencies": {
-    "eslint": "^8.6.0",
-    "eslint-plugin-jsdoc": "^37.6.1",
+    "eslint": "^8.9.0",
+    "eslint-plugin-jsdoc": "^37.9.4",
     "node": "^16.10.0",
     "nodemon": "^2.0.15",
     "prettier": "2.5.1"
@@ -62,18 +71,18 @@
   "keywords": [
     "discord",
     "discord.js",
+    "discord-bot",
+    "open-source",
     "bot",
-    "multipurpose"
+    "multipurpose",
+    "multi-purpose-bot"
   ],
   "_moduleAliases": {
     "@root": ".",
     "@commands": "src/commands/",
     "@features": "src/features/",
-    "@schemas": "src/schemas/",
+    "@schemas": "src/database/schemas/",
     "@src": "src/",
     "@utils": "src/utils/"
-  },
-  "bugs": {
-    "url": "https://github.com/saiteja-madha/discord-js-bot/issues"
   }
 }

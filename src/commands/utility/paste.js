@@ -43,7 +43,7 @@ module.exports = class PasteCommand extends Command {
     const title = args.shift();
     const content = args.join(" ");
     const response = await paste(content, title);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

@@ -24,7 +24,7 @@ module.exports = class Stop extends Command {
    */
   async messageRun(message, args) {
     const response = stop(message);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

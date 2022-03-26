@@ -26,7 +26,7 @@ module.exports = class BegCommand extends Command {
    */
   async messageRun(message) {
     const response = await beg(message.author);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

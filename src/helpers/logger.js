@@ -1,3 +1,4 @@
+const { inspect } = require("util");
 const { MessageEmbed, WebhookClient } = require("discord.js"),
   chalk = require("chalk"),
   moment = require("moment"),
@@ -18,11 +19,12 @@ const sendWebhook = (content, err) => {
   if (!content && !err) return;
   const errString = err?.stack || err;
 
-  const embed = new MessageEmbed()
-    .setColor(config.EMBED_COLORS.ERROR)
-    .setAuthor({ name: err?.name || "Error" })
-    .setDescription("```js\n" + (errString.length > 4096 ? `${errString.substr(0, 4000)}...` : errString) + "\n```");
+  const embed = new MessageEmbed().setColor(config.EMBED_COLORS.ERROR).setAuthor({ name: err?.name || "Error" });
 
+  if (errString)
+    embed.setDescription(
+      "```js\n" + (errString.length > 4096 ? `${errString.substr(0, 4000)}...` : errString) + "\n```"
+    );
   if (err?.description) embed.addField("Description", content);
   if (err?.message) embed.addField("Message", err?.message);
 
@@ -52,8 +54,12 @@ const sendLogs = (level, content, data) => {
       break;
 
     case "error":
-      console.log(`[${chalk.cyan(timestamp)}] [${chalk.redBright(level)}] ${content} ${data ? ": " + data : ""}`);
-      simpleLogger.error(data ? data : content);
+      console.log(
+        `[${chalk.cyan(timestamp)}] [${chalk.redBright(level)}] ${content} ${
+          data ? ": " + inspect(data.message ?? data) : ""
+        }`
+      );
+      simpleLogger.error(data ?? content);
       if (errorWebhook) sendWebhook(content, data);
       break;
 

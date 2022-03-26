@@ -37,9 +37,9 @@ module.exports = class Gamble extends Command {
    */
   async messageRun(message, args) {
     const betAmount = parseInt(args[0]);
-    if (isNaN(betAmount)) return message.reply("Bet amount needs to be a valid number input");
+    if (isNaN(betAmount)) return message.safeReply("Bet amount needs to be a valid number input");
     const response = await gamble(message.author, betAmount);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

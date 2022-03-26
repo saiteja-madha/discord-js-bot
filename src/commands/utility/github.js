@@ -2,7 +2,7 @@ const { Command } = require("@src/structures");
 const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
 const { MESSAGES } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
-const outdent = require("outdent");
+const { stripIndent } = require("common-tags");
 
 module.exports = class GithubCommand extends Command {
   constructor(client) {
@@ -39,7 +39,7 @@ module.exports = class GithubCommand extends Command {
   async messageRun(message, args) {
     const username = args.join(" ");
     const response = await getGithubUser(username, message.author);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**
@@ -84,7 +84,7 @@ async function getGithubUser(target, author) {
     })
     .addField(
       "User Info",
-      outdent`**Real Name**: *${name || "Not Provided"}*
+      stripIndent`**Real Name**: *${name || "Not Provided"}*
         **Location**: *${location}*
         **GitHub ID**: *${githubId}*
         **Website**: *${website}*\n`,

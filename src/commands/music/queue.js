@@ -34,7 +34,7 @@ module.exports = class Queue extends Command {
   async messageRun(message, args) {
     const page = args.length && Number(args[0]) ? Number(args[0]) : 1;
     const response = getQueue(message, page);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

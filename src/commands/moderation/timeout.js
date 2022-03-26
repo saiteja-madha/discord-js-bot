@@ -49,12 +49,12 @@ module.exports = class Timeout extends Command {
    */
   async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
-    if (!target) return message.reply(`No user found matching ${args[0]}`);
+    if (!target) return message.safeReply(`No user found matching ${args[0]}`);
     const minutes = parseInt(args[1]);
-    if (isNaN(minutes)) return message.reply("Invalid time. Provide time in minutes.");
+    if (isNaN(minutes)) return message.safeReply("Invalid time. Provide time in minutes.");
     const reason = args.slice(2).join(" ").trim();
     const response = await timeout(message.member, target, minutes, reason);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

@@ -115,6 +115,10 @@ const Schema = mongoose.Schema({
     },
   },
   autorole: String,
+  suggestions: {
+    enabled: Boolean,
+    channel_id: String,
+  },
 });
 
 const Model = mongoose.model("guild", Schema);
@@ -125,6 +129,7 @@ module.exports = {
 
     let guildData = await Model.findOne({ _id: guild.id });
     if (!guildData) {
+      await guild.fetchOwner({ cache: true });
       guildData = new Model({
         _id: guild.id,
         data: {
@@ -132,7 +137,7 @@ module.exports = {
           region: guild.preferredLocale,
           owner: {
             id: guild.ownerId,
-            tag: guild.members.cache.get(guild.ownerId).user.tag,
+            tag: guild.members.cache.get(guild.ownerId)?.user.tag,
           },
           joinedAt: guild.joinedAt,
         },

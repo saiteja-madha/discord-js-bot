@@ -49,14 +49,14 @@ module.exports = class Filters extends Command {
    * @param {Message} message
    * @param {string[]} args
    */
-  async messageRun(message, args, invoke) {
+  async messageRun(message, args, data) {
     const image = await getImageFromCommand(message, args);
 
     // use invoke as an endpoint
-    const url = getFilter(invoke.toLowerCase(), image);
+    const url = getFilter(data.invoke.toLowerCase(), image);
     const response = await getBuffer(url);
 
-    if (!response.success) return message.reply("Failed to generate image");
+    if (!response.success) return message.safeReply("Failed to generate image");
 
     const attachment = new MessageAttachment(response.buffer, "attachment.png");
     const embed = new MessageEmbed()
@@ -64,7 +64,7 @@ module.exports = class Filters extends Command {
       .setImage("attachment://attachment.png")
       .setFooter({ text: `Requested by: ${message.author.tag}` });
 
-    await message.reply({ embeds: [embed], files: [attachment] });
+    await message.safeReply({ embeds: [embed], files: [attachment] });
   }
 
   /**

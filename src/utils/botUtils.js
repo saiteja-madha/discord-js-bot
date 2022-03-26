@@ -59,13 +59,8 @@ function validateConfig() {
   if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
 }
 
-async function startupCheck() {
-  await checkForUpdates();
-  validateConfig();
-}
-
 /**
- * @param {import('discord.js').TextBasedChannels} channel
+ * @param {import('discord.js').TextBasedChannel} channel
  * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} content
  * @param {number} [seconds]
  */
@@ -148,7 +143,7 @@ const permissions = {
  */
 const parsePermissions = (perms) => {
   const permissionWord = `permission${perms.length > 1 ? "s" : ""}`;
-  return perms.map((perm) => `\`${permissions[perm]}\``).join(", ") + permissionWord;
+  return "`" + perms.map((perm) => permissions[perm]).join(", ") + "` " + permissionWord;
 };
 
 const musicValidations = [
@@ -170,8 +165,9 @@ const musicValidations = [
 module.exports = {
   permissions,
   parsePermissions,
+  validateConfig,
+  checkForUpdates,
   sendMessage,
   safeDM,
-  startupCheck,
   musicValidations,
 };

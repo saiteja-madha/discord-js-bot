@@ -39,7 +39,7 @@ module.exports = class WeatherCommand extends Command {
   async messageRun(message, args) {
     const place = args.join(" ");
     const response = await weather(place);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

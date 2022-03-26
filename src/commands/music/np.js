@@ -27,7 +27,7 @@ module.exports = class Skip extends Command {
    */
   async messageRun(message, args) {
     const response = nowPlaying(message);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

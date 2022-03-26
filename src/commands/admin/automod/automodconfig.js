@@ -1,7 +1,6 @@
 const { Command } = require("@src/structures");
 const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { getSettings } = require("@schemas/Guild");
 const { table } = require("table");
 
 module.exports = class AutomodConfigCommand extends Command {
@@ -113,46 +112,44 @@ module.exports = class AutomodConfigCommand extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
+   * @param {object} data
    */
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
-    const settings = await getSettings(message.guild);
+    const settings = data.settings;
 
     let response;
     if (input === "status") {
       response = await getStatus(settings, message.guild);
-    }
-
-    if (input === "strikes") {
+    } else if (input === "strikes") {
       const strikes = args[1];
       if (isNaN(strikes) || Number.parseInt(strikes) < 1) {
-        return message.reply("Strikes must be a valid number greater than 0");
+        return message.safeReply("Strikes must be a valid number greater than 0");
       }
       response = await setStrikes(settings, strikes);
-    }
-
-    if (input === "action") {
+    } else if (input === "action") {
       const action = args[1].toUpperCase();
       if (!action || !["MUTE", "KICK", "BAN"].includes(action))
-        return message.reply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
+        return message.safeReply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
       response = await setAction(settings, message.guild, action);
-    }
-
-    if (input === "debug") {
+    } else if (input === "debug") {
       const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.reply("Invalid status. Value must be `on/off`");
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setDebug(settings, status);
     }
 
-    await message.reply(response);
+    //
+    else response = "Invalid command usage!";
+    await message.safeReply(response);
   }
 
   /**
    * @param {CommandInteraction} interaction
+   * @param {object} data
    */
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
-    const settings = await getSettings(interaction.guild);
+    const settings = data.settings;
 
     let response;
 

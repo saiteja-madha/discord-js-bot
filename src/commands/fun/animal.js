@@ -41,10 +41,10 @@ module.exports = class AnimalCommand extends Command {
   async messageRun(message, args) {
     const choice = args[0];
     if (!animals.includes(choice)) {
-      return message.reply(`Invalid animal selected. Available animals:\n${animals.join(", ")}`);
+      return message.safeReply(`Invalid animal selected. Available animals:\n${animals.join(", ")}`);
     }
     const response = await getAnimal(message.author, choice);
-    return message.reply(response);
+    return message.safeReply(response);
   }
 
   /**

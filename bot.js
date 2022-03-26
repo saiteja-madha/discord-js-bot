@@ -1,8 +1,10 @@
 require("dotenv").config();
 require("module-alias/register");
+require("@src/helpers/extenders");
 
 const path = require("path");
-const { startupCheck } = require("@utils/botUtils");
+const { validateConfig, checkForUpdates } = require("@utils/botUtils");
+const { initializeMongoose } = require("@src/database/mongoose");
 const { BotClient } = require("@src/structures");
 
 global.__appRoot = path.resolve(__dirname);
@@ -17,7 +19,15 @@ client.loadEvents("src/events");
 process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
 (async () => {
-  await startupCheck();
+  validateConfig();
+
+  // initialize the database
+  await initializeMongoose();
+
+  // check for updates
+  await checkForUpdates();
+
+  // start the dashboard
   if (client.config.DASHBOARD.enabled) {
     client.logger.log("Launching dashboard");
     try {
@@ -27,6 +37,7 @@ process.on("unhandledRejection", (err) => client.logger.error(`Unhandled excepti
       client.logger.error("Failed to launch dashboard", ex);
     }
   }
-  await client.initializeMongoose();
+
+  // start the client
   await client.login(process.env.BOT_TOKEN);
 })();

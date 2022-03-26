@@ -37,9 +37,9 @@ module.exports = class ResetInvites extends Command {
    */
   async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
-    if (!target) return message.reply("Incorrect syntax. You must mention a target");
+    if (!target) return message.safeReply("Incorrect syntax. You must mention a target");
     const response = await clearInvites(message, target.user);
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   /**

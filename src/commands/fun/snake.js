@@ -24,7 +24,7 @@ module.exports = class SnakeCommand extends Command {
    * @param {string[]} args
    */
   async messageRun(message, args) {
-    await message.reply("**Starting Snake Game**");
+    await message.safeReply("**Starting Snake Game**");
     await startSnakeGame(message);
   }
 

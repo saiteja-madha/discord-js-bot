@@ -26,21 +26,21 @@ module.exports = class PurgeCommand extends Command {
   async messageRun(message, args) {
     const amount = args[0];
 
-    if (isNaN(amount)) return message.reply("Numbers are only allowed");
-    if (parseInt(amount) > 99) return message.reply("The max amount of messages that I can delete is 99");
+    if (isNaN(amount)) return message.safeReply("Numbers are only allowed");
+    if (parseInt(amount) > 99) return message.safeReply("The max amount of messages that I can delete is 99");
 
     const response = await purgeMessages(message.member, message.channel, "ALL", amount);
 
     if (typeof response === "number") {
       return sendMessage(message.channel, `Successfully deleted ${response} messages`, 5);
     } else if (response === "BOT_PERM") {
-      return message.reply("I don't have `Read Message History` & `Manage Messages` to delete messages");
+      return message.safeReply("I don't have `Read Message History` & `Manage Messages` to delete messages");
     } else if (response === "MEMBER_PERM") {
-      return message.reply("You don't have `Read Message History` & `Manage Messages` to delete messages");
+      return message.safeReply("You don't have `Read Message History` & `Manage Messages` to delete messages");
     } else if (response === "NO_MESSAGES") {
-      return message.reply("No messages found that can be cleaned");
+      return message.safeReply("No messages found that can be cleaned");
     } else {
-      return message.reply(`Error occurred! Failed to delete messages`);
+      return message.safeReply(`Error occurred! Failed to delete messages`);
     }
   }
 };

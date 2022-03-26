@@ -82,7 +82,7 @@ module.exports = class Reputation extends Command {
     // give
     else if (sub === "give") {
       const target = await resolveMember(message, args[1]);
-      if (!target) return message.reply("Please provide a valid user to give reputation to");
+      if (!target) return message.safeReply("Please provide a valid user to give reputation to");
       response = await giveReputation(message.author, target.user);
     }
 
@@ -91,7 +91,7 @@ module.exports = class Reputation extends Command {
       response = "Incorrect command usage";
     }
 
-    await message.reply(response);
+    await message.safeReply(response);
   }
 
   async interactionRun(interaction) {

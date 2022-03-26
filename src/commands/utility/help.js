@@ -41,28 +41,27 @@ module.exports = class HelpCommand extends Command {
   /**
    * @param {Message} message
    * @param {string[]} args
-   * @param {string} invoke
-   * @param {string} prefix
+   * @param {object} data
    */
-  async messageRun(message, args, invoke, prefix) {
+  async messageRun(message, args, data) {
     let trigger = args[0];
 
     // !help
     if (!trigger) {
       if (cache[`${message.guildId}|${message.author.id}`]) {
-        return message.reply("You are already viewing the help menu.");
+        return message.safeReply("You are already viewing the help menu.");
       }
       const response = await getHelpMenu(message);
-      const sentMsg = await message.reply(response);
-      return waiter(sentMsg, message.author.id, prefix);
+      const sentMsg = await message.safeReply(response);
+      return waiter(sentMsg, message.author.id, data.prefix);
     }
 
     // check if command help (!help cat)
     const cmd = this.client.getCommand(trigger);
-    if (cmd) return cmd.sendUsage(message.channel, prefix, trigger);
+    if (cmd) return cmd.sendUsage(message.channel, data.prefix, trigger);
 
     // No matching command/category found
-    await message.reply("No matching command found");
+    await message.safeReply("No matching command found");
   }
 
   /**
@@ -163,6 +162,7 @@ const waiter = (msg, userId, prefix) => {
   let buttonsRow = msg.components[1];
 
   collector.on("collect", async (response) => {
+    if (!["help-menu", "previousBtn", "nextBtn"].includes(response.customId)) return;
     await response.deferUpdate();
 
     switch (response.customId) {
