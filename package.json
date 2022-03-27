@@ -1,6 +1,6 @@
 {
   "name": "discord-js-bot",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "An open-source, multipurpose discord bot built using discord-js",
   "main": "bot.js",
   "author": "Sai Teja M",
