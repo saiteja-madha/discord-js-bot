@@ -1,4 +1,4 @@
-const { automodHandler, xpHandler } = require("@src/handlers");
+const { commandHandler, automodHandler, xpHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
@@ -9,31 +9,24 @@ const { sendMessage } = require("@utils/botUtils");
 module.exports = async (client, message) => {
   if (!message.guild || message.author.bot) return;
   const settings = await getSettings(message.guild);
-  const { prefix } = settings;
 
   // check for bot mentions
   if (message.content.includes(`${client.user.id}`)) {
     sendMessage(message.channel, `My prefix is \`${settings.prefix}\``);
   }
 
+  // command handler
   let isCommand = false;
-  if (message.content.startsWith(prefix)) {
-    const args = message.content.replace(`${prefix}`, "").split(/\s+/);
-    const invoke = args.shift().toLowerCase();
+  if (message.content && message.content.startsWith(settings.prefix)) {
+    const invoke = message.content.replace(`${settings.prefix}`, "").split(/\s+/)[0];
     const cmd = client.getCommand(invoke);
-
-    const data = { prefix, invoke, settings };
-
-    // command is found
     if (cmd) {
       isCommand = true;
-      cmd.executeCommand(message, args, data);
+      commandHandler.handlePrefixCommand(message, cmd, settings);
     }
   }
 
   // if not a command
-  if (!isCommand) {
-    await automodHandler.performAutomod(message, settings);
-    if (settings.ranking.enabled) xpHandler.handleXp(message);
-  }
+  if (!isCommand) await automodHandler.performAutomod(message, settings);
+  if (settings.ranking.enabled) xpHandler.handleXp(message);
 };

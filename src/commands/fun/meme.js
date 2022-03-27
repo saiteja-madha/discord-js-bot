@@ -1,39 +1,33 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction, MessageActionRow, MessageButton } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const { getRandomInt } = require("@utils/miscUtils");
 
-module.exports = class MemeCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "meme",
-      description: "get a random meme",
-      category: "FUN",
-      botPermissions: ["EMBED_LINKS"],
-      cooldown: 20,
-      command: {
-        enabled: true,
-        usage: "[category]",
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "meme",
+  description: "get a random meme",
+  category: "FUN",
+  botPermissions: ["EMBED_LINKS"],
+  cooldown: 20,
+  command: {
+    enabled: true,
+    usage: "[category]",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "category",
+        description: "meme category",
+        type: "STRING",
+        required: false,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "category",
-            description: "meme category",
-            type: "STRING",
-            required: false,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const choice = args[0];
 
@@ -71,11 +65,8 @@ module.exports = class MemeCommand extends Command {
         components: [buttonRow],
       });
     });
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const choice = interaction.options.getString("category");
 
@@ -113,7 +104,7 @@ module.exports = class MemeCommand extends Command {
         components: [buttonRow],
       });
     });
-  }
+  },
 };
 
 async function getRandomEmbed(choice) {

@@ -1,42 +1,33 @@
 const { EMBED_COLORS } = require("@root/config");
-const { Command } = require("@src/structures");
-const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const prettyMs = require("pretty-ms");
 const { splitBar } = require("string-progressbar");
 
-module.exports = class Skip extends Command {
-  constructor(client) {
-    super(client, {
-      name: "np",
-      description: "show's what track is currently being played",
-      category: "MUSIC",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        aliases: ["nowplaying"],
-      },
-      slashCommand: {
-        enabled: true,
-      },
-    });
-  }
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "np",
+  description: "show's what track is currently being played",
+  category: "MUSIC",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    aliases: ["nowplaying"],
+  },
+  slashCommand: {
+    enabled: true,
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const response = nowPlaying(message);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const response = nowPlaying(interaction);
     await interaction.followUp(response);
-  }
+  },
 };
 
 function nowPlaying({ client, guildId }) {

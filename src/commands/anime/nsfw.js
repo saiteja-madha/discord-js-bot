@@ -1,5 +1,4 @@
-const { Command } = require("@src/structures");
-const { CommandInteraction, MessageEmbed, Message } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const NekosLife = require("nekos.life");
 const neko = new NekosLife();
@@ -31,57 +30,49 @@ const choices = [
   "yuri",
 ];
 
-module.exports = class NSFW extends Command {
-  constructor(client) {
-    super(client, {
-      name: "nsfw",
-      description: "show some random nsfw",
-      enabled: true,
-      category: "ANIME",
-      cooldown: 10,
-      validations: [
-        {
-          callback: ({ channel }) => channel?.nsfw,
-          message: "This command can only be used in nsfw channel",
-        },
-      ],
-      command: {
-        enabled: true,
-        usage: "nsfw [category]",
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "nsfw",
+  description: "show some random nsfw",
+  enabled: true,
+  category: "ANIME",
+  cooldown: 10,
+  validations: [
+    {
+      callback: ({ channel }) => channel?.nsfw,
+      message: "This command can only be used in nsfw channel",
+    },
+  ],
+  command: {
+    enabled: true,
+    usage: "nsfw [category]",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "category",
+        description: "nsfw category",
+        type: "STRING",
+        required: false,
+        choices: choices.map((ch) => ({ name: ch, value: ch })),
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "category",
-            description: "nsfw category",
-            type: "STRING",
-            required: false,
-            choices: choices.map((ch) => ({ name: ch, value: ch })),
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const choice = args.join(" ");
     const embed = await genNSFW(choice, message.author);
     await message.safeReply({ embeds: [embed] });
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const choice = interaction.options.getString("category");
     const embed = await genNSFW(choice, interaction.user);
     await interaction.followUp({ embeds: [embed] });
-  }
+  },
 };
 
 const genNSFW = async (category, user) => {

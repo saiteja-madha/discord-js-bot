@@ -1,5 +1,4 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction, MessageEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { parsePermissions } = require("@utils/botUtils");
 const { EMBED_COLORS } = require("@root/config");
 
@@ -12,185 +11,180 @@ const reroll = require("./sub/reroll");
 const list = require("./sub/list");
 const edit = require("./sub/edit");
 
-module.exports = class Giveaway extends Command {
-  constructor(client) {
-    super(client, {
-      name: "giveaway",
-      description: "giveaway commands",
-      category: "GIVEAWAY",
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        subcommands: [
-          {
-            trigger: "start",
-            description: "start an interactive giveaway setup",
-          },
-          {
-            trigger: "pause <messageId>",
-            description: "pause a giveaway",
-          },
-          {
-            trigger: "resume <messageId>",
-            description: "resume a paused giveaway",
-          },
-          {
-            trigger: "end <messageId>",
-            description: "end a giveaway",
-          },
-          {
-            trigger: "reroll <messageId>",
-            description: "reroll a giveaway",
-          },
-          {
-            trigger: "list",
-            description: "list all giveaways",
-          },
-          {
-            trigger: "edit",
-            description: "edit a giveaway",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "giveaway",
+  description: "giveaway commands",
+  category: "GIVEAWAY",
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    subcommands: [
+      {
+        trigger: "start",
+        description: "start an interactive giveaway setup",
       },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
+      {
+        trigger: "pause <messageId>",
+        description: "pause a giveaway",
+      },
+      {
+        trigger: "resume <messageId>",
+        description: "resume a paused giveaway",
+      },
+      {
+        trigger: "end <messageId>",
+        description: "end a giveaway",
+      },
+      {
+        trigger: "reroll <messageId>",
+        description: "reroll a giveaway",
+      },
+      {
+        trigger: "list",
+        description: "list all giveaways",
+      },
+      {
+        trigger: "edit",
+        description: "edit a giveaway",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "start",
+        description: "start a giveaway",
+        type: "SUB_COMMAND",
         options: [
           {
-            name: "start",
-            description: "start a giveaway",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "channel",
-                description: "the channel to start the giveaway in",
-                type: "CHANNEL",
-                channelTypes: ["GUILD_TEXT"],
-                required: true,
-              },
-              {
-                name: "duration",
-                description: "the duration of the giveaway in minutes",
-                type: "INTEGER",
-                required: true,
-              },
-              {
-                name: "prize",
-                description: "the prize of the giveaway",
-                type: "STRING",
-                required: true,
-              },
-              {
-                name: "winners",
-                description: "the number of winners",
-                type: "INTEGER",
-                required: true,
-              },
-              {
-                name: "host",
-                description: "the host of the giveaway",
-                type: "USER",
-                required: false,
-              },
-            ],
+            name: "channel",
+            description: "the channel to start the giveaway in",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
           },
           {
-            name: "pause",
-            description: "pause a giveaway",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "message_id",
-                description: "the message id of the giveaway",
-                type: "STRING",
-                required: true,
-              },
-            ],
+            name: "duration",
+            description: "the duration of the giveaway in minutes",
+            type: "INTEGER",
+            required: true,
           },
           {
-            name: "resume",
-            description: "resume a paused giveaway",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "message_id",
-                description: "the message id of the giveaway",
-                type: "STRING",
-                required: true,
-              },
-            ],
+            name: "prize",
+            description: "the prize of the giveaway",
+            type: "STRING",
+            required: true,
           },
           {
-            name: "end",
-            description: "end a giveaway",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "message_id",
-                description: "the message id of the giveaway",
-                type: "STRING",
-                required: true,
-              },
-            ],
+            name: "winners",
+            description: "the number of winners",
+            type: "INTEGER",
+            required: true,
           },
           {
-            name: "reroll",
-            description: "reroll a giveaway",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "message_id",
-                description: "the message id of the giveaway",
-                type: "STRING",
-                required: true,
-              },
-            ],
-          },
-          {
-            name: "list",
-            description: "list all giveaways",
-            type: "SUB_COMMAND",
-          },
-          {
-            name: "edit",
-            description: "edit a giveaway",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "message_id",
-                description: "the message id of the giveaway",
-                type: "STRING",
-                required: true,
-              },
-              {
-                name: "add_duration",
-                description: "the number of minutes to add to the giveaway duration",
-                type: "INTEGER",
-                required: false,
-              },
-              {
-                name: "new_prize",
-                description: "the new prize",
-                type: "STRING",
-                required: false,
-              },
-              {
-                name: "new_winners",
-                description: "the new number of winners",
-                type: "INTEGER",
-                required: false,
-              },
-            ],
+            name: "host",
+            description: "the host of the giveaway",
+            type: "USER",
+            required: false,
           },
         ],
       },
-    });
-  }
+      {
+        name: "pause",
+        description: "pause a giveaway",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "message_id",
+            description: "the message id of the giveaway",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "resume",
+        description: "resume a paused giveaway",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "message_id",
+            description: "the message id of the giveaway",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "end",
+        description: "end a giveaway",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "message_id",
+            description: "the message id of the giveaway",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "reroll",
+        description: "reroll a giveaway",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "message_id",
+            description: "the message id of the giveaway",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "list",
+        description: "list all giveaways",
+        type: "SUB_COMMAND",
+      },
+      {
+        name: "edit",
+        description: "edit a giveaway",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "message_id",
+            description: "the message id of the giveaway",
+            type: "STRING",
+            required: true,
+          },
+          {
+            name: "add_duration",
+            description: "the number of minutes to add to the giveaway duration",
+            type: "INTEGER",
+            required: false,
+          },
+          {
+            name: "new_prize",
+            description: "the new prize",
+            type: "STRING",
+            required: false,
+          },
+          {
+            name: "new_winners",
+            description: "the new number of winners",
+            type: "INTEGER",
+            required: false,
+          },
+        ],
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const sub = args[0]?.toLowerCase();
     let response;
@@ -241,11 +235,8 @@ module.exports = class Giveaway extends Command {
     else response = "Not a valid sub command";
 
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand();
     let response;
@@ -302,7 +293,7 @@ module.exports = class Giveaway extends Command {
     else response = "Invalid subcommand";
 
     await interaction.followUp(response);
-  }
+  },
 };
 
 // Interactive Giveaway setup

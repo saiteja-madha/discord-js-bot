@@ -9,6 +9,7 @@
       "@features/*": ["./src/features/*"],
       "@schemas/*": ["./src/database/schemas/*"],
       "@src/*": ["./src/*"],
+      "@structures/*": ["./src/structures/*"],
       "@utils/*": ["./src/utils/*"]
     }
   },

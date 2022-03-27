@@ -1,52 +1,43 @@
-const { Command } = require("@src/structures");
-const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const prettyMs = require("pretty-ms");
 const { EMBED_COLORS } = require("@root/config");
 
-module.exports = class Play extends Command {
-  constructor(client) {
-    super(client, {
-      name: "play",
-      description: "play a song from youtube",
-      category: "MUSIC",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<song-name>",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "play",
+  description: "play a song from youtube",
+  category: "MUSIC",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<song-name>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "query",
+        description: "song name or url",
+        type: "STRING",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "query",
-            description: "song name or url",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const query = args.join(" ");
     const response = await play(message, message.author, query);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const query = interaction.options.getString("query");
     const response = await play(interaction, interaction.user, query);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function play({ member, guild, channel }, user, query) {

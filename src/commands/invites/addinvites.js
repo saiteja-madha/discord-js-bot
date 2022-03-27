@@ -1,47 +1,41 @@
-const { Command } = require("@src/structures");
 const { getEffectiveInvites, checkInviteRewards } = require("@src/handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
 
-module.exports = class AddInvitesCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "addinvites",
-      description: "add invites to a member",
-      category: "INVITE",
-      userPermissions: ["MANAGE_GUILD"],
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<@member|id> <invites>",
-        minArgsCount: 2,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "addinvites",
+  description: "add invites to a member",
+  category: "INVITE",
+  userPermissions: ["MANAGE_GUILD"],
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<@member|id> <invites>",
+    minArgsCount: 2,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "user",
+        description: "the user to give invites to",
+        type: "USER",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "user",
-            description: "the user to give invites to",
-            type: "USER",
-            required: true,
-          },
-          {
-            name: "invites",
-            description: "the number of invites to give",
-            type: "INTEGER",
-            required: true,
-          },
-        ],
+      {
+        name: "invites",
+        description: "the number of invites to give",
+        type: "INTEGER",
+        required: true,
       },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
     const amount = parseInt(args[1]);
@@ -51,17 +45,14 @@ module.exports = class AddInvitesCommand extends Command {
 
     const response = await addInvites(message, target.user, parseInt(amount));
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");
     const amount = interaction.options.getInteger("invites");
     const response = await addInvites(interaction, user, amount);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function addInvites({ guild }, user, amount) {

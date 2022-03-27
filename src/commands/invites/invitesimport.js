@@ -1,52 +1,42 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
 const { getMember } = require("@schemas/Member");
 const { resolveMember } = require("@utils/guildUtils");
 
-module.exports = class InvitesImportCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "invitesimport",
-      description: "add existing guild invites to users",
-      category: "INVITE",
-      botPermissions: ["MANAGE_GUILD"],
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        usage: "[@member]",
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "invitesimport",
+  description: "add existing guild invites to users",
+  category: "INVITE",
+  botPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    usage: "[@member]",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "user",
+        description: "the user to import invites for",
+        type: "USER",
+        required: false,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "user",
-            description: "the user to import invites for",
-            type: "USER",
-            required: false,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const target = args.length > 0 && (await resolveMember(message, args[0]));
     const response = await importInvites(message, target?.user);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");
     const response = await importInvites(interaction, user);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function importInvites({ guild }, user) {

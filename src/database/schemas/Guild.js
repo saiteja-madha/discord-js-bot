@@ -9,6 +9,10 @@ const Schema = mongoose.Schema({
     type: String,
     required: true,
   },
+  isPremium: {
+    type: Boolean,
+    default: false,
+  },
   data: {
     name: String,
     region: String,
@@ -60,7 +64,7 @@ const Schema = mongoose.Schema({
     ranks: [
       {
         invites: {
-          type: String,
+          type: Number,
           required: true,
         },
         _id: {

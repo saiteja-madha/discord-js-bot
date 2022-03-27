@@ -1,5 +1,3 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
 const { musicValidations } = require("@utils/botUtils");
 
 const levels = {
@@ -9,69 +7,61 @@ const levels = {
   high: 0.25,
 };
 
-module.exports = class Bassboost extends Command {
-  constructor(client) {
-    super(client, {
-      name: "bassboost",
-      description: "set bassboost level",
-      category: "MUSIC",
-      validations: musicValidations,
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        usage: "<none|low|medium|high>",
-      },
-      slashCommand: {
-        enabled: true,
-        options: [
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "bassboost",
+  description: "set bassboost level",
+  category: "MUSIC",
+  validations: musicValidations,
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    usage: "<none|low|medium|high>",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "level",
+        description: "bassboost level",
+        type: "STRING",
+        required: true,
+        choices: [
           {
-            name: "level",
-            description: "bassboost level",
-            type: "STRING",
-            required: true,
-            choices: [
-              {
-                name: "none",
-                value: "none",
-              },
-              {
-                name: "low",
-                value: "low",
-              },
-              {
-                name: "medium",
-                value: "medium",
-              },
-              {
-                name: "high",
-                value: "high",
-              },
-            ],
+            name: "none",
+            value: "none",
+          },
+          {
+            name: "low",
+            value: "low",
+          },
+          {
+            name: "medium",
+            value: "medium",
+          },
+          {
+            name: "high",
+            value: "high",
           },
         ],
       },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     let level = "none";
     if (args.length && args[0].toLowerCase() in levels) level = args[0].toLowerCase();
     const response = setBassBoost(message, level);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     let level = interaction.options.getString("level");
     const response = setBassBoost(interaction, level);
     await interaction.followUp(response);
-  }
+  },
 };
 
 function setBassBoost({ client, guildId }, level) {

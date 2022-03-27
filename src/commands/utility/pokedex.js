@@ -1,54 +1,45 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const { stripIndent } = require("common-tags");
 
-module.exports = class Pokedex extends Command {
-  constructor(client) {
-    super(client, {
-      name: "pokedex",
-      description: "shows pokemon information",
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
-      cooldown: 5,
-      command: {
-        enabled: true,
-        usage: "<pokemon>",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "pokedex",
+  description: "shows pokemon information",
+  category: "UTILITY",
+  botPermissions: ["EMBED_LINKS"],
+  cooldown: 5,
+  command: {
+    enabled: true,
+    usage: "<pokemon>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "pokemon",
+        description: "pokemon name to get information for",
+        type: "STRING",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "pokemon",
-            description: "pokemon name to get information for",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const pokemon = args.join(" ");
     const response = await pokedex(pokemon);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const pokemon = interaction.options.getString("pokemon");
     const response = await pokedex(pokemon);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function pokedex(pokemon) {

@@ -1,41 +1,32 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
 
-module.exports = class BegCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "beg",
-      description: "beg from someone",
-      category: "ECONOMY",
-      cooldown: 21600,
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-      },
-      slashCommand: {
-        enabled: true,
-      },
-    });
-  }
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "beg",
+  description: "beg from someone",
+  category: "ECONOMY",
+  cooldown: 21600,
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+  },
+  slashCommand: {
+    enabled: true,
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
-  async messageRun(message) {
+  async messageRun(message, args) {
     const response = await beg(message.author);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const response = await beg(interaction.user);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function beg(user) {

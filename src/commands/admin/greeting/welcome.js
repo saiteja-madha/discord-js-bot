@@ -1,169 +1,161 @@
-const { Command } = require("@src/structures");
 const { isHex } = require("@utils/miscUtils");
 const { buildGreeting } = require("@src/handlers/greeting");
-const { Message, CommandInteraction } = require("discord.js");
 const { canSendEmbeds } = require("@utils/guildUtils");
 const { sendMessage } = require("@utils/botUtils");
 
-module.exports = class Welcome extends Command {
-  constructor(client) {
-    super(client, {
-      name: "welcome",
-      description: "setup welcome message",
-      category: "ADMIN",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        subcommands: [
-          {
-            trigger: "status <on|off>",
-            description: "enable or disable welcome message",
-          },
-          {
-            trigger: "channel <#channel>",
-            description: "configure welcome message",
-          },
-          {
-            trigger: "preview",
-            description: "preview the configured welcome message",
-          },
-          {
-            trigger: "desc <text>",
-            description: "set embed description",
-          },
-          {
-            trigger: "thumbnail <ON|OFF>",
-            description: "enable/disable embed thumbnail",
-          },
-          {
-            trigger: "color <hexcolor>",
-            description: "set embed color",
-          },
-          {
-            trigger: "footer <text>",
-            description: "set embed footer content",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "welcome",
+  description: "setup welcome message",
+  category: "ADMIN",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    subcommands: [
+      {
+        trigger: "status <on|off>",
+        description: "enable or disable welcome message",
       },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
+      {
+        trigger: "channel <#channel>",
+        description: "configure welcome message",
+      },
+      {
+        trigger: "preview",
+        description: "preview the configured welcome message",
+      },
+      {
+        trigger: "desc <text>",
+        description: "set embed description",
+      },
+      {
+        trigger: "thumbnail <ON|OFF>",
+        description: "enable/disable embed thumbnail",
+      },
+      {
+        trigger: "color <hexcolor>",
+        description: "set embed color",
+      },
+      {
+        trigger: "footer <text>",
+        description: "set embed footer content",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "status",
+        description: "enable or disable welcome message",
+        type: "SUB_COMMAND",
         options: [
           {
             name: "status",
-            description: "enable or disable welcome message",
-            type: "SUB_COMMAND",
-            options: [
+            description: "enabled or disabled",
+            required: true,
+            type: "STRING",
+            choices: [
               {
-                name: "status",
-                description: "enabled or disabled",
-                required: true,
-                type: "STRING",
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
+                name: "ON",
+                value: "ON",
               },
-            ],
-          },
-          {
-            name: "preview",
-            description: "preview the configured welcome message",
-            type: "SUB_COMMAND",
-          },
-          {
-            name: "channel",
-            description: "set welcome channel",
-            type: "SUB_COMMAND",
-            options: [
               {
-                name: "channel",
-                description: "channel name",
-                type: "CHANNEL",
-                channelTypes: ["GUILD_TEXT"],
-                required: true,
-              },
-            ],
-          },
-          {
-            name: "desc",
-            description: "set embed description",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "content",
-                description: "description content",
-                type: "STRING",
-                required: true,
-              },
-            ],
-          },
-          {
-            name: "thumbnail",
-            description: "configure embed thumbnail",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "status",
-                description: "thumbnail status",
-                type: "STRING",
-                required: true,
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "color",
-            description: "set embed color",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "hex-code",
-                description: "hex color code",
-                type: "STRING",
-                required: true,
-              },
-            ],
-          },
-          {
-            name: "footer",
-            description: "set embed footer",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "content",
-                description: "footer content",
-                type: "STRING",
-                required: true,
+                name: "OFF",
+                value: "OFF",
               },
             ],
           },
         ],
       },
-    });
-  }
+      {
+        name: "preview",
+        description: "preview the configured welcome message",
+        type: "SUB_COMMAND",
+      },
+      {
+        name: "channel",
+        description: "set welcome channel",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "channel",
+            description: "channel name",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "desc",
+        description: "set embed description",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "content",
+            description: "description content",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "thumbnail",
+        description: "configure embed thumbnail",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "status",
+            description: "thumbnail status",
+            type: "STRING",
+            required: true,
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "color",
+        description: "set embed color",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "hex-code",
+            description: "hex color code",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "footer",
+        description: "set embed footer",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "content",
+            description: "footer content",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const type = args[0].toLowerCase();
     const settings = data.settings;
@@ -220,13 +212,8 @@ module.exports = class Welcome extends Command {
     //
     else response = "Invalid command usage!";
     return message.safeReply(response);
-  }
+  },
 
-  /**
-   *
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     const settings = data.settings;
@@ -266,7 +253,7 @@ module.exports = class Welcome extends Command {
     }
 
     return interaction.followUp(response);
-  }
+  },
 };
 
 async function sendPreview(settings, member) {

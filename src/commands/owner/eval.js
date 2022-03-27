@@ -1,40 +1,34 @@
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
-const { Command } = require("@src/structures");
+const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 
 // This dummy token will be replaced by the actual token
 const DUMMY_TOKEN = "MY_TOKEN_IS_SECRET";
 
-module.exports = class Eval extends Command {
-  constructor(client) {
-    super(client, {
-      name: "eval",
-      description: "evaluates something",
-      // category: "OWNER",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<script>",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "eval",
+  description: "evaluates something",
+  category: "OWNER",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<script>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "expression",
+        description: "content to evaluate",
+        type: "STRING",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "expression",
-            description: "content to evaluate",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const input = args.join(" ");
 
@@ -48,11 +42,8 @@ module.exports = class Eval extends Command {
       response = buildErrorResponse(ex);
     }
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const input = interaction.options.getString("expression");
 
@@ -64,7 +55,7 @@ module.exports = class Eval extends Command {
       response = buildErrorResponse(ex);
     }
     await interaction.followUp(response);
-  }
+  },
 };
 
 const buildSuccessResponse = (output, client) => {

@@ -1,61 +1,55 @@
-const { Command } = require("@src/structures");
 const { findMatchingRoles, getMatchingChannels } = require("@utils/guildUtils");
 const { addReactionRole, getReactionRoles } = require("@schemas/Message");
-const { Util, Message, CommandInteraction } = require("discord.js");
+const { Util } = require("discord.js");
 const { parsePermissions } = require("@utils/botUtils");
 
 const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
 
-module.exports = class AddReactionRole extends Command {
-  constructor(client) {
-    super(client, {
-      name: "addrr",
-      description: "setup reaction role for the specified message",
-      category: "ADMIN",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        usage: "<#channel> <messageid> <emote> <role>",
-        minArgsCount: 4,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "addrr",
+  description: "setup reaction role for the specified message",
+  category: "ADMIN",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    usage: "<#channel> <messageid> <emote> <role>",
+    minArgsCount: 4,
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "channel",
+        description: "channel where the message exists",
+        type: "CHANNEL",
+        channelTypes: ["GUILD_TEXT"],
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
-        options: [
-          {
-            name: "channel",
-            description: "channel where the message exists",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
-            required: true,
-          },
-          {
-            name: "message_id",
-            description: "message id to which reaction roles must be configured",
-            type: "STRING",
-            required: true,
-          },
-          {
-            name: "emoji",
-            description: "emoji to use",
-            type: "STRING",
-            required: true,
-          },
-          {
-            name: "role",
-            description: "role to be given for the selected emoji",
-            type: "ROLE",
-            required: true,
-          },
-        ],
+      {
+        name: "message_id",
+        description: "message id to which reaction roles must be configured",
+        type: "STRING",
+        required: true,
       },
-    });
-  }
+      {
+        name: "emoji",
+        description: "emoji to use",
+        type: "STRING",
+        required: true,
+      },
+      {
+        name: "role",
+        description: "role to be given for the selected emoji",
+        type: "ROLE",
+        required: true,
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const targetChannel = getMatchingChannels(message.guild, args[0]);
     if (targetChannel.length === 0) return message.safeReply(`No channels found matching ${args[0]}`);
@@ -69,11 +63,8 @@ module.exports = class AddReactionRole extends Command {
 
     const response = await addRR(message.guild, targetChannel[0], targetMessage, reaction, role);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const targetChannel = interaction.options.getChannel("channel");
     const messageId = interaction.options.getString("message_id");
@@ -82,7 +73,7 @@ module.exports = class AddReactionRole extends Command {
 
     const response = await addRR(interaction.guild, targetChannel, messageId, reaction, role);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function addRR(guild, channel, messageId, reaction, role) {

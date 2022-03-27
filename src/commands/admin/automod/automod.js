@@ -1,192 +1,183 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
-
-module.exports = class Automod extends Command {
-  constructor(client) {
-    super(client, {
-      name: "automod",
-      description: "various automod configuration",
-      category: "AUTOMOD",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        minArgsCount: 2,
-        subcommands: [
-          {
-            trigger: "antighostping <ON|OFF>",
-            description: "Logs ghost mentions in your server",
-          },
-          {
-            trigger: "antiinvites <ON|OFF>",
-            description: "Allow or disallow sending discord invites in message",
-          },
-          {
-            trigger: "antilinks <ON|OFF>",
-            description: "Allow or disallow sending links in message",
-          },
-          {
-            trigger: "antiscam <ON|OFF>",
-            description: "Enable or disable antiscam detection",
-          },
-          {
-            trigger: "maxlines <number>",
-            description: "Sets maximum lines allowed per message [0 to disable]",
-          },
-          {
-            trigger: "maxmentions <number>",
-            description: "Sets maximum member mentions allowed per message [0 to disable]",
-          },
-          {
-            trigger: "maxrolementions <number>",
-            description: "Sets maximum role mentions allowed per message [0 to disable]",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "automod",
+  description: "various automod configuration",
+  category: "AUTOMOD",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    minArgsCount: 2,
+    subcommands: [
+      {
+        trigger: "antighostping <ON|OFF>",
+        description: "Logs ghost mentions in your server",
       },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
+      {
+        trigger: "antiinvites <ON|OFF>",
+        description: "Allow or disallow sending discord invites in message",
+      },
+      {
+        trigger: "antilinks <ON|OFF>",
+        description: "Allow or disallow sending links in message",
+      },
+      {
+        trigger: "antiscam <ON|OFF>",
+        description: "Enable or disable antiscam detection",
+      },
+      {
+        trigger: "maxlines <number>",
+        description: "Sets maximum lines allowed per message [0 to disable]",
+      },
+      {
+        trigger: "maxmentions <number>",
+        description: "Sets maximum member mentions allowed per message [0 to disable]",
+      },
+      {
+        trigger: "maxrolementions <number>",
+        description: "Sets maximum role mentions allowed per message [0 to disable]",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "antighostping",
+        description: "Logs ghost mentions in your server",
+        type: "SUB_COMMAND",
         options: [
           {
-            name: "antighostping",
-            description: "Logs ghost mentions in your server",
-            type: "SUB_COMMAND",
-            options: [
+            name: "status",
+            description: "configuration status",
+            required: true,
+            type: "STRING",
+            choices: [
               {
-                name: "status",
-                description: "configuration status",
-                required: true,
-                type: "STRING",
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
+                name: "ON",
+                value: "ON",
               },
-            ],
-          },
-          {
-            name: "antiinvites",
-            description: "Allow or disallow sending discord invites in message",
-            type: "SUB_COMMAND",
-            options: [
               {
-                name: "status",
-                description: "configuration status",
-                required: true,
-                type: "STRING",
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "antilinks",
-            description: "Allow or disallow sending links in message",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "status",
-                description: "configuration status",
-                required: true,
-                type: "STRING",
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "antiscam",
-            description: "Enable or disable antiscam detection",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "status",
-                description: "configuration status",
-                required: true,
-                type: "STRING",
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "maxlines",
-            description: "Sets maximum lines allowed per message",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "amount",
-                description: "configuration amount (0 to disable)",
-                required: true,
-                type: "INTEGER",
-              },
-            ],
-          },
-          {
-            name: "maxmentions",
-            description: "Sets maximum user mentions allowed per message",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "amount",
-                description: "configuration amount (0 to disable)",
-                required: true,
-                type: "INTEGER",
-              },
-            ],
-          },
-          {
-            name: "maxrolementions",
-            description: "Sets maximum role mentions allowed per message",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "amount",
-                description: "configuration amount (0 to disable)",
-                required: true,
-                type: "INTEGER",
+                name: "OFF",
+                value: "OFF",
               },
             ],
           },
         ],
       },
-    });
-  }
+      {
+        name: "antiinvites",
+        description: "Allow or disallow sending discord invites in message",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "status",
+            description: "configuration status",
+            required: true,
+            type: "STRING",
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "antilinks",
+        description: "Allow or disallow sending links in message",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "status",
+            description: "configuration status",
+            required: true,
+            type: "STRING",
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "antiscam",
+        description: "Enable or disable antiscam detection",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "status",
+            description: "configuration status",
+            required: true,
+            type: "STRING",
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "maxlines",
+        description: "Sets maximum lines allowed per message",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "amount",
+            description: "configuration amount (0 to disable)",
+            required: true,
+            type: "INTEGER",
+          },
+        ],
+      },
+      {
+        name: "maxmentions",
+        description: "Sets maximum user mentions allowed per message",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "amount",
+            description: "configuration amount (0 to disable)",
+            required: true,
+            type: "INTEGER",
+          },
+        ],
+      },
+      {
+        name: "maxrolementions",
+        description: "Sets maximum role mentions allowed per message",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "amount",
+            description: "configuration amount (0 to disable)",
+            required: true,
+            type: "INTEGER",
+          },
+        ],
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const settings = data.settings;
     const sub = args[0].toLowerCase();
@@ -250,12 +241,8 @@ module.exports = class Automod extends Command {
     else response = "Invalid command usage!";
 
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     const settings = data.settings;
@@ -272,7 +259,7 @@ module.exports = class Automod extends Command {
     }
 
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function antighostPing(settings, input) {

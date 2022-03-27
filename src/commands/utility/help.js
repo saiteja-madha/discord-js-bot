@@ -1,4 +1,4 @@
-const { Command, CommandCategory, BotClient } = require("@src/structures");
+const { CommandCategory, BotClient } = require("@src/structures");
 const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 const {
   MessageEmbed,
@@ -8,41 +8,36 @@ const {
   MessageButton,
   CommandInteraction,
 } = require("discord.js");
+const { getCommandUsage, getSlashUsage } = require("@src/handlers/command");
 
 const CMDS_PER_PAGE = 5;
 const IDLE_TIMEOUT = 30;
 const cache = {};
 
-module.exports = class HelpCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "help",
-      description: "command help menu",
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "[command]",
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "help",
+  description: "command help menu",
+  category: "UTILITY",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "[command]",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "command",
+        description: "name of the command",
+        required: false,
+        type: "STRING",
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "command",
-            description: "name of the command",
-            required: false,
-            type: "STRING",
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     let trigger = args[0];
 
@@ -57,16 +52,16 @@ module.exports = class HelpCommand extends Command {
     }
 
     // check if command help (!help cat)
-    const cmd = this.client.getCommand(trigger);
-    if (cmd) return cmd.sendUsage(message.channel, data.prefix, trigger);
+    const cmd = message.client.getCommand(trigger);
+    if (cmd) {
+      const embed = getCommandUsage(cmd, data.prefix, trigger);
+      return message.safeReply({ embeds: [embed] });
+    }
 
     // No matching command/category found
     await message.safeReply("No matching command found");
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     let cmdName = interaction.options.getString("command");
 
@@ -81,15 +76,15 @@ module.exports = class HelpCommand extends Command {
     }
 
     // check if command help (!help cat)
-    const cmd = this.client.slashCommands.get(cmdName);
+    const cmd = interaction.client.slashCommands.get(cmdName);
     if (cmd) {
-      const embed = cmd.getSlashUsage();
+      const embed = getSlashUsage(cmd);
       return interaction.followUp({ embeds: [embed] });
     }
 
     // No matching command/category found
     await interaction.followUp("No matching command found");
-  }
+  },
 };
 
 /**

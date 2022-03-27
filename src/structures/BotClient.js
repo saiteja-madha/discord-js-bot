@@ -1,8 +1,9 @@
 const { Client, Collection, Intents, WebhookClient } = require("discord.js");
 const path = require("path");
-const fs = require("fs");
 const { table } = require("table");
 const logger = require("../helpers/logger");
+const { recursiveReadDirSync } = require("../helpers/Loader");
+const { validateCommand } = require("../helpers/Validator");
 const MusicManager = require("./MusicManager");
 const Command = require("./Command");
 const BaseContext = require("./BaseContext");
@@ -48,7 +49,6 @@ module.exports = class BotClient extends Client {
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 
     // initialize cache
-    this.cmdCooldownCache = new Collection(); // store message cooldowns for commands
     this.ctxCooldownCache = new Collection(); // store message cooldowns for contextMenus
     this.xpCooldownCache = new Collection(); // store message cooldowns for xp
     this.inviteCache = new Collection(); // store invite data for invite tracking
@@ -74,33 +74,6 @@ module.exports = class BotClient extends Client {
   }
 
   /**
-   * @param {string} directory
-   * @private
-   */
-  getAbsoluteFilePaths(directory) {
-    const filePaths = [];
-    const readCommands = (dir) => {
-      const files = fs.readdirSync(path.join(__appRoot, dir));
-      files.forEach((file) => {
-        const stat = fs.lstatSync(path.join(__appRoot, dir, file));
-        if (stat.isDirectory()) {
-          readCommands(path.join(dir, file));
-        } else {
-          const extension = path.extname(file);
-          if (extension !== ".js") {
-            this.logger.debug(`getAbsoluteFilePaths - Skipping ${file}: not a js file`);
-            return;
-          }
-          const filePath = path.join(__appRoot, dir, file);
-          filePaths.push(filePath);
-        }
-      });
-    };
-    readCommands(directory);
-    return filePaths;
-  }
-
-  /**
    * Load all events from the specified directory
    * @param {string} directory directory containing the event files
    */
@@ -111,7 +84,7 @@ module.exports = class BotClient extends Client {
     const clientEvents = [];
     const musicEvents = [];
 
-    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
+    recursiveReadDirSync(directory).forEach((filePath) => {
       const file = path.basename(filePath);
       const dirName = path.basename(path.dirname(filePath));
       try {
@@ -178,16 +151,18 @@ module.exports = class BotClient extends Client {
    * @param {Command} cmd
    */
   loadCommand(cmd) {
-    // Command
+    // Prefix Command
     if (cmd.command?.enabled) {
       const index = this.commands.length;
       if (this.commandIndex.has(cmd.name)) {
         throw new Error(`Command ${cmd.name} already registered`);
       }
-      cmd.command.aliases.forEach((alias) => {
-        if (this.commandIndex.has(alias)) throw new Error(`Alias ${alias} already registered`);
-        this.commandIndex.set(alias.toLowerCase(), index);
-      });
+      if (Array.isArray(cmd.command.aliases)) {
+        cmd.command.aliases.forEach((alias) => {
+          if (this.commandIndex.has(alias)) throw new Error(`Alias ${alias} already registered`);
+          this.commandIndex.set(alias.toLowerCase(), index);
+        });
+      }
       this.commandIndex.set(cmd.name.toLowerCase(), index);
       this.commands.push(cmd);
     } else {
@@ -209,17 +184,18 @@ module.exports = class BotClient extends Client {
    */
   loadCommands(directory) {
     this.logger.log(`Loading commands...`);
-    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
-      const file = path.basename(filePath);
+    const files = recursiveReadDirSync(directory);
+    for (const file of files) {
       try {
-        const cmdClass = require(filePath);
-        if (!(cmdClass.prototype instanceof Command)) return;
-        const cmd = new cmdClass(this);
+        const cmd = require(file);
+        if (typeof cmd !== "object") continue;
+        validateCommand(cmd);
         this.loadCommand(cmd);
       } catch (ex) {
         this.logger.error(`Failed to load ${file} Reason: ${ex.message}`);
       }
-    });
+    }
+
     this.logger.success(`Loaded ${this.commands.length} commands`);
     this.logger.success(`Loaded ${this.slashCommands.size} slash commands`);
     if (this.slashCommands.size > 100) throw new Error("A maximum of 100 slash commands can be enabled");
@@ -231,7 +207,7 @@ module.exports = class BotClient extends Client {
    */
   loadContexts(directory) {
     this.logger.log(`Loading contexts...`);
-    this.getAbsoluteFilePaths(directory).forEach((filePath) => {
+    recursiveReadDirSync(directory).forEach((filePath) => {
       const file = path.basename(filePath);
       try {
         const ctxClass = require(filePath);

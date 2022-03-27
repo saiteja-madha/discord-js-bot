@@ -1,45 +1,40 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
+const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 const { timeformat } = require("@utils/miscUtils");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config.js");
 const botstats = require("../shared/botstats");
 
-module.exports = class BotCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "bot",
-      description: "bot related commands",
-      category: "INFORMATION",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: false,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "bot",
+  description: "bot related commands",
+  category: "INFORMATION",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: false,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "invite",
+        description: "get bot's invite",
+        type: "SUB_COMMAND",
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "invite",
-            description: "get bot's invite",
-            type: "SUB_COMMAND",
-          },
-          {
-            name: "stats",
-            description: "get bot's statistics",
-            type: "SUB_COMMAND",
-          },
-          {
-            name: "uptime",
-            description: "get bot's uptime",
-            type: "SUB_COMMAND",
-          },
-        ],
+      {
+        name: "stats",
+        description: "get bot's statistics",
+        type: "SUB_COMMAND",
       },
-    });
-  }
+      {
+        name: "uptime",
+        description: "get bot's uptime",
+        type: "SUB_COMMAND",
+      },
+    ],
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand();
     if (!sub) return interaction.followUp("Not a valid subcommand");
@@ -65,7 +60,7 @@ module.exports = class BotCommand extends Command {
     else if (sub === "uptime") {
       await interaction.followUp(`My Uptime: \`${timeformat(process.uptime())}\``);
     }
-  }
+  },
 };
 
 function botInvite(client) {

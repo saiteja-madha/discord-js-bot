@@ -1,57 +1,49 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
 const { findMatchingRoles } = require("@utils/guildUtils");
 
-module.exports = class AutoRole extends Command {
-  constructor(client) {
-    super(client, {
-      name: "autorole",
-      description: "setup role to be given when a member joins the server",
-      category: "ADMIN",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        usage: "<role|off>",
-        minArgsCount: 1,
-      },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "autorole",
+  description: "setup role to be given when a member joins the server",
+  category: "ADMIN",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    usage: "<role|off>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "add",
+        description: "setup the autorole",
+        type: "SUB_COMMAND",
         options: [
           {
-            name: "add",
-            description: "setup the autorole",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "role",
-                description: "the role to be given",
-                type: "ROLE",
-                required: false,
-              },
-              {
-                name: "role_id",
-                description: "the role id to be given",
-                type: "STRING",
-                required: false,
-              },
-            ],
+            name: "role",
+            description: "the role to be given",
+            type: "ROLE",
+            required: false,
           },
           {
-            name: "remove",
-            description: "disable the autorole",
-            type: "SUB_COMMAND",
+            name: "role_id",
+            description: "the role id to be given",
+            type: "STRING",
+            required: false,
           },
         ],
       },
-    });
-  }
+      {
+        name: "remove",
+        description: "disable the autorole",
+        type: "SUB_COMMAND",
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const input = args.join(" ");
     let response;
@@ -65,12 +57,8 @@ module.exports = class AutoRole extends Command {
     }
 
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     let response;
@@ -99,7 +87,7 @@ module.exports = class AutoRole extends Command {
     else response = "Invalid subcommand";
 
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function setAutoRole({ guild }, role, settings) {

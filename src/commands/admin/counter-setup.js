@@ -1,60 +1,52 @@
-const { Message, CommandInteraction } = require("discord.js");
-const { Command } = require("@src/structures");
 const { getMemberStats } = require("@utils/guildUtils");
 
-module.exports = class CounterSetup extends Command {
-  constructor(client) {
-    super(client, {
-      name: "counter",
-      description: "setup counter channel in the guild",
-      category: "ADMIN",
-      userPermissions: ["MANAGE_GUILD"],
-      botPermissions: ["MANAGE_CHANNELS"],
-      command: {
-        enabled: true,
-        usage: "<type> <channel-name>",
-        minArgsCount: 1,
-      },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
-        options: [
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "counter",
+  description: "setup counter channel in the guild",
+  category: "ADMIN",
+  userPermissions: ["MANAGE_GUILD"],
+  botPermissions: ["MANAGE_CHANNELS"],
+  command: {
+    enabled: true,
+    usage: "<type> <channel-name>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "type",
+        description: "type of counter channel",
+        type: "STRING",
+        required: true,
+        choices: [
           {
-            name: "type",
-            description: "type of counter channel",
-            type: "STRING",
-            required: true,
-            choices: [
-              {
-                name: "users",
-                value: "USERS",
-              },
-              {
-                name: "members",
-                value: "MEMBERS",
-              },
-              {
-                name: "bots",
-                value: "BOTS",
-              },
-            ],
+            name: "users",
+            value: "USERS",
           },
           {
-            name: "name",
-            description: "name of the counter channel",
-            type: "STRING",
-            required: true,
+            name: "members",
+            value: "MEMBERS",
+          },
+          {
+            name: "bots",
+            value: "BOTS",
           },
         ],
       },
-    });
-  }
+      {
+        name: "name",
+        description: "name of the counter channel",
+        type: "STRING",
+        required: true,
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const type = args[0].toUpperCase();
     if (!type || !["USERS", "MEMBERS", "BOTS"].includes(type)) {
@@ -66,19 +58,15 @@ module.exports = class CounterSetup extends Command {
 
     const response = await setupCounter(message.guild, type, channelName, data.settings);
     return message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const type = interaction.options.getString("type");
     const name = interaction.options.getString("name");
 
     const response = await setupCounter(interaction.guild, type.toUpperCase(), name, data.settings);
     return interaction.followUp(response);
-  }
+  },
 };
 
 async function setupCounter(guild, type, name, settings) {

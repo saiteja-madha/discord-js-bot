@@ -1,57 +1,46 @@
-const { Command } = require("@src/structures");
-const { Message, MessageAttachment, CommandInteraction } = require("discord.js");
+const { MessageAttachment } = require("discord.js");
 const { EMBED_COLORS, IMAGE } = require("@root/config");
 const { getBuffer } = require("@utils/httpUtils");
 const { resolveMember } = require("@utils/guildUtils");
 const { getMember, getXpLb } = require("@schemas/Member");
 
-module.exports = class Rank extends Command {
-  constructor(client) {
-    super(client, {
-      name: "rank",
-      description: "shows members rank in this server",
-      cooldown: 5,
-      category: "INFORMATION",
-      botPermissions: ["ATTACH_FILES"],
-      command: {
-        enabled: true,
-        usage: "[@member|id]",
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "rank",
+  description: "shows members rank in this server",
+  cooldown: 5,
+  category: "INFORMATION",
+  botPermissions: ["ATTACH_FILES"],
+  command: {
+    enabled: true,
+    usage: "[@member|id]",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "user",
+        description: "target user",
+        type: "USER",
+        required: false,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "user",
-            description: "target user",
-            type: "USER",
-            required: false,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const member = (await resolveMember(message, args[0])) || message.member;
     const response = await getRank(message, member, data.settings);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const user = interaction.options.getUser("user") || interaction.user;
     const member = await interaction.guild.members.fetch(user);
     const response = await getRank(interaction, member, data.settings);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function getRank({ guild }, member, settings) {

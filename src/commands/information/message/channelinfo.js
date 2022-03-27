@@ -1,30 +1,20 @@
-const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
 const { getMatchingChannels } = require("@utils/guildUtils");
 const channelInfo = require("../shared/channel");
 
-module.exports = class ChannelInfo extends Command {
-  constructor(client) {
-    super(client, {
-      name: "channelinfo",
-      description: "shows information about a channel",
-      category: "INFORMATION",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "[#channel|id]",
-        aliases: ["chinfo"],
-      },
-      slashCommand: {
-        enabled: false,
-      },
-    });
-  }
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "channelinfo",
+  description: "shows information about a channel",
+  category: "INFORMATION",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "[#channel|id]",
+    aliases: ["chinfo"],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     let targetChannel;
 
@@ -45,5 +35,5 @@ module.exports = class ChannelInfo extends Command {
 
     const response = channelInfo(targetChannel);
     await message.safeReply(response);
-  }
+  },
 };

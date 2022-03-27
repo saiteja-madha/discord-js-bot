@@ -1,28 +1,18 @@
-const { Command } = require("@src/structures");
-const { Message } = require("discord.js");
 const { timeformat } = require("@utils/miscUtils");
 
-module.exports = class BotInvite extends Command {
-  constructor(client) {
-    super(client, {
-      name: "uptime",
-      description: "gives you bot uptime",
-      category: "INFORMATION",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-      },
-      slashCommand: {
-        enabled: false,
-      },
-    });
-  }
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "uptime",
+  description: "gives you bot uptime",
+  category: "INFORMATION",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     await message.safeReply(`My Uptime: \`${timeformat(process.uptime())}\``);
-  }
+  },
 };

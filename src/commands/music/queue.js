@@ -1,50 +1,41 @@
 const { EMBED_COLORS } = require("@root/config");
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
-module.exports = class Queue extends Command {
-  constructor(client) {
-    super(client, {
-      name: "queue",
-      description: "displays the current music queue",
-      category: "MUSIC",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "[page]",
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "queue",
+  description: "displays the current music queue",
+  category: "MUSIC",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "[page]",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "page",
+        description: "page number",
+        type: "INTEGER",
+        required: false,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "page",
-            description: "page number",
-            type: "INTEGER",
-            required: false,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const page = args.length && Number(args[0]) ? Number(args[0]) : 1;
     const response = getQueue(message, page);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const page = interaction.options.getInteger("page");
     const response = getQueue(interaction, page);
     await interaction.followUp(response);
-  }
+  },
 };
 
 function getQueue({ client, guild }, pgNo) {

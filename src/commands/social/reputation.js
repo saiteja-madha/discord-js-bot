@@ -1,70 +1,64 @@
-const { Command } = require("@src/structures");
 const { resolveMember } = require("@utils/guildUtils");
 const { getUser } = require("@schemas/User");
-const { MessageEmbed, Message } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { diffHours, getRemainingTime } = require("@utils/miscUtils");
 const { EMBED_COLORS } = require("@root/config");
 
-module.exports = class Reputation extends Command {
-  constructor(client) {
-    super(client, {
-      name: "rep",
-      description: "give reputation to a user",
-      category: "SOCIAL",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        aliases: ["reputation"],
-        subcommands: [
-          {
-            trigger: "view [user]",
-            description: "view reputation for a user",
-          },
-          {
-            trigger: "give [user]",
-            description: "give reputation to a user",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "rep",
+  description: "give reputation to a user",
+  category: "SOCIAL",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    aliases: ["reputation"],
+    subcommands: [
+      {
+        trigger: "view [user]",
+        description: "view reputation for a user",
       },
-      slashCommand: {
-        enabled: true,
+      {
+        trigger: "give [user]",
+        description: "give reputation to a user",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "view",
+        description: "view reputation for a user",
+        type: "SUB_COMMAND",
         options: [
           {
-            name: "view",
-            description: "view reputation for a user",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "user",
-                description: "the user to check reputation for",
-                type: "USER",
-                required: false,
-              },
-            ],
-          },
-          {
-            name: "give",
-            description: "give reputation to a user",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "user",
-                description: "the user to check reputation for",
-                type: "USER",
-                required: true,
-              },
-            ],
+            name: "user",
+            description: "the user to check reputation for",
+            type: "USER",
+            required: false,
           },
         ],
       },
-    });
-  }
+      {
+        name: "give",
+        description: "give reputation to a user",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "user",
+            description: "the user to check reputation for",
+            type: "USER",
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const sub = args[0];
     let response;
@@ -92,7 +86,7 @@ module.exports = class Reputation extends Command {
     }
 
     await message.safeReply(response);
-  }
+  },
 
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand();
@@ -111,7 +105,7 @@ module.exports = class Reputation extends Command {
     }
 
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function viewReputation(target) {

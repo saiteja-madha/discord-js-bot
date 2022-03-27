@@ -1,28 +1,21 @@
-const { Message } = require("discord.js");
-const { Command } = require("@src/structures");
 const { purgeMessages } = require("@utils/modUtils");
 const { sendMessage } = require("@utils/botUtils");
 
-module.exports = class PurgeCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "purge",
-      description: "deletes the specified amount of messages",
-      category: "MODERATION",
-      userPermissions: ["MANAGE_MESSAGES"],
-      botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
-      command: {
-        enabled: true,
-        usage: "<amount>",
-        minArgsCount: 1,
-      },
-    });
-  }
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "purge",
+  description: "deletes the specified amount of messages",
+  category: "MODERATION",
+  userPermissions: ["MANAGE_MESSAGES"],
+  botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
+  command: {
+    enabled: true,
+    usage: "<amount>",
+    minArgsCount: 1,
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const amount = args[0];
 
@@ -42,5 +35,5 @@ module.exports = class PurgeCommand extends Command {
     } else {
       return message.safeReply(`Error occurred! Failed to delete messages`);
     }
-  }
+  },
 };

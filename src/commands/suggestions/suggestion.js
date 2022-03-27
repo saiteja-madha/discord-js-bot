@@ -1,114 +1,106 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
 const { getMatchingChannels } = require("@utils/guildUtils");
 
-module.exports = class Suggestion extends Command {
-  constructor(client) {
-    super(client, {
-      name: "suggestion",
-      description: "configure suggestion system",
-      category: "SUGGESTION",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        minArgsCount: 2,
-        subcommands: [
-          {
-            trigger: "status <on|off>",
-            description: "enable/disable suggestion system",
-          },
-          {
-            trigger: "channel <#channel>",
-            description: "configure suggestion channel or disable it",
-          },
-          {
-            trigger: "approve <messageId>",
-            description: "approve a suggestion",
-          },
-          {
-            trigger: "reject <messageId>",
-            description: "reject a suggestion",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "suggestion",
+  description: "configure suggestion system",
+  category: "SUGGESTION",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    minArgsCount: 2,
+    subcommands: [
+      {
+        trigger: "status <on|off>",
+        description: "enable/disable suggestion system",
       },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
+      {
+        trigger: "channel <#channel>",
+        description: "configure suggestion channel or disable it",
+      },
+      {
+        trigger: "approve <messageId>",
+        description: "approve a suggestion",
+      },
+      {
+        trigger: "reject <messageId>",
+        description: "reject a suggestion",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "status",
+        description: "enable or disable welcome message",
+        type: "SUB_COMMAND",
         options: [
           {
             name: "status",
-            description: "enable or disable welcome message",
-            type: "SUB_COMMAND",
-            options: [
+            description: "enabled or disabled",
+            required: true,
+            type: "STRING",
+            choices: [
               {
-                name: "status",
-                description: "enabled or disabled",
-                required: true,
-                type: "STRING",
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
+                name: "ON",
+                value: "ON",
               },
-            ],
-          },
-          {
-            name: "channel",
-            description: "configure suggestion channel or disable it",
-            type: "SUB_COMMAND",
-            options: [
               {
-                name: "channel_name",
-                description: "the channel where suggestions will be sent",
-                type: "CHANNEL",
-                channelTypes: ["GUILD_TEXT"],
-                required: false,
-              },
-            ],
-          },
-          {
-            name: "approve",
-            description: "approve a suggestion",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "message_id",
-                description: "the message id of the suggestion",
-                type: "STRING",
-                required: true,
-              },
-            ],
-          },
-          {
-            name: "reject",
-            description: "reject a suggestion",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "message_id",
-                description: "the message id of the suggestion",
-                type: "STRING",
-                required: true,
+                name: "OFF",
+                value: "OFF",
               },
             ],
           },
         ],
       },
-    });
-  }
+      {
+        name: "channel",
+        description: "configure suggestion channel or disable it",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "channel_name",
+            description: "the channel where suggestions will be sent",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: false,
+          },
+        ],
+      },
+      {
+        name: "approve",
+        description: "approve a suggestion",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "message_id",
+            description: "the message id of the suggestion",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "reject",
+        description: "reject a suggestion",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "message_id",
+            description: "the message id of the suggestion",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const sub = args[0];
     let response;
@@ -145,12 +137,8 @@ module.exports = class Suggestion extends Command {
     // else
     else response = "Not a valid subcommand";
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     let response;
@@ -182,7 +170,7 @@ module.exports = class Suggestion extends Command {
     // else
     else response = "Not a valid subcommand";
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function setStatus(settings, status) {

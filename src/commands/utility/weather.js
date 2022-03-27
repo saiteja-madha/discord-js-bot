@@ -1,55 +1,46 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 
 const API_KEY = process.env.WEATHERSTACK_KEY;
 
-module.exports = class WeatherCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "weather",
-      description: "get weather information",
-      cooldown: 5,
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<place>",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "weather",
+  description: "get weather information",
+  cooldown: 5,
+  category: "UTILITY",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<place>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "place",
+        description: "country/city name to get weather information for",
+        type: "STRING",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "place",
-            description: "country/city name to get weather information for",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const place = args.join(" ");
     const response = await weather(place);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const place = interaction.options.getString("place");
     const response = await weather(place);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function weather(place) {

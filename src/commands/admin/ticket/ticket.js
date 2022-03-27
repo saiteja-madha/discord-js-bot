@@ -1,5 +1,4 @@
-const { MessageEmbed, Message, MessageActionRow, MessageButton, CommandInteraction } = require("discord.js");
-const { Command } = require("@src/structures");
+const { MessageEmbed, Message, MessageActionRow, MessageButton } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 
 // Schemas
@@ -15,155 +14,149 @@ const SETUP_TIMEOUT = 30 * 1000;
 
 const SETUP_PERMS = ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"];
 
-module.exports = class Ticket extends Command {
-  constructor(client) {
-    super(client, {
-      name: "ticket",
-      description: "various ticketing commands",
-      category: "TICKET",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        subcommands: [
-          {
-            trigger: "setup",
-            description: "start an interactive ticket setup",
-          },
-          {
-            trigger: "log <#channel>",
-            description: "setup log channel for tickets",
-          },
-          {
-            trigger: "limit <number>",
-            description: "set maximum number of concurrent open tickets",
-          },
-          {
-            trigger: "close",
-            description: "close the ticket",
-          },
-          {
-            trigger: "closeall",
-            description: "close all open tickets",
-          },
-          {
-            trigger: "add <userId|roleId>",
-            description: "add user/role to the ticket",
-          },
-          {
-            trigger: "remove <userId|roleId>",
-            description: "remove user/role from the ticket",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "ticket",
+  description: "various ticketing commands",
+  category: "TICKET",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    subcommands: [
+      {
+        trigger: "setup",
+        description: "start an interactive ticket setup",
       },
-      slashCommand: {
-        enabled: true,
+      {
+        trigger: "log <#channel>",
+        description: "setup log channel for tickets",
+      },
+      {
+        trigger: "limit <number>",
+        description: "set maximum number of concurrent open tickets",
+      },
+      {
+        trigger: "close",
+        description: "close the ticket",
+      },
+      {
+        trigger: "closeall",
+        description: "close all open tickets",
+      },
+      {
+        trigger: "add <userId|roleId>",
+        description: "add user/role to the ticket",
+      },
+      {
+        trigger: "remove <userId|roleId>",
+        description: "remove user/role from the ticket",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "setup",
+        description: "setup a new ticket message",
+        type: "SUB_COMMAND",
         options: [
           {
-            name: "setup",
-            description: "setup a new ticket message",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "channel",
-                description: "the channel where ticket creation message must be sent",
-                type: "CHANNEL",
-                channelTypes: ["GUILD_TEXT"],
-                required: true,
-              },
-              {
-                name: "title",
-                description: "the title for the ticket message",
-                type: "STRING",
-                required: true,
-              },
-              {
-                name: "role",
-                description: "the role's which can have access to newly opened tickets",
-                type: "ROLE",
-                required: false,
-              },
-              {
-                name: "color",
-                description: "hex color for the ticket embed",
-                type: "STRING",
-                required: false,
-              },
-            ],
+            name: "channel",
+            description: "the channel where ticket creation message must be sent",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
           },
           {
-            name: "log",
-            description: "setup log channel for tickets",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "channel",
-                description: "channel where ticket logs must be sent",
-                type: "CHANNEL",
-                channelTypes: ["GUILD_TEXT"],
-                required: true,
-              },
-            ],
+            name: "title",
+            description: "the title for the ticket message",
+            type: "STRING",
+            required: true,
           },
           {
-            name: "limit",
-            description: "set maximum number of concurrent open tickets",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "amount",
-                description: "max number of tickets",
-                type: "INTEGER",
-                required: true,
-              },
-            ],
+            name: "role",
+            description: "the role's which can have access to newly opened tickets",
+            type: "ROLE",
+            required: false,
           },
           {
-            name: "close",
-            description: "closes the ticket [used in ticket channel only]",
-            type: "SUB_COMMAND",
-          },
-          {
-            name: "closeall",
-            description: "closes all open tickets",
-            type: "SUB_COMMAND",
-          },
-          {
-            name: "add",
-            description: "add user to the current ticket channel [used in ticket channel only]",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "user_id",
-                description: "the id of the user to add",
-                type: "STRING",
-                required: true,
-              },
-            ],
-          },
-          {
-            name: "remove",
-            description: "remove user from the ticket channel [used in ticket channel only]",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "user",
-                description: "the user to remove",
-                type: "USER",
-                required: true,
-              },
-            ],
+            name: "color",
+            description: "hex color for the ticket embed",
+            type: "STRING",
+            required: false,
           },
         ],
       },
-    });
-  }
+      {
+        name: "log",
+        description: "setup log channel for tickets",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "channel",
+            description: "channel where ticket logs must be sent",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "limit",
+        description: "set maximum number of concurrent open tickets",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "amount",
+            description: "max number of tickets",
+            type: "INTEGER",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "close",
+        description: "closes the ticket [used in ticket channel only]",
+        type: "SUB_COMMAND",
+      },
+      {
+        name: "closeall",
+        description: "closes all open tickets",
+        type: "SUB_COMMAND",
+      },
+      {
+        name: "add",
+        description: "add user to the current ticket channel [used in ticket channel only]",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "user_id",
+            description: "the id of the user to add",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "remove",
+        description: "remove user from the ticket channel [used in ticket channel only]",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "user",
+            description: "the user to remove",
+            type: "USER",
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     let response;
@@ -234,12 +227,8 @@ module.exports = class Ticket extends Command {
     }
 
     if (response) await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     let response;
@@ -302,7 +291,7 @@ module.exports = class Ticket extends Command {
     }
 
     if (response) await interaction.followUp(response);
-  }
+  },
 };
 
 /**

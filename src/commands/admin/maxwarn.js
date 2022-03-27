@@ -1,81 +1,72 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction } = require("discord.js");
-
-module.exports = class MaxWarn extends Command {
-  constructor(client) {
-    super(client, {
-      name: "maxwarn",
-      description: "set max warnings configuration",
-      category: "ADMIN",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        subcommands: [
-          {
-            trigger: "limit <number>",
-            description: "set max warnings a member can receive before taking an action",
-          },
-          {
-            trigger: "action <mute|kick|ban>",
-            description: "set action to performed after receiving maximum warnings",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "maxwarn",
+  description: "set max warnings configuration",
+  category: "ADMIN",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    subcommands: [
+      {
+        trigger: "limit <number>",
+        description: "set max warnings a member can receive before taking an action",
       },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
+      {
+        trigger: "action <mute|kick|ban>",
+        description: "set action to performed after receiving maximum warnings",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "limit",
+        description: "set max warnings a member can receive before taking an action",
+        type: "SUB_COMMAND",
         options: [
           {
-            name: "limit",
-            description: "set max warnings a member can receive before taking an action",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "amount",
-                description: "max number of strikes",
-                type: "INTEGER",
-                required: true,
-              },
-            ],
+            name: "amount",
+            description: "max number of strikes",
+            type: "INTEGER",
+            required: true,
           },
+        ],
+      },
+      {
+        name: "action",
+        description: "set action to performed after receiving maximum warnings",
+        type: "SUB_COMMAND",
+        options: [
           {
             name: "action",
-            description: "set action to performed after receiving maximum warnings",
-            type: "SUB_COMMAND",
-            options: [
+            description: "action to perform",
+            type: "STRING",
+            required: true,
+            choices: [
               {
-                name: "action",
-                description: "action to perform",
-                type: "STRING",
-                required: true,
-                choices: [
-                  {
-                    name: "MUTE",
-                    value: "MUTE",
-                  },
-                  {
-                    name: "KICK",
-                    value: "KICK",
-                  },
-                  {
-                    name: "BAN",
-                    value: "BAN",
-                  },
-                ],
+                name: "MUTE",
+                value: "MUTE",
+              },
+              {
+                name: "KICK",
+                value: "KICK",
+              },
+              {
+                name: "BAN",
+                value: "BAN",
               },
             ],
           },
         ],
       },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     if (!["limit", "action"].includes(input)) return message.safeReply("Invalid command usage");
@@ -95,12 +86,8 @@ module.exports = class MaxWarn extends Command {
     }
 
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
 
@@ -114,7 +101,7 @@ module.exports = class MaxWarn extends Command {
     }
 
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function setLimit(limit, settings) {

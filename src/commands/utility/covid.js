@@ -1,54 +1,45 @@
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
-const { Command } = require("@src/structures");
+const { MessageEmbed } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const timestampToDate = require("timestamp-to-date");
 
-module.exports = class CovidCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "covid",
-      description: "get covid statistics for a country",
-      cooldown: 5,
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<country>",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "covid",
+  description: "get covid statistics for a country",
+  cooldown: 5,
+  category: "UTILITY",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<country>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "country",
+        description: "country name to get covid statistics for",
+        type: "STRING",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "country",
-            description: "country name to get covid statistics for",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const country = args.join(" ");
     const response = await getCovid(country);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const country = interaction.options.getString("country");
     const response = await getCovid(country);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function getCovid(country) {

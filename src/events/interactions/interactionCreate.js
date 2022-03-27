@@ -1,5 +1,6 @@
 const { handleTicketOpen, handleTicketClose } = require("@src/handlers/ticket");
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
+const { commandHandler } = require("@src/handlers");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -14,9 +15,7 @@ module.exports = async (client, interaction) => {
 
   // Slash Command
   if (interaction.isCommand()) {
-    const command = client.slashCommands.get(interaction.commandName);
-    if (command) await command.executeInteraction(interaction);
-    else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
+    return commandHandler.handleSlashCommand(interaction);
   }
 
   // Context Menu

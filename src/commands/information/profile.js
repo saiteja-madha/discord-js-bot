@@ -1,55 +1,44 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction, MessageEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { getMember } = require("@schemas/Member");
 const { EMBED_COLORS, ECONOMY } = require("@root/config");
 const { resolveMember } = require("@utils/guildUtils");
 
-module.exports = class Profile extends Command {
-  constructor(client) {
-    super(client, {
-      name: "profile",
-      description: "shows members profile",
-      cooldown: 5,
-      category: "INFORMATION",
-      command: {
-        enabled: true,
-        usage: "[@member|id]",
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "profile",
+  description: "shows members profile",
+  cooldown: 5,
+  category: "INFORMATION",
+  command: {
+    enabled: true,
+    usage: "[@member|id]",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "user",
+        description: "target user",
+        type: "USER",
+        required: false,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "user",
-            description: "target user",
-            type: "USER",
-            required: false,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const target = (await resolveMember(message, args[0])) || message.member;
     const response = await profile(message, target.user, data.settings);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const user = interaction.options.getUser("user") || interaction.user;
     const response = await profile(interaction, user, data.settings);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function profile({ guild }, user, settings) {

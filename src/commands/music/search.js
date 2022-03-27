@@ -1,53 +1,44 @@
-const { Command } = require("@src/structures");
-const { Message, MessageEmbed, CommandInteraction, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
 const prettyMs = require("pretty-ms");
 const { EMBED_COLORS } = require("@root/config");
 
-module.exports = class Search extends Command {
-  constructor(client) {
-    super(client, {
-      name: "search",
-      description: "search for matching songs on youtube",
-      category: "MUSIC",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<song-name>",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "search",
+  description: "search for matching songs on youtube",
+  category: "MUSIC",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<song-name>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "query",
+        description: "song to search",
+        type: "STRING",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "query",
-            description: "song to search",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const query = args.join(" ");
     const response = await search(message, message.author, query);
     if (response) await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const query = interaction.options.getString("query");
     const response = await search(interaction, interaction.user, query);
     if (response) await interaction.followUp(response);
     else interaction.deleteReply();
-  }
+  },
 };
 
 async function search({ member, guild, channel }, user, query) {

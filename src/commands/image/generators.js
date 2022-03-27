@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageAttachment, Message, CommandInteraction } = require("discord.js");
-const { Command } = require("@src/structures");
+const { MessageEmbed, MessageAttachment } = require("discord.js");
 const { getBuffer } = require("@utils/httpUtils");
 const { getImageFromCommand, getGenerator } = require("@utils/imageUtils");
 const { EMBED_COLORS } = require("@root/config.js");
@@ -31,49 +30,44 @@ const availableGenerators = [
   "wasted",
 ];
 
-module.exports = class Generator extends Command {
-  constructor(client) {
-    super(client, {
-      name: "generator",
-      description: "generates a meme for the provided image",
-      cooldown: 5,
-      category: "IMAGE",
-      botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
-      command: {
-        enabled: true,
-        aliases: availableGenerators,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "generator",
+  description: "generates a meme for the provided image",
+  cooldown: 5,
+  category: "IMAGE",
+  botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
+  command: {
+    enabled: true,
+    aliases: availableGenerators,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "name",
+        description: "the type of generator",
+        type: "STRING",
+        required: true,
+        choices: availableGenerators.map((gen) => ({ name: gen, value: gen })),
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "name",
-            description: "the type of generator",
-            type: "STRING",
-            required: true,
-            choices: availableGenerators.map((gen) => ({ name: gen, value: gen })),
-          },
-          {
-            name: "user",
-            description: "the user to whose avatar the generator needs to applied",
-            type: "USER",
-            required: false,
-          },
-          {
-            name: "link",
-            description: "the image link to which the generator needs to applied",
-            type: "STRING",
-            required: false,
-          },
-        ],
+      {
+        name: "user",
+        description: "the user to whose avatar the generator needs to applied",
+        type: "USER",
+        required: false,
       },
-    });
-  }
+      {
+        name: "link",
+        description: "the image link to which the generator needs to applied",
+        type: "STRING",
+        required: false,
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args, data) {
     const image = await getImageFromCommand(message, args);
 
@@ -90,11 +84,8 @@ module.exports = class Generator extends Command {
       .setFooter({ text: `Requested by: ${message.author.tag}` });
 
     await message.safeReply({ embeds: [embed], files: [attachment] });
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const author = interaction.user;
     const user = interaction.options.getUser("user");
@@ -118,5 +109,5 @@ module.exports = class Generator extends Command {
       .setFooter({ text: `Requested by: ${author.tag}` });
 
     await interaction.followUp({ embeds: [embed], files: [attachment] });
-  }
+  },
 };

@@ -1,41 +1,35 @@
-const { Command } = require("@src/structures");
 const { getBuffer } = require("@utils/httpUtils");
-const { Message, MessageAttachment, CommandInteraction } = require("discord.js");
+const { MessageAttachment } = require("discord.js");
 
 const PROXY_TYPES = ["all", "http", "socks4", "socks5"];
 
-module.exports = class ProxiesCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "proxies",
-      description: "fetch proxies. Available types: http, socks4, socks5",
-      cooldown: 5,
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
-      command: {
-        enabled: true,
-        usage: "[type]",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "proxies",
+  description: "fetch proxies. Available types: http, socks4, socks5",
+  cooldown: 5,
+  category: "UTILITY",
+  botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
+  command: {
+    enabled: true,
+    usage: "[type]",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "type",
+        description: "type of proxy",
+        type: "STRING",
+        required: true,
+        choices: PROXY_TYPES.map((p) => ({ name: p, value: p })),
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "type",
-            description: "type of proxy",
-            type: "STRING",
-            required: true,
-            choices: PROXY_TYPES.map((p) => ({ name: p, value: p })),
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     let type = "all";
 
@@ -48,17 +42,14 @@ module.exports = class ProxiesCommand extends Command {
     const response = await getProxies(type);
     if (msg.deletable) await msg.delete();
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const type = interaction.options.getString("type");
     await interaction.followUp("Fetching proxies... Please wait");
     const response = await getProxies(type);
     await interaction.editReply(response);
-  }
+  },
 };
 
 async function getProxies(type) {

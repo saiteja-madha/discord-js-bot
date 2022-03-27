@@ -1,54 +1,45 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@utils/httpUtils");
 const moment = require("moment");
 
-module.exports = class UrbanCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "urban",
-      description: "searches the urban dictionary",
-      cooldown: 5,
-      category: "UTILITY",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<word>",
-        minArgsCount: 1,
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "urban",
+  description: "searches the urban dictionary",
+  cooldown: 5,
+  category: "UTILITY",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<word>",
+    minArgsCount: 1,
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "word",
+        description: "the word for which you want to urban meaning",
+        type: "STRING",
+        required: true,
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "word",
-            description: "the word for which you want to urban meaning",
-            type: "STRING",
-            required: true,
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const word = args.join(" ");
     const response = await urban(word);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const word = interaction.options.getString("word");
     const response = await urban(word);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function urban(word) {

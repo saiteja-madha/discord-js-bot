@@ -1,55 +1,46 @@
-const { Command } = require("@src/structures");
-const { MessageEmbed, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
 const { getRandomInt } = require("@utils/miscUtils");
 
-module.exports = class Gamble extends Command {
-  constructor(client) {
-    super(client, {
-      name: "gamble",
-      description: "try your luck by gambling",
-      category: "ECONOMY",
-      botPermissions: ["EMBED_LINKS"],
-      command: {
-        enabled: true,
-        usage: "<amount>",
-        minArgsCount: 1,
-        aliases: ["slot"],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "gamble",
+  description: "try your luck by gambling",
+  category: "ECONOMY",
+  botPermissions: ["EMBED_LINKS"],
+  command: {
+    enabled: true,
+    usage: "<amount>",
+    minArgsCount: 1,
+    aliases: ["slot"],
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "coins",
+        description: "number of coins to bet",
+        required: true,
+        type: "INTEGER",
       },
-      slashCommand: {
-        enabled: true,
-        options: [
-          {
-            name: "coins",
-            description: "number of coins to bet",
-            required: true,
-            type: "INTEGER",
-          },
-        ],
-      },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const betAmount = parseInt(args[0]);
     if (isNaN(betAmount)) return message.safeReply("Bet amount needs to be a valid number input");
     const response = await gamble(message.author, betAmount);
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const betAmount = interaction.options.getInteger("coins");
     const response = await gamble(interaction.user, betAmount);
     await interaction.followUp(response);
-  }
+  },
 };
 
 function getEmoji() {

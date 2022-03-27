@@ -1,119 +1,112 @@
-const { Command } = require("@src/structures");
-const { Message, MessageEmbed, CommandInteraction } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { table } = require("table");
 
-module.exports = class AutomodConfigCommand extends Command {
-  constructor(client) {
-    super(client, {
-      name: "automodconfig",
-      description: "various automod configuration",
-      category: "AUTOMOD",
-      userPermissions: ["MANAGE_GUILD"],
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        subcommands: [
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "automodconfig",
+  description: "various automod configuration",
+  category: "AUTOMOD",
+  userPermissions: ["MANAGE_GUILD"],
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    subcommands: [
+      {
+        trigger: "status",
+        description: "check automod configuration for this guild",
+      },
+      {
+        trigger: "strikes <number>",
+        description: "maximum number of strikes a member can receive before taking an action",
+      },
+      {
+        trigger: "action <MUTE|KICK|BAN>",
+        description: "set action to be performed after receiving maximum strikes",
+      },
+      {
+        trigger: "debug <ON|OFF>",
+        description: "turns on automod for messages sent by admins and moderators",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    ephemeral: true,
+    options: [
+      {
+        name: "status",
+        description: "Check automod configuration",
+        type: "SUB_COMMAND",
+      },
+      {
+        name: "strikes",
+        description: "Set maximum number of strikes before taking an action",
+        type: "SUB_COMMAND",
+        options: [
           {
-            trigger: "status",
-            description: "check automod configuration for this guild",
-          },
-          {
-            trigger: "strikes <number>",
-            description: "maximum number of strikes a member can receive before taking an action",
-          },
-          {
-            trigger: "action <MUTE|KICK|BAN>",
-            description: "set action to be performed after receiving maximum strikes",
-          },
-          {
-            trigger: "debug <ON|OFF>",
-            description: "turns on automod for messages sent by admins and moderators",
+            name: "amount",
+            description: "number of strikes (default 5)",
+            required: true,
+            type: "INTEGER",
           },
         ],
       },
-      slashCommand: {
-        enabled: true,
-        ephemeral: true,
+      {
+        name: "action",
+        description: "Set action to be performed after receiving maximum strikes",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "action",
+            description: "action to perform",
+            type: "STRING",
+            required: true,
+            choices: [
+              {
+                name: "MUTE",
+                value: "MUTE",
+              },
+              {
+                name: "KICK",
+                value: "KICK",
+              },
+              {
+                name: "BAN",
+                value: "BAN",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "debug",
+        description: "Enable/disable automod for messages sent by admins & moderators",
+        type: "SUB_COMMAND",
         options: [
           {
             name: "status",
-            description: "Check automod configuration",
-            type: "SUB_COMMAND",
-          },
-          {
-            name: "strikes",
-            description: "Set maximum number of strikes before taking an action",
-            type: "SUB_COMMAND",
-            options: [
+            description: "configuration status",
+            required: true,
+            type: "STRING",
+            choices: [
               {
-                name: "amount",
-                description: "number of strikes (default 5)",
-                required: true,
-                type: "INTEGER",
+                name: "ON",
+                value: "ON",
               },
-            ],
-          },
-          {
-            name: "action",
-            description: "Set action to be performed after receiving maximum strikes",
-            type: "SUB_COMMAND",
-            options: [
               {
-                name: "action",
-                description: "action to perform",
-                type: "STRING",
-                required: true,
-                choices: [
-                  {
-                    name: "MUTE",
-                    value: "MUTE",
-                  },
-                  {
-                    name: "KICK",
-                    value: "KICK",
-                  },
-                  {
-                    name: "BAN",
-                    value: "BAN",
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "debug",
-            description: "Enable/disable automod for messages sent by admins & moderators",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "status",
-                description: "configuration status",
-                required: true,
-                type: "STRING",
-                choices: [
-                  {
-                    name: "ON",
-                    value: "ON",
-                  },
-                  {
-                    name: "OFF",
-                    value: "OFF",
-                  },
-                ],
+                name: "OFF",
+                value: "OFF",
               },
             ],
           },
         ],
       },
-    });
-  }
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   * @param {object} data
-   */
   async messageRun(message, args, data) {
     const input = args[0].toLowerCase();
     const settings = data.settings;
@@ -141,12 +134,8 @@ module.exports = class AutomodConfigCommand extends Command {
     //
     else response = "Invalid command usage!";
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   * @param {object} data
-   */
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     const settings = data.settings;
@@ -161,7 +150,7 @@ module.exports = class AutomodConfigCommand extends Command {
     else if (sub === "debug") response = await setDebug(settings, interaction.options.getString("status"));
 
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function getStatus(settings, guild) {

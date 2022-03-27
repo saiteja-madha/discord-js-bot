@@ -1,68 +1,62 @@
-const { Command } = require("@src/structures");
-const { Message, CommandInteraction, MessageEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { resolveMember } = require("@utils/guildUtils");
 const { getWarningLogs, clearWarningLogs } = require("@schemas/ModLog");
 const { getMember } = require("@schemas/Member");
 
-module.exports = class Warnings extends Command {
-  constructor(client) {
-    super(client, {
-      name: "warnings",
-      description: "list or clear user warnings",
-      category: "MODERATION",
-      userPermissions: ["KICK_MEMBERS"],
-      command: {
-        enabled: true,
-        minArgsCount: 1,
-        subcommands: [
-          {
-            trigger: "list [member]",
-            description: "list all warnings for a user",
-          },
-          {
-            trigger: "clear <member>",
-            description: "clear all warnings for a user",
-          },
-        ],
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "warnings",
+  description: "list or clear user warnings",
+  category: "MODERATION",
+  userPermissions: ["KICK_MEMBERS"],
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    subcommands: [
+      {
+        trigger: "list [member]",
+        description: "list all warnings for a user",
       },
-      slashCommand: {
-        enabled: true,
+      {
+        trigger: "clear <member>",
+        description: "clear all warnings for a user",
+      },
+    ],
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "list",
+        description: "list all warnings for a user",
+        type: "SUB_COMMAND",
         options: [
           {
-            name: "list",
-            description: "list all warnings for a user",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "user",
-                description: "the target member",
-                type: "USER",
-                required: true,
-              },
-            ],
-          },
-          {
-            name: "clear",
-            description: "clear all warnings for a user",
-            type: "SUB_COMMAND",
-            options: [
-              {
-                name: "user",
-                description: "the target member",
-                type: "USER",
-                required: true,
-              },
-            ],
+            name: "user",
+            description: "the target member",
+            type: "USER",
+            required: true,
           },
         ],
       },
-    });
-  }
+      {
+        name: "clear",
+        description: "clear all warnings for a user",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "user",
+            description: "the target member",
+            type: "USER",
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const sub = args[0]?.toLowerCase();
     let response = "";
@@ -86,11 +80,8 @@ module.exports = class Warnings extends Command {
     }
 
     await message.safeReply(response);
-  }
+  },
 
-  /**
-   * @param {CommandInteraction} interaction
-   */
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand();
     let response = "";
@@ -114,7 +105,7 @@ module.exports = class Warnings extends Command {
     }
 
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function listWarnings(target, { guildId }) {

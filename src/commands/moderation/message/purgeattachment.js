@@ -1,28 +1,21 @@
-const { Message } = require("discord.js");
-const { Command } = require("@src/structures");
 const { purgeMessages } = require("@utils/modUtils");
 const { sendMessage } = require("@utils/botUtils");
 
-module.exports = class PurgeLinks extends Command {
-  constructor(client) {
-    super(client, {
-      name: "purgelinks",
-      description: "deletes the specified amount of messages with links",
-      category: "MODERATION",
-      userPermissions: ["MANAGE_MESSAGES"],
-      botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
-      command: {
-        enabled: true,
-        usage: "[amount]",
-        aliases: ["purgelink"],
-      },
-    });
-  }
+/**
+ * @type {import("@structures/Command")}
+ */
+module.exports = {
+  name: "purgeattach",
+  description: "deletes the specified amount of messages with attachments",
+  category: "MODERATION",
+  userPermissions: ["MANAGE_MESSAGES"],
+  botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
+  command: {
+    enabled: true,
+    usage: "[amount]",
+    aliases: ["purgeattachment", "purgeattachments"],
+  },
 
-  /**
-   * @param {Message} message
-   * @param {string[]} args
-   */
   async messageRun(message, args) {
     const amount = args[0] || 99;
 
@@ -31,7 +24,7 @@ module.exports = class PurgeLinks extends Command {
       if (parseInt(amount) > 99) return message.safeReply("The max amount of messages that I can delete is 99");
     }
 
-    const response = await purgeMessages(message.member, message.channel, "LINK", amount);
+    const response = await purgeMessages(message.member, message.channel, "ATTACHMENT", amount);
 
     if (typeof response === "number") {
       return sendMessage(message.channel, `Successfully deleted ${response} messages`, 5);
@@ -44,5 +37,5 @@ module.exports = class PurgeLinks extends Command {
     } else {
       return message.safeReply(`Error occurred! Failed to delete messages`);
     }
-  }
+  },
 };
