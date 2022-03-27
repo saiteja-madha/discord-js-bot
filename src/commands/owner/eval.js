@@ -10,7 +10,7 @@ module.exports = class Eval extends Command {
     super(client, {
       name: "eval",
       description: "evaluates something",
-      // category: "OWNER",
+      category: "OWNER",
       botPermissions: ["EMBED_LINKS"],
       command: {
         enabled: true,
