@@ -93,17 +93,15 @@ module.exports = {
 async function getHelpMenu({ client, guild }) {
   // Menu Row
   const options = [];
-  const keys = Object.keys(CommandCategory);
-  keys.forEach((key) => {
-    const value = CommandCategory[key];
-    const data = {
-      label: value.name,
-      value: key,
-      description: `View commands in ${value.name} category`,
-      emoji: value.emoji,
-    };
-    options.push(data);
-  });
+  for (const [k, v] of Object.entries(CommandCategory)) {
+    if (v.enabled === false) continue;
+    options.push({
+      label: v.name,
+      value: k,
+      description: `View commands in ${v.name} category`,
+      emoji: v.emoji,
+    });
+  }
 
   const menuRow = new MessageActionRow().addComponents(
     new MessageSelectMenu().setCustomId("help-menu").setPlaceholder("Choose the command category").addOptions(options)

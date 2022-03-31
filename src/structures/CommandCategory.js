@@ -1,3 +1,5 @@
+const config = require("@root/config");
+
 module.exports = {
   ADMIN: {
     name: "Admin",
@@ -66,6 +68,7 @@ module.exports = {
   },
   SUGGESTION: {
     name: "Suggestion",
+    enabled: config.SUGGESTIONS.ENABLED,
     image: "https://cdn-icons-png.flaticon.com/512/1484/1484815.png",
     emoji: "📝",
   },

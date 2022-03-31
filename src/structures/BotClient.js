@@ -9,6 +9,7 @@ const Command = require("./Command");
 const BaseContext = require("./BaseContext");
 const GiveawayManager = require("./GiveawayManager");
 const { schemas } = require("@src/database/mongoose");
+const CommandCategory = require("./CommandCategory");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -151,6 +152,11 @@ module.exports = class BotClient extends Client {
    * @param {Command} cmd
    */
   loadCommand(cmd) {
+    // Check if category is disabled
+    if (cmd.category && CommandCategory[cmd.category]?.enabled === false) {
+      this.logger.debug(`Skipping Command ${cmd.name}. Category ${cmd.category} is disabled`);
+      return;
+    }
     // Prefix Command
     if (cmd.command?.enabled) {
       const index = this.commands.length;
