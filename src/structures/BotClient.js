@@ -4,12 +4,12 @@ const { table } = require("table");
 const logger = require("../helpers/logger");
 const { recursiveReadDirSync } = require("../helpers/Loader");
 const { validateCommand, validateContext } = require("../helpers/Validator");
-const MusicManager = require("./MusicManager");
 const Command = require("./Command");
 const BaseContext = require("./BaseContext");
 const GiveawayManager = require("./GiveawayManager");
 const { schemas } = require("@src/database/mongoose");
 const CommandCategory = require("./CommandCategory");
+const erelaHandler = require("../handlers/erela");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -62,7 +62,7 @@ module.exports = class BotClient extends Client {
       : undefined;
 
     // Music Player
-    this.musicManager = new MusicManager(this);
+    this.musicManager = erelaHandler(this);
 
     // Giveaways
     this.giveawaysManager = new GiveawayManager(this);
@@ -83,26 +83,15 @@ module.exports = class BotClient extends Client {
     let success = 0;
     let failed = 0;
     const clientEvents = [];
-    const musicEvents = [];
 
     recursiveReadDirSync(directory).forEach((filePath) => {
       const file = path.basename(filePath);
-      const dirName = path.basename(path.dirname(filePath));
       try {
         const eventName = path.basename(file, ".js");
         const event = require(filePath);
 
-        // music events
-        if (dirName === "music") {
-          this.musicManager.on(eventName, event.bind(null, this));
-          musicEvents.push([file, "✓"]);
-        }
-
-        // bot events
-        else {
-          this.on(eventName, event.bind(null, this));
-          clientEvents.push([file, "✓"]);
-        }
+        this.on(eventName, event.bind(null, this));
+        clientEvents.push([file, "✓"]);
 
         delete require.cache[require.resolve(filePath)];
         success += 1;
@@ -117,17 +106,6 @@ module.exports = class BotClient extends Client {
         header: {
           alignment: "center",
           content: "Client Events",
-        },
-        singleLine: true,
-        columns: [{ width: 25 }, { width: 5, alignment: "center" }],
-      })
-    );
-
-    console.log(
-      table(musicEvents, {
-        header: {
-          alignment: "center",
-          content: "Music Events",
         },
         singleLine: true,
         columns: [{ width: 25 }, { width: 5, alignment: "center" }],
