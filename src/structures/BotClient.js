@@ -3,7 +3,7 @@ const path = require("path");
 const { table } = require("table");
 const logger = require("../helpers/logger");
 const { recursiveReadDirSync } = require("../helpers/Loader");
-const { validateCommand } = require("../helpers/Validator");
+const { validateCommand, validateContext } = require("../helpers/Validator");
 const MusicManager = require("./MusicManager");
 const Command = require("./Command");
 const BaseContext = require("./BaseContext");
@@ -213,19 +213,20 @@ module.exports = class BotClient extends Client {
    */
   loadContexts(directory) {
     this.logger.log(`Loading contexts...`);
-    recursiveReadDirSync(directory).forEach((filePath) => {
-      const file = path.basename(filePath);
+    const files = recursiveReadDirSync(directory);
+    for (const file of files) {
       try {
-        const ctxClass = require(filePath);
-        if (!(ctxClass.prototype instanceof BaseContext)) return;
-        const ctx = new ctxClass(this);
+        const ctx = require(file);
+        if (typeof ctx !== "object") continue;
+        validateContext(ctx);
         if (!ctx.enabled) return this.logger.debug(`Skipping context ${ctx.name}. Disabled!`);
         if (this.contextMenus.has(ctx.name)) throw new Error(`Context already exists with that name`);
         this.contextMenus.set(ctx.name, ctx);
       } catch (ex) {
-        this.logger.error(`Context: Failed to load ${file} Reason: ${ex.message}`);
+        this.logger.error(`Failed to load ${file} Reason: ${ex.message}`);
       }
-    });
+    }
+
     const userContexts = this.contextMenus.filter((ctx) => ctx.type === "USER").size;
     const messageContexts = this.contextMenus.filter((ctx) => ctx.type === "MESSAGE").size;
 

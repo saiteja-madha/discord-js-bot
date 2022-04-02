@@ -3,7 +3,7 @@ const { permissions } = require("@utils/botUtils");
 
 module.exports = class Validator {
   /**
-   * @param {import('@src/structures/Command')} cmd
+   * @param {import('@structures/Command')} cmd
    */
   static validateCommand(cmd) {
     if (typeof cmd !== "object") {
@@ -120,6 +120,47 @@ module.exports = class Validator {
       }
       if (cmd.slashCommand.enabled && typeof cmd.interactionRun !== "function") {
         throw new TypeError("Missing 'interactionRun' function");
+      }
+    }
+  }
+
+  /**
+   * @param {import('@structures/BaseContext')} context
+   */
+  static validateContext(context) {
+    if (typeof context !== "object") {
+      throw new TypeError("Context must be an object");
+    }
+    if (typeof context.name !== "string" || context.name !== context.name.toLowerCase()) {
+      throw new Error("Context name must be a lowercase string.");
+    }
+    if (typeof context.description !== "string") {
+      throw new TypeError("Context description must be a string.");
+    }
+    if (context.type !== "USER" && context.type !== "MESSAGE") {
+      throw new TypeError("Context type must be a either USER/MESSAGE.");
+    }
+    if (Object.prototype.hasOwnProperty.call(context, "enabled") && typeof context.enabled !== "boolean") {
+      throw new TypeError("Context enabled must be a boolean value");
+    }
+    if (Object.prototype.hasOwnProperty.call(context, "ephemeral") && typeof context.ephemeral !== "boolean") {
+      throw new TypeError("Context enabled must be a boolean value");
+    }
+    if (
+      Object.prototype.hasOwnProperty.call(context, "defaultPermission") &&
+      typeof context.defaultPermission !== "boolean"
+    ) {
+      throw new TypeError("Context defaultPermission must be a boolean value");
+    }
+    if (Object.prototype.hasOwnProperty.call(context, "cooldown") && typeof context.cooldown !== "number") {
+      throw new TypeError("Context cooldown must be a number");
+    }
+    if (context.userPermissions) {
+      if (!Array.isArray(context.userPermissions)) {
+        throw new TypeError("Context userPermissions must be an Array of permission key strings.");
+      }
+      for (const perm of context.userPermissions) {
+        if (!permissions[perm]) throw new RangeError(`Invalid command userPermission: ${perm}`);
       }
     }
   }

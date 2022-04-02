@@ -1,6 +1,6 @@
 const { handleTicketOpen, handleTicketClose } = require("@src/handlers/ticket");
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
-const { commandHandler } = require("@src/handlers");
+const { commandHandler, contextHandler } = require("@src/handlers");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -21,7 +21,7 @@ module.exports = async (client, interaction) => {
   // Context Menu
   else if (interaction.isContextMenu()) {
     const context = client.contextMenus.get(interaction.commandName);
-    if (context) await context.execute(interaction);
+    if (context) await contextHandler.handleContext(interaction, context);
     else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
   }
 

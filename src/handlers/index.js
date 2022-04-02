@@ -6,4 +6,5 @@ module.exports = {
   reactionHandler: require("./reaction"),
   xpHandler: require("./xp"),
   commandHandler: require("./command"),
+  contextHandler: require("./context"),
 };

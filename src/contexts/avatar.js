@@ -1,26 +1,21 @@
-const { ContextMenuInteraction, MessageEmbed } = require("discord.js");
-const { BaseContext } = require("@src/structures");
+const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 
-module.exports = class Avatar extends BaseContext {
-  constructor(client) {
-    super(client, {
-      name: "avatar",
-      description: "displays avatar information about the user",
-      type: "USER",
-      enabled: true,
-      ephemeral: true,
-    });
-  }
+/**
+ * @type {import('@structures/BaseContext')}
+ */
+module.exports = {
+  name: "avatar",
+  description: "displays avatar information about the user",
+  type: "USER",
+  enabled: true,
+  ephemeral: true,
 
-  /**
-   * @param {ContextMenuInteraction} interaction
-   */
   async run(interaction) {
     const user = await interaction.client.users.fetch(interaction.targetId);
     const response = getAvatar(user);
     await interaction.followUp(response);
-  }
+  },
 };
 
 function getAvatar(user) {

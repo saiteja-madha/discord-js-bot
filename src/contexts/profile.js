@@ -1,29 +1,25 @@
-const { BaseContext } = require("@src/structures");
-const { ContextMenuInteraction, MessageEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
 const { getUser } = require("@schemas/User");
 const { getMember } = require("@schemas/Member");
 const { EMBED_COLORS, ECONOMY } = require("@root/config");
 
-module.exports = class Profile extends BaseContext {
-  constructor(client) {
-    super(client, {
-      name: "profile",
-      description: "get users profile",
-      type: "USER",
-      enabled: true,
-      ephemeral: true,
-    });
-  }
+/**
+ * @type {import('@structures/BaseContext')}
+ */
+module.exports = {
+  name: "profile",
+  description: "get users profile",
+  type: "USER",
+  enabled: true,
+  ephemeral: true,
+  cooldown: 10,
 
-  /**
-   * @param {ContextMenuInteraction} interaction
-   */
   async run(interaction) {
     const user = await interaction.client.users.fetch(interaction.targetId);
     const response = await profile(interaction, user);
     await interaction.followUp(response);
-  }
+  },
 };
 
 async function profile({ guild }, user) {
