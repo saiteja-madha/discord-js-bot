@@ -75,6 +75,11 @@ module.exports = {
     START_EMBED: "#FF468A",
     END_EMBED: "#FF468A",
   },
+  TICKET: {
+    ENABLED: false,
+    CREATE_EMBED: "#068ADD",
+    CLOSE_EMBED: "#068ADD",
+  },
   /* Bot Embed Colors */
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",
@@ -83,8 +88,6 @@ module.exports = {
     ERROR: "#D61A3C",
     WARNING: "#F7E919",
     AUTOMOD: "#36393F",
-    TICKET_CREATE: "#068ADD",
-    TICKET_CLOSE: "#068ADD",
     TIMEOUT_LOG: "#102027",
     UNTIMEOUT_LOG: "#4B636E",
     KICK_LOG: "#FF7961",

@@ -1,6 +1,6 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { postToBin } = require("@utils/httpUtils");
-const { EMBED_COLORS } = require("@root/config.js");
+const { TICKET } = require("@root/config.js");
 const { getSettings } = require("@schemas/Guild");
 const { sendMessage, safeDM } = require("@utils/botUtils");
 const { error } = require("@src/helpers/logger");
@@ -85,7 +85,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     if (channel.deletable) await channel.delete();
 
-    const embed = new MessageEmbed().setAuthor({ name: "Ticket Closed" }).setColor(EMBED_COLORS.TICKET_CLOSE);
+    const embed = new MessageEmbed().setAuthor({ name: "Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
     if (reason) embed.addField("Reason", reason, false);
     embed
       .setDescription(`**Title:** ${ticketDetails.title}`)
@@ -192,7 +192,7 @@ async function openTicket(guild, user, config) {
     const sent = await sendMessage(tktChannel, { content: user.toString(), embeds: [embed], components: [buttonsRow] });
 
     const dmEmbed = new MessageEmbed()
-      .setColor(EMBED_COLORS.TICKET_CREATE)
+      .setColor(TICKET.CREATE_EMBED)
       .setAuthor({ name: "Ticket Created" })
       .setThumbnail(guild.iconURL())
       .setDescription(`**Server:** ${guild.name}\n**Title:** ${config.title}`);

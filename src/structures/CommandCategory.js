@@ -76,6 +76,7 @@ module.exports = {
   },
   TICKET: {
     name: "Ticket",
+    enabled: config.TICKET.ENABLED,
     image: "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/512/ticket-icon.png",
     emoji: "🎫",
   },
