@@ -18,6 +18,7 @@ module.exports = {
   },
   ECONOMY: {
     name: "Economy",
+    enabled: config.ECONOMY.ENABLED,
     image: "https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-11/128/coins-icon.png",
     emoji: "🪙",
   },

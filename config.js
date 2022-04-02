@@ -24,17 +24,15 @@ module.exports = {
     COOLDOWN: 5, // Cooldown in seconds between messages
     DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
   },
-  MISCELLANEOUS: {
-    DAILY_COINS: 100, // coins to be received by daily command
-  },
   ECONOMY: {
+    ENABLED: false,
     CURRENCY: "₪",
     DAILY_COINS: 100, // coins to be received by daily command
     MIN_BEG_AMOUNT: 100, // minimum coins to be received when beg command is used
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
   SUGGESTIONS: {
-    ENABLED: true, // Should the suggestion system be enabled
+    ENABLED: false, // Should the suggestion system be enabled
     EMOJI: {
       UP_VOTE: "⬆️",
       DOWN_VOTE: "⬇️",
