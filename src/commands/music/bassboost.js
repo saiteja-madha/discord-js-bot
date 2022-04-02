@@ -13,7 +13,7 @@ const levels = {
 module.exports = {
   name: "bassboost",
   description: "set bassboost level",
-  category: "MUSIC",
+  category: "ERELA_JS",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -65,7 +65,7 @@ module.exports = {
 };
 
 function setBassBoost({ client, guildId }, level) {
-  const player = client.musicManager.get(guildId);
+  const player = client.erelaManager.get(guildId);
   const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
   player.setEQ(...bands);
   return `> Set the bassboost level to \`${level}\``;

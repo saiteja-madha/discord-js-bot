@@ -62,7 +62,7 @@ module.exports = class BotClient extends Client {
       : undefined;
 
     // Music Player
-    this.musicManager = erelaHandler(this);
+    if (this.config.ERELA_JS.ENABLED) this.erelaManager = erelaHandler(this);
 
     // Giveaways
     this.giveawaysManager = new GiveawayManager(this);

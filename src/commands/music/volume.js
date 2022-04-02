@@ -6,7 +6,7 @@ const { musicValidations } = require("@utils/botUtils");
 module.exports = {
   name: "volume",
   description: "set the music player volume",
-  category: "MUSIC",
+  category: "ERELA_JS",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -38,7 +38,7 @@ module.exports = {
 };
 
 function volume({ client, guildId }, volume) {
-  const player = client.musicManager.get(guildId);
+  const player = client.erelaManager.get(guildId);
 
   if (!volume) return `> The player volume is \`${player.volume}\`.`;
   if (volume < 1 || volume > 100) return "you need to give me a volume between 1 and 100.";

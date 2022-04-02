@@ -6,7 +6,7 @@ const { musicValidations } = require("@utils/botUtils");
 module.exports = {
   name: "stop",
   description: "stop the music player",
-  category: "MUSIC",
+  category: "ERELA_JS",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -27,7 +27,7 @@ module.exports = {
 };
 
 function stop({ client, guildId }) {
-  const player = client.musicManager.get(guildId);
+  const player = client.erelaManager.get(guildId);
   player.destroy();
   return "🎶 The music player is stopped and queue has been cleared";
 }

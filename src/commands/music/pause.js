@@ -6,7 +6,7 @@ const { musicValidations } = require("@utils/botUtils");
 module.exports = {
   name: "pause",
   description: "pause the music player",
-  category: "MUSIC",
+  category: "ERELA_JS",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -27,7 +27,7 @@ module.exports = {
 };
 
 function pause({ client, guildId }) {
-  const player = client.musicManager.get(guildId);
+  const player = client.erelaManager.get(guildId);
   if (player.paused) return "The player is already paused.";
 
   player.pause(true);

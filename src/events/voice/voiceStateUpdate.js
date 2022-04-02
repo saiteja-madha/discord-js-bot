@@ -1,11 +1,10 @@
-const { MUSIC } = require("@root/config");
-
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').VoiceState} oldState
  * @param {import('discord.js').VoiceState} newState
  */
 module.exports = async (client, oldState, newState) => {
+  if (!client.config.ERELA_JS.ENABLED) return;
   const guild = oldState.guild;
 
   // if nobody left the channel in question, return.
@@ -17,7 +16,7 @@ module.exports = async (client, oldState, newState) => {
       // if 1 (you), wait 1 minute
       if (!oldState.channel.members.size - 1)
         // if there's still 1 member,
-        client.musicManager.get(guild.id) && client.musicManager.get(guild.id).destroy();
-    }, MUSIC.IDLE_TIME * 1000);
+        client.erelaManager.get(guild.id) && client.erelaManager.get(guild.id).destroy();
+    }, client.config.ERELA_JS.IDLE_TIME * 1000);
   }
 };

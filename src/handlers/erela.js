@@ -33,7 +33,7 @@ module.exports = (client) => {
   }
 
   const erela = new Manager({
-    nodes: client.config.MUSIC.NODES,
+    nodes: client.config.ERELA_JS.NODES,
     autoPlay: true,
     plugins,
 

@@ -3,5 +3,5 @@
  * @param {any} data
  */
 module.exports = async (client, data) => {
-  client.musicManager.updateVoiceState(data);
+  if (client.config.ERELA_JS.ENABLED) client.erelaManager.updateVoiceState(data);
 };

@@ -8,7 +8,7 @@ const { EMBED_COLORS } = require("@root/config");
 module.exports = {
   name: "search",
   description: "search for matching songs on youtube",
-  category: "MUSIC",
+  category: "ERELA_JS",
   botPermissions: ["EMBED_LINKS"],
   command: {
     enabled: true,
@@ -43,14 +43,14 @@ module.exports = {
 
 async function search({ member, guild, channel }, user, query) {
   if (!member.voice.channel) return "🚫 You need to join a voice channel first";
-  let player = guild.client.musicManager.get(guild.id);
+  let player = guild.client.erelaManager.get(guild.id);
 
   if (player && member.voice.channel !== guild.me.voice.channel) {
     return "🚫 You must be in the same voice channel as mine";
   }
 
   try {
-    player = guild.client.musicManager.create({
+    player = guild.client.erelaManager.create({
       guild: guild.id,
       textChannel: channel.id,
       voiceChannel: member.voice.channel.id,
@@ -119,7 +119,7 @@ async function search({ member, guild, channel }, user, query) {
       return { embeds: [embed] };
 
     case "SEARCH_RESULT": {
-      let max = guild.client.config.MUSIC.MAX_SEARCH_RESULTS;
+      let max = guild.client.config.ERELA_JS.MAX_SEARCH_RESULTS;
       if (res.tracks.length < max) max = res.tracks.length;
 
       const results = res.tracks.slice(0, max);

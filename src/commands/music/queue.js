@@ -7,7 +7,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "queue",
   description: "displays the current music queue",
-  category: "MUSIC",
+  category: "ERELA_JS",
   botPermissions: ["EMBED_LINKS"],
   command: {
     enabled: true,
@@ -39,7 +39,7 @@ module.exports = {
 };
 
 function getQueue({ client, guild }, pgNo) {
-  const player = client.musicManager.get(guild.id);
+  const player = client.erelaManager.get(guild.id);
   if (!player) return "🚫 There is no music playing in this guild.";
 
   const queue = player.queue;

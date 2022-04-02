@@ -2,7 +2,6 @@ const { counterHandler, inviteHandler } = require("@src/handlers");
 const { cacheReactionRoles } = require("@schemas/Message");
 const { getSettings } = require("@schemas/Guild");
 const { updateCounterChannels } = require("@src/handlers/counter");
-const { PRESENCE } = require("@root/config");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -11,15 +10,17 @@ module.exports = async (client) => {
   client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
 
   // Initialize Music Manager
-  client.logger.log("Initializing music manager");
-  client.musicManager.init(client.user.id);
+  if (client.config.ERELA_JS.ENABLED) {
+    client.logger.log("Initializing music manager");
+    client.erelaManager.init(client.user.id);
+  }
 
   // Initialize Giveaways Manager
   client.logger.log("Initializing giveaways manager");
   client.giveawaysManager._init();
 
   // Update Bot Presence
-  if (PRESENCE.ENABLED) {
+  if (client.config.PRESENCE.ENABLED) {
     updatePresence(client);
     setInterval(() => updatePresence(client), 10 * 60 * 1000);
   }
@@ -54,7 +55,7 @@ module.exports = async (client) => {
  * @param {import('@src/structures').BotClient} client
  */
 const updatePresence = (client) => {
-  let message = PRESENCE.MESSAGE;
+  let message = client.config.PRESENCE.MESSAGE;
 
   if (message.includes("{servers}")) {
     message = message.replaceAll("{servers}", client.guilds.cache.size);
@@ -66,11 +67,11 @@ const updatePresence = (client) => {
   }
 
   client.user.setPresence({
-    status: PRESENCE.STATUS,
+    status: client.config.PRESENCE.STATUS,
     activities: [
       {
         name: message,
-        type: PRESENCE.TYPE,
+        type: client.config.PRESENCE.TYPE,
       },
     ],
   });

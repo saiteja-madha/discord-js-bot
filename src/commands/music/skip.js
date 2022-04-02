@@ -6,7 +6,7 @@ const { musicValidations } = require("@utils/botUtils");
 module.exports = {
   name: "skip",
   description: "skip the current song",
-  category: "MUSIC",
+  category: "ERELA_JS",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -27,7 +27,7 @@ module.exports = {
 };
 
 function skip({ client, guildId }) {
-  const player = client.musicManager.get(guildId);
+  const player = client.erelaManager.get(guildId);
   const { title } = player.queue.current;
   player.stop();
   return `⏯️ ${title} was skipped.`;

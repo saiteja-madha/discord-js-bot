@@ -8,7 +8,7 @@ const { durationToMillis } = require("@utils/miscUtils");
 module.exports = {
   name: "seek",
   description: "sets the playing track's position to the specified position",
-  category: "MUSIC",
+  category: "ERELA_JS",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -40,7 +40,7 @@ module.exports = {
 };
 
 function seekTo({ client, guildId }, time) {
-  const player = client.musicManager?.get(guildId);
+  const player = client.erelaManager?.get(guildId);
   const seekTo = durationToMillis(time);
 
   if (seekTo > player.queue.current.duration) {

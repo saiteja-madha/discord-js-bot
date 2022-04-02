@@ -148,7 +148,7 @@ const parsePermissions = (perms) => {
 
 const musicValidations = [
   {
-    callback: ({ client, guildId }) => client.musicManager.get(guildId),
+    callback: ({ client, guildId }) => client.erelaManager.get(guildId),
     message: "🚫 No music is being played!",
   },
   {
@@ -157,7 +157,7 @@ const musicValidations = [
   },
   {
     callback: ({ member, client, guildId }) =>
-      member.voice?.channelId === client.musicManager.get(guildId).voiceChannel,
+      member.voice?.channelId === client.erelaManager.get(guildId).voiceChannel,
     message: "🚫 You're not in the same voice channel.",
   },
 ];

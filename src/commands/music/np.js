@@ -9,7 +9,7 @@ const { splitBar } = require("string-progressbar");
 module.exports = {
   name: "np",
   description: "show's what track is currently being played",
-  category: "MUSIC",
+  category: "ERELA_JS",
   botPermissions: ["EMBED_LINKS"],
   command: {
     enabled: true,
@@ -31,7 +31,7 @@ module.exports = {
 };
 
 function nowPlaying({ client, guildId }) {
-  const player = client.musicManager.get(guildId);
+  const player = client.erelaManager.get(guildId);
   if (!player || !player.queue.current) return "🚫 No music is being played!";
 
   const track = player.queue.current;
