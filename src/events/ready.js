@@ -16,8 +16,10 @@ module.exports = async (client) => {
   }
 
   // Initialize Giveaways Manager
-  client.logger.log("Initializing giveaways manager");
-  client.giveawaysManager._init();
+  if (client.config.GIVEAWAYS.ENABLED) {
+    client.logger.log("Initializing giveaways manager");
+    client.giveawaysManager._init();
+  }
 
   // Update Bot Presence
   if (client.config.PRESENCE.ENABLED) {

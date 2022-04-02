@@ -6,10 +6,10 @@ const { recursiveReadDirSync } = require("../helpers/Loader");
 const { validateCommand, validateContext } = require("../helpers/Validator");
 const Command = require("./Command");
 const BaseContext = require("./BaseContext");
-const GiveawayManager = require("./GiveawayManager");
 const { schemas } = require("@src/database/mongoose");
 const CommandCategory = require("./CommandCategory");
 const erelaHandler = require("../handlers/erela");
+const giveawaysHandler = require("../handlers/giveaway");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -65,7 +65,7 @@ module.exports = class BotClient extends Client {
     if (this.config.ERELA_JS.ENABLED) this.erelaManager = erelaHandler(this);
 
     // Giveaways
-    this.giveawaysManager = new GiveawayManager(this);
+    if (this.config.GIVEAWAYS.ENABLED) this.giveawaysManager = giveawaysHandler(this);
 
     // Logger
     this.logger = logger;

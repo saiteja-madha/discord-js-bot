@@ -69,6 +69,12 @@ module.exports = {
       },
     ],
   },
+  GIVEAWAYS: {
+    ENABLED: false,
+    REACTION: "🎁",
+    START_EMBED: "#FF468A",
+    END_EMBED: "#FF468A",
+  },
   /* Bot Embed Colors */
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",
@@ -90,7 +96,6 @@ module.exports = {
     UNDEAFEN_LOG: "#4B636E",
     DISCONNECT_LOG: "RANDOM",
     MOVE_LOG: "RANDOM",
-    GIVEAWAYS: "#FF468A",
   },
   /* Maximum number of keys that can be stored */
   CACHE_SIZE: {

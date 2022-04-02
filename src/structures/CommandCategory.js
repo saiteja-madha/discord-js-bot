@@ -28,6 +28,7 @@ module.exports = {
   },
   GIVEAWAY: {
     name: "Giveaway",
+    enabled: config.GIVEAWAYS.ENABLED,
     image: "https://icons.iconarchive.com/icons/flameia/aqua-smiles/128/make-fun-icon.png",
     emoji: "🎉",
   },

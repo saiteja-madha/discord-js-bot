@@ -1,18 +1,19 @@
 const { GiveawaysManager } = require("discord-giveaways");
 const Model = require("@schemas/Giveaways");
-const { EMBED_COLORS } = require("@root/config");
 
-// Explanation at: https://github.com/Androz2091/discord-giveaways/blob/master/examples/custom-databases/mongoose.js
-module.exports = class extends GiveawaysManager {
+class MongooseGiveaways extends GiveawaysManager {
+  /**
+   * @param {import("@structures/BotClient")} client
+   */
   constructor(client) {
     super(
       client,
       {
         default: {
           botsCanWin: false,
-          embedColor: EMBED_COLORS.GIVEAWAYS,
-          embedColorEnd: EMBED_COLORS.GIVEAWAYS,
-          reaction: "🎁",
+          embedColor: client.config.GIVEAWAYS.START_EMBED,
+          embedColorEnd: client.config.GIVEAWAYS.END_EMBED,
+          reaction: client.config.GIVEAWAYS.REACTION,
         },
       },
       false
@@ -37,4 +38,6 @@ module.exports = class extends GiveawaysManager {
     await Model.deleteOne({ messageId }).exec();
     return true;
   }
-};
+}
+
+module.exports = (client) => new MongooseGiveaways(client);
