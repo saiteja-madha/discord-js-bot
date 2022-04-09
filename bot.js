@@ -1,13 +1,15 @@
 require("dotenv").config();
 require("module-alias/register");
-require("@src/helpers/extenders");
+require("@helpers/extenders");
 
 const path = require("path");
-const { validateConfig, checkForUpdates } = require("@utils/botUtils");
+const { checkForUpdates } = require("@utils/botUtils");
 const { initializeMongoose } = require("@src/database/mongoose");
 const { BotClient } = require("@src/structures");
+const { validateConfiguration } = require("@helpers/Validator");
 
 global.__appRoot = path.resolve(__dirname);
+validateConfiguration();
 
 // initialize client
 const client = new BotClient();
@@ -19,8 +21,6 @@ client.loadEvents("src/events");
 process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
 (async () => {
-  validateConfig();
-
   // initialize the database
   await initializeMongoose();
 

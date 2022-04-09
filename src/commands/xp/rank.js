@@ -11,7 +11,7 @@ module.exports = {
   name: "rank",
   description: "shows members rank in this server",
   cooldown: 5,
-  category: "INFORMATION",
+  category: "XP_SYSTEM",
   botPermissions: ["ATTACH_FILES"],
   command: {
     enabled: true,

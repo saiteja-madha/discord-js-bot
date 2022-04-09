@@ -3,7 +3,7 @@ const { postToBin } = require("@utils/httpUtils");
 const { TICKET } = require("@root/config.js");
 const { getSettings } = require("@schemas/Guild");
 const { sendMessage, safeDM } = require("@utils/botUtils");
-const { error } = require("@src/helpers/logger");
+const { error } = require("@helpers/logger");
 
 const OPEN_PERMS = ["MANAGE_CHANNELS"];
 const CLOSE_PERMS = ["MANAGE_CHANNELS", "READ_MESSAGE_HISTORY"];

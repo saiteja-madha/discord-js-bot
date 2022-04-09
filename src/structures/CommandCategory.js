@@ -35,11 +35,13 @@ module.exports = {
   },
   IMAGE: {
     name: "Image",
+    enabled: config.IMAGE.ENABLED,
     image: "https://icons.iconarchive.com/icons/dapino/summer-holiday/128/photo-icon.png",
     emoji: "🖼️",
   },
   INVITE: {
     name: "Invite",
+    enabled: config.INVITE.ENABLED,
     image: "https://cdn4.iconfinder.com/data/icons/general-business/150/Invite-512.png",
     emoji: "📨",
   },
@@ -50,6 +52,7 @@ module.exports = {
   },
   MODERATION: {
     name: "Moderation",
+    enabled: config.MODERATION.ENABLED,
     image: "https://icons.iconarchive.com/icons/lawyerwordpress/law/128/Gavel-Law-icon.png",
     emoji: "🔨",
   },
@@ -85,5 +88,11 @@ module.exports = {
     name: "Utility",
     image: "https://icons.iconarchive.com/icons/blackvariant/button-ui-system-folders-alt/128/Utilities-icon.png",
     emoji: "🛠",
+  },
+  XP_SYSTEM: {
+    name: "Levelling",
+    enabled: config.XP_SYSTEM.ENABLED,
+    image: "https://cdn1.iconfinder.com/data/icons/game-design-butterscotch-vol-1/256/Leader-512.png",
+    emoji: "🏆",
   },
 };

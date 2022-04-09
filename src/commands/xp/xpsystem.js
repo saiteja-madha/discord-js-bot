@@ -4,7 +4,7 @@
 module.exports = {
   name: "xpsystem",
   description: "enable or disable XP ranking system in the server",
-  category: "ADMIN",
+  category: "XP_SYSTEM",
   userPermissions: ["MANAGE_GUILD"],
   command: {
     enabled: true,

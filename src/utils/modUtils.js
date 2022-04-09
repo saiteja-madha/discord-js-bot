@@ -1,5 +1,5 @@
 const { Collection, MessageEmbed } = require("discord.js");
-const { EMBED_COLORS } = require("@root/config");
+const { MODERATION } = require("@root/config");
 
 // Utils
 const { sendMessage } = require("@utils/botUtils");
@@ -74,47 +74,47 @@ async function logModeration(issuer, target, reason, type, data = {}) {
       break;
 
     case "TIMEOUT":
-      embed.setColor(EMBED_COLORS.TIMEOUT_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.TIMEOUT);
       break;
 
     case "UNTIMEOUT":
-      embed.setColor(EMBED_COLORS.UNTIMEOUT_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.UNTIMEOUT);
       break;
 
     case "KICK":
-      embed.setColor(EMBED_COLORS.KICK_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.KICK);
       break;
 
     case "SOFTBAN":
-      embed.setColor(EMBED_COLORS.SOFTBAN_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.SOFTBAN);
       break;
 
     case "BAN":
-      embed.setColor(EMBED_COLORS.BAN_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.BAN);
       break;
 
     case "VMUTE":
-      embed.setColor(EMBED_COLORS.VMUTE_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.VMUTE);
       break;
 
     case "VUNMUTE":
-      embed.setColor(EMBED_COLORS.VUNMUTE_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.VUNMUTE);
       break;
 
     case "DEAFEN":
-      embed.setColor(EMBED_COLORS.DEAFEN_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.DEAFEN);
       break;
 
     case "UNDEAFEN":
-      embed.setColor(EMBED_COLORS.UNDEAFEN_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.UNDEAFEN);
       break;
 
     case "DISCONNECT":
-      embed.setColor(EMBED_COLORS.DISCONNECT_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.DISCONNECT);
       break;
 
     case "MOVE":
-      embed.setColor(EMBED_COLORS.MOVE_LOG);
+      embed.setColor(MODERATION.EMBED_COLORS.MOVE);
       break;
   }
 

@@ -2,28 +2,38 @@ module.exports = {
   OWNER_IDS: [], // Bot owner ID's
   PREFIX: "!", // Default prefix for the bot
   SUPPORT_SERVER: "", // Your bot support server
-  PRESENCE: {
-    ENABLED: true, // Whether or not the bot should update its status
-    STATUS: "online", // The bot's status [online, idle, dnd, invisible]
-    TYPE: "WATCHING", // Status type for the bot [PLAYING | LISTENING | WATCHING | COMPETING]
-    MESSAGE: "{members} members in {servers} servers", // Your bot status message
-  },
-  DASHBOARD: {
-    enabled: false, // enable or disable dashboard
-    baseURL: "http://localhost:8080", // base url
-    failureURL: "http://localhost:8080", // failure redirect url
-    port: "8080", // port to run the bot on
-  },
   INTERACTIONS: {
     SLASH: false, // Should the interactions be enabled
     CONTEXT: false, // Should contexts be enabled
     GLOBAL: false, // Should the interactions be registered globally
     TEST_GUILD_ID: "xxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
-  XP_SYSTEM: {
-    COOLDOWN: 5, // Cooldown in seconds between messages
-    DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
+  EMBED_COLORS: {
+    BOT_EMBED: "#068ADD",
+    TRANSPARENT: "#36393F",
+    SUCCESS: "#00A56A",
+    ERROR: "#D61A3C",
+    WARNING: "#F7E919",
+    AUTOMOD: "#36393F",
   },
+  CACHE_SIZE: {
+    GUILDS: 100,
+    USERS: 10000,
+    MEMBERS: 10000,
+  },
+  MESSAGES: {
+    API_ERROR: "Unexpected Backend Error! Try again later or contact support server",
+  },
+
+  // PLUGINS
+
+  DASHBOARD: {
+    enabled: false, // enable or disable dashboard
+    baseURL: "http://localhost:8080", // base url
+    failureURL: "http://localhost:8080", // failure redirect url
+    port: "8080", // port to run the bot on
+  },
+
   ECONOMY: {
     ENABLED: false,
     CURRENCY: "₪",
@@ -31,6 +41,54 @@ module.exports = {
     MIN_BEG_AMOUNT: 100, // minimum coins to be received when beg command is used
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
+
+  ERELA_JS: {
+    ENABLED: false,
+    IDLE_TIME: 60, // Time in seconds before the bot disconnects from the voice channel
+    MAX_SEARCH_RESULTS: 5,
+    NODES: [],
+  },
+
+  GIVEAWAYS: {
+    ENABLED: false,
+    REACTION: "🎁",
+    START_EMBED: "#FF468A",
+    END_EMBED: "#FF468A",
+  },
+
+  IMAGE: {
+    ENABLED: false,
+    BASE_API: "https://image-api.strangebot.xyz",
+  },
+
+  INVITE: {
+    ENABLED: false,
+  },
+
+  MODERATION: {
+    ENABLED: false,
+    EMBED_COLORS: {
+      TIMEOUT: "#102027",
+      UNTIMEOUT: "#4B636E",
+      KICK: "#FF7961",
+      SOFTBAN: "#AF4448",
+      BAN: "#D32F2F",
+      VMUTE: "#102027",
+      VUNMUTE: "#4B636E",
+      DEAFEN: "#102027",
+      UNDEAFEN: "#4B636E",
+      DISCONNECT: "RANDOM",
+      MOVE: "RANDOM",
+    },
+  },
+
+  PRESENCE: {
+    ENABLED: false, // Whether or not the bot should update its status
+    STATUS: "online", // The bot's status [online, idle, dnd, invisible]
+    TYPE: "WATCHING", // Status type for the bot [PLAYING | LISTENING | WATCHING | COMPETING]
+    MESSAGE: "{members} members in {servers} servers", // Your bot status message
+  },
+
   SUGGESTIONS: {
     ENABLED: false, // Should the suggestion system be enabled
     EMOJI: {
@@ -41,70 +99,16 @@ module.exports = {
     APPROVED_EMBED: "#00ff00",
     DENIED_EMBED: "#ff0000",
   },
-  IMAGE: {
-    BASE_API: "https://image-api.strangebot.xyz",
-  },
-  ERELA_JS: {
-    ENABLED: false,
-    IDLE_TIME: 60, // Time in seconds before the bot disconnects from the voice channel
-    MAX_SEARCH_RESULTS: 5,
-    NODES: [
-      {
-        host: "ger.lavalink.mitask.tech",
-        port: 2333,
-        password: "lvserver",
-        identifier: "German Link",
-        retryDelay: 5000,
-        secure: false,
-      },
-      {
-        host: "usa.lavalink.mitask.tech",
-        port: 2333,
-        password: "lvserver",
-        identifier: "USA Link",
-        retryDelay: 5000,
-        secure: false,
-      },
-    ],
-  },
-  GIVEAWAYS: {
-    ENABLED: false,
-    REACTION: "🎁",
-    START_EMBED: "#FF468A",
-    END_EMBED: "#FF468A",
-  },
+
   TICKET: {
     ENABLED: false,
     CREATE_EMBED: "#068ADD",
     CLOSE_EMBED: "#068ADD",
   },
-  /* Bot Embed Colors */
-  EMBED_COLORS: {
-    BOT_EMBED: "#068ADD",
-    TRANSPARENT: "#36393F",
-    SUCCESS: "#00A56A",
-    ERROR: "#D61A3C",
-    WARNING: "#F7E919",
-    AUTOMOD: "#36393F",
-    TIMEOUT_LOG: "#102027",
-    UNTIMEOUT_LOG: "#4B636E",
-    KICK_LOG: "#FF7961",
-    SOFTBAN_LOG: "#AF4448",
-    BAN_LOG: "#D32F2F",
-    VMUTE_LOG: "#102027",
-    VUNMUTE_LOG: "#4B636E",
-    DEAFEN_LOG: "#102027",
-    UNDEAFEN_LOG: "#4B636E",
-    DISCONNECT_LOG: "RANDOM",
-    MOVE_LOG: "RANDOM",
-  },
-  /* Maximum number of keys that can be stored */
-  CACHE_SIZE: {
-    GUILDS: 100,
-    USERS: 10000,
-    MEMBERS: 10000,
-  },
-  MESSAGES: {
-    API_ERROR: "Unexpected Backend Error! Try again later or contact support server",
+
+  XP_SYSTEM: {
+    ENABLED: false,
+    COOLDOWN: 5, // Cooldown in seconds between messages
+    DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
   },
 };

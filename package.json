@@ -81,6 +81,7 @@
     "@root": ".",
     "@commands": "src/commands/",
     "@features": "src/features/",
+    "@helpers": "src/helpers/",
     "@schemas": "src/database/schemas/",
     "@src": "src/",
     "@structures": "src/structures/",
