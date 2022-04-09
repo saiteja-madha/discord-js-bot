@@ -1,7 +1,60 @@
 const CommandCategory = require("@structures/CommandCategory");
 const { permissions } = require("@utils/botUtils");
+const config = require("@root/config");
+const { log, warn, error } = require("./logger");
 
 module.exports = class Validator {
+  static validateConfiguration() {
+    log("Validating config file and environment variables");
+
+    // Bot Token
+    if (!process.env.BOT_TOKEN) {
+      error("env: BOT_TOKEN cannot be empty");
+      process.exit(1);
+    }
+
+    // Validate Database Config
+    if (!process.env.MONGO_CONNECTION) {
+      error("env: MONGO_CONNECTION cannot be empty");
+      process.exit(1);
+    }
+
+    // Validate Dashboard Config
+    if (config.DASHBOARD.enabled) {
+      if (!process.env.BOT_SECRET) {
+        error("env: BOT_SECRET cannot be empty");
+        process.exit(1);
+      }
+      if (!process.env.SESSION_PASSWORD) {
+        error("env: SESSION_PASSWORD cannot be empty");
+        process.exit(1);
+      }
+      if (!config.DASHBOARD.baseURL || !config.DASHBOARD.failureURL || !config.DASHBOARD.port) {
+        error("config.js: DASHBOARD details cannot be empty");
+        process.exit(1);
+      }
+    }
+
+    // Cache Size
+    if (isNaN(config.CACHE_SIZE.GUILDS) || isNaN(config.CACHE_SIZE.USERS) || isNaN(config.CACHE_SIZE.MEMBERS)) {
+      error("config.js: CACHE_SIZE must be a positive integer");
+      process.exit(1);
+    }
+
+    // Warnings
+    if (config.OWNER_IDS.length === 0) warn("config.js: OWNER_IDS are empty");
+    if (!config.SUPPORT_SERVER) warn("config.js: SUPPORT_SERVER is not provided");
+    if (!process.env.WEATHERSTACK_KEY) warn("env: WEATHERSTACK_KEY is missing. Weather command won't work");
+    if (config.ERELA_JS.ENABLED) {
+      if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
+        warn("env: SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET are missing. Spotify music won't work in ErelaJS");
+      }
+      if (config.ERELA_JS.NODES.length == 0) {
+        warn("config.js: ErelaJS must at least one node");
+      }
+    }
+  }
+
   /**
    * @param {import('@structures/Command')} cmd
    */
