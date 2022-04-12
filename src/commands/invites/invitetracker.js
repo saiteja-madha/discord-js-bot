@@ -1,4 +1,4 @@
-const { cacheGuildInvites } = require("@src/handlers/invite");
+const { cacheGuildInvites, resetInviteCache } = require("@src/handlers/invite");
 
 /**
  * @type {import("@structures/Command")}
@@ -70,7 +70,7 @@ async function setStatus({ guild }, input, settings) {
 
     await cacheGuildInvites(guild);
   } else {
-    guild.client.inviteCache.delete(guild.id);
+    resetInviteCache(guild.id);
   }
 
   settings.invite.tracking = status;

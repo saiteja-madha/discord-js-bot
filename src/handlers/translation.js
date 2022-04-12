@@ -1,5 +1,4 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const { getReactionRoles } = require("@schemas/Message");
 const { isTranslated, logTranslation } = require("@schemas/TranslateLog");
 const data = require("@src/data.json");
 const { getCountryLanguages } = require("country-language");
@@ -8,33 +7,22 @@ const { translate } = require("@utils/httpUtils");
 const { timeformat } = require("@utils/miscUtils");
 
 const TRANSLATE_COOLDOWN = 120;
+const cooldownCache = new Map();
 
 /**
  * @param {import('discord.js').User} user
  */
 const getTranslationCooldown = (user) => {
-  if (user.client.flagTranslateCache.has(user.id)) {
-    const remaining = (Date.now() - user.client.flagTranslateCache.get(user.id)) * 0.001;
+  if (cooldownCache.has(user.id)) {
+    const remaining = (Date.now() - cooldownCache.get(user.id)) * 0.001;
     if (remaining > TRANSLATE_COOLDOWN) {
-      user.client.flagTranslateCache.delete(user.id);
+      cooldownCache.delete(user.id);
       return 0;
     }
     return TRANSLATE_COOLDOWN - remaining;
   }
   return 0;
 };
-
-/**
- * @param {import("discord.js").MessageReaction} reaction
- */
-function getRole(reaction) {
-  const { message, emoji } = reaction;
-  if (!message || !message.channel) return;
-  const rr = getReactionRoles(message.guildId, message.channel.id, message.id);
-  const emote = emoji.id ? emoji.id : emoji.toString();
-  const found = rr.find((doc) => doc.emote === emote);
-  if (found) return message.guild.roles.cache.get(found.role_id);
-}
 
 /**
  * @param {string} countryCode
@@ -96,7 +84,7 @@ async function handleFlagReaction(countryCode, message, user) {
       });
 
     sendMessage(message.channel, { embeds: [embed], components: [btnRow] }).then(
-      () => user.client.flagTranslateCache.set(user.id, Date.now()) // set cooldown
+      () => cooldownCache.set(user.id, Date.now()) // set cooldown
     );
 
     logTranslation(message, countryCode);
@@ -104,6 +92,5 @@ async function handleFlagReaction(countryCode, message, user) {
 }
 
 module.exports = {
-  getRole,
   handleFlagReaction,
 };

@@ -1,4 +1,4 @@
-const { reactionHandler } = require("@src/handlers");
+const { reactionRoleHandler } = require("@src/handlers");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -13,12 +13,6 @@ module.exports = async (client, reaction, user) => {
       return; // Possibly deleted
     }
   }
-  const { message } = reaction;
 
-  const reactionRole = reactionHandler.getRole(reaction);
-  if (reactionRole) {
-    const member = await message.guild.members.fetch(user.id);
-    if (!member) return;
-    await member.roles.remove(reactionRole);
-  }
+  await reactionRoleHandler.handleReactionRemove(reaction, user);
 };

@@ -1,10 +1,11 @@
 module.exports = {
   automodHandler: require("./automod"),
+  commandHandler: require("./command"),
+  contextHandler: require("./context"),
   counterHandler: require("./counter"),
   greetingHandler: require("./greeting"),
   inviteHandler: require("./invite"),
-  reactionHandler: require("./reaction"),
+  reactionRoleHandler: require("./reactionRoles"),
+  translationHandler: require("./translation"),
   xpHandler: require("./xp"),
-  commandHandler: require("./command"),
-  contextHandler: require("./context"),
 };

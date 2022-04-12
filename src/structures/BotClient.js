@@ -4,8 +4,6 @@ const { table } = require("table");
 const logger = require("../helpers/logger");
 const { recursiveReadDirSync } = require("../helpers/Loader");
 const { validateCommand, validateContext } = require("../helpers/Validator");
-const Command = require("./Command");
-const BaseContext = require("./BaseContext");
 const { schemas } = require("@src/database/mongoose");
 const CommandCategory = require("./CommandCategory");
 const erelaHandler = require("../handlers/erela");
@@ -33,28 +31,24 @@ module.exports = class BotClient extends Client {
     this.config = require("@root/config"); // load the config file
 
     /**
-     * @type {Command[]}
+     * @type {import('@structures/Command')[]}
      */
     this.commands = []; // store actual command
     this.commandIndex = new Collection(); // store (alias, arrayIndex) pair
 
     /**
-     * @type {Collection<string, Command>}
+     * @type {Collection<string, import('@structures/Command')>}
      */
     this.slashCommands = new Collection(); // store slash commands
 
     /**
-     * @type {Collection<string, BaseContext>}
+     * @type {Collection<string, import('@structures/BaseContext')>}
      */
     this.contextMenus = new Collection(); // store contextMenus
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 
     // initialize cache
-    this.ctxCooldownCache = new Collection(); // store message cooldowns for contextMenus
-    this.xpCooldownCache = new Collection(); // store message cooldowns for xp
-    this.inviteCache = new Collection(); // store invite data for invite tracking
     this.antiScamCache = new Collection(); // store message data for anti_scam feature
-    this.flagTranslateCache = new Collection(); // store translated messages
 
     // initialize webhook for sending guild join/leave details
     this.joinLeaveWebhook = process.env.JOIN_LEAVE_LOGS
@@ -118,7 +112,7 @@ module.exports = class BotClient extends Client {
   /**
    * Find command matching the invoke
    * @param {string} invoke
-   * @returns {Command|undefined}
+   * @returns {import('@structures/Command')|undefined}
    */
   getCommand(invoke) {
     const index = this.commandIndex.get(invoke.toLowerCase());

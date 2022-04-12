@@ -2,6 +2,11 @@ const { Collection } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
 const { getMember } = require("@schemas/Member");
 
+const inviteCache = new Collection();
+
+const getInviteCache = (guild) => inviteCache.get(guild.id);
+const resetInviteCache = (guild) => inviteCache.delete(guild.id);
+
 const getEffectiveInvites = (inviteData = {}) =>
   inviteData.tracked + inviteData.added - inviteData.fake - inviteData.left || 0;
 
@@ -26,7 +31,7 @@ async function cacheGuildInvites(guild) {
     tempMap.set(guild.vanityURLCode, cacheInvite(await guild.fetchVanityData(), true));
   }
 
-  guild.client.inviteCache.set(guild.id, tempMap);
+  inviteCache.set(guild.id, tempMap);
   return tempMap;
 }
 
@@ -62,7 +67,7 @@ const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
 async function trackJoinedMember(member) {
   const { guild } = member;
 
-  const cachedInvites = guild.client.inviteCache.get(guild.id);
+  const cachedInvites = inviteCache.get(guild.id);
   const newInvites = await cacheGuildInvites(guild);
 
   // return if no cached data
@@ -135,6 +140,8 @@ async function trackLeftMember(guild, user) {
 }
 
 module.exports = {
+  getInviteCache,
+  resetInviteCache,
   trackJoinedMember,
   trackLeftMember,
   cacheGuildInvites,

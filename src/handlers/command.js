@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const { Command } = require("@src/structures");
 const { OWNER_IDS, PREFIX, EMBED_COLORS } = require("@root/config");
 const { parsePermissions } = require("@utils/botUtils");
 const { timeformat } = require("@utils/miscUtils");
@@ -10,7 +9,7 @@ const cooldownCache = new Map();
 module.exports = {
   /**
    * @param {import('discord.js').Message} message
-   * @param {Command} cmd
+   * @param {import("@structures/Command")} cmd
    * @param {object} settings
    */
   handlePrefixCommand: async function (message, cmd, settings) {

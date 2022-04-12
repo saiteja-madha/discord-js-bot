@@ -1,11 +1,11 @@
-const { cacheInvite } = require("@src/handlers/invite");
+const { getInviteCache, cacheInvite } = require("@src/handlers/invite");
 
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').Invite} invite
  */
 module.exports = async (client, invite) => {
-  const cachedInvites = client.inviteCache.get(invite?.guild.id);
+  const cachedInvites = getInviteCache(invite?.guild);
 
   // Check if cache for the guild exists and then add it to cache
   if (cachedInvites) {

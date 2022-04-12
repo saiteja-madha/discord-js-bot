@@ -2,6 +2,7 @@ const { getMember } = require("@schemas/Member");
 const { getRandomInt } = require("@utils/miscUtils");
 const { sendMessage } = require("@utils/botUtils");
 
+const cooldownCache = new Map();
 const xpToAdd = () => getRandomInt(19) + 1;
 
 /**
@@ -14,18 +15,18 @@ async function handleXp(message) {
   // Ignore possible bot commands
 
   // Cooldown check to prevent Message Spamming
-  if (message.client.xpCooldownCache.has(key)) {
-    const difference = (Date.now() - message.client.xpCooldownCache.get(key)) * 0.001;
+  if (cooldownCache.has(key)) {
+    const difference = (Date.now() - cooldownCache.get(key)) * 0.001;
     if (difference < message.client.config.XP_SYSTEM.COOLDOWN) {
       return;
     }
-    message.client.xpCooldownCache.delete(key);
+    cooldownCache.delete(key);
   }
 
   // Update member's XP in DB
   const memberDb = await getMember(message.guild.id, message.member.id);
   memberDb.xp += xpToAdd();
-  message.client.xpCooldownCache.set(key, Date.now());
+  cooldownCache.set(key, Date.now());
 
   // Check if member has levelled up
   let { xp, level } = memberDb;

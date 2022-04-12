@@ -1,4 +1,4 @@
-const { reactionHandler } = require("@src/handlers");
+const { translationHandler, reactionRoleHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
 const { getCountryFromFlag } = require("@utils/miscUtils");
 
@@ -20,19 +20,14 @@ module.exports = async (client, reaction, user) => {
   if (user.bot) return;
 
   // Reaction Roles
-  const reactionRole = reactionHandler.getRole(reaction);
-  if (reactionRole) {
-    const member = await message.guild.members.fetch(user.id);
-    if (!member) return;
-    await member.roles.add(reactionRole);
-  }
+  reactionRoleHandler.handleReactionAdd(reaction, user);
 
   // Handle Reaction Emojis
   if (!emoji.id) {
     // Translation By Flags
     if (message.content && (await getSettings(message.guild)).flag_translation.enabled) {
       const countryCode = getCountryFromFlag(emoji.name);
-      if (countryCode) reactionHandler.handleFlagReaction(countryCode, message, user);
+      if (countryCode) translationHandler.handleFlagReaction(countryCode, message, user);
     }
   }
 };
