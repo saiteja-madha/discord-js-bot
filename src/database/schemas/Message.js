@@ -46,7 +46,7 @@ module.exports = {
       message_id: messageId,
       ticket: {
         title,
-        support_role: [roleId],
+        support_roles: [roleId],
       },
     }).save(),
 
