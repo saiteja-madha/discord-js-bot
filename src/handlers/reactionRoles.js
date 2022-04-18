@@ -1,4 +1,4 @@
-const messageManager = require("@managers/MessageManager");
+const { getReactionRoles } = require("@schemas/Message");
 
 module.exports = {
   /**
@@ -37,7 +37,7 @@ async function getRole(reaction) {
   const { message, emoji } = reaction;
   if (!message || !message.channel) return;
 
-  const rr = messageManager.getReactionRoles(message);
+  const rr = getReactionRoles(message);
   const emote = emoji.id ? emoji.id : emoji.toString();
   const found = rr.find((doc) => doc.emote === emote);
 
