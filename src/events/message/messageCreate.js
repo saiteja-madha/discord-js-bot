@@ -1,4 +1,4 @@
-const { commandHandler, automodHandler, xpHandler } = require("@src/handlers");
+const { commandHandler, automodHandler, statsHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
 const { sendMessage } = require("@utils/botUtils");
 
@@ -26,7 +26,9 @@ module.exports = async (client, message) => {
     }
   }
 
-  // if not a command
+  // stats handler
+  if (settings.stats.enabled) await statsHandler.trackMessageStats(message, isCommand, settings);
+
+  // automod handler
   if (!isCommand) await automodHandler.performAutomod(message, settings);
-  if (settings.ranking.enabled) xpHandler.handleXp(message);
 };

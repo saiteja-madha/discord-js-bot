@@ -6,6 +6,6 @@ module.exports = {
   greetingHandler: require("./greeting"),
   inviteHandler: require("./invite"),
   reactionRoleHandler: require("./reactionRoles"),
+  statsHandler: require("./stats"),
   translationHandler: require("./translation"),
-  xpHandler: require("./xp"),
 };

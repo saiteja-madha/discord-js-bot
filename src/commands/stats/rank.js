@@ -2,16 +2,16 @@ const { MessageAttachment } = require("discord.js");
 const { EMBED_COLORS, IMAGE } = require("@root/config");
 const { getBuffer } = require("@utils/httpUtils");
 const { resolveMember } = require("@utils/guildUtils");
-const { getMember, getXpLb } = require("@schemas/Member");
+const { getMemberStats, getXpLb } = require("@schemas/MemberStats");
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: "rank",
-  description: "shows members rank in this server",
+  description: "displays members rank in this server",
   cooldown: 5,
-  category: "XP_SYSTEM",
+  category: "STATS",
   botPermissions: ["ATTACH_FILES"],
   command: {
     enabled: true,
@@ -45,10 +45,10 @@ module.exports = {
 
 async function getRank({ guild }, member, settings) {
   const { user } = member;
-  if (!settings.ranking.enabled) return "Ranking is disabled on this server";
+  if (!settings.stats.enabled) return "Stats Tracking is disabled on this server";
 
-  const memberDb = await getMember(guild.id, user.id);
-  if (!memberDb.xp) return `${user.tag} is not ranked yet!`;
+  const memberStats = await getMemberStats(guild.id, user.id);
+  if (!memberStats.xp) return `${user.tag} is not ranked yet!`;
 
   const lb = await getXpLb(guild.id, 100);
   let pos = -1;
@@ -58,15 +58,15 @@ async function getRank({ guild }, member, settings) {
     }
   });
 
-  const xpNeeded = memberDb.level * memberDb.level * 100;
+  const xpNeeded = memberStats.level * memberStats.level * 100;
 
   const url = new URL(`${IMAGE.BASE_API}/utils/rank-card`);
   url.searchParams.append("name", user.username);
   url.searchParams.append("discriminator", user.discriminator);
   url.searchParams.append("avatar", user.displayAvatarURL({ format: "png", size: 128 }));
-  url.searchParams.append("currentxp", memberDb.xp);
+  url.searchParams.append("currentxp", memberStats.xp);
   url.searchParams.append("reqxp", xpNeeded);
-  url.searchParams.append("level", memberDb.level);
+  url.searchParams.append("level", memberStats.level);
   url.searchParams.append("barcolor", EMBED_COLORS.BOT_EMBED);
   url.searchParams.append("status", member?.presence?.status?.toString() || "idle");
   if (pos !== -1) url.searchParams.append("rank", pos);

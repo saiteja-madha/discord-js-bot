@@ -2,13 +2,13 @@
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "xpsystem",
-  description: "enable or disable XP ranking system in the server",
-  category: "XP_SYSTEM",
+  name: "statstracking",
+  description: "enable or disable tracking stats in the server",
+  category: "STATS",
   userPermissions: ["MANAGE_GUILD"],
   command: {
     enabled: true,
-    aliases: ["xpsystem", "xptracking"],
+    aliases: ["statssystem", "statstracking"],
     usage: "<on|off>",
     minArgsCount: 1,
   },
@@ -51,8 +51,8 @@ module.exports = {
 async function setStatus(input, settings) {
   const status = input.toLowerCase() === "on" ? true : false;
 
-  settings.ranking.enabled = status;
+  settings.stats.enabled = status;
   await settings.save();
 
-  return `Configuration saved! XP System is now ${status ? "enabled" : "disabled"}`;
+  return `Configuration saved! Stats Tracking is now ${status ? "enabled" : "disabled"}`;
 }

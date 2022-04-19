@@ -1,6 +1,6 @@
 const { handleTicketOpen, handleTicketClose } = require("@src/handlers/ticket");
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
-const { commandHandler, contextHandler } = require("@src/handlers");
+const { commandHandler, contextHandler, statsHandler } = require("@src/handlers");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -15,6 +15,7 @@ module.exports = async (client, interaction) => {
 
   // Slash Command
   if (interaction.isCommand()) {
+    statsHandler.trackInteractionStats(interaction);
     return commandHandler.handleSlashCommand(interaction);
   }
 

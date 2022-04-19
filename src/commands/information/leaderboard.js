@@ -61,7 +61,7 @@ module.exports = {
 };
 
 async function getXpLeaderboard({ guild }, author, settings) {
-  if (!settings.ranking.enabled) return "Ranking is disabled on this server";
+  if (!settings.stats.enabled) return "Ranking is disabled on this server";
 
   const lb = await getXpLb(guild.id, 10);
   if (lb.length === 0) return "No users in the leaderboard";
