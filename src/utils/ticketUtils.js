@@ -163,13 +163,14 @@ async function openTicket(guild, user, config) {
       },
     ];
 
-    if (config.support_roles.length > 0) {
-      config.support_roles.forEach((role) => {
+    for (const roleId of config.support_roles) {
+      const role = guild.roles.cache.get(roleId);
+      if (role) {
         permissionOverwrites.push({
           id: role,
           allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
         });
-      });
+      }
     }
 
     const tktChannel = await guild.channels.create(`tіcket-${ticketNumber}`, {
