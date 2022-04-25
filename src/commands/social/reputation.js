@@ -109,7 +109,7 @@ module.exports = {
 };
 
 async function viewReputation(target) {
-  const userData = await getUser(target.id);
+  const userData = await getUser(target);
   if (!userData) return `${target.tag} has no reputation yet`;
 
   const embed = new MessageEmbed()
@@ -126,7 +126,7 @@ async function giveReputation(user, target) {
   if (target.bot) return "You cannot give reputation to bots";
   if (target.id === user.id) return "You cannot give reputation to yourself";
 
-  const userData = await getUser(user.id);
+  const userData = await getUser(user);
   if (userData && userData.reputation.timestamp) {
     const lastRep = new Date(userData.reputation.timestamp);
     const diff = diffHours(new Date(), lastRep);
@@ -136,7 +136,7 @@ async function giveReputation(user, target) {
     }
   }
 
-  const targetData = await getUser(target.id);
+  const targetData = await getUser(target);
 
   userData.reputation.given += 1;
   userData.reputation.timestamp = new Date();

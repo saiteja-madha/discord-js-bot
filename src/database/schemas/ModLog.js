@@ -13,8 +13,25 @@ const Schema = mongoose.Schema({
     id: reqString,
     tag: reqString,
   },
-  type: reqString,
-  expires: Date,
+  type: {
+    type: String,
+    required: true,
+    enum: [
+      "PURGE",
+      "WARN",
+      "TIMEOUT",
+      "UNTIMEOUT",
+      "KICK",
+      "SOFTBAN",
+      "BAN",
+      "VMUTE",
+      "VUNMUTE",
+      "DEAFEN",
+      "UNDEAFEN",
+      "DISCONNECT",
+      "MOVE",
+    ],
+  },
 });
 
 const Model = mongoose.model("mod-logs", Schema);

@@ -4,38 +4,20 @@ const FixedSizeMap = require("fixedsize-map");
 
 const cache = new FixedSizeMap(CACHE_SIZE.USERS);
 
-const ReqString = {
-  type: String,
-  required: true,
-};
-
 const Schema = mongoose.Schema({
-  _id: ReqString,
+  _id: String,
+  username: String,
+  discriminator: String,
   logged: Boolean,
-  coins: {
-    type: Number,
-    default: 0,
-  },
-  bank: {
-    type: Number,
-    default: 0,
-  },
+  coins: { type: Number, default: 0 },
+  bank: { type: Number, default: 0 },
   reputation: {
-    received: {
-      type: Number,
-      default: 0,
-    },
-    given: {
-      type: Number,
-      default: 0,
-    },
+    received: { type: Number, default: 0 },
+    given: { type: Number, default: 0 },
     timestamp: Date,
   },
   daily: {
-    streak: {
-      type: Number,
-      default: 0,
-    },
+    streak: { type: Number, default: 0 },
     timestamp: Date,
   },
 });
@@ -43,14 +25,26 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("user", Schema);
 
 module.exports = {
-  getUser: async (userId) => {
-    const cached = cache.get(userId);
+  /**
+   * @param {import('discord.js').User} user
+   */
+  getUser: async (user) => {
+    if (!user) throw new Error("User is required.");
+    if (!user.id) throw new Error("User Id is required.");
+
+    const cached = cache.get(user.id);
     if (cached) return cached;
 
-    let user = await Model.findById(userId);
-    if (!user) user = new Model({ _id: userId });
+    let userDb = await Model.findById(user.id);
+    if (!userDb) {
+      userDb = new Model({
+        _id: user.id,
+        username: user.username,
+        discriminator: user.discriminator,
+      });
+    }
 
-    cache.add(userId, user);
-    return user;
+    cache.add(user.id, userDb);
+    return userDb;
   },
 };

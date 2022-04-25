@@ -43,7 +43,7 @@ module.exports = {
 
 async function profile({ guild }, user, settings) {
   const memberData = await getMember(guild.id, user.id);
-  const userData = await getUser(user.id);
+  const userData = await getUser(user);
 
   const embed = new MessageEmbed()
     .setThumbnail(user.displayAvatarURL())

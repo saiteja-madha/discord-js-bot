@@ -22,10 +22,7 @@ const Schema = mongoose.Schema(
           type: String,
           enum: ["PENDING", "APPROVED", "REJECTED"],
         },
-        timestamp: {
-          type: Date,
-          default: new Date(),
-        },
+        timestamp: { type: Date, default: new Date() },
       },
     ],
   },

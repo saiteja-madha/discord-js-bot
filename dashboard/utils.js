@@ -33,7 +33,7 @@ async function fetchUser(userData, client, query) {
   }
   const user = await client.users.fetch(userData.id);
   user.displayAvatar = user.displayAvatarURL();
-  const userDb = await getUser(user.id);
+  const userDb = await getUser(user);
   const userInfos = { ...user, ...userDb, ...userData, ...user.presence };
   return userInfos;
 }

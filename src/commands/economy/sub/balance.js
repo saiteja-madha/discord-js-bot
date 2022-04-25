@@ -3,7 +3,7 @@ const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config");
 
 module.exports = async (user) => {
-  const economy = await getUser(user.id);
+  const economy = await getUser(user);
 
   const embed = new MessageEmbed()
     .setColor(EMBED_COLORS.BOT_EMBED)

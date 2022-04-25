@@ -60,7 +60,7 @@ async function beg(user) {
   ];
 
   let amount = Math.floor(Math.random() * `${ECONOMY.MAX_BEG_AMOUNT}` + `${ECONOMY.MIN_BEG_AMOUNT}`);
-  const userDb = await getUser(user.id);
+  const userDb = await getUser(user);
   userDb.coins += amount;
   await userDb.save();
 

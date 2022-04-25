@@ -1,56 +1,33 @@
 const mongoose = require("mongoose");
 const { CACHE_SIZE, PREFIX } = require("@root/config.js");
 const FixedSizeMap = require("fixedsize-map");
+const { getUser } = require("./User");
 
 const cache = new FixedSizeMap(CACHE_SIZE.GUILDS);
 
 const Schema = mongoose.Schema({
-  _id: {
-    type: String,
-    required: true,
-  },
-  isPremium: {
-    type: Boolean,
-    default: false,
-  },
+  _id: String,
+  isPremium: Boolean,
   data: {
     name: String,
     region: String,
-    owner: {
-      id: String,
-      tag: String,
-    },
+    owner: { type: String, ref: "users" },
     joinedAt: Date,
     leftAt: Date,
-    bots: {
-      type: Number,
-      default: 0,
-    },
+    bots: { type: Number, default: 0 },
   },
-  prefix: {
-    type: String,
-    default: PREFIX,
-  },
+  prefix: { type: String, default: PREFIX },
   ranking: {
     enabled: Boolean,
   },
   ticket: {
     log_channel: String,
-    limit: {
-      type: Number,
-      default: 10,
-    },
+    limit: { type: Number, default: 10 },
   },
   automod: {
     debug: Boolean,
-    strikes: {
-      type: Number,
-      default: 5,
-    },
-    action: {
-      type: String,
-      default: "MUTE",
-    },
+    strikes: { type: Number, default: 5 },
+    action: { type: String, default: "MUTE" },
     anti_links: Boolean,
     anti_invites: Boolean,
     anti_scam: Boolean,
@@ -63,14 +40,8 @@ const Schema = mongoose.Schema({
     tracking: Boolean,
     ranks: [
       {
-        invites: {
-          type: Number,
-          required: true,
-        },
-        _id: {
-          type: String,
-          required: true,
-        },
+        invites: { type: Number, required: true },
+        _id: { type: String, required: true },
       },
     ],
   },
@@ -81,12 +52,10 @@ const Schema = mongoose.Schema({
   max_warn: {
     action: {
       type: String,
+      enum: ["MUTE", "KICK", "BAN"],
       default: "BAN",
     },
-    limit: {
-      type: Number,
-      default: 5,
-    },
+    limit: { type: Number, default: 5 },
   },
   counters: [
     {
@@ -128,28 +97,37 @@ const Schema = mongoose.Schema({
 const Model = mongoose.model("guild", Schema);
 
 module.exports = {
+  /**
+   * @param {import('discord.js').Guild} guild
+   */
   getSettings: async (guild) => {
-    if (cache.contains(guild.id)) return cache.get(guild.id);
+    if (!guild) throw new Error("Guild is undefined");
+    if (!guild.id) throw new Error("Guild Id is undefined");
 
-    let guildData = await Model.findOne({ _id: guild.id });
+    const cached = cache.get(guild.id);
+    if (cached) return cached;
+
+    let guildData = await Model.findById(guild.id);
     if (!guildData) {
-      await guild.fetchOwner({ cache: true });
+      // save owner details
+      guild
+        .fetchOwner()
+        .then(async (owner) => {
+          const userDb = await getUser(owner);
+          await userDb.save();
+        })
+        .catch((ex) => {});
+
+      // create a new guild model
       guildData = new Model({
         _id: guild.id,
         data: {
           name: guild.name,
           region: guild.preferredLocale,
-          owner: {
-            id: guild.ownerId,
-            tag: guild.members.cache.get(guild.ownerId)?.user.tag,
-          },
+          owner: guild.ownerId,
           joinedAt: guild.joinedAt,
         },
       });
-
-      if (!guild.id) {
-        throw new Error("Guild ID is undefined");
-      }
 
       await guildData.save();
     }

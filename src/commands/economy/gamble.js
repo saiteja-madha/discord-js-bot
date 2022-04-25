@@ -80,7 +80,7 @@ async function gamble(user, betAmount) {
   if (betAmount < 0) return "Bet amount cannot be negative";
   if (betAmount < 10) return "Bet amount cannot be less than 10";
 
-  const userDb = await getUser(user.id);
+  const userDb = await getUser(user);
   if (userDb.coins < betAmount)
     return `You do not have sufficient coins to gamble!\n**Coin balance:** ${userDb.coins || 0}${ECONOMY.CURRENCY}`;
 

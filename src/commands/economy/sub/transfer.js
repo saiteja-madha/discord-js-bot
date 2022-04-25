@@ -7,7 +7,7 @@ module.exports = async (self, target, coins) => {
   if (target.bot) return "You cannot transfer coins to bots!";
   if (target.id === self.id) return "You cannot transfer coins to self!";
 
-  const userDb = await getUser(self.id);
+  const userDb = await getUser(self);
 
   if (userDb.bank < coins) {
     return `Insufficient bank balance! You only have ${userDb.bank}${ECONOMY.CURRENCY} in your bank account.${
@@ -15,7 +15,7 @@ module.exports = async (self, target, coins) => {
     } `;
   }
 
-  const targetDb = await getUser(target.id);
+  const targetDb = await getUser(target);
 
   userDb.bank -= coins;
   targetDb.bank += coins;

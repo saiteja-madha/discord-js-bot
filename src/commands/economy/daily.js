@@ -30,7 +30,7 @@ module.exports = {
 };
 
 async function daily(user) {
-  const userDb = await getUser(user.id);
+  const userDb = await getUser(user);
   let streak = 0;
 
   if (userDb.daily.timestamp) {

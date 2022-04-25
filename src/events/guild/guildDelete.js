@@ -15,12 +15,12 @@ module.exports = async (client, guild) => {
   if (!client.joinLeaveWebhook) return;
 
   let ownerTag;
-  const ownerId = guild.ownerId || settings.data.owner.id;
+  const ownerId = guild.ownerId || settings.data.owner;
   try {
-    const owner = await client.users.fetch(guild.ownerId);
+    const owner = await client.users.fetch(ownerId);
     ownerTag = owner.tag;
   } catch (err) {
-    ownerTag = settings.data.owner.tag;
+    ownerTag = "Deleted User";
   }
 
   const embed = new MessageEmbed()
