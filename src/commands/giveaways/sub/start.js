@@ -4,9 +4,10 @@
  * @param {number} duration
  * @param {string} prize
  * @param {number} winners
- * @param {import('discord.js').User} host
+ * @param {import('discord.js').User} [host]
  */
 module.exports = async (member, giveawayChannel, duration, prize, winners, host) => {
+  if (!host) host = member.user;
   if (!member.permissions.has("MANAGE_MESSAGES")) {
     return "You need to have the manage messages permissions to start giveaways.";
   }
