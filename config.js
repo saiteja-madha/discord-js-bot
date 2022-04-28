@@ -14,7 +14,6 @@ module.exports = {
     SUCCESS: "#00A56A",
     ERROR: "#D61A3C",
     WARNING: "#F7E919",
-    AUTOMOD: "#36393F",
   },
   CACHE_SIZE: {
     GUILDS: 100,
@@ -26,6 +25,12 @@ module.exports = {
   },
 
   // PLUGINS
+
+  AUTOMOD: {
+    ENABLED: true,
+    LOG_EMBED: "#36393F",
+    DM_EMBED: "#36393F",
+  },
 
   DASHBOARD: {
     enabled: false, // enable or disable dashboard

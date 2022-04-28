@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { table } = require("table");
+const { stripIndent } = require("common-tags");
 
 /**
  * @type {import("@structures/Command")}
@@ -23,11 +23,11 @@ module.exports = {
         description: "maximum number of strikes a member can receive before taking an action",
       },
       {
-        trigger: "action <MUTE|KICK|BAN>",
+        trigger: "action <TIMEOUT|KICK|BAN>",
         description: "set action to be performed after receiving maximum strikes",
       },
       {
-        trigger: "debug <ON|OFF>",
+        trigger: "debug <on|off>",
         description: "turns on automod for messages sent by admins and moderators",
       },
     ],
@@ -66,8 +66,8 @@ module.exports = {
             required: true,
             choices: [
               {
-                name: "MUTE",
-                value: "MUTE",
+                name: "TIMEOUT",
+                value: "TIMEOUT",
               },
               {
                 name: "KICK",
@@ -122,8 +122,8 @@ module.exports = {
       response = await setStrikes(settings, strikes);
     } else if (input === "action") {
       const action = args[1].toUpperCase();
-      if (!action || !["MUTE", "KICK", "BAN"].includes(action))
-        return message.safeReply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
+      if (!action || !["TIMEOUT", "KICK", "BAN"].includes(action))
+        return message.safeReply("Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
       response = await setAction(settings, message.guild, action);
     } else if (input === "debug") {
       const status = args[1].toLowerCase();
@@ -155,40 +155,30 @@ module.exports = {
 
 async function getStatus(settings, guild) {
   const { automod } = settings;
-  const row = [];
 
   const logChannel = settings.modlog_channel
     ? guild.channels.cache.get(settings.modlog_channel).toString()
     : "Not Configured";
 
-  row.push(["Max Lines", automod.max_lines || "NA"]);
-  row.push(["Max Mentions", automod.max_mentions || "NA"]);
-  row.push(["Max Role Mentions", automod.max_role_mentions || "NA"]);
-  row.push(["Anti-Links", automod.anti_links ? "✓" : "✕"]);
-  row.push(["Anti-Invites", automod.anti_invites ? "✓" : "✕"]);
-  row.push(["Anti-Scam", automod.anti_scam ? "✓" : "✕"]);
-  row.push(["Anti-Ghostping", automod.anti_ghostping ? "✓" : "✕"]);
-
-  const asciiTable = table(row, {
-    singleLine: true,
-    header: {
-      content: "Automod Configuration",
-      alignment: "center",
-    },
-    columns: [
-      {},
-      {
-        alignment: "center",
-      },
-    ],
-  });
+  // String Builder
+  let desc = stripIndent`
+    ❯ **Max Lines**: ${automod.max_lines || "NA"}
+    ❯ **Anti-Massmention**: ${automod.anti_massmention > 0 ? "✓" : "✕"}
+    ❯ **Anti-Attachment**: ${automod.anti_attachment ? "✓" : "✕"}
+    ❯ **Anti-Links**: ${automod.anti_links ? "✓" : "✕"}
+    ❯ **Anti-Invites**: ${automod.anti_invites ? "✓" : "✕"}
+    ❯ **Anti-Spam**: ${automod.anti_spam ? "✓" : "✕"}
+    ❯ **Anti-Ghostping**: ${automod.anti_ghostping ? "✓" : "✕"}
+  `;
 
   const embed = new MessageEmbed()
+    .setAuthor({ name: "Automod Configuration", icon_url: guild.iconURL() })
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setDescription("```" + asciiTable + "```")
+    .setDescription(desc)
     .addField("Log Channel", logChannel, true)
     .addField("Max Strikes", automod.strikes.toString(), true)
-    .addField("Action", automod.action, true);
+    .addField("Action", automod.action, true)
+    .addField("Debug", automod.debug ? "✓" : "✕", true);
 
   return { embeds: [embed] };
 }
@@ -200,7 +190,7 @@ async function setStrikes(settings, strikes) {
 }
 
 async function setAction(settings, guild, action) {
-  if (action === "MUTE") {
+  if (action === "TIMEOUT") {
     if (!guild.me.permissions.has("MODERATE_MEMBERS")) {
       return "I do not permission to timeout members";
     }

@@ -15,7 +15,7 @@ module.exports = {
         description: "set max warnings a member can receive before taking an action",
       },
       {
-        trigger: "action <mute|kick|ban>",
+        trigger: "action <timeout|kick|ban>",
         description: "set action to performed after receiving maximum warnings",
       },
     ],
@@ -49,8 +49,8 @@ module.exports = {
             required: true,
             choices: [
               {
-                name: "MUTE",
-                value: "MUTE",
+                name: "TIMEOUT",
+                value: "TIMEOUT",
               },
               {
                 name: "KICK",
@@ -80,8 +80,8 @@ module.exports = {
 
     if (input === "action") {
       const action = args[1]?.toUpperCase();
-      if (!action || !["MUTE", "KICK", "BAN"].includes(action))
-        return message.safeReply("Not a valid action. Action can be `Mute`/`Kick`/`Ban`");
+      if (!action || !["TIMEOUT", "KICK", "BAN"].includes(action))
+        return message.safeReply("Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
       response = await setAction(message.guild, action, data.settings);
     }
 
@@ -111,7 +111,7 @@ async function setLimit(limit, settings) {
 }
 
 async function setAction(guild, action, settings) {
-  if (action === "MUTE") {
+  if (action === "TIMEOUT") {
     if (!guild.me.permissions.has("MODERATE_MEMBERS")) {
       return "I do not permission to timeout members";
     }

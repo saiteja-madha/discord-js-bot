@@ -47,9 +47,6 @@ module.exports = class BotClient extends Client {
     this.contextMenus = new Collection(); // store contextMenus
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 
-    // initialize cache
-    this.antiScamCache = new Collection(); // store message data for anti_scam feature
-
     // initialize webhook for sending guild join/leave details
     this.joinLeaveWebhook = process.env.JOIN_LEAVE_LOGS
       ? new WebhookClient({ url: process.env.JOIN_LEAVE_LOGS })
@@ -278,6 +275,7 @@ module.exports = class BotClient extends Client {
         "MANAGE_MESSAGES",
         "MANAGE_NICKNAMES",
         "MANAGE_ROLES",
+        "MODERATE_MEMBERS",
         "MOVE_MEMBERS",
         "MUTE_MEMBERS",
         "PRIORITY_SPEAKER",

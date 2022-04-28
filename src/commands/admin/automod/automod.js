@@ -11,32 +11,32 @@ module.exports = {
     minArgsCount: 2,
     subcommands: [
       {
-        trigger: "antighostping <ON|OFF>",
-        description: "Logs ghost mentions in your server",
+        trigger: "antighostping <on|off>",
+        description: "detect and logs ghost mentions in your server",
       },
       {
-        trigger: "antiinvites <ON|OFF>",
-        description: "Allow or disallow sending discord invites in message",
+        trigger: "antiattachments <on|off>",
+        description: "allow or disallow attachments in messages",
       },
       {
-        trigger: "antilinks <ON|OFF>",
-        description: "Allow or disallow sending links in message",
+        trigger: "antiinvites <on|off>",
+        description: "allow or disallow discord invites in message",
       },
       {
-        trigger: "antiscam <ON|OFF>",
-        description: "Enable or disable antiscam detection",
+        trigger: "antilinks <on|off>",
+        description: "allow or disallow links in message",
+      },
+      {
+        trigger: "antispam <on|off>",
+        description: "enable or disable antispam detection",
       },
       {
         trigger: "maxlines <number>",
-        description: "Sets maximum lines allowed per message [0 to disable]",
+        description: "sets maximum lines allowed per message [0 to disable]",
       },
       {
-        trigger: "maxmentions <number>",
-        description: "Sets maximum member mentions allowed per message [0 to disable]",
-      },
-      {
-        trigger: "maxrolementions <number>",
-        description: "Sets maximum role mentions allowed per message [0 to disable]",
+        trigger: "massmention <on|off> [threshold]",
+        description: "enable or disable massmention detection [default threshold is 3 mentions]",
       },
     ],
   },
@@ -46,7 +46,30 @@ module.exports = {
     options: [
       {
         name: "antighostping",
-        description: "Logs ghost mentions in your server",
+        description: "detects and logs ghost mentions in your server",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "status",
+            description: "configuration status",
+            required: true,
+            type: "STRING",
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "antiattachments",
+        description: "allow or disallow attachments in message",
         type: "SUB_COMMAND",
         options: [
           {
@@ -69,7 +92,7 @@ module.exports = {
       },
       {
         name: "antiinvites",
-        description: "Allow or disallow sending discord invites in message",
+        description: "allow or disallow discord invites in message",
         type: "SUB_COMMAND",
         options: [
           {
@@ -92,7 +115,7 @@ module.exports = {
       },
       {
         name: "antilinks",
-        description: "Allow or disallow sending links in message",
+        description: "allow or disallow links in message",
         type: "SUB_COMMAND",
         options: [
           {
@@ -114,8 +137,8 @@ module.exports = {
         ],
       },
       {
-        name: "antiscam",
-        description: "Enable or disable antiscam detection",
+        name: "antispam",
+        description: "enable or disable antispam detection",
         type: "SUB_COMMAND",
         options: [
           {
@@ -138,7 +161,7 @@ module.exports = {
       },
       {
         name: "maxlines",
-        description: "Sets maximum lines allowed per message",
+        description: "sets maximum lines allowed per message",
         type: "SUB_COMMAND",
         options: [
           {
@@ -150,27 +173,30 @@ module.exports = {
         ],
       },
       {
-        name: "maxmentions",
-        description: "Sets maximum user mentions allowed per message",
+        name: "massmention",
+        description: "enable or disable massmention detection",
         type: "SUB_COMMAND",
         options: [
           {
-            name: "amount",
-            description: "configuration amount (0 to disable)",
+            name: "status",
+            description: "configuration status",
             required: true,
-            type: "INTEGER",
+            type: "STRING",
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
           },
-        ],
-      },
-      {
-        name: "maxrolementions",
-        description: "Sets maximum role mentions allowed per message",
-        type: "SUB_COMMAND",
-        options: [
           {
-            name: "amount",
-            description: "configuration amount (0 to disable)",
-            required: true,
+            name: "threshold",
+            description: "configuration threshold (default is 3 mentions)",
+            required: false,
             type: "INTEGER",
           },
         ],
@@ -186,7 +212,14 @@ module.exports = {
     if (sub == "antighostping") {
       const status = args[1].toLowerCase();
       if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antighostPing(settings, status);
+      response = await antiGhostPing(settings, status);
+    }
+
+    //
+    if (sub == "antiattachments") {
+      const status = args[1].toLowerCase();
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+      response = await antiAttachments(settings, status);
     }
 
     //
@@ -204,10 +237,10 @@ module.exports = {
     }
 
     //
-    else if (sub == "antiscam") {
+    else if (sub == "antispam") {
       const status = args[1].toLowerCase();
       if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiScam(settings, status);
+      response = await antiSpam(settings, status);
     }
 
     //
@@ -220,21 +253,11 @@ module.exports = {
     }
 
     //
-    else if (sub === "maxmentions") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.safeReply("Max Mentions must be a valid number greater than 0");
-      }
-      response = await maxMentions(settings, max);
-    }
-
-    //
-    else if (sub === "maxrolementions") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.safeReply("Max Role Mentions must be a valid number greater than 0");
-      }
-      response = await maxRoleMentions(settings, max);
+    else if (sub === "massmention") {
+      const status = args[1].toLowerCase();
+      const threshold = args[2] || 3;
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+      response = await antiMassMention(settings, status, threshold);
     }
 
     //
@@ -248,25 +271,35 @@ module.exports = {
     const settings = data.settings;
 
     let response;
-    if (sub == "antighostping") response = await antighostPing(settings, interaction.options.getString("status"));
-    else if (sub === "antiinvites") response = await antiInvites(settings, interaction.options.getString("status"));
+    if (sub == "antighostping") response = await antiGhostPing(settings, interaction.options.getString("status"));
+    else if (sub == "antiattachments") {
+      response = await antiAttachments(settings, interaction.options.getString("status"));
+    } else if (sub === "antiinvites") response = await antiInvites(settings, interaction.options.getString("status"));
     else if (sub == "antilinks") response = await antilinks(settings, interaction.options.getString("status"));
-    else if (sub == "antiscam") response = await antiScam(settings, interaction.options.getString("status"));
+    else if (sub == "antispam") response = await antiSpam(settings, interaction.options.getString("status"));
     else if (sub === "maxlines") response = await maxLines(settings, interaction.options.getInteger("amount"));
-    else if (sub === "maxmentions") response = await maxMentions(settings, interaction.options.getInteger("amount"));
-    else if (sub === "maxrolementions") {
-      response = await maxRoleMentions(settings, interaction.options.getInteger("amount"));
-    }
+    else if (sub === "massmention") {
+      response = await antiMassMention(settings, interaction.options.getInteger("amount"));
+    } else response = "Invalid command usage!";
 
     await interaction.followUp(response);
   },
 };
 
-async function antighostPing(settings, input) {
+async function antiGhostPing(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_ghostping = status;
   await settings.save();
-  return `Configuration saved! Antighost ping is now ${status ? "enabled" : "disabled"}`;
+  return `Configuration saved! Anti-Ghostping is now ${status ? "enabled" : "disabled"}`;
+}
+
+async function antiAttachments(settings, input) {
+  const status = input.toUpperCase() === "ON" ? true : false;
+  settings.automod.anti_attachments = status;
+  await settings.save();
+  return `Messages ${
+    status ? "with attachments will now be automatically deleted" : "will not be filtered for attachments now"
+  }`;
 }
 
 async function antiInvites(settings, input) {
@@ -285,11 +318,11 @@ async function antilinks(settings, input) {
   return `Messages ${status ? "with links will now be automatically deleted" : "will not be filtered for links now"}`;
 }
 
-async function antiScam(settings, input) {
+async function antiSpam(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
-  settings.automod.anti_scam = status;
+  settings.automod.anti_spam = status;
   await settings.save();
-  return `Antiscam detection is now ${status ? "enabled" : "disabled"}`;
+  return `Antispam detection is now ${status ? "enabled" : "disabled"}`;
 }
 
 async function maxLines(settings, input) {
@@ -305,28 +338,13 @@ async function maxLines(settings, input) {
   }`;
 }
 
-async function maxMentions(settings, input) {
-  const mentions = Number.parseInt(input);
-  if (isNaN(mentions)) return "Please enter a valid number input";
-
-  settings.automod.max_mentions = mentions;
+async function antiMassMention(settings, input, threshold) {
+  const status = input.toUpperCase() === "ON" ? true : false;
+  if (!status) {
+    settings.automod.anti_massmention = 0;
+  } else {
+    settings.automod.anti_massmention = threshold;
+  }
   await settings.save();
-  return `${
-    input === 0
-      ? "Maximum user mentions limit is disabled"
-      : `Messages having more than \`${input}\` user mentions will now be automatically deleted`
-  }`;
-}
-
-async function maxRoleMentions(settings, input) {
-  const mentions = Number.parseInt(input);
-  if (isNaN(mentions)) return "Please enter a valid number input";
-
-  settings.automod.max_role_mentions = mentions;
-  await settings.save();
-  return `${
-    input === 0
-      ? "Maximum role mentions limit is disabled"
-      : `Messages having more than \`${input}\` role mentions will now be automatically deleted`
-  }`;
+  return `Mass mention detection is now ${status ? "enabled" : "disabled"}`;
 }
