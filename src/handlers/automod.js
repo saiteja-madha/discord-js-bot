@@ -7,12 +7,12 @@ const { AUTOMOD } = require("@root/config");
 const { addAutoModLogToDb } = require("@schemas/AutomodLogs");
 
 const antispamCache = new Map();
-const MESSAGES_THRESHOLD = 5000;
+const MESSAGE_SPAM_THRESHOLD = 3000;
 
 // Cleanup the cache
 setInterval(() => {
   antispamCache.forEach((value, key) => {
-    if (Date.now() - value.timestamp > MESSAGES_THRESHOLD) {
+    if (Date.now() - value.timestamp > MESSAGE_SPAM_THRESHOLD) {
       antispamCache.delete(key);
     }
   });
@@ -42,7 +42,6 @@ const shouldModerate = (message) => {
  * @param {object} settings
  */
 async function performAutomod(message, settings) {
-  let isDeleted = false;
   const { automod } = settings;
 
   if (!automod.debug && !shouldModerate(message)) return;
@@ -122,7 +121,7 @@ async function performAutomod(message, settings) {
         if (
           antispamInfo.channelId !== message.channelId &&
           antispamInfo.content === content &&
-          Date.now() - antispamInfo.timestamp < MESSAGES_THRESHOLD
+          Date.now() - antispamInfo.timestamp < MESSAGE_SPAM_THRESHOLD
         ) {
           embed.addField("AntiSpam Detection", "✓", true);
           shouldDelete = true;
@@ -202,8 +201,6 @@ async function performAutomod(message, settings) {
 
     await memberDb.save();
   }
-
-  return isDeleted;
 }
 
 module.exports = {
