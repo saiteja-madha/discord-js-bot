@@ -44,6 +44,7 @@ const shouldModerate = (message) => {
 async function performAutomod(message, settings) {
   const { automod } = settings;
 
+  if (automod.wh_channels.includes(message.channelId)) return;
   if (!automod.debug && !shouldModerate(message)) return;
 
   const { channel, member, guild, content, author, mentions } = message;

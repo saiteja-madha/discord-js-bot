@@ -28,6 +28,7 @@ const Schema = mongoose.Schema({
     debug: Boolean,
     strikes: { type: Number, default: 10 },
     action: { type: String, default: "TIMEOUT" },
+    wh_channels: [String],
     anti_attachments: Boolean,
     anti_invites: Boolean,
     anti_links: Boolean,
