@@ -17,7 +17,7 @@ module.exports = async (member, giveawayChannel, duration, prize, winners, host)
 
   try {
     await member.client.giveawaysManager.start(giveawayChannel, {
-      duration: 60000 * duration,
+      duration,
       prize,
       winnerCount: winners,
       hostedBy: host,

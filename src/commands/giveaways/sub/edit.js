@@ -23,7 +23,7 @@ module.exports = async (member, messageId, addDuration, newPrize, newWinnerCount
 
   try {
     await member.client.giveawaysManager.edit(messageId, {
-      addTime: 60000 * addDuration || 0,
+      addTime: addDuration || 0,
       newPrize: newPrize || giveaway.prize,
       newWinnerCount: newWinnerCount || giveaway.winnerCount,
     });

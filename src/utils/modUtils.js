@@ -237,17 +237,17 @@ async function warnTarget(issuer, target, reason) {
  * Timeouts(aka mutes) the target and logs to the database, channel
  * @param {import('discord.js').GuildMember} issuer
  * @param {import('discord.js').GuildMember} target
- * @param {number} minutes
+ * @param {number} ms
  * @param {string} reason
  */
-async function timeoutTarget(issuer, target, minutes, reason) {
+async function timeoutTarget(issuer, target, ms, reason) {
   if (!memberInteract(issuer, target)) return "MEMBER_PERM";
   if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
   if (target.communicationDisabledUntilTimestamp - Date.now() > 0) return "ALREADY_TIMEOUT";
 
   try {
-    await target.timeout(minutes * 60 * 1000, reason);
-    logModeration(issuer, target, reason, "Timeout", { minutes });
+    await target.timeout(ms, reason);
+    logModeration(issuer, target, reason, "Timeout");
     return true;
   } catch (ex) {
     error("timeoutTarget", ex);
@@ -259,7 +259,6 @@ async function timeoutTarget(issuer, target, minutes, reason) {
  * UnTimeouts(aka mutes) the target and logs to the database, channel
  * @param {import('discord.js').GuildMember} issuer
  * @param {import('discord.js').GuildMember} target
- * @param {number} minutes
  * @param {string} reason
  */
 async function unTimeoutTarget(issuer, target, reason) {

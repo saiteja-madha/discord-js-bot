@@ -1,5 +1,6 @@
 const { timeoutTarget } = require("@utils/modUtils");
 const { resolveMember } = require("@utils/guildUtils");
+const ems = require("enhanced-ms");
 
 /**
  * @type {import("@structures/Command")}
@@ -13,7 +14,7 @@ module.exports = {
   command: {
     enabled: true,
     aliases: ["mute"],
-    usage: "<ID|@member> <minutes> [reason]",
+    usage: "<ID|@member> <duration> [reason]",
     minArgsCount: 1,
   },
   slashCommand: {
@@ -26,9 +27,9 @@ module.exports = {
         required: true,
       },
       {
-        name: "minutes",
+        name: "duration",
         description: "the time to timeout the member for",
-        type: "INTEGER",
+        type: "STRING",
         required: true,
       },
       {
@@ -43,20 +44,28 @@ module.exports = {
   async messageRun(message, args) {
     const target = await resolveMember(message, args[0], true);
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-    const minutes = parseInt(args[1]);
-    if (isNaN(minutes)) return message.safeReply("Invalid time. Provide time in minutes.");
+
+    // parse time
+    const ms = ems(args[1]);
+    if (!ms) return message.safeReply("Please provide a valid duration. Example: 1d/1h/1m/1s");
+
     const reason = args.slice(2).join(" ").trim();
-    const response = await timeout(message.member, target, minutes, reason);
+    const response = await timeout(message.member, target, ms, reason);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");
-    const minutes = interaction.options.getInteger("minutes");
+
+    // parse time
+    const duration = interaction.options.getString("duration");
+    const ms = ems(duration);
+    if (!ms) return interaction.followUp("Please provide a valid duration. Example: 1d/1h/1m/1s");
+
     const reason = interaction.options.getString("reason");
     const target = await interaction.guild.members.fetch(user.id);
 
-    const response = await timeout(interaction.member, target, minutes, reason);
+    const response = await timeout(interaction.member, target, ms, reason);
     await interaction.followUp(response);
   },
 };
