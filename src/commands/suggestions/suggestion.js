@@ -1,5 +1,8 @@
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
 const { getMatchingChannels } = require("@utils/guildUtils");
+const { parsePermissions } = require("@utils/botUtils");
+
+const CHANNEL_PERMS = ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS", "MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"];
 
 /**
  * @type {import("@structures/Command")}
@@ -18,8 +21,16 @@ module.exports = {
         description: "enable/disable suggestion system",
       },
       {
-        trigger: "channel <#channel>",
+        trigger: "channel <#channel|off>",
         description: "configure suggestion channel or disable it",
+      },
+      {
+        trigger: "appch <#channel>",
+        description: "configure suggestion approval channel or disable it",
+      },
+      {
+        trigger: "rejch <#channel>",
+        description: "configure suggestion rejected channel or disable it",
       },
       {
         trigger: "approve <messageId>",
@@ -73,10 +84,45 @@ module.exports = {
         ],
       },
       {
+        name: "appch",
+        description: "configure suggestion approval channel or disable it",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "channel_name",
+            description: "the channel where approved suggestions will be sent",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: false,
+          },
+        ],
+      },
+      {
+        name: "rejch",
+        description: "configure suggestion rejected channel or disable it",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "channel_name",
+            description: "the channel where rejected suggestions will be sent",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: false,
+          },
+        ],
+      },
+      {
         name: "approve",
         description: "approve a suggestion",
         type: "SUB_COMMAND",
         options: [
+          {
+            name: "channel_name",
+            description: "the channel where message exists",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
+          },
           {
             name: "message_id",
             description: "the message id of the suggestion",
@@ -90,6 +136,13 @@ module.exports = {
         description: "reject a suggestion",
         type: "SUB_COMMAND",
         options: [
+          {
+            name: "channel_name",
+            description: "the channel where message exists",
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+            required: true,
+          },
           {
             name: "message_id",
             description: "the message id of the suggestion",
@@ -120,6 +173,24 @@ module.exports = {
       if (matched.length == 0) response = `No matching channels found for ${input}`;
       else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
       else response = await setChannel(data.settings, matched[0]);
+    }
+
+    // appch
+    else if (sub == "appch") {
+      const input = args[1];
+      let matched = getMatchingChannels(message.guild, input).filter((c) => c.type == "GUILD_TEXT");
+      if (matched.length == 0) response = `No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      else response = await setApprovedChannel(data.settings, matched[0]);
+    }
+
+    // appch
+    else if (sub == "rejch") {
+      const input = args[1];
+      let matched = getMatchingChannels(message.guild, input).filter((c) => c.type == "GUILD_TEXT");
+      if (matched.length == 0) response = `No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      else response = await setRejectedChannel(data.settings, matched[0]);
     }
 
     // approve
@@ -155,16 +226,30 @@ module.exports = {
       response = await setChannel(data.settings, channel);
     }
 
+    // app_channel
+    else if (sub == "appch") {
+      const channel = interaction.options.getChannel("channel_name");
+      response = await setApprovedChannel(data.settings, channel);
+    }
+
+    // rej_channel
+    else if (sub == "rejch") {
+      const channel = interaction.options.getChannel("channel_name");
+      response = await setRejectedChannel(data.settings, channel);
+    }
+
     // approve
     else if (sub == "approve") {
+      const channel = interaction.options.getChannel("channel_name");
       const messageId = interaction.options.getString("message_id");
-      response = await approveSuggestion(interaction.guild, interaction.member, messageId);
+      response = await approveSuggestion(interaction.member, channel, messageId);
     }
 
     // reject
     else if (sub == "reject") {
+      const channel = interaction.options.getChannel("channel_name");
       const messageId = interaction.options.getString("message_id");
-      response = await rejectSuggestion(interaction.guild, interaction.member, messageId);
+      response = await rejectSuggestion(interaction.member, channel, messageId);
     }
 
     // else
@@ -187,7 +272,43 @@ async function setChannel(settings, channel) {
     return "Suggestion system is now disabled";
   }
 
+  if (!channel.permissionsFor(channel.guild.me).has(CHANNEL_PERMS)) {
+    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
+  }
+
   settings.suggestions.channel_id = channel.id;
   await settings.save();
-  return `Suggestions will now be sent to ${channel.name}`;
+  return `Suggestions will now be sent to ${channel}`;
+}
+
+async function setApprovedChannel(settings, channel) {
+  if (!channel) {
+    settings.suggestions.approved_channel = null;
+    await settings.save();
+    return "Suggestion approved channel is now disabled";
+  }
+
+  if (!channel.permissionsFor(channel.guild.me).has(CHANNEL_PERMS)) {
+    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
+  }
+
+  settings.suggestions.approved_channel = channel.id;
+  await settings.save();
+  return `Approved suggestions will now be sent to ${channel}`;
+}
+
+async function setRejectedChannel(settings, channel) {
+  if (!channel) {
+    settings.suggestions.rejected_channel = null;
+    await settings.save();
+    return "Suggestion rejected channel is now disabled";
+  }
+
+  if (!channel.permissionsFor(channel.guild.me).has(CHANNEL_PERMS)) {
+    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
+  }
+
+  settings.suggestions.rejected_channel = channel.id;
+  await settings.save();
+  return `Rejected suggestions will now be sent to ${channel}`;
 }

@@ -44,6 +44,11 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import('discord.js').GuildMember} member
+ * @param {string} suggestion
+ * @param {object} settings
+ */
 async function suggest(member, suggestion, settings) {
   if (!settings.suggestions.enabled) return "Suggestion system is disabled.";
   if (!settings.suggestions.channel_id) return "Suggestion channel not configured!";
@@ -66,7 +71,8 @@ async function suggest(member, suggestion, settings) {
 
   let buttonsRow = new MessageActionRow().addComponents(
     new MessageButton().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle("SUCCESS"),
-    new MessageButton().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle("DANGER")
+    new MessageButton().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle("DANGER"),
+    new MessageButton().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle("SECONDARY")
   );
 
   try {

@@ -42,14 +42,14 @@ module.exports = async (client, interaction) => {
     // Suggestion
     if (interaction.customId === "SUGGEST_APPROVE") {
       await interaction.deferReply({ ephemeral: true });
-      const response = await approveSuggestion(interaction.guild, interaction.member, interaction.message.id);
+      const response = await approveSuggestion(interaction.member, interaction.channel, interaction.message.id);
       if (typeof response !== "boolean") interaction.followUp(response);
       else interaction.followUp("Suggestion approved");
     }
 
     if (interaction.customId === "SUGGEST_REJECT") {
       await interaction.deferReply({ ephemeral: true });
-      const response = await rejectSuggestion(interaction.guild, interaction.member, interaction.message.id);
+      const response = await rejectSuggestion(interaction.member, interaction.channel, interaction.message.id);
       if (typeof response !== "boolean") interaction.followUp(response);
       else interaction.followUp("Suggestion rejected");
     }

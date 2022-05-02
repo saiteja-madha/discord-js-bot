@@ -48,4 +48,8 @@ module.exports = {
   findSuggestion: async (guildId, messageId) => {
     return Model.findOne({ guild_id: guildId, message_id: messageId });
   },
+
+  deleteSuggestionDb: async (guildId, messageId) => {
+    return Model.deleteOne({ guild_id: guildId, message_id: messageId });
+  },
 };

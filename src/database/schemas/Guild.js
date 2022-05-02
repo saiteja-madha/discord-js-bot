@@ -91,6 +91,8 @@ const Schema = mongoose.Schema({
   suggestions: {
     enabled: Boolean,
     channel_id: String,
+    approved_channel: String,
+    rejected_channel: String,
   },
 });
 
