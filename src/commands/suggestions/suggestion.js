@@ -33,11 +33,11 @@ module.exports = {
         description: "configure suggestion rejected channel or disable it",
       },
       {
-        trigger: "approve <messageId>",
+        trigger: "approve <messageId> [reason]",
         description: "approve a suggestion",
       },
       {
-        trigger: "reject <messageId>",
+        trigger: "reject <messageId> [reason]",
         description: "reject a suggestion",
       },
     ],
@@ -129,6 +129,12 @@ module.exports = {
             type: "STRING",
             required: true,
           },
+          {
+            name: "reason",
+            description: "the reason for the approval",
+            type: "STRING",
+            required: false,
+          },
         ],
       },
       {
@@ -148,6 +154,12 @@ module.exports = {
             description: "the message id of the suggestion",
             type: "STRING",
             required: true,
+          },
+          {
+            name: "reason",
+            description: "the reason for the rejection",
+            type: "STRING",
+            required: false,
           },
         ],
       },
@@ -195,14 +207,28 @@ module.exports = {
 
     // approve
     else if (sub == "approve") {
-      const messageId = args[1];
-      response = await approveSuggestion(message.guild, message.member, messageId);
+      const input = args[1];
+      let matched = getMatchingChannels(message.guild, input).filter((c) => c.type == "GUILD_TEXT");
+      if (matched.length == 0) response = `No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      else {
+        const messageId = args[2];
+        const reason = args.slice(3).join(" ");
+        response = await approveSuggestion(message.member, matched[0], messageId, reason);
+      }
     }
 
     // reject
     else if (sub == "reject") {
-      const messageId = args[1];
-      response = await rejectSuggestion(message.guild, message.member, messageId);
+      const input = args[1];
+      let matched = getMatchingChannels(message.guild, input).filter((c) => c.type == "GUILD_TEXT");
+      if (matched.length == 0) response = `No matching channels found for ${input}`;
+      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
+      else {
+        const messageId = args[2];
+        const reason = args.slice(3).join(" ");
+        response = await rejectSuggestion(message.member, matched[0], messageId, reason);
+      }
     }
 
     // else

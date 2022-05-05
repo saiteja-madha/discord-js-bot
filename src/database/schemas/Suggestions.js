@@ -8,7 +8,7 @@ const Schema = mongoose.Schema(
     suggestion: String,
     status: {
       type: String,
-      enum: ["PENDING", "APPROVED", "REJECTED"],
+      enum: ["PENDING", "APPROVED", "REJECTED", "DELETED"],
       default: "PENDING",
     },
     stats: {
@@ -17,17 +17,23 @@ const Schema = mongoose.Schema(
     },
     status_updates: [
       {
+        _id: false,
         user_id: String,
         status: {
           type: String,
-          enum: ["PENDING", "APPROVED", "REJECTED"],
+          enum: ["APPROVED", "REJECTED", "DELETED"],
         },
+        reason: String,
         timestamp: { type: Date, default: new Date() },
       },
     ],
   },
   {
-    timestamps: true,
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
+    versionKey: false,
   }
 );
 
@@ -50,6 +56,6 @@ module.exports = {
   },
 
   deleteSuggestionDb: async (guildId, messageId) => {
-    return Model.deleteOne({ guild_id: guildId, message_id: messageId });
+    return Model.updateOne({ guild_id: guildId, message_id: messageId }, { status: "DELETED" });
   },
 };
