@@ -9,7 +9,7 @@ const { sendMessage } = require("@utils/botUtils");
  */
 module.exports = {
   name: "suggest",
-  description: "create a suggestion",
+  description: "submit a suggestion",
   category: "SUGGESTION",
   cooldown: 20,
   command: {

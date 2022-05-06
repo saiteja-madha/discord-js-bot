@@ -26,18 +26,18 @@ module.exports = {
       },
       {
         trigger: "appch <#channel>",
-        description: "configure suggestion approval channel or disable it",
+        description: "configure approved suggestions channel or disable it",
       },
       {
         trigger: "rejch <#channel>",
-        description: "configure suggestion rejected channel or disable it",
+        description: "configure rejected suggestions channel or disable it",
       },
       {
-        trigger: "approve <messageId> [reason]",
+        trigger: "approve <channel> <messageId> [reason]",
         description: "approve a suggestion",
       },
       {
-        trigger: "reject <messageId> [reason]",
+        trigger: "reject <channel> <messageId> [reason]",
         description: "reject a suggestion",
       },
     ],
@@ -85,7 +85,7 @@ module.exports = {
       },
       {
         name: "appch",
-        description: "configure suggestion approval channel or disable it",
+        description: "configure approved suggestions channel or disable it",
         type: "SUB_COMMAND",
         options: [
           {
@@ -99,7 +99,7 @@ module.exports = {
       },
       {
         name: "rejch",
-        description: "configure suggestion rejected channel or disable it",
+        description: "configure rejected suggestions channel or disable it",
         type: "SUB_COMMAND",
         options: [
           {
