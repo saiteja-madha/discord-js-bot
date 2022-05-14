@@ -1,3 +1,4 @@
+const { getSettings } = require("@schemas/Guild");
 const { handleTicketOpen, handleTicketClose } = require("@src/handlers/ticket");
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
 const { commandHandler, contextHandler, statsHandler } = require("@src/handlers");
@@ -9,13 +10,17 @@ const { commandHandler, contextHandler, statsHandler } = require("@src/handlers"
 module.exports = async (client, interaction) => {
   if (!interaction.guild) {
     return interaction
-      .reply({ content: "Command can only be executed in a discord server", ephemeral: true })
+      .reply({ content: "Interaction can only be executed in a discord server", ephemeral: true })
       .catch(() => {});
   }
 
+  const settings = await getSettings(interaction.guild);
+
+  // track stats
+  if (settings.stats.enabled) statsHandler.trackInteractionStats(interaction).catch(() => {});
+
   // Slash Command
   if (interaction.isCommand()) {
-    statsHandler.trackInteractionStats(interaction);
     return commandHandler.handleSlashCommand(interaction);
   }
 

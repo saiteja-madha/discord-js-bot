@@ -21,6 +21,10 @@ const Schema = mongoose.Schema({
     prefix: { type: Number, default: 0 },
     slash: { type: Number, default: 0 },
   },
+  contexts: {
+    message: { type: Number, default: 0 },
+    user: { type: Number, default: 0 },
+  },
   xp: { type: Number, default: 0 },
   level: { type: Number, default: 1 },
 });

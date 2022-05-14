@@ -55,12 +55,14 @@ module.exports = {
   },
 
   /**
-   * @param {import('discord.js').CommandInteraction} interaction
+   * @param {import('discord.js').Interaction} interaction
    */
   async trackInteractionStats(interaction) {
     if (!interaction.guild) return;
     const statsDb = await getMemberStats(interaction.guildId, interaction.member.id);
-    statsDb.commands.slash += 1;
+    if (interaction.isCommand()) statsDb.commands.slash += 1;
+    if (interaction.isUserContextMenu()) statsDb.contexts.user += 1;
+    if (interaction.isMessageContextMenu()) statsDb.contexts.message += 1;
     await statsDb.save();
   },
 
@@ -83,17 +85,17 @@ module.exports = {
       const statsDb = await getMemberStats(member.guild.id, member.id);
       statsDb.voice.connections += 1;
       await statsDb.save();
-      voiceStates.set(newState.member.id, Date.now());
+      voiceStates.set(member.id, Date.now());
     }
 
     // Member left a voice channel
     if (oldChannel && !newChannel) {
       const statsDb = await getMemberStats(member.guild.id, member.id);
-      if (voiceStates.has(oldState.member.id)) {
-        const time = Date.now() - voiceStates.get(oldState.member.id);
-        statsDb.voice.time += time / 1000;
+      if (voiceStates.has(member.id)) {
+        const time = Date.now() - voiceStates.get(member.id);
+        statsDb.voice.time += time / 1000; // add time in seconds
         await statsDb.save();
-        voiceStates.delete(oldState.member.id);
+        voiceStates.delete(member.id);
       }
     }
   },
