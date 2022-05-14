@@ -10,8 +10,9 @@ const xpToAdd = () => getRandomInt(19) + 1;
 /**
  * @param {string} content
  * @param {import('discord.js').GuildMember} member
+ * @param {number} level
  */
-const parse = (content, member) => {
+const parse = (content, member, level) => {
   return content
     .replaceAll(/\\n/g, "\n")
     .replaceAll(/{server}/g, member.guild.name)
@@ -19,7 +20,8 @@ const parse = (content, member) => {
     .replaceAll(/{member:id}/g, member.id)
     .replaceAll(/{member:name}/g, member.displayName)
     .replaceAll(/{member:mention}/g, member.toString())
-    .replaceAll(/{member:tag}/g, member.user.tag);
+    .replaceAll(/{member:tag}/g, member.user.tag)
+    .replaceAll(/{level}/g, level);
 };
 
 module.exports = {
@@ -60,7 +62,7 @@ module.exports = {
       statsDb.xp = xp;
       statsDb.level = level;
       let lvlUpMessage = settings.stats.xp.message;
-      lvlUpMessage = parse(lvlUpMessage, message.member);
+      lvlUpMessage = parse(lvlUpMessage, message.member, level);
       const lvlUpChannel = message.channel;
 
       sendMessage(lvlUpChannel, lvlUpMessage);
