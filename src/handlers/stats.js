@@ -7,6 +7,21 @@ const voiceStates = new Map();
 
 const xpToAdd = () => getRandomInt(19) + 1;
 
+/**
+ * @param {string} content
+ * @param {import('discord.js').GuildMember} member
+ */
+const parse = (content, member) => {
+  return content
+    .replaceAll(/\\n/g, "\n")
+    .replaceAll(/{server}/g, member.guild.name)
+    .replaceAll(/{count}/g, member.guild.memberCount)
+    .replaceAll(/{member:id}/g, member.id)
+    .replaceAll(/{member:name}/g, member.displayName)
+    .replaceAll(/{member:mention}/g, member.toString())
+    .replaceAll(/{member:tag}/g, member.user.tag);
+};
+
 module.exports = {
   /**
    * This function saves stats for a new message
@@ -45,7 +60,7 @@ module.exports = {
       statsDb.xp = xp;
       statsDb.level = level;
       let lvlUpMessage = settings.stats.xp.message;
-      lvlUpMessage = lvlUpMessage.replace("{l}", level).replace("{m}", message.member.user.toString());
+      lvlUpMessage = parse(lvlUpMessage, message.member);
       const lvlUpChannel = message.channel;
 
       sendMessage(lvlUpChannel, lvlUpMessage);
