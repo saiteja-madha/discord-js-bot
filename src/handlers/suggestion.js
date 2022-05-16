@@ -33,6 +33,13 @@ const getVotesMessage = (upVotes, downVotes) => {
   }
 };
 
+const hasPerms = (member, settings) => {
+  return (
+    member.permissions.has("MANAGE_GUILD") ||
+    member.roles.cache.find((r) => settings.suggestions.staff_roles.includes(r.id))
+  );
+};
+
 /**
  * @param {import('discord.js').GuildMember} member
  * @param {import('discord.js').TextBasedChannel} channel
@@ -44,7 +51,7 @@ async function approveSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!member.permissions.has("MANAGE_GUILD")) return "You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
 
   // validate if document exists
   const doc = await findSuggestion(guild.id, messageId);
@@ -133,7 +140,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!member.permissions.has("MANAGE_GUILD")) return "You don't have permission to reject suggestions!";
+  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
 
   // validate if document exists
   const doc = await findSuggestion(guild.id, messageId);
@@ -216,9 +223,10 @@ async function rejectSuggestion(member, channel, messageId, reason) {
  */
 async function deleteSuggestion(member, channel, messageId, reason) {
   const { guild } = member;
+  const settings = await getSettings(guild);
 
   // validate permissions
-  if (!member.permissions.has("MANAGE_GUILD")) return "You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
 
   try {
     await channel.messages.delete(messageId);

@@ -93,6 +93,7 @@ const Schema = mongoose.Schema({
     channel_id: String,
     approved_channel: String,
     rejected_channel: String,
+    staff_roles: [String],
   },
 });
 

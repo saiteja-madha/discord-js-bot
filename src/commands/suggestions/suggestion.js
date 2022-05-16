@@ -1,5 +1,5 @@
 const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
-const { getMatchingChannels } = require("@utils/guildUtils");
+const { getMatchingChannels, findMatchingRoles } = require("@utils/guildUtils");
 const { parsePermissions } = require("@utils/botUtils");
 
 const CHANNEL_PERMS = ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS", "MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"];
@@ -39,6 +39,14 @@ module.exports = {
       {
         trigger: "reject <channel> <messageId> [reason]",
         description: "reject a suggestion",
+      },
+      {
+        trigger: "staffadd <roleId>",
+        description: "add a staff role",
+      },
+      {
+        trigger: "staffremove <roleId>",
+        description: "remove a staff role",
       },
     ],
   },
@@ -163,6 +171,32 @@ module.exports = {
           },
         ],
       },
+      {
+        name: "staffadd",
+        description: "add a staff role",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "role",
+            description: "the role to add as a staff",
+            type: "ROLE",
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "staffremove",
+        description: "staffremove a staff role",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "role",
+            description: "the role to staffremove from a staff",
+            type: "ROLE",
+            required: true,
+          },
+        ],
+      },
     ],
   },
 
@@ -231,6 +265,24 @@ module.exports = {
       }
     }
 
+    // staffadd
+    else if (sub == "staffadd") {
+      const input = args[1];
+      let matched = findMatchingRoles(message.guild, input);
+      if (matched.length == 0) response = `No matching roles found for ${input}`;
+      else if (matched.length > 1) response = `Multiple roles found for ${input}. Please be more specific.`;
+      else response = await addStaffRole(data.settings, matched[0]);
+    }
+
+    // staffremove
+    else if (sub == "staffremove") {
+      const input = args[1];
+      let matched = findMatchingRoles(message.guild, input);
+      if (matched.length == 0) response = `No matching roles found for ${input}`;
+      else if (matched.length > 1) response = `Multiple roles found for ${input}. Please be more specific.`;
+      else response = await removeStaffRole(data.settings, matched[0]);
+    }
+
     // else
     else response = "Not a valid subcommand";
     await message.safeReply(response);
@@ -276,6 +328,18 @@ module.exports = {
       const channel = interaction.options.getChannel("channel_name");
       const messageId = interaction.options.getString("message_id");
       response = await rejectSuggestion(interaction.member, channel, messageId);
+    }
+
+    // staffadd
+    else if (sub == "staffadd") {
+      const role = interaction.options.getRole("role");
+      response = await addStaffRole(data.settings, role);
+    }
+
+    // staffremove
+    else if (sub == "staffremove") {
+      const role = interaction.options.getRole("role");
+      response = await removeStaffRole(data.settings, role);
     }
 
     // else
@@ -337,4 +401,22 @@ async function setRejectedChannel(settings, channel) {
   settings.suggestions.rejected_channel = channel.id;
   await settings.save();
   return `Rejected suggestions will now be sent to ${channel}`;
+}
+
+async function addStaffRole(settings, role) {
+  if (settings.suggestions.staff_roles.includes(role.id)) {
+    return `\`${role.name}\` is already a staff role`;
+  }
+  settings.suggestions.staff_roles.push(role.id);
+  await settings.save();
+  return `\`${role.name}\` is now a staff role`;
+}
+
+async function removeStaffRole(settings, role) {
+  if (!settings.suggestions.staff_roles.includes(role.id)) {
+    return `${role} is not a staff role`;
+  }
+  settings.suggestions.staff_roles.splice(settings.suggestions.staff_roles.indexOf(role.id), 1);
+  await settings.save();
+  return `\`${role.name}\` is no longer a staff role`;
 }
