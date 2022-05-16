@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema(
   {
     guild_id: String,
-    user_id: String,
+    channel_id: String,
     message_id: String,
+    user_id: String,
     suggestion: String,
     status: {
       type: String,
@@ -45,6 +46,7 @@ module.exports = {
   addSuggestion: async (message, userId, suggestion) => {
     return new Model({
       guild_id: message.guildId,
+      channel_id: message.channelId,
       message_id: message.id,
       user_id: userId,
       suggestion: suggestion,

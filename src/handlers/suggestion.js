@@ -108,6 +108,7 @@ async function approveSuggestion(member, channel, messageId, reason) {
     // suggestions-approve channel is configured
     else {
       const sent = await approveChannel.send({ embeds: [approvedEmbed], components: [buttonsRow] });
+      doc.channel_id = approveChannel.id;
       doc.message_id = sent.id;
       await message.delete();
     }
@@ -193,6 +194,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
     // suggestions-reject channel is configured
     else {
       const sent = await rejectChannel.send({ embeds: [rejectedEmbed], components: [buttonsRow] });
+      doc.channel_id = rejectChannel.id;
       doc.message_id = sent.id;
       await message.delete();
     }
