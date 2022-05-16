@@ -95,9 +95,9 @@ module.exports = {
       UP_VOTE: "⬆️",
       DOWN_VOTE: "⬇️",
     },
-    DEFAULT_EMBED: "#0099ff",
-    APPROVED_EMBED: "#00ff00",
-    DENIED_EMBED: "#ff0000",
+    DEFAULT_EMBED: "#4F545C",
+    APPROVED_EMBED: "#43B581",
+    DENIED_EMBED: "#F04747",
   },
 
   TICKET: {
