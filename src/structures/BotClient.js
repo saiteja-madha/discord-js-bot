@@ -246,7 +246,10 @@ module.exports = class BotClient extends Client {
     // Register for a specific guild
     else if (guildId && typeof guildId === "string") {
       const guild = this.guilds.cache.get(guildId);
-      if (!guild) throw new Error(`No guilds found matching ${guildId}`);
+      if (!guild) {
+        this.logger.error(`Failed to register interactions in guild ${guildId}`, new Error(`No matching guild`));
+        return;
+      }
       await guild.commands.set(toRegister);
     }
 

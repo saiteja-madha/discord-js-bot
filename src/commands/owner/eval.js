@@ -18,7 +18,7 @@ module.exports = {
     minArgsCount: 1,
   },
   slashCommand: {
-    enabled: true,
+    enabled: false,
     options: [
       {
         name: "expression",
