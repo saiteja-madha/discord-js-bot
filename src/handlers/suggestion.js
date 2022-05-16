@@ -3,6 +3,7 @@ const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
 const { SUGGESTIONS } = require("@root/config");
 const { MessageActionRow, MessageButton } = require("discord.js");
 const { stripIndents } = require("common-tags");
+const { Modal, showModal } = require("discord-modals");
 
 /**
  * @param {import('discord.js').Message} message
@@ -86,7 +87,7 @@ async function approveSuggestion(member, channel, messageId, reason) {
   if (!reasonField) {
     if (reason) approvedEmbed.addField("Reason", "```" + reason + "```");
   } else {
-    if (reason) reasonField.value = reason;
+    if (reason) reasonField.value = "```" + reason + "```";
     else approvedEmbed.fields.splice(approvedEmbed.fields.indexOf(reasonField), 1);
   }
 
@@ -172,7 +173,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
   if (!reasonField) {
     if (reason) rejectedEmbed.addField("Reason", "```" + reason + "```");
   } else {
-    if (reason) reasonField.value = reason;
+    if (reason) reasonField.value = "```" + reason + "```";
     else rejectedEmbed.fields.splice(rejectedEmbed.fields.indexOf(reasonField), 1);
   }
 
@@ -221,7 +222,7 @@ async function deleteSuggestion(member, channel, messageId, reason) {
 
   try {
     await channel.messages.delete(messageId);
-    await deleteSuggestionDb(guild.id, messageId);
+    await deleteSuggestionDb(guild.id, messageId, member.id, reason);
     return "Suggestion deleted";
   } catch (ex) {
     guild.client.logger.error("deleteSuggestion", ex);
@@ -233,24 +234,57 @@ async function deleteSuggestion(member, channel, messageId, reason) {
  * @param {import('discord.js').ButtonInteraction} interaction
  */
 async function handleApproveBtn(interaction) {
-  const response = await approveSuggestion(interaction.member, interaction.channel, interaction.message.id);
-  await interaction.followUp(response);
+  const modal = new Modal().setCustomId("SUGGEST_APPROVE_MODAL").setTitle("Approve Suggestion").addComponents({
+    customId: "reason",
+    label: "Reason",
+    type: "TEXT_INPUT",
+    style: "LONG",
+    minLength: 4,
+    required: false,
+  });
+
+  showModal(modal, {
+    client: interaction.client,
+    interaction,
+  });
 }
 
 /**
  * @param {import('discord.js').ButtonInteraction} interaction
  */
 async function handleRejectBtn(interaction) {
-  const response = await rejectSuggestion(interaction.member, interaction.channel, interaction.message.id);
-  await interaction.followUp(response);
+  const modal = new Modal().setCustomId("SUGGEST_REJECT_MODAL").setTitle("Reject Suggestion").addComponents({
+    customId: "reason",
+    label: "Reason",
+    type: "TEXT_INPUT",
+    style: "LONG",
+    minLength: 4,
+    required: false,
+  });
+
+  showModal(modal, {
+    client: interaction.client,
+    interaction,
+  });
 }
 
 /**
  * @param {import('discord.js').ButtonInteraction} interaction
  */
 async function handleDeleteBtn(interaction) {
-  const response = await deleteSuggestion(interaction.member, interaction.channel, interaction.message.id);
-  await interaction.followUp(response);
+  const modal = new Modal().setCustomId("SUGGEST_DELETE_MODAL").setTitle("Delete Suggestion").addComponents({
+    customId: "reason",
+    label: "Reason",
+    type: "TEXT_INPUT",
+    style: "LONG",
+    minLength: 4,
+    required: false,
+  });
+
+  showModal(modal, {
+    client: interaction.client,
+    interaction,
+  });
 }
 
 module.exports = {
@@ -259,4 +293,5 @@ module.exports = {
   handleDeleteBtn,
   approveSuggestion,
   rejectSuggestion,
+  deleteSuggestion,
 };

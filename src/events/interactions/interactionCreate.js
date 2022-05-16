@@ -41,17 +41,14 @@ module.exports = async (client, interaction) => {
 
     // Suggestion
     if (interaction.customId === "SUGGEST_APPROVE") {
-      await interaction.deferReply({ ephemeral: true });
       await handleApproveBtn(interaction);
     }
 
     if (interaction.customId === "SUGGEST_REJECT") {
-      await interaction.deferReply({ ephemeral: true });
       await handleRejectBtn(interaction);
     }
 
     if (interaction.customId === "SUGGEST_DELETE") {
-      await interaction.deferReply({ ephemeral: true });
       await handleDeleteBtn(interaction);
     }
   }

@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("module-alias/register");
 require("@helpers/extenders");
+const discordModals = require("discord-modals");
 
 const path = require("path");
 const { checkForUpdates } = require("@utils/botUtils");
@@ -16,6 +17,9 @@ const client = new BotClient();
 client.loadCommands("src/commands");
 client.loadContexts("src/contexts");
 client.loadEvents("src/events");
+
+// initialize modals
+discordModals(client);
 
 // find unhandled promise rejections
 process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
