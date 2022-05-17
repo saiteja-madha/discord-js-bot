@@ -43,6 +43,10 @@ module.exports = {
         trigger: "footer <text>",
         description: "set embed footer content",
       },
+      {
+        trigger: "image <url>",
+        description: "set embed image",
+      },
     ],
   },
   slashCommand: {
@@ -153,6 +157,19 @@ module.exports = {
           },
         ],
       },
+      {
+        name: "image",
+        description: "set embed image",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "url",
+            description: "image url",
+            type: "STRING",
+            required: true,
+          },
+        ],
+      },
     ],
   },
 
@@ -209,6 +226,13 @@ module.exports = {
       response = await setFooter(settings, content);
     }
 
+    // image
+    else if (type === "image") {
+      const url = args[1];
+      if (!url) return message.safeReply("Invalid image url. Please provide a valid url");
+      response = await setImage(settings, url);
+    }
+
     //
     else response = "Invalid command usage!";
     return message.safeReply(response);
@@ -246,6 +270,10 @@ module.exports = {
 
       case "footer":
         response = await setFooter(settings, interaction.options.getString("content"));
+        break;
+
+      case "image":
+        response = await setImage(settings, interaction.options.getString("url"));
         break;
 
       default:
@@ -307,6 +335,12 @@ async function setColor(settings, color) {
 
 async function setFooter(settings, content) {
   settings.welcome.embed.footer = content;
+  await settings.save();
+  return "Configuration saved! Welcome message updated";
+}
+
+async function setImage(settings, url) {
+  settings.welcome.embed.image = url;
   await settings.save();
   return "Configuration saved! Welcome message updated";
 }
