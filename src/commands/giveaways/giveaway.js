@@ -87,6 +87,12 @@ module.exports = {
             required: true,
           },
           {
+            name: "allowed_roles",
+            description: "the roleId's that can participate in the giveaway. Multiple roles must be comma separated",
+            type: "STRING",
+            required: false,
+          },
+          {
             name: "host",
             description: "the host of the giveaway",
             type: "USER",
@@ -248,7 +254,15 @@ module.exports = {
       const prize = interaction.options.getString("prize");
       const winnerCount = interaction.options.getInteger("winners");
       const host = interaction.options.getUser("host");
-      response = await start(interaction.member, channel, duration, prize, winnerCount, host);
+      const roleIds = interaction.options.getString("allowed_roles") || "";
+
+      const allowedRoles = roleIds
+        .split(",")
+        .map((roleId) => interaction.guild.roles.cache.get(roleId))
+        .filter((role) => role)
+        .map((role) => role.id);
+
+      response = await start(interaction.member, channel, duration, prize, winnerCount, host, allowedRoles);
     }
 
     //
@@ -313,8 +327,13 @@ async function runInteractiveSetup(message) {
   let duration;
   let prize;
   let winners = 1;
+  let allowedRoles = [];
   let host;
 
+  /**
+   * @param {string} question
+   * @returns {Promise<import("discord.js").Message>}
+   */
   const waitFor = async (question) => {
     await channel.send({ embeds: [embed.setDescription(question)] });
     try {
@@ -364,6 +383,21 @@ async function runInteractiveSetup(message) {
     }
     winners = parseInt(winners);
 
+    // giveaway role
+    reply = await waitFor(
+      "Please specify the `RoleID's` that can take part in the giveaway. Multiple roles can be comma separated.\n " +
+        "Alternatively, you can specify `none` to disable the role requirement"
+    );
+    if (reply === false) return;
+    allowedRoles =
+      reply.content.toLowerCase() === "none"
+        ? []
+        : reply.content
+            .split(",")
+            .map((roleId) => message.guild.roles.cache.get(roleId))
+            .filter((role) => role)
+            .map((role) => role.id);
+
     // host
     reply = await waitFor(
       "Please `mention the user` that will host the giveaway. Alternatively, you can specify `none`"
@@ -381,7 +415,7 @@ async function runInteractiveSetup(message) {
       return reply.reply("Giveaway setup has been cancelled");
     }
 
-    const response = await start(message.member, targetChannel, duration, prize, winners, host);
+    const response = await start(message.member, targetChannel, duration, prize, winners, host, allowedRoles);
     await channel.send(response);
   } catch (e) {
     await channel.send({ embeds: [embed.setDescription("An error occurred while setting up the giveaway")] });
