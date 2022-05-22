@@ -58,13 +58,15 @@ async function performAutomod(message, settings) {
   // Max mentions
   if (mentions.members.size > automod.max_mentions) {
     embed.addField("Mentions", `${mentions.members.size}/${automod.max_mentions}`, true);
-    strikesTotal += mentions.members.size - automod.max_mentions;
+    // strikesTotal += mentions.members.size - automod.max_mentions;
+    strikesTotal += 1;
   }
 
   // Maxrole mentions
   if (mentions.roles.size > automod.max_role_mentions) {
     embed.addField("RoleMentions", `${mentions.roles.size}/${automod.max_role_mentions}`, true);
-    strikesTotal += mentions.roles.size - automod.max_role_mentions;
+    // strikesTotal += mentions.roles.size - automod.max_role_mentions;
+    strikesTotal += 1;
   }
 
   if (automod.anti_massmention > 0) {
@@ -81,7 +83,8 @@ async function performAutomod(message, settings) {
         `${mentions.users.size + mentions.roles.size}/${automod.anti_massmention}`,
         true
       );
-      strikesTotal += mentions.users.size + mentions.roles.size - automod.anti_massmention;
+      // strikesTotal += mentions.users.size + mentions.roles.size - automod.anti_massmention;
+      strikesTotal += 1;
     }
   }
 
@@ -91,7 +94,8 @@ async function performAutomod(message, settings) {
     if (count > automod.max_lines) {
       embed.addField("New Lines", `${count}/${automod.max_lines}`, true);
       shouldDelete = true;
-      strikesTotal += Math.ceil((count - automod.max_lines) / automod.max_lines);
+      // strikesTotal += Math.ceil((count - automod.max_lines) / automod.max_lines);
+      strikesTotal += 1;
     }
   }
 
