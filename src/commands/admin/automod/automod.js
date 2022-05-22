@@ -1,3 +1,8 @@
+const { MessageEmbed } = require("discord.js");
+const { EMBED_COLORS } = require("@root/config.js");
+const { stripIndent } = require("common-tags");
+const { getMatchingChannels } = require("@utils/guildUtils");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -8,35 +13,35 @@ module.exports = {
   userPermissions: ["MANAGE_GUILD"],
   command: {
     enabled: true,
-    minArgsCount: 2,
+    minArgsCount: 1,
     subcommands: [
       {
-        trigger: "antighostping <ON|OFF>",
-        description: "Logs ghost mentions in your server",
+        trigger: "status",
+        description: "check automod configuration for this guild",
       },
       {
-        trigger: "antiinvites <ON|OFF>",
-        description: "Allow or disallow sending discord invites in message",
+        trigger: "strikes <number>",
+        description: "maximum number of strikes a member can receive before taking an action",
       },
       {
-        trigger: "antilinks <ON|OFF>",
-        description: "Allow or disallow sending links in message",
+        trigger: "action <TIMEOUT|KICK|BAN>",
+        description: "set action to be performed after receiving maximum strikes",
       },
       {
-        trigger: "antiscam <ON|OFF>",
-        description: "Enable or disable antiscam detection",
+        trigger: "debug <on|off>",
+        description: "turns on automod for messages sent by admins and moderators",
       },
       {
-        trigger: "maxlines <number>",
-        description: "Sets maximum lines allowed per message [0 to disable]",
+        trigger: "whitelist",
+        description: "list of channels that are whitelisted",
       },
       {
-        trigger: "maxmentions <number>",
-        description: "Sets maximum member mentions allowed per message [0 to disable]",
+        trigger: "whitelistadd <channel>",
+        description: "add a channel to the whitelist",
       },
       {
-        trigger: "maxrolementions <number>",
-        description: "Sets maximum role mentions allowed per message [0 to disable]",
+        trigger: "whitelistremove <channel>",
+        description: "remove a channel from the whitelist",
       },
     ],
   },
@@ -45,133 +50,103 @@ module.exports = {
     ephemeral: true,
     options: [
       {
-        name: "antighostping",
-        description: "Logs ghost mentions in your server",
+        name: "status",
+        description: "check automod configuration",
         type: "SUB_COMMAND",
-        options: [
-          {
-            name: "status",
-            description: "configuration status",
-            required: true,
-            type: "STRING",
-            choices: [
-              {
-                name: "ON",
-                value: "ON",
-              },
-              {
-                name: "OFF",
-                value: "OFF",
-              },
-            ],
-          },
-        ],
       },
       {
-        name: "antiinvites",
-        description: "Allow or disallow sending discord invites in message",
-        type: "SUB_COMMAND",
-        options: [
-          {
-            name: "status",
-            description: "configuration status",
-            required: true,
-            type: "STRING",
-            choices: [
-              {
-                name: "ON",
-                value: "ON",
-              },
-              {
-                name: "OFF",
-                value: "OFF",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "antilinks",
-        description: "Allow or disallow sending links in message",
-        type: "SUB_COMMAND",
-        options: [
-          {
-            name: "status",
-            description: "configuration status",
-            required: true,
-            type: "STRING",
-            choices: [
-              {
-                name: "ON",
-                value: "ON",
-              },
-              {
-                name: "OFF",
-                value: "OFF",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "antiscam",
-        description: "Enable or disable antiscam detection",
-        type: "SUB_COMMAND",
-        options: [
-          {
-            name: "status",
-            description: "configuration status",
-            required: true,
-            type: "STRING",
-            choices: [
-              {
-                name: "ON",
-                value: "ON",
-              },
-              {
-                name: "OFF",
-                value: "OFF",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "maxlines",
-        description: "Sets maximum lines allowed per message",
+        name: "strikes",
+        description: "set maximum number of strikes before taking an action",
         type: "SUB_COMMAND",
         options: [
           {
             name: "amount",
-            description: "configuration amount (0 to disable)",
+            description: "number of strikes (default 5)",
             required: true,
             type: "INTEGER",
           },
         ],
       },
       {
-        name: "maxmentions",
-        description: "Sets maximum user mentions allowed per message",
+        name: "action",
+        description: "set action to be performed after receiving maximum strikes",
         type: "SUB_COMMAND",
         options: [
           {
-            name: "amount",
-            description: "configuration amount (0 to disable)",
+            name: "action",
+            description: "action to perform",
+            type: "STRING",
             required: true,
-            type: "INTEGER",
+            choices: [
+              {
+                name: "TIMEOUT",
+                value: "TIMEOUT",
+              },
+              {
+                name: "KICK",
+                value: "KICK",
+              },
+              {
+                name: "BAN",
+                value: "BAN",
+              },
+            ],
           },
         ],
       },
       {
-        name: "maxrolementions",
-        description: "Sets maximum role mentions allowed per message",
+        name: "debug",
+        description: "enable/disable automod for messages sent by admins & moderators",
         type: "SUB_COMMAND",
         options: [
           {
-            name: "amount",
-            description: "configuration amount (0 to disable)",
+            name: "status",
+            description: "configuration status",
             required: true,
-            type: "INTEGER",
+            type: "STRING",
+            choices: [
+              {
+                name: "ON",
+                value: "ON",
+              },
+              {
+                name: "OFF",
+                value: "OFF",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "whitelist",
+        description: "view whitelisted channels",
+        type: "SUB_COMMAND",
+      },
+      {
+        name: "whitelistadd",
+        description: "add a channel to the whitelist",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "channel",
+            description: "channel to add",
+            required: true,
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
+          },
+        ],
+      },
+      {
+        name: "whitelistremove",
+        description: "remove a channel from the whitelist",
+        type: "SUB_COMMAND",
+        options: [
+          {
+            name: "channel",
+            description: "channel to remove",
+            required: true,
+            type: "CHANNEL",
+            channelTypes: ["GUILD_TEXT"],
           },
         ],
       },
@@ -179,67 +154,50 @@ module.exports = {
   },
 
   async messageRun(message, args, data) {
+    const input = args[0].toLowerCase();
     const settings = data.settings;
-    const sub = args[0].toLowerCase();
 
     let response;
-    if (sub == "antighostping") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antighostPing(settings, status);
-    }
-
-    //
-    else if (sub === "antiinvites") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiInvites(settings, status);
-    }
-
-    //
-    else if (sub == "antilinks") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antilinks(settings, status);
-    }
-
-    //
-    else if (sub == "antiscam") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiScam(settings, status);
-    }
-
-    //
-    else if (sub === "maxlines") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.safeReply("Max Lines must be a valid number greater than 0");
+    if (input === "status") {
+      response = await getStatus(settings, message.guild);
+    } else if (input === "strikes") {
+      const strikes = args[1];
+      if (isNaN(strikes) || Number.parseInt(strikes) < 1) {
+        return message.safeReply("Strikes must be a valid number greater than 0");
       }
-      response = await maxLines(settings, max);
+      response = await setStrikes(settings, strikes);
+    } else if (input === "action") {
+      const action = args[1].toUpperCase();
+      if (!action || !["TIMEOUT", "KICK", "BAN"].includes(action))
+        return message.safeReply("Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
+      response = await setAction(settings, message.guild, action);
+    } else if (input === "debug") {
+      const status = args[1].toLowerCase();
+      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
+      response = await setDebug(settings, status);
     }
 
-    //
-    else if (sub === "maxmentions") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.safeReply("Max Mentions must be a valid number greater than 0");
-      }
-      response = await maxMentions(settings, max);
+    // whitelist
+    else if (input === "whitelist") {
+      response = getWhitelist(message.guild, settings);
     }
 
-    //
-    else if (sub === "maxrolementions") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.safeReply("Max Role Mentions must be a valid number greater than 0");
-      }
-      response = await maxRoleMentions(settings, max);
+    // whitelist add
+    else if (input === "whitelistadd") {
+      const match = getMatchingChannels(message.guild, args[1]);
+      if (!match.length) return message.safeReply(`No channel found matching ${args[1]}`);
+      response = await whiteListAdd(settings, match[0].id);
+    }
+
+    // whitelist remove
+    else if (input === "whitelistremove") {
+      const match = getMatchingChannels(message.guild, args[1]);
+      if (!match.length) return message.safeReply(`No channel found matching ${args[1]}`);
+      response = await whiteListRemove(settings, match[0].id);
     }
 
     //
     else response = "Invalid command usage!";
-
     await message.safeReply(response);
   },
 
@@ -248,85 +206,117 @@ module.exports = {
     const settings = data.settings;
 
     let response;
-    if (sub == "antighostping") response = await antighostPing(settings, interaction.options.getString("status"));
-    else if (sub === "antiinvites") response = await antiInvites(settings, interaction.options.getString("status"));
-    else if (sub == "antilinks") response = await antilinks(settings, interaction.options.getString("status"));
-    else if (sub == "antiscam") response = await antiScam(settings, interaction.options.getString("status"));
-    else if (sub === "maxlines") response = await maxLines(settings, interaction.options.getInteger("amount"));
-    else if (sub === "maxmentions") response = await maxMentions(settings, interaction.options.getInteger("amount"));
-    else if (sub === "maxrolementions") {
-      response = await maxRoleMentions(settings, interaction.options.getInteger("amount"));
+
+    if (sub === "status") response = await getStatus(settings, interaction.guild);
+    else if (sub === "strikes") response = await setStrikes(settings, interaction.options.getInteger("amount"));
+    else if (sub === "action")
+      response = await setAction(settings, interaction.guild, interaction.options.getString("action"));
+    else if (sub === "debug") response = await setDebug(settings, interaction.options.getString("status"));
+    else if (sub === "whitelist") {
+      response = getWhitelist(interaction.guild, settings);
+    } else if (sub === "whitelistadd") {
+      const channelId = interaction.options.getChannel("channel").id;
+      response = await whiteListAdd(settings, channelId);
+    } else if (sub === "whitelistremove") {
+      const channelId = interaction.options.getChannel("channel").id;
+      response = await whiteListRemove(settings, channelId);
     }
 
     await interaction.followUp(response);
   },
 };
 
-async function antighostPing(settings, input) {
-  const status = input.toUpperCase() === "ON" ? true : false;
-  settings.automod.anti_ghostping = status;
-  await settings.save();
-  return `Configuration saved! Antighost ping is now ${status ? "enabled" : "disabled"}`;
+async function getStatus(settings, guild) {
+  const { automod } = settings;
+
+  const logChannel = settings.modlog_channel
+    ? guild.channels.cache.get(settings.modlog_channel).toString()
+    : "Not Configured";
+
+  // String Builder
+  let desc = stripIndent`
+    ❯ **Max Lines**: ${automod.max_lines || "NA"}
+    ❯ **Anti-Massmention**: ${automod.anti_massmention > 0 ? "✓" : "✕"}
+    ❯ **Anti-Attachment**: ${automod.anti_attachment ? "✓" : "✕"}
+    ❯ **Anti-Links**: ${automod.anti_links ? "✓" : "✕"}
+    ❯ **Anti-Invites**: ${automod.anti_invites ? "✓" : "✕"}
+    ❯ **Anti-Spam**: ${automod.anti_spam ? "✓" : "✕"}
+    ❯ **Anti-Ghostping**: ${automod.anti_ghostping ? "✓" : "✕"}
+  `;
+
+  const embed = new MessageEmbed()
+    .setAuthor({ name: "Automod Configuration", icon_url: guild.iconURL() })
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription(desc)
+    .addField("Log Channel", logChannel, true)
+    .addField("Max Strikes", automod.strikes.toString(), true)
+    .addField("Action", automod.action, true)
+    .addField("Debug", automod.debug ? "✓" : "✕", true);
+
+  return { embeds: [embed] };
 }
 
-async function antiInvites(settings, input) {
-  const status = input.toUpperCase() === "ON" ? true : false;
-  settings.automod.anti_invites = status;
+async function setStrikes(settings, strikes) {
+  settings.automod.strikes = strikes;
   await settings.save();
-  return `Messages ${
-    status ? "with discord invites will now be automatically deleted" : "will not be filtered for discord invites now"
-  }`;
+  return `Configuration saved! Maximum strikes is set to ${strikes}`;
 }
 
-async function antilinks(settings, input) {
-  const status = input.toUpperCase() === "ON" ? true : false;
-  settings.automod.anti_links = status;
+async function setAction(settings, guild, action) {
+  if (action === "TIMEOUT") {
+    if (!guild.me.permissions.has("MODERATE_MEMBERS")) {
+      return "I do not permission to timeout members";
+    }
+  }
+
+  if (action === "KICK") {
+    if (!guild.me.permissions.has("KICK_MEMBERS")) {
+      return "I do not have permission to kick members";
+    }
+  }
+
+  if (action === "BAN") {
+    if (!guild.me.permissions.has("BAN_MEMBERS")) {
+      return "I do not have permission to ban members";
+    }
+  }
+
+  settings.automod.action = action;
   await settings.save();
-  return `Messages ${status ? "with links will now be automatically deleted" : "will not be filtered for links now"}`;
+  return `Configuration saved! Automod action is set to ${action}`;
 }
 
-async function antiScam(settings, input) {
-  const status = input.toUpperCase() === "ON" ? true : false;
-  settings.automod.anti_scam = status;
+async function setDebug(settings, input) {
+  const status = input.toLowerCase() === "on" ? true : false;
+  settings.automod.debug = status;
   await settings.save();
-  return `Antiscam detection is now ${status ? "enabled" : "disabled"}`;
+  return `Configuration saved! Automod debug is now ${status ? "enabled" : "disabled"}`;
 }
 
-async function maxLines(settings, input) {
-  const lines = Number.parseInt(input);
-  if (isNaN(lines)) return "Please enter a valid number input";
+function getWhitelist(guild, settings) {
+  const whitelist = settings.automod.wh_channels;
+  if (!whitelist || !whitelist.length) return "No channels are whitelisted";
 
-  settings.automod.max_lines = lines;
-  await settings.save();
-  return `${
-    input === 0
-      ? "Maximum line limit is disabled"
-      : `Messages longer than \`${input}\` lines will now be automatically deleted`
-  }`;
+  const channels = [];
+  for (const channelId of whitelist) {
+    const channel = guild.channels.cache.get(channelId);
+    if (!channel) continue;
+    if (channel) channels.push(channel.toString());
+  }
+
+  return `Whitelisted channels: ${channels.join(", ")}`;
 }
 
-async function maxMentions(settings, input) {
-  const mentions = Number.parseInt(input);
-  if (isNaN(mentions)) return "Please enter a valid number input";
-
-  settings.automod.max_mentions = mentions;
+async function whiteListAdd(settings, channelId) {
+  if (settings.automod.wh_channels.includes(channelId)) return "Channel is already whitelisted";
+  settings.automod.wh_channels.push(channelId);
   await settings.save();
-  return `${
-    input === 0
-      ? "Maximum user mentions limit is disabled"
-      : `Messages having more than \`${input}\` user mentions will now be automatically deleted`
-  }`;
+  return `Channel whitelisted!`;
 }
 
-async function maxRoleMentions(settings, input) {
-  const mentions = Number.parseInt(input);
-  if (isNaN(mentions)) return "Please enter a valid number input";
-
-  settings.automod.max_role_mentions = mentions;
+async function whiteListRemove(settings, channelId) {
+  if (!settings.automod.wh_channels.includes(channelId)) return "Channel is not whitelisted";
+  settings.automod.wh_channels.splice(settings.automod.wh_channels.indexOf(channelId), 1);
   await settings.save();
-  return `${
-    input === 0
-      ? "Maximum role mentions limit is disabled"
-      : `Messages having more than \`${input}\` role mentions will now be automatically deleted`
-  }`;
+  return `Channel removed from whitelist!`;
 }

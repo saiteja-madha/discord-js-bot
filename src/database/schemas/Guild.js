@@ -26,14 +26,15 @@ const Schema = mongoose.Schema({
   },
   automod: {
     debug: Boolean,
-    strikes: { type: Number, default: 5 },
-    action: { type: String, default: "MUTE" },
-    anti_links: Boolean,
+    strikes: { type: Number, default: 10 },
+    action: { type: String, default: "TIMEOUT" },
+    wh_channels: [String],
+    anti_attachments: Boolean,
     anti_invites: Boolean,
-    anti_scam: Boolean,
+    anti_links: Boolean,
+    anti_spam: Boolean,
     anti_ghostping: Boolean,
-    max_mentions: Number,
-    max_role_mentions: Number,
+    anti_massmention: Number,
     max_lines: Number,
   },
   invite: {
@@ -52,8 +53,8 @@ const Schema = mongoose.Schema({
   max_warn: {
     action: {
       type: String,
-      enum: ["MUTE", "KICK", "BAN"],
-      default: "BAN",
+      enum: ["TIMEOUT", "KICK", "BAN"],
+      default: "KICK",
     },
     limit: { type: Number, default: 5 },
   },
