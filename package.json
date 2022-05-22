@@ -32,6 +32,7 @@
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
+    "enhanced-ms": "^1.0.2",
     "erela.js": "^2.3.3",
     "erela.js-deezer": "^1.0.7",
     "erela.js-facebook": "^1.0.4",

@@ -1,6 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const { parsePermissions } = require("@utils/botUtils");
 const { EMBED_COLORS } = require("@root/config");
+const ems = require("enhanced-ms");
 
 // Sub Commands
 const start = require("./sub/start");
@@ -70,8 +71,8 @@ module.exports = {
           },
           {
             name: "duration",
-            description: "the duration of the giveaway in minutes",
-            type: "INTEGER",
+            description: "the duration of the giveaway (Example: 1w/1d/1h/1m/1s)",
+            type: "STRING",
             required: true,
           },
           {
@@ -250,7 +251,12 @@ module.exports = {
     //
     if (sub === "start") {
       const channel = interaction.options.getChannel("channel");
-      const duration = interaction.options.getInteger("duration");
+      const durationMs = ems(interaction.options.getString("duration"));
+      if (!durationMs) {
+        return interaction.followUp("Not a valid duration");
+      }
+
+      const duration = durationMs / 60000;
       const prize = interaction.options.getString("prize");
       const winnerCount = interaction.options.getInteger("winners");
       const host = interaction.options.getUser("host");
@@ -297,10 +303,13 @@ module.exports = {
     //
     else if (sub === "edit") {
       const messageId = interaction.options.getString("message_id");
-      const addDuration = interaction.options.getInteger("add_duration");
+      const addDurationMs = ems(interaction.options.getInteger("add_duration"));
+      if (!addDurationMs) {
+        return interaction.followUp("Not a valid duration");
+      }
       const newPrize = interaction.options.getString("new_prize");
       const newWinnerCount = interaction.options.getInteger("new_winners");
-      response = await edit(interaction.member, messageId, addDuration, newPrize, newWinnerCount);
+      response = await edit(interaction.member, messageId, addDurationMs, newPrize, newWinnerCount);
     }
 
     //
@@ -366,8 +375,8 @@ async function runInteractiveSetup(message) {
     // wait for duration
     reply = await waitFor("Please `specify the duration` of the giveaway in minutes");
     if (reply === false) return;
-    duration = reply.content;
-    if (isNaN(duration)) return reply.reply("Giveaway setup has been cancelled. You did not specify a duration");
+    duration = ems(reply.content);
+    if (isNaN(duration)) return reply.reply("Giveaway setup has been cancelled. You did not specify a valid duration");
 
     // wait for prize
     reply = await waitFor("Please `specify the prize` of the giveaway");
@@ -468,8 +477,10 @@ async function runInteractiveEdit(message) {
     reply = await waitFor("Please specify the `duration to add` to the giveaway in minutes");
     if (reply === false) return;
     if (reply.content.toLowerCase() !== "skip") {
-      addDuration = reply.content;
-      if (isNaN(addDuration)) return reply.reply("Giveaway update has been cancelled. You did not specify a duration");
+      addDuration = ems(reply.content);
+      if (isNaN(addDuration)) {
+        return reply.reply("Giveaway update has been cancelled. You did not specify a valid duration");
+      }
     }
 
     // wait for new prize

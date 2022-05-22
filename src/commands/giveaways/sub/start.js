@@ -21,7 +21,7 @@ module.exports = async (member, giveawayChannel, duration, prize, winners, host,
      * @type {import("discord-giveaways").GiveawayStartOptions}
      */
     const options = {
-      duration: 60000 * duration,
+      duration: duration,
       prize,
       winnerCount: winners,
       hostedBy: host,
