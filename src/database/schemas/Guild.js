@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { CACHE_SIZE, PREFIX } = require("@root/config.js");
+const { CACHE_SIZE, PREFIX, STATS } = require("@root/config.js");
 const FixedSizeMap = require("fixedsize-map");
 const { getUser } = require("./User");
 
@@ -17,8 +17,12 @@ const Schema = mongoose.Schema({
     bots: { type: Number, default: 0 },
   },
   prefix: { type: String, default: PREFIX },
-  ranking: {
+  stats: {
     enabled: Boolean,
+    xp: {
+      message: { type: String, default: STATS.DEFAULT_LVL_UP_MSG },
+      channel: String,
+    },
   },
   ticket: {
     log_channel: String,

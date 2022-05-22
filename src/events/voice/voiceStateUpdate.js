@@ -1,10 +1,16 @@
+const { trackVoiceStats } = require("@src/handlers/stats");
+
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').VoiceState} oldState
  * @param {import('discord.js').VoiceState} newState
  */
 module.exports = async (client, oldState, newState) => {
-  if (!client.config.ERELA_JS.ENABLED) return;
+  // Track voice stats
+  trackVoiceStats(oldState, newState);
+
+  // Erela.js
+  if (client.config.ERELA_JS.ENABLED) {
   const guild = oldState.guild;
 
   // if nobody left the channel in question, return.
@@ -18,5 +24,6 @@ module.exports = async (client, oldState, newState) => {
         // if there's still 1 member,
         client.erelaManager.get(guild.id) && client.erelaManager.get(guild.id).destroy();
     }, client.config.ERELA_JS.IDLE_TIME * 1000);
+    }
   }
 };

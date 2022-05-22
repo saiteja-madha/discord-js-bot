@@ -95,6 +95,12 @@ module.exports = {
     MESSAGE: "{members} members in {servers} servers", // Your bot status message
   },
 
+  STATS: {
+    ENABLED: false,
+    XP_COOLDOWN: 5, // Cooldown in seconds between messages
+    DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
+  },
+
   SUGGESTIONS: {
     ENABLED: false, // Should the suggestion system be enabled
     EMOJI: {

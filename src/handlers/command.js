@@ -153,7 +153,7 @@ module.exports = {
 
   /**
    * Build a usage embed for this command
-   * @param {Command} cmd - command object
+   * @param {import('@structures/Command')} cmd - command object
    * @param {string} prefix - guild bot prefix
    * @param {string} invoke - alias that was used to trigger this command
    * @param {string} [title] - the embed title
@@ -179,7 +179,7 @@ module.exports = {
   },
 
   /**
-   * @param {Command} cmd - command object
+   * @param {import('@structures/Command')} cmd - command object
    */
   getSlashUsage(cmd) {
     let desc = "";
