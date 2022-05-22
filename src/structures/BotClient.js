@@ -259,6 +259,45 @@ module.exports = class BotClient extends Client {
   }
 
   /**
+   * @param {string} search
+   * @param {Boolean} exact
+   */
+  async resolveUsers(search, exact = false) {
+    if (!search || typeof search !== "string") return [];
+    const users = [];
+
+    // check if userId is passed
+    const patternMatch = search.match(/(\d{17,20})/);
+    if (patternMatch) {
+      const id = patternMatch[1];
+      const fetched = await this.users.fetch(id, { cache: true }).catch(() => {}); // check if mentions contains the ID
+      if (fetched) {
+        users.push(fetched);
+        return users;
+      }
+    }
+
+    // check if exact tag is matched in cache
+    const matchingTags = this.users.cache.filter((user) => user.tag === search);
+    if (exact && matchingTags.size === 1) users.push(matchingTags.first());
+    else matchingTags.forEach((match) => users.push(match));
+
+    // check matching username
+    if (!exact) {
+      this.users.cache
+        .filter(
+          (x) =>
+            x.username === search ||
+            x.username.toLowerCase().includes(search.toLowerCase()) ||
+            x.tag.toLowerCase().includes(search.toLowerCase())
+        )
+        .forEach((user) => users.push(user));
+    }
+
+    return users;
+  }
+
+  /**
    * Get bot's invite
    */
   getInvite() {

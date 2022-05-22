@@ -24,6 +24,7 @@ const Schema = mongoose.Schema({
       "KICK",
       "SOFTBAN",
       "BAN",
+      "UNBAN",
       "VMUTE",
       "VUNMUTE",
       "DEAFEN",
