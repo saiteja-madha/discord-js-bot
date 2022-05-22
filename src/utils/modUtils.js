@@ -62,12 +62,15 @@ async function logModeration(issuer, target, reason, type, data = {}) {
   let logChannel;
   if (settings.modlog_channel) logChannel = guild.channels.cache.get(settings.modlog_channel);
 
-  const embed = new MessageEmbed();
+  const embed = new MessageEmbed().setFooter({
+    text: `By ${issuer.displayName} • ${issuer.id}`,
+    iconURL: issuer.displayAvatarURL(),
+  });
+
   switch (type.toUpperCase()) {
     case "PURGE":
       embed
-        .setAuthor({ name: `Moderation Case - ${type}` })
-        .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
+        .setAuthor({ name: `Moderation - ${type}` })
         .addField("Purge Type", data.purgeType, true)
         .addField("Messages", data.deletedCount.toString(), true)
         .addField("Channel", `#${data.channel.name} [${data.channel.id}]`, false);
@@ -123,15 +126,12 @@ async function logModeration(issuer, target, reason, type, data = {}) {
   }
 
   if (type.toUpperCase() !== "PURGE") {
-    embed
-      .setAuthor({ name: `Moderation Case - ${type}` })
-      .setThumbnail(target.displayAvatarURL())
-      .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false);
+    embed.setAuthor({ name: `Moderation - ${type}` }).setThumbnail(target.displayAvatarURL());
 
     if (target instanceof GuildMember) embed.addField("Member", `${target.displayName} [${target.id}]`, false);
     else embed.addField("User", `${target.tag} [${target.id}]`, false);
 
-    embed.addField("Reason", reason || "No reason provided", true).setTimestamp(Date.now());
+    embed.addField("Reason", reason || "No reason provided", false);
 
     if (type.toUpperCase() === "TIMEOUT") {
       embed.addField("Expires", `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`, true);
