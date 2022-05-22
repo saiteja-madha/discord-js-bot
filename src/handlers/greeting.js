@@ -34,8 +34,11 @@ const parse = async (content, member, inviterData = {}) => {
     .replaceAll(/\\n/g, "\n")
     .replaceAll(/{server}/g, member.guild.name)
     .replaceAll(/{count}/g, member.guild.memberCount)
-    .replaceAll(/{member:name}/g, member.displayName)
+    .replaceAll(/{member:nick}/g, member.displayName)
+    .replaceAll(/{member:name}/g, member.user.username)
+    .replaceAll(/{member:dis}/g, member.user.discriminator)
     .replaceAll(/{member:tag}/g, member.user.tag)
+    .replaceAll(/{member:avatar}/g, member.displayAvatarURL())
     .replaceAll(/{inviter:name}/g, inviteData.name)
     .replaceAll(/{inviter:tag}/g, inviteData.tag)
     .replaceAll(/{invites}/g, getEffectiveInvites(inviterData.invite_data));
@@ -56,11 +59,19 @@ const buildGreeting = async (member, type, config, inviterData) => {
 
   // build embed
   const embed = new MessageEmbed();
-  if (config.embed.description) embed.setDescription(await parse(config.embed.description, member, inviterData));
+  if (config.embed.description) {
+    const parsed = await parse(config.embed.description, member, inviterData);
+    embed.setDescription(parsed);
+  }
   if (config.embed.color) embed.setColor(config.embed.color);
   if (config.embed.thumbnail) embed.setThumbnail(member.user.displayAvatarURL());
   if (config.embed.footer) {
-    embed.setFooter({ text: await parse(config.embed.footer, member, inviterData) });
+    const parsed = await parse(config.embed.footer, member, inviterData);
+    embed.setFooter({ text: parsed });
+  }
+  if (config.embed.image) {
+    const parsed = await parse(config.embed.image, member);
+    embed.setImage(parsed);
   }
 
   // set default message

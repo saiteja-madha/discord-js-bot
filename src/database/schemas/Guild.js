@@ -75,6 +75,7 @@ const Schema = mongoose.Schema({
       color: String,
       thumbnail: Boolean,
       footer: String,
+      image: String,
     },
   },
   farewell: {
@@ -86,6 +87,7 @@ const Schema = mongoose.Schema({
       color: String,
       thumbnail: Boolean,
       footer: String,
+      image: String,
     },
   },
   autorole: String,
