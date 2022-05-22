@@ -8,6 +8,7 @@ const { schemas } = require("@src/database/mongoose");
 const CommandCategory = require("./CommandCategory");
 const erelaHandler = require("../handlers/erela");
 const giveawaysHandler = require("../handlers/giveaway");
+const { DiscordTogether } = require("discord-together");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -63,6 +64,9 @@ module.exports = class BotClient extends Client {
 
     // Database
     this.database = schemas;
+
+    // Discord Together
+    this.discordTogether = new DiscordTogether(this);
   }
 
   /**
