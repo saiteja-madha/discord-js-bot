@@ -8,6 +8,7 @@ const { schemas } = require("@src/database/mongoose");
 const CommandCategory = require("./CommandCategory");
 const erelaHandler = require("../handlers/erela");
 const giveawaysHandler = require("../handlers/giveaway");
+const { DiscordTogether } = require("discord-together");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -47,9 +48,6 @@ module.exports = class BotClient extends Client {
     this.contextMenus = new Collection(); // store contextMenus
     this.counterUpdateQueue = []; // store guildId's that needs counter update
 
-    // initialize cache
-    this.antiScamCache = new Collection(); // store message data for anti_scam feature
-
     // initialize webhook for sending guild join/leave details
     this.joinLeaveWebhook = process.env.JOIN_LEAVE_LOGS
       ? new WebhookClient({ url: process.env.JOIN_LEAVE_LOGS })
@@ -66,6 +64,9 @@ module.exports = class BotClient extends Client {
 
     // Database
     this.database = schemas;
+
+    // Discord Together
+    this.discordTogether = new DiscordTogether(this);
   }
 
   /**
@@ -246,7 +247,10 @@ module.exports = class BotClient extends Client {
     // Register for a specific guild
     else if (guildId && typeof guildId === "string") {
       const guild = this.guilds.cache.get(guildId);
-      if (!guild) throw new Error(`No guilds found matching ${guildId}`);
+      if (!guild) {
+        this.logger.error(`Failed to register interactions in guild ${guildId}`, new Error(`No matching guild`));
+        return;
+      }
       await guild.commands.set(toRegister);
     }
 
@@ -256,6 +260,45 @@ module.exports = class BotClient extends Client {
     }
 
     this.logger.success("Successfully registered slash commands");
+  }
+
+  /**
+   * @param {string} search
+   * @param {Boolean} exact
+   */
+  async resolveUsers(search, exact = false) {
+    if (!search || typeof search !== "string") return [];
+    const users = [];
+
+    // check if userId is passed
+    const patternMatch = search.match(/(\d{17,20})/);
+    if (patternMatch) {
+      const id = patternMatch[1];
+      const fetched = await this.users.fetch(id, { cache: true }).catch(() => {}); // check if mentions contains the ID
+      if (fetched) {
+        users.push(fetched);
+        return users;
+      }
+    }
+
+    // check if exact tag is matched in cache
+    const matchingTags = this.users.cache.filter((user) => user.tag === search);
+    if (exact && matchingTags.size === 1) users.push(matchingTags.first());
+    else matchingTags.forEach((match) => users.push(match));
+
+    // check matching username
+    if (!exact) {
+      this.users.cache
+        .filter(
+          (x) =>
+            x.username === search ||
+            x.username.toLowerCase().includes(search.toLowerCase()) ||
+            x.tag.toLowerCase().includes(search.toLowerCase())
+        )
+        .forEach((user) => users.push(user));
+    }
+
+    return users;
   }
 
   /**
@@ -278,6 +321,7 @@ module.exports = class BotClient extends Client {
         "MANAGE_MESSAGES",
         "MANAGE_NICKNAMES",
         "MANAGE_ROLES",
+        "MODERATE_MEMBERS",
         "MOVE_MEMBERS",
         "MUTE_MEMBERS",
         "PRIORITY_SPEAKER",

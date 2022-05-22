@@ -14,7 +14,6 @@ module.exports = {
     SUCCESS: "#00A56A",
     ERROR: "#D61A3C",
     WARNING: "#F7E919",
-    AUTOMOD: "#36393F",
   },
   CACHE_SIZE: {
     GUILDS: 100,
@@ -26,6 +25,12 @@ module.exports = {
   },
 
   // PLUGINS
+
+  AUTOMOD: {
+    ENABLED: true,
+    LOG_EMBED: "#36393F",
+    DM_EMBED: "#36393F",
+  },
 
   DASHBOARD: {
     enabled: false, // enable or disable dashboard
@@ -73,6 +78,7 @@ module.exports = {
       KICK: "#FF7961",
       SOFTBAN: "#AF4448",
       BAN: "#D32F2F",
+      UNBAN: "#00C853",
       VMUTE: "#102027",
       VUNMUTE: "#4B636E",
       DEAFEN: "#102027",

@@ -142,7 +142,7 @@ module.exports = {
     try {
       await interaction.deferReply({ ephemeral: cmd.slashCommand.ephemeral });
       const settings = await getSettings(interaction.guild);
-      await cmd.interactionRun(interaction, settings);
+      await cmd.interactionRun(interaction, { settings });
     } catch (ex) {
       await interaction.followUp("Oops! An error occurred while running the command");
       interaction.client.logger.error("interactionRun", ex);

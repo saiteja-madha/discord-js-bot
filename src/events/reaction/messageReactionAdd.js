@@ -1,6 +1,6 @@
 const { translationHandler, reactionRoleHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
-const { getCountryFromFlag } = require("@utils/miscUtils");
+const { isValidEmoji } = require("country-emoji-languages");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -26,8 +26,9 @@ module.exports = async (client, reaction, user) => {
   if (!emoji.id) {
     // Translation By Flags
     if (message.content && (await getSettings(message.guild)).flag_translation.enabled) {
-      const countryCode = getCountryFromFlag(emoji.name);
-      if (countryCode) translationHandler.handleFlagReaction(countryCode, message, user);
+      if (isValidEmoji(emoji.name)) {
+        translationHandler.handleFlagReaction(emoji.name, message, user);
+      }
     }
   }
 };

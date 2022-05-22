@@ -1,4 +1,4 @@
-const { Collection, MessageEmbed } = require("discord.js");
+const { Collection, MessageEmbed, GuildMember } = require("discord.js");
 const { MODERATION } = require("@root/config");
 
 // Utils
@@ -49,7 +49,7 @@ async function addModAction(issuer, target, reason, action) {
 /**
  * Send logs to the configured channel and stores in the database
  * @param {import('discord.js').GuildMember} issuer
- * @param {import('discord.js').GuildMember} target
+ * @param {import('discord.js').GuildMember|import('discord.js').User} target
  * @param {string} reason
  * @param {string} type
  * @param {Object} data
@@ -62,12 +62,15 @@ async function logModeration(issuer, target, reason, type, data = {}) {
   let logChannel;
   if (settings.modlog_channel) logChannel = guild.channels.cache.get(settings.modlog_channel);
 
-  const embed = new MessageEmbed();
+  const embed = new MessageEmbed().setFooter({
+    text: `By ${issuer.displayName} • ${issuer.id}`,
+    iconURL: issuer.displayAvatarURL(),
+  });
+
   switch (type.toUpperCase()) {
     case "PURGE":
       embed
-        .setAuthor({ name: `Moderation Case - ${type}` })
-        .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
+        .setAuthor({ name: `Moderation - ${type}` })
         .addField("Purge Type", data.purgeType, true)
         .addField("Messages", data.deletedCount.toString(), true)
         .addField("Channel", `#${data.channel.name} [${data.channel.id}]`, false);
@@ -91,6 +94,10 @@ async function logModeration(issuer, target, reason, type, data = {}) {
 
     case "BAN":
       embed.setColor(MODERATION.EMBED_COLORS.BAN);
+      break;
+
+    case "UNBAN":
+      embed.setColor(MODERATION.EMBED_COLORS.UNBAN);
       break;
 
     case "VMUTE":
@@ -119,13 +126,12 @@ async function logModeration(issuer, target, reason, type, data = {}) {
   }
 
   if (type.toUpperCase() !== "PURGE") {
-    embed
-      .setAuthor({ name: `Moderation Case - ${type}` })
-      .setThumbnail(target.user.displayAvatarURL())
-      .addField("Issuer", `${issuer.displayName} [${issuer.id}]`, false)
-      .addField("Member", `${target.displayName} [${target.id}]`, false)
-      .addField("Reason", reason || "No reason provided", true)
-      .setTimestamp(Date.now());
+    embed.setAuthor({ name: `Moderation - ${type}` }).setThumbnail(target.displayAvatarURL());
+
+    if (target instanceof GuildMember) embed.addField("Member", `${target.displayName} [${target.id}]`, false);
+    else embed.addField("User", `${target.tag} [${target.id}]`, false);
+
+    embed.addField("Reason", reason || "No reason provided", false);
 
     if (type.toUpperCase() === "TIMEOUT") {
       embed.addField("Expires", `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`, true);
@@ -320,19 +326,38 @@ async function softbanTarget(issuer, target, reason) {
 /**
  * Bans the target and logs to the database, channel
  * @param {import('discord.js').GuildMember} issuer
- * @param {import('discord.js').GuildMember} target
+ * @param {import('discord.js').User} target
  * @param {string} reason
  */
 async function banTarget(issuer, target, reason) {
-  if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-  if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+  const targetMem = await issuer.guild.members.fetch(target.id).catch(() => {});
+
+  if (targetMem && !memberInteract(issuer, targetMem)) return "MEMBER_PERM";
+  if (targetMem && !memberInteract(issuer.guild.me, targetMem)) return "BOT_PERM";
 
   try {
-    await target.ban({ days: 0, reason });
+    await issuer.guild.bans.create(target.id, { days: 0, reason });
     logModeration(issuer, target, reason, "Ban");
     return true;
   } catch (ex) {
     error(`banTarget`, ex);
+    return "ERROR";
+  }
+}
+
+/**
+ * Bans the target and logs to the database, channel
+ * @param {import('discord.js').GuildMember} issuer
+ * @param {import('discord.js').User} target
+ * @param {string} reason
+ */
+async function unBanTarget(issuer, target, reason) {
+  try {
+    await issuer.guild.bans.remove(target, reason);
+    logModeration(issuer, target, reason, "UnBan");
+    return true;
+  } catch (ex) {
+    error(`unBanTarget`, ex);
     return "ERROR";
   }
 }
@@ -487,6 +512,7 @@ module.exports = {
   kickTarget,
   softbanTarget,
   banTarget,
+  unBanTarget,
   vMuteTarget,
   vUnmuteTarget,
   deafenTarget,
