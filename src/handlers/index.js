@@ -8,5 +8,4 @@ module.exports = {
   reactionRoleHandler: require("./reactionRoles"),
   statsHandler: require("./stats"),
   translationHandler: require("./translation"),
-  xpHandler: require("./xp"),
 };

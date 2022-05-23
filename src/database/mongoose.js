@@ -8,14 +8,11 @@ module.exports = {
     try {
       await mongoose.connect(process.env.MONGO_CONNECTION, {
         keepAlive: true,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
       });
 
       success("Mongoose: Database connection established");
     } catch (err) {
-      error("Mongoose: Failed to connect to database");
+      error("Mongoose: Failed to connect to database", err);
       process.exit(1);
     }
   },
