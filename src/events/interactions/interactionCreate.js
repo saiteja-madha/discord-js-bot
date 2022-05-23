@@ -1,6 +1,6 @@
 const { getSettings } = require("@schemas/Guild");
 const { handleTicketOpen, handleTicketClose } = require("@src/handlers/ticket");
-const { approveSuggestion, rejectSuggestion } = require("@src/handlers/suggestion");
+const { handleApproveBtn, handleRejectBtn, handleDeleteBtn } = require("@src/handlers/suggestion");
 const { commandHandler, contextHandler, statsHandler } = require("@src/handlers");
 
 /**
@@ -13,11 +13,6 @@ module.exports = async (client, interaction) => {
       .reply({ content: "Command can only be executed in a discord server", ephemeral: true })
       .catch(() => {});
   }
-
-  const settings = await getSettings(interaction.guild);
-
-  // track stats
-  if (settings.stats.enabled) statsHandler.trackInteractionStats(interaction).catch(() => {});
 
   // Slash Command
   if (interaction.isCommand()) {
@@ -47,17 +42,20 @@ module.exports = async (client, interaction) => {
 
     // Suggestion
     if (interaction.customId === "SUGGEST_APPROVE") {
-      await interaction.deferReply({ ephemeral: true });
-      const response = await approveSuggestion(interaction.guild, interaction.member, interaction.message.id);
-      if (typeof response !== "boolean") interaction.followUp(response);
-      else interaction.followUp("Suggestion approved");
+      await handleApproveBtn(interaction);
     }
 
     if (interaction.customId === "SUGGEST_REJECT") {
-      await interaction.deferReply({ ephemeral: true });
-      const response = await rejectSuggestion(interaction.guild, interaction.member, interaction.message.id);
-      if (typeof response !== "boolean") interaction.followUp(response);
-      else interaction.followUp("Suggestion rejected");
+      await handleRejectBtn(interaction);
+    }
+
+    if (interaction.customId === "SUGGEST_DELETE") {
+      await handleDeleteBtn(interaction);
     }
   }
+
+  const settings = await getSettings(interaction.guild);
+
+  // track stats
+  if (settings.stats.enabled) statsHandler.trackInteractionStats(interaction).catch(() => {});
 };

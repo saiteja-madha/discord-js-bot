@@ -9,6 +9,7 @@ const CommandCategory = require("./CommandCategory");
 const erelaHandler = require("../handlers/erela");
 const giveawaysHandler = require("../handlers/giveaway");
 const { DiscordTogether } = require("discord-together");
+const discordModals = require("discord-modals");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -67,6 +68,9 @@ module.exports = class BotClient extends Client {
 
     // Discord Together
     this.discordTogether = new DiscordTogether(this);
+
+    // Discord modals
+    discordModals(this);
   }
 
   /**
@@ -122,7 +126,7 @@ module.exports = class BotClient extends Client {
 
   /**
    * Register command file in the client
-   * @param {Command} cmd
+   * @param {import("@structures/Command")} cmd
    */
   loadCommand(cmd) {
     // Check if category is disabled
