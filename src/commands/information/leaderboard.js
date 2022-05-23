@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Util } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const { getInvitesLb } = require("@schemas/Member");
 const { getXpLb } = require("@schemas/MemberStats");
@@ -71,7 +71,7 @@ async function getXpLeaderboard({ guild }, author, settings) {
   for (let i = 0; i < lb.length; i++) {
     try {
       const user = await author.client.users.fetch(lb[i].member_id);
-      collector += `**#${(i + 1).toString()}** - ${user.tag}\n`;
+      collector += `**#${(i + 1).toString()}** - ${Util.escapeInlineCode(user.tag)}\n`;
     } catch (ex) {
       // Ignore
     }
@@ -99,7 +99,7 @@ async function getInviteLeaderboard({ guild }, author, settings) {
       if (memberId === "VANITY") collector += `**#${(i + 1).toString()}** - Vanity URL [${lb[i].invites}]\n`;
       else {
         const user = await author.client.users.fetch(lb[i].member_id);
-        collector += `**#${(i + 1).toString()}** - ${user.tag} [${lb[i].invites}]\n`;
+        collector += `**#${(i + 1).toString()}** - ${Util.escapeInlineCode(user.tag)} [${lb[i].invites}]\n`;
       }
     } catch (ex) {
       collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].invites}]\n`;

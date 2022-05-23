@@ -164,7 +164,9 @@ async function openTicket(guild, user, config) {
     ];
 
     if (config.support_roles.length > 0) {
-      config.support_roles.forEach((role) => {
+      config.support_roles.forEach((roleId) => {
+        const role = guild.roles.cache.get(roleId);
+        if (!role) return;
         permissionOverwrites.push({
           id: role,
           allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],

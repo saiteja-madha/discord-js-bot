@@ -97,7 +97,7 @@ module.exports = {
     }
 
     if (sub === "action") {
-      response = await setAction(interaction.options.getString("action"), data.settings);
+      response = await setAction(interaction.guild, interaction.options.getString("action"), data.settings);
     }
 
     await interaction.followUp(response);
