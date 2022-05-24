@@ -3,8 +3,9 @@
 This may help you if you are editing this script
 
 ## Structures(Folders)
-
+```
 ◟ dashboard - Website, Socket and routes
+```
 
           ◟ src
 ╠ /commands - Bot commands and slash commands
