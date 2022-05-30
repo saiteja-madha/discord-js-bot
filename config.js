@@ -6,7 +6,7 @@ module.exports = {
     SLASH: true, // Should the interactions be enabled
     CONTEXT: false, // Should contexts be enabled
     GLOBAL: false, // Should the interactions be registered globally
-    TEST_GUILD_ID: "896227692549132338", // Guild ID where the interactions should be registered. [** Test you commands here first **]
+    TEST_GUILD_ID: "xxxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",
