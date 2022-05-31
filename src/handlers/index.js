@@ -7,5 +7,7 @@ module.exports = {
   inviteHandler: require("./invite"),
   reactionRoleHandler: require("./reactionRoles"),
   statsHandler: require("./stats"),
+  suggestionHandler: require("./suggestion"),
+  ticketHandler: require("./ticket"),
   translationHandler: require("./translation"),
 };

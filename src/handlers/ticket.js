@@ -5,6 +5,7 @@ const { closeTicket, openTicket } = require("@utils/ticketUtils");
  * @param {import("discord.js").ButtonInteraction} interaction
  */
 async function handleTicketOpen(interaction) {
+  await interaction.deferReply({ ephemeral: true });
   const config = await getTicketConfig(interaction.guildId, interaction.channelId, interaction.message.id);
   if (!config) return;
 
@@ -35,6 +36,7 @@ async function handleTicketOpen(interaction) {
  * @param {import("discord.js").ButtonInteraction} interaction
  */
 async function handleTicketClose(interaction) {
+  await interaction.deferReply({ ephemeral: true });
   const status = await closeTicket(interaction.channel, interaction.user);
   if (status === "MISSING_PERMISSIONS") {
     return interaction.followUp("Cannot close the ticket, missing permissions. Contact server manager for help!");

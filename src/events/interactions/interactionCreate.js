@@ -1,7 +1,5 @@
 const { getSettings } = require("@schemas/Guild");
-const { handleTicketOpen, handleTicketClose } = require("@src/handlers/ticket");
-const { handleApproveBtn, handleRejectBtn, handleDeleteBtn } = require("@src/handlers/suggestion");
-const { commandHandler, contextHandler, statsHandler } = require("@src/handlers");
+const { commandHandler, contextHandler, statsHandler, suggestionHandler, ticketHandler } = require("@src/handlers");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -14,7 +12,7 @@ module.exports = async (client, interaction) => {
       .catch(() => {});
   }
 
-  // Slash Command
+  // Slash Commands
   if (interaction.isCommand()) {
     return commandHandler.handleSlashCommand(interaction);
   }
@@ -26,31 +24,37 @@ module.exports = async (client, interaction) => {
     else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
   }
 
-  // Custom Buttons
+  // Buttons
   else if (interaction.isButton()) {
-    // ticket create
-    if (interaction.customId === "TICKET_CREATE") {
-      await interaction.deferReply({ ephemeral: true });
-      await handleTicketOpen(interaction);
-    }
+    switch (interaction.customId) {
+      case "TICKET_CREATE":
+        return ticketHandler.handleTicketOpen(interaction);
 
-    // ticket close
-    if (interaction.customId === "TICKET_CLOSE") {
-      await interaction.deferReply({ ephemeral: true });
-      await handleTicketClose(interaction);
-    }
+      case "TICKET_CLOSE":
+        return ticketHandler.handleTicketClose(interaction);
 
-    // Suggestion
-    if (interaction.customId === "SUGGEST_APPROVE") {
-      await handleApproveBtn(interaction);
-    }
+      case "SUGGEST_APPROVE":
+        return suggestionHandler.handleApproveBtn(interaction);
 
-    if (interaction.customId === "SUGGEST_REJECT") {
-      await handleRejectBtn(interaction);
-    }
+      case "SUGGEST_REJECT":
+        return suggestionHandler.handleRejectBtn(interaction);
 
-    if (interaction.customId === "SUGGEST_DELETE") {
-      await handleDeleteBtn(interaction);
+      case "SUGGEST_DELETE":
+        return suggestionHandler.handleDeleteBtn(interaction);
+    }
+  }
+
+  // Modals
+  else if (interaction.isModalSubmit()) {
+    switch (interaction.customId) {
+      case "SUGGEST_APPROVE_MODAL":
+        return suggestionHandler.handleApproveModal(interaction);
+
+      case "SUGGEST_REJECT_MODAL":
+        return suggestionHandler.handleRejectModal(interaction);
+
+      case "SUGGEST_DELETE_MODAL":
+        return suggestionHandler.handleDeleteModal(interaction);
     }
   }
 

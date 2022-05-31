@@ -1,9 +1,8 @@
 const { getSettings } = require("@schemas/Guild");
 const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
 const { SUGGESTIONS } = require("@root/config");
-const { MessageActionRow, MessageButton } = require("discord.js");
+const { MessageActionRow, MessageButton, Modal, TextInputComponent } = require("discord.js");
 const { stripIndents } = require("common-tags");
-const { Modal, showModal } = require("discord-modals");
 
 /**
  * @param {import('discord.js').Message} message
@@ -242,63 +241,90 @@ async function deleteSuggestion(member, channel, messageId, reason) {
  * @param {import('discord.js').ButtonInteraction} interaction
  */
 async function handleApproveBtn(interaction) {
-  const modal = new Modal().setCustomId("SUGGEST_APPROVE_MODAL").setTitle("Approve Suggestion").addComponents({
-    customId: "reason",
-    label: "Reason",
-    type: "TEXT_INPUT",
-    style: "LONG",
-    minLength: 4,
-    required: false,
-  });
+  await interaction.showModal(
+    new Modal({
+      title: "Approve Suggestion",
+      customId: "SUGGEST_APPROVE_MODAL",
+      components: [
+        new MessageActionRow().addComponents([
+          new TextInputComponent().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+        ]),
+      ],
+    })
+  );
+}
 
-  showModal(modal, {
-    client: interaction.client,
-    interaction,
-  });
+/**
+ * @param {import('discord.js').ModalSubmitInteraction} modal
+ */
+async function handleApproveModal(modal) {
+  await modal.deferReply({ ephemeral: true });
+  const reason = modal.fields.getTextInputValue("reason");
+  const response = await approveSuggestion(modal.member, modal.channel, modal.message.id, reason);
+  await modal.followUp(response);
 }
 
 /**
  * @param {import('discord.js').ButtonInteraction} interaction
  */
 async function handleRejectBtn(interaction) {
-  const modal = new Modal().setCustomId("SUGGEST_REJECT_MODAL").setTitle("Reject Suggestion").addComponents({
-    customId: "reason",
-    label: "Reason",
-    type: "TEXT_INPUT",
-    style: "LONG",
-    minLength: 4,
-    required: false,
-  });
+  await interaction.showModal(
+    new Modal({
+      title: "Reject Suggestion",
+      customId: "SUGGEST_REJECT_MODAL",
+      components: [
+        new MessageActionRow().addComponents([
+          new TextInputComponent().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+        ]),
+      ],
+    })
+  );
+}
 
-  showModal(modal, {
-    client: interaction.client,
-    interaction,
-  });
+/**
+ * @param {import('discord.js').ModalSubmitInteraction} modal
+ */
+async function handleRejectModal(modal) {
+  await modal.deferReply({ ephemeral: true });
+  const reason = modal.fields.getTextInputValue("reason");
+  const response = await rejectSuggestion(modal.member, modal.channel, modal.message.id, reason);
+  await modal.followUp(response);
 }
 
 /**
  * @param {import('discord.js').ButtonInteraction} interaction
  */
 async function handleDeleteBtn(interaction) {
-  const modal = new Modal().setCustomId("SUGGEST_DELETE_MODAL").setTitle("Delete Suggestion").addComponents({
-    customId: "reason",
-    label: "Reason",
-    type: "TEXT_INPUT",
-    style: "LONG",
-    minLength: 4,
-    required: false,
-  });
+  await interaction.showModal(
+    new Modal({
+      title: "Delete Suggestion",
+      customId: "SUGGEST_DELETE_MODAL",
+      components: [
+        new MessageActionRow().addComponents([
+          new TextInputComponent().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+        ]),
+      ],
+    })
+  );
+}
 
-  showModal(modal, {
-    client: interaction.client,
-    interaction,
-  });
+/**
+ * @param {import('discord.js').ModalSubmitInteraction} modal
+ */
+async function handleDeleteModal(modal) {
+  await modal.deferReply({ ephemeral: true });
+  const reason = modal.fields.getTextInputValue("reason");
+  const response = await deleteSuggestion(modal.member, modal.channel, modal.message.id, reason);
+  await modal.followUp({ content: response, ephemeral: true });
 }
 
 module.exports = {
   handleApproveBtn,
+  handleApproveModal,
   handleRejectBtn,
+  handleRejectModal,
   handleDeleteBtn,
+  handleDeleteModal,
   approveSuggestion,
   rejectSuggestion,
   deleteSuggestion,

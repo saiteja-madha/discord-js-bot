@@ -9,7 +9,6 @@ const CommandCategory = require("./CommandCategory");
 const erelaHandler = require("../handlers/erela");
 const giveawaysHandler = require("../handlers/giveaway");
 const { DiscordTogether } = require("discord-together");
-const discordModals = require("discord-modals");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -68,9 +67,6 @@ module.exports = class BotClient extends Client {
 
     // Discord Together
     this.discordTogether = new DiscordTogether(this);
-
-    // Discord modals
-    discordModals(this);
   }
 
   /**
