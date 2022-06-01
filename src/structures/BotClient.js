@@ -1,7 +1,7 @@
 const { Client, Collection, Intents, WebhookClient } = require("discord.js");
 const path = require("path");
 const { table } = require("table");
-const logger = require("../helpers/logger");
+const Logger = require("@helpers/logger");
 const { recursiveReadDirSync } = require("../helpers/Loader");
 const { validateCommand, validateContext } = require("../helpers/Validator");
 const { schemas } = require("@src/database/mongoose");
@@ -60,7 +60,7 @@ module.exports = class BotClient extends Client {
     if (this.config.GIVEAWAYS.ENABLED) this.giveawaysManager = giveawaysHandler(this);
 
     // Logger
-    this.logger = logger;
+    this.logger = Logger;
 
     // Database
     this.database = schemas;
