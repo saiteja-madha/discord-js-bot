@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
-const { diffHours, getRemainingTime } = require("@utils/miscUtils");
+const { diffHours, getRemainingTime } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}

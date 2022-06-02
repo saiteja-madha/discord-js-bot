@@ -1,4 +1,4 @@
-const { banTarget } = require("@utils/modUtils");
+const { banTarget } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}

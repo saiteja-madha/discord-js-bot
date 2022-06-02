@@ -1,4 +1,4 @@
-const { deafenTarget } = require("@utils/modUtils");
+const { deafenTarget } = require("@helpers/ModUtils");
 
 module.exports = async ({ member }, target, reason) => {
   const response = await deafenTarget(member, target, reason);

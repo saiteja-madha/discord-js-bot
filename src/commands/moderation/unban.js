@@ -1,4 +1,4 @@
-const { unBanTarget } = require("@utils/modUtils");
+const { unBanTarget } = require("@helpers/ModUtils");
 const { MessageActionRow, MessageSelectMenu } = require("discord.js");
 
 /**

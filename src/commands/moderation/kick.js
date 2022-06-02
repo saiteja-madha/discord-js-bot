@@ -1,5 +1,4 @@
-const { kickTarget } = require("@utils/modUtils");
-const { resolveMember } = require("@utils/guildUtils");
+const { kickTarget } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -34,7 +33,7 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
     const reason = message.content.split(args[0])[1].trim();
     const response = await kick(message.member, target, reason);

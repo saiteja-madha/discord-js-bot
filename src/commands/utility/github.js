@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { MESSAGES } = require("@root/config.js");
-const { getJson } = require("@utils/httpUtils");
+const { getJson } = require("@helpers/HttpUtils");
 const { stripIndent } = require("common-tags");
 
 /**

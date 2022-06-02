@@ -1,5 +1,3 @@
-const { getMemberStats } = require("@utils/guildUtils");
-
 /**
  * @type {import("@structures/Command")}
  */
@@ -72,7 +70,7 @@ module.exports = {
 async function setupCounter(guild, type, name, settings) {
   let channelName = name;
 
-  const stats = await getMemberStats(guild);
+  const stats = await guild.fetchMemberStats();
   if (type === "USERS") channelName += ` : ${stats[0]}`;
   else if (type === "MEMBERS") channelName += ` : ${stats[2]}`;
   else if (type === "BOTS") channelName += ` : ${stats[1]}`;

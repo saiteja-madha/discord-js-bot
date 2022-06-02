@@ -2,7 +2,6 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { SUGGESTIONS } = require("@root/config");
 const { addSuggestion } = require("@schemas/Suggestions");
 const { stripIndent } = require("common-tags");
-const { sendMessage } = require("@utils/botUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -32,7 +31,7 @@ module.exports = {
   async messageRun(message, args, data) {
     const suggestion = args.join(" ");
     const response = await suggest(message.member, suggestion, data.settings);
-    if (typeof response === "boolean") return sendMessage(message.channel, "Your suggestion has been submitted!", 5);
+    if (typeof response === "boolean") return message.channel.safeSend("Your suggestion has been submitted!", 5);
     else await message.safeReply(response);
   },
 

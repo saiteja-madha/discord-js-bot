@@ -1,5 +1,6 @@
-const { canSendEmbeds } = require("@utils/guildUtils");
-
+/**
+ * @type {import("@structures/Command")}
+ */
 module.exports = {
   name: "modlog",
   description: "enable or disable moderation logs",
@@ -45,9 +46,8 @@ module.exports = {
 };
 
 async function setChannel(targetChannel, settings) {
-  if (targetChannel) {
-    if (!canSendEmbeds(targetChannel))
-      return "Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";
+  if (targetChannel && !targetChannel.canSendEmbeds()) {
+    return "Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";
   }
 
   settings.modlog_channel = targetChannel?.id;

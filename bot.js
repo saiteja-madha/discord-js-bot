@@ -1,9 +1,13 @@
 require("dotenv").config();
 require("module-alias/register");
-require("@helpers/extenders");
+
+// register extenders
+require("@helpers/extenders/Message");
+require("@helpers/extenders/Guild");
+require("@helpers/extenders/GuildChannel");
 
 const path = require("path");
-const { checkForUpdates } = require("@utils/botUtils");
+const { checkForUpdates } = require("@helpers/BotUtils");
 const { initializeMongoose } = require("@src/database/mongoose");
 const { BotClient } = require("@src/structures");
 const { validateConfiguration } = require("@helpers/Validator");

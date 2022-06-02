@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageAttachment } = require("discord.js");
-const { getBuffer } = require("@utils/httpUtils");
-const { getImageFromCommand, getFilter } = require("@utils/imageUtils");
-const { EMBED_COLORS } = require("@root/config.js");
+const { getBuffer } = require("@helpers/HttpUtils");
+const { getImageFromMessage } = require("@helpers/BotUtils");
+const { EMBED_COLORS, IMAGE } = require("@root/config.js");
 
 const availableFilters = ["blur", "burn", "gay", "greyscale", "invert", "pixelate", "sepia", "sharpen"];
 
@@ -44,7 +44,7 @@ module.exports = {
   },
 
   async messageRun(message, args, data) {
-    const image = await getImageFromCommand(message, args);
+    const image = await getImageFromMessage(message, args);
 
     // use invoke as an endpoint
     const url = getFilter(data.invoke.toLowerCase(), image);
@@ -86,3 +86,9 @@ module.exports = {
     await interaction.followUp({ embeds: [embed], files: [attachment] });
   },
 };
+
+function getFilter(filter, image) {
+  const endpoint = new URL(`${IMAGE.BASE_API}/filters/${filter}`);
+  endpoint.searchParams.append("image", image);
+  return endpoint.href;
+}

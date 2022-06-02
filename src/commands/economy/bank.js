@@ -1,4 +1,3 @@
-const { resolveMember } = require("@root/src/utils/guildUtils");
 const balance = require("./sub/balance");
 const deposit = require("./sub/deposit");
 const transfer = require("./sub/transfer");
@@ -103,7 +102,7 @@ module.exports = {
     let response;
 
     if (sub === "balance") {
-      const resolved = (await resolveMember(message, args[1])) || message.member;
+      const resolved = (await message.guild.resolveMember(args[1])) || message.member;
       response = await balance(resolved.user);
     }
 
@@ -124,7 +123,7 @@ module.exports = {
     //
     else if (sub === "transfer") {
       if (args.length < 3) return message.safeReply("Provide a valid user and coins to transfer");
-      const target = await resolveMember(message, args[1], true);
+      const target = await message.guild.resolveMember(args[1], true);
       if (!target) return message.safeReply("Provide a valid user to transfer coins to");
       const coins = parseInt(args[2]);
       if (isNaN(coins)) return message.safeReply("Provide a valid number of coins you wish to transfer");

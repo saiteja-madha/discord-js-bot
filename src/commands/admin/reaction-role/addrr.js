@@ -1,7 +1,6 @@
-const { findMatchingRoles, getMatchingChannels } = require("@utils/guildUtils");
 const { addReactionRole, getReactionRoles } = require("@schemas/Message");
 const { Util } = require("discord.js");
-const { parsePermissions } = require("@utils/botUtils");
+const { parsePermissions } = require("@helpers/Utils");
 
 const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
 
@@ -51,12 +50,12 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const targetChannel = getMatchingChannels(message.guild, args[0]);
+    const targetChannel = message.guild.findMatchingChannels(args[0]);
     if (targetChannel.length === 0) return message.safeReply(`No channels found matching ${args[0]}`);
 
     const targetMessage = args[1];
 
-    const role = findMatchingRoles(message.guild, args[3])[0];
+    const role = message.guild.findMatchingRoles(args[3])[0];
     if (!role) return message.safeReply(`No roles found matching ${args[3]}`);
 
     const reaction = args[2];

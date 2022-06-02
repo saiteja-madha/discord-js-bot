@@ -1,4 +1,4 @@
-const { timeformat } = require("@utils/miscUtils");
+const { timeformat } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}

@@ -1,4 +1,4 @@
-const { disconnectTarget } = require("@utils/modUtils");
+const { disconnectTarget } = require("@helpers/ModUtils");
 
 module.exports = async ({ member }, target, reason) => {
   const response = await disconnectTarget(member, target, reason);

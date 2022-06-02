@@ -1,5 +1,4 @@
 const { getMember } = require("@schemas/Member");
-const { resolveMember } = require("@utils/guildUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -27,7 +26,7 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const target = args.length > 0 && (await resolveMember(message, args[0]));
+    const target = await message.guild.resolveMember(args[0]);
     const response = await importInvites(message, target?.user);
     await message.safeReply(response);
   },

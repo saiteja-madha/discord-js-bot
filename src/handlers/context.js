@@ -1,5 +1,5 @@
-const { parsePermissions } = require("@utils/botUtils");
-const { timeformat } = require("@utils/miscUtils");
+const { parsePermissions } = require("@helpers/Utils");
+const { timeformat } = require("@helpers/Utils");
 
 const cooldownCache = new Map();
 

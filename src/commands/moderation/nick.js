@@ -1,5 +1,4 @@
-const { memberInteract } = require("@utils/modUtils");
-const { resolveMember } = require("@utils/guildUtils");
+const { canModerate } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -66,7 +65,7 @@ module.exports = {
     const sub = args[0].toLowerCase();
 
     if (sub === "set") {
-      const target = await resolveMember(message, args[1]);
+      const target = await message.guild.resolveMember(args[1]);
       if (!target) return message.safeReply("Could not find matching member");
       const name = args.slice(2).join(" ");
       if (!name) return message.safeReply("Please specify a nickname");
@@ -77,7 +76,7 @@ module.exports = {
 
     //
     else if (sub === "reset") {
-      const target = await resolveMember(message, args[1]);
+      const target = await message.guild.resolveMember(args[1]);
       if (!target) return message.safeReply("Could not find matching member");
 
       const response = await nickname(message, target);
@@ -95,10 +94,10 @@ module.exports = {
 };
 
 async function nickname({ member, guild }, target, name) {
-  if (!memberInteract(member, target)) {
+  if (!canModerate(member, target)) {
     return `Oops! You cannot manage nickname of ${target.user.tag}`;
   }
-  if (!memberInteract(guild.me, target)) {
+  if (!canModerate(guild.me, target)) {
     return `Oops! I cannot manage nickname of ${target.user.tag}`;
   }
 

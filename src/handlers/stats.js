@@ -1,6 +1,5 @@
 const { getMemberStats } = require("@schemas/MemberStats");
-const { getRandomInt } = require("@utils/miscUtils");
-const { sendMessage } = require("@utils/botUtils");
+const { getRandomInt } = require("@helpers/Utils");
 
 const cooldownCache = new Map();
 const voiceStates = new Map();
@@ -65,7 +64,7 @@ module.exports = {
       lvlUpMessage = parse(lvlUpMessage, message.member, level);
       const lvlUpChannel = message.channel;
 
-      sendMessage(lvlUpChannel, lvlUpMessage);
+      lvlUpChannel.safeSend(lvlUpMessage);
     }
     await statsDb.save();
     cooldownCache.set(key, Date.now());

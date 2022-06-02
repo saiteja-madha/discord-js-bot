@@ -5,10 +5,9 @@ const { EMBED_COLORS } = require("@root/config.js");
 const { createNewTicket } = require("@schemas/Message");
 
 // Utils
-const { parsePermissions } = require("@utils/botUtils");
-const { canSendEmbeds, findMatchingRoles, getMatchingChannels } = require("@utils/guildUtils");
-const { isTicketChannel, closeTicket, closeAllTickets } = require("@utils/ticketUtils");
-const { isHex } = require("@utils/miscUtils");
+const { parsePermissions } = require("@helpers/Utils");
+const { isTicketChannel, closeTicket, closeAllTickets } = require("@handlers/ticket");
+const { isHex } = require("@helpers/Utils");
 
 const SETUP_TIMEOUT = 30 * 1000;
 
@@ -175,7 +174,7 @@ module.exports = {
     // log ticket
     else if (input === "log") {
       if (args.length < 2) return message.safeReply("Please provide a channel where ticket logs must be sent");
-      const target = getMatchingChannels(message.guild, args[1]);
+      const target = message.guild.findMatchingChannels(args[1]);
       if (target.length === 0) return message.safeReply("Could not find any matching channel");
       response = await setupLogChannel(target[0], data.settings);
     }
@@ -249,7 +248,7 @@ module.exports = {
         return interaction.followUp("I do not have permissions to manage this role");
       }
 
-      if (!canSendEmbeds(channel)) {
+      if (!channel.canSendEmbeds()) {
         return interaction.followUp(`I need do not have permissions to send embeds in ${channel}`);
       }
 
@@ -341,7 +340,7 @@ async function runInteractiveSetup({ channel, guild, author }) {
 
     if (query === "cancel") return reply.reply("Ticket setup has been cancelled");
     if (query !== "none") {
-      const roles = findMatchingRoles(guild, query);
+      const roles = guild.findMatchingRoles(query);
       if (roles.length === 0) {
         return reply.reply(`Uh oh, I couldn't find any roles called ${query}! Ticket setup has been cancelled`);
       }
@@ -386,7 +385,7 @@ async function setupTicket(guild, channel, title, role, color) {
 }
 
 async function setupLogChannel(target, settings) {
-  if (!canSendEmbeds(target)) return `Oops! I do have have permission to send embed to ${target}`;
+  if (!target.canSendEmbeds()) return `Oops! I do have have permission to send embed to ${target}`;
 
   settings.ticket.log_channel = target.id;
   await settings.save();

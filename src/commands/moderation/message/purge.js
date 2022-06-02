@@ -1,5 +1,4 @@
-const { purgeMessages } = require("@utils/modUtils");
-const { sendMessage } = require("@utils/botUtils");
+const { purgeMessages } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -25,7 +24,7 @@ module.exports = {
     const response = await purgeMessages(message.member, message.channel, "ALL", amount);
 
     if (typeof response === "number") {
-      return sendMessage(message.channel, `Successfully deleted ${response} messages`, 5);
+      return message.channel.safeSend(`Successfully deleted ${response} messages`, 5);
     } else if (response === "BOT_PERM") {
       return message.safeReply("I don't have `Read Message History` & `Manage Messages` to delete messages");
     } else if (response === "MEMBER_PERM") {

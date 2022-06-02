@@ -81,11 +81,10 @@
   ],
   "_moduleAliases": {
     "@root": ".",
-    "@commands": "src/commands/",
+    "@handlers": "src/handlers/",
     "@helpers": "src/helpers/",
     "@schemas": "src/database/schemas/",
     "@src": "src/",
-    "@structures": "src/structures/",
-    "@utils": "src/utils/"
+    "@structures": "src/structures/"
   }
 }

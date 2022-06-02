@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
-const { getRandomInt } = require("@utils/miscUtils");
+const { getRandomInt } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}

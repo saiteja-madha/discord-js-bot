@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { getJson } = require("@utils/httpUtils");
-const { getRandomInt } = require("@utils/miscUtils");
+const { getJson } = require("@helpers/HttpUtils");
+const { getRandomInt } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}

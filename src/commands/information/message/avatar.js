@@ -1,4 +1,3 @@
-const { resolveMember } = require("@utils/guildUtils");
 const avatarInfo = require("../shared/avatar");
 
 /**
@@ -15,7 +14,7 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const target = (args.length && (await resolveMember(message, args[0]))) || message.member;
+    const target = (await message.guild.resolveMember(args[0])) || message.member;
     const response = avatarInfo(target.user);
     await message.safeReply(response);
   },

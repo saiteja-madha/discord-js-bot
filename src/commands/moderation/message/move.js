@@ -1,4 +1,3 @@
-const { resolveMember, getMatchingChannels } = require("@utils/guildUtils");
 const move = require("../shared/move");
 
 /**
@@ -17,10 +16,10 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
 
-    const channels = getMatchingChannels(message.guild, args[1]);
+    const channels = message.guild.findMatchingChannels(args[1]);
     if (!channels.length) return message.safeReply("No matching channels found");
     const targetChannel = channels.pop();
     if (!targetChannel.type === "GUILD_VOICE" && !targetChannel.type === "GUILD_STAGE_VOICE") {

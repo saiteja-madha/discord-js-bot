@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getJson } = require("@utils/httpUtils");
+const { getJson } = require("@helpers/HttpUtils");
 
 const API_KEY = process.env.WEATHERSTACK_KEY;
 
