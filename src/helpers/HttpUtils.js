@@ -1,6 +1,6 @@
 const ISO6391 = require("iso-639-1");
 const sourcebin = require("sourcebin_js");
-const { error, debug } = require("@helpers/logger");
+const { error, debug } = require("@helpers/Logger");
 const fetch = require("node-fetch");
 const gTranslate = require("@vitalets/google-translate-api");
 

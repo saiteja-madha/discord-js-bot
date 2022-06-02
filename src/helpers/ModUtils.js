@@ -3,7 +3,7 @@ const { MODERATION } = require("@root/config");
 
 // Utils
 const { containsLink } = require("@helpers/Utils");
-const { error } = require("@helpers/logger");
+const { error } = require("@helpers/Logger");
 
 // Schemas
 const { getSettings } = require("@schemas/Guild");

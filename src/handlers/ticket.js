@@ -7,7 +7,7 @@ const { getTicketConfig } = require("@schemas/Message");
 
 // helpers
 const { postToBin } = require("@helpers/HttpUtils");
-const { error } = require("@helpers/logger");
+const { error } = require("@helpers/Logger");
 
 const OPEN_PERMS = ["MANAGE_CHANNELS"];
 const CLOSE_PERMS = ["MANAGE_CHANNELS", "READ_MESSAGE_HISTORY"];

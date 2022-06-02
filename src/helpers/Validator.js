@@ -1,7 +1,7 @@
 const CommandCategory = require("@structures/CommandCategory");
 const permissions = require("./permissions");
 const config = require("@root/config");
-const { log, warn, error } = require("./logger");
+const { log, warn, error } = require("./Logger");
 
 module.exports = class Validator {
   static validateConfiguration() {

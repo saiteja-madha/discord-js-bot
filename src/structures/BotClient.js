@@ -1,7 +1,7 @@
 const { Client, Collection, Intents, WebhookClient } = require("discord.js");
 const path = require("path");
 const { table } = require("table");
-const Logger = require("../helpers/logger");
+const Logger = require("../helpers/Logger");
 const { recursiveReadDirSync } = require("../helpers/Utils");
 const { validateCommand, validateContext } = require("../helpers/Validator");
 const { schemas } = require("@src/database/mongoose");
