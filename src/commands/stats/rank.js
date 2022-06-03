@@ -1,7 +1,6 @@
 const { MessageAttachment } = require("discord.js");
 const { EMBED_COLORS, IMAGE } = require("@root/config");
-const { getBuffer } = require("@utils/httpUtils");
-const { resolveMember } = require("@utils/guildUtils");
+const { getBuffer } = require("@helpers/HttpUtils");
 const { getMemberStats, getXpLb } = require("@schemas/MemberStats");
 
 /**
@@ -30,7 +29,7 @@ module.exports = {
   },
 
   async messageRun(message, args, data) {
-    const member = (await resolveMember(message, args[0])) || message.member;
+    const member = (await message.guild.resolveMember(args[0])) || message.member;
     const response = await getRank(message, member, data.settings);
     await message.safeReply(response);
   },

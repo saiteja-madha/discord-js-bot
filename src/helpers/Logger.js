@@ -1,0 +1,89 @@
+const config = require("@root/config");
+const { MessageEmbed, WebhookClient } = require("discord.js");
+const pino = require("pino");
+
+const webhookLogger = process.env.ERROR_LOGS ? new WebhookClient({ url: process.env.ERROR_LOGS }) : undefined;
+
+const today = new Date();
+const pinoLogger = pino.default(
+  {
+    level: "debug",
+  },
+  pino.multistream([
+    {
+      level: "info",
+      stream: pino.transport({
+        target: "pino-pretty",
+        options: {
+          colorize: true,
+          translateTime: "yyyy-mm-dd HH:mm:ss",
+          ignore: "pid,hostname",
+          singleLine: false,
+          hideObject: true,
+        },
+      }),
+    },
+    {
+      level: "debug",
+      stream: pino.destination({
+        dest: `${process.cwd()}/logs/combined-${today.getFullYear()}.${today.getMonth()}.${today.getDate()}.log`,
+        sync: false,
+      }),
+    },
+  ])
+);
+
+function sendWebhook(content, err) {
+  if (!content && !err) return;
+  const errString = err?.stack || err;
+
+  const embed = new MessageEmbed().setColor(config.EMBED_COLORS.ERROR).setAuthor({ name: err?.name || "Error" });
+
+  if (errString)
+    embed.setDescription(
+      "```js\n" + (errString.length > 4096 ? `${errString.substr(0, 4000)}...` : errString) + "\n```"
+    );
+  if (err?.description) embed.addField("Description", content);
+  if (err?.message) embed.addField("Message", err?.message);
+
+  webhookLogger.send({ username: "Logs", embeds: [embed] }).catch((ex) => {});
+}
+
+module.exports = class Logger {
+  /**
+   * @param {string} content
+   */
+  static success(content) {
+    pinoLogger.info(content);
+  }
+
+  /**
+   * @param {string} content
+   */
+  static log(content) {
+    pinoLogger.info(content);
+  }
+
+  /**
+   * @param {string} content
+   */
+  static warn(content) {
+    pinoLogger.warn(content);
+  }
+
+  /**
+   * @param {string} content
+   * @param {object} ex
+   */
+  static error(content, ex) {
+    pinoLogger.error(ex, content);
+    if (webhookLogger) sendWebhook(content, ex);
+  }
+
+  /**
+   * @param {string} content
+   */
+  static debug(content) {
+    pinoLogger.debug(content);
+  }
+};

@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
-const { sendMessage } = require("@utils/botUtils");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -31,6 +30,6 @@ module.exports = async (client, message) => {
       .addField("Everyone?", everyone.toString(), true)
       .setFooter({ text: `Sent at: ${message.createdAt}` });
 
-    sendMessage(logChannel, { embeds: [embed] });
+    logChannel.safeSend({ embeds: [embed] });
   }
 };

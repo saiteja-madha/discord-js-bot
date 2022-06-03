@@ -1,5 +1,4 @@
-const { purgeMessages } = require("@utils/modUtils");
-const { sendMessage } = require("@utils/botUtils");
+const { purgeMessages } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -195,7 +194,7 @@ module.exports = {
     if (typeof response === "number") {
       const message = `Successfully cleaned ${response} messages in ${channel}`;
       if (channel.id !== interaction.channelId) await interaction.followUp(message);
-      else await sendMessage(channel, message, 5);
+      else await channel.safeSend(message, 5);
       return;
     }
 

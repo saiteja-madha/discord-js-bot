@@ -1,4 +1,4 @@
-const { cacheGuildInvites, resetInviteCache } = require("@src/handlers/invite");
+const { cacheGuildInvites, resetInviteCache } = require("@handlers/invite");
 
 /**
  * @type {import("@structures/Command")}

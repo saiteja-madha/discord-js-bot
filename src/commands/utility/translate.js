@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { translate } = require("@utils/httpUtils");
+const { translate } = require("@helpers/HttpUtils");
 const { GOOGLE_TRANSLATE } = require("@src/data.json");
 
 // Discord limits to a maximum of 25 choices for slash command

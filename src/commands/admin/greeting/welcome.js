@@ -1,7 +1,5 @@
-const { isHex } = require("@utils/miscUtils");
-const { buildGreeting } = require("@src/handlers/greeting");
-const { canSendEmbeds } = require("@utils/guildUtils");
-const { sendMessage } = require("@utils/botUtils");
+const { isHex } = require("@helpers/Utils");
+const { buildGreeting } = require("@handlers/greeting");
 
 /**
  * @type {import("@structures/Command")}
@@ -291,7 +289,7 @@ async function sendPreview(settings, member) {
   if (!targetChannel) return "No channel is configured to send welcome message";
 
   const response = await buildGreeting(member, "WELCOME", settings.welcome);
-  await sendMessage(targetChannel, response);
+  await targetChannel.safeSend(response);
 
   return `Sent welcome preview to ${targetChannel.toString()}`;
 }
@@ -304,7 +302,7 @@ async function setStatus(settings, status) {
 }
 
 async function setChannel(settings, channel) {
-  if (!canSendEmbeds(channel)) {
+  if (!channel.canSendEmbeds()) {
     return (
       "Ugh! I cannot send greeting to that channel? I need the `Write Messages` and `Embed Links` permissions in " +
       channel.toString()

@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageAttachment } = require("discord.js");
-const { getBuffer } = require("@utils/httpUtils");
-const { getImageFromCommand, getGenerator } = require("@utils/imageUtils");
-const { EMBED_COLORS } = require("@root/config.js");
+const { getBuffer } = require("@helpers/HttpUtils");
+const { getImageFromMessage } = require("@helpers/BotUtils");
+const { EMBED_COLORS, IMAGE } = require("@root/config.js");
 
 const availableGenerators = [
   "ad",
@@ -69,7 +69,7 @@ module.exports = {
   },
 
   async messageRun(message, args, data) {
-    const image = await getImageFromCommand(message, args);
+    const image = await getImageFromMessage(message, args);
 
     // use invoke as an endpoint
     const url = getGenerator(data.invoke.toLowerCase(), image);
@@ -111,3 +111,9 @@ module.exports = {
     await interaction.followUp({ embeds: [embed], files: [attachment] });
   },
 };
+
+function getGenerator(genName, image) {
+  const endpoint = new URL(`${IMAGE.BASE_API}/generators/${genName}`);
+  endpoint.searchParams.append("image", image);
+  return endpoint.href;
+}

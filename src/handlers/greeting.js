@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
-const { sendMessage } = require("@utils/botUtils");
 
 /**
  * @param {string} content
@@ -102,7 +101,7 @@ async function sendWelcome(member, inviterData = {}) {
   // build welcome message
   const response = await buildGreeting(member, "WELCOME", config, inviterData);
 
-  sendMessage(channel, response);
+  channel.safeSend(response);
 }
 
 /**
@@ -121,7 +120,7 @@ async function sendFarewell(member, inviterData = {}) {
   // build farewell message
   const response = await buildGreeting(member, "FAREWELL", config, inviterData);
 
-  sendMessage(channel, response);
+  channel.safeSend(response);
 }
 
 module.exports = {

@@ -1,7 +1,6 @@
-const { getEffectiveInvites } = require("@src/handlers/invite");
+const { getEffectiveInvites } = require("@handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
 const { MessageEmbed } = require("discord.js");
-const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
 
 /**
@@ -29,7 +28,7 @@ module.exports = {
   },
 
   async messageRun(message, args, data) {
-    const target = (await resolveMember(message, args[0])) || message.member;
+    const target = (await message.guild.resolveMember(args[0])) || message.member;
     const response = await getInvites(message, target.user, data.settings);
     await message.safeReply(response);
   },

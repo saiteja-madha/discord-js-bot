@@ -1,5 +1,4 @@
-const { timeoutTarget } = require("@utils/modUtils");
-const { resolveMember } = require("@utils/guildUtils");
+const { timeoutTarget } = require("@helpers/ModUtils");
 const ems = require("enhanced-ms");
 
 /**
@@ -42,7 +41,7 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
 
     // parse time

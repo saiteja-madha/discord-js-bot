@@ -1,5 +1,3 @@
-const { findMatchingRoles } = require("@utils/guildUtils");
-
 /**
  * @type {import("@structures/Command")}
  */
@@ -51,7 +49,7 @@ module.exports = {
     if (input.toLowerCase() === "off") {
       response = await setAutoRole(message, null, data.settings);
     } else {
-      const roles = findMatchingRoles(message.guild, input);
+      const roles = message.guild.findMatchingRoles(input);
       if (roles.length === 0) response = "No matching roles found matching your query";
       else response = await setAutoRole(message, roles[0], data.settings);
     }
@@ -70,7 +68,7 @@ module.exports = {
         const role_id = interaction.options.getString("role_id");
         if (!role_id) return interaction.followUp("Please provide a role or role id");
 
-        const roles = findMatchingRoles(interaction.guild, role_id);
+        const roles = interaction.guild.findMatchingRoles(role_id);
         if (roles.length === 0) return interaction.followUp("No matching roles found matching your query");
         role = roles[0];
       }

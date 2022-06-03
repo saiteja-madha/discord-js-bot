@@ -1,7 +1,7 @@
 const { counterHandler, inviteHandler } = require("@src/handlers");
 const { cacheReactionRoles } = require("@schemas/Message");
 const { getSettings } = require("@schemas/Guild");
-const { updateCounterChannels } = require("@src/handlers/counter");
+const { updateCounterChannels } = require("@handlers/counter");
 
 /**
  * @param {import('@src/structures').BotClient} client

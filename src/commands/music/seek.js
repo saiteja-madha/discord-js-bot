@@ -1,6 +1,6 @@
-const { musicValidations } = require("@utils/botUtils");
+const { musicValidations } = require("@helpers/BotUtils");
 const prettyMs = require("pretty-ms");
-const { durationToMillis } = require("@utils/miscUtils");
+const { durationToMillis } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}

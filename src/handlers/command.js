@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const { OWNER_IDS, PREFIX, EMBED_COLORS } = require("@root/config");
-const { parsePermissions } = require("@utils/botUtils");
-const { timeformat } = require("@utils/miscUtils");
+const { parsePermissions } = require("@helpers/Utils");
+const { timeformat } = require("@helpers/Utils");
 const { getSettings } = require("@schemas/Guild");
 
 const cooldownCache = new Map();

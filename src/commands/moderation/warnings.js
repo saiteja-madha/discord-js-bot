@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const { resolveMember } = require("@utils/guildUtils");
 const { getWarningLogs, clearWarningLogs } = require("@schemas/ModLog");
 const { getMember } = require("@schemas/Member");
 
@@ -62,14 +61,14 @@ module.exports = {
     let response = "";
 
     if (sub === "list") {
-      const target = (await resolveMember(message, args[1], true)) || message.member;
+      const target = (await message.guild.resolveMember(args[1], true)) || message.member;
       if (!target) return message.safeReply(`No user found matching ${args[1]}`);
       response = await listWarnings(target, message);
     }
 
     //
     else if (sub === "clear") {
-      const target = await resolveMember(message, args[1], true);
+      const target = await message.guild.resolveMember(args[1], true);
       if (!target) return message.safeReply(`No user found matching ${args[1]}`);
       response = await clearWarnings(target, message);
     }

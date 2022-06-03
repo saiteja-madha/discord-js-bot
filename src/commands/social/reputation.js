@@ -1,7 +1,6 @@
-const { resolveMember } = require("@utils/guildUtils");
 const { getUser } = require("@schemas/User");
 const { MessageEmbed } = require("discord.js");
-const { diffHours, getRemainingTime } = require("@utils/miscUtils");
+const { diffHours, getRemainingTime } = require("@helpers/Utils");
 const { EMBED_COLORS } = require("@root/config");
 
 /**
@@ -67,7 +66,7 @@ module.exports = {
     if (sub === "view") {
       let target = message.author;
       if (args.length > 1) {
-        const resolved = (await resolveMember(message, args[1])) || message.member;
+        const resolved = (await message.guild.resolveMember(args[1])) || message.member;
         if (resolved) target = resolved.user;
       }
       response = await viewReputation(target);
@@ -75,7 +74,7 @@ module.exports = {
 
     // give
     else if (sub === "give") {
-      const target = await resolveMember(message, args[1]);
+      const target = await message.guild.resolveMember(args[1]);
       if (!target) return message.safeReply("Please provide a valid user to give reputation to");
       response = await giveReputation(message.author, target.user);
     }

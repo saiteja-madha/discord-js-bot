@@ -1,5 +1,4 @@
 const { Message } = require("discord.js");
-const { sendMessage } = require("@utils/botUtils");
 
 /**
  * @param {string|import('discord.js').MessagePayload|import('discord.js').MessageOptions} content
@@ -13,7 +12,7 @@ Message.prototype.safeReply = async function (content, seconds) {
 
   perms.push("READ_MESSAGE_HISTORY");
   if (this.channel.type !== "DM" && !this.channel.permissionsFor(this.guild.me).has(perms)) {
-    return sendMessage(this.channel, content, seconds);
+    return this.safeSend(content, seconds);
   }
 
   try {

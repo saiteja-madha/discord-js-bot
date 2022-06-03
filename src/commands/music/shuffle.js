@@ -1,4 +1,4 @@
-const { musicValidations } = require("@utils/botUtils");
+const { musicValidations } = require("@helpers/BotUtils");
 
 /**
  * @type {import("@structures/Command")}

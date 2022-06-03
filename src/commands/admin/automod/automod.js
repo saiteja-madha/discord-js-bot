@@ -1,7 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { stripIndent } = require("common-tags");
-const { getMatchingChannels } = require("@utils/guildUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -184,14 +183,14 @@ module.exports = {
 
     // whitelist add
     else if (input === "whitelistadd") {
-      const match = getMatchingChannels(message.guild, args[1]);
+      const match = message.guild.findMatchingChannels(args[1]);
       if (!match.length) return message.safeReply(`No channel found matching ${args[1]}`);
       response = await whiteListAdd(settings, match[0].id);
     }
 
     // whitelist remove
     else if (input === "whitelistremove") {
-      const match = getMatchingChannels(message.guild, args[1]);
+      const match = message.guild.findMatchingChannels(args[1]);
       if (!match.length) return message.safeReply(`No channel found matching ${args[1]}`);
       response = await whiteListRemove(settings, match[0].id);
     }

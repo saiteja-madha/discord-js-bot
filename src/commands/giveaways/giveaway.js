@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { parsePermissions } = require("@utils/botUtils");
+const { parsePermissions } = require("@helpers/Utils");
 const { EMBED_COLORS } = require("@root/config");
 const ems = require("enhanced-ms");
 

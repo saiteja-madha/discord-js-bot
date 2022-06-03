@@ -1,4 +1,4 @@
-const { getBuffer } = require("@utils/httpUtils");
+const { getBuffer } = require("@helpers/HttpUtils");
 const { MessageAttachment } = require("discord.js");
 
 const PROXY_TYPES = ["all", "http", "socks4", "socks5"];

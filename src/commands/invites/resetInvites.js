@@ -1,4 +1,3 @@
-const { resolveMember } = require("@utils/guildUtils");
 const { getMember } = require("@schemas/Member");
 
 /**
@@ -29,7 +28,7 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const target = await resolveMember(message, args[0], true);
+    const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.safeReply("Incorrect syntax. You must mention a target");
     const response = await clearInvites(message, target.user);
     await message.safeReply(response);

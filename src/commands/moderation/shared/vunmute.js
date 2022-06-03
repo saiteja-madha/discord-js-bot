@@ -1,4 +1,4 @@
-const { vUnmuteTarget } = require("@utils/modUtils");
+const { vUnmuteTarget } = require("@helpers/ModUtils");
 
 module.exports = async ({ member }, target, reason) => {
   const response = await vUnmuteTarget(member, target, reason);

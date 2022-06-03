@@ -4,7 +4,6 @@ const Facebook = require("erela.js-facebook");
 const Spotify = require("erela.js-spotify");
 const { MessageEmbed } = require("discord.js");
 const prettyMs = require("pretty-ms");
-const { sendMessage } = require("@utils/botUtils");
 
 /**
  * @param {import("@structures/BotClient")} client
@@ -57,7 +56,7 @@ module.exports = (client) => {
 
   erela.on("queueEnd", (player) => {
     const channel = client.channels.cache.get(player.textChannel);
-    sendMessage(channel, "Queue has ended.");
+    channel.safeSend("Queue has ended.");
     player.destroy();
   });
 
@@ -78,7 +77,7 @@ module.exports = (client) => {
 
     if (typeof track.displayThumbnail === "function") embed.setThumbnail(track.displayThumbnail("hqdefault"));
     if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
-    sendMessage(channel, { embeds: [embed] });
+    channel.safeSend({ embeds: [embed] });
   });
 
   return erela;

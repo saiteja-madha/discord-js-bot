@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
-const { timeformat } = require("@utils/miscUtils");
+const { timeformat } = require("@helpers/Utils");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config.js");
 const botstats = require("../shared/botstats");
 

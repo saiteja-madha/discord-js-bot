@@ -1,4 +1,4 @@
-const { moveTarget } = require("@utils/modUtils");
+const { moveTarget } = require("@helpers/ModUtils");
 
 module.exports = async ({ member }, target, reason, channel) => {
   const response = await moveTarget(member, target, reason, channel);

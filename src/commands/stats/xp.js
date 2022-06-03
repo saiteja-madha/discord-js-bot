@@ -1,5 +1,3 @@
-const { getMatchingChannels } = require("@utils/guildUtils");
-
 /**
  * @type {import("@structures/Command")}
  */
@@ -73,7 +71,7 @@ module.exports = {
 
       if (input === "off") channel = "off";
       else {
-        const match = getMatchingChannels(message.guild, input);
+        const match = message.guild.findMatchingChannels(input);
         if (match.length === 0) return message.safeReply("Invalid channel. Please provide a valid channel");
         channel = match[0];
       }

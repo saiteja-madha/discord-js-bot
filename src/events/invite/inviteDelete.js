@@ -1,4 +1,4 @@
-const { getInviteCache } = require("@src/handlers/invite");
+const { getInviteCache } = require("@handlers/invite");
 
 /**
  * @param {import('@src/structures').BotClient} client

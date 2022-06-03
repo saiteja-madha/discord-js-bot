@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { postToBin } = require("@utils/httpUtils");
+const { postToBin } = require("@helpers/HttpUtils");
 
 /**
  * @type {import("@structures/Command")}

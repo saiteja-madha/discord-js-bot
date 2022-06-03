@@ -8,7 +8,7 @@ const {
   MessageButton,
   CommandInteraction,
 } = require("discord.js");
-const { getCommandUsage, getSlashUsage } = require("@src/handlers/command");
+const { getCommandUsage, getSlashUsage } = require("@handlers/command");
 
 const CMDS_PER_PAGE = 5;
 const IDLE_TIMEOUT = 30;

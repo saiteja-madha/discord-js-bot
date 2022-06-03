@@ -1,7 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const { getMemberStats } = require("@schemas/MemberStats");
 const { EMBED_COLORS } = require("@root/config");
-const { resolveMember } = require("@utils/guildUtils");
 const { stripIndents } = require("common-tags");
 
 /**
@@ -29,7 +28,7 @@ module.exports = {
   },
 
   async messageRun(message, args, data) {
-    const target = (await resolveMember(message, args[0])) || message.member;
+    const target = (await message.guild.resolveMember(args[0])) || message.member;
     const response = await stats(target, data.settings);
     await message.safeReply(response);
   },

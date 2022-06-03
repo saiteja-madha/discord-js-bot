@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { resolveMember } = require("@utils/guildUtils");
 
 /**
  * @type {import("@structures/Command")}
@@ -27,7 +26,7 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const target = (await resolveMember(message, args[0])) || message.member;
+    const target = (await message.guild.resolveMember(args[0])) || message.member;
     const response = await getInviteCodes(message, target.user);
     await message.safeReply(response);
   },

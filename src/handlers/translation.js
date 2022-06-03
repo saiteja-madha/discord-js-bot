@@ -2,9 +2,8 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const { isTranslated, logTranslation } = require("@schemas/TranslateLog");
 const data = require("@src/data.json");
 const { getLanguagesFromEmoji } = require("country-emoji-languages");
-const { sendMessage } = require("@utils/botUtils");
-const { translate } = require("@utils/httpUtils");
-const { timeformat } = require("@utils/miscUtils");
+const { translate } = require("@helpers/HttpUtils");
+const { timeformat } = require("@helpers/Utils");
 
 const TRANSLATE_COOLDOWN = 120;
 const cooldownCache = new Map();
@@ -33,7 +32,7 @@ async function handleFlagReaction(emoji, message, user) {
   // cooldown check
   const remaining = getTranslationCooldown(user);
   if (remaining > 0) {
-    return sendMessage(message.channel, `${user} You must wait ${timeformat(remaining)} before translating again!`, 5);
+    return message.channel.safeSend(`${user} You must wait ${timeformat(remaining)} before translating again!`, 5);
   }
 
   if (await isTranslated(message, emoji)) return;
@@ -79,7 +78,7 @@ async function handleFlagReaction(emoji, message, user) {
       iconURL: user.displayAvatarURL(),
     });
 
-  sendMessage(message.channel, { embeds: [embed], components: [btnRow] }).then(
+  message.channel.safeSend({ embeds: [embed], components: [btnRow] }).then(
     () => cooldownCache.set(user.id, Date.now()) // set cooldown
   );
 

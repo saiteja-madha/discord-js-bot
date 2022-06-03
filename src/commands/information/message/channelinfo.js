@@ -1,4 +1,3 @@
-const { getMatchingChannels } = require("@utils/guildUtils");
 const channelInfo = require("../shared/channel");
 
 /**
@@ -25,7 +24,7 @@ module.exports = {
     // find channel by name/ID
     else if (args.length > 0) {
       const search = args.join(" ");
-      const tcByName = getMatchingChannels(message.guild, search);
+      const tcByName = message.guild.findMatchingChannels(search);
       if (tcByName.length === 0) return message.safeReply(`No channels found matching \`${search}\`!`);
       if (tcByName.length > 1) return message.safeReply(`Multiple channels found matching \`${search}\`!`);
       [targetChannel] = tcByName;
