@@ -1,4 +1,4 @@
-const { getReactionRoles } = require("@schemas/Message");
+const { getReactionRoles } = require("@schemas/ReactionRoles");
 
 module.exports = {
   /**

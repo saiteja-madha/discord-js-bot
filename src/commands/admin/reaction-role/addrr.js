@@ -1,4 +1,4 @@
-const { addReactionRole, getReactionRoles } = require("@schemas/Message");
+const { addReactionRole, getReactionRoles } = require("@schemas/ReactionRoles");
 const { Util } = require("discord.js");
 const { parsePermissions } = require("@helpers/Utils");
 

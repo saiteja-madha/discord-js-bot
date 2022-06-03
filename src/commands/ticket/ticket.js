@@ -1,17 +1,6 @@
-const { MessageEmbed, Message, MessageActionRow, MessageButton } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton, Modal, TextInputComponent } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-
-// Schemas
-const { createNewTicket } = require("@schemas/Message");
-
-// Utils
-const { parsePermissions } = require("@helpers/Utils");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@handlers/ticket");
-const { isHex } = require("@helpers/Utils");
-
-const SETUP_TIMEOUT = 30 * 1000;
-
-const SETUP_PERMS = ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"];
 
 /**
  * @type {import("@structures/Command")}
@@ -26,7 +15,7 @@ module.exports = {
     minArgsCount: 1,
     subcommands: [
       {
-        trigger: "setup",
+        trigger: "setup <#channel>",
         description: "start an interactive ticket setup",
       },
       {
@@ -69,24 +58,6 @@ module.exports = {
             type: "CHANNEL",
             channelTypes: ["GUILD_TEXT"],
             required: true,
-          },
-          {
-            name: "title",
-            description: "the title for the ticket message",
-            type: "STRING",
-            required: true,
-          },
-          {
-            name: "role",
-            description: "the role's which can have access to newly opened tickets",
-            type: "ROLE",
-            required: false,
-          },
-          {
-            name: "color",
-            description: "hex color for the ticket embed",
-            type: "STRING",
-            required: false,
           },
         ],
       },
@@ -165,10 +136,11 @@ module.exports = {
       if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
         return message.safeReply("I am missing `Manage Channels` to create ticket channels");
       }
-      if (!message.channel.permissionsFor(message.guild.me).has("EMBED_LINKS")) {
-        return message.safeReply("I am missing `Embed Links` permission to run an interactive setup");
+      const targetChannel = message.guild.findMatchingChannels(args[1])[0];
+      if (!targetChannel) {
+        return message.safeReply("I could not find channel with that name");
       }
-      return runInteractiveSetup(message);
+      return ticketModalSetup(message, targetChannel, data.settings);
     }
 
     // log ticket
@@ -235,24 +207,13 @@ module.exports = {
     // setup
     if (sub === "setup") {
       const channel = interaction.options.getChannel("channel");
-      const title = interaction.options.getString("title");
-      const role = interaction.options.getRole("role");
-      const color = interaction.options.getString("color");
 
       if (!interaction.guild.me.permissions.has("MANAGE_CHANNELS")) {
         return interaction.followUp("I am missing `Manage Channels` to create ticket channels");
       }
 
-      if (color && !isHex(color)) return interaction.followUp("Please provide a valid hex color");
-      if (role && (role.managed || interaction.guild.me.roles.highest.position < role.position)) {
-        return interaction.followUp("I do not have permissions to manage this role");
-      }
-
-      if (!channel.canSendEmbeds()) {
-        return interaction.followUp(`I need do not have permissions to send embeds in ${channel}`);
-      }
-
-      response = await setupTicket(interaction.guild, channel, title, role, color);
+      await interaction.deleteReply();
+      return ticketModalSetup(interaction, channel, data.settings);
     }
 
     // Log channel
@@ -294,94 +255,89 @@ module.exports = {
 };
 
 /**
- * @param {Message} message
+ * @param {import('discord.js').Message} param0
+ * @param {import('discord.js').GuildTextBasedChannel} targetChannel
+ * @param {object} settings
  */
-async function runInteractiveSetup({ channel, guild, author }) {
-  const filter = (m) => m.author.id === author.id;
+async function ticketModalSetup({ guild, channel, member }, targetChannel, settings) {
+  const buttonRow = new MessageActionRow().addComponents(
+    new MessageButton().setCustomId("ticket_btnSetup").setLabel("Setup Message").setStyle("PRIMARY")
+  );
 
+  const sentMsg = await channel.send({
+    content: "Please click the button below to setup ticket message",
+    components: [buttonRow],
+  });
+
+  const btnInteraction = await channel
+    .awaitMessageComponent({
+      componentType: "BUTTON",
+      filter: (i) => i.customId === "ticket_btnSetup" && i.member.id === member.id && i.message.id === sentMsg.id,
+      time: 20000,
+    })
+    .catch((ex) => {});
+
+  if (!btnInteraction) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
+
+  // display modal
+  await btnInteraction.showModal(
+    new Modal({
+      customId: "ticket-modalSetup",
+      title: "Ticket Setup",
+      components: [
+        new MessageActionRow().addComponents(
+          new TextInputComponent().setCustomId("title").setLabel("Embed Title").setStyle("SHORT")
+        ),
+        new MessageActionRow().addComponents(
+          new TextInputComponent().setCustomId("description").setLabel("Embed Description").setStyle("PARAGRAPH")
+        ),
+        new MessageActionRow().addComponents(
+          new TextInputComponent().setCustomId("footer").setLabel("Embed Footer").setStyle("SHORT")
+        ),
+        new MessageActionRow().addComponents(
+          new TextInputComponent().setCustomId("staff").setLabel("Staff Roles").setStyle("SHORT")
+        ),
+      ],
+    })
+  );
+
+  // receive modal input
+  const modal = await btnInteraction
+    .awaitModalSubmit({
+      time: 1 * 60 * 1000,
+      filter: (m) => m.customId === "ticket-modalSetup" && m.member.id === member.id && m.message.id === sentMsg.id,
+    })
+    .catch((ex) => {});
+
+  if (!modal) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
+
+  await modal.reply("Setting up ticket message ...");
+  const title = modal.fields.getTextInputValue("title");
+  const description = modal.fields.getTextInputValue("description");
+  const footer = modal.fields.getTextInputValue("footer");
+  const staffRoles = modal.fields
+    .getTextInputValue("staff")
+    .split(",")
+    .filter((s) => guild.roles.cache.has(s.trim()));
+
+  // send ticket message
   const embed = new MessageEmbed()
-    .setAuthor({ name: "Ticket Setup" })
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setFooter({ text: "Type cancel to cancel setup" });
+    .setAuthor({ name: title || "Support Ticket" })
+    .setDescription(description || "Please use the button below to create a ticket")
+    .setFooter({ text: footer || "You can only have 1 open ticket at a time!" });
 
-  let targetChannel;
-  let title;
-  let role;
-  try {
-    // wait for channel
-    await channel.send({
-      embeds: [embed.setDescription("Please `mention the channel` in which the ticket message must be sent")],
-    });
-    let reply = (await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT })).first();
-    if (reply.content.toLowerCase() === "cancel") return reply.reply("Ticket setup has been cancelled");
-    targetChannel = reply.mentions.channels.first();
-    if (!targetChannel) return reply.reply("Ticket setup has been cancelled. You did not mention a channel");
-    if (!targetChannel.isText() && !targetChannel.permissionsFor(guild.me).has(SETUP_PERMS)) {
-      return reply.reply(
-        `Ticket setup has been cancelled.\nI need ${parsePermissions(SETUP_PERMS)} in ${targetChannel}`
-      );
-    }
+  const tktBtnRow = new MessageActionRow().addComponents(
+    new MessageButton().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle("SUCCESS")
+  );
 
-    // wait for title
-    await channel.send({ embeds: [embed.setDescription("Please enter the `title` of the ticket")] });
-    reply = (await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT })).first();
-    if (reply.content.toLowerCase() === "cancel") return reply.reply("Ticket setup has been cancelled");
-    title = reply.content;
+  // save configuration
+  settings.ticket.staff_roles = staffRoles;
+  await settings.save();
 
-    // wait for roles
-    const desc =
-      "What roles should have access to view the newly created tickets?\n" +
-      "Please type the name of a existing role in this server.\n\n" +
-      "Alternatively you can type `none`";
-
-    await channel.send({ embeds: [embed.setDescription(desc)] });
-    reply = (await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT })).first();
-    const query = reply.content.toLowerCase();
-
-    if (query === "cancel") return reply.reply("Ticket setup has been cancelled");
-    if (query !== "none") {
-      const roles = guild.findMatchingRoles(query);
-      if (roles.length === 0) {
-        return reply.reply(`Uh oh, I couldn't find any roles called ${query}! Ticket setup has been cancelled`);
-      }
-      role = roles[0];
-      if (role.managed || guild.me.roles.highest.position < role.position) {
-        return reply.reply("Ticket setup has been cancelled. I do not have permission to manage this role");
-      }
-      await reply.reply(`Alright! \`${role.name}\` can now view the newly created tickets`);
-    }
-  } catch (ex) {
-    return channel.send("No answer for 30 seconds, setup has cancelled");
-  }
-
-  const response = await setupTicket(guild, targetChannel, title, role);
-  return channel.send(response);
-}
-
-async function setupTicket(guild, channel, title, role, color) {
-  try {
-    const embed = new MessageEmbed()
-      .setAuthor({ name: "Support Ticket" })
-      .setDescription(title)
-      .setFooter({ text: "You can only have 1 open ticket at a time!" });
-
-    if (color) embed.setColor(color);
-
-    const row = new MessageActionRow().addComponents(
-      new MessageButton().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle("SUCCESS")
-    );
-
-    const tktMessage = await channel.send({ embeds: [embed], components: [row] });
-
-    // save to Database
-    await createNewTicket(guild.id, channel.id, tktMessage.id, title, role?.id);
-
-    // send success
-    return "Configuration saved! Ticket message is now setup 🎉";
-  } catch (ex) {
-    guild.client.logger.error("ticketSetup", ex);
-    return "Unexpected error occurred! Setup failed";
-  }
+  await targetChannel.send({ embeds: [embed], components: [tktBtnRow] });
+  await modal.deleteReply();
+  await sentMsg.edit({ content: "Done! Ticket Message Created", components: [] });
 }
 
 async function setupLogChannel(target, settings) {

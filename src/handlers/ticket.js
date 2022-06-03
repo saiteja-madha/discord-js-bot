@@ -3,7 +3,6 @@ const { TICKET } = require("@root/config.js");
 
 // schemas
 const { getSettings } = require("@schemas/Guild");
-const { getTicketConfig } = require("@schemas/Message");
 
 // helpers
 const { postToBin } = require("@helpers/HttpUtils");
@@ -47,9 +46,8 @@ async function parseTicketDetails(channel) {
   if (!channel.topic) return;
   const split = channel.topic?.split("|");
   const userId = split[1];
-  const title = split[2];
   const user = await channel.client.users.fetch(userId, { cache: false }).catch(() => {});
-  return { title, user };
+  return { user };
 }
 
 /**
@@ -92,7 +90,6 @@ async function closeTicket(channel, closedBy, reason) {
     const embed = new MessageEmbed().setAuthor({ name: "Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
     if (reason) embed.addField("Reason", reason, false);
     embed
-      .setDescription(`**Title:** ${ticketDetails.title}`)
       .addField("Opened By", ticketDetails.user ? ticketDetails.user.tag : "User left", true)
       .addField("Closed By", closedBy ? closedBy.tag : "User left", true);
 
@@ -104,9 +101,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     // send embed to user
     if (ticketDetails.user) {
-      const dmEmbed = embed
-        .setDescription(`**Server:** ${channel.guild.name}\n**Title:** ${ticketDetails.title}`)
-        .setThumbnail(channel.guild.iconURL());
+      const dmEmbed = embed.setDescription(`**Server:** ${channel.guild.name}`).setThumbnail(channel.guild.iconURL());
       ticketDetails.user.send({ embeds: [dmEmbed], components }).catch((ex) => {});
     }
 
@@ -138,9 +133,8 @@ async function closeAllTickets(guild, author) {
 /**
  * @param {import('discord.js').Guild} guild
  * @param {import('discord.js').User} user
- * @param {Object} config
  */
-async function openTicket(guild, user, config) {
+async function openTicket(guild, user) {
   if (!guild.me.permissions.has(OPEN_PERMS)) return "MISSING_PERMISSIONS";
 
   const alreadyExists = getExistingTicketChannel(guild, user.id);
@@ -167,8 +161,8 @@ async function openTicket(guild, user, config) {
       },
     ];
 
-    if (config.support_roles.length > 0) {
-      config.support_roles.forEach((roleId) => {
+    if (settings.ticket.staff_roles.length > 0) {
+      settings.ticket.staff_roles.forEach((roleId) => {
         const role = guild.roles.cache.get(roleId);
         if (!role) return;
         permissionOverwrites.push({
@@ -180,15 +174,13 @@ async function openTicket(guild, user, config) {
 
     const tktChannel = await guild.channels.create(`tіcket-${ticketNumber}`, {
       type: "GUILD_TEXT",
-      topic: `tіcket|${user.id}|${config.title}`,
+      topic: `tіcket|${user.id}`,
       permissionOverwrites,
     });
 
     const embed = new MessageEmbed()
       .setAuthor({ name: `Ticket #${ticketNumber}` })
-      .setDescription(
-        `Hello ${user.toString()}\nSupport will be with you shortly\n\n**Ticket Reason:**\n${config.title}`
-      )
+      .setDescription(`Hello ${user.toString()}\nSupport will be with you shortly`)
       .setFooter({ text: "You may close your ticket anytime by clicking the button below" });
 
     let buttonsRow = new MessageActionRow().addComponents(
@@ -201,7 +193,7 @@ async function openTicket(guild, user, config) {
       .setColor(TICKET.CREATE_EMBED)
       .setAuthor({ name: "Ticket Created" })
       .setThumbnail(guild.iconURL())
-      .setDescription(`**Server:** ${guild.name}\n**Title:** ${config.title}`);
+      .setDescription(`**Server:** ${guild.name}`);
 
     const row = new MessageActionRow().addComponents(
       new MessageButton().setLabel("View Channel").setURL(sent.url).setStyle("LINK")
@@ -221,10 +213,8 @@ async function openTicket(guild, user, config) {
  */
 async function handleTicketOpen(interaction) {
   await interaction.deferReply({ ephemeral: true });
-  const config = await getTicketConfig(interaction.guildId, interaction.channelId, interaction.message.id);
-  if (!config) return;
 
-  const status = await openTicket(interaction.guild, interaction.user, config.ticket);
+  const status = await openTicket(interaction.guild, interaction.user);
 
   if (status === "MISSING_PERMISSIONS") {
     return interaction.followUp(

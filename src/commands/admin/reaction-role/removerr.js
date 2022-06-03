@@ -1,4 +1,4 @@
-const { removeReactionRole } = require("@schemas/Message");
+const { removeReactionRole } = require("@schemas/ReactionRoles");
 const { parsePermissions } = require("@helpers/Utils");
 
 const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];

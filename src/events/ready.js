@@ -1,5 +1,5 @@
 const { counterHandler, inviteHandler } = require("@src/handlers");
-const { cacheReactionRoles } = require("@schemas/Message");
+const { cacheReactionRoles } = require("@schemas/ReactionRoles");
 const { getSettings } = require("@schemas/Guild");
 const { updateCounterChannels } = require("@handlers/counter");
 

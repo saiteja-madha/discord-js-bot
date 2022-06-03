@@ -27,6 +27,7 @@ const Schema = mongoose.Schema({
   ticket: {
     log_channel: String,
     limit: { type: Number, default: 10 },
+    staff_roles: [String],
   },
   automod: {
     debug: Boolean,

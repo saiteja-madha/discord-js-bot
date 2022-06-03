@@ -16,13 +16,9 @@ const Schema = mongoose.Schema({
       role_id: reqString,
     },
   ],
-  ticket: {
-    title: reqString,
-    support_roles: [],
-  },
 });
 
-const Model = mongoose.model("messages", Schema);
+const Model = mongoose.model("reaction-roles", Schema);
 
 // Cache
 const rrCache = new Map();
@@ -31,31 +27,12 @@ const getKey = (guildId, channelId, messageId) => `${guildId}|${channelId}|${mes
 module.exports = {
   model: Model,
 
-  getTicketConfig: async (guildId, channelId, messageId) =>
-    Model.findOne({
-      guild_id: guildId,
-      channel_id: channelId,
-      message_id: messageId,
-      ticket: { $exists: true },
-    }).lean(),
-
-  createNewTicket: async (guildId, channelId, messageId, title, roleId) =>
-    new Model({
-      guild_id: guildId,
-      channel_id: channelId,
-      message_id: messageId,
-      ticket: {
-        title,
-        support_role: [roleId],
-      },
-    }).save(),
-
   cacheReactionRoles: async (client) => {
     // clear previous cache
     rrCache.clear();
 
     // load all docs from database
-    const docs = await Model.find({ roles: { $exists: true, $ne: [] } }).lean();
+    const docs = await Model.find().lean();
 
     // validate and cache docs
     for (const doc of docs) {

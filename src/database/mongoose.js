@@ -21,7 +21,7 @@ module.exports = {
     Giveaways: require("./schemas/Giveaways"),
     Guild: require("./schemas/Guild"),
     Member: require("./schemas/Member"),
-    Message: require("./schemas/Message").model,
+    ReactionRoles: require("./schemas/ReactionRoles").model,
     ModLog: require("./schemas/ModLog").model,
     TranslateLog: require("./schemas/TranslateLog").model,
     User: require("./schemas/User"),

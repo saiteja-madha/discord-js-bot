@@ -3,7 +3,7 @@ module.exports = {
   PREFIX: "!", // Default prefix for the bot
   SUPPORT_SERVER: "", // Your bot support server
   INTERACTIONS: {
-    SLASH: true, // Should the interactions be enabled
+    SLASH: false, // Should the interactions be enabled
     CONTEXT: false, // Should contexts be enabled
     GLOBAL: false, // Should the interactions be registered globally
     TEST_GUILD_ID: "xxxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
@@ -27,7 +27,7 @@ module.exports = {
   // PLUGINS
 
   AUTOMOD: {
-    ENABLED: true,
+    ENABLED: false,
     LOG_EMBED: "#36393F",
     DM_EMBED: "#36393F",
   },
@@ -71,7 +71,7 @@ module.exports = {
   },
 
   MODERATION: {
-    ENABLED: true,
+    ENABLED: false,
     EMBED_COLORS: {
       TIMEOUT: "#102027",
       UNTIMEOUT: "#4B636E",
