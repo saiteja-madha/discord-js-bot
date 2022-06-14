@@ -1,8 +1,12 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton,	version: djsversion, } = require("discord.js");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config");
 const { timeformat } = require("@utils/miscUtils");
 const os = require("os");
 const { stripIndent } = require("common-tags");
+const version = require("../../../../package.json").version;
+const {
+	utc,
+} = require("moment");
 
 module.exports = (client) => {
   // STATS
@@ -24,19 +28,35 @@ module.exports = (client) => {
   const overallUsed = `${((os.totalmem() - os.freemem()) / 1024 / 1024 / 1024).toFixed(2)} GB`;
   const overallAvailable = `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB`;
   const overallUsage = `${Math.floor(((os.totalmem() - os.freemem()) / os.totalmem()) * 100)}%`;
+  const owner = client.users.cache.get('User_ID_Here')
 
   let desc = "";
-  desc += `❒ Total guilds: ${guilds}\n`;
-  desc += `❒ Total users: ${users}\n`;
-  desc += `❒ Total channels: ${channels}\n`;
-  desc += `❒ Websocket Ping: ${client.ws.ping} ms\n`;
+  desc += `❯ **Total Guilds:** ${guilds}\n`;
+  desc += `❯ **Total Users:** ${users}\n`;
+  desc += `❯ **Total Channels:** ${channels}\n`;
+  desc += `❯ **Websocket Ping:** ${client.ws.ping} ms\n`;
   desc += "\n";
 
   const embed = new MessageEmbed()
+    .setURL(client.web)
     .setTitle("Bot Information")
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription(desc)
+    .addField(
+      "General",
+      ` ❯ **Client:** ${client.user.tag} (${client.user.id})
+        ❯ **Developers:** ${owner} | [**Discord JS Bot**](https://github.com/saiteja-madha/discord-js-bot)
+        ❯ **Slash Commands:** ${client.slashCommands.size}
+        `,
+    )
+    .addField(
+      "System",
+     `  ❯ **Node.js:** ${process.version}
+        ❯ **Version:** v${version}
+        ❯ **Discord.js:** v${djsversion}
+      `,
+    )
     .addField(
       "CPU:",
       stripIndent`
@@ -49,6 +69,7 @@ module.exports = (client) => {
     .addField(
       "Bot's RAM:",
       stripIndent`
+        ❯ **Platform:** ${process.platform}
         ❯ **Used:** ${botUsed}
         ❯ **Available:** ${botAvailable}
         ❯ **Usage:** ${botUsage}
@@ -64,8 +85,9 @@ module.exports = (client) => {
       `,
       true
     )
-    .addField("Node Js version", process.versions.node, false)
-    .addField("Uptime", "```" + timeformat(process.uptime()) + "```", false);
+    .addField("Uptime", "```" + timeformat(process.uptime()) + "```", false)
+    .addField("Creation Date", "```" + utc(client.user.createdTimestamp).format(
+      "Do MMMM YYYY HH:mm:ss") + "```");
 
   // Buttons
   let components = [];
