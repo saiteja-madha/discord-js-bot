@@ -43,7 +43,6 @@
     "module-alias": "^2.2.2",
     "moment": "^2.29.2",
     "mongoose": "^5.13.7",
-    "nekos.life": "^2.0.9",
     "node-fetch": "^2.6.1",
     "os": "^0.1.2",
     "pretty-ms": "^7.0.1",
