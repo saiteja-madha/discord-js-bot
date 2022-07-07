@@ -41,7 +41,7 @@
     "fs": "0.0.2",
     "iso-639-1": "^2.1.13",
     "module-alias": "^2.2.2",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "mongoose": "^5.13.7",
     "nekos.life": "^2.0.9",
     "node-fetch": "^2.6.1",
