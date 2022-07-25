@@ -16,7 +16,7 @@ class MongooseGiveaways extends GiveawaysManager {
           reaction: client.config.GIVEAWAYS.REACTION,
         },
       },
-      false
+      false // do not initialize manager yet
     );
   }
 

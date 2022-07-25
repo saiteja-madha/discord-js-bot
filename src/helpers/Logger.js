@@ -20,6 +20,7 @@ const pinoLogger = pino.default(
           ignore: "pid,hostname",
           singleLine: false,
           hideObject: true,
+          customColors: "info:blue,warn:yellow,error:red",
         },
       }),
     },
@@ -27,7 +28,7 @@ const pinoLogger = pino.default(
       level: "debug",
       stream: pino.destination({
         dest: `${process.cwd()}/logs/combined-${today.getFullYear()}.${today.getMonth()}.${today.getDate()}.log`,
-        sync: false,
+        sync: true,
       }),
     },
   ])
@@ -76,7 +77,11 @@ module.exports = class Logger {
    * @param {object} ex
    */
   static error(content, ex) {
-    pinoLogger.error(ex, `${content}: ${ex.message}`);
+    if (ex) { 
+      pinoLogger.error(ex, `${content}: ${ex?.message}`)
+    } else { 
+      pinoLogger.error(content) 
+    }
     if (webhookLogger) sendWebhook(content, ex);
   }
 

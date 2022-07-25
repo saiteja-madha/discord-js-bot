@@ -11,14 +11,14 @@ module.exports = async (client) => {
 
   // Initialize Music Manager
   if (client.config.ERELA_JS.ENABLED) {
-    client.logger.log("Initializing music manager");
     client.erelaManager.init(client.user.id);
+    client.logger.success("Music Manager initialized");
   }
 
   // Initialize Giveaways Manager
   if (client.config.GIVEAWAYS.ENABLED) {
-    client.logger.log("Initializing giveaways manager");
-    client.giveawaysManager._init();
+    client.logger.log("Initializing giveaways manager...");
+    client.giveawaysManager._init().then((_) => client.logger.success("Giveaway Manager initialized"));
   }
 
   // Update Bot Presence

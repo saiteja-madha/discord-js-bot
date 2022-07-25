@@ -247,11 +247,11 @@ function getSlashCategoryEmbeds(client, category) {
     let toAdd = commands.splice(0, commands.length > CMDS_PER_PAGE ? CMDS_PER_PAGE : commands.length);
 
     toAdd = toAdd.map((cmd) => {
-      const subCmds = cmd.slashCommand.options.filter((opt) => opt.type === "SUB_COMMAND");
-      const subCmdsString = subCmds.map((s) => s.name).join(", ");
+      const subCmds = cmd.slashCommand.options?.filter((opt) => opt.type === "SUB_COMMAND");
+      const subCmdsString = subCmds?.map((s) => s.name).join(", ");
 
       return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
-        subCmds == 0 ? "" : `❯ **SubCommands [${subCmds.length}]**: ${subCmdsString}\n`
+        !subCmds?.length ? "" : `❯ **SubCommands [${subCmds?.length}]**: ${subCmdsString}\n`
       } `;
     });
 

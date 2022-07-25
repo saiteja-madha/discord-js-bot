@@ -96,10 +96,4 @@ module.exports = {
     image: "https://icons.iconarchive.com/icons/blackvariant/button-ui-system-folders-alt/128/Utilities-icon.png",
     emoji: "🛠",
   },
-  XP_SYSTEM: {
-    name: "Levelling",
-    enabled: config.XP_SYSTEM.ENABLED,
-    image: "https://cdn1.iconfinder.com/data/icons/game-design-butterscotch-vol-1/256/Leader-512.png",
-    emoji: "🏆",
-  },
 };
