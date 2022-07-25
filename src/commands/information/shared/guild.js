@@ -1,7 +1,10 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ChannelType, GuildVerificationLevel } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const moment = require("moment");
 
+/**
+ * @param {import('discord.js').Guild} guild
+ */
 module.exports = async (guild) => {
   const { name, id, preferredLocale, channels, roles, ownerId } = guild;
 
@@ -9,11 +12,13 @@ module.exports = async (guild) => {
   const createdAt = moment(guild.createdAt);
 
   const totalChannels = channels.cache.size;
-  const categories = channels.cache.filter((c) => c.type === "GUILD_CATEGORY").size;
-  const textChannels = channels.cache.filter((c) => c.type === "GUILD_TEXT").size;
-  const voiceChannels = channels.cache.filter((c) => c.type === "GUILD_VOICE" || c.type === "GUILD_STAGE_VOICE").size;
+  const categories = channels.cache.filter((c) => c.type === ChannelType.GuildCategory).size;
+  const textChannels = channels.cache.filter((c) => c.type === ChannelType.GuildText).size;
+  const voiceChannels = channels.cache.filter(
+    (c) => c.type === ChannelType.GuildVoice || c.type === ChannelType.GuildStageVoice
+  ).size;
   const threadChannels = channels.cache.filter(
-    (c) => c.type === "GUILD_PRIVATE_THREAD" || c.type === "GUILD_PUBLIC_THREAD"
+    (c) => c.type === ChannelType.GuildPrivateThread || c.type === ChannelType.GuildPublicThread
   ).size;
 
   const memberCache = guild.members.cache;
@@ -38,11 +43,11 @@ module.exports = async (guild) => {
 
   let { verificationLevel } = guild;
   switch (guild.verificationLevel) {
-    case "VERY_HIGH":
+    case GuildVerificationLevel.VeryHigh:
       verificationLevel = "┻�?┻ミヽ(ಠ益ಠ)ノ彡┻�?┻";
       break;
 
-    case "HIGH":
+    case GuildVerificationLevel.High:
       verificationLevel = "(╯°□°）╯︵ ┻�?┻";
       break;
 

@@ -1,4 +1,4 @@
-const { Guild } = require("discord.js");
+const { Guild, ChannelType } = require("discord.js");
 
 const ROLE_MENTION = /<?@?&?(\d{17,20})>?/;
 const CHANNEL_MENTION = /<?#?(\d{17,20})>?/;
@@ -9,7 +9,7 @@ const MEMBER_MENTION = /<?@?!?(\d{17,20})>?/;
  * @param {string} query
  * @param {import("discord.js").GuildChannelTypes[]} type
  */
-Guild.prototype.findMatchingChannels = function (query, type = ["GUILD_TEXT", "GUILD_NEWS"]) {
+Guild.prototype.findMatchingChannels = function (query, type = [ChannelType.GuildText, ChannelType.GuildNews]) {
   if (!this || !query || typeof query !== "string") return [];
 
   const channelManager = this.channels.cache.filter((ch) => type.includes(ch.type));

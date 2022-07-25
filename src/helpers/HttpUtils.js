@@ -35,6 +35,7 @@ module.exports = class HttpUtils {
     try {
       const response = await fetch(url);
       const buffer = await response.buffer();
+      if (response.status !== 200) debug(response);
       return {
         success: response.status === 200 ? true : false,
         status: response.status,

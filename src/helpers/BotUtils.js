@@ -36,7 +36,7 @@ module.exports = class BotUtils {
       if (attachIsImage) url = attachUrl;
     }
 
-    if (!url && args.length === 0) url = message.author.displayAvatarURL({ size: 256, format: "png" });
+    if (!url && args.length === 0) url = message.author.displayAvatarURL({ size: 256, extension: "png" });
 
     if (!url && args.length !== 0) {
       try {

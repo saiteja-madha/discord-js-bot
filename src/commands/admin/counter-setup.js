@@ -1,4 +1,4 @@
-const { ApplicationCommandOptionType } = require("discord.js");
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -85,7 +85,7 @@ async function setupCounter(guild, type, name, settings) {
 
   const vc = await guild.channels.create({
     name: channelName,
-    type: "GUILD_VOICE",
+    type: ChannelType.GuildVoice,
     permissionOverwrites: [
       {
         id: guild.roles.everyone,

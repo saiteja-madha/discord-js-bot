@@ -62,7 +62,7 @@ async function getRank({ guild }, member, settings) {
   const url = new URL(`${IMAGE.BASE_API}/utils/rank-card`);
   url.searchParams.append("name", user.username);
   url.searchParams.append("discriminator", user.discriminator);
-  url.searchParams.append("avatar", user.displayAvatarURL({ format: "png", size: 128 }));
+  url.searchParams.append("avatar", user.displayAvatarURL({ extension: "png", size: 128 }));
   url.searchParams.append("currentxp", memberStats.xp);
   url.searchParams.append("reqxp", xpNeeded);
   url.searchParams.append("level", memberStats.level);

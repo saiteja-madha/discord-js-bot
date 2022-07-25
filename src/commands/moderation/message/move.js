@@ -1,3 +1,4 @@
+const { ChannelType } = require("discord.js");
 const move = require("../shared/move");
 
 /**
@@ -22,7 +23,7 @@ module.exports = {
     const channels = message.guild.findMatchingChannels(args[1]);
     if (!channels.length) return message.safeReply("No matching channels found");
     const targetChannel = channels.pop();
-    if (!targetChannel.type === "GUILD_VOICE" && !targetChannel.type === "GUILD_STAGE_VOICE") {
+    if (!targetChannel.type === ChannelType.GuildVoice && !targetChannel.type === ChannelType.GuildStageVoice) {
       return message.safeReply("Target channel is not a voice channel");
     }
 

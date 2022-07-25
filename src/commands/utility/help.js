@@ -8,6 +8,7 @@ const {
   ButtonBuilder,
   CommandInteraction,
   ApplicationCommandOptionType,
+  ButtonStyle,
 } = require("discord.js");
 const { getCommandUsage, getSlashUsage } = require("@handlers/command");
 
@@ -111,8 +112,8 @@ async function getHelpMenu({ client, guild }) {
   // Buttons Row
   let components = [];
   components.push(
-    new ButtonBuilder().setCustomId("previousBtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
-    new ButtonBuilder().setCustomId("nextBtn").setEmoji("➡️").setStyle("SECONDARY").setDisabled(true)
+    new ButtonBuilder().setCustomId("previousBtn").setEmoji("⬅️").setStyle(ButtonStyle.Secondary).setDisabled(true),
+    new ButtonBuilder().setCustomId("nextBtn").setEmoji("➡️").setStyle(ButtonStyle.Secondary).setDisabled(true)
   );
 
   let buttonsRow = new ActionRowBuilder().addComponents(components);
@@ -164,7 +165,14 @@ const waiter = (msg, userId, prefix) => {
         const cat = response.values[0].toUpperCase();
         arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix) : getSlashCategoryEmbeds(msg.client, cat);
         currentPage = 0;
-        buttonsRow.components.forEach((button) => button.setDisabled(arrEmbeds.length > 1 ? false : true));
+
+        // Buttons Row
+        let components = [];
+        buttonsRow.components.forEach((button) =>
+          components.push(ButtonBuilder.from(button).setDisabled(arrEmbeds.length > 1 ? false : true))
+        );
+
+        buttonsRow = new ActionRowBuilder().addComponents(components);
         msg.editable && (await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] }));
         break;
       }

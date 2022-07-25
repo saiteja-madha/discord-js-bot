@@ -1,7 +1,15 @@
 const { getSettings } = require("@schemas/Guild");
 const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
 const { SUGGESTIONS } = require("@root/config");
-const { ActionRowBuilder, ButtonBuilder, Modal, TextInputBuilder, EmbedBuilder } = require("discord.js");
+const {
+  ActionRowBuilder,
+  ButtonBuilder,
+  Modal,
+  TextInputBuilder,
+  EmbedBuilder,
+  ButtonStyle,
+  TextInputStyle,
+} = require("discord.js");
 const { stripIndents } = require("common-tags");
 
 /**
@@ -68,9 +76,13 @@ async function approveSuggestion(member, channel, messageId, reason) {
   }
 
   let buttonsRow = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle("SUCCESS").setDisabled(true),
-    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle("DANGER"),
-    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle("SECONDARY")
+    new ButtonBuilder()
+      .setCustomId("SUGGEST_APPROVE")
+      .setLabel("Approve")
+      .setStyle(ButtonStyle.Success)
+      .setDisabled(true),
+    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle(ButtonStyle.Danger),
+    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle(ButtonStyle.Secondary)
   );
 
   const approvedEmbed = new EmbedBuilder()
@@ -152,9 +164,9 @@ async function rejectSuggestion(member, channel, messageId, reason) {
   }
 
   let buttonsRow = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle("SUCCESS"),
-    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle("DANGER").setDisabled(true),
-    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle("SECONDARY")
+    new ButtonBuilder().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle(ButtonStyle.Danger).setDisabled(true),
+    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle(ButtonStyle.Secondary)
   );
 
   const rejectedEmbed = new EmbedBuilder()
@@ -243,7 +255,11 @@ async function handleApproveBtn(interaction) {
       customId: "SUGGEST_APPROVE_MODAL",
       components: [
         new ActionRowBuilder().addComponents([
-          new TextInputBuilder().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+          new TextInputBuilder()
+            .setCustomId("reason")
+            .setLabel("reason")
+            .setStyle(TextInputStyle.Paragraph)
+            .setMinLength(4),
         ]),
       ],
     })
@@ -270,7 +286,11 @@ async function handleRejectBtn(interaction) {
       customId: "SUGGEST_REJECT_MODAL",
       components: [
         new ActionRowBuilder().addComponents([
-          new TextInputBuilder().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+          new TextInputBuilder()
+            .setCustomId("reason")
+            .setLabel("reason")
+            .setStyle(TextInputStyle.Paragraph)
+            .setMinLength(4),
         ]),
       ],
     })
@@ -297,7 +317,11 @@ async function handleDeleteBtn(interaction) {
       customId: "SUGGEST_DELETE_MODAL",
       components: [
         new ActionRowBuilder().addComponents([
-          new TextInputBuilder().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+          new TextInputBuilder()
+            .setCustomId("reason")
+            .setLabel("reason")
+            .setStyle(TextInputStyle.Paragraph)
+            .setMinLength(4),
         ]),
       ],
     })

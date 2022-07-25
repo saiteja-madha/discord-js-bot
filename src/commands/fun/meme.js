@@ -1,4 +1,10 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ApplicationCommandOptionType } = require("discord.js");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ApplicationCommandOptionType,
+  ButtonStyle,
+} = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@helpers/HttpUtils");
 const { getRandomInt } = require("@helpers/Utils");
@@ -32,7 +38,7 @@ module.exports = {
     const choice = args[0];
 
     const buttonRow = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId("regenMemeBtn").setStyle("SECONDARY").setEmoji("🔁")
+      new ButtonBuilder().setCustomId("regenMemeBtn").setStyle(ButtonStyle.Secondary).setEmoji("🔁")
     );
     const embed = await getRandomEmbed(choice);
 
@@ -71,7 +77,7 @@ module.exports = {
     const choice = interaction.options.getString("category");
 
     const buttonRow = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId("regenMemeBtn").setStyle("SECONDARY").setEmoji("🔁")
+      new ButtonBuilder().setCustomId("regenMemeBtn").setStyle(ButtonStyle.Secondary).setEmoji("🔁")
     );
     const embed = await getRandomEmbed(choice);
 
@@ -132,7 +138,7 @@ async function getRandomEmbed(choice) {
     return new EmbedBuilder()
       .setAuthor({ name: memeTitle, url: memeUrl })
       .setImage(memeImage)
-      .setColor("RANDOM")
+      .setColor("Random")
       .setFooter({ text: `👍 ${memeUpvotes} | 💬 ${memeNumComments}` });
   } catch (error) {
     return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");

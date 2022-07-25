@@ -6,6 +6,8 @@ const {
   TextInputBuilder,
   ApplicationCommandOptionType,
   ChannelType,
+  ButtonStyle,
+  TextInputStyle,
 } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@handlers/ticket");
@@ -269,7 +271,7 @@ module.exports = {
  */
 async function ticketModalSetup({ guild, channel, member }, targetChannel, settings) {
   const buttonRow = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId("ticket_btnSetup").setLabel("Setup Message").setStyle("PRIMARY")
+    new ButtonBuilder().setCustomId("ticket_btnSetup").setLabel("Setup Message").setStyle(ButtonStyle.Primary)
   );
 
   const sentMsg = await channel.send({
@@ -294,16 +296,19 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
       title: "Ticket Setup",
       components: [
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder().setCustomId("title").setLabel("Embed Title").setStyle("SHORT")
+          new TextInputBuilder().setCustomId("title").setLabel("Embed Title").setStyle(TextInputStyle.Short)
         ),
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder().setCustomId("description").setLabel("Embed Description").setStyle("PARAGRAPH")
+          new TextInputBuilder()
+            .setCustomId("description")
+            .setLabel("Embed Description")
+            .setStyle(TextInputStyle.Paragraph)
         ),
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder().setCustomId("footer").setLabel("Embed Footer").setStyle("SHORT")
+          new TextInputBuilder().setCustomId("footer").setLabel("Embed Footer").setStyle(TextInputStyle.Short)
         ),
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder().setCustomId("staff").setLabel("Staff Roles").setStyle("SHORT")
+          new TextInputBuilder().setCustomId("staff").setLabel("Staff Roles").setStyle(TextInputStyle.Short)
         ),
       ],
     })
@@ -336,7 +341,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
     .setFooter({ text: footer || "You can only have 1 open ticket at a time!" });
 
   const tktBtnRow = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle("SUCCESS")
+    new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle(ButtonStyle.Success)
   );
 
   // save configuration

@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } = require("discord.js");
 const { TICKET } = require("@root/config.js");
 
 // schemas
@@ -16,7 +16,7 @@ const CLOSE_PERMS = ["ManageChannels", "ReadMessageHistory"];
  */
 function isTicketChannel(channel) {
   return (
-    channel.type === "GUILD_TEXT" &&
+    channel.type === ChannelType.GuildText &&
     channel.name.startsWith("tіcket-") &&
     channel.topic &&
     channel.topic.startsWith("tіcket|")
@@ -80,7 +80,7 @@ async function closeTicket(channel, closedBy, reason) {
     if (logsUrl) {
       components.push(
         new ActionRowBuilder().addComponents(
-          new ButtonBuilder().setLabel("Transcript").setURL(logsUrl.short).setStyle("LINK")
+          new ButtonBuilder().setLabel("Transcript").setURL(logsUrl.short).setStyle(ButtonStyle.Link)
         )
       );
     }
@@ -187,7 +187,7 @@ async function openTicket(guild, user) {
 
     const tktChannel = await guild.channels.create({
       name: `tіcket-${ticketNumber}`,
-      type: "GUILD_TEXT",
+      type: ChannelType.GuildText,
       topic: `tіcket|${user.id}`,
       permissionOverwrites,
     });
@@ -198,7 +198,11 @@ async function openTicket(guild, user) {
       .setFooter({ text: "You may close your ticket anytime by clicking the button below" });
 
     let buttonsRow = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setLabel("Close Ticket").setCustomId("TICKET_CLOSE").setEmoji("🔒").setStyle("PRIMARY")
+      new ButtonBuilder()
+        .setLabel("Close Ticket")
+        .setCustomId("TICKET_CLOSE")
+        .setEmoji("🔒")
+        .setStyle(ButtonStyle.Primary)
     );
 
     const sent = await tktChannel.send({ content: user.toString(), embeds: [embed], components: [buttonsRow] });
@@ -210,7 +214,7 @@ async function openTicket(guild, user) {
       .setDescription(`**Server:** ${guild.name}`);
 
     const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setLabel("View Channel").setURL(sent.url).setStyle("LINK")
+      new ButtonBuilder().setLabel("View Channel").setURL(sent.url).setStyle(ButtonStyle.Link)
     );
 
     user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});

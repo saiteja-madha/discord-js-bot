@@ -1,4 +1,4 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType, ChannelType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { stripIndent } = require("common-tags");
 
@@ -130,8 +130,8 @@ module.exports = {
             name: "channel",
             description: "channel to add",
             required: true,
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
           },
         ],
       },
@@ -144,8 +144,8 @@ module.exports = {
             name: "channel",
             description: "channel to remove",
             required: true,
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
           },
         ],
       },

@@ -65,7 +65,7 @@ const buildSuccessResponse = (output, client) => {
   const embed = new EmbedBuilder()
     .setAuthor({ name: "📤 Output" })
     .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
-    .setColor("RANDOM")
+    .setColor("Random")
     .setTimestamp(Date.now());
 
   return { embeds: [embed] };

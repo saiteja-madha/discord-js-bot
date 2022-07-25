@@ -68,7 +68,7 @@ const genReaction = async (category, user) => {
 
     return new EmbedBuilder()
       .setImage(imageUrl)
-      .setColor("RANDOM")
+      .setColor("Random")
       .setFooter({ text: `Requested By ${user.tag}` });
   } catch (ex) {
     return new EmbedBuilder()

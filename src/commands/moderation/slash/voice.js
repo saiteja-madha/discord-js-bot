@@ -4,7 +4,7 @@ const vunmute = require("../shared/vunmute");
 const undeafen = require("../shared/undeafen");
 const disconnect = require("../shared/disconnect");
 const move = require("../shared/move");
-const { ApplicationCommandOptionType } = require("discord.js");
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -130,8 +130,8 @@ module.exports = {
           {
             name: "channel",
             description: "the channel to move member to",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_VOICE", "GUILD_STAGE_VOICE"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildVoice, ChannelType.GuildStageVoice],
             required: true,
           },
           {

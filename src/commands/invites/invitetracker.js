@@ -1,5 +1,5 @@
 const { cacheGuildInvites, resetInviteCache } = require("@handlers/invite");
-const { ApplicationCommandOptionType } = require("discord.js");
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -60,7 +60,7 @@ async function setStatus({ guild }, input, settings) {
     }
 
     const channelMissing = guild.channels.cache
-      .filter((ch) => ch.type === "GUILD_TEXT" && !ch.permissionsFor(guild.members.me).has("ManageChannels"))
+      .filter((ch) => ch.type === ChannelType.GuildText && !ch.permissionsFor(guild.members.me).has("ManageChannels"))
       .map((ch) => ch.name);
 
     if (channelMissing.length > 1) {

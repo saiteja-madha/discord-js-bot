@@ -320,7 +320,7 @@ module.exports = class BotClient extends Client {
         "AttachFiles",
         "BanMembers",
         "ChangeNickname",
-        Connect,
+        "Connect",
         "DeafenMembers",
         "EmbedLinks",
         "KickMembers",

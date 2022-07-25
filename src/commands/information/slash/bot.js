@@ -1,4 +1,10 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ApplicationCommandOptionType } = require("discord.js");
+const {
+  EmbedBuilder,
+  ButtonBuilder,
+  ActionRowBuilder,
+  ApplicationCommandOptionType,
+  ButtonStyle,
+} = require("discord.js");
 const { timeformat } = require("@helpers/Utils");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config.js");
 const botstats = require("../shared/botstats");
@@ -72,14 +78,16 @@ function botInvite(client) {
 
   // Buttons
   let components = [];
-  components.push(new ButtonBuilder().setLabel("Invite Link").setURL(client.getInvite()).setStyle("LINK"));
+  components.push(new ButtonBuilder().setLabel("Invite Link").setURL(client.getInvite()).setStyle(ButtonStyle.Link));
 
   if (SUPPORT_SERVER) {
-    components.push(new ButtonBuilder().setLabel("Support Server").setURL(SUPPORT_SERVER).setStyle("LINK"));
+    components.push(new ButtonBuilder().setLabel("Support Server").setURL(SUPPORT_SERVER).setStyle(ButtonStyle.Link));
   }
 
   if (DASHBOARD.enabled) {
-    components.push(new ButtonBuilder().setLabel("Dashboard Link").setURL(DASHBOARD.baseURL).setStyle("LINK"));
+    components.push(
+      new ButtonBuilder().setLabel("Dashboard Link").setURL(DASHBOARD.baseURL).setStyle(ButtonStyle.Link)
+    );
   }
 
   let buttonsRow = new ActionRowBuilder().addComponents(components);
