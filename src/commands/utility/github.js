@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { MESSAGES } = require("@root/config.js");
 const { getJson } = require("@helpers/HttpUtils");
 const { stripIndent } = require("common-tags");
@@ -11,7 +11,7 @@ module.exports = {
   description: "shows github statistics of a user",
   cooldown: 10,
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     aliases: ["git"],
@@ -24,7 +24,7 @@ module.exports = {
       {
         name: "username",
         description: "github username",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -67,21 +67,27 @@ async function getGithubUser(target, author) {
   let website = websiteProvided(blog) ? `[Click me](${blog})` : "Not Provided";
   if (website == null) website = "Not Provided";
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({
       name: `GitHub User: ${username}`,
       url: userPageLink,
       iconURL: avatarUrl,
     })
-    .addField(
-      "User Info",
-      stripIndent`**Real Name**: *${name || "Not Provided"}*
+    .addFields(
+      {
+        name: "User Info",
+        value: stripIndent`**Real Name**: *${name || "Not Provided"}*
         **Location**: *${location}*
         **GitHub ID**: *${githubId}*
         **Website**: *${website}*\n`,
-      true
+        inline: true,
+      },
+      {
+        name: "Social Stats",
+        value: `**Followers**: *${followers}*\n**Following**: *${following}*`,
+        inline: true,
+      }
     )
-    .addField("Social Stats", `**Followers**: *${followers}*\n**Following**: *${following}*`, true)
     .setDescription(`**Bio**:\n${bio || "Not Provided"}`)
     .setImage(avatarUrl)
     .setColor(0x6e5494)

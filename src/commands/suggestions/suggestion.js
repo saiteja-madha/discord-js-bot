@@ -1,7 +1,8 @@
 const { approveSuggestion, rejectSuggestion } = require("@handlers/suggestion");
 const { parsePermissions } = require("@helpers/Utils");
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
-const CHANNEL_PERMS = ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS", "MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"];
+const CHANNEL_PERMS = ["ViewChannel", "SendMessages", "EmbedLinks", "ManageMessages", "ReadMessageHistory"];
 
 /**
  * @type {import("@structures/Command")}
@@ -10,7 +11,7 @@ module.exports = {
   name: "suggestion",
   description: "configure suggestion system",
   category: "SUGGESTION",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 2,
@@ -56,13 +57,13 @@ module.exports = {
       {
         name: "status",
         description: "enable or disable welcome message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "enabled or disabled",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -79,13 +80,13 @@ module.exports = {
       {
         name: "channel",
         description: "configure suggestion channel or disable it",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel_name",
             description: "the channel where suggestions will be sent",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: false,
           },
         ],
@@ -93,13 +94,13 @@ module.exports = {
       {
         name: "appch",
         description: "configure approved suggestions channel or disable it",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel_name",
             description: "the channel where approved suggestions will be sent",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: false,
           },
         ],
@@ -107,13 +108,13 @@ module.exports = {
       {
         name: "rejch",
         description: "configure rejected suggestions channel or disable it",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel_name",
             description: "the channel where rejected suggestions will be sent",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: false,
           },
         ],
@@ -121,25 +122,25 @@ module.exports = {
       {
         name: "approve",
         description: "approve a suggestion",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel_name",
             description: "the channel where message exists",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "message_id",
             description: "the message id of the suggestion",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
           {
             name: "reason",
             description: "the reason for the approval",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -147,25 +148,25 @@ module.exports = {
       {
         name: "reject",
         description: "reject a suggestion",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel_name",
             description: "the channel where message exists",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "message_id",
             description: "the message id of the suggestion",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
           {
             name: "reason",
             description: "the reason for the rejection",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -173,12 +174,12 @@ module.exports = {
       {
         name: "staffadd",
         description: "add a staff role",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "role",
             description: "the role to add as a staff",
-            type: "ROLE",
+            type: ApplicationCommandOptionType.Role,
             required: true,
           },
         ],
@@ -186,12 +187,12 @@ module.exports = {
       {
         name: "staffremove",
         description: "staffremove a staff role",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "role",
             description: "the role to staffremove from a staff",
-            type: "ROLE",
+            type: ApplicationCommandOptionType.Role,
             required: true,
           },
         ],
@@ -361,7 +362,7 @@ async function setChannel(settings, channel) {
     return "Suggestion system is now disabled";
   }
 
-  if (!channel.permissionsFor(channel.guild.me).has(CHANNEL_PERMS)) {
+  if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
     return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
   }
 
@@ -377,7 +378,7 @@ async function setApprovedChannel(settings, channel) {
     return "Suggestion approved channel is now disabled";
   }
 
-  if (!channel.permissionsFor(channel.guild.me).has(CHANNEL_PERMS)) {
+  if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
     return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
   }
 
@@ -393,7 +394,7 @@ async function setRejectedChannel(settings, channel) {
     return "Suggestion rejected channel is now disabled";
   }
 
-  if (!channel.permissionsFor(channel.guild.me).has(CHANNEL_PERMS)) {
+  if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
     return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`;
   }
 

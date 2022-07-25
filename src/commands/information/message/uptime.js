@@ -7,7 +7,7 @@ module.exports = {
   name: "uptime",
   description: "gives you bot uptime",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
   },

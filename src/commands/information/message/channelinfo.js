@@ -7,7 +7,7 @@ module.exports = {
   name: "channelinfo",
   description: "shows information about a channel",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[#channel|id]",

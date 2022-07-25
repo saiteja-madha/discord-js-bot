@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getWarningLogs, clearWarningLogs } = require("@schemas/ModLog");
 const { getMember } = require("@schemas/Member");
 
@@ -9,7 +9,7 @@ module.exports = {
   name: "warnings",
   description: "list or clear user warnings",
   category: "MODERATION",
-  userPermissions: ["KICK_MEMBERS"],
+  userPermissions: ["KickMembers"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -30,12 +30,12 @@ module.exports = {
       {
         name: "list",
         description: "list all warnings for a user",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
         ],
@@ -43,12 +43,12 @@ module.exports = {
       {
         name: "clear",
         description: "clear all warnings for a user",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
         ],
@@ -115,7 +115,7 @@ async function listWarnings(target, { guildId }) {
   if (!warnings.length) return `${target.user.tag} has no warnings`;
 
   const acc = warnings.map((warning, i) => `${i + 1}. ${warning.reason} [By ${warning.admin.tag}]`).join("\n");
-  const embed = new MessageEmbed({
+  const embed = new EmbedBuilder({
     author: `${target.user.tag}'s warnings`,
     description: acc,
   });

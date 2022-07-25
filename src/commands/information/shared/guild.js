@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const moment = require("moment");
 
@@ -57,25 +57,47 @@ module.exports = async (guild) => {
   desc = `${desc + "❯"} **Region:** ${preferredLocale}\n`;
   desc += "\n";
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle("GUILD INFORMATION")
     .setThumbnail(guild.iconURL())
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(desc)
-    .addField(`Server Members [${all}]`, `\`\`\`Members: ${users}\nBots: ${bots}\`\`\``, true)
-    .addField(`Online Stats [${onlineAll}]`, `\`\`\`Members: ${onlineUsers}\nBots: ${onlineBots}\`\`\``, true)
-    .addField(
-      `Categories and channels [${totalChannels}]`,
-      `\`\`\`Categories: ${categories} | Text: ${textChannels} | Voice: ${voiceChannels} | Thread: ${threadChannels}\`\`\``,
-      false
-    )
-    .addField(`Roles [${rolesCount}]`, `\`\`\`${rolesString}\`\`\``, false)
-    .addField("Verification", `\`\`\`${verificationLevel}\`\`\``, true)
-    .addField("Boost Count", `\`\`\`${guild.premiumSubscriptionCount}\`\`\``, true)
-    .addField(
-      `Server Created [${createdAt.fromNow()}]`,
-      `\`\`\`${createdAt.format("dddd, Do MMMM YYYY")}\`\`\``,
-      false
+    .addFields(
+      {
+        name: `Server Members [${all}]`,
+        value: `\`\`\`Members: ${users}\nBots: ${bots}\`\`\``,
+        inline: true,
+      },
+      {
+        name: `Online Stats [${onlineAll}]`,
+        value: `\`\`\`Members: ${onlineUsers}\nBots: ${onlineBots}\`\`\``,
+        inline: true,
+      },
+      {
+        name: `Categories and channels [${totalChannels}]`,
+        value: `\`\`\`Categories: ${categories} | Text: ${textChannels} | Voice: ${voiceChannels} | Thread: ${threadChannels}\`\`\``,
+        inline: false,
+      },
+      {
+        name: `Roles [${rolesCount}]`,
+        value: `\`\`\`${rolesString}\`\`\``,
+        inline: false,
+      },
+      {
+        name: "Verification",
+        value: `\`\`\`${verificationLevel}\`\`\``,
+        inline: true,
+      },
+      {
+        name: "Boost Count",
+        value: `\`\`\`${guild.premiumSubscriptionCount}\`\`\``,
+        inline: true,
+      },
+      {
+        name: `Server Created [${createdAt.fromNow()}]`,
+        value: `\`\`\`${createdAt.format("dddd, Do MMMM YYYY")}\`\`\``,
+        inline: false,
+      }
     );
 
   if (guild.splashURL) embed.setImage(guild.splashURL);

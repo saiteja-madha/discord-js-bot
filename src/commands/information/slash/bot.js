@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { timeformat } = require("@helpers/Utils");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config.js");
 const botstats = require("../shared/botstats");
@@ -10,7 +10,7 @@ module.exports = {
   name: "bot",
   description: "bot related commands",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: false,
   },
@@ -20,17 +20,17 @@ module.exports = {
       {
         name: "invite",
         description: "get bot's invite",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "stats",
         description: "get bot's statistics",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "uptime",
         description: "get bot's uptime",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
     ],
   },
@@ -64,7 +64,7 @@ module.exports = {
 };
 
 function botInvite(client) {
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Invite" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
@@ -72,16 +72,16 @@ function botInvite(client) {
 
   // Buttons
   let components = [];
-  components.push(new MessageButton().setLabel("Invite Link").setURL(client.getInvite()).setStyle("LINK"));
+  components.push(new ButtonBuilder().setLabel("Invite Link").setURL(client.getInvite()).setStyle("LINK"));
 
   if (SUPPORT_SERVER) {
-    components.push(new MessageButton().setLabel("Support Server").setURL(SUPPORT_SERVER).setStyle("LINK"));
+    components.push(new ButtonBuilder().setLabel("Support Server").setURL(SUPPORT_SERVER).setStyle("LINK"));
   }
 
   if (DASHBOARD.enabled) {
-    components.push(new MessageButton().setLabel("Dashboard Link").setURL(DASHBOARD.baseURL).setStyle("LINK"));
+    components.push(new ButtonBuilder().setLabel("Dashboard Link").setURL(DASHBOARD.baseURL).setStyle("LINK"));
   }
 
-  let buttonsRow = new MessageActionRow().addComponents(components);
+  let buttonsRow = new ActionRowBuilder().addComponents(components);
   return { embeds: [embed], components: [buttonsRow] };
 }

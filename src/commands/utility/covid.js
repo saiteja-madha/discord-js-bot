@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@helpers/HttpUtils");
 const timestampToDate = require("timestamp-to-date");
@@ -11,7 +11,7 @@ module.exports = {
   description: "get covid statistics for a country",
   cooldown: 5,
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<country>",
@@ -23,7 +23,7 @@ module.exports = {
       {
         name: "country",
         description: "country name to get covid statistics for",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -50,19 +50,57 @@ async function getCovid(country) {
   const { data } = response;
 
   const mg = timestampToDate(data?.updated, "dd.MM.yyyy at HH:mm");
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle(`Covid - ${data?.country}`)
     .setThumbnail(data?.countryInfo.flag)
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .addField("Cases total", data?.cases.toString(), true)
-    .addField("Cases today", data?.todayCases.toString(), true)
-    .addField("Total deaths", data?.deaths.toString(), true)
-    .addField("Deaths today", data?.todayDeaths.toString(), true)
-    .addField("Recovered", data?.recovered.toString(), true)
-    .addField("Active", data?.active.toString(), true)
-    .addField("Critical stage", data?.critical.toString(), true)
-    .addField("Cases per 1 million", data?.casesPerOneMillion.toString(), true)
-    .addField("Deaths per 1 million", data?.deathsPerOneMillion.toString(), true)
+    .addFields(
+      {
+        name: "Cases Total",
+        value: data?.cases.toString(),
+        inline: true,
+      },
+      {
+        name: "Cases Today",
+        value: data?.todayCases.toString(),
+        inline: true,
+      },
+      {
+        name: "Deaths Total",
+        value: data?.deaths.toString(),
+        inline: true,
+      },
+      {
+        name: "Deaths Today",
+        value: data?.todayDeaths.toString(),
+        inline: true,
+      },
+      {
+        name: "Recovered",
+        value: data?.recovered.toString(),
+        inline: true,
+      },
+      {
+        name: "Active",
+        value: data?.active.toString(),
+        inline: true,
+      },
+      {
+        name: "Critical",
+        value: data?.critical.toString(),
+        inline: true,
+      },
+      {
+        name: "Cases per 1 million",
+        value: data?.casesPerOneMillion.toString(),
+        inline: true,
+      },
+      {
+        name: "Deaths per 1 million",
+        value: data?.deathsPerOneMillion.toString(),
+        inline: true,
+      }
+    )
     .setFooter({ text: `Last updated on ${mg}` });
 
   return { embeds: [embed] };

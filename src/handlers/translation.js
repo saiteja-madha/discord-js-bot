@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 const { isTranslated, logTranslation } = require("@schemas/TranslateLog");
 const data = require("@src/data.json");
 const { getLanguagesFromEmoji } = require("country-emoji-languages");
@@ -61,15 +61,15 @@ async function handleFlagReaction(emoji, message, user) {
 
   if (translated === 0) return;
 
-  const btnRow = new MessageActionRow().addComponents(
-    new MessageButton({
+  const btnRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder({
       url: message.url,
       label: "Original Message",
       style: "LINK",
     })
   );
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(message.client.config.EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: `Translation from ${src}` })
     .setDescription(desc)

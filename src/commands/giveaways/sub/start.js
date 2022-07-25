@@ -1,3 +1,5 @@
+const { ChannelType } = require("discord.js");
+
 /**
  * @param {import('discord.js').GuildMember} member
  * @param {import('discord.js').GuildTextBasedChannel} giveawayChannel
@@ -10,11 +12,11 @@
 module.exports = async (member, giveawayChannel, duration, prize, winners, host, allowedRoles = []) => {
   try {
     if (!host) host = member.user;
-    if (!member.permissions.has("MANAGE_MESSAGES")) {
+    if (!member.permissions.has("ManageMessages")) {
       return "You need to have the manage messages permissions to start giveaways.";
     }
 
-    if (!giveawayChannel.isText()) {
+    if (!giveawayChannel.type === ChannelType.GuildText) {
       return "You can only start giveaways in text channels.";
     }
 

@@ -1,4 +1,5 @@
 const { unTimeoutTarget } = require("@helpers/ModUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,8 +8,8 @@ module.exports = {
   name: "untimeout",
   description: "remove timeout from a member",
   category: "MODERATION",
-  botPermissions: ["MODERATE_MEMBERS"],
-  userPermissions: ["MODERATE_MEMBERS"],
+  botPermissions: ["ModerateMembers"],
+  userPermissions: ["ModerateMembers"],
   command: {
     enabled: true,
     aliases: ["unmute"],
@@ -21,13 +22,13 @@ module.exports = {
       {
         name: "user",
         description: "the target member",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "reason",
         description: "reason for timeout",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],

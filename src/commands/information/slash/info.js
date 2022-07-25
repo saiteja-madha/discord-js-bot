@@ -4,6 +4,7 @@ const guildInfo = require("../shared/guild");
 const avatar = require("../shared/avatar");
 const emojiInfo = require("../shared/emoji");
 const botInfo = require("../shared/botstats");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -12,7 +13,7 @@ module.exports = {
   name: "info",
   description: "show various information",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: false,
   },
@@ -22,12 +23,12 @@ module.exports = {
       {
         name: "user",
         description: "get user information",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "name",
             description: "name of the user",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: false,
           },
         ],
@@ -35,12 +36,12 @@ module.exports = {
       {
         name: "channel",
         description: "get channel information",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "name",
             description: "name of the channel",
-            type: "CHANNEL",
+            type: ApplicationCommandOptionType.Channel,
             required: false,
           },
         ],
@@ -48,22 +49,22 @@ module.exports = {
       {
         name: "guild",
         description: "get guild information",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "bot",
         description: "get bot information",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "avatar",
         description: "displays avatar information",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "name",
             description: "name of the user",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: false,
           },
         ],
@@ -71,12 +72,12 @@ module.exports = {
       {
         name: "emoji",
         description: "displays emoji information",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "name",
             description: "name of the emoji",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],

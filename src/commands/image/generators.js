@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageAttachment } = require("discord.js");
+const { EmbedBuilder, AttachmentBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getBuffer } = require("@helpers/HttpUtils");
 const { getImageFromMessage } = require("@helpers/BotUtils");
 const { EMBED_COLORS, IMAGE } = require("@root/config.js");
@@ -38,7 +38,7 @@ module.exports = {
   description: "generates a meme for the provided image",
   cooldown: 5,
   category: "IMAGE",
-  botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
+  botPermissions: ["EmbedLinks", "AttachFiles"],
   command: {
     enabled: true,
     aliases: availableGenerators,
@@ -49,20 +49,20 @@ module.exports = {
       {
         name: "name",
         description: "the type of generator",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: availableGenerators.map((gen) => ({ name: gen, value: gen })),
       },
       {
         name: "user",
         description: "the user to whose avatar the generator needs to applied",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
       {
         name: "link",
         description: "the image link to which the generator needs to applied",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],
@@ -77,8 +77,8 @@ module.exports = {
 
     if (!response.success) return message.safeReply("Failed to generate image");
 
-    const attachment = new MessageAttachment(response.buffer, "attachment.png");
-    const embed = new MessageEmbed()
+    const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
       .setFooter({ text: `Requested by: ${message.author.tag}` });
@@ -102,8 +102,8 @@ module.exports = {
 
     if (!response.success) return interaction.followUp("Failed to generate image");
 
-    const attachment = new MessageAttachment(response.buffer, "attachment.png");
-    const embed = new MessageEmbed()
+    const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
       .setFooter({ text: `Requested by: ${author.tag}` });

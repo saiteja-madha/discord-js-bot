@@ -1,4 +1,4 @@
-const { Util, MessageEmbed } = require("discord.js");
+const { parseEmoji, EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { parse } = require("twemoji-parser");
 
@@ -9,7 +9,7 @@ module.exports = {
   name: "bigemoji",
   description: "enlarge an emoji",
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<emoji>",
@@ -22,7 +22,7 @@ module.exports = {
       {
         name: "emoji",
         description: "emoji to enlarge",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -42,9 +42,9 @@ module.exports = {
 };
 
 function getEmoji(user, emoji) {
-  const custom = Util.parseEmoji(emoji);
+  const custom = parseEmoji(emoji);
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "❯ Big Emoji ❮" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setFooter({ text: `Requested by ${user.tag}` });

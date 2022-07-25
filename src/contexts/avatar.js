@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 
 /**
@@ -26,7 +26,7 @@ function getAvatar(user) {
   const x1024 = user.displayAvatarURL({ format: "png", dynamic: true, size: 1024 });
   const x2048 = user.displayAvatarURL({ format: "png", dynamic: true, size: 2048 });
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle(`Avatar of ${user.username}`)
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setImage(x256)

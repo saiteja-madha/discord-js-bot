@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require("discord.js");
 
 const IDLE_TIMEOUT = 30; // in seconds
 const MAX_PER_PAGE = 10; // max number of embed fields per page
@@ -10,7 +10,7 @@ module.exports = {
   name: "listservers",
   description: "lists all/matching servers",
   category: "OWNER",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     aliases: ["listserver", "findserver", "findservers"],
@@ -48,30 +48,36 @@ module.exports = {
     // Buttons Row
     let components = [];
     components.push(
-      new MessageButton().setCustomId("prevBtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
-      new MessageButton()
+      new ButtonBuilder().setCustomId("prevBtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
+      new ButtonBuilder()
         .setCustomId("nxtBtn")
         .setEmoji("➡️")
         .setStyle("SECONDARY")
         .setDisabled(totalPages === 1)
     );
-    let buttonsRow = new MessageActionRow().addComponents([components]);
+    let buttonsRow = new ActionRowBuilder().addComponents([components]);
 
     // Embed Builder
     const buildEmbed = () => {
       const start = (currentPage - 1) * maxPerPage;
       const end = start + maxPerPage < total ? start + maxPerPage : total;
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setColor(client.config.EMBED_COLORS.BOT_EMBED)
         .setAuthor({ name: "List of servers" })
         .setFooter({ text: `${match ? "Matched" : "Total"} Servers: ${total} • Page ${currentPage} of ${totalPages}` });
 
+      const fields = [];
       for (let i = start; i < end; i++) {
         const server = servers[i];
-        embed.addField(server.name, `${server.id}`, true);
+        fields.push({
+          name: server.name,
+          value: server.id,
+          inline: true,
+        });
       }
 
+      embed.addFields(fields);
       buttonsRow.components.find((c) => c.customId === "nxtBtn").setDisabled(currentPage === totalPages);
       buttonsRow.components.find((c) => c.customId === "prevBtn").setDisabled(currentPage === 1);
 

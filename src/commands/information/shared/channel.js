@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const { stripIndent } = require("common-tags");
 
@@ -58,7 +58,7 @@ module.exports = (channel) => {
       `;
   }
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Channel Details" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(desc);

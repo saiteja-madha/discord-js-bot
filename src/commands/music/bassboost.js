@@ -1,4 +1,5 @@
 const { musicValidations } = require("@helpers/BotUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 const levels = {
   none: 0.0,
@@ -26,7 +27,7 @@ module.exports = {
       {
         name: "level",
         description: "bassboost level",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: [
           {

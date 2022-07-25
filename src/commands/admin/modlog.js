@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "modlog",
   description: "enable or disable moderation logs",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     usage: "<#channel|off>",
@@ -19,8 +21,8 @@ module.exports = {
         name: "channel",
         description: "channels to send mod logs",
         required: false,
-        type: "CHANNEL",
-        channelTypes: ["GUILD_TEXT"],
+        type: ApplicationCommandOptionType.Channel,
+        channelTypes: [ChannelType.GuildText],
       },
     ],
   },

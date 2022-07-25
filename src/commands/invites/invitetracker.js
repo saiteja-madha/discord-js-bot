@@ -1,4 +1,5 @@
 const { cacheGuildInvites, resetInviteCache } = require("@handlers/invite");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,7 +8,7 @@ module.exports = {
   name: "invitetracker",
   description: "enable or disable invite tracking in the server",
   category: "INVITE",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     aliases: ["invitetracking"],
@@ -21,7 +22,7 @@ module.exports = {
         name: "status",
         description: "configuration status",
         required: true,
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         choices: [
           {
             name: "ON",
@@ -54,12 +55,12 @@ async function setStatus({ guild }, input, settings) {
   const status = input.toUpperCase() === "ON" ? true : false;
 
   if (status) {
-    if (!guild.me.permissions.has(["MANAGE_GUILD", "MANAGE_CHANNELS"])) {
+    if (!guild.members.me.permissions.has(["ManageGuild", "ManageChannels"])) {
       return "Oops! I am missing `Manage Server`, `Manage Channels` permission!\nI cannot track invites";
     }
 
     const channelMissing = guild.channels.cache
-      .filter((ch) => ch.type === "GUILD_TEXT" && !ch.permissionsFor(guild.me).has("MANAGE_CHANNELS"))
+      .filter((ch) => ch.type === "GUILD_TEXT" && !ch.permissionsFor(guild.members.me).has("ManageChannels"))
       .map((ch) => ch.name);
 
     if (channelMissing.length > 1) {

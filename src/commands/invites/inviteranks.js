@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 
 /**
@@ -8,7 +8,7 @@ module.exports = {
   name: "inviteranks",
   description: "shows the invite ranks configured on this guild",
   category: "INVITE",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
   },
@@ -38,7 +38,7 @@ async function getInviteRanks({ guild }, settings) {
     }
   });
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Invite Ranks" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(str);

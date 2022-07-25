@@ -7,7 +7,7 @@ module.exports = {
   name: "botinvite",
   description: "gives you bot invite",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
   },

@@ -1,4 +1,5 @@
 const { timeoutTarget } = require("@helpers/ModUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 const ems = require("enhanced-ms");
 
 /**
@@ -8,8 +9,8 @@ module.exports = {
   name: "timeout",
   description: "timeouts the specified member",
   category: "MODERATION",
-  botPermissions: ["MODERATE_MEMBERS"],
-  userPermissions: ["MODERATE_MEMBERS"],
+  botPermissions: ["ModerateMembers"],
+  userPermissions: ["ModerateMembers"],
   command: {
     enabled: true,
     aliases: ["mute"],
@@ -22,19 +23,19 @@ module.exports = {
       {
         name: "user",
         description: "the target member",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "duration",
         description: "the time to timeout the member for",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: "reason",
         description: "reason for timeout",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],

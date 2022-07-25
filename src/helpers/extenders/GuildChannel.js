@@ -1,10 +1,10 @@
-const { GuildChannel } = require("discord.js");
+const { GuildChannel, ChannelType } = require("discord.js");
 
 /**
  * Check if bot has permission to send embeds
  */
 GuildChannel.prototype.canSendEmbeds = function () {
-  return this.permissionsFor(this.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]);
+  return this.permissionsFor(this.guild.members.me).has(["ViewChannel", "SendMessages", "EmbedLinks"]);
 };
 
 /**
@@ -14,11 +14,11 @@ GuildChannel.prototype.canSendEmbeds = function () {
  */
 GuildChannel.prototype.safeSend = async function (content, seconds) {
   if (!content) return;
-  if (!this.isText() && !this.isThread()) return;
+  if (!this.type === ChannelType.GuildText && !this.type === ChannelType.DM) return;
 
-  const perms = ["VIEW_CHANNEL", "SEND_MESSAGES"];
-  if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
-  if (!this.permissionsFor(this.guild.me).has(perms)) return;
+  const perms = ["ViewChannel", "SendMessages"];
+  if (content.embeds && content.embeds.length > 0) perms.push("EmbedLinks");
+  if (!this.permissionsFor(this.guild.members.me).has(perms)) return;
 
   try {
     if (!seconds) return await this.send(content);

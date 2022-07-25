@@ -1,5 +1,6 @@
 const { getSettings } = require("@schemas/Guild");
 const { commandHandler, contextHandler, statsHandler, suggestionHandler, ticketHandler } = require("@src/handlers");
+const { InteractionType } = require("discord.js");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -13,12 +14,12 @@ module.exports = async (client, interaction) => {
   }
 
   // Slash Commands
-  if (interaction.isCommand()) {
+  if (interaction.type === InteractionType.ApplicationCommand) {
     return commandHandler.handleSlashCommand(interaction);
   }
 
   // Context Menu
-  else if (interaction.isContextMenu()) {
+  else if (interaction.isContextMenuCommand()) {
     const context = client.contextMenus.get(interaction.commandName);
     if (context) await contextHandler.handleContext(interaction, context);
     else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
@@ -45,7 +46,7 @@ module.exports = async (client, interaction) => {
   }
 
   // Modals
-  else if (interaction.isModalSubmit()) {
+  else if (interaction.type === InteractionType.ModalSubmit) {
     switch (interaction.customId) {
       case "SUGGEST_APPROVE_MODAL":
         return suggestionHandler.handleApproveModal(interaction);

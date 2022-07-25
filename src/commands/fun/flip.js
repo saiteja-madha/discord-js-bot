@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 
 const NORMAL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_,;.?!/\\'0123456789";
@@ -11,7 +11,7 @@ module.exports = {
   name: "flip",
   description: "flips a coin or message",
   category: "FUN",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -32,17 +32,17 @@ module.exports = {
       {
         name: "coin",
         description: "flip a coin",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "text",
         description: "reverses the given message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "input",
             description: "text to flip",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -107,12 +107,12 @@ module.exports = {
 };
 
 const firstEmbed = (user) =>
-  new MessageEmbed().setColor(EMBED_COLORS.TRANSPARENT).setDescription(`${user.username}, started a coin toss`);
+  new EmbedBuilder().setColor(EMBED_COLORS.TRANSPARENT).setDescription(`${user.username}, started a coin toss`);
 
-const secondEmbed = () => new MessageEmbed().setDescription("The coin is in the air");
+const secondEmbed = () => new EmbedBuilder().setDescription("The coin is in the air");
 
 const resultEmbed = (toss) =>
-  new MessageEmbed()
+  new EmbedBuilder()
     .setDescription(`>> **${toss} Wins** <<`)
     .setImage(toss === "HEAD" ? "https://i.imgur.com/HavOS7J.png" : "https://i.imgur.com/u1pmQMV.png");
 

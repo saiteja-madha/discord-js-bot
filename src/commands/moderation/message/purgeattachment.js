@@ -7,8 +7,8 @@ module.exports = {
   name: "purgeattach",
   description: "deletes the specified amount of messages with attachments",
   category: "MODERATION",
-  userPermissions: ["MANAGE_MESSAGES"],
-  botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
+  userPermissions: ["ManageMessages"],
+  botPermissions: ["ManageMessages", "ReadMessageHistory"],
   command: {
     enabled: true,
     usage: "[amount]",

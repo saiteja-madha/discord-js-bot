@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { stripIndent } = require("common-tags");
 
@@ -9,7 +9,7 @@ module.exports = {
   name: "automod",
   description: "various automod configuration",
   category: "AUTOMOD",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -51,30 +51,30 @@ module.exports = {
       {
         name: "status",
         description: "check automod configuration",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "strikes",
         description: "set maximum number of strikes before taking an action",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "amount",
             description: "number of strikes (default 5)",
             required: true,
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
           },
         ],
       },
       {
         name: "action",
         description: "set action to be performed after receiving maximum strikes",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "action",
             description: "action to perform",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
               {
@@ -96,13 +96,13 @@ module.exports = {
       {
         name: "debug",
         description: "enable/disable automod for messages sent by admins & moderators",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "configuration status",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -119,12 +119,12 @@ module.exports = {
       {
         name: "whitelist",
         description: "view whitelisted channels",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "whitelistadd",
         description: "add a channel to the whitelist",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
@@ -138,7 +138,7 @@ module.exports = {
       {
         name: "whitelistremove",
         description: "remove a channel from the whitelist",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
@@ -243,14 +243,32 @@ async function getStatus(settings, guild) {
     ❯ **Anti-Ghostping**: ${automod.anti_ghostping ? "✓" : "✕"}
   `;
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Automod Configuration", icon_url: guild.iconURL() })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(desc)
-    .addField("Log Channel", logChannel, true)
-    .addField("Max Strikes", automod.strikes.toString(), true)
-    .addField("Action", automod.action, true)
-    .addField("Debug", automod.debug ? "✓" : "✕", true);
+    .addFields(
+      {
+        name: "Log Channel",
+        value: logChannel,
+        inline: true,
+      },
+      {
+        name: "Max Strikes",
+        value: automod.strikes.toString(),
+        inline: true,
+      },
+      {
+        name: "Action",
+        value: automod.action,
+        inline: true,
+      },
+      {
+        name: "Debug",
+        value: automod.debug ? "✓" : "✕",
+        inline: true,
+      }
+    );
 
   return { embeds: [embed] };
 }
@@ -263,19 +281,19 @@ async function setStrikes(settings, strikes) {
 
 async function setAction(settings, guild, action) {
   if (action === "TIMEOUT") {
-    if (!guild.me.permissions.has("MODERATE_MEMBERS")) {
+    if (!guild.members.me.permissions.has("ModerateMembers")) {
       return "I do not permission to timeout members";
     }
   }
 
   if (action === "KICK") {
-    if (!guild.me.permissions.has("KICK_MEMBERS")) {
+    if (!guild.members.me.permissions.has("KickMembers")) {
       return "I do not have permission to kick members";
     }
   }
 
   if (action === "BAN") {
-    if (!guild.me.permissions.has("BAN_MEMBERS")) {
+    if (!guild.members.me.permissions.has("BanMembers")) {
       return "I do not have permission to ban members";
     }
   }

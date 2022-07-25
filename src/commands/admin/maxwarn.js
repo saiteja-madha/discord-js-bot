@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "maxwarn",
   description: "set max warnings configuration",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -27,12 +29,12 @@ module.exports = {
       {
         name: "limit",
         description: "set max warnings a member can receive before taking an action",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "amount",
             description: "max number of strikes",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true,
           },
         ],
@@ -40,12 +42,12 @@ module.exports = {
       {
         name: "action",
         description: "set action to performed after receiving maximum warnings",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "action",
             description: "action to perform",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
               {
@@ -112,19 +114,19 @@ async function setLimit(limit, settings) {
 
 async function setAction(guild, action, settings) {
   if (action === "TIMEOUT") {
-    if (!guild.me.permissions.has("MODERATE_MEMBERS")) {
+    if (!guild.members.me.permissions.has("ModerateMembers")) {
       return "I do not permission to timeout members";
     }
   }
 
   if (action === "KICK") {
-    if (!guild.me.permissions.has("KICK_MEMBERS")) {
+    if (!guild.members.me.permissions.has("KickMembers")) {
       return "I do not have permission to kick members";
     }
   }
 
   if (action === "BAN") {
-    if (!guild.me.permissions.has("BAN_MEMBERS")) {
+    if (!guild.members.me.permissions.has("BanMembers")) {
       return "I do not have permission to ban members";
     }
   }

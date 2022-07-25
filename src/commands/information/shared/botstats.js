@@ -1,9 +1,12 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config");
 const { timeformat } = require("@helpers/Utils");
 const os = require("os");
 const { stripIndent } = require("common-tags");
 
+/**
+ * @param {import('@structures/BotClient')} client
+ */
 module.exports = (client) => {
   // STATS
   const guilds = client.guilds.cache.size;
@@ -32,54 +35,64 @@ module.exports = (client) => {
   desc += `❒ Websocket Ping: ${client.ws.ping} ms\n`;
   desc += "\n";
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle("Bot Information")
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription(desc)
-    .addField(
-      "CPU:",
-      stripIndent`
+    .addFields(
+      {
+        name: "CPU",
+        value: stripIndent`
         ❯ **OS:** ${platform} [${architecture}]
         ❯ **Cores:** ${cores}
         ❯ **Usage:** ${cpuUsage}
         `,
-      true
-    )
-    .addField(
-      "Bot's RAM:",
-      stripIndent`
+        inline: true,
+      },
+      {
+        name: "Bot's RAM",
+        value: stripIndent`
         ❯ **Used:** ${botUsed}
         ❯ **Available:** ${botAvailable}
         ❯ **Usage:** ${botUsage}
         `,
-      true
-    )
-    .addField(
-      "Overall RAM:",
-      stripIndent`
-      ❯ **Used:** ${overallUsed}
-      ❯ **Available:** ${overallAvailable}
-      ❯ **Usage:** ${overallUsage}
-      `,
-      true
-    )
-    .addField("Node Js version", process.versions.node, false)
-    .addField("Uptime", "```" + timeformat(process.uptime()) + "```", false);
+        inline: true,
+      },
+      {
+        name: "Overall RAM",
+        value: stripIndent`
+        ❯ **Used:** ${overallUsed}
+        ❯ **Available:** ${overallAvailable}
+        ❯ **Usage:** ${overallUsage}
+        `,
+        inline: true,
+      },
+      {
+        name: "Node Js version",
+        value: process.versions.node,
+        inline: false,
+      },
+      {
+        name: "Uptime",
+        value: "```" + timeformat(process.uptime()) + "```",
+        inline: false,
+      }
+    );
 
   // Buttons
   let components = [];
-  components.push(new MessageButton().setLabel("Invite Link").setURL(client.getInvite()).setStyle("LINK"));
+  components.push(new ButtonBuilder().setLabel("Invite Link").setURL(client.getInvite()).setStyle("LINK"));
 
   if (SUPPORT_SERVER) {
-    components.push(new MessageButton().setLabel("Support Server").setURL(SUPPORT_SERVER).setStyle("LINK"));
+    components.push(new ButtonBuilder().setLabel("Support Server").setURL(SUPPORT_SERVER).setStyle("LINK"));
   }
 
   if (DASHBOARD.enabled) {
-    components.push(new MessageButton().setLabel("Dashboard Link").setURL(DASHBOARD.baseURL).setStyle("LINK"));
+    components.push(new ButtonBuilder().setLabel("Dashboard Link").setURL(DASHBOARD.baseURL).setStyle("LINK"));
   }
 
-  let buttonsRow = new MessageActionRow().addComponents(components);
+  let buttonsRow = new ActionRowBuilder().addComponents(components);
 
   return { embeds: [embed], components: [buttonsRow] };
 };

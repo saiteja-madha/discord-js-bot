@@ -2,7 +2,7 @@ const { Manager } = require("erela.js");
 const Deezer = require("erela.js-deezer");
 const Facebook = require("erela.js-facebook");
 const Spotify = require("erela.js-spotify");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const prettyMs = require("pretty-ms");
 
 /**
@@ -68,15 +68,29 @@ module.exports = (client) => {
   erela.on("trackStart", (player, track) => {
     const channel = client.channels.cache.get(player.textChannel);
 
-    const embed = new MessageEmbed()
+    const fields = [];
+    const embed = new EmbedBuilder()
       .setAuthor({ name: "Now Playing" })
       .setColor(client.config.EMBED_COLORS.BOT_EMBED)
       .setDescription(`[${track.title}](${track.uri})`)
-      .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
       .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
+    fields.push({
+      name: "Song Duration",
+      value: "`" + prettyMs(track.duration, { colonNotation: true }) + "`",
+      inline: true,
+    });
+
     if (typeof track.displayThumbnail === "function") embed.setThumbnail(track.displayThumbnail("hqdefault"));
-    if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
+    if (player.queue.totalSize > 0) {
+      fields.push({
+        name: "Position in Queue",
+        value: (player.queue.size - 0).toString(),
+        inline: true,
+      });
+    }
+
+    embed.setFields(fields);
     channel.safeSend({ embeds: [embed] });
   });
 

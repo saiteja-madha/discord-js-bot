@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
 
 /**
@@ -23,14 +23,32 @@ module.exports = async (client, guild) => {
     ownerTag = "Deleted User";
   }
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle("Guild Left")
     .setThumbnail(guild.iconURL())
     .setColor(client.config.EMBED_COLORS.ERROR)
-    .addField("Name", guild.name || "NA", false)
-    .addField("ID", guild.id, false)
-    .addField("Owner", `${ownerTag} [\`${ownerId}\`]`, false)
-    .addField("Members", `\`\`\`yaml\n${guild.memberCount}\`\`\``, false)
+    .addFields(
+      {
+        name: "Guild Name",
+        value: guild.name || "NA",
+        inline: false,
+      },
+      {
+        name: "ID",
+        value: guild.id,
+        inline: false,
+      },
+      {
+        name: "Owner",
+        value: `${ownerTag} [\`${ownerId}\`]`,
+        inline: false,
+      },
+      {
+        name: "Members",
+        value: `\`\`\`yaml\n${guild.memberCount}\`\`\``,
+        inline: false,
+      }
+    )
     .setFooter({ text: `Guild #${client.guilds.cache.size}` });
 
   client.joinLeaveWebhook.send({

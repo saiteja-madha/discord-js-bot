@@ -1,4 +1,5 @@
 const { canModerate } = require("@helpers/ModUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,8 +8,8 @@ module.exports = {
   name: "nick",
   description: "nickname commands",
   category: "MODERATION",
-  botPermissions: ["MANAGE_NICKNAMES"],
-  userPermissions: ["MANAGE_NICKNAMES"],
+  botPermissions: ["ManageNicknames"],
+  userPermissions: ["ManageNicknames"],
   command: {
     enabled: true,
     minArgsCount: 2,
@@ -29,18 +30,18 @@ module.exports = {
       {
         name: "set",
         description: "change a members nickname",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the member whose nick you want to set",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "name",
             description: "the nickname to set",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -48,12 +49,12 @@ module.exports = {
       {
         name: "reset",
         description: "reset a members nickname",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the members whose nick you want to reset",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
         ],

@@ -4,6 +4,7 @@ const vunmute = require("../shared/vunmute");
 const undeafen = require("../shared/undeafen");
 const disconnect = require("../shared/disconnect");
 const move = require("../shared/move");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -12,8 +13,8 @@ module.exports = {
   name: "voice",
   description: "voice moderation commands",
   category: "MODERATION",
-  userPermissions: ["MUTE_MEMBERS", "MOVE_MEMBERS", "DEAFEN_MEMBERS"],
-  botPermissions: ["MUTE_MEMBERS", "MOVE_MEMBERS", "DEAFEN_MEMBERS"],
+  userPermissions: ["MuteMembers", "MoveMembers", "DeafenMembers"],
+  botPermissions: ["MuteMembers", "MoveMembers", "DeafenMembers"],
   command: {
     enabled: false,
   },
@@ -23,18 +24,18 @@ module.exports = {
       {
         name: "mute",
         description: "mute a member's voice",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "reason",
             description: "reason for mute",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -42,18 +43,18 @@ module.exports = {
       {
         name: "unmute",
         description: "unmute a muted member's voice",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "reason",
             description: "reason for unmute",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -61,18 +62,18 @@ module.exports = {
       {
         name: "deafen",
         description: "deafen a member in voice channel",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "reason",
             description: "reason for deafen",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -80,18 +81,18 @@ module.exports = {
       {
         name: "undeafen",
         description: "undeafen a member in voice channel",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "reason",
             description: "reason for undeafen",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -99,18 +100,18 @@ module.exports = {
       {
         name: "kick",
         description: "kick a member from voice channel",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "reason",
             description: "reason for mute",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -118,12 +119,12 @@ module.exports = {
       {
         name: "move",
         description: "move a member from one voice channel to another",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the target member",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
@@ -136,7 +137,7 @@ module.exports = {
           {
             name: "reason",
             description: "reason for mute",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],

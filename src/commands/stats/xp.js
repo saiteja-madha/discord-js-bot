@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "xp",
   description: "configure the levelling system",
   category: "STATS",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -26,12 +28,12 @@ module.exports = {
       {
         name: "message",
         description: "set custom level up message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "message",
             description: "message to display when a user levels up",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -39,13 +41,13 @@ module.exports = {
       {
         name: "channel",
         description: "set the channel to send level up messages to",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel to send level up messages to",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
         ],

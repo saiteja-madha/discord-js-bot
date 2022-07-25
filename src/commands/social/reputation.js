@@ -1,5 +1,5 @@
 const { getUser } = require("@schemas/User");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { diffHours, getRemainingTime } = require("@helpers/Utils");
 const { EMBED_COLORS } = require("@root/config");
 
@@ -10,7 +10,7 @@ module.exports = {
   name: "rep",
   description: "give reputation to a user",
   category: "SOCIAL",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -32,12 +32,12 @@ module.exports = {
       {
         name: "view",
         description: "view reputation for a user",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the user to check reputation for",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: false,
           },
         ],
@@ -45,12 +45,12 @@ module.exports = {
       {
         name: "give",
         description: "give reputation to a user",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the user to check reputation for",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
         ],
@@ -111,12 +111,22 @@ async function viewReputation(target) {
   const userData = await getUser(target);
   if (!userData) return `${target.tag} has no reputation yet`;
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: `Reputation for ${target.username}` })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(target.displayAvatarURL())
-    .addField("Given", userData.reputation?.given.toString(), true)
-    .addField("Received", userData.reputation?.received.toString(), true);
+    .addFields(
+      {
+        name: "Given",
+        value: userData.reputation?.given.toString(),
+        inline: true,
+      },
+      {
+        name: "Received",
+        value: userData.reputation?.received.toString(),
+        inline: true,
+      }
+    );
 
   return { embeds: [embed] };
 }
@@ -144,7 +154,7 @@ async function giveReputation(user, target) {
   await userData.save();
   await targetData.save();
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(`${target.toString()} +1 Rep!`)
     .setFooter({ text: `By ${user.tag}` })

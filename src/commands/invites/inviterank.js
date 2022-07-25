@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "inviterank",
   description: "configure invite ranks",
   category: "INVITE",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     usage: "<role-name> <invites>",
@@ -28,18 +30,18 @@ module.exports = {
       {
         name: "add",
         description: "add a new invite rank",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "role",
             description: "role to be given",
-            type: "ROLE",
+            type: ApplicationCommandOptionType.Role,
             required: true,
           },
           {
             name: "invites",
             description: "number of invites required to obtain the role",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true,
           },
         ],
@@ -47,12 +49,12 @@ module.exports = {
       {
         name: "remove",
         description: "remove a previously configured invite rank",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "role",
             description: "role with configured invite rank",
-            type: "ROLE",
+            type: ApplicationCommandOptionType.Role,
             required: true,
           },
         ],

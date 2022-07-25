@@ -7,8 +7,8 @@ module.exports = {
   name: "deafen",
   description: "deafen specified member in voice channels",
   category: "MODERATION",
-  userPermissions: ["DEAFEN_MEMBERS"],
-  botPermissions: ["DEAFEN_MEMBERS"],
+  userPermissions: ["DeafenMembers"],
+  botPermissions: ["DeafenMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> [reason]",

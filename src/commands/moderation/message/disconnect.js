@@ -7,7 +7,7 @@ module.exports = {
   name: "disconnect",
   description: "disconnect specified member from voice channel",
   category: "MODERATION",
-  userPermissions: ["MUTE_MEMBERS"],
+  userPermissions: ["MuteMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> [reason]",

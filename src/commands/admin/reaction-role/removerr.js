@@ -1,7 +1,8 @@
 const { removeReactionRole } = require("@schemas/ReactionRoles");
 const { parsePermissions } = require("@helpers/Utils");
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
-const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
+const channelPerms = ["EmbedLinks", "ReadMessageHistory", "AddReactions", "UseExternalEmojis", "ManageMessages"];
 
 /**
  * @type {import("@structures/Command")}
@@ -10,10 +11,10 @@ module.exports = {
   name: "removerr",
   description: "remove configured reaction for the specified message",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
-    usage: "<#channel> <messageid>",
+    usage: "<#channel> <messageId>",
     minArgsCount: 2,
   },
   slashCommand: {
@@ -23,14 +24,14 @@ module.exports = {
       {
         name: "channel",
         description: "channel where the message exists",
-        type: "CHANNEL",
-        channelTypes: ["GUILD_TEXT"],
+        type: ApplicationCommandOptionType.Channel,
+        channelTypes: [ChannelType.GuildText],
         required: true,
       },
       {
         name: "message_id",
         description: "message id for which reaction roles was configured",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -56,13 +57,13 @@ module.exports = {
 };
 
 async function removeRR(guild, channel, messageId) {
-  if (!channel.permissionsFor(guild.me).has(channelPerms)) {
+  if (!channel.permissionsFor(guild.members.me).has(channelPerms)) {
     return `You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`;
   }
 
   let targetMessage;
   try {
-    targetMessage = await channel.messages.fetch(messageId);
+    targetMessage = await channel.messages.fetch({ message: messageId });
   } catch (ex) {
     return "Could not fetch message. Did you provide a valid messageId?";
   }

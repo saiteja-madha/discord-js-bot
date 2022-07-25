@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
 
@@ -10,7 +10,7 @@ module.exports = {
   description: "beg from someone",
   category: "ECONOMY",
   cooldown: 21600,
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
   },
@@ -64,7 +64,7 @@ async function beg(user) {
   userDb.coins += amount;
   await userDb.save();
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: `${user.username}`, iconURL: user.displayAvatarURL() })
     .setDescription(

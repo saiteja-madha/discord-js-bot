@@ -7,7 +7,7 @@ module.exports = {
   name: "userinfo",
   description: "shows information about the user",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[@member|id]",

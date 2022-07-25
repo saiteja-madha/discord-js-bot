@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType, ChannelType } = require("discord.js");
 const { parsePermissions } = require("@helpers/Utils");
 const { EMBED_COLORS } = require("@root/config");
 const ems = require("enhanced-ms");
@@ -60,43 +60,43 @@ module.exports = {
       {
         name: "start",
         description: "start a giveaway",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "the channel to start the giveaway in",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "duration",
             description: "the duration of the giveaway (Example: 1w/1d/1h/1m/1s)",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
           {
             name: "prize",
             description: "the prize of the giveaway",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
           {
             name: "winners",
             description: "the number of winners",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true,
           },
           {
             name: "allowed_roles",
             description: "the roleId's that can participate in the giveaway. Multiple roles must be comma separated",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
           {
             name: "host",
             description: "the host of the giveaway",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: false,
           },
         ],
@@ -104,12 +104,12 @@ module.exports = {
       {
         name: "pause",
         description: "pause a giveaway",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "message_id",
             description: "the message id of the giveaway",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -117,12 +117,12 @@ module.exports = {
       {
         name: "resume",
         description: "resume a paused giveaway",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "message_id",
             description: "the message id of the giveaway",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -130,12 +130,12 @@ module.exports = {
       {
         name: "end",
         description: "end a giveaway",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "message_id",
             description: "the message id of the giveaway",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -143,12 +143,12 @@ module.exports = {
       {
         name: "reroll",
         description: "reroll a giveaway",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "message_id",
             description: "the message id of the giveaway",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -156,35 +156,35 @@ module.exports = {
       {
         name: "list",
         description: "list all giveaways",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "edit",
         description: "edit a giveaway",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "message_id",
             description: "the message id of the giveaway",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
           {
             name: "add_duration",
             description: "the number of minutes to add to the giveaway duration",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
           {
             name: "new_prize",
             description: "the new prize",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
           {
             name: "new_winners",
             description: "the new number of winners",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
         ],
@@ -198,7 +198,7 @@ module.exports = {
 
     //
     if (sub === "start") {
-      if (!message.channel.permissionsFor(message.guild.me).has("EMBED_LINKS")) {
+      if (!message.channel.permissionsFor(message.guild.members.me).has("EmbedLinks")) {
         return message.safeReply("I am missing `Embed Links` permission to run an interactive setup");
       }
       return await runInteractiveSetup(message);
@@ -320,14 +320,17 @@ module.exports = {
 };
 
 // Interactive Giveaway setup
+/**
+ * @param {import('discord.js').Message} message
+ */
 async function runInteractiveSetup(message) {
   const { member, channel, guild } = message;
 
   const SETUP_TIMEOUT = 30 * 1000;
-  const SETUP_PERMS = ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"];
+  const SETUP_PERMS = ["ViewChannel", "SendMessages", "EmbedLinks"];
 
   const filter = (m) => m.author.id === member.id;
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Giveaway Setup" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setFooter({ text: "Type cancel to cancel setup" });
@@ -366,7 +369,10 @@ async function runInteractiveSetup(message) {
     if (reply === false) return;
     targetChannel = reply.mentions.channels.first();
     if (!targetChannel) return reply.reply("Giveaway setup has been cancelled. You did not mention a channel");
-    if (!targetChannel.isText() && !targetChannel.permissionsFor(guild.me).has(SETUP_PERMS)) {
+    if (
+      !targetChannel.type === ChannelType.GuildText &&
+      !targetChannel.permissionsFor(guild.members.me).has(SETUP_PERMS)
+    ) {
       return reply.reply(
         `Giveaway setup has been cancelled.\nI need ${parsePermissions(SETUP_PERMS)} in ${targetChannel}`
       );
@@ -438,7 +444,7 @@ async function runInteractiveEdit(message) {
   const SETUP_TIMEOUT = 30 * 1000;
 
   const filter = (m) => m.author.id === member.id;
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Giveaway Update" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setFooter({ text: "Type `cancel` to cancel update!\nType `skip` to skip this step" });

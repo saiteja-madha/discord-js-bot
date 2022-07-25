@@ -1,4 +1,5 @@
 const { musicValidations } = require("@helpers/BotUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -18,7 +19,7 @@ module.exports = {
     options: [
       {
         name: "type",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         description: "The entity you want to loop",
         required: false,
         choices: [

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getMemberStats } = require("@schemas/MemberStats");
 const { EMBED_COLORS } = require("@root/config");
 const { stripIndents } = require("common-tags");
@@ -21,7 +21,7 @@ module.exports = {
       {
         name: "user",
         description: "target user",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
     ],
@@ -48,29 +48,43 @@ async function stats(member, settings) {
   if (!settings.stats.enabled) return "Stats Tracking is disabled on this server";
   const memberStats = await getMemberStats(member.guild.id, member.id);
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setThumbnail(member.user.displayAvatarURL())
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .addField("User Tag", member.user.tag, true)
-    .addField("ID", member.id, true)
-    .addField("⌚ Member since", member.joinedAt.toLocaleString(), false)
-    .addField(
-      "📝 Message Stats",
-      stripIndents`
+    .addFields(
+      {
+        name: "User Tag",
+        value: member.user.tag,
+        inline: true,
+      },
+      {
+        name: "ID",
+        value: member.id,
+        inline: true,
+      },
+      {
+        name: "⌚ Member since",
+        value: member.joinedAt.toLocaleString(),
+        inline: false,
+      },
+      {
+        name: "💬 Messages sent",
+        value: stripIndents`
       ❯ Messages Sent: ${memberStats.messages}
       ❯ Prefix Commands: ${memberStats.commands.prefix}
       ❯ Slash Commands: ${memberStats.commands.slash}
       ❯ XP Earned: ${memberStats.xp}
       ❯ Current Level: ${memberStats.level}
     `,
-      false
-    )
-    .addField(
-      "🎙️ Voice Stats",
-      stripIndents`
+        inline: false,
+      },
+      {
+        name: "🎙️ Voice Stats",
+        value: stripIndents`
       ❯ Total Connections: ${memberStats.voice.connections}
       ❯ Time Spent: ${memberStats.voice.time}
-    `
+    `,
+      }
     )
     .setFooter({ text: "Stats Generated" })
     .setTimestamp();
