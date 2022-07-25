@@ -4,7 +4,7 @@ const { EMBED_COLORS } = require("@root/config");
 const NekosLife = require("nekos.life");
 const neko = new NekosLife();
 
-const choices = ["hug", "kiss", "cuddle", "pat", "poke", "slap", "smug", "tickle", "wink"];
+const choices = ["hug", "kiss", "cuddle", "feed", "pat", "poke", "slap", "smug", "tickle", "wink"];
 
 /**
  * @type {import("@structures/Command")}
@@ -63,7 +63,7 @@ const genReaction = async (category, user) => {
 
     // neko api
     else {
-      imageUrl = (await neko.sfw[category]()).url;
+      imageUrl = (await neko[category]()).url;
     }
 
     return new MessageEmbed()
