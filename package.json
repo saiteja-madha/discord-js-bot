@@ -6,7 +6,7 @@
   "author": "Sai Teja M",
   "license": "ISC",
   "engines": {
-    "node": ">=16.6.0"
+    "node": ">=16.9.0"
   },
   "scripts": {
     "dev": "nodemon .",
@@ -27,9 +27,9 @@
     "chalk": "^4.1.2",
     "common-tags": "^1.8.2",
     "country-emoji-languages": "^1.0.0",
-    "discord-giveaways": "^5.1.1",
+    "discord-giveaways": "^5.2.2",
     "discord-together": "^1.3.3",
-    "discord.js": "^13.7.0",
+    "discord.js": "^13.9.1",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
     "enhanced-ms": "^1.0.2",
@@ -41,15 +41,15 @@
     "express-session": "^1.17.3",
     "fixedsize-map": "^1.0.1",
     "fs": "0.0.2",
-    "iso-639-1": "^2.1.13",
+    "iso-639-1": "^2.1.15",
     "module-alias": "^2.2.2",
-    "moment": "^2.29.3",
-    "mongoose": "^6.3.4",
+    "moment": "^2.29.4",
+    "mongoose": "^6.4.6",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.6.1",
     "os": "^0.1.2",
-    "pino": "^8.0.0",
-    "pino-pretty": "^8.0.0",
+    "pino": "^8.3.0",
+    "pino-pretty": "^8.1.0",
     "pretty-ms": "^7.0.1",
     "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
@@ -65,11 +65,11 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "eslint": "^8.9.0",
-    "eslint-plugin-jsdoc": "^37.9.4",
-    "node": "^16.10.0",
-    "nodemon": "^2.0.15",
-    "prettier": "2.5.1"
+    "eslint": "^8.20.0",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "node": "^16.9.0",
+    "nodemon": "^2.0.19",
+    "prettier": "2.7.1"
   },
   "keywords": [
     "discord",
