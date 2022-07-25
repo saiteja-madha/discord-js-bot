@@ -121,6 +121,6 @@ module.exports = {
   XP_SYSTEM: {
     ENABLED: false,
     COOLDOWN: 5, // Cooldown in seconds between messages
-    DEFAULT_LVL_UP_MSG: "{m}, You just advanced to **Level {l}**",
+    DEFAULT_LVL_UP_MSG: "{member:tag}, You just advanced to **Level {level}**",
   },
 };
