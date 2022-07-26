@@ -1,6 +1,15 @@
-const { EmbedBuilder, ApplicationCommandOptionType, ChannelType } = require("discord.js");
+const {
+  ChannelType,
+  ButtonBuilder,
+  ActionRowBuilder,
+  ComponentType,
+  TextInputStyle,
+  TextInputBuilder,
+  ModalBuilder,
+  ButtonStyle,
+  ApplicationCommandOptionType,
+} = require("discord.js");
 const { parsePermissions } = require("@helpers/Utils");
-const { EMBED_COLORS } = require("@root/config");
 const ems = require("enhanced-ms");
 
 // Sub Commands
@@ -24,8 +33,8 @@ module.exports = {
     minArgsCount: 1,
     subcommands: [
       {
-        trigger: "start",
-        description: "start an interactive giveaway setup",
+        trigger: "start <#channel>",
+        description: "setup a new giveaway",
       },
       {
         trigger: "pause <messageId>",
@@ -48,7 +57,7 @@ module.exports = {
         description: "list all giveaways",
       },
       {
-        trigger: "edit",
+        trigger: "edit <messageId>",
         description: "edit a giveaway",
       },
     ],
@@ -68,36 +77,6 @@ module.exports = {
             type: ApplicationCommandOptionType.Channel,
             channelTypes: [ChannelType.GuildText],
             required: true,
-          },
-          {
-            name: "duration",
-            description: "the duration of the giveaway (Example: 1w/1d/1h/1m/1s)",
-            type: ApplicationCommandOptionType.String,
-            required: true,
-          },
-          {
-            name: "prize",
-            description: "the prize of the giveaway",
-            type: ApplicationCommandOptionType.String,
-            required: true,
-          },
-          {
-            name: "winners",
-            description: "the number of winners",
-            type: ApplicationCommandOptionType.Integer,
-            required: true,
-          },
-          {
-            name: "allowed_roles",
-            description: "the roleId's that can participate in the giveaway. Multiple roles must be comma separated",
-            type: ApplicationCommandOptionType.String,
-            required: false,
-          },
-          {
-            name: "host",
-            description: "the host of the giveaway",
-            type: ApplicationCommandOptionType.User,
-            required: false,
           },
         ],
       },
@@ -198,10 +177,10 @@ module.exports = {
 
     //
     if (sub === "start") {
-      if (!message.channel.permissionsFor(message.guild.members.me).has("EmbedLinks")) {
-        return message.safeReply("I am missing `Embed Links` permission to run an interactive setup");
-      }
-      return await runInteractiveSetup(message);
+      if (!args[1]) return message.safeReply("Incorrect usage! Please provide a channel to start the giveaway in");
+      const match = message.guild.findMatchingChannels(args[1]);
+      if (!match.length) return message.safeReply(`No channel found matching ${args[1]}`);
+      return await runModalSetup(message, match[0]);
     }
 
     //
@@ -235,7 +214,9 @@ module.exports = {
 
     //
     else if (sub === "edit") {
-      return await runInteractiveEdit(message);
+      const messageId = args[1];
+      if (!messageId) return message.safeReply("Incorrect usage! Please provide a message id");
+      return await runModalEdit(message, messageId);
     }
 
     //
@@ -251,24 +232,7 @@ module.exports = {
     //
     if (sub === "start") {
       const channel = interaction.options.getChannel("channel");
-      const durationMs = ems(interaction.options.getString("duration"));
-      if (!durationMs) {
-        return interaction.followUp("Not a valid duration");
-      }
-
-      const duration = durationMs / 60000;
-      const prize = interaction.options.getString("prize");
-      const winnerCount = interaction.options.getInteger("winners");
-      const host = interaction.options.getUser("host");
-      const roleIds = interaction.options.getString("allowed_roles") || "";
-
-      const allowedRoles = roleIds
-        .split(",")
-        .map((roleId) => interaction.guild.roles.cache.get(roleId))
-        .filter((role) => role)
-        .map((role) => role.id);
-
-      response = await start(interaction.member, channel, duration, prize, winnerCount, host, allowedRoles);
+      return await runModalSetup(interaction, channel);
     }
 
     //
@@ -319,197 +283,212 @@ module.exports = {
   },
 };
 
-// Interactive Giveaway setup
+// Modal Giveaway setup
 /**
- * @param {import('discord.js').Message} message
+ * @param {import('discord.js').Message|import('discord.js').CommandInteraction} args0
+ * @param {import('discord.js').GuildTextBasedChannel} targetCh
  */
-async function runInteractiveSetup(message) {
-  const { member, channel, guild } = message;
-
-  const SETUP_TIMEOUT = 30 * 1000;
+async function runModalSetup({ member, channel, guild }, targetCh) {
   const SETUP_PERMS = ["ViewChannel", "SendMessages", "EmbedLinks"];
 
-  const filter = (m) => m.author.id === member.id;
-  const embed = new EmbedBuilder()
-    .setAuthor({ name: "Giveaway Setup" })
-    .setColor(EMBED_COLORS.BOT_EMBED)
-    .setFooter({ text: "Type cancel to cancel setup" });
-
-  let targetChannel;
-  let duration;
-  let prize;
-  let winners = 1;
-  let allowedRoles = [];
-  let host;
-
-  /**
-   * @param {string} question
-   * @returns {Promise<import("discord.js").Message>}
-   */
-  const waitFor = async (question) => {
-    await channel.send({ embeds: [embed.setDescription(question)] });
-    try {
-      let reply = (await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT, errors: ["time"] })).first();
-      if (reply.content.toLowerCase() === "cancel") {
-        await reply.reply("Giveaway setup has been cancelled");
-        return false;
-      }
-
-      return reply;
-    } catch (err) {
-      await channel.send({ embeds: [embed.setDescription("No response received. Giveaway setup has been cancelled")] });
-      return false;
-    }
-  };
-
-  let reply;
-  try {
-    // wait for channel
-    reply = await waitFor("Please `mention the channel` in which the giveaway must be hosted");
-    if (reply === false) return;
-    targetChannel = reply.mentions.channels.first();
-    if (!targetChannel) return reply.reply("Giveaway setup has been cancelled. You did not mention a channel");
-    if (
-      !targetChannel.type === ChannelType.GuildText &&
-      !targetChannel.permissionsFor(guild.members.me).has(SETUP_PERMS)
-    ) {
-      return reply.reply(
-        `Giveaway setup has been cancelled.\nI need ${parsePermissions(SETUP_PERMS)} in ${targetChannel}`
-      );
-    }
-
-    // wait for duration
-    reply = await waitFor("Please `specify the duration` of the giveaway in minutes");
-    if (reply === false) return;
-    duration = ems(reply.content);
-    if (isNaN(duration)) return reply.reply("Giveaway setup has been cancelled. You did not specify a valid duration");
-
-    // wait for prize
-    reply = await waitFor("Please `specify the prize` of the giveaway");
-    if (reply === false) return;
-    prize = reply.content;
-
-    // winner count
-    reply = await waitFor("Please `specify the number of winners`");
-    if (reply === false) return;
-    winners = reply.content;
-    if (isNaN(winners)) {
-      return reply.reply("Giveaway setup has been cancelled. You did not specify a number of winners");
-    }
-    winners = parseInt(winners);
-
-    // giveaway role
-    reply = await waitFor(
-      "Please specify the `RoleID's` that can take part in the giveaway. Multiple roles can be comma separated.\n " +
-        "Alternatively, you can specify `none` to disable the role requirement"
+  // validate channel perms
+  if (!targetCh) return channel.safeSend("Giveaway setup has been cancelled. You did not mention a channel");
+  if (!targetCh.type === ChannelType.GuildText && !targetCh.permissionsFor(guild.members.me).has(SETUP_PERMS)) {
+    return channel.safeSend(
+      `Giveaway setup has been cancelled.\nI need ${parsePermissions(SETUP_PERMS)} in ${targetCh}`
     );
-    if (reply === false) return;
-    allowedRoles =
-      reply.content.toLowerCase() === "none"
-        ? []
-        : reply.content
-            .split(",")
-            .map((roleId) => message.guild.roles.cache.get(roleId))
-            .filter((role) => role)
-            .map((role) => role.id);
-
-    // host
-    reply = await waitFor(
-      "Please `mention the user` that will host the giveaway. Alternatively, you can specify `none`"
-    );
-    if (reply === false) return;
-    host = reply.mentions.users.first();
-    if (!host) host = null;
-
-    // wait for confirmation
-    reply = await waitFor(
-      `Are you sure you want to host a giveaway in ${targetChannel} for ${duration} minutes with ${prize} for ${winners} winners?\n\n Type \`yes\` to confirm`
-    );
-    if (reply === false) return;
-    if (reply.content.toLowerCase() !== "yes") {
-      return reply.reply("Giveaway setup has been cancelled");
-    }
-
-    const response = await start(message.member, targetChannel, duration, prize, winners, host, allowedRoles);
-    await channel.send(response);
-  } catch (e) {
-    await channel.send({ embeds: [embed.setDescription("An error occurred while setting up the giveaway")] });
   }
+
+  const buttonRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId("giveaway_btnSetup").setLabel("Setup Giveaway").setStyle(ButtonStyle.Primary)
+  );
+
+  const sentMsg = await channel.send({
+    content: "Please click the button below to setup new giveaway",
+    components: [buttonRow],
+  });
+
+  const btnInteraction = await channel
+    .awaitMessageComponent({
+      componentType: ComponentType.Button,
+      filter: (i) => i.customId === "giveaway_btnSetup" && i.member.id === member.id && i.message.id === sentMsg.id,
+      time: 20000,
+    })
+    .catch((ex) => {});
+
+  if (!btnInteraction) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
+
+  // display modal
+  await btnInteraction.showModal(
+    new ModalBuilder({
+      customId: "giveaway-modalSetup",
+      title: "Giveaway Setup",
+      components: [
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("duration")
+            .setLabel("What is the duration?")
+            .setPlaceholder("1h / 1d / 1w")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("prize")
+            .setLabel("What is the prize?")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("winners")
+            .setLabel("Number of winners?")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("roles")
+            .setLabel("RoleId's that can take part in the giveaway")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("host")
+            .setLabel("User Id hosting the giveaway")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+      ],
+    })
+  );
+
+  // receive modal input
+  const modal = await btnInteraction
+    .awaitModalSubmit({
+      time: 1 * 60 * 1000,
+      filter: (m) => m.customId === "giveaway-modalSetup" && m.member.id === member.id && m.message.id === sentMsg.id,
+    })
+    .catch((ex) => {});
+
+  if (!modal) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
+
+  sentMsg.delete().catch(() => {});
+  await modal.reply("Setting up giveaway...");
+
+  // duration
+  const duration = ems(modal.fields.getTextInputValue("duration"));
+  if (isNaN(duration)) return modal.editReply("Setup has been cancelled. You did not specify a valid duration");
+
+  // prize
+  const prize = modal.fields.getTextInputValue("prize");
+
+  // winner count
+  const winners = parseInt(modal.fields.getTextInputValue("winners"));
+  if (isNaN(winners)) return modal.editReply("Setup has been cancelled. You did not specify a valid winner count");
+
+  // roles
+  const allowedRoles =
+    modal.fields
+      .getTextInputValue("roles")
+      ?.split(",")
+      ?.filter((roleId) => guild.roles.cache.get(roleId)) || [];
+
+  // host
+  const host = modal.fields.getTextInputValue("host")
+    ? await guild.client.users.fetch(modal.fields.getTextInputValue("host"))
+    : null;
+
+  const response = await start(member, targetCh, duration, prize, winners, host, allowedRoles);
+  await modal.editReply(response);
 }
 
 // Interactive Giveaway Update
-async function runInteractiveEdit(message) {
+/**
+ * @param {import('discord.js').Message} message
+ * @param {string} messageId
+ */
+async function runModalEdit(message, messageId) {
   const { member, channel } = message;
 
-  const SETUP_TIMEOUT = 30 * 1000;
+  const buttonRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId("giveaway_btnEdit").setLabel("Edit Giveaway").setStyle(ButtonStyle.Primary)
+  );
 
-  const filter = (m) => m.author.id === member.id;
-  const embed = new EmbedBuilder()
-    .setAuthor({ name: "Giveaway Update" })
-    .setColor(EMBED_COLORS.BOT_EMBED)
-    .setFooter({ text: "Type `cancel` to cancel update!\nType `skip` to skip this step" });
+  const sentMsg = await channel.send({
+    content: "Please click the button below to edit the giveaway",
+    components: [buttonRow],
+  });
 
-  let messageId;
-  let addDuration;
-  let newPrize;
-  let newWinnerCount;
+  const btnInteraction = await channel
+    .awaitMessageComponent({
+      componentType: ComponentType.Button,
+      filter: (i) => i.customId === "giveaway_btnEdit" && i.member.id === member.id && i.message.id === sentMsg.id,
+      time: 20000,
+    })
+    .catch((ex) => {});
 
-  const waitFor = async (question) => {
-    await channel.send({ embeds: [embed.setDescription(question)] });
-    try {
-      let reply = (await channel.awaitMessages({ filter, max: 1, time: SETUP_TIMEOUT, errors: ["time"] })).first();
-      if (reply.content.toLowerCase() === "cancel") {
-        await reply.reply("Giveaway update has been cancelled");
-        return false;
-      }
+  if (!btnInteraction) return sentMsg.edit({ content: "No response received, cancelling update", components: [] });
 
-      return reply;
-    } catch (err) {
-      await channel.send({
-        embeds: [embed.setDescription("No response received. Giveaway update has been cancelled")],
-      });
-      return false;
-    }
-  };
+  // display modal
+  await btnInteraction.showModal(
+    new ModalBuilder({
+      customId: "giveaway-modalEdit",
+      title: "Giveaway Update",
+      components: [
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("duration")
+            .setLabel("Duration to add")
+            .setPlaceholder("1h / 1d / 1w")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("prize")
+            .setLabel("What is the new prize?")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("winners")
+            .setLabel("Number of winners?")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+      ],
+    })
+  );
 
-  let reply;
-  try {
-    // wait for messageId
-    reply = await waitFor("Please enter the `messageId` of the existing giveaway");
-    if (reply === false) return;
-    messageId = reply.content;
+  // receive modal input
+  const modal = await btnInteraction
+    .awaitModalSubmit({
+      time: 1 * 60 * 1000,
+      filter: (m) => m.customId === "giveaway-modalEdit" && m.member.id === member.id && m.message.id === sentMsg.id,
+    })
+    .catch((ex) => {});
 
-    // wait for addDuration
-    reply = await waitFor("Please specify the `duration to add` to the giveaway in minutes");
-    if (reply === false) return;
-    if (reply.content.toLowerCase() !== "skip") {
-      addDuration = ems(reply.content);
-      if (isNaN(addDuration)) {
-        return reply.reply("Giveaway update has been cancelled. You did not specify a valid duration");
-      }
-    }
+  if (!modal) return sentMsg.edit({ content: "No response received, cancelling update", components: [] });
 
-    // wait for new prize
-    reply = await waitFor("Please specify the `new prize` of the giveaway");
-    if (reply.content.toLowerCase() !== "skip") {
-      if (reply === false) return;
-      newPrize = reply.content;
-    }
+  sentMsg.delete().catch(() => {});
+  await modal.reply("Updating the giveaway...");
 
-    // winner count
-    reply = await waitFor("Please specify the `new number of winners`");
-    if (reply === false) return;
-    if (reply.content.toLowerCase() !== "skip") {
-      newWinnerCount = reply.content;
-      if (isNaN(newWinnerCount)) {
-        return reply.reply("Giveaway setup has been cancelled. You did not specify a number of winners");
-      }
-      newWinnerCount = parseInt(newWinnerCount);
-    }
+  // duration
+  const addDuration = ems(modal.fields.getTextInputValue("duration"));
+  if (isNaN(addDuration)) return modal.editReply("Update has been cancelled. You did not specify a valid add duration");
 
-    const response = await edit(message.member, messageId, addDuration, newPrize, newWinnerCount);
-    await channel.send(response);
-  } catch (e) {
-    await channel.send({ embeds: [embed.setDescription("An error occurred while setting up the giveaway")] });
+  // prize
+  const newPrize = modal.fields.getTextInputValue("prize");
+
+  // winner count
+  const newWinnerCount = parseInt(modal.fields.getTextInputValue("winners"));
+  if (isNaN(newWinnerCount)) {
+    return modal.editReply("Update has been cancelled. You did not specify a valid winner count");
   }
+
+  const response = await edit(message.member, messageId, addDuration, newPrize, newWinnerCount);
+  await modal.editReply(response);
 }
