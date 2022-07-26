@@ -4,7 +4,7 @@ const { InteractionType } = require("discord.js");
 
 /**
  * @param {import('@src/structures').BotClient} client
- * @param {import('discord.js').Interaction} interaction
+ * @param {import('discord.js').BaseInteraction} interaction
  */
 module.exports = async (client, interaction) => {
   if (!interaction.guild) {
@@ -14,7 +14,7 @@ module.exports = async (client, interaction) => {
   }
 
   // Slash Commands
-  if (interaction.type === InteractionType.ApplicationCommand) {
+  if (interaction.isChatInputCommand()) {
     return commandHandler.handleSlashCommand(interaction);
   }
 

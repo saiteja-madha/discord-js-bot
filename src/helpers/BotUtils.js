@@ -22,7 +22,7 @@ module.exports = class BotUtils {
 
   /**
    * Get the image url from the message
-   * @param {import('discord.js'.Message)} message
+   * @param {import('discord.js').Message} message
    * @param {string[]} args
    */
   static async getImageFromMessage(message, args) {
@@ -47,15 +47,15 @@ module.exports = class BotUtils {
     }
 
     if (!url && message.mentions.users.size > 0) {
-      url = message.mentions.users.first().displayAvatarURL({ size: 256, format: "png" });
+      url = message.mentions.users.first().displayAvatarURL({ size: 256, extension: "png" });
     }
 
     if (!url) {
       const member = await message.guild.resolveMember(args[0]);
-      if (member) url = member.user.displayAvatarURL({ size: 256, format: "png" });
+      if (member) url = member.user.displayAvatarURL({ size: 256, extension: "png" });
     }
 
-    if (!url) url = message.author.displayAvatarURL({ size: 256, format: "png" });
+    if (!url) url = message.author.displayAvatarURL({ size: 256, extension: "png" });
 
     return url;
   }

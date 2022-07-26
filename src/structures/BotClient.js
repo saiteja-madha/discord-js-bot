@@ -256,7 +256,7 @@ module.exports = class BotClient extends Client {
     else if (guildId && typeof guildId === "string") {
       const guild = this.guilds.cache.get(guildId);
       if (!guild) {
-        this.logger.error(`Failed to register interactions in guild ${guildId}`, new Error(`No matching guild`));
+        this.logger.error(`Failed to register interactions in guild ${guildId}`, new Error("No matching guild"));
         return;
       }
       await guild.commands.set(toRegister);
@@ -264,10 +264,10 @@ module.exports = class BotClient extends Client {
 
     // Throw an error
     else {
-      throw new Error(`Did you provide a valid guildId to register slash commands`);
+      throw new Error("Did you provide a valid guildId to register interactions");
     }
 
-    this.logger.success("Successfully registered slash commands");
+    this.logger.success("Successfully registered interactions");
   }
 
   /**

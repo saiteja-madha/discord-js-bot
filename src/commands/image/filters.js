@@ -68,9 +68,9 @@ module.exports = {
     const filter = interaction.options.getString("name");
 
     let image;
-    if (user) image = user.displayAvatarURL({ size: 256, format: "png" });
+    if (user) image = user.displayAvatarURL({ size: 256, extension: "png" });
     if (!image && imageLink) image = imageLink;
-    if (!image) image = author.displayAvatarURL({ size: 256, format: "png" });
+    if (!image) image = author.displayAvatarURL({ size: 256, extension: "png" });
 
     const url = getFilter(filter, image);
     const response = await getBuffer(url);

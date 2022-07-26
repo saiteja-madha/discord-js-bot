@@ -76,9 +76,9 @@ module.exports = {
   async trackInteractionStats(interaction) {
     if (!interaction.guild) return;
     const statsDb = await getMemberStats(interaction.guildId, interaction.member.id);
-    if (interaction.isCommand()) statsDb.commands.slash += 1;
-    if (interaction.isUserContextMenu()) statsDb.contexts.user += 1;
-    if (interaction.isMessageContextMenu()) statsDb.contexts.message += 1;
+    if (interaction.isChatInputCommand()) statsDb.commands.slash += 1;
+    if (interaction.isUserContextMenuCommand()) statsDb.contexts.user += 1;
+    if (interaction.isMessageContextMenuCommand()) statsDb.contexts.message += 1;
     await statsDb.save();
   },
 
