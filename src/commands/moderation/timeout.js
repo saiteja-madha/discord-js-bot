@@ -15,7 +15,7 @@ module.exports = {
     enabled: true,
     aliases: ["mute"],
     usage: "<ID|@member> <duration> [reason]",
-    minArgsCount: 1,
+    minArgsCount: 2,
   },
   slashCommand: {
     enabled: true,

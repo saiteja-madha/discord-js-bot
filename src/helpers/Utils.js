@@ -72,7 +72,7 @@ module.exports = class Utils {
    * @param {string} duration
    */
   static durationToMillis(duration) {
-    duration
+    return duration
       .split(":")
       .map(Number)
       .reduce((acc, curr) => curr + acc * 60) * 1000;

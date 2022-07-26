@@ -116,7 +116,7 @@ async function listWarnings(target, { guildId }) {
 
   const acc = warnings.map((warning, i) => `${i + 1}. ${warning.reason} [By ${warning.admin.tag}]`).join("\n");
   const embed = new EmbedBuilder({
-    author: `${target.user.tag}'s warnings`,
+    author: { name: `${target.user.tag}'s warnings` },
     description: acc,
   });
 

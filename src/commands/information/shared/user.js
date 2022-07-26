@@ -8,6 +8,9 @@ module.exports = (member) => {
   let color = member.displayHexColor;
   if (color === "#000000") color = EMBED_COLORS.BOT_EMBED;
 
+  let rolesString = member.roles.cache.map((r) => r.name).join(", ");
+  if (rolesString.length > 1024) rolesString = rolesString.substring(0, 1020) + "...";
+
   const embed = new EmbedBuilder()
     .setAuthor({
       name: `User information for ${member.displayName}`,
@@ -36,7 +39,7 @@ module.exports = (member) => {
       },
       {
         name: `Roles [${member.roles.cache.size}]`,
-        value: member.roles.cache.map((r) => r.name).join(", "),
+        value: rolesString,
       },
       {
         name: "Avatar-URL",

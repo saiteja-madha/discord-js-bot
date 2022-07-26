@@ -98,7 +98,7 @@ async function nickname({ member, guild }, target, name) {
   if (!canModerate(member, target)) {
     return `Oops! You cannot manage nickname of ${target.user.tag}`;
   }
-  if (!canModerate(guild.me, target)) {
+  if (!canModerate(guild.members.me, target)) {
     return `Oops! I cannot manage nickname of ${target.user.tag}`;
   }
 

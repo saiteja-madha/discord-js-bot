@@ -4,7 +4,7 @@ const { SUGGESTIONS } = require("@root/config");
 const {
   ActionRowBuilder,
   ButtonBuilder,
-  Modal,
+  ModalBuilder,
   TextInputBuilder,
   EmbedBuilder,
   ButtonStyle,
@@ -86,6 +86,7 @@ async function approveSuggestion(member, channel, messageId, reason) {
   );
 
   const approvedEmbed = new EmbedBuilder()
+    .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.APPROVED_EMBED)
     .setAuthor({ name: "Suggestion Approved" })
     .setFooter({ text: `Approved By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
@@ -100,6 +101,8 @@ async function approveSuggestion(member, channel, messageId, reason) {
     doc.stats.upvotes = upVotes;
     doc.stats.downvotes = downVotes;
     fields.push({ name: "Stats", value: getVotesMessage(upVotes, downVotes) });
+  } else {
+    fields.push(statsField);
   }
 
   // update reason
@@ -149,7 +152,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings)) return "You don't have permission to reject suggestions!";
 
   // validate if document exists
   const doc = await findSuggestion(guild.id, messageId);
@@ -170,6 +173,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
   );
 
   const rejectedEmbed = new EmbedBuilder()
+    .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.DENIED_EMBED)
     .setAuthor({ name: "Suggestion Rejected" })
     .setFooter({ text: `Rejected By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
@@ -184,6 +188,8 @@ async function rejectSuggestion(member, channel, messageId, reason) {
     doc.stats.upvotes = upVotes;
     doc.stats.downvotes = downVotes;
     fields.push({ name: "Stats", value: getVotesMessage(upVotes, downVotes) });
+  } else {
+    fields.push(statsField);
   }
 
   // update reason
@@ -233,7 +239,7 @@ async function deleteSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings)) return "You don't have permission to delete suggestions!";
 
   try {
     await channel.messages.delete(messageId);
@@ -250,7 +256,7 @@ async function deleteSuggestion(member, channel, messageId, reason) {
  */
 async function handleApproveBtn(interaction) {
   await interaction.showModal(
-    new Modal({
+    new ModalBuilder({
       title: "Approve Suggestion",
       customId: "SUGGEST_APPROVE_MODAL",
       components: [
@@ -281,7 +287,7 @@ async function handleApproveModal(modal) {
  */
 async function handleRejectBtn(interaction) {
   await interaction.showModal(
-    new Modal({
+    new ModalBuilder({
       title: "Reject Suggestion",
       customId: "SUGGEST_REJECT_MODAL",
       components: [
@@ -312,7 +318,7 @@ async function handleRejectModal(modal) {
  */
 async function handleDeleteBtn(interaction) {
   await interaction.showModal(
-    new Modal({
+    new ModalBuilder({
       title: "Delete Suggestion",
       customId: "SUGGEST_DELETE_MODAL",
       components: [

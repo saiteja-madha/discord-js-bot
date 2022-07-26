@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { isTranslated, logTranslation } = require("@schemas/TranslateLog");
 const data = require("@src/data.json");
 const { getLanguagesFromEmoji } = require("country-emoji-languages");
@@ -65,7 +65,7 @@ async function handleFlagReaction(emoji, message, user) {
     new ButtonBuilder({
       url: message.url,
       label: "Original Message",
-      style: "LINK",
+      style: ButtonStyle.Link,
     })
   );
 

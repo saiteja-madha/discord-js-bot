@@ -52,7 +52,6 @@ async function performAutomod(message, settings) {
   let shouldDelete = false;
   let strikesTotal = 0;
 
-  const embed = new EmbedBuilder();
   const fields = [];
 
   // Max mentions
@@ -166,36 +165,37 @@ async function performAutomod(message, settings) {
     memberDb.strikes += strikesTotal;
 
     // log to db
-    const reason = embed.fields.map((field) => field.name + ": " + field.value).join("\n");
+    const reason = fields.map((field) => field.name + ": " + field.value).join("\n");
     addAutoModLogToDb(member, content, reason, strikesTotal).catch(() => {});
 
     // send automod log
-    embed
+    if (logChannel) {
+      const logEmbed = new EmbedBuilder()
       .setAuthor({ name: "Auto Moderation" })
       .setThumbnail(author.displayAvatarURL())
       .setColor(AUTOMOD.LOG_EMBED)
+      .addFields(fields)
       .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
       .setFooter({
         text: `By ${author.tag} | ${author.id}`,
         iconURL: author.avatarURL(),
       });
 
-    logChannel.safeSend({ embeds: [embed] });
+      logChannel.safeSend({ embeds: [logEmbed] });
+    }
 
     // DM strike details
     const strikeEmbed = new EmbedBuilder()
       .setColor(AUTOMOD.DM_EMBED)
       .setThumbnail(guild.iconURL())
       .setAuthor({ name: "Auto Moderation" })
+      .addFields(fields)
       .setDescription(
         `You have received ${strikesTotal} strikes!\n\n` +
           `**Guild:** ${guild.name}\n` +
           `**Total Strikes:** ${memberDb.strikes} out of ${automod.strikes}`
       );
-
-    const fields = [];
-    embed.data.fields.forEach((field) => fields.push({ name: field.name, value: field.value }));
-    embed.addFields(fields);
+      
     author.send({ embeds: [strikeEmbed] }).catch((ex) => {});
 
     // check if max strikes are received
