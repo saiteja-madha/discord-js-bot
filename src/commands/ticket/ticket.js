@@ -2,12 +2,13 @@ const {
   EmbedBuilder,
   ActionRowBuilder,
   ButtonBuilder,
-  Modal,
+  ModalBuilder,
   TextInputBuilder,
   ApplicationCommandOptionType,
   ChannelType,
   ButtonStyle,
   TextInputStyle,
+  ComponentType,
 } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@handlers/ticket");
@@ -178,7 +179,7 @@ module.exports = {
     // Close all tickets
     else if (input === "closeall") {
       let sent = await message.safeReply("Closing tickets ...");
-      response = await closeAll(message);
+      response = await closeAll(message, message.author);
       return sent.editable ? sent.edit(response) : message.channel.send(response);
     }
 
@@ -245,7 +246,7 @@ module.exports = {
 
     // Close all
     else if (sub === "closeall") {
-      response = await closeAll(interaction);
+      response = await closeAll(interaction, interaction.user);
     }
 
     // Add to ticket
@@ -281,7 +282,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
 
   const btnInteraction = await channel
     .awaitMessageComponent({
-      componentType: "BUTTON",
+      componentType: ComponentType.Button,
       filter: (i) => i.customId === "ticket_btnSetup" && i.member.id === member.id && i.message.id === sentMsg.id,
       time: 20000,
     })
@@ -291,24 +292,37 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
 
   // display modal
   await btnInteraction.showModal(
-    new Modal({
+    new ModalBuilder({
       customId: "ticket-modalSetup",
       title: "Ticket Setup",
       components: [
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder().setCustomId("title").setLabel("Embed Title").setStyle(TextInputStyle.Short)
+          new TextInputBuilder()
+            .setCustomId("title")
+            .setLabel("Embed Title")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId("description")
             .setLabel("Embed Description")
             .setStyle(TextInputStyle.Paragraph)
+            .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder().setCustomId("footer").setLabel("Embed Footer").setStyle(TextInputStyle.Short)
+          new TextInputBuilder()
+            .setCustomId("footer")
+            .setLabel("Embed Footer")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder().setCustomId("staff").setLabel("Staff Roles").setStyle(TextInputStyle.Short)
+          new TextInputBuilder()
+            .setCustomId("staff")
+            .setLabel("Staff Roles")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
         ),
       ],
     })
@@ -379,8 +393,8 @@ async function close({ channel }, author) {
   return null;
 }
 
-async function closeAll({ guild }) {
-  const stats = await closeAllTickets(guild);
+async function closeAll({ guild }, user) {
+  const stats = await closeAllTickets(guild, user);
   return `Completed! Success: \`${stats[0]}\` Failed: \`${stats[1]}\``;
 }
 
