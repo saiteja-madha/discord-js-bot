@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 
 // This dummy token will be replaced by the actual token
@@ -11,7 +11,7 @@ module.exports = {
   name: "eval",
   description: "evaluates something",
   category: "OWNER",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<script>",
@@ -23,7 +23,7 @@ module.exports = {
       {
         name: "expression",
         description: "content to evaluate",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -62,17 +62,17 @@ const buildSuccessResponse = (output, client) => {
   // Token protection
   output = require("util").inspect(output, { depth: 0 }).replaceAll(client.token, DUMMY_TOKEN);
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "📤 Output" })
     .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
-    .setColor("RANDOM")
+    .setColor("Random")
     .setTimestamp(Date.now());
 
   return { embeds: [embed] };
 };
 
 const buildErrorResponse = (err) => {
-  const embed = new MessageEmbed();
+  const embed = new EmbedBuilder();
   embed
     .setAuthor({ name: "📤 Error" })
     .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")

@@ -1,5 +1,5 @@
 const { getBuffer } = require("@helpers/HttpUtils");
-const { MessageAttachment } = require("discord.js");
+const { AttachmentBuilder, ApplicationCommandOptionType } = require("discord.js");
 
 const PROXY_TYPES = ["all", "http", "socks4", "socks5"];
 
@@ -11,7 +11,7 @@ module.exports = {
   description: "fetch proxies. Available types: http, socks4, socks5",
   cooldown: 5,
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
+  botPermissions: ["EmbedLinks", "AttachFiles"],
   command: {
     enabled: true,
     usage: "[type]",
@@ -23,7 +23,7 @@ module.exports = {
       {
         name: "type",
         description: "type of proxy",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: PROXY_TYPES.map((p) => ({ name: p, value: p })),
       },
@@ -60,6 +60,6 @@ async function getProxies(type) {
   if (!response.success || !response.buffer) return "Failed to fetch proxies";
   if (response.buffer.length === 0) return "Could not fetch data. Try again later";
 
-  const attachment = new MessageAttachment(response.buffer, `${type.toLowerCase()}_proxies.txt`);
+  const attachment = new AttachmentBuilder(response.buffer, { name: `${type.toLowerCase()}_proxies.txt` });
   return { content: `${type.toUpperCase()} Proxies fetched`, files: [attachment] };
 }

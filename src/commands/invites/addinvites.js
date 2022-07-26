@@ -1,6 +1,6 @@
 const { getEffectiveInvites, checkInviteRewards } = require("@handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getMember } = require("@schemas/Member");
 
 /**
@@ -10,8 +10,8 @@ module.exports = {
   name: "addinvites",
   description: "add invites to a member",
   category: "INVITE",
-  userPermissions: ["MANAGE_GUILD"],
-  botPermissions: ["EMBED_LINKS"],
+  userPermissions: ["ManageGuild"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<@member|id> <invites>",
@@ -23,13 +23,13 @@ module.exports = {
       {
         name: "user",
         description: "the user to give invites to",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "invites",
         description: "the number of invites to give",
-        type: "INTEGER",
+        type: ApplicationCommandOptionType.Integer,
         required: true,
       },
     ],
@@ -61,7 +61,7 @@ async function addInvites({ guild }, user, amount) {
   memberDb.invite_data.added += amount;
   await memberDb.save();
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: `Added invites to ${user.username}` })
     .setThumbnail(user.displayAvatarURL())
     .setColor(EMBED_COLORS.BOT_EMBED)

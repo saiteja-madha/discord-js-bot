@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@helpers/HttpUtils");
 const moment = require("moment");
@@ -11,7 +11,7 @@ module.exports = {
   description: "searches the urban dictionary",
   cooldown: 5,
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<word>",
@@ -23,7 +23,7 @@ module.exports = {
       {
         name: "word",
         description: "the word for which you want to urban meaning",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -50,15 +50,33 @@ async function urban(word) {
   if (!json.list[0]) return `Nothing found matching \`${word}\``;
 
   const data = json.list[0];
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle(data.word)
     .setURL(data.permalink)
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(`**Definition**\`\`\`css\n${data.definition}\`\`\``)
-    .addField("Author", data.author, true)
-    .addField("ID", data.defid.toString(), true)
-    .addField("Likes / Dislikes", `👍 ${data.thumbs_up} | 👎 ${data.thumbs_down}`, true)
-    .addField("Example", data.example, false)
+    .addFields(
+      {
+        name: "Author",
+        value: data.author,
+        inline: true,
+      },
+      {
+        name: "ID",
+        value: data.defid.toString(),
+        inline: true,
+      },
+      {
+        name: "Likes / Dislikes",
+        value: `👍 ${data.thumbs_up} | 👎 ${data.thumbs_down}`,
+        inline: true,
+      },
+      {
+        name: "Example",
+        value: data.example,
+        inline: false,
+      }
+    )
     .setFooter({ text: `Created ${moment(data.written_on).fromNow()}` });
 
   return { embeds: [embed] };

@@ -1,6 +1,7 @@
 const { musicValidations } = require("@helpers/BotUtils");
 const prettyMs = require("pretty-ms");
 const { durationToMillis } = require("@helpers/Utils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -20,7 +21,7 @@ module.exports = {
       {
         name: "time",
         description: "The time you want to seek to.",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],

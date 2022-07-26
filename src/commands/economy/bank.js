@@ -1,3 +1,4 @@
+const { ApplicationCommandOptionType } = require("discord.js");
 const balance = require("./sub/balance");
 const deposit = require("./sub/deposit");
 const transfer = require("./sub/transfer");
@@ -10,7 +11,7 @@ module.exports = {
   name: "bank",
   description: "access to bank operations",
   category: "ECONOMY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -39,12 +40,12 @@ module.exports = {
       {
         name: "balance",
         description: "check your coin balance",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "name of the user",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: false,
           },
         ],
@@ -52,12 +53,12 @@ module.exports = {
       {
         name: "deposit",
         description: "deposit coins to your bank account",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "coins",
             description: "number of coins to deposit",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true,
           },
         ],
@@ -65,12 +66,12 @@ module.exports = {
       {
         name: "withdraw",
         description: "withdraw coins from your bank account",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "coins",
             description: "number of coins to withdraw",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true,
           },
         ],
@@ -78,18 +79,18 @@ module.exports = {
       {
         name: "transfer",
         description: "transfer coins to other user",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the user to whom coins must be transferred",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "coins",
             description: "the amount of coins to transfer",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true,
           },
         ],

@@ -1,4 +1,5 @@
 const { getMember } = require("@schemas/Member");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,8 +8,8 @@ module.exports = {
   name: "resetinvites",
   description: "clear a users added invites",
   category: "INVITE",
-  userPermissions: ["MANAGE_GUILD"],
-  botPermissions: ["EMBED_LINKS"],
+  userPermissions: ["ManageGuild"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<@member>",
@@ -21,7 +22,7 @@ module.exports = {
       {
         name: "user",
         description: "the user to clear invites for",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
     ],

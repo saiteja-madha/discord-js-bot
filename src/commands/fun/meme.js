@@ -1,4 +1,10 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ApplicationCommandOptionType,
+  ButtonStyle,
+} = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@helpers/HttpUtils");
 const { getRandomInt } = require("@helpers/Utils");
@@ -10,7 +16,7 @@ module.exports = {
   name: "meme",
   description: "get a random meme",
   category: "FUN",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   cooldown: 20,
   command: {
     enabled: true,
@@ -22,7 +28,7 @@ module.exports = {
       {
         name: "category",
         description: "meme category",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],
@@ -31,8 +37,8 @@ module.exports = {
   async messageRun(message, args) {
     const choice = args[0];
 
-    const buttonRow = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId("regenMemeBtn").setStyle("SECONDARY").setEmoji("🔁")
+    const buttonRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId("regenMemeBtn").setStyle(ButtonStyle.Secondary).setEmoji("🔁")
     );
     const embed = await getRandomEmbed(choice);
 
@@ -70,8 +76,8 @@ module.exports = {
   async interactionRun(interaction) {
     const choice = interaction.options.getString("category");
 
-    const buttonRow = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId("regenMemeBtn").setStyle("SECONDARY").setEmoji("🔁")
+    const buttonRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId("regenMemeBtn").setStyle(ButtonStyle.Secondary).setEmoji("🔁")
     );
     const embed = await getRandomEmbed(choice);
 
@@ -113,12 +119,12 @@ async function getRandomEmbed(choice) {
 
   const response = await getJson(`https://www.reddit.com/r/${rand}/random/.json`);
   if (!response.success) {
-    return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
+    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
   }
 
   const json = response.data;
   if (!Array.isArray(json) || json.length === 0) {
-    return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription(`No meme found matching ${choice}`);
+    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription(`No meme found matching ${choice}`);
   }
 
   try {
@@ -129,12 +135,12 @@ async function getRandomEmbed(choice) {
     let memeUpvotes = json[0].data.children[0].data.ups;
     let memeNumComments = json[0].data.children[0].data.num_comments;
 
-    return new MessageEmbed()
+    return new EmbedBuilder()
       .setAuthor({ name: memeTitle, url: memeUrl })
       .setImage(memeImage)
-      .setColor("RANDOM")
+      .setColor("Random")
       .setFooter({ text: `👍 ${memeUpvotes} | 💬 ${memeNumComments}` });
   } catch (error) {
-    return new MessageEmbed().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
+    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
   }
 }

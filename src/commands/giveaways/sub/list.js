@@ -5,7 +5,7 @@ const { EMBED_COLORS } = require("@root/config");
  */
 module.exports = async (member) => {
   // Permissions
-  if (!member.permissions.has("MANAGE_MESSAGES")) {
+  if (!member.permissions.has("ManageMessages")) {
     return "You need to have the manage messages permissions to manage giveaways.";
   }
 

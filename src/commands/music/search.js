@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, ApplicationCommandOptionType } = require("discord.js");
 const prettyMs = require("pretty-ms");
 const { EMBED_COLORS } = require("@root/config");
 
@@ -9,7 +9,7 @@ module.exports = {
   name: "search",
   description: "search for matching songs on youtube",
   category: "ERELA_JS",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<song-name>",
@@ -21,7 +21,7 @@ module.exports = {
       {
         name: "query",
         description: "song to search",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -45,7 +45,8 @@ async function search({ member, guild, channel }, user, query) {
   if (!member.voice.channel) return "🚫 You need to join a voice channel first";
   let player = guild.client.erelaManager.get(guild.id);
 
-  if (player && member.voice.channel !== guild.me.voice.channel) {
+  if (player && !guild.members.me.voice.channel) player.destroy();
+  if (player && member.voice.channel !== guild.members.me.voice.channel) {
     return "🚫 You must be in the same voice channel as mine";
   }
 
@@ -77,7 +78,7 @@ async function search({ member, guild, channel }, user, query) {
     return "There was an error while searching";
   }
 
-  let embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED);
+  let embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED);
   let track;
 
   switch (res.loadType) {
@@ -85,7 +86,7 @@ async function search({ member, guild, channel }, user, query) {
       if (!player.queue.current) player.destroy();
       return `No results found matching ${query}`;
 
-    case "TRACK_LOADED":
+    case "TRACK_LOADED": {
       track = res.tracks[0];
       player.queue.add(track);
       if (!player.playing && !player.paused && !player.queue.size) {
@@ -93,15 +94,30 @@ async function search({ member, guild, channel }, user, query) {
         return "> 🎶 Adding song to queue";
       }
 
+      const fields = [];
       embed
         .setThumbnail(track.displayThumbnail("hqdefault"))
         .setAuthor({ name: "Added Song to queue" })
         .setDescription(`[${track.title}](${track.uri})`)
-        .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
         .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
-      if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
+      fields.push({
+        name: "Song Duration",
+        value: "`" + prettyMs(track.duration, { colonNotation: true }) + "`",
+        inline: true,
+      });
+
+      if (player.queue.totalSize > 0) {
+        fields.push({
+          name: "Position in Queue",
+          value: (player.queue.size - 0).toString(),
+          inline: true,
+        });
+      }
+
+      embed.addFields(fields);
       return { embeds: [embed] };
+    }
 
     case "PLAYLIST_LOADED":
       player.queue.add(res.tracks);
@@ -112,8 +128,18 @@ async function search({ member, guild, channel }, user, query) {
       embed
         .setAuthor({ name: "Added Playlist to queue" })
         .setDescription(res.playlist.name)
-        .addField("Enqueued", `${res.tracks.length} songs`, true)
-        .addField("Playlist duration", "`" + prettyMs(res.playlist.duration, { colonNotation: true }) + "`", true)
+        .addFields(
+          {
+            name: "Enqueued",
+            value: `${res.tracks.length} songs`,
+            inline: true,
+          },
+          {
+            name: "Playlist Duration",
+            value: "`" + prettyMs(res.playlist.duration, { colonNotation: true }) + "`",
+            inline: true,
+          }
+        )
         .setFooter({ text: `Requested By: ${res.tracks[0].requester.tag}` });
 
       return { embeds: [embed] };
@@ -128,8 +154,8 @@ async function search({ member, guild, channel }, user, query) {
         value: index.toString(),
       }));
 
-      const menuRow = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
+      const menuRow = new ActionRowBuilder().addComponents(
+        new SelectMenuBuilder()
           .setCustomId("search-results")
           .setPlaceholder("Choose Search Results")
           .setMaxValues(max)
@@ -168,15 +194,28 @@ async function search({ member, guild, channel }, user, query) {
             return player.play();
           }
 
+          const fields = [];
           embed
             .setThumbnail(track.displayThumbnail("hqdefault"))
             .setAuthor({ name: "Added Song to queue" })
             .setDescription(`[${track.title}](${track.uri})`)
-            .addField("Song Duration", "`" + prettyMs(track.duration, { colonNotation: true }) + "`", true)
             .setFooter({ text: `Requested By: ${track.requester.tag}` });
 
-          if (player.queue.totalSize > 0) embed.addField("Position in Queue", (player.queue.size - 0).toString(), true);
+          fields.push({
+            name: "Song Duration",
+            value: "`" + prettyMs(track.duration, { colonNotation: true }) + "`",
+            inline: true,
+          });
 
+          if (player.queue.totalSize > 0) {
+            fields.push({
+              name: "Position in Queue",
+              value: (player.queue.size - 0).toString(),
+              inline: true,
+            });
+          }
+
+          embed.addFields(fields);
           return sentMsg.edit({ embeds: [embed], components: [] });
         }
 

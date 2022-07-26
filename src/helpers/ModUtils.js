@@ -1,4 +1,4 @@
-const { Collection, MessageEmbed, GuildMember } = require("discord.js");
+const { Collection, EmbedBuilder, GuildMember } = require("discord.js");
 const { MODERATION } = require("@root/config");
 
 // Utils
@@ -35,18 +35,20 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
   let logChannel;
   if (settings.modlog_channel) logChannel = guild.channels.cache.get(settings.modlog_channel);
 
-  const embed = new MessageEmbed().setFooter({
+  const embed = new EmbedBuilder().setFooter({
     text: `By ${issuer.displayName} • ${issuer.id}`,
     iconURL: issuer.displayAvatarURL(),
   });
 
+  const fields = [];
   switch (type.toUpperCase()) {
     case "PURGE":
-      embed
-        .setAuthor({ name: `Moderation - ${type}` })
-        .addField("Purge Type", data.purgeType, true)
-        .addField("Messages", data.deletedCount.toString(), true)
-        .addField("Channel", `#${data.channel.name} [${data.channel.id}]`, false);
+      embed.setAuthor({ name: `Moderation - ${type}` });
+      fields.push(
+        { name: "Purge Type", value: data.purgeType, inline: true },
+        { name: "Messages", value: data.deletedCount.toString(), inline: true },
+        { name: "Channel", value: `#${data.channel.name} [${data.channel.id}]`, inline: false }
+      );
       break;
 
     case "TIMEOUT":
@@ -101,19 +103,29 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
   if (type.toUpperCase() !== "PURGE") {
     embed.setAuthor({ name: `Moderation - ${type}` }).setThumbnail(target.displayAvatarURL());
 
-    if (target instanceof GuildMember) embed.addField("Member", `${target.displayName} [${target.id}]`, false);
-    else embed.addField("User", `${target.tag} [${target.id}]`, false);
+    if (target instanceof GuildMember) {
+      fields.push({ name: "Member", value: `${target.displayName} [${target.id}]`, inline: false });
+    } else {
+      fields.push({ name: "User", value: `${target.tag} [${target.id}]`, inline: false });
+    }
 
-    embed.addField("Reason", reason || "No reason provided", false);
+    fields.push({ name: "Reason", value: reason || "No reason provided", inline: false });
 
     if (type.toUpperCase() === "TIMEOUT") {
-      embed.addField("Expires", `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`, true);
+      fields.push({
+        name: "Expires",
+        value: `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`,
+        inline: true,
+      });
     }
-    if (type.toUpperCase() === "MOVE") embed.addField("Moved to", data.channel.name, true);
+    if (type.toUpperCase() === "MOVE") {
+      fields.push({ name: "Moved to", value: data.channel.name, inline: true });
+    }
   }
 
+  embed.setFields(fields);
   await addModLogToDb(issuer, target, reason, type.toUpperCase());
-  logChannel.safeSend({ embeds: [embed] });
+  if (logChannel) logChannel.safeSend({ embeds: [embed] });
 };
 
 module.exports = class ModUtils {
@@ -154,18 +166,18 @@ module.exports = class ModUtils {
    * @param {number} amount
    */
   static async purgeMessages(issuer, channel, type, amount, argument) {
-    if (!channel.permissionsFor(issuer).has(["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"])) {
+    if (!channel.permissionsFor(issuer).has(["ManageMessages", "ReadMessageHistory"])) {
       return "MEMBER_PERM";
     }
 
-    if (!channel.permissionsFor(issuer.guild.me).has(["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"])) {
+    if (!channel.permissionsFor(issuer.guild.members.me).has(["ManageMessages", "ReadMessageHistory"])) {
       return "BOT_PERM";
     }
 
     const toDelete = new Collection();
 
     try {
-      const messages = await channel.messages.fetch({ limit: amount }, { cache: false, force: true });
+      const messages = await channel.messages.fetch({ limit: amount, cache: false, force: true });
 
       for (const message of messages.values()) {
         if (toDelete.size >= amount) break;
@@ -220,7 +232,7 @@ module.exports = class ModUtils {
    */
   static async warnTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     try {
       logModeration(issuer, target, reason, "Warn");
@@ -230,7 +242,7 @@ module.exports = class ModUtils {
 
       // check if max warnings are reached
       if (memberDb.warnings >= settings.max_warn.limit) {
-        await ModUtils.addModAction(issuer.guild.me, target, "Max warnings reached", settings.max_warn.action); // moderate
+        await ModUtils.addModAction(issuer.guild.members.me, target, "Max warnings reached", settings.max_warn.action); // moderate
         memberDb.warnings = 0; // reset warnings
       }
 
@@ -251,7 +263,7 @@ module.exports = class ModUtils {
    */
   static async timeoutTarget(issuer, target, ms, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
     if (target.communicationDisabledUntilTimestamp - Date.now() > 0) return "ALREADY_TIMEOUT";
 
     try {
@@ -272,7 +284,7 @@ module.exports = class ModUtils {
    */
   static async unTimeoutTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
     if (target.communicationDisabledUntilTimestamp - Date.now() < 0) return "NO_TIMEOUT";
 
     try {
@@ -293,7 +305,7 @@ module.exports = class ModUtils {
    */
   static async kickTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     try {
       await target.kick(reason);
@@ -313,10 +325,10 @@ module.exports = class ModUtils {
    */
   static async softbanTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     try {
-      await target.ban({ days: 7, reason });
+      await target.ban({ deleteMessageDays: 7, reason });
       await issuer.guild.members.unban(target.user);
       logModeration(issuer, target, reason, "Softban");
       return true;
@@ -336,7 +348,7 @@ module.exports = class ModUtils {
     const targetMem = await issuer.guild.members.fetch(target.id).catch(() => {});
 
     if (targetMem && !memberInteract(issuer, targetMem)) return "MEMBER_PERM";
-    if (targetMem && !memberInteract(issuer.guild.me, targetMem)) return "BOT_PERM";
+    if (targetMem && !memberInteract(issuer.guild.members.me, targetMem)) return "BOT_PERM";
 
     try {
       await issuer.guild.bans.create(target.id, { days: 0, reason });
@@ -373,7 +385,7 @@ module.exports = class ModUtils {
    */
   static async vMuteTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     if (!target.voice.channel) return "NO_VOICE";
     if (target.voice.mute) return "ALREADY_MUTED";
@@ -396,7 +408,7 @@ module.exports = class ModUtils {
    */
   static async vUnmuteTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     if (!target.voice.channel) return "NO_VOICE";
     if (!target.voice.mute) return "NOT_MUTED";
@@ -419,7 +431,7 @@ module.exports = class ModUtils {
    */
   static async deafenTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     if (!target.voice.channel) return "NO_VOICE";
     if (target.voice.deaf) return "ALREADY_DEAFENED";
@@ -442,7 +454,7 @@ module.exports = class ModUtils {
    */
   static async unDeafenTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     if (!target.voice.channel) return "NO_VOICE";
     if (!target.voice.deaf) return "NOT_DEAFENED";
@@ -465,7 +477,7 @@ module.exports = class ModUtils {
    */
   static async disconnectTarget(issuer, target, reason) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     if (!target.voice.channel) return "NO_VOICE";
 
@@ -488,12 +500,12 @@ module.exports = class ModUtils {
    */
   static async moveTarget(issuer, target, reason, channel) {
     if (!memberInteract(issuer, target)) return "MEMBER_PERM";
-    if (!memberInteract(issuer.guild.me, target)) return "BOT_PERM";
+    if (!memberInteract(issuer.guild.members.me, target)) return "BOT_PERM";
 
     if (!target.voice?.channel) return "NO_VOICE";
     if (target.voice.channelId === channel.id) return "ALREADY_IN_CHANNEL";
 
-    if (!channel.permissionsFor(target).has(["VIEW_CHANNEL", "CONNECT"])) return "TARGET_PERM";
+    if (!channel.permissionsFor(target).has(["ViewChannel", "Connect"])) return "TARGET_PERM";
 
     try {
       await target.voice.setChannel(channel, reason);

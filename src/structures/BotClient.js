@@ -1,4 +1,11 @@
-const { Client, Collection, Intents, WebhookClient } = require("discord.js");
+const {
+  Client,
+  Collection,
+  GatewayIntentBits,
+  Partials,
+  WebhookClient,
+  ApplicationCommandType,
+} = require("discord.js");
 const path = require("path");
 const { table } = require("table");
 const Logger = require("../helpers/Logger");
@@ -14,15 +21,16 @@ module.exports = class BotClient extends Client {
   constructor() {
     super({
       intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_INVITES,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_PRESENCES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.GUILD_VOICE_STATES,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildVoiceStates,
       ],
-      partials: ["USER", "MESSAGE", "REACTION"],
+      partials: [Partials.User, Partials.Message, Partials.Reaction],
       allowedMentions: {
         repliedUser: false,
       },
@@ -223,7 +231,7 @@ module.exports = class BotClient extends Client {
         .map((cmd) => ({
           name: cmd.name,
           description: cmd.description,
-          type: "CHAT_INPUT",
+          type: ApplicationCommandType.ChatInput,
           options: cmd.slashCommand.options,
         }))
         .forEach((s) => toRegister.push(s));
@@ -248,7 +256,7 @@ module.exports = class BotClient extends Client {
     else if (guildId && typeof guildId === "string") {
       const guild = this.guilds.cache.get(guildId);
       if (!guild) {
-        this.logger.error(`Failed to register interactions in guild ${guildId}`, new Error(`No matching guild`));
+        this.logger.error(`Failed to register interactions in guild ${guildId}`, new Error("No matching guild"));
         return;
       }
       await guild.commands.set(toRegister);
@@ -256,10 +264,10 @@ module.exports = class BotClient extends Client {
 
     // Throw an error
     else {
-      throw new Error(`Did you provide a valid guildId to register slash commands`);
+      throw new Error("Did you provide a valid guildId to register interactions");
     }
 
-    this.logger.success("Successfully registered slash commands");
+    this.logger.success("Successfully registered interactions");
   }
 
   /**
@@ -308,28 +316,28 @@ module.exports = class BotClient extends Client {
     return this.generateInvite({
       scopes: ["bot", "applications.commands"],
       permissions: [
-        "ADD_REACTIONS",
-        "ATTACH_FILES",
-        "BAN_MEMBERS",
-        "CHANGE_NICKNAME",
-        "CONNECT",
-        "DEAFEN_MEMBERS",
-        "EMBED_LINKS",
-        "KICK_MEMBERS",
-        "MANAGE_CHANNELS",
-        "MANAGE_GUILD",
-        "MANAGE_MESSAGES",
-        "MANAGE_NICKNAMES",
-        "MANAGE_ROLES",
-        "MODERATE_MEMBERS",
-        "MOVE_MEMBERS",
-        "MUTE_MEMBERS",
-        "PRIORITY_SPEAKER",
-        "READ_MESSAGE_HISTORY",
-        "SEND_MESSAGES",
-        "SEND_MESSAGES_IN_THREADS",
-        "SPEAK",
-        "VIEW_CHANNEL",
+        "AddReactions",
+        "AttachFiles",
+        "BanMembers",
+        "ChangeNickname",
+        "Connect",
+        "DeafenMembers",
+        "EmbedLinks",
+        "KickMembers",
+        "ManageChannels",
+        "ManageGuild",
+        "ManageMessages",
+        "ManageNicknames",
+        "ManageRoles",
+        "ModerateMembers",
+        "MoveMembers",
+        "MuteMembers",
+        "PrioritySpeaker",
+        "ReadMessageHistory",
+        "SendMessages",
+        "SendMessagesInThreads",
+        "Speak",
+        "ViewChannel",
       ],
     });
   }

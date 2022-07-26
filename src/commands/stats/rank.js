@@ -1,4 +1,4 @@
-const { MessageAttachment } = require("discord.js");
+const { AttachmentBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS, IMAGE } = require("@root/config");
 const { getBuffer } = require("@helpers/HttpUtils");
 const { getMemberStats, getXpLb } = require("@schemas/MemberStats");
@@ -11,7 +11,7 @@ module.exports = {
   description: "displays members rank in this server",
   cooldown: 5,
   category: "STATS",
-  botPermissions: ["ATTACH_FILES"],
+  botPermissions: ["AttachFiles"],
   command: {
     enabled: true,
     usage: "[@member|id]",
@@ -22,7 +22,7 @@ module.exports = {
       {
         name: "user",
         description: "target user",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
     ],
@@ -62,7 +62,7 @@ async function getRank({ guild }, member, settings) {
   const url = new URL(`${IMAGE.BASE_API}/utils/rank-card`);
   url.searchParams.append("name", user.username);
   url.searchParams.append("discriminator", user.discriminator);
-  url.searchParams.append("avatar", user.displayAvatarURL({ format: "png", size: 128 }));
+  url.searchParams.append("avatar", user.displayAvatarURL({ extension: "png", size: 128 }));
   url.searchParams.append("currentxp", memberStats.xp);
   url.searchParams.append("reqxp", xpNeeded);
   url.searchParams.append("level", memberStats.level);
@@ -73,6 +73,6 @@ async function getRank({ guild }, member, settings) {
   const response = await getBuffer(url.href);
   if (!response.success) return "Failed to generate rank-card";
 
-  const attachment = new MessageAttachment(response.buffer, "rank.png");
+  const attachment = new AttachmentBuilder(response.buffer, { name: "rank.png" });
   return { files: [attachment] };
 }

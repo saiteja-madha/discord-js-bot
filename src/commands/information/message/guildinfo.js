@@ -7,7 +7,7 @@ module.exports = {
   name: "guildinfo",
   description: "shows information about the server",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   cooldown: 5,
   command: {
     enabled: true,

@@ -1,4 +1,5 @@
 const { musicValidations } = require("@helpers/BotUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -18,7 +19,7 @@ module.exports = {
       {
         name: "amount",
         description: "Enter a value to set [0 to 100]",
-        type: "INTEGER",
+        type: ApplicationCommandOptionType.Integer,
         required: false,
       },
     ],

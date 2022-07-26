@@ -1,8 +1,8 @@
 const { addReactionRole, getReactionRoles } = require("@schemas/ReactionRoles");
-const { Util } = require("discord.js");
+const { parseEmoji, ApplicationCommandOptionType, ChannelType } = require("discord.js");
 const { parsePermissions } = require("@helpers/Utils");
 
-const channelPerms = ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"];
+const channelPerms = ["EmbedLinks", "ReadMessageHistory", "AddReactions", "UseExternalEmojis", "ManageMessages"];
 
 /**
  * @type {import("@structures/Command")}
@@ -11,10 +11,10 @@ module.exports = {
   name: "addrr",
   description: "setup reaction role for the specified message",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
-    usage: "<#channel> <messageid> <emote> <role>",
+    usage: "<#channel> <messageId> <emote> <role>",
     minArgsCount: 4,
   },
   slashCommand: {
@@ -24,26 +24,26 @@ module.exports = {
       {
         name: "channel",
         description: "channel where the message exists",
-        type: "CHANNEL",
-        channelTypes: ["GUILD_TEXT"],
+        type: ApplicationCommandOptionType.Channel,
+        channelTypes: [ChannelType.GuildText],
         required: true,
       },
       {
         name: "message_id",
         description: "message id to which reaction roles must be configured",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: "emoji",
         description: "emoji to use",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: "role",
         description: "role to be given for the selected emoji",
-        type: "ROLE",
+        type: ApplicationCommandOptionType.Role,
         required: true,
       },
     ],
@@ -76,13 +76,13 @@ module.exports = {
 };
 
 async function addRR(guild, channel, messageId, reaction, role) {
-  if (!channel.permissionsFor(guild.me).has(channelPerms)) {
+  if (!channel.permissionsFor(guild.members.me).has(channelPerms)) {
     return `You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`;
   }
 
   let targetMessage;
   try {
-    targetMessage = await channel.messages.fetch(messageId);
+    targetMessage = await channel.messages.fetch({ message: messageId });
   } catch (ex) {
     return "Could not fetch message. Did you provide a valid messageId?";
   }
@@ -95,11 +95,11 @@ async function addRR(guild, channel, messageId, reaction, role) {
     return "You cannot assign the everyone role.";
   }
 
-  if (guild.me.roles.highest.position < role.position) {
+  if (guild.members.me.roles.highest.position < role.position) {
     return "Oops! I cannot add/remove members to that role. Is that role higher than mine?";
   }
 
-  const custom = Util.parseEmoji(reaction);
+  const custom = parseEmoji(reaction);
   if (custom.id && !guild.emojis.cache.has(custom.id)) return "This emoji does not belong to this server";
   const emoji = custom.id ? custom.id : custom.name;
 

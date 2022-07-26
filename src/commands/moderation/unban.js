@@ -1,5 +1,5 @@
 const { unBanTarget } = require("@helpers/ModUtils");
-const { MessageActionRow, MessageSelectMenu } = require("discord.js");
+const { ActionRowBuilder, SelectMenuBuilder, ApplicationCommandOptionType, ComponentType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -8,8 +8,8 @@ module.exports = {
   name: "unban",
   description: "unbans the specified member",
   category: "MODERATION",
-  botPermissions: ["BAN_MEMBERS"],
-  userPermissions: ["BAN_MEMBERS"],
+  botPermissions: ["BanMembers"],
+  userPermissions: ["BanMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> [reason]",
@@ -22,13 +22,13 @@ module.exports = {
       {
         name: "name",
         description: "match the name of the member",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: "reason",
         description: "reason for ban",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],
@@ -65,7 +65,7 @@ async function getMatchingBans(guild, match) {
     if (ban.user.partial) await ban.user.fetch();
 
     // exact match
-    if (ban.user.id === match.id || ban.user.tag === match) {
+    if (ban.user.id === match || ban.user.tag === match) {
       matched.push(ban.user);
       break;
     }
@@ -83,8 +83,8 @@ async function getMatchingBans(guild, match) {
     options.push({ label: user.tag, value: user.id });
   }
 
-  const menuRow = new MessageActionRow().addComponents(
-    new MessageSelectMenu().setCustomId("unban-menu").setPlaceholder("Choose a user to unban").addOptions(options)
+  const menuRow = new ActionRowBuilder().addComponents(
+    new SelectMenuBuilder().setCustomId("unban-menu").setPlaceholder("Choose a user to unban").addOptions(options)
   );
 
   return { content: "Please select a user you wish to unban", components: [menuRow] };
@@ -97,10 +97,10 @@ async function getMatchingBans(guild, match) {
  */
 async function waitForBan(issuer, reason, sent) {
   const collector = sent.channel.createMessageComponentCollector({
-    filter: (m) => m.member.id === issuer.id && m.customId === "unban-menu",
+    filter: (m) => m.member.id === issuer.id && m.customId === "unban-menu" && sent.id === m.message.id,
     time: 20000,
     max: 1,
-    componentType: "SELECT_MENU",
+    componentType: ComponentType.SelectMenu,
   });
 
   //

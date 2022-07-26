@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "setprefix",
   description: "sets a new prefix for this server",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     usage: "<new-prefix>",
@@ -18,7 +20,7 @@ module.exports = {
       {
         name: "newprefix",
         description: "the new prefix to set",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],

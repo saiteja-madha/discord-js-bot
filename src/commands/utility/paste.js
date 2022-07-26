@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { postToBin } = require("@helpers/HttpUtils");
 
 /**
@@ -9,7 +9,7 @@ module.exports = {
   description: "Paste something in sourceb.in",
   cooldown: 5,
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     minArgsCount: 2,
@@ -22,12 +22,12 @@ module.exports = {
         name: "title",
         description: "title for your content",
         required: true,
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
       },
       {
         name: "content",
         description: "content to be posted to bin",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -52,7 +52,7 @@ async function paste(content, title) {
   const response = await postToBin(content, title);
   if (!response) return "❌ Something went wrong";
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Paste links" })
     .setDescription(`🔸 Normal: ${response.url}\n🔹 Raw: ${response.raw}`);
 

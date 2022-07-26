@@ -7,8 +7,8 @@ module.exports = {
   name: "vunmute",
   description: "unmutes specified member's voice",
   category: "MODERATION",
-  userPermissions: ["MUTE_MEMBERS"],
-  botPermissions: ["MUTE_MEMBERS"],
+  userPermissions: ["MuteMembers"],
+  botPermissions: ["MuteMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> [reason]",

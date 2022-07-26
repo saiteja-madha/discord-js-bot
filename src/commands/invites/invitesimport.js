@@ -1,4 +1,5 @@
 const { getMember } = require("@schemas/Member");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,8 +8,8 @@ module.exports = {
   name: "invitesimport",
   description: "add existing guild invites to users",
   category: "INVITE",
-  botPermissions: ["MANAGE_GUILD"],
-  userPermissions: ["MANAGE_GUILD"],
+  botPermissions: ["ManageGuild"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     usage: "[@member]",
@@ -19,7 +20,7 @@ module.exports = {
       {
         name: "user",
         description: "the user to import invites for",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
     ],

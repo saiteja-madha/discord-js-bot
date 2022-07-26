@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getJson } = require("@helpers/HttpUtils");
 const { EMBED_COLORS } = require("@root/config");
 const NekosLife = require("nekos.life");
@@ -26,7 +26,7 @@ module.exports = {
       {
         name: "category",
         description: "reaction type",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: choices.map((ch) => ({ name: ch, value: ch })),
       },
@@ -66,12 +66,12 @@ const genReaction = async (category, user) => {
       imageUrl = (await neko[category]()).url;
     }
 
-    return new MessageEmbed()
+    return new EmbedBuilder()
       .setImage(imageUrl)
-      .setColor("RANDOM")
+      .setColor("Random")
       .setFooter({ text: `Requested By ${user.tag}` });
   } catch (ex) {
-    return new MessageEmbed()
+    return new EmbedBuilder()
       .setColor(EMBED_COLORS.ERROR)
       .setDescription("Failed to fetch meme. Try again!")
       .setFooter({ text: `Requested By ${user.tag}` });

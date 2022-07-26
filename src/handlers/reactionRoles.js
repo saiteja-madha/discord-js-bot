@@ -37,7 +37,7 @@ async function getRole(reaction) {
   const { message, emoji } = reaction;
   if (!message || !message.channel) return;
 
-  const rr = getReactionRoles(message);
+  const rr = getReactionRoles(message.guildId, message.channelId, message.id);
   const emote = emoji.id ? emoji.id : emoji.toString();
   const found = rr.find((doc) => doc.emote === emote);
 

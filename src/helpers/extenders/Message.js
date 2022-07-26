@@ -6,12 +6,12 @@ const { Message } = require("discord.js");
  */
 Message.prototype.safeReply = async function (content, seconds) {
   if (!content) return;
-  const perms = ["VIEW_CHANNEL", "SEND_MESSAGES"];
-  if (content.embeds && content.embeds.length > 0) perms.push("EMBED_LINKS");
-  if (this.channel.type !== "DM" && !this.channel.permissionsFor(this.guild.me).has(perms)) return;
+  const perms = ["ViewChannel", "SendMessages"];
+  if (content.embeds && content.embeds.length > 0) perms.push("EmbedLinks");
+  if (this.channel.type !== "DM" && !this.channel.permissionsFor(this.guild.members.me).has(perms)) return;
 
-  perms.push("READ_MESSAGE_HISTORY");
-  if (this.channel.type !== "DM" && !this.channel.permissionsFor(this.guild.me).has(perms)) {
+  perms.push("ReadMessageHistory");
+  if (this.channel.type !== "DM" && !this.channel.permissionsFor(this.guild.members.me).has(perms)) {
     return this.safeSend(content, seconds);
   }
 

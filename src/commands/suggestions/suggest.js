@@ -1,4 +1,10 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ApplicationCommandOptionType,
+  ButtonStyle,
+} = require("discord.js");
 const { SUGGESTIONS } = require("@root/config");
 const { addSuggestion } = require("@schemas/Suggestions");
 const { stripIndent } = require("common-tags");
@@ -22,7 +28,7 @@ module.exports = {
       {
         name: "suggestion",
         description: "the suggestion",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -54,7 +60,7 @@ async function suggest(member, suggestion, settings) {
   const channel = member.guild.channels.cache.get(settings.suggestions.channel_id);
   if (!channel) return "Suggestion channel not found!";
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "New Suggestion" })
     .setThumbnail(member.user.avatarURL())
     .setColor(SUGGESTIONS.DEFAULT_EMBED)
@@ -68,10 +74,10 @@ async function suggest(member, suggestion, settings) {
     )
     .setTimestamp();
 
-  let buttonsRow = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle("SUCCESS"),
-    new MessageButton().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle("DANGER"),
-    new MessageButton().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle("SECONDARY")
+  let buttonsRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle(ButtonStyle.Danger),
+    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle(ButtonStyle.Secondary)
   );
 
   try {

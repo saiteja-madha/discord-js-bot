@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@helpers/HttpUtils");
 const { stripIndent } = require("common-tags");
@@ -10,7 +10,7 @@ module.exports = {
   name: "pokedex",
   description: "shows pokemon information",
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   cooldown: 5,
   command: {
     enabled: true,
@@ -23,7 +23,7 @@ module.exports = {
       {
         name: "pokemon",
         description: "pokemon name to get information for",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -49,7 +49,7 @@ async function pokedex(pokemon) {
 
   const json = response.data[0];
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle(`Pokédex - ${json.name}`)
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(json.sprite)

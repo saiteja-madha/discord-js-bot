@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config");
 
@@ -12,13 +12,27 @@ module.exports = async (user, coins) => {
   userDb.coins += coins;
   await userDb.save();
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: "New Balance" })
     .setThumbnail(user.displayAvatarURL())
-    .addField("Wallet", `${userDb.coins}${ECONOMY.CURRENCY}`, true)
-    .addField("Bank", `${userDb.bank}${ECONOMY.CURRENCY}`, true)
-    .addField("Net Worth", `${userDb?.coins + userDb?.bank}${ECONOMY.CURRENCY}`, true);
+    .addFields(
+      {
+        name: "Wallet",
+        value: `${userDb.coins}${ECONOMY.CURRENCY}`,
+        inline: true,
+      },
+      {
+        name: "Bank",
+        value: `${userDb.bank}${ECONOMY.CURRENCY}`,
+        inline: true,
+      },
+      {
+        name: "Net Worth",
+        value: `${userDb.coins + userDb.bank}${ECONOMY.CURRENCY}`,
+        inline: true,
+      }
+    );
 
   return { embeds: [embed] };
 };

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
 const { getJson } = require("@helpers/HttpUtils");
 
@@ -13,7 +13,7 @@ module.exports = {
   description: "shows a random animal facts",
   cooldown: 5,
   category: "FUN",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<animal>",
@@ -26,7 +26,7 @@ module.exports = {
       {
         name: "name",
         description: "animal type",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: animals.map((animal) => ({ name: animal, value: animal })),
       },
@@ -55,7 +55,7 @@ async function getFact(user, choice) {
 
   const fact = response.data?.fact;
   const imageUrl = response.data?.image;
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.TRANSPARENT)
     .setThumbnail(imageUrl)
     .setDescription(fact)

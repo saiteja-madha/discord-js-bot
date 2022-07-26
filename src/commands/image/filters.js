@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageAttachment } = require("discord.js");
+const { EmbedBuilder, AttachmentBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getBuffer } = require("@helpers/HttpUtils");
 const { getImageFromMessage } = require("@helpers/BotUtils");
 const { EMBED_COLORS, IMAGE } = require("@root/config.js");
@@ -13,7 +13,7 @@ module.exports = {
   description: "add filter to the provided image",
   cooldown: 5,
   category: "IMAGE",
-  botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
+  botPermissions: ["EmbedLinks", "AttachFiles"],
   command: {
     enabled: true,
     aliases: availableFilters,
@@ -24,20 +24,20 @@ module.exports = {
       {
         name: "name",
         description: "the type of filter",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: availableFilters.map((filter) => ({ name: filter, value: filter })),
       },
       {
         name: "user",
         description: "the user to whose avatar the filter needs to applied",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
       {
         name: "link",
         description: "the image link to which the filter needs to applied",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],
@@ -52,8 +52,8 @@ module.exports = {
 
     if (!response.success) return message.safeReply("Failed to generate image");
 
-    const attachment = new MessageAttachment(response.buffer, "attachment.png");
-    const embed = new MessageEmbed()
+    const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
       .setFooter({ text: `Requested by: ${message.author.tag}` });
@@ -68,17 +68,17 @@ module.exports = {
     const filter = interaction.options.getString("name");
 
     let image;
-    if (user) image = user.displayAvatarURL({ size: 256, format: "png" });
+    if (user) image = user.displayAvatarURL({ size: 256, extension: "png" });
     if (!image && imageLink) image = imageLink;
-    if (!image) image = author.displayAvatarURL({ size: 256, format: "png" });
+    if (!image) image = author.displayAvatarURL({ size: 256, extension: "png" });
 
     const url = getFilter(filter, image);
     const response = await getBuffer(url);
 
     if (!response.success) return interaction.followUp("Failed to generate image");
 
-    const attachment = new MessageAttachment(response.buffer, "attachment.png");
-    const embed = new MessageEmbed()
+    const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
       .setFooter({ text: `Requested by: ${author.tag}` });

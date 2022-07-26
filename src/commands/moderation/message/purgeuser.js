@@ -7,8 +7,8 @@ module.exports = {
   name: "purgeuser",
   description: "deletes the specified amount of messages",
   category: "MODERATION",
-  userPermissions: ["MANAGE_MESSAGES"],
-  botPermissions: ["MANAGE_MESSAGES", "READ_MESSAGE_HISTORY"],
+  userPermissions: ["ManageMessages"],
+  botPermissions: ["ManageMessages", "ReadMessageHistory"],
   command: {
     enabled: true,
     usage: "<@user|ID> [amount]",

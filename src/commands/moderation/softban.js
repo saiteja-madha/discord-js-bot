@@ -1,4 +1,5 @@
 const { softbanTarget } = require("@helpers/ModUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,8 +8,8 @@ module.exports = {
   name: "softban",
   description: "softban the specified member. Kicks and deletes messages",
   category: "MODERATION",
-  botPermissions: ["BAN_MEMBERS"],
-  userPermissions: ["KICK_MEMBERS"],
+  botPermissions: ["BanMembers"],
+  userPermissions: ["KickMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> [reason]",
@@ -20,13 +21,13 @@ module.exports = {
       {
         name: "user",
         description: "the target member",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "reason",
         description: "reason for softban",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],

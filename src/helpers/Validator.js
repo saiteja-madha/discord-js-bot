@@ -2,6 +2,7 @@ const CommandCategory = require("@structures/CommandCategory");
 const permissions = require("./permissions");
 const config = require("@root/config");
 const { log, warn, error } = require("./Logger");
+const { ApplicationCommandType } = require("discord.js");
 
 module.exports = class Validator {
   static validateConfiguration() {
@@ -190,8 +191,8 @@ module.exports = class Validator {
     if (typeof context.description !== "string") {
       throw new TypeError("Context description must be a string.");
     }
-    if (context.type !== "USER" && context.type !== "MESSAGE") {
-      throw new TypeError("Context type must be a either USER/MESSAGE.");
+    if (context.type !== ApplicationCommandType.User && context.type !== ApplicationCommandType.Message) {
+      throw new TypeError("Context type must be a either User/Message.");
     }
     if (Object.prototype.hasOwnProperty.call(context, "enabled") && typeof context.enabled !== "boolean") {
       throw new TypeError("Context enabled must be a boolean value");

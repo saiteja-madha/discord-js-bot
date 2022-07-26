@@ -1,4 +1,15 @@
-const { MessageEmbed, MessageActionRow, MessageButton, Modal, TextInputComponent } = require("discord.js");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ModalBuilder,
+  TextInputBuilder,
+  ApplicationCommandOptionType,
+  ChannelType,
+  ButtonStyle,
+  TextInputStyle,
+  ComponentType,
+} = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@handlers/ticket");
 
@@ -9,7 +20,7 @@ module.exports = {
   name: "ticket",
   description: "various ticketing commands",
   category: "TICKET",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -50,13 +61,13 @@ module.exports = {
       {
         name: "setup",
         description: "setup a new ticket message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "the channel where ticket creation message must be sent",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
         ],
@@ -64,13 +75,13 @@ module.exports = {
       {
         name: "log",
         description: "setup log channel for tickets",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel where ticket logs must be sent",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
         ],
@@ -78,12 +89,12 @@ module.exports = {
       {
         name: "limit",
         description: "set maximum number of concurrent open tickets",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "amount",
             description: "max number of tickets",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: true,
           },
         ],
@@ -91,22 +102,22 @@ module.exports = {
       {
         name: "close",
         description: "closes the ticket [used in ticket channel only]",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "closeall",
         description: "closes all open tickets",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "add",
         description: "add user to the current ticket channel [used in ticket channel only]",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user_id",
             description: "the id of the user to add",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -114,12 +125,12 @@ module.exports = {
       {
         name: "remove",
         description: "remove user from the ticket channel [used in ticket channel only]",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "user",
             description: "the user to remove",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
         ],
@@ -133,7 +144,7 @@ module.exports = {
 
     // Setup
     if (input === "setup") {
-      if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!message.guild.members.me.permissions.has("ManageChannels")) {
         return message.safeReply("I am missing `Manage Channels` to create ticket channels");
       }
       const targetChannel = message.guild.findMatchingChannels(args[1])[0];
@@ -168,7 +179,7 @@ module.exports = {
     // Close all tickets
     else if (input === "closeall") {
       let sent = await message.safeReply("Closing tickets ...");
-      response = await closeAll(message);
+      response = await closeAll(message, message.author);
       return sent.editable ? sent.edit(response) : message.channel.send(response);
     }
 
@@ -208,7 +219,7 @@ module.exports = {
     if (sub === "setup") {
       const channel = interaction.options.getChannel("channel");
 
-      if (!interaction.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!interaction.guild.members.me.permissions.has("ManageChannels")) {
         return interaction.followUp("I am missing `Manage Channels` to create ticket channels");
       }
 
@@ -235,7 +246,7 @@ module.exports = {
 
     // Close all
     else if (sub === "closeall") {
-      response = await closeAll(interaction);
+      response = await closeAll(interaction, interaction.user);
     }
 
     // Add to ticket
@@ -260,8 +271,8 @@ module.exports = {
  * @param {object} settings
  */
 async function ticketModalSetup({ guild, channel, member }, targetChannel, settings) {
-  const buttonRow = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId("ticket_btnSetup").setLabel("Setup Message").setStyle("PRIMARY")
+  const buttonRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId("ticket_btnSetup").setLabel("Setup Message").setStyle(ButtonStyle.Primary)
   );
 
   const sentMsg = await channel.send({
@@ -271,7 +282,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
 
   const btnInteraction = await channel
     .awaitMessageComponent({
-      componentType: "BUTTON",
+      componentType: ComponentType.Button,
       filter: (i) => i.customId === "ticket_btnSetup" && i.member.id === member.id && i.message.id === sentMsg.id,
       time: 20000,
     })
@@ -281,21 +292,37 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
 
   // display modal
   await btnInteraction.showModal(
-    new Modal({
+    new ModalBuilder({
       customId: "ticket-modalSetup",
       title: "Ticket Setup",
       components: [
-        new MessageActionRow().addComponents(
-          new TextInputComponent().setCustomId("title").setLabel("Embed Title").setStyle("SHORT")
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("title")
+            .setLabel("Embed Title")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
         ),
-        new MessageActionRow().addComponents(
-          new TextInputComponent().setCustomId("description").setLabel("Embed Description").setStyle("PARAGRAPH")
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("description")
+            .setLabel("Embed Description")
+            .setStyle(TextInputStyle.Paragraph)
+            .setRequired(false)
         ),
-        new MessageActionRow().addComponents(
-          new TextInputComponent().setCustomId("footer").setLabel("Embed Footer").setStyle("SHORT")
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("footer")
+            .setLabel("Embed Footer")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
         ),
-        new MessageActionRow().addComponents(
-          new TextInputComponent().setCustomId("staff").setLabel("Staff Roles").setStyle("SHORT")
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("staff")
+            .setLabel("Staff Roles")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
         ),
       ],
     })
@@ -321,14 +348,14 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
     .filter((s) => guild.roles.cache.has(s.trim()));
 
   // send ticket message
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: title || "Support Ticket" })
     .setDescription(description || "Please use the button below to create a ticket")
     .setFooter({ text: footer || "You can only have 1 open ticket at a time!" });
 
-  const tktBtnRow = new MessageActionRow().addComponents(
-    new MessageButton().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle("SUCCESS")
+  const tktBtnRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle(ButtonStyle.Success)
   );
 
   // save configuration
@@ -366,8 +393,8 @@ async function close({ channel }, author) {
   return null;
 }
 
-async function closeAll({ guild }) {
-  const stats = await closeAllTickets(guild);
+async function closeAll({ guild }, user) {
+  const stats = await closeAllTickets(guild, user);
   return `Completed! Success: \`${stats[0]}\` Failed: \`${stats[1]}\``;
 }
 
@@ -377,8 +404,8 @@ async function addToTicket({ channel }, inputId) {
 
   try {
     await channel.permissionOverwrites.create(inputId, {
-      VIEW_CHANNEL: true,
-      SEND_MESSAGES: true,
+      ViewChannel: true,
+      SendMessages: true,
     });
 
     return "Done";
@@ -393,8 +420,8 @@ async function removeFromTicket({ channel }, inputId) {
 
   try {
     channel.permissionOverwrites.create(inputId, {
-      VIEW_CHANNEL: false,
-      SEND_MESSAGES: false,
+      ViewChannel: false,
+      SendMessages: false,
     });
     return "Done";
   } catch (ex) {

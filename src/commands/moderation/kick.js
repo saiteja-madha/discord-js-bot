@@ -1,4 +1,5 @@
 const { kickTarget } = require("@helpers/ModUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,8 +8,8 @@ module.exports = {
   name: "kick",
   description: "kicks the specified member",
   category: "MODERATION",
-  botPermissions: ["KICK_MEMBERS"],
-  userPermissions: ["KICK_MEMBERS"],
+  botPermissions: ["KickMembers"],
+  userPermissions: ["KickMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> [reason]",
@@ -20,13 +21,13 @@ module.exports = {
       {
         name: "user",
         description: "the target member",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "reason",
         description: "reason for kick",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],

@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "anti",
   description: "manage various automod settings for the server",
   category: "AUTOMOD",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 2,
@@ -31,13 +33,13 @@ module.exports = {
       {
         name: "ghostping",
         description: "detects and logs ghost mentions in your server",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "configuration status",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -54,13 +56,13 @@ module.exports = {
       {
         name: "spam",
         description: "enable or disable antispam detection",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "configuration status",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -77,13 +79,13 @@ module.exports = {
       {
         name: "massmention",
         description: "enable or disable massmention detection",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "configuration status",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -99,7 +101,7 @@ module.exports = {
             name: "threshold",
             description: "configuration threshold (default is 3 mentions)",
             required: false,
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
           },
         ],
       },

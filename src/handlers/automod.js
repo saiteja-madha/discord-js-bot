@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { containsLink, containsDiscordInvite } = require("@helpers/Utils");
 const { getMember } = require("@schemas/Member");
 const { addModAction } = require("@helpers/ModUtils");
@@ -25,13 +25,13 @@ const shouldModerate = (message) => {
   const { member, guild, channel } = message;
 
   // Ignore if bot cannot delete channel messages
-  if (!channel.permissionsFor(guild.me).has("MANAGE_MESSAGES")) return false;
+  if (!channel.permissionsFor(guild.members.me).has("ManageMessages")) return false;
 
   // Ignore Possible Guild Moderators
-  if (member.permissions.has(["KICK_MEMBERS", "BAN_MEMBERS", "MANAGE_GUILD"])) return false;
+  if (member.permissions.has(["KickMembers", "BanMembers", "ManageGuild"])) return false;
 
   // Ignore Possible Channel Moderators
-  if (channel.permissionsFor(message.member).has("MANAGE_MESSAGES")) return false;
+  if (channel.permissionsFor(message.member).has("ManageMessages")) return false;
   return true;
 };
 
@@ -52,18 +52,18 @@ async function performAutomod(message, settings) {
   let shouldDelete = false;
   let strikesTotal = 0;
 
-  const embed = new MessageEmbed();
+  const fields = [];
 
   // Max mentions
   if (mentions.members.size > automod.max_mentions) {
-    embed.addField("Mentions", `${mentions.members.size}/${automod.max_mentions}`, true);
+    fields.push({ name: "Mentions", value: `${mentions.members.size}/${automod.max_mentions}`, inline: true });
     // strikesTotal += mentions.members.size - automod.max_mentions;
     strikesTotal += 1;
   }
 
   // Maxrole mentions
   if (mentions.roles.size > automod.max_role_mentions) {
-    embed.addField("RoleMentions", `${mentions.roles.size}/${automod.max_role_mentions}`, true);
+    fields.push({ name: "RoleMentions", value: `${mentions.roles.size}/${automod.max_role_mentions}`, inline: true });
     // strikesTotal += mentions.roles.size - automod.max_role_mentions;
     strikesTotal += 1;
   }
@@ -71,17 +71,17 @@ async function performAutomod(message, settings) {
   if (automod.anti_massmention > 0) {
     // check everyone mention
     if (mentions.everyone) {
-      embed.addField("Everyone Mention", "✓", true);
+      fields.push({ name: "Everyone Mention", value: "✓", inline: true });
       strikesTotal += 1;
     }
 
     // check user/role mentions
     if (mentions.users.size + mentions.roles.size > automod.anti_massmention) {
-      embed.addField(
-        "User/Role Mentions",
-        `${mentions.users.size + mentions.roles.size}/${automod.anti_massmention}`,
-        true
-      );
+      fields.push({
+        name: "User/Role Mentions",
+        value: `${mentions.users.size + mentions.roles.size}/${automod.anti_massmention}`,
+        inline: true,
+      });
       // strikesTotal += mentions.users.size + mentions.roles.size - automod.anti_massmention;
       strikesTotal += 1;
     }
@@ -91,7 +91,7 @@ async function performAutomod(message, settings) {
   if (automod.max_lines > 0) {
     const count = content.split("\n").length;
     if (count > automod.max_lines) {
-      embed.addField("New Lines", `${count}/${automod.max_lines}`, true);
+      fields.push({ name: "New Lines", value: `${count}/${automod.max_lines}`, inline: true });
       shouldDelete = true;
       // strikesTotal += Math.ceil((count - automod.max_lines) / automod.max_lines);
       strikesTotal += 1;
@@ -101,7 +101,7 @@ async function performAutomod(message, settings) {
   // Anti Attachments
   if (automod.anti_attachments) {
     if (message.attachments.size > 0) {
-      embed.addField("Attachments Found", "✓", true);
+      fields.push({ name: "Attachments Found", value: "✓", inline: true });
       shouldDelete = true;
       strikesTotal += 1;
     }
@@ -110,7 +110,7 @@ async function performAutomod(message, settings) {
   // Anti links
   if (automod.anti_links) {
     if (containsLink(content)) {
-      embed.addField("Links Found", "✓", true);
+      fields.push({ name: "Links Found", value: "✓", inline: true });
       shouldDelete = true;
       strikesTotal += 1;
     }
@@ -127,7 +127,7 @@ async function performAutomod(message, settings) {
           antispamInfo.content === content &&
           Date.now() - antispamInfo.timestamp < MESSAGE_SPAM_THRESHOLD
         ) {
-          embed.addField("AntiSpam Detection", "✓", true);
+          fields.push({ name: "AntiSpam Detection", value: "✓", inline: true });
           shouldDelete = true;
           strikesTotal += 1;
         }
@@ -145,7 +145,7 @@ async function performAutomod(message, settings) {
   // Anti Invites
   if (!automod.anti_links && automod.anti_invites) {
     if (containsDiscordInvite(content)) {
-      embed.addField("Discord Invites", "✓", true);
+      fields.push({ name: "Discord Invites", value: "✓", inline: true });
       shouldDelete = true;
       strikesTotal += 1;
     }
@@ -165,33 +165,37 @@ async function performAutomod(message, settings) {
     memberDb.strikes += strikesTotal;
 
     // log to db
-    const reason = embed.fields.map((field) => field.name + ": " + field.value).join("\n");
+    const reason = fields.map((field) => field.name + ": " + field.value).join("\n");
     addAutoModLogToDb(member, content, reason, strikesTotal).catch(() => {});
 
     // send automod log
-    embed
+    if (logChannel) {
+      const logEmbed = new EmbedBuilder()
       .setAuthor({ name: "Auto Moderation" })
       .setThumbnail(author.displayAvatarURL())
       .setColor(AUTOMOD.LOG_EMBED)
+      .addFields(fields)
       .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
       .setFooter({
         text: `By ${author.tag} | ${author.id}`,
         iconURL: author.avatarURL(),
       });
 
-    logChannel.safeSend({ embeds: [embed] });
+      logChannel.safeSend({ embeds: [logEmbed] });
+    }
 
     // DM strike details
-    const strikeEmbed = new MessageEmbed()
+    const strikeEmbed = new EmbedBuilder()
       .setColor(AUTOMOD.DM_EMBED)
       .setThumbnail(guild.iconURL())
       .setAuthor({ name: "Auto Moderation" })
+      .addFields(fields)
       .setDescription(
         `You have received ${strikesTotal} strikes!\n\n` +
           `**Guild:** ${guild.name}\n` +
           `**Total Strikes:** ${memberDb.strikes} out of ${automod.strikes}`
       );
-    embed.fields.forEach((field) => strikeEmbed.addField(field.name, field.value, true));
+      
     author.send({ embeds: [strikeEmbed] }).catch((ex) => {});
 
     // check if max strikes are received
@@ -200,7 +204,7 @@ async function performAutomod(message, settings) {
       memberDb.strikes = 0;
 
       // Add Moderation Action
-      await addModAction(guild.me, member, "Automod: Max strikes received", automod.action).catch(() => {});
+      await addModAction(guild.members.me, member, "Automod: Max strikes received", automod.action).catch(() => {});
     }
 
     await memberDb.save();

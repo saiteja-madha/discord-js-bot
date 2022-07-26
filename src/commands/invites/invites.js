@@ -1,6 +1,6 @@
 const { getEffectiveInvites } = require("@handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getMember } = require("@schemas/Member");
 
 /**
@@ -10,7 +10,7 @@ module.exports = {
   name: "invites",
   description: "shows number of invites in this server",
   category: "INVITE",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[@member|id]",
@@ -21,7 +21,7 @@ module.exports = {
       {
         name: "user",
         description: "the user to get the invites for",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
     ],
@@ -45,14 +45,28 @@ async function getInvites({ guild }, user, settings) {
 
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: `Invites for ${user.username}` })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(user.displayAvatarURL())
     .setDescription(`${user.toString()} has ${getEffectiveInvites(inviteData)} invites`)
-    .addField("Total Invites", `**${inviteData?.tracked + inviteData?.added || 0}**`, true)
-    .addField("Fake Invites", `**${inviteData?.fake || 0}**`, true)
-    .addField("Left Invites", `**${inviteData?.left || 0}**`, true);
+    .addFields(
+      {
+        name: "Total Invites",
+        value: `**${inviteData?.tracked + inviteData?.added || 0}**`,
+        inline: true,
+      },
+      {
+        name: "Fake Invites",
+        value: `**${inviteData?.fake || 0}**`,
+        inline: true,
+      },
+      {
+        name: "Left Invites",
+        value: `**${inviteData?.left || 0}**`,
+        inline: true,
+      }
+    );
 
   return { embeds: [embed] };
 }

@@ -1,4 +1,5 @@
 const { purgeMessages } = require("@helpers/ModUtils");
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,7 +8,7 @@ module.exports = {
   name: "purge",
   description: "purge commands",
   category: "MODERATION",
-  userPermissions: ["MANAGE_MESSAGES"],
+  userPermissions: ["ManageMessages"],
   command: {
     enabled: false,
   },
@@ -17,19 +18,19 @@ module.exports = {
       {
         name: "all",
         description: "purge all messages",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel from which messages must be cleaned",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "amount",
             description: "number of messages to be deleted (Max 99)",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
         ],
@@ -37,19 +38,19 @@ module.exports = {
       {
         name: "attachments",
         description: "purge all messages with attachments",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel from which messages must be cleaned",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "amount",
             description: "number of messages to be deleted (Max 99)",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
         ],
@@ -57,19 +58,19 @@ module.exports = {
       {
         name: "bots",
         description: "purge all bot messages",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel from which messages must be cleaned",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "amount",
             description: "number of messages to be deleted (Max 99)",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
         ],
@@ -77,19 +78,19 @@ module.exports = {
       {
         name: "links",
         description: "purge all messages with links",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel from which messages must be cleaned",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "amount",
             description: "number of messages to be deleted (Max 99)",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
         ],
@@ -97,25 +98,25 @@ module.exports = {
       {
         name: "token",
         description: "purge all messages containing the specified token",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel from which messages must be cleaned",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "token",
             description: "token to be looked up in messages",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
           {
             name: "amount",
             description: "number of messages to be deleted (Max 99)",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
         ],
@@ -123,25 +124,25 @@ module.exports = {
       {
         name: "user",
         description: "purge all messages from the specified user",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel from which messages must be cleaned",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
           {
             name: "user",
             description: "user whose messages needs to be cleaned",
-            type: "USER",
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: "amount",
             description: "number of messages to be deleted (Max 99)",
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
             required: false,
           },
         ],

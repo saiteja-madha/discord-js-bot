@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } = require("discord.js");
 const { TICKET } = require("@root/config.js");
 
 // schemas
@@ -8,15 +8,15 @@ const { getSettings } = require("@schemas/Guild");
 const { postToBin } = require("@helpers/HttpUtils");
 const { error } = require("@helpers/Logger");
 
-const OPEN_PERMS = ["MANAGE_CHANNELS"];
-const CLOSE_PERMS = ["MANAGE_CHANNELS", "READ_MESSAGE_HISTORY"];
+const OPEN_PERMS = ["ManageChannels"];
+const CLOSE_PERMS = ["ManageChannels", "ReadMessageHistory"];
 
 /**
  * @param {import('discord.js').Channel} channel
  */
 function isTicketChannel(channel) {
   return (
-    channel.type === "GUILD_TEXT" &&
+    channel.type === ChannelType.GuildText &&
     channel.name.startsWith("tіcket-") &&
     channel.topic &&
     channel.topic.startsWith("tіcket|")
@@ -56,7 +56,7 @@ async function parseTicketDetails(channel) {
  * @param {string} [reason]
  */
 async function closeTicket(channel, closedBy, reason) {
-  if (!channel.deletable || !channel.permissionsFor(channel.guild.me).has(CLOSE_PERMS)) {
+  if (!channel.deletable || !channel.permissionsFor(channel.guild.members.me).has(CLOSE_PERMS)) {
     return "MISSING_PERMISSIONS";
   }
 
@@ -79,19 +79,32 @@ async function closeTicket(channel, closedBy, reason) {
     const components = [];
     if (logsUrl) {
       components.push(
-        new MessageActionRow().addComponents(
-          new MessageButton().setLabel("Transcript").setURL(logsUrl.short).setStyle("LINK")
+        new ActionRowBuilder().addComponents(
+          new ButtonBuilder().setLabel("Transcript").setURL(logsUrl.short).setStyle(ButtonStyle.Link)
         )
       );
     }
 
     if (channel.deletable) await channel.delete();
 
-    const embed = new MessageEmbed().setAuthor({ name: "Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
-    if (reason) embed.addField("Reason", reason, false);
-    embed
-      .addField("Opened By", ticketDetails.user ? ticketDetails.user.tag : "User left", true)
-      .addField("Closed By", closedBy ? closedBy.tag : "User left", true);
+    const embed = new EmbedBuilder().setAuthor({ name: "Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
+    const fields = [];
+
+    if (reason) fields.push({ name: "Reason", value: reason, inline: false });
+    fields.push(
+      {
+        name: "Opened By",
+        value: ticketDetails.user ? ticketDetails.user.tag : "Unknown",
+        inline: true,
+      },
+      {
+        name: "Closed By",
+        value: closedBy ? closedBy.tag : "Unknown",
+        inline: false,
+      }
+    );
+
+    embed.setFields(fields);
 
     // send embed to log channel
     if (config.ticket.log_channel) {
@@ -121,11 +134,11 @@ async function closeAllTickets(guild, author) {
   let success = 0;
   let failed = 0;
 
-  channels.forEach(async (ch) => {
-    const status = await closeTicket(ch, author, "Force close all open tickets");
-    if (status.success) success += 1;
+  for (const ch of channels) {
+    const status = await closeTicket(ch[1], author, "Force close all open tickets");
+    if (status === "SUCCESS") success += 1;
     else failed += 1;
-  });
+  }
 
   return [success, failed];
 }
@@ -135,7 +148,7 @@ async function closeAllTickets(guild, author) {
  * @param {import('discord.js').User} user
  */
 async function openTicket(guild, user) {
-  if (!guild.me.permissions.has(OPEN_PERMS)) return "MISSING_PERMISSIONS";
+  if (!guild.members.me.permissions.has(OPEN_PERMS)) return "MISSING_PERMISSIONS";
 
   const alreadyExists = getExistingTicketChannel(guild, user.id);
   if (alreadyExists) return "ALREADY_EXISTS";
@@ -149,15 +162,15 @@ async function openTicket(guild, user) {
     const permissionOverwrites = [
       {
         id: guild.roles.everyone,
-        deny: ["VIEW_CHANNEL"],
+        deny: ["ViewChannel"],
       },
       {
         id: user.id,
-        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+        allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
       },
       {
-        id: guild.me.roles.highest.id,
-        allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+        id: guild.members.me.roles.highest.id,
+        allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
       },
     ];
 
@@ -167,36 +180,41 @@ async function openTicket(guild, user) {
         if (!role) return;
         permissionOverwrites.push({
           id: role,
-          allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+          allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
         });
       });
     }
 
-    const tktChannel = await guild.channels.create(`tіcket-${ticketNumber}`, {
-      type: "GUILD_TEXT",
+    const tktChannel = await guild.channels.create({
+      name: `tіcket-${ticketNumber}`,
+      type: ChannelType.GuildText,
       topic: `tіcket|${user.id}`,
       permissionOverwrites,
     });
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: `Ticket #${ticketNumber}` })
       .setDescription(`Hello ${user.toString()}\nSupport will be with you shortly`)
       .setFooter({ text: "You may close your ticket anytime by clicking the button below" });
 
-    let buttonsRow = new MessageActionRow().addComponents(
-      new MessageButton().setLabel("Close Ticket").setCustomId("TICKET_CLOSE").setEmoji("🔒").setStyle("PRIMARY")
+    let buttonsRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setLabel("Close Ticket")
+        .setCustomId("TICKET_CLOSE")
+        .setEmoji("🔒")
+        .setStyle(ButtonStyle.Primary)
     );
 
     const sent = await tktChannel.send({ content: user.toString(), embeds: [embed], components: [buttonsRow] });
 
-    const dmEmbed = new MessageEmbed()
+    const dmEmbed = new EmbedBuilder()
       .setColor(TICKET.CREATE_EMBED)
       .setAuthor({ name: "Ticket Created" })
       .setThumbnail(guild.iconURL())
       .setDescription(`**Server:** ${guild.name}`);
 
-    const row = new MessageActionRow().addComponents(
-      new MessageButton().setLabel("View Channel").setURL(sent.url).setStyle("LINK")
+    const row = new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setLabel("View Channel").setURL(sent.url).setStyle(ButtonStyle.Link)
     );
 
     user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});

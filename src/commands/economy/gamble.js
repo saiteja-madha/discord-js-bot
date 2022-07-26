@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
 const { getRandomInt } = require("@helpers/Utils");
@@ -10,7 +10,7 @@ module.exports = {
   name: "gamble",
   description: "try your luck by gambling",
   category: "ECONOMY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "<amount>",
@@ -24,7 +24,7 @@ module.exports = {
         name: "coins",
         description: "number of coins to bet",
         required: true,
-        type: "INTEGER",
+        type: ApplicationCommandOptionType.Integer,
       },
     ],
   },
@@ -107,7 +107,7 @@ async function gamble(user, betAmount) {
   userDb.coins += balance;
   await userDb.save();
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: user.username, iconURL: user.displayAvatarURL() })
     .setColor(EMBED_COLORS.TRANSPARENT)
     .setThumbnail("https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif")

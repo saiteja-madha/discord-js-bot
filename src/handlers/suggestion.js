@@ -1,7 +1,15 @@
 const { getSettings } = require("@schemas/Guild");
 const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
 const { SUGGESTIONS } = require("@root/config");
-const { MessageActionRow, MessageButton, Modal, TextInputComponent } = require("discord.js");
+const {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ModalBuilder,
+  TextInputBuilder,
+  EmbedBuilder,
+  ButtonStyle,
+  TextInputStyle,
+} = require("discord.js");
 const { stripIndents } = require("common-tags");
 
 /**
@@ -34,7 +42,7 @@ const getVotesMessage = (upVotes, downVotes) => {
 
 const hasPerms = (member, settings) => {
   return (
-    member.permissions.has("MANAGE_GUILD") ||
+    member.permissions.has("ManageGuild") ||
     member.roles.cache.find((r) => settings.suggestions.staff_roles.includes(r.id))
   );
 };
@@ -62,40 +70,45 @@ async function approveSuggestion(member, channel, messageId, reason) {
    */
   let message;
   try {
-    message = await channel.messages.fetch(messageId, { force: true });
+    message = await channel.messages.fetch({ message: messageId, force: true });
   } catch (err) {
     return "Suggestion message not found";
   }
 
-  let buttonsRow = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle("SUCCESS").setDisabled(true),
-    new MessageButton().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle("DANGER"),
-    new MessageButton().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle("SECONDARY")
+  let buttonsRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId("SUGGEST_APPROVE")
+      .setLabel("Approve")
+      .setStyle(ButtonStyle.Success)
+      .setDisabled(true),
+    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle(ButtonStyle.Danger),
+    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle(ButtonStyle.Secondary)
   );
 
-  const approvedEmbed = message.embeds[0]
+  const approvedEmbed = new EmbedBuilder()
+    .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.APPROVED_EMBED)
     .setAuthor({ name: "Suggestion Approved" })
     .setFooter({ text: `Approved By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
     .setTimestamp();
 
+  const fields = [];
+
   // add stats if it doesn't exist
-  const statsField = approvedEmbed.fields.find((field) => field.name === "Stats");
+  const statsField = message.embeds[0].fields.find((field) => field.name === "Stats");
   if (!statsField) {
     const [upVotes, downVotes] = getStats(message);
     doc.stats.upvotes = upVotes;
     doc.stats.downvotes = downVotes;
-    approvedEmbed.addField("Stats", getVotesMessage(upVotes, downVotes));
+    fields.push({ name: "Stats", value: getVotesMessage(upVotes, downVotes) });
+  } else {
+    fields.push(statsField);
   }
 
   // update reason
-  const reasonField = approvedEmbed.fields.find((field) => field.name === "Reason");
-  if (!reasonField) {
-    if (reason) approvedEmbed.addField("Reason", "```" + reason + "```");
-  } else {
-    if (reason) reasonField.value = "```" + reason + "```";
-    else approvedEmbed.fields.splice(approvedEmbed.fields.indexOf(reasonField), 1);
-  }
+  if (reason) fields.push({ name: "Reason", value: "```" + reason + "```" });
+
+  approvedEmbed.addFields(fields);
 
   try {
     doc.status = "APPROVED";
@@ -139,7 +152,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings)) return "You don't have permission to reject suggestions!";
 
   // validate if document exists
   const doc = await findSuggestion(guild.id, messageId);
@@ -148,40 +161,41 @@ async function rejectSuggestion(member, channel, messageId, reason) {
 
   let message;
   try {
-    message = await channel.messages.fetch(messageId);
+    message = await channel.messages.fetch({ message: messageId });
   } catch (err) {
     return "Suggestion message not found";
   }
 
-  let buttonsRow = new MessageActionRow().addComponents(
-    new MessageButton().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle("SUCCESS"),
-    new MessageButton().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle("DANGER").setDisabled(true),
-    new MessageButton().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle("SECONDARY")
+  let buttonsRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle(ButtonStyle.Danger).setDisabled(true),
+    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle(ButtonStyle.Secondary)
   );
 
-  const rejectedEmbed = message.embeds[0]
+  const rejectedEmbed = new EmbedBuilder()
+    .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.DENIED_EMBED)
     .setAuthor({ name: "Suggestion Rejected" })
     .setFooter({ text: `Rejected By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
     .setTimestamp();
 
+  const fields = [];
+
   // add stats if it doesn't exist
-  const statsField = rejectedEmbed.fields.find((field) => field.name === "Stats");
+  const statsField = message.embeds[0].fields.find((field) => field.name === "Stats");
   if (!statsField) {
     const [upVotes, downVotes] = getStats(message);
     doc.stats.upvotes = upVotes;
     doc.stats.downvotes = downVotes;
-    rejectedEmbed.addField("Stats", getVotesMessage(upVotes, downVotes));
+    fields.push({ name: "Stats", value: getVotesMessage(upVotes, downVotes) });
+  } else {
+    fields.push(statsField);
   }
 
   // update reason
-  const reasonField = rejectedEmbed.fields.find((field) => field.name === "Reason");
-  if (!reasonField) {
-    if (reason) rejectedEmbed.addField("Reason", "```" + reason + "```");
-  } else {
-    if (reason) reasonField.value = "```" + reason + "```";
-    else rejectedEmbed.fields.splice(rejectedEmbed.fields.indexOf(reasonField), 1);
-  }
+  if (reason) fields.push({ name: "Reason", value: "```" + reason + "```" });
+
+  rejectedEmbed.addFields(fields);
 
   try {
     doc.status = "REJECTED";
@@ -225,7 +239,7 @@ async function deleteSuggestion(member, channel, messageId, reason) {
   const settings = await getSettings(guild);
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings)) return "You don't have permission to delete suggestions!";
 
   try {
     await channel.messages.delete(messageId);
@@ -242,12 +256,16 @@ async function deleteSuggestion(member, channel, messageId, reason) {
  */
 async function handleApproveBtn(interaction) {
   await interaction.showModal(
-    new Modal({
+    new ModalBuilder({
       title: "Approve Suggestion",
       customId: "SUGGEST_APPROVE_MODAL",
       components: [
-        new MessageActionRow().addComponents([
-          new TextInputComponent().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+        new ActionRowBuilder().addComponents([
+          new TextInputBuilder()
+            .setCustomId("reason")
+            .setLabel("reason")
+            .setStyle(TextInputStyle.Paragraph)
+            .setMinLength(4),
         ]),
       ],
     })
@@ -269,12 +287,16 @@ async function handleApproveModal(modal) {
  */
 async function handleRejectBtn(interaction) {
   await interaction.showModal(
-    new Modal({
+    new ModalBuilder({
       title: "Reject Suggestion",
       customId: "SUGGEST_REJECT_MODAL",
       components: [
-        new MessageActionRow().addComponents([
-          new TextInputComponent().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+        new ActionRowBuilder().addComponents([
+          new TextInputBuilder()
+            .setCustomId("reason")
+            .setLabel("reason")
+            .setStyle(TextInputStyle.Paragraph)
+            .setMinLength(4),
         ]),
       ],
     })
@@ -296,12 +318,16 @@ async function handleRejectModal(modal) {
  */
 async function handleDeleteBtn(interaction) {
   await interaction.showModal(
-    new Modal({
+    new ModalBuilder({
       title: "Delete Suggestion",
       customId: "SUGGEST_DELETE_MODAL",
       components: [
-        new MessageActionRow().addComponents([
-          new TextInputComponent().setCustomId("reason").setLabel("reason").setStyle("PARAGRAPH").setMinLength(4),
+        new ActionRowBuilder().addComponents([
+          new TextInputBuilder()
+            .setCustomId("reason")
+            .setLabel("reason")
+            .setStyle(TextInputStyle.Paragraph)
+            .setMinLength(4),
         ]),
       ],
     })

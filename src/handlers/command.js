@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { OWNER_IDS, PREFIX, EMBED_COLORS } = require("@root/config");
 const { parsePermissions } = require("@helpers/Utils");
 const { timeformat } = require("@helpers/Utils");
@@ -22,7 +22,7 @@ module.exports = {
     data.prefix = prefix;
     data.invoke = invoke;
 
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) return;
+    if (!message.channel.permissionsFor(message.guild.members.me).has("SendMessages")) return;
 
     //premium handler
     if (cmd.isPremium === true && !settings.isPremium === false) {
@@ -52,7 +52,7 @@ module.exports = {
 
     // check bot permissions
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
-      if (!message.channel.permissionsFor(message.guild.me).has(cmd.botPermissions)) {
+      if (!message.channel.permissionsFor(message.guild.members.me).has(cmd.botPermissions)) {
         return message.safeReply(`I need ${parsePermissions(cmd.botPermissions)} for this command`);
       }
     }
@@ -120,7 +120,7 @@ module.exports = {
 
     // bot permissions
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
-      if (!interaction.guild.me.permissions.has(cmd.botPermissions)) {
+      if (!interaction.guild.members.me.permissions.has(cmd.botPermissions)) {
         return interaction.reply({
           content: `I need ${parsePermissions(cmd.botPermissions)} for this command`,
           ephemeral: true,
@@ -173,7 +173,7 @@ module.exports = {
       if (cmd.cooldown) desc += `\n**Cooldown:** ${timeformat(cmd.cooldown)}`;
     }
 
-    const embed = new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
+    const embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
     if (title) embed.setAuthor({ name: title });
     return embed;
   },
@@ -196,7 +196,7 @@ module.exports = {
       desc += `\n**Cooldown:** ${timeformat(cmd.cooldown)}`;
     }
 
-    return new MessageEmbed().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
+    return new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED).setDescription(desc);
   },
 };
 

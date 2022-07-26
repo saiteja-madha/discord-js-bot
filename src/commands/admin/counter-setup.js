@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,8 +7,8 @@ module.exports = {
   name: "counter",
   description: "setup counter channel in the guild",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
-  botPermissions: ["MANAGE_CHANNELS"],
+  userPermissions: ["ManageGuild"],
+  botPermissions: ["ManageChannels"],
   command: {
     enabled: true,
     usage: "<type> <channel-name>",
@@ -19,7 +21,7 @@ module.exports = {
       {
         name: "type",
         description: "type of counter channel",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: [
           {
@@ -39,7 +41,7 @@ module.exports = {
       {
         name: "name",
         description: "name of the counter channel",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
@@ -67,6 +69,12 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import('discord.js').Guild} guild
+ * @param {string} type
+ * @param {string} name
+ * @param {object} settings
+ */
 async function setupCounter(guild, type, name, settings) {
   let channelName = name;
 
@@ -75,16 +83,17 @@ async function setupCounter(guild, type, name, settings) {
   else if (type === "MEMBERS") channelName += ` : ${stats[2]}`;
   else if (type === "BOTS") channelName += ` : ${stats[1]}`;
 
-  const vc = await guild.channels.create(channelName, {
-    type: "GUILD_VOICE",
+  const vc = await guild.channels.create({
+    name: channelName,
+    type: ChannelType.GuildVoice,
     permissionOverwrites: [
       {
         id: guild.roles.everyone,
-        deny: ["CONNECT"],
+        deny: ["Connect"],
       },
       {
-        id: guild.me.id,
-        allow: ["VIEW_CHANNEL", "MANAGE_CHANNELS", "CONNECT"],
+        id: guild.members.me.id,
+        allow: ["ViewChannel", "ManageChannels", "Connect"],
       },
     ],
   });

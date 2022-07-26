@@ -1,4 +1,4 @@
-const { MessageEmbed, Util } = require("discord.js");
+const { EmbedBuilder, escapeInlineCode, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const { getInvitesLb } = require("@schemas/Member");
 const { getXpLb } = require("@schemas/MemberStats");
@@ -10,7 +10,7 @@ module.exports = {
   name: "leaderboard",
   description: "display the XP leaderboard",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     aliases: ["lb"],
@@ -24,7 +24,7 @@ module.exports = {
         name: "type",
         description: "type of leaderboard to display",
         required: true,
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         choices: [
           {
             name: "xp",
@@ -71,13 +71,13 @@ async function getXpLeaderboard({ guild }, author, settings) {
   for (let i = 0; i < lb.length; i++) {
     try {
       const user = await author.client.users.fetch(lb[i].member_id);
-      collector += `**#${(i + 1).toString()}** - ${Util.escapeInlineCode(user.tag)}\n`;
+      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)}\n`;
     } catch (ex) {
       // Ignore
     }
   }
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "XP Leaderboard" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(collector)
@@ -99,14 +99,14 @@ async function getInviteLeaderboard({ guild }, author, settings) {
       if (memberId === "VANITY") collector += `**#${(i + 1).toString()}** - Vanity URL [${lb[i].invites}]\n`;
       else {
         const user = await author.client.users.fetch(lb[i].member_id);
-        collector += `**#${(i + 1).toString()}** - ${Util.escapeInlineCode(user.tag)} [${lb[i].invites}]\n`;
+        collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)} [${lb[i].invites}]\n`;
       }
     } catch (ex) {
       collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].invites}]\n`;
     }
   }
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: "Invite Leaderboard" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(collector)

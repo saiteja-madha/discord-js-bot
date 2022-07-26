@@ -1,4 +1,5 @@
 const { banTarget } = require("@helpers/ModUtils");
+const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -7,8 +8,8 @@ module.exports = {
   name: "ban",
   description: "bans the specified member",
   category: "MODERATION",
-  botPermissions: ["BAN_MEMBERS"],
-  userPermissions: ["BAN_MEMBERS"],
+  botPermissions: ["BanMembers"],
+  userPermissions: ["BanMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> [reason]",
@@ -20,13 +21,13 @@ module.exports = {
       {
         name: "user",
         description: "the target member",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "reason",
         description: "reason for ban",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],

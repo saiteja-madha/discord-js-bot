@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 
 /**
@@ -8,7 +8,7 @@ module.exports = {
   name: "invitecodes",
   description: "list all your invites codes in this guild",
   category: "INVITE",
-  botPermissions: ["EMBED_LINKS", "MANAGE_GUILD"],
+  botPermissions: ["EmbedLinks", "ManageGuild"],
   command: {
     enabled: true,
     usage: "[@member|id]",
@@ -19,7 +19,7 @@ module.exports = {
       {
         name: "user",
         description: "the user to get the invite codes for",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
     ],
@@ -48,7 +48,7 @@ async function getInviteCodes({ guild }, user) {
     str += `❯ [${inv.code}](${inv.url}) : ${inv.uses} uses\n`;
   });
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({ name: `Invite code for ${user.username}` })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(str);

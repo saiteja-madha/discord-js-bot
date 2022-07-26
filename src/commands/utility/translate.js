@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { translate } = require("@helpers/HttpUtils");
 const { GOOGLE_TRANSLATE } = require("@src/data.json");
@@ -16,7 +16,7 @@ module.exports = {
   description: "translate from one language to other",
   cooldown: 20,
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     aliases: ["tr"],
@@ -29,21 +29,21 @@ module.exports = {
       {
         name: "language",
         description: "translation language",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: choices.map((choice) => ({ name: GOOGLE_TRANSLATE[choice], value: choice })),
       },
       {
         name: "text",
         description: "the text that requires translation",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
   },
 
   async messageRun(message, args) {
-    let embed = new MessageEmbed();
+    let embed = new EmbedBuilder();
     const outputCode = args.shift();
 
     if (!GOOGLE_TRANSLATE[outputCode]) {
@@ -74,7 +74,7 @@ async function getTranslation(author, input, outputCode) {
   const data = await translate(input, outputCode);
   if (!data) return "Failed to translate your text";
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({
       name: `${author.username} says`,
       iconURL: author.avatarURL(),

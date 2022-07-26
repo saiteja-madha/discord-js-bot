@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "statstracking",
   description: "enable or disable tracking stats in the server",
   category: "STATS",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     aliases: ["statssystem", "statstracking"],
@@ -20,7 +22,7 @@ module.exports = {
         name: "status",
         description: "enabled or disabled",
         required: true,
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         choices: [
           {
             name: "ON",

@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "autodelete",
   description: "manage the autodelete settings for the server",
   category: "AUTOMOD",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 2,
@@ -35,13 +37,13 @@ module.exports = {
       {
         name: "attachments",
         description: "allow or disallow attachments in message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "configuration status",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -58,13 +60,13 @@ module.exports = {
       {
         name: "invites",
         description: "allow or disallow discord invites in message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "configuration status",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -81,13 +83,13 @@ module.exports = {
       {
         name: "links",
         description: "allow or disallow links in message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "configuration status",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -104,13 +106,13 @@ module.exports = {
       {
         name: "maxlines",
         description: "sets maximum lines allowed per message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "amount",
             description: "configuration amount (0 to disable)",
             required: true,
-            type: "INTEGER",
+            type: ApplicationCommandOptionType.Integer,
           },
         ],
       },

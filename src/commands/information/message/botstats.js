@@ -7,7 +7,7 @@ module.exports = {
   name: "botstats",
   description: "shows bot information",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   cooldown: 5,
   command: {
     enabled: true,

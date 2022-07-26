@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const { getUser } = require("@schemas/User");
 const { ECONOMY, EMBED_COLORS } = require("@root/config");
 
@@ -23,7 +23,7 @@ module.exports = async (self, target, coins) => {
   await userDb.save();
   await targetDb.save();
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: "Updated Balance" })
     .setDescription(`You have successfully transferred ${coins}${ECONOMY.CURRENCY} to ${target.tag}`)

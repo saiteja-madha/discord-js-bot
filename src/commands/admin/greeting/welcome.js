@@ -1,5 +1,6 @@
 const { isHex } = require("@helpers/Utils");
 const { buildGreeting } = require("@handlers/greeting");
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -8,7 +9,7 @@ module.exports = {
   name: "welcome",
   description: "setup welcome message",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -54,13 +55,13 @@ module.exports = {
       {
         name: "status",
         description: "enable or disable welcome message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "enabled or disabled",
             required: true,
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             choices: [
               {
                 name: "ON",
@@ -77,18 +78,18 @@ module.exports = {
       {
         name: "preview",
         description: "preview the configured welcome message",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: "channel",
         description: "set welcome channel",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "channel",
             description: "channel name",
-            type: "CHANNEL",
-            channelTypes: ["GUILD_TEXT"],
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildText],
             required: true,
           },
         ],
@@ -96,12 +97,12 @@ module.exports = {
       {
         name: "desc",
         description: "set embed description",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "content",
             description: "description content",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -109,12 +110,12 @@ module.exports = {
       {
         name: "thumbnail",
         description: "configure embed thumbnail",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "status",
             description: "thumbnail status",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
               {
@@ -132,12 +133,12 @@ module.exports = {
       {
         name: "color",
         description: "set embed color",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "hex-code",
             description: "hex color code",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -145,12 +146,12 @@ module.exports = {
       {
         name: "footer",
         description: "set embed footer",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "content",
             description: "footer content",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
@@ -158,12 +159,12 @@ module.exports = {
       {
         name: "image",
         description: "set embed image",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "url",
             description: "image url",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],

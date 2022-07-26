@@ -1,12 +1,14 @@
 const { CommandCategory, BotClient } = require("@src/structures");
 const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 const {
-  MessageEmbed,
-  MessageActionRow,
-  MessageSelectMenu,
+  EmbedBuilder,
+  ActionRowBuilder,
+  SelectMenuBuilder,
   Message,
-  MessageButton,
+  ButtonBuilder,
   CommandInteraction,
+  ApplicationCommandOptionType,
+  ButtonStyle,
 } = require("discord.js");
 const { getCommandUsage, getSlashUsage } = require("@handlers/command");
 
@@ -21,7 +23,7 @@ module.exports = {
   name: "help",
   description: "command help menu",
   category: "UTILITY",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[command]",
@@ -33,7 +35,7 @@ module.exports = {
         name: "command",
         description: "name of the command",
         required: false,
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
       },
     ],
   },
@@ -103,25 +105,25 @@ async function getHelpMenu({ client, guild }) {
     });
   }
 
-  const menuRow = new MessageActionRow().addComponents(
-    new MessageSelectMenu().setCustomId("help-menu").setPlaceholder("Choose the command category").addOptions(options)
+  const menuRow = new ActionRowBuilder().addComponents(
+    new SelectMenuBuilder().setCustomId("help-menu").setPlaceholder("Choose the command category").addOptions(options)
   );
 
   // Buttons Row
   let components = [];
   components.push(
-    new MessageButton().setCustomId("previousBtn").setEmoji("⬅️").setStyle("SECONDARY").setDisabled(true),
-    new MessageButton().setCustomId("nextBtn").setEmoji("➡️").setStyle("SECONDARY").setDisabled(true)
+    new ButtonBuilder().setCustomId("previousBtn").setEmoji("⬅️").setStyle(ButtonStyle.Secondary).setDisabled(true),
+    new ButtonBuilder().setCustomId("nextBtn").setEmoji("➡️").setStyle(ButtonStyle.Secondary).setDisabled(true)
   );
 
-  let buttonsRow = new MessageActionRow().addComponents(components);
+  let buttonsRow = new ActionRowBuilder().addComponents(components);
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription(
       "**About Me:**\n" +
-        `Hello I am ${guild.me.displayName}!\n` +
+        `Hello I am ${guild.members.me.displayName}!\n` +
         "A cool multipurpose discord bot which can serve all your needs\n\n" +
         `**Invite Me:** [Here](${client.getInvite()})\n` +
         `**Support Server:** [Join](${SUPPORT_SERVER})`
@@ -163,7 +165,14 @@ const waiter = (msg, userId, prefix) => {
         const cat = response.values[0].toUpperCase();
         arrEmbeds = prefix ? getMsgCategoryEmbeds(msg.client, cat, prefix) : getSlashCategoryEmbeds(msg.client, cat);
         currentPage = 0;
-        buttonsRow.components.forEach((button) => button.setDisabled(arrEmbeds.length > 1 ? false : true));
+
+        // Buttons Row
+        let components = [];
+        buttonsRow.components.forEach((button) =>
+          components.push(ButtonBuilder.from(button).setDisabled(arrEmbeds.length > 1 ? false : true))
+        );
+
+        buttonsRow = new ActionRowBuilder().addComponents(components);
         msg.editable && (await msg.edit({ embeds: [arrEmbeds[currentPage]], components: [menuRow, buttonsRow] }));
         break;
       }
@@ -218,7 +227,7 @@ function getSlashCategoryEmbeds(client, category) {
     collector +=
       "**Available Filters:**\n" + `${availableFilters}` + `*\n\n**Available Generators**\n` + `${availableGens}`;
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
@@ -231,7 +240,7 @@ function getSlashCategoryEmbeds(client, category) {
   const commands = Array.from(client.slashCommands.filter((cmd) => cmd.category === category).values());
 
   if (commands.length === 0) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
@@ -259,7 +268,7 @@ function getSlashCategoryEmbeds(client, category) {
   }
 
   arrSplitted.forEach((item, index) => {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
@@ -297,7 +306,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
       `**${prefix}cmd <url>:** Picks image from provided URL\n` +
       `**${prefix}cmd [attachment]:** Picks attachment image`;
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
@@ -310,7 +319,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
   const commands = client.commands.filter((cmd) => cmd.category === category);
 
   if (commands.length === 0) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })
@@ -329,7 +338,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
   }
 
   arrSplitted.forEach((item, index) => {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setThumbnail(CommandCategory[category]?.image)
       .setAuthor({ name: `${category} Commands` })

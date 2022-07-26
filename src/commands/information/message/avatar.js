@@ -7,7 +7,7 @@ module.exports = {
   name: "avatar",
   description: "shows a users avatar information",
   category: "INFORMATION",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[@member|id]",

@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 const discordTogether = [
   "youtube",
   "poker",
@@ -22,7 +24,7 @@ module.exports = {
   name: "together",
   description: "discord together",
   category: "FUN",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     minArgsCount: 1,
@@ -35,7 +37,7 @@ module.exports = {
       {
         name: "type",
         description: "type",
-        type: "STRING",
+        type: ApplicationCommandOptionType.String,
         required: true,
         choices: discordTogether.map((game) => ({ name: game, value: game })),
       },

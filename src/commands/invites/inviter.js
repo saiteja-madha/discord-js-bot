@@ -1,6 +1,6 @@
 const { getEffectiveInvites } = require("@handlers/invite");
 const { EMBED_COLORS } = require("@root/config.js");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { stripIndent } = require("common-tags");
 const { getMember } = require("@schemas/Member");
 
@@ -11,7 +11,7 @@ module.exports = {
   name: "inviter",
   description: "shows inviter information",
   category: "INVITE",
-  botPermissions: ["EMBED_LINKS"],
+  botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
     usage: "[@member|id]",
@@ -22,7 +22,7 @@ module.exports = {
       {
         name: "user",
         description: "the user to get the inviter information for",
-        type: "USER",
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
     ],
@@ -50,7 +50,7 @@ async function getInviter({ guild }, user, settings) {
   const inviter = await guild.client.users.fetch(inviteData.inviter, false, true);
   const inviterData = (await getMember(guild.id, inviteData.inviter)).invite_data;
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: `Invite data for ${user.username}` })
     .setDescription(

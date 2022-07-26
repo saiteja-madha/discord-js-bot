@@ -1,3 +1,5 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 /**
  * @type {import("@structures/Command")}
  */
@@ -5,7 +7,7 @@ module.exports = {
   name: "autorole",
   description: "setup role to be given when a member joins the server",
   category: "ADMIN",
-  userPermissions: ["MANAGE_GUILD"],
+  userPermissions: ["ManageGuild"],
   command: {
     enabled: true,
     usage: "<role|off>",
@@ -18,18 +20,18 @@ module.exports = {
       {
         name: "add",
         description: "setup the autorole",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: "role",
             description: "the role to be given",
-            type: "ROLE",
+            type: ApplicationCommandOptionType.Role,
             required: false,
           },
           {
             name: "role_id",
             description: "the role id to be given",
-            type: "STRING",
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],
@@ -37,7 +39,7 @@ module.exports = {
       {
         name: "remove",
         description: "disable the autorole",
-        type: "SUB_COMMAND",
+        type: ApplicationCommandOptionType.Subcommand,
       },
     ],
   },
@@ -90,8 +92,9 @@ module.exports = {
 
 async function setAutoRole({ guild }, role, settings) {
   if (role) {
-    if (!guild.me.permissions.has("MANAGE_ROLES")) return "I don't have the `MANAGE_ROLES` permission";
-    if (guild.me.roles.highest.position < role.position) return "I don't have the permissions to assign this role";
+    if (!guild.members.me.permissions.has("ManageRoles")) return "I don't have the `ManageRoles` permission";
+    if (guild.members.me.roles.highest.position < role.position)
+      return "I don't have the permissions to assign this role";
     if (role.managed) return "Oops! This role is managed by an integration";
   }
 
