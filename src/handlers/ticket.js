@@ -1,4 +1,12 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } = require("discord.js");
+const {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChannelType,
+  SelectMenuBuilder,
+  ComponentType,
+} = require("discord.js");
 const { TICKET } = require("@root/config.js");
 
 // schemas
@@ -100,7 +108,7 @@ async function closeTicket(channel, closedBy, reason) {
       {
         name: "Closed By",
         value: closedBy ? closedBy.tag : "Unknown",
-        inline: false,
+        inline: true,
       }
     );
 
@@ -144,18 +152,51 @@ async function closeAllTickets(guild, author) {
 }
 
 /**
- * @param {import('discord.js').Guild} guild
- * @param {import('discord.js').User} user
+ * @param {import("discord.js").ButtonInteraction} interaction
  */
-async function openTicket(guild, user) {
-  if (!guild.members.me.permissions.has(OPEN_PERMS)) return "MISSING_PERMISSIONS";
+async function handleTicketOpen(interaction) {
+  await interaction.deferReply({ ephemeral: true });
+  const { guild, user } = interaction;
+
+  if (!guild.members.me.permissions.has(OPEN_PERMS))
+    return interaction.followUp(
+      "Cannot create ticket channel, missing `Manage Channel` permission. Contact server manager for help!"
+    );
 
   const alreadyExists = getExistingTicketChannel(guild, user.id);
-  if (alreadyExists) return "ALREADY_EXISTS";
+  if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
 
   const settings = await getSettings(guild);
+
+  // limit check
   const existing = getTicketChannels(guild).size;
-  if (existing > settings.ticket.limit) return "TOO_MANY_TICKETS";
+  if (existing > settings.ticket.limit) return interaction.followUp("There are too many open tickets. Try again later");
+
+  // check categories
+  let catName = null;
+  let catPerms = [];
+  const categories = settings.ticket.categories;
+  if (categories.length > 0) {
+    const options = [];
+    settings.ticket.categories.forEach((cat) => options.push({ label: cat.name, value: cat.name }));
+    const menuRow = new ActionRowBuilder().addComponents(
+      new SelectMenuBuilder()
+        .setCustomId("ticket-menu")
+        .setPlaceholder("Choose the ticket category")
+        .addOptions(options)
+    );
+
+    await interaction.followUp({ content: "Please choose a ticket category", components: [menuRow] });
+    const res = await interaction.channel.awaitMessageComponent({
+      componentType: ComponentType.SelectMenu,
+      time: 60 * 1000,
+    });
+
+    if (!res) return interaction.followUp("Timed out. Try again");
+    await interaction.editReply({ content: "Processing", components: [] });
+    catName = res.values[0];
+    catPerms = categories.find((cat) => cat.name === catName)?.staff_roles || [];
+  }
 
   try {
     const ticketNumber = (existing + 1).toString();
@@ -174,8 +215,8 @@ async function openTicket(guild, user) {
       },
     ];
 
-    if (settings.ticket.staff_roles.length > 0) {
-      settings.ticket.staff_roles.forEach((roleId) => {
+    if (catPerms?.length > 0) {
+      catPerms?.forEach((roleId) => {
         const role = guild.roles.cache.get(roleId);
         if (!role) return;
         permissionOverwrites.push({
@@ -194,7 +235,12 @@ async function openTicket(guild, user) {
 
     const embed = new EmbedBuilder()
       .setAuthor({ name: `Ticket #${ticketNumber}` })
-      .setDescription(`Hello ${user.toString()}\nSupport will be with you shortly`)
+      .setDescription(
+        `Hello ${user.toString()}
+        Support will be with you shortly
+        ${catName ? `\n**Category:** ${catName}` : ""}
+        `
+      )
       .setFooter({ text: "You may close your ticket anytime by clicking the button below" });
 
     let buttonsRow = new ActionRowBuilder().addComponents(
@@ -211,7 +257,11 @@ async function openTicket(guild, user) {
       .setColor(TICKET.CREATE_EMBED)
       .setAuthor({ name: "Ticket Created" })
       .setThumbnail(guild.iconURL())
-      .setDescription(`**Server:** ${guild.name}`);
+      .setDescription(
+        `**Server:** ${guild.name}
+        ${catName ? `**Category:** ${catName}` : ""}
+        `
+      );
 
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder().setLabel("View Channel").setURL(sent.url).setStyle(ButtonStyle.Link)
@@ -219,40 +269,11 @@ async function openTicket(guild, user) {
 
     user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});
 
-    return "SUCCESS";
+    await interaction.editReply(`Ticket created! 🔥`);
   } catch (ex) {
-    error("openTicket", ex);
-    return "FAILED";
+    error("handleTicketOpen", ex);
+    return interaction.editReply("Failed to create ticket channel, an error occurred!");
   }
-}
-
-/**
- * @param {import("discord.js").ButtonInteraction} interaction
- */
-async function handleTicketOpen(interaction) {
-  await interaction.deferReply({ ephemeral: true });
-
-  const status = await openTicket(interaction.guild, interaction.user);
-
-  if (status === "MISSING_PERMISSIONS") {
-    return interaction.followUp(
-      "Cannot create ticket channel, missing `Manage Channel` permission. Contact server manager for help!"
-    );
-  }
-
-  if (status === "ALREADY_EXISTS") {
-    return interaction.followUp(`You already have an open ticket`);
-  }
-
-  if (status === "TOO_MANY_TICKETS") {
-    return interaction.followUp("There are too many open tickets. Try again later");
-  }
-
-  if (status === "FAILED") {
-    return interaction.followUp("Failed to create ticket channel, an error occurred!");
-  }
-
-  await interaction.followUp(`Ticket created! 🔥`);
 }
 
 /**
@@ -274,7 +295,6 @@ module.exports = {
   isTicketChannel,
   closeTicket,
   closeAllTickets,
-  openTicket,
   handleTicketOpen,
   handleTicketClose,
 };
