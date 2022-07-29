@@ -43,7 +43,7 @@
  * @property {CommandInfo} command - A short description of the command
  * @property {InteractionInfo} slashCommand - A short description of the command
  * @property {function(import('discord.js').Message, string[], object)} messageRun - The callback to be executed when the command is invoked
- * @property {function(import('discord.js').CommandInteraction, object)} interactionRun - The callback to be executed when the interaction is invoked
+ * @property {function(import('discord.js').ChatInputCommandInteraction, object)} interactionRun - The callback to be executed when the interaction is invoked
  */
 
 /**

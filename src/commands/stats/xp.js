@@ -86,7 +86,7 @@ module.exports = {
   },
 
   async interactionRun(interaction, data) {
-    const sub = interaction.options.getSubCommand();
+    const sub = interaction.options.getSubcommand();
     let response;
 
     if (sub === "message") response = await setMessage(interaction.options.getString("message"), data.settings);

@@ -82,7 +82,7 @@ module.exports = {
   },
 
   /**
-   * @param {import('discord.js').CommandInteraction} interaction
+   * @param {import('discord.js').ChatInputCommandInteraction} interaction
    */
   handleSlashCommand: async function (interaction) {
     const cmd = interaction.client.slashCommands.get(interaction.commandName);
