@@ -58,15 +58,19 @@
                                             <input type="text" name="hexcolor" class="form-control" value="<%= guild.welcome.embed.color %>">
                                         </div>
                                         <div class="form-group">
+                                            <label>Image URL</label>
+                                            <input type="text" name="image" class="form-control" value="<%= guild.welcome.embed.image %>">
+                                        </div>
+                                        <div class="form-group">
                                             <label>Channel</label>
                                             <select class="form-control" name="channel">
                                                 <% if(bot.channels.cache.has(guild.welcome.channel)){ %>
                                                     <option selected="selected">#<%= bot.channels.cache.get(guild.welcome.channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.welcome.channel && ch.type === 2).forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.welcome.channel && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
-                                                    <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 2).first().name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 2).forEach((ch) => { %>
+                                                    <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 0).first().name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                 <% } %>
@@ -125,15 +129,19 @@
                                             <input type="text" name="hexcolor" class="form-control" value="<%= guild.farewell.embed.color %>">
                                         </div>
                                         <div class="form-group">
+                                            <label>Image URL</label>
+                                            <input type="text" name="image" class="form-control" value="<%= guild.farewell.embed.image %>">
+                                        </div>
+                                        <div class="form-group">
                                             <label>Channel</label>
                                             <select class="form-control" name="channel">
                                                 <% if(bot.channels.cache.has(guild.farewell.channel)){ %>
                                                     <option selected="selected">#<%= bot.channels.cache.get(guild.farewell.channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel && ch.type === 2).forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
-                                                        <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 2).first().name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 2).forEach((ch) => { %>
+                                                        <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 0).first().name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                 <% } %>

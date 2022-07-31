@@ -67,13 +67,13 @@
                                             <select class="form-control" name="modlog_channel">
                                                 <% if(guild.modlog_channel && bot.channels.cache.has(guild.modlog_channel)){ %>
                                                     <option selected="selected">#<%= bot.channels.cache.get(guild.modlog_channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT" && ch.id !== guild.modlog_channel).forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !== guild.modlog_channel).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                         <option>No channel</option>
                                                 <% } else { %>
                                                     <option selected="selected">No channel</option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                 <% } %>
@@ -103,13 +103,13 @@
                                             <select class="form-control" name="channel">
                                                 <% if(guild.ticket.log_channel && bot.channels.cache.has(guild.ticket.log_channel)){ %>
                                                     <option selected="selected">#<%= bot.channels.cache.get(guild.ticket.log_channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT" && ch.id !== guild.ticket.log_channel).forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !== guild.ticket.log_channel).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                         <option>No channel</option>
                                                 <% } else { %>
                                                     <option selected="selected">No channel</option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                 <% } %>
@@ -168,8 +168,8 @@
                                             <label>Max Strikes Action</label>
                                             <select class="form-control" name="automod_action">
                                                 <option selected="selected"><%= guild.automod.action %></option>
-                                                <% if(guild.automod.action !== "MUTE") { %>
-                                                    <option>MUTE</option>
+                                                <% if(guild.automod.action !== "TIMEOUT") { %>
+                                                    <option>TIMEOUT</option>
                                                 <% } %>
                                                 <% if(guild.automod.action !== "KICK") { %>
                                                     <option>KICK</option>
@@ -184,29 +184,12 @@
                                             <input type="number" name="max_lines" class="form-control" placeholder="<%= guild.automod.max_lines %>">
                                         </div>
                                         <div class="form-group">
-                                            <label>Max Mentions</label>
-                                            <input type="number" name="max_mentions" class="form-control" placeholder="<%= guild.automod.max_mentions %>">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Max Role Mentions</label>
-                                            <input type="number" name="max_role_mentions" class="form-control" placeholder="<%= guild.automod.max_role_mentions %>">
-                                        </div>
-                                        <div class="form-group">
                                             <div class="checkbox">
                                                 <label>
-                                                    <% if(guild.automod.anti_links) { %>
-                                                        <input type="checkbox" name="anti_links" checked>Anti Links
+                                                    <% if(guild.automod.anti_attachments) { %>
+                                                        <input type="checkbox" name="anti_attachments" checked>Anti Attachments
                                                     <% } else { %>
-                                                        <input type="checkbox" name="anti_links">Anti Links
-                                                    <% } %>
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <% if(guild.automod.anti_scam) { %>
-                                                        <input type="checkbox" name="anti_scam" checked>Anti Scam
-                                                    <% } else { %>
-                                                        <input type="checkbox" name="anti_scam">Anti Scam
+                                                        <input type="checkbox" name="anti_attachments">Anti Attachments
                                                     <% } %>
                                                 </label>
                                             </div>
@@ -221,6 +204,24 @@
                                             </div>
                                             <div class="checkbox">
                                                 <label>
+                                                    <% if(guild.automod.anti_links) { %>
+                                                        <input type="checkbox" name="anti_links" checked>Anti Links
+                                                    <% } else { %>
+                                                        <input type="checkbox" name="anti_links">Anti Links
+                                                    <% } %>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <% if(guild.automod.anti_spam) { %>
+                                                        <input type="checkbox" name="anti_spam" checked>Anti Spam
+                                                    <% } else { %>
+                                                        <input type="checkbox" name="anti_spam">Anti Spam
+                                                    <% } %>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
                                                     <% if(guild.automod.anti_ghostping) { %>
                                                         <input type="checkbox" name="anti_ghostping" checked>Anti Ghostping
                                                     <% } else { %>
@@ -228,6 +229,27 @@
                                                     <% } %>
                                                 </label>
                                             </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <% if(guild.automod.anti_massmention) { %>
+                                                        <input type="checkbox" name="anti_massmention" checked>Anti Massmention
+                                                    <% } else { %>
+                                                        <input type="checkbox" name="anti_massmention">Anti Massmention
+                                                    <% } %>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Whitelisted Channels</label>
+                                            <select class="form-control" name="channels" multiple>
+                                                <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
+                                                    <% if(guild.automod.wh_channels.includes(ch.id) ){ %>
+                                                        <option selected="selected">#<%= ch.name %></option>
+                                                    <% } else { %>
+                                                        <option>#<%= ch.name %></option>
+                                                    <% } %>
+                                                <% }); %>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="box-footer">

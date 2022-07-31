@@ -7,9 +7,10 @@
         <div class="pull-left image">
             <img src="<%= user.displayAvatar %>" class="img-circle" alt="User Image">
         </div>
+        <% var status = guild.members.cache.get(user.id)?.presence?.status; %>
         <div class="pull-left info">
             <p><%= user.username %></p>
-            <a href="#"><i class="fa fa-circle text-<%= user.status === 'dnd' ? 'danger' : user.status === 'idle' ? 'warning' : user.status === 'online' ? 'success' : ''%>"></i> <%= (user.status) ? user.status.toUpperCase() : 'Offline' %></a>
+            <a href="#"><i class="fa fa-circle text-<%= status === 'dnd' ? 'danger' : status === 'idle' ? 'warning' : status === 'online' ? 'success' : ''%>"></i> <%= (status) ? status.toUpperCase() : 'Offline' %></a>
         </div>
         </div>
         <!-- search form -->
@@ -29,21 +30,6 @@
             <li class="header">SERVERS MANAGEMENT</li>
             <li class="treeview menu-open">
                 <li><a href="/selector"><i class="fa fa-home"></i> <span>Selector</span></a></li>
-            </li>
-            <li class="treeview">
-                <a href="/manage/"> <i class="fa fa-server"></i>
-                    <span>Servers list</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <% if(user.displayedGuilds){ %>
-                    <ul class="treeview-menu">
-                        <% user.displayedGuilds.forEach((guild) => { %>
-                            <li><a href="<%= guild.settingsUrl %>"><i class="fa fa-circle-o text-<%= guild.owner ? 'blue' : 'grey' %>"></i> <%= guild.name %></a></li>
-                        <% }); %>
-                    </ul> 
-                <% } %>
             </li>
         </ul>
         <% if (locals.guild){ %>

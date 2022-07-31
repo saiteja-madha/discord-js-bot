@@ -128,21 +128,9 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
       settings.automod.max_lines = data.max_lines;
     }
 
-    if (data.max_mentions && data.max_mentions !== settings.automod.max_mentions) {
-      settings.automod.max_mentions = data.max_mentions;
-    }
-    if (data.max_role_mentions && data.max_role_mentions !== settings.automod.max_role_mentions) {
-      settings.automod.max_role_mentions = data.max_role_mentions;
-    }
-
-    data.anti_links = data.anti_links === "on" ? true : false;
-    if (data.anti_links !== (settings.automod.anti_links || false)) {
-      settings.automod.anti_links = data.anti_links;
-    }
-
-    data.anti_scam = data.anti_scam === "on" ? true : false;
-    if (data.anti_scam !== (settings.automod.anti_scam || false)) {
-      settings.automod.anti_scam = data.anti_scam;
+    data.anti_attachments = data.anti_attachments === "on" ? true : false;
+    if (data.anti_attachments !== (settings.automod.anti_attachments || false)) {
+      settings.automod.anti_attachments = data.anti_attachments;
     }
 
     data.anti_invites = data.anti_invites === "on" ? true : false;
@@ -150,9 +138,30 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
       settings.automod.anti_invites = data.anti_invites;
     }
 
+    data.anti_links = data.anti_links === "on" ? true : false;
+    if (data.anti_links !== (settings.automod.anti_links || false)) {
+      settings.automod.anti_links = data.anti_links;
+    }
+
+    data.anti_spam = data.anti_spam === "on" ? true : false;
+    if (data.anti_spam !== (settings.automod.anti_spam || false)) {
+      settings.automod.anti_spam = data.anti_spam;
+    }
+
     data.anti_ghostping = data.anti_ghostping === "on" ? true : false;
     if (data.anti_ghostping !== (settings.automod.anti_ghostping || false)) {
       settings.automod.anti_ghostping = data.anti_ghostping;
+    }
+
+    data.anti_massmention = data.anti_massmention === "on" ? true : false;
+    if (data.anti_massmention !== (settings.automod.anti_massmention || false)) {
+      settings.automod.anti_massmention = data.anti_massmention;
+    }
+
+    if (data.channels?.length) {
+      settings.automod.wh_channels = data.channels
+        .map((ch) => guild.channels.cache.find((c) => "#" + c.name === ch)?.id)
+        .filter((c) => c);
     }
   }
 
@@ -203,6 +212,10 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
       settings.welcome.embed.color = data.hexcolor;
     }
 
+    if (data.image && data.image !== settings.welcome.embed?.image) {
+      settings.welcome.embed.image = data.image;
+    }
+
     data.thumbnail = data.thumbnail === "on" ? true : false;
     if (data.thumbnail !== (settings.welcome.embed?.thumbnail || false)) {
       settings.welcome.embed.thumbnail = data.thumbnail;
@@ -240,6 +253,10 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
 
     if (data.hexcolor && data.hexcolor !== settings.farewell.embed?.color) {
       settings.farewell.embed.color = data.hexcolor;
+    }
+
+    if (data.image && data.image !== settings.farewell.embed?.image) {
+      settings.farewell.embed.image = data.image;
     }
 
     data.thumbnail = data.thumbnail === "on" ? true : false;
