@@ -192,7 +192,7 @@ async function handleTicketOpen(interaction) {
       time: 60 * 1000,
     });
 
-    if (!res) return interaction.followUp("Timed out. Try again");
+    if (!res) return interaction.editReply({ content: "Timed out. Try again", components: [] });
     await interaction.editReply({ content: "Processing", components: [] });
     catName = res.values[0];
     catPerms = categories.find((cat) => cat.name === catName)?.staff_roles || [];
