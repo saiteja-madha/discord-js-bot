@@ -187,10 +187,14 @@ async function handleTicketOpen(interaction) {
     );
 
     await interaction.followUp({ content: "Please choose a ticket category", components: [menuRow] });
-    const res = await interaction.channel.awaitMessageComponent({
-      componentType: ComponentType.SelectMenu,
-      time: 60 * 1000,
-    });
+    const res = await interaction.channel
+      .awaitMessageComponent({
+        componentType: ComponentType.SelectMenu,
+        time: 60 * 1000,
+      })
+      .catch((err) => {
+        if (err.message.includes("time")) return;
+      });
 
     if (!res) return interaction.editReply({ content: "Timed out. Try again", components: [] });
     await interaction.editReply({ content: "Processing", components: [] });
