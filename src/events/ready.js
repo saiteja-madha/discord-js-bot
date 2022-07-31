@@ -1,7 +1,6 @@
-const { counterHandler, inviteHandler } = require("@src/handlers");
+const { counterHandler, inviteHandler, presenceHandler } = require("@src/handlers");
 const { cacheReactionRoles } = require("@schemas/ReactionRoles");
 const { getSettings } = require("@schemas/Guild");
-const { updateCounterChannels } = require("@handlers/counter");
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -23,8 +22,7 @@ module.exports = async (client) => {
 
   // Update Bot Presence
   if (client.config.PRESENCE.ENABLED) {
-    updatePresence(client);
-    setInterval(() => updatePresence(client), 10 * 60 * 1000);
+    presenceHandler(client);
   }
 
   // Register Interactions
@@ -50,31 +48,5 @@ module.exports = async (client) => {
     }
   }
 
-  setInterval(() => updateCounterChannels(client), 10 * 60 * 1000);
-};
-
-/**
- * @param {import('@src/structures').BotClient} client
- */
-const updatePresence = (client) => {
-  let message = client.config.PRESENCE.MESSAGE;
-
-  if (message.includes("{servers}")) {
-    message = message.replaceAll("{servers}", client.guilds.cache.size);
-  }
-
-  if (message.includes("{members}")) {
-    const members = client.guilds.cache.map((g) => g.memberCount).reduce((partial_sum, a) => partial_sum + a, 0);
-    message = message.replaceAll("{members}", members);
-  }
-
-  client.user.setPresence({
-    status: client.config.PRESENCE.STATUS,
-    activities: [
-      {
-        name: message,
-        type: client.config.PRESENCE.TYPE,
-      },
-    ],
-  });
+  setInterval(() => counterHandler.updateCounterChannels(client), 10 * 60 * 1000);
 };
