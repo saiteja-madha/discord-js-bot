@@ -62,11 +62,11 @@
                                             <select class="form-control" name="channel">
                                                 <% if(bot.channels.cache.has(guild.welcome.channel)){ %>
                                                     <option selected="selected">#<%= bot.channels.cache.get(guild.welcome.channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.welcome.channel && ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.welcome.channel && ch.type === 2).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
-                                                    <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").first().name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                    <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 2).first().name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 2).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                 <% } %>
@@ -129,11 +129,11 @@
                                             <select class="form-control" name="channel">
                                                 <% if(bot.channels.cache.has(guild.farewell.channel)){ %>
                                                     <option selected="selected">#<%= bot.channels.cache.get(guild.farewell.channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel && ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel && ch.type === 2).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
-                                                        <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === "GUILD_TEXT").first().name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === "GUILD_TEXT").forEach((ch) => { %>
+                                                        <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 2).first().name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 2).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                 <% } %>
