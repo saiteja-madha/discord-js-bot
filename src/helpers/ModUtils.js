@@ -288,7 +288,7 @@ module.exports = class ModUtils {
     if (target.communicationDisabledUntilTimestamp - Date.now() < 0) return "NO_TIMEOUT";
 
     try {
-      await target.timeout(0, reason);
+      await target.timeout(null, reason);
       logModeration(issuer, target, reason, "UnTimeout");
       return true;
     } catch (ex) {
