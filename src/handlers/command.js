@@ -24,11 +24,6 @@ module.exports = {
 
     if (!message.channel.permissionsFor(message.guild.members.me).has("SendMessages")) return;
 
-    //premium handler
-    if (cmd.isPremium === true && !settings.isPremium === false) {
-      return message.safeReply("This command is only available to premium guilds.");
-    }
-
     // callback validations
     if (cmd.validations) {
       for (const validation of cmd.validations) {

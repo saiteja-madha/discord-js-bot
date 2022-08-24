@@ -7,7 +7,6 @@ const cache = new FixedSizeMap(CACHE_SIZE.GUILDS);
 
 const Schema = mongoose.Schema({
   _id: String,
-  isPremium: Boolean,
   data: {
     name: String,
     region: String,

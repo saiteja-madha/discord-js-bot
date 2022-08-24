@@ -35,7 +35,6 @@
  * @property {string} name - The name of the command (must be lowercase)
  * @property {string} description - A short description of the command
  * @property {number} cooldown - The command cooldown in seconds
- * @property {boolean} isPremium - Whether the command is premium or not
  * @property {CommandCategory} category - The category this command belongs to
  * @property {import('discord.js').PermissionResolvable[]} [botPermissions] - Permissions required by the client to use the command.
  * @property {import('discord.js').PermissionResolvable[]} [userPermissions] - Permissions required by the user to use the command
