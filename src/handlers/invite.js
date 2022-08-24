@@ -50,10 +50,10 @@ const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
     const invites = getEffectiveInvites(inviterData.invite_data);
     settings.invite.ranks.forEach((reward) => {
       if (isAdded) {
-        if (invites + 1 >= reward.invites && inviter.roles.cache.has(reward._id)) {
+        if (invites >= reward.invites && !inviter.roles.cache.has(reward._id)) {
           inviter.roles.add(reward._id);
         }
-      } else if (invites - 1 < reward.invites && inviter.roles.cache.has(reward._id)) {
+      } else if (invites < reward.invites && inviter.roles.cache.has(reward._id)) {
         inviter.roles.remove(reward._id);
       }
     });

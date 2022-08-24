@@ -5,12 +5,22 @@ const reqString = {
   required: true,
 };
 
-const Schema = mongoose.Schema({
-  guild_id: reqString,
-  channel_id: reqString,
-  message_id: reqString,
-  emoji: reqString,
-});
+const Schema = mongoose.Schema(
+  {
+    guild_id: reqString,
+    channel_id: reqString,
+    message_id: reqString,
+    emoji: reqString,
+  },
+  {
+    versionKey: false,
+    autoIndex: false,
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: false,
+    },
+  }
+);
 
 const Model = mongoose.model("logs-translation", Schema);
 

@@ -11,7 +11,7 @@ module.exports = async (client, message) => {
 
   // check for bot mentions
   if (message.content.includes(`${client.user.id}`)) {
-    message.channel.safeSend(`My prefix is \`${settings.prefix}\``);
+    message.channel.safeSend(`> My prefix is \`${settings.prefix}\``);
   }
 
   // command handler

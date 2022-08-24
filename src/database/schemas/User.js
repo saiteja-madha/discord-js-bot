@@ -44,6 +44,13 @@ module.exports = {
       });
     }
 
+    // Temporary fix for users who where added to DB before v5.0.0
+    // Update username and discriminator in previous DB
+    else if (!userDb.username || !userDb.discriminator) {
+      userDb.username = user.username;
+      userDb.discriminator = user.discriminator;
+    }
+
     cache.add(user.id, userDb);
     return userDb;
   },

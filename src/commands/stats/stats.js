@@ -82,7 +82,7 @@ async function stats(member, settings) {
         name: "🎙️ Voice Stats",
         value: stripIndents`
       ❯ Total Connections: ${memberStats.voice.connections}
-      ❯ Time Spent: ${memberStats.voice.time}
+      ❯ Time Spent: ${Math.floor(memberStats.voice.time / 60)} min
     `,
       }
     )

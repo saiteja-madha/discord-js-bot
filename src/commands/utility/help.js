@@ -14,7 +14,6 @@ const { getCommandUsage, getSlashUsage } = require("@handlers/command");
 
 const CMDS_PER_PAGE = 5;
 const IDLE_TIMEOUT = 30;
-const cache = {};
 
 /**
  * @type {import("@structures/Command")}
@@ -45,9 +44,6 @@ module.exports = {
 
     // !help
     if (!trigger) {
-      if (cache[`${message.guildId}|${message.author.id}`]) {
-        return message.safeReply("You are already viewing the help menu.");
-      }
       const response = await getHelpMenu(message);
       const sentMsg = await message.safeReply(response);
       return waiter(sentMsg, message.author.id, data.prefix);
@@ -69,9 +65,6 @@ module.exports = {
 
     // !help
     if (!cmdName) {
-      if (cache[`${interaction.guildId}|${interaction.user.id}`]) {
-        return interaction.followUp("You are already viewing the help menu.");
-      }
       const response = await getHelpMenu(interaction);
       const sentMsg = await interaction.followUp(response);
       return waiter(sentMsg, interaction.user.id);
@@ -141,11 +134,8 @@ async function getHelpMenu({ client, guild }) {
  * @param {string} prefix
  */
 const waiter = (msg, userId, prefix) => {
-  // Add to cache
-  cache[`${msg.guildId}|${userId}`] = Date.now();
-
   const collector = msg.channel.createMessageComponentCollector({
-    filter: (reactor) => reactor.user.id === userId,
+    filter: (reactor) => reactor.user.id === userId && msg.id === reactor.message.id,
     idle: IDLE_TIMEOUT * 1000,
     dispose: true,
     time: 5 * 60 * 1000,
@@ -194,7 +184,6 @@ const waiter = (msg, userId, prefix) => {
   });
 
   collector.on("end", () => {
-    if (cache[`${msg.guildId}|${userId}`]) delete cache[`${msg.guildId}|${userId}`];
     if (!msg.guild || !msg.channel) return;
     return msg.editable && msg.edit({ components: [] });
   });

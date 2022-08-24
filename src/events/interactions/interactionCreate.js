@@ -15,7 +15,7 @@ module.exports = async (client, interaction) => {
 
   // Slash Commands
   if (interaction.isChatInputCommand()) {
-    return commandHandler.handleSlashCommand(interaction);
+    await commandHandler.handleSlashCommand(interaction);
   }
 
   // Context Menu

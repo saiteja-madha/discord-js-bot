@@ -5,35 +5,45 @@ const reqString = {
   required: true,
 };
 
-const Schema = mongoose.Schema({
-  guild_id: reqString,
-  member_id: String,
-  reason: String,
-  admin: {
-    id: reqString,
-    tag: reqString,
+const Schema = mongoose.Schema(
+  {
+    guild_id: reqString,
+    member_id: String,
+    reason: String,
+    admin: {
+      id: reqString,
+      tag: reqString,
+    },
+    type: {
+      type: String,
+      required: true,
+      enum: [
+        "PURGE",
+        "WARN",
+        "TIMEOUT",
+        "UNTIMEOUT",
+        "KICK",
+        "SOFTBAN",
+        "BAN",
+        "UNBAN",
+        "VMUTE",
+        "VUNMUTE",
+        "DEAFEN",
+        "UNDEAFEN",
+        "DISCONNECT",
+        "MOVE",
+      ],
+    },
   },
-  type: {
-    type: String,
-    required: true,
-    enum: [
-      "PURGE",
-      "WARN",
-      "TIMEOUT",
-      "UNTIMEOUT",
-      "KICK",
-      "SOFTBAN",
-      "BAN",
-      "UNBAN",
-      "VMUTE",
-      "VUNMUTE",
-      "DEAFEN",
-      "UNDEAFEN",
-      "DISCONNECT",
-      "MOVE",
-    ],
-  },
-});
+  {
+    versionKey: false,
+    autoIndex: false,
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: false,
+    },
+  }
+);
 
 const Model = mongoose.model("mod-logs", Schema);
 

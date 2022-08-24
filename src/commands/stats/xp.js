@@ -4,7 +4,7 @@ const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "xp",
+  name: "levelup",
   description: "configure the levelling system",
   category: "STATS",
   userPermissions: ["ManageGuild"],

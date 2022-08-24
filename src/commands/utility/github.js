@@ -76,7 +76,8 @@ async function getGithubUser(target, author) {
     .addFields(
       {
         name: "User Info",
-        value: stripIndent`**Real Name**: *${name || "Not Provided"}*
+        value: stripIndent`
+        **Real Name**: *${name || "Not Provided"}*
         **Location**: *${location}*
         **GitHub ID**: *${githubId}*
         **Website**: *${website}*\n`,

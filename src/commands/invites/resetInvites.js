@@ -1,5 +1,6 @@
 const { getMember } = require("@schemas/Member");
 const { ApplicationCommandOptionType } = require("discord.js");
+const { checkInviteRewards } = require("@handlers/invite");
 
 /**
  * @type {import("@structures/Command")}
@@ -46,5 +47,6 @@ async function clearInvites({ guild }, user) {
   const memberDb = await getMember(guild.id, user.id);
   memberDb.invite_data.added = 0;
   await memberDb.save();
+  checkInviteRewards(guild, memberDb, false);
   return `Done! Invites cleared for \`${user.tag}\``;
 }
