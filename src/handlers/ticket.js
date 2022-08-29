@@ -54,8 +54,9 @@ async function parseTicketDetails(channel) {
   if (!channel.topic) return;
   const split = channel.topic?.split("|");
   const userId = split[1];
+  const catName = split[2] || "Default";
   const user = await channel.client.users.fetch(userId, { cache: false }).catch(() => {});
-  return { user };
+  return { user, catName };
 }
 
 /**
@@ -122,7 +123,9 @@ async function closeTicket(channel, closedBy, reason) {
 
     // send embed to user
     if (ticketDetails.user) {
-      const dmEmbed = embed.setDescription(`**Server:** ${channel.guild.name}`).setThumbnail(channel.guild.iconURL());
+      const dmEmbed = embed
+        .setDescription(`**Server:** ${channel.guild.name}\n**Category:** ${ticketDetails.catName}`)
+        .setThumbnail(channel.guild.iconURL());
       ticketDetails.user.send({ embeds: [dmEmbed], components }).catch((ex) => {});
     }
 
@@ -233,7 +236,7 @@ async function handleTicketOpen(interaction) {
     const tktChannel = await guild.channels.create({
       name: `tіcket-${ticketNumber}`,
       type: ChannelType.GuildText,
-      topic: `tіcket|${user.id}`,
+      topic: `tіcket|${user.id}|${catName || "Default"}`,
       permissionOverwrites,
     });
 

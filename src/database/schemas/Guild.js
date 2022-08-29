@@ -29,6 +29,7 @@ const Schema = mongoose.Schema({
     limit: { type: Number, default: 10 },
     categories: [
       {
+        _id: false,
         name: String,
         staff_roles: [String],
       },
