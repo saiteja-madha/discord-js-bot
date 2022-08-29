@@ -5,18 +5,26 @@ const reqString = {
   required: true,
 };
 
-const Schema = mongoose.Schema({
-  guild_id: reqString,
-  channel_id: reqString,
-  message_id: reqString,
-  roles: [
-    {
-      _id: false,
-      emote: reqString,
-      role_id: reqString,
+const Schema = new mongoose.Schema(
+  {
+    guild_id: reqString,
+    channel_id: reqString,
+    message_id: reqString,
+    roles: [
+      {
+        _id: false,
+        emote: reqString,
+        role_id: reqString,
+      },
+    ],
+  },
+  {
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: false,
     },
-  ],
-});
+  }
+);
 
 const Model = mongoose.model("reaction-roles", Schema);
 

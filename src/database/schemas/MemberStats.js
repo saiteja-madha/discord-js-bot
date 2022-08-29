@@ -9,25 +9,33 @@ const ReqString = {
   required: true,
 };
 
-const Schema = mongoose.Schema({
-  guild_id: ReqString,
-  member_id: ReqString,
-  messages: { type: Number, default: 0 },
-  voice: {
-    connections: { type: Number, default: 0 },
-    time: { type: Number, default: 0 },
+const Schema = new mongoose.Schema(
+  {
+    guild_id: ReqString,
+    member_id: ReqString,
+    messages: { type: Number, default: 0 },
+    voice: {
+      connections: { type: Number, default: 0 },
+      time: { type: Number, default: 0 },
+    },
+    commands: {
+      prefix: { type: Number, default: 0 },
+      slash: { type: Number, default: 0 },
+    },
+    contexts: {
+      message: { type: Number, default: 0 },
+      user: { type: Number, default: 0 },
+    },
+    xp: { type: Number, default: 0 },
+    level: { type: Number, default: 1 },
   },
-  commands: {
-    prefix: { type: Number, default: 0 },
-    slash: { type: Number, default: 0 },
-  },
-  contexts: {
-    message: { type: Number, default: 0 },
-    user: { type: Number, default: 0 },
-  },
-  xp: { type: Number, default: 0 },
-  level: { type: Number, default: 1 },
-});
+  {
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
+  }
+);
 
 const Model = mongoose.model("member-stats", Schema);
 

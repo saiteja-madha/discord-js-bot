@@ -4,23 +4,31 @@ const FixedSizeMap = require("fixedsize-map");
 
 const cache = new FixedSizeMap(CACHE_SIZE.USERS);
 
-const Schema = mongoose.Schema({
-  _id: String,
-  username: String,
-  discriminator: String,
-  logged: Boolean,
-  coins: { type: Number, default: 0 },
-  bank: { type: Number, default: 0 },
-  reputation: {
-    received: { type: Number, default: 0 },
-    given: { type: Number, default: 0 },
-    timestamp: Date,
+const Schema = new mongoose.Schema(
+  {
+    _id: String,
+    username: String,
+    discriminator: String,
+    logged: Boolean,
+    coins: { type: Number, default: 0 },
+    bank: { type: Number, default: 0 },
+    reputation: {
+      received: { type: Number, default: 0 },
+      given: { type: Number, default: 0 },
+      timestamp: Date,
+    },
+    daily: {
+      streak: { type: Number, default: 0 },
+      timestamp: Date,
+    },
   },
-  daily: {
-    streak: { type: Number, default: 0 },
-    timestamp: Date,
-  },
-});
+  {
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
+  }
+);
 
 const Model = mongoose.model("user", Schema);
 

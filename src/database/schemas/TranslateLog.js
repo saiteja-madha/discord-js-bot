@@ -5,7 +5,7 @@ const reqString = {
   required: true,
 };
 
-const Schema = mongoose.Schema(
+const Schema = new mongoose.Schema(
   {
     guild_id: reqString,
     channel_id: reqString,

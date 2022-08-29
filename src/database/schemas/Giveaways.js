@@ -54,7 +54,10 @@ const Schema = new mongoose.Schema(
       roles: { type: [String], default: undefined },
     },
   },
-  { id: false }
+  {
+    id: false,
+    autoIndex: false,
+  }
 );
 
 const Model = mongoose.model("giveaways", Schema);

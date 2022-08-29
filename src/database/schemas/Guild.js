@@ -5,7 +5,7 @@ const { getUser } = require("./User");
 
 const cache = new FixedSizeMap(CACHE_SIZE.GUILDS);
 
-const Schema = mongoose.Schema({
+const Schema = new mongoose.Schema({
   _id: String,
   data: {
     name: String,

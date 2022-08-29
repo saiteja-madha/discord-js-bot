@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema(
+const Schema = new mongoose.Schema(
   {
     guild_id: String,
     channel_id: String,
@@ -34,7 +34,6 @@ const Schema = mongoose.Schema(
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
-    versionKey: false,
   }
 );
 
