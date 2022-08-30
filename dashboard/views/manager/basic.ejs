@@ -32,24 +32,13 @@
                             <!-- BASIC CONFIGURATION -->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">General Configuration</h3>
+                                    <h3 class="box-title">General</h3>
                                 </div>
                                 <form role="form" action="/manage/<%= guild.id %>/basic/" method="POST">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Prefix</label>
                                             <input type="text" name="prefix" class="form-control" placeholder="<%= guild.prefix %>">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <% if(guild.stats.enabled) { %>
-                                                        <input type="checkbox" name="ranking" checked>Ranking
-                                                    <% } else { %>
-                                                        <input type="checkbox" name="ranking">Ranking
-                                                    <% } %>
-                                                </label>
-                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="checkbox">
@@ -63,11 +52,52 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Moderation Logs</label>
-                                            <select class="form-control" name="modlog_channel">
-                                                <% if(guild.modlog_channel && bot.channels.cache.has(guild.modlog_channel)){ %>
-                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.modlog_channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !== guild.modlog_channel).forEach((ch) => { %>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <% if(guild.invite.tracking) { %>
+                                                        <input type="checkbox" name="invite_tracking" checked>Invite Tracking
+                                                    <% } else { %>
+                                                        <input type="checkbox" name="invite_tracking">Invite Tracking
+                                                    <% } %>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-footer">
+                                        <button type="submit" name="basicUpdate" class="btn btn-primary">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- END: BASIC CONFIGURATION -->
+
+                            <!-- STATISTICS CONFIGURATION -->
+                            <div class="box box-warning">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Statistics</h3>
+                                </div>
+                                <form role="form" action="/manage/<%= guild.id %>/basic/" method="POST">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <% if(guild.stats.enabled) { %>
+                                                        <input type="checkbox" name="ranking" checked>Tracking
+                                                    <% } else { %>
+                                                        <input type="checkbox" name="ranking">Tracking
+                                                    <% } %>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Levelup Message</label>
+                                            <input type="text" name="levelup_message" class="form-control" placeholder="<%= guild.stats.xp.message %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Levelup Channel</label>
+                                            <select class="form-control" name="levelup_channel">
+                                                <% if(guild.stats.xp.channel && bot.channels.cache.has(guild.stats.xp.channel)){ %>
+                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.stats.xp.channel).name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !== guild.stats.xp.channel).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                         <option>No channel</option>
@@ -81,7 +111,7 @@
                                         </div>
                                     </div>
                                     <div class="box-footer">
-                                        <button type="submit" name="basicUpdate" class="btn btn-primary">Update</button>
+                                        <button type="submit" name="statsUpdate" class="btn btn-primary">Update</button>
                                     </div>
                                 </form>
                             </div>
@@ -90,7 +120,7 @@
                             <!-- TICKET CONFIGURATION -->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Ticket Configuration</h3>
+                                    <h3 class="box-title">Ticket</h3>
                                 </div>
                                 <form role="form" action="/manage/<%= guild.id %>/basic/" method="POST">
                                     <div class="box-body">
@@ -127,36 +157,61 @@
 
                         <div class="col-md-6">
 
-                            <!-- INVITE CONFIGURATION -->
+                            <!-- MODERATION CONFIGURATION -->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Invite Configuration</h3>
+                                    <h3 class="box-title">Moderation</h3>
                                 </div>
                                 <form role="form" action="/manage/<%= guild.id %>/basic/" method="POST">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <% if(guild.invite.tracking) { %>
-                                                        <input type="checkbox" name="tracking" checked>Invite Tracking
-                                                    <% } else { %>
-                                                        <input type="checkbox" name="tracking">Invite Tracking
-                                                    <% } %>
-                                                </label>
-                                            </div>
+                                            <label>Max Warnings</label>
+                                            <input type="number" name="max_warnings" class="form-control" placeholder="<%= guild.max_warn.limit %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max Warnings Action</label>
+                                            <select class="form-control" name="max_warn_action">
+                                                <option selected="selected"><%= guild.max_warn.action %></option>
+                                                <% if(guild.max_warn.action !== "TIMEOUT") { %>
+                                                    <option>TIMEOUT</option>
+                                                <% } %>
+                                                <% if(guild.max_warn.action !== "KICK") { %>
+                                                    <option>KICK</option>
+                                                <% } %>
+                                                <% if(guild.max_warn.action !== "BAN") { %>
+                                                    <option>BAN</option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Moderation Logs</label>
+                                            <select class="form-control" name="modlog_channel">
+                                                <% if(guild.modlog_channel && bot.channels.cache.has(guild.modlog_channel)){ %>
+                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.modlog_channel).name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !== guild.modlog_channel).forEach((ch) => { %>
+                                                        <option>#<%= ch.name %></option>
+                                                    <% }); %>
+                                                        <option>No channel</option>
+                                                <% } else { %>
+                                                    <option selected="selected">No channel</option>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
+                                                        <option>#<%= ch.name %></option>
+                                                    <% }); %>
+                                                <% } %>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="box-footer">
-                                        <button type="submit" name="inviteUpdate" class="btn btn-primary">Update</button>
+                                        <button type="submit" name="modUpdate" class="btn btn-primary">Update</button>
                                     </div>
                                 </form>
                             </div>
-                            <!-- END: INVITE CONFIGURATION -->
+                            <!-- END: MODERATION CONFIGURATION -->
 
                             <!-- AUTOMOD CONFIGURATION -->
                             <div class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Automod Configuration</h3>
+                                    <h3 class="box-title">Auto Moderation</h3>
                                 </div>
                                 <form role="form" action="/manage/<%= guild.id %>/basic/" method="POST">
                                     <div class="box-body">

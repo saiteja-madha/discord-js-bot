@@ -76,14 +76,10 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
   const settings = await getSettings(guild);
   const data = req.body;
 
+  // BASIC CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "basicUpdate")) {
     if (data.prefix && data.prefix !== settings.prefix) {
       settings.prefix = data.prefix;
-    }
-
-    data.ranking = data.ranking === "on" ? true : false;
-    if (data.ranking !== (settings.ranking.enabled || false)) {
-      settings.ranking.enabled = data.ranking;
     }
 
     data.flag_translation = data.flag_translation === "on" ? true : false;
@@ -91,12 +87,30 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
       settings.flag_translation.enabled = data.flag_translation;
     }
 
-    data.modlog_channel = guild.channels.cache.find((ch) => "#" + ch.name === data.modlog_channel)?.id || null;
-    if (data.modlog_channel !== settings.modlog_channel) {
-      settings.modlog_channel = data.modlog_channel;
+    data.invite_tracking = data.invite_tracking === "on" ? true : false;
+    if (data.invite_tracking !== (settings.invite.tracking || false)) {
+      settings.invite.tracking = data.invite_tracking;
     }
   }
 
+  // STATISTICS CONFIGURATION
+  if (Object.prototype.hasOwnProperty.call(data, "statsUpdate")) {
+    data.ranking = data.ranking === "on" ? true : false;
+    if (data.ranking !== (settings.stats.enabled || false)) {
+      settings.stats.enabled = data.ranking;
+    }
+
+    if (data.levelup_message && data.levelup_message !== settings.stats.xp.message) {
+      settings.stats.xp.message = data.levelup_message;
+    }
+
+    data.levelup_channel = guild.channels.cache.find((ch) => "#" + ch.name === data.levelup_channel)?.id || null;
+    if (data.levelup_channel !== settings.stats.xp.channel) {
+      settings.stats.xp.channel = data.levelup_channel;
+    }
+  }
+
+  // TICKET CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "ticketUpdate")) {
     if (data.limit && data.limit != settings.ticket.limit) {
       settings.ticket.limit = data.limit;
@@ -108,13 +122,23 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
     }
   }
 
-  if (Object.prototype.hasOwnProperty.call(data, "inviteUpdate")) {
-    data.tracking = data.tracking === "on" ? true : false;
-    if (data.tracking !== (settings.invite.tracking || false)) {
-      settings.invite.tracking = data.tracking;
+  // MODERATION CONFIGURATION
+  if (Object.prototype.hasOwnProperty.call(data, "modUpdate")) {
+    if (data.max_warnings && data.max_warnings != settings.max_warn.limit) {
+      settings.max_warn.limit = data.max_warnings;
+    }
+
+    if (data.max_warn_action !== settings.max_warn.action) {
+      settings.max_warn.action = data.max_warn_action;
+    }
+
+    data.modlog_channel = guild.channels.cache.find((ch) => "#" + ch.name === data.modlog_channel)?.id || null;
+    if (data.modlog_channel !== settings.modlog_channel) {
+      settings.modlog_channel = data.modlog_channel;
     }
   }
 
+  // AUTOMOD CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "automodUpdate")) {
     if (data.max_strikes != settings.automod.strikes) {
       settings.automod.strikes = data.max_strikes;
