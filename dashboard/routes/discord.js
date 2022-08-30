@@ -7,6 +7,12 @@ const fetch = require("node-fetch"),
 // Gets login page
 router.get("/login", async function (req, res) {
   if (!req.user || !req.user.id || !req.user.guilds) {
+    // check if client user is ready
+    if (!req.client.user?.id) {
+      req.client.logger.debug("Client is not ready! Redirecting to /login");
+      return res.redirect("/login");
+    }
+
     return res.redirect(
       `https://discordapp.com/api/oauth2/authorize?client_id=${
         req.client.user.id
@@ -43,7 +49,11 @@ router.get("/callback", async (req, res) => {
   // Fetch tokens (used to fetch user information's)
   const tokens = await response.json();
   // If the code isn't valid
-  if (tokens.error || !tokens.access_token) return res.redirect(`/api/login&state=${req.query.state}`);
+  if (tokens.error || !tokens.access_token) {
+    req.client.logger.debug(tokens);
+    req.client.logger.error("Failed to login to dashboard");
+    return res.redirect(`/api/login&state=${req.query.state}`);
+  }
   const userData = {
     infos: null,
     guilds: null,

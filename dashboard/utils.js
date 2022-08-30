@@ -12,8 +12,8 @@ async function fetchUser(userData, client, query) {
   if (userData.guilds) {
     userData.guilds.forEach((guild) => {
       if (guild.permissions) {
-        const perms = new Discord.Permissions(BigInt(guild.permissions));
-        if (perms.has("MANAGE_GUILD")) guild.admin = true;
+        const perms = new Discord.PermissionsBitField(BigInt(guild.permissions));
+        if (perms.has("ManageGuild")) guild.admin = true;
       }
       guild.settingsUrl = client.guilds.cache.get(guild.id)
         ? `/manage/${guild.id}/`
