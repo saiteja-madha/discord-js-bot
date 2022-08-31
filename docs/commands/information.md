@@ -1,5 +1,5 @@
 ---
-description: 13 commands
+description: 11 commands
 ---
 
 # 🪧 Information
@@ -15,7 +15,5 @@ description: 13 commands
 | **!botinfo**            | **/info bot**     | get bot information                                        |
 | **!avatar \[member]**   | **/info avatar**  | displays avatar information                                |
 | **!emojinfo \[emoji]**  | **/info emoji**   | displays emoji information                                 |
-| **!lb**                 | **/lb**           | display the XP leaderboard                                 |
+| **!lb \<xp\|invite>**   | **/lb**           | display the XP leaderboard                                 |
 | **!ping**               | **/ping**         | shows the current ping from the bot to the discord servers |
-| **!profile \[member]**  | **/profile**      | shows members profile                                      |
-| **!rank \[member]**     | **/rank**         | shows members rank in this server                          |

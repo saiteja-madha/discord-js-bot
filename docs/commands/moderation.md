@@ -1,17 +1,20 @@
 ---
-description: 22 commands
+description: 23 commands
 ---
 
 # 🔨 Moderation
 
 | Command                             | Slash                  | Description                                              |
 | ----------------------------------- | ---------------------- | -------------------------------------------------------- |
+| **!warnings list \[member]**        | **/warnings list**     | list all warnings for a user                             |
+| **!warnings clear \<member>**       | **/warnings clear**    | clear all warnings for a user                            |
 | **!warn \<member> \[reason]**       | **/warn**              | warns the specified member                               |
-| **!mute \<member> \[reason]**       | **/mute**              | mutes the specified member                               |
-| **!unmute \<member> \[reason]**     | **/unmute**            | unmutes the specified member                             |
+| **!timout \<member> \[reason]**     | **/timout**            | timout the specified member                              |
+| **!untimout \<member> \[reason]**   | **/untimout**          | untimout the specified member                            |
 | **!kick \<member> \[reason]**       | **/kick**              | kicks the specified member                               |
 | **!softban \<member> \[reason]**    | **/softban**           | softban the specified member. Kicks and deletes messages |
 | **!ban \<member> \[reason]**        | **/ban**               | ban the specified member                                 |
+| **!unban \<member> \[reason]**      | **/unban**             | unban a banned user                                      |
 | **!nick set \<member>**             | **/nick set**          | change a members nickname                                |
 | **!nick reset \<member>**           | **/nick reset**        | reset a members nickname                                 |
 | **!purge \[amount]**                | **/purge all**         | purge all messages                                       |
