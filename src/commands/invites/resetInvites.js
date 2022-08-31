@@ -2,6 +2,7 @@ const { Command } = require("@src/structures");
 const { resolveMember } = require("@utils/guildUtils");
 const { Message, CommandInteraction } = require("discord.js");
 const { getMember } = require("@schemas/Member");
+const { checkInviteRewards } = require("@src/handlers/invite");
 
 module.exports = class ResetInvites extends Command {
   constructor(client) {
@@ -56,5 +57,7 @@ async function clearInvites({ guild }, user) {
   const memberDb = await getMember(guild.id, user.id);
   memberDb.invite_data.added = 0;
   await memberDb.save();
+
+  checkInviteRewards(guild, memberDb, false);
   return `Done! Invites cleared for \`${user.tag}\``;
 }
