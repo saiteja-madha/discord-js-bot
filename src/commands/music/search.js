@@ -54,6 +54,7 @@ async function search({ member, guild, channel }, user, query) {
   if (!member.voice.channel) return "🚫 You need to join a voice channel first";
   let player = guild.client.musicManager.get(guild.id);
 
+  if (player && !guild.members.me.voice.channel) player.destroy();
   if (player && member.voice.channel !== guild.me.voice.channel) {
     return "🚫 You must be in the same voice channel as mine";
   }
