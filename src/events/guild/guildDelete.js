@@ -6,6 +6,7 @@ const { getSettings } = require("@schemas/Guild");
  * @param {import('discord.js').Guild} guild
  */
 module.exports = async (client, guild) => {
+  if (!guild.available) return;
   client.logger.log(`Guild Left: ${guild.name} Members: ${guild.memberCount}`);
 
   const settings = await getSettings(guild);
