@@ -15,7 +15,7 @@ module.exports = class Timeout extends Command {
         enabled: true,
         aliases: ["mute"],
         usage: "<ID|@member> <minutes> [reason]",
-        minArgsCount: 1,
+        minArgsCount: 2,
       },
       slashCommand: {
         enabled: true,
