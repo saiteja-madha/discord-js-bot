@@ -1,9 +1,11 @@
 ---
-description: 1 command
+description: 3 command
 ---
 
 # 🔏 Owner
 
-| Command             | Slash     | Description        |
-| ------------------- | --------- | ------------------ |
-| **!eval \<script>** | **/eval** | Evaluates a script |
+| Command                      | Slash | Description                |
+| ---------------------------- | ----- | -------------------------- |
+| **!eval \<script>**          | NA    | evaluates something        |
+| **!leaveserver \<serverId>** | NA    | leave a server             |
+| **!listservers \[match]**    | NA    | lists all/matching servers |
