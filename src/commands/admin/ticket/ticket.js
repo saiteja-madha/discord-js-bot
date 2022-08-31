@@ -204,7 +204,7 @@ module.exports = class Ticket extends Command {
     // Close all tickets
     else if (input === "closeall") {
       let sent = await message.safeReply("Closing tickets ...");
-      response = await closeAll(message);
+      response = await closeAll(message, message.author);
       return sent.editable ? sent.edit(response) : message.channel.send(response);
     }
 
@@ -286,7 +286,7 @@ module.exports = class Ticket extends Command {
 
     // Close all
     else if (sub === "closeall") {
-      response = await closeAll(interaction);
+      response = await closeAll(interaction, interaction.user);
     }
 
     // Add to ticket
@@ -422,8 +422,8 @@ async function close({ channel }, author) {
   return null;
 }
 
-async function closeAll({ guild }) {
-  const stats = await closeAllTickets(guild);
+async function closeAll({ guild }, user) {
+  const stats = await closeAllTickets(guild, user);
   return `Completed! Success: \`${stats[0]}\` Failed: \`${stats[1]}\``;
 }
 

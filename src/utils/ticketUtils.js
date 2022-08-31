@@ -122,11 +122,11 @@ async function closeAllTickets(guild, author) {
   let success = 0;
   let failed = 0;
 
-  channels.forEach(async (ch) => {
-    const status = await closeTicket(ch, author, "Force close all open tickets");
-    if (status.success) success += 1;
+  for (const ch of channels) {
+    const status = await closeTicket(ch[1], author, "Force close all open tickets");
+    if (status === "SUCCESS") success += 1;
     else failed += 1;
-  });
+  }
 
   return [success, failed];
 }
