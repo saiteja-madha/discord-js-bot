@@ -11,11 +11,11 @@ services:
     depends_on:
       - lavalink
     volumes:
-      - ./*:/usr/src/app/config.js:ro
+      - ./config.js:/usr/src/app/config.js:ro
 
   lavalink:
     image: fredboat/lavalink:dev
-    container_name: music-lavalink
+    container_name: discord-js-lavalink
     hostname: lavalink
     restart: unless-stopped
     networks:
@@ -25,3 +25,4 @@ services:
 
 networks:
   lavalink-net:
+    name: lavalink-net
