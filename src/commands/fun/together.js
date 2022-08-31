@@ -1,20 +1,28 @@
 const { ApplicationCommandOptionType } = require("discord.js");
 
 const discordTogether = [
-  "youtube",
-  "poker",
-  "chess",
-  "checkers",
-  "betrayal",
-  "fishing",
-  "lettertile",
-  "wordsnack",
-  "doodlecrew",
-  "spellcast",
+  "askaway",
   "awkword",
-  "puttparty",
-  "sketchheads",
+  "betrayal",
+  "bobble",
+  "checkers",
+  "chess",
+  "chessdev",
+  "doodlecrew",
+  "fishing",
+  "land",
+  "lettertile",
+  "meme",
   "ocho",
+  "poker",
+  "puttparty",
+  "puttpartyqa",
+  "sketchheads",
+  "sketchyartist",
+  "spellcast",
+  "wordsnack",
+  "youtube",
+  "youtubedev",
 ];
 
 /**
@@ -58,72 +66,15 @@ module.exports = {
 };
 
 async function getTogetherInvite(member, choice) {
-  const { client } = member;
+  choice = choice.toLowerCase();
 
   const vc = member.voice.channel?.id;
   if (!vc) return "You must be in a voice channel to use this command.";
 
-  let invite;
-  switch (choice.toLowerCase()) {
-    case "youtube":
-      invite = await client.discordTogether.createTogetherCode(vc, "youtube");
-      break;
-
-    case "poker":
-      invite = await client.discordTogether.createTogetherCode(vc, "poker");
-      break;
-
-    case "chess":
-      invite = await client.discordTogether.createTogetherCode(vc, "chess");
-      break;
-
-    case "checkers":
-      invite = await client.discordTogether.createTogetherCode(vc, "checkers");
-      break;
-
-    case "betrayal":
-      invite = await client.discordTogether.createTogetherCode(vc, "betrayal");
-      break;
-
-    case "fishing":
-      invite = await client.discordTogether.createTogetherCode(vc, "fishing");
-      break;
-
-    case "lettertile":
-      invite = await client.discordTogether.createTogetherCode(vc, "lettertile");
-      break;
-
-    case "wordsnack":
-      invite = await client.discordTogether.createTogetherCode(vc, "wordsnack");
-      break;
-
-    case "doodlecrew":
-      invite = await client.discordTogether.createTogetherCode(vc, "doodlecrew");
-      break;
-
-    case "spellcast":
-      invite = await client.discordTogether.createTogetherCode(vc, "spellcast");
-      break;
-
-    case "awkword":
-      invite = await client.discordTogether.createTogetherCode(vc, "awkword");
-      break;
-
-    case "puttparty":
-      invite = await client.discordTogether.createTogetherCode(vc, "puttparty");
-      break;
-
-    case "sketchheads":
-      invite = await client.discordTogether.createTogetherCode(vc, "sketchheads");
-      break;
-
-    case "ocho":
-      invite = await client.discordTogether.createTogetherCode(vc, "ocho");
-      break;
-
-    default:
-      return `Invalid game.\nValid games: ${discordTogether.join(", ")}`;
+  if (!discordTogether.includes(choice)) {
+    return `Invalid game.\nValid games: ${discordTogether.join(", ")}`;
   }
 
+  const invite = await member.client.discordTogether.createTogetherCode(vc, choice);
   return `${invite.code}`;
 }
