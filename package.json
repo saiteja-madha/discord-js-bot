@@ -28,7 +28,7 @@
     "common-tags": "^1.8.2",
     "country-language": "^0.1.7",
     "discord-giveaways": "^5.1.1",
-    "discord.js": "^13.6.0",
+    "discord.js": "^13.10.3",
     "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "erela.js": "^2.3.3",
