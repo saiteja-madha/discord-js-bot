@@ -6,7 +6,7 @@
 
 > Demo Bot: ⚠️ REMOVED ⚠️ THE TOKEN WAS COMPROMISED ⚠️
 
-> Support Server: [Join Here](https://discord.gg/fE75UShbqB)
+> Support Server: [Join Here](https://discord.gg/2gPy75zgbW)
 
 > Documentation URL: [Visit Here](https://docs.strangebot.xyz)
 
