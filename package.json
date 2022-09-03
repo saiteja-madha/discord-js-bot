@@ -6,7 +6,7 @@
   "author": "Sai Teja M",
   "license": "ISC",
   "engines": {
-    "node": ">=16.6.0"
+    "node": "16.16.0"
   },
   "scripts": {
     "dev": "nodemon .",
@@ -64,7 +64,7 @@
   "devDependencies": {
     "eslint": "^8.9.0",
     "eslint-plugin-jsdoc": "^37.9.4",
-    "node": "^16.10.0",
+    "node": "^16.16.0",
     "nodemon": "^2.0.15",
     "prettier": "2.5.1"
   },
