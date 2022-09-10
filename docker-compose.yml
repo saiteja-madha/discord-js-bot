@@ -2,8 +2,7 @@ version: "4"
 
 services:
   discord-js-bot:
-    build: .
-    image: discord-js-bot:latest
+    image: saitejamadha/discord-js-bot:5.0.0
     container_name: discord-js-bot
     restart: unless-stopped
     networks:
