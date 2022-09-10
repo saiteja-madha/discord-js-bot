@@ -47,6 +47,7 @@ async function migration() {
   await migrateMemberStats(collections);
   await migrateMembers(collections);
   await migrateUsers(collections);
+  await migrateMessages(collections);
 }
 
 const clearAndLog = (message) => {
@@ -313,6 +314,62 @@ const migrateUsers = async (collections) => {
     }
   } catch (ex) {
     clearAndLog("📦 Migrating 'users' collection | ❌ Error occurred");
+    console.log(ex);
+  }
+};
+
+/**
+ * Migrate messages collection from v4 to v5
+ * @param {mongoose.Collection<mongoose.Document>[]} collections
+ */
+const migrateMessages = async (collections) => {
+  process.stdout.write("📦 Migrating 'messages' collection ");
+  try {
+    if (
+      !collections.find((c) => c.collectionName === "v4-ticket-backup") &&
+      !collections.find((c) => c.collectionName === "reaction-roles") &&
+      collections.find((c) => c.collectionName === "messages")
+    ) {
+      const rrolesC = await mongoose.connection.db.createCollection("reaction-roles");
+      const ticketsC = await mongoose.connection.db.createCollection("v4-ticket-backup");
+      const messagesC = collections.find((c) => c.collectionName === "messages");
+
+      const rrToUpdate = await messagesC.find({ roles: { $exists: true, $ne: [] } }).toArray();
+      const tToUpdate = await messagesC.find({ ticket: { $exists: true } }).toArray();
+
+      if (rrToUpdate.length > 0 || tToUpdate.length > 0) {
+        await rrolesC.insertMany(
+          rrToUpdate.map((doc) => ({
+            guild_id: doc.guild_id,
+            channel_id: doc.channel_id,
+            message_id: doc.message_id,
+            roles: doc.roles,
+          }))
+        );
+
+        await ticketsC.insertMany(
+          tToUpdate.map((doc) => ({
+            guild_id: doc.guild_id,
+            channel_id: doc.channel_id,
+            message_id: doc.message_id,
+            ticket: doc.ticket,
+          }))
+        );
+
+        await mongoose.connection.db.dropCollection("messages");
+
+        clearAndLog(
+          `📦 Migrating 'messages' collection | Completed - Updated: ${rrToUpdate.length + tToUpdate.length}`
+        );
+      } else {
+        await mongoose.connection.db.dropCollection("messages");
+        clearAndLog("📦 Migrating 'messages' collection | ✅ No updates required");
+      }
+    } else {
+      clearAndLog("📦 Migrating 'messages' collection | ✅ No updates required");
+    }
+  } catch (ex) {
+    clearAndLog("📦 Migrating 'messages' collection | ❌ Error occurred");
     console.log(ex);
   }
 };
