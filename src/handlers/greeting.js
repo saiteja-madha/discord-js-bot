@@ -24,6 +24,9 @@ const parse = async (content, member, inviterData = {}) => {
         inviteData.name = "NA";
         inviteData.tag = "NA";
       }
+    } else if (member.user.bot) {
+      inviteData.name = "OAuth";
+      inviteData.tag = "OAuth";
     } else {
       inviteData.name = inviterId;
       inviteData.tag = inviterId;

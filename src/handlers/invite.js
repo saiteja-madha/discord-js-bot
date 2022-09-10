@@ -67,6 +67,8 @@ const checkInviteRewards = async (guild, inviterData = {}, isAdded) => {
 async function trackJoinedMember(member) {
   const { guild } = member;
 
+  if (member.user.bot) return {};
+
   const cachedInvites = inviteCache.get(guild.id);
   const newInvites = await cacheGuildInvites(guild);
 
@@ -122,6 +124,8 @@ async function trackJoinedMember(member) {
  * @param {import("discord.js").User} user
  */
 async function trackLeftMember(guild, user) {
+  if (user.bot) return {};
+
   const settings = await getSettings(guild);
   if (!settings.invite.tracking) return;
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
