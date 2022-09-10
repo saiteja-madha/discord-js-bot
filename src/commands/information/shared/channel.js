@@ -1,21 +1,25 @@
 const { EmbedBuilder, ChannelType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
 const { stripIndent } = require("common-tags");
+const channelTypes = require("@helpers/channelTypes");
 
+/**
+ * @param {import('discord.js').GuildChannel} channel
+ */
 module.exports = (channel) => {
-  const { id, name, topic, parent, position, type } = channel;
+  const { id, name, parent, position, type } = channel;
 
   let desc = stripIndent`
-    ❯ ID: **${id}**
-    ❯ Name: **${name}**
-    ❯ Type: **${channel.type.toString()}**
-    ❯ Category: **${parent || "NA"}**
-    ❯ Topic: **${topic || "No topic set"}**\n
-    `;
+      ❯ ID: **${id}**
+      ❯ Name: **${name}**
+      ❯ Type: **${channelTypes(channel.type)}**
+      ❯ Category: **${parent || "NA"}**\n
+      `;
 
   if (type === ChannelType.GuildText) {
     const { rateLimitPerUser, nsfw } = channel;
     desc += stripIndent`
+      ❯ Topic: **${channel.topic || "No topic set"}**
       ❯ Position: **${position}**
       ❯ Slowmode: **${rateLimitPerUser}**
       ❯ isNSFW: **${nsfw ? "✓" : "✕"}**\n
