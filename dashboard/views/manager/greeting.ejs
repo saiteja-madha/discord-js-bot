@@ -69,7 +69,7 @@
                                                     <% guild.channels.cache.filter((ch) => ch.id !== guild.welcome.channel && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
-                                                    <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 0).first().name %></option>
+                                                    <option disabled selected value> -- select an option -- </option>
                                                     <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
@@ -140,7 +140,7 @@
                                                     <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); } else { %>
-                                                        <option selected="selected">#<%= guild.channels.cache.filter((ch) => ch.type === 0).first().name %></option>
+                                                        <option disabled selected value> -- select an option -- </option>
                                                     <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>

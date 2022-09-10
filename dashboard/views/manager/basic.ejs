@@ -102,7 +102,7 @@
                                                     <% }); %>
                                                         <option>No channel</option>
                                                 <% } else { %>
-                                                    <option selected="selected">No channel</option>
+                                                    <option disabled selected value> -- select an option -- </option>
                                                     <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
@@ -138,7 +138,7 @@
                                                     <% }); %>
                                                         <option>No channel</option>
                                                 <% } else { %>
-                                                    <option selected="selected">No channel</option>
+                                                    <option disabled selected value> -- select an option -- </option>
                                                     <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
@@ -193,7 +193,7 @@
                                                     <% }); %>
                                                         <option>No channel</option>
                                                 <% } else { %>
-                                                    <option selected="selected">No channel</option>
+                                                    <option disabled selected value> -- select an option -- </option>
                                                     <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
