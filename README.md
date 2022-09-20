@@ -27,7 +27,7 @@
 ## 🔗 Resource Links
 
 - 🤖 Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=1013236808353599488&permissions=397602323830&scope=bot%20applications.commands)
-- 🤝 Support Server: [Join Here](https://discord.gg/fE75UShbqB)
+- 🤝 Support Server: [Join Here](https://discord.gg/2gPy75zgbW)
 - 📂 Documentation URL: [Visit Here](https://docs.strangebot.xyz)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
 
