@@ -147,7 +147,11 @@ module.exports = {
     if (sub == "ghostping") response = await antiGhostPing(settings, interaction.options.getString("status"));
     else if (sub == "spam") response = await antiSpam(settings, interaction.options.getString("status"));
     else if (sub === "massmention") {
-      response = await antiMassMention(settings, interaction.options.getInteger("amount"));
+      response = await antiMassMention(
+        settings,
+        interaction.options.getString("status"),
+        interaction.options.getInteger("amount")
+      );
     } else response = "Invalid command usage!";
 
     await interaction.followUp(response);
