@@ -275,10 +275,12 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
     new ButtonBuilder().setCustomId("ticket_btnSetup").setLabel("Setup Message").setStyle(ButtonStyle.Primary)
   );
 
-  const sentMsg = await channel.send({
+  const sentMsg = await channel.safeSend({
     content: "Please click the button below to setup ticket message",
     components: [buttonRow],
   });
+
+  if (!sentMsg) return;
 
   const btnInteraction = await channel
     .awaitMessageComponent({
