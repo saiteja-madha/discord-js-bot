@@ -25,7 +25,7 @@ const shouldModerate = (message) => {
   const { member, guild, channel } = message;
 
   // Ignore if bot cannot delete channel messages
-  if (!channel.permissionsFor(guild.members.me).has("ManageMessages")) return false;
+  if (!channel.permissionsFor(guild.members.me)?.has("ManageMessages")) return false;
 
   // Ignore Possible Guild Moderators
   if (member.permissions.has(["KickMembers", "BanMembers", "ManageGuild"])) return false;
@@ -171,15 +171,15 @@ async function performAutomod(message, settings) {
     // send automod log
     if (logChannel) {
       const logEmbed = new EmbedBuilder()
-      .setAuthor({ name: "Auto Moderation" })
-      .setThumbnail(author.displayAvatarURL())
-      .setColor(AUTOMOD.LOG_EMBED)
-      .addFields(fields)
-      .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
-      .setFooter({
-        text: `By ${author.tag} | ${author.id}`,
-        iconURL: author.avatarURL(),
-      });
+        .setAuthor({ name: "Auto Moderation" })
+        .setThumbnail(author.displayAvatarURL())
+        .setColor(AUTOMOD.LOG_EMBED)
+        .addFields(fields)
+        .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
+        .setFooter({
+          text: `By ${author.tag} | ${author.id}`,
+          iconURL: author.avatarURL(),
+        });
 
       logChannel.safeSend({ embeds: [logEmbed] });
     }
@@ -195,7 +195,7 @@ async function performAutomod(message, settings) {
           `**Guild:** ${guild.name}\n` +
           `**Total Strikes:** ${memberDb.strikes} out of ${automod.strikes}`
       );
-      
+
     author.send({ embeds: [strikeEmbed] }).catch((ex) => {});
 
     // check if max strikes are received
