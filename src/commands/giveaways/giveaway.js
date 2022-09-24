@@ -303,10 +303,12 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
     new ButtonBuilder().setCustomId("giveaway_btnSetup").setLabel("Setup Giveaway").setStyle(ButtonStyle.Primary)
   );
 
-  const sentMsg = await channel.send({
+  const sentMsg = await channel.safeSend({
     content: "Please click the button below to setup new giveaway",
     components: [buttonRow],
   });
+
+  if (!sentMsg) return;
 
   const btnInteraction = await channel
     .awaitMessageComponent({
