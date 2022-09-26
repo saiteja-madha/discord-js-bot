@@ -1,4 +1,6 @@
+.DS_Store
 node_modules/
 .vscode/
-npm-debug.log
+*.log
+*.tar.gz
 .env
