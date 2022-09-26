@@ -51,7 +51,17 @@ module.exports = {
     ENABLED: false,
     IDLE_TIME: 60, // Time in seconds before the bot disconnects from the voice channel
     MAX_SEARCH_RESULTS: 5,
-    NODES: [],
+    // Add any number of lavalink nodes here
+    // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
+    NODES: [
+      {
+        host: "localhost",
+        port: 2333,
+        password: "youshallnotpass",
+        identifier: "Local Node",
+        secure: false,
+      },
+    ],
   },
 
   GIVEAWAYS: {
