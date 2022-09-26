@@ -12,7 +12,7 @@ Message.prototype.safeReply = async function (content, seconds) {
 
   perms.push("ReadMessageHistory");
   if (this.channel.type !== "DM" && !this.channel.permissionsFor(this.guild.members.me).has(perms)) {
-    return this.safeSend(content, seconds);
+    return this.channel.safeSend(content, seconds);
   }
 
   try {

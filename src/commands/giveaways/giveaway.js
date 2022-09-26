@@ -303,10 +303,12 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
     new ButtonBuilder().setCustomId("giveaway_btnSetup").setLabel("Setup Giveaway").setStyle(ButtonStyle.Primary)
   );
 
-  const sentMsg = await channel.send({
+  const sentMsg = await channel.safeSend({
     content: "Please click the button below to setup new giveaway",
     components: [buttonRow],
   });
+
+  if (!sentMsg) return;
 
   const btnInteraction = await channel
     .awaitMessageComponent({
@@ -393,12 +395,18 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
     modal.fields
       .getTextInputValue("roles")
       ?.split(",")
-      ?.filter((roleId) => guild.roles.cache.get(roleId)) || [];
+      ?.filter((roleId) => guild.roles.cache.get(roleId.trim())) || [];
 
   // host
-  const host = modal.fields.getTextInputValue("host")
-    ? await guild.client.users.fetch(modal.fields.getTextInputValue("host"))
-    : null;
+  const hostId = modal.fields.getTextInputValue("host");
+  let host = null;
+  if (hostId) {
+    try {
+      host = await guild.client.users.fetch(hostId);
+    } catch (ex) {
+      return modal.editReply("Setup has been cancelled. You need to provide a valid userId for host");
+    }
+  }
 
   const response = await start(member, targetCh, duration, prize, winners, host, allowedRoles);
   await modal.editReply(response);

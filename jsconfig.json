@@ -5,7 +5,6 @@
     "baseUrl": "./",
     "paths": {
       "@root/*": ["./*"],
-      "@features/*": ["./src/features/*"],
       "@handlers/*": ["./src/handlers/*"],
       "@helpers/*": ["./src/helpers/*"],
       "@schemas/*": ["./src/database/schemas/*"],

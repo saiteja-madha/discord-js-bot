@@ -70,8 +70,9 @@ module.exports = {
   },
 };
 
-async function timeout(issuer, target, minutes, reason) {
-  const response = await timeoutTarget(issuer, target, minutes, reason);
+async function timeout(issuer, target, ms, reason) {
+  if (!NaN(Number(ms))) return "Please provide a valid duration. Example: 1d/1h/1m/1s";
+  const response = await timeoutTarget(issuer, target, ms, reason);
   if (typeof response === "boolean") return `${target.user.tag} is timed out!`;
   if (response === "BOT_PERM") return `I do not have permission to timeout ${target.user.tag}`;
   else if (response === "MEMBER_PERM") return `You do not have permission to timeout ${target.user.tag}`;

@@ -37,6 +37,7 @@ module.exports = class BotClient extends Client {
       restRequestTimeout: 20000,
     });
 
+    this.wait = require("util").promisify(setTimeout); // await client.wait(1000) - Wait 1 second
     this.config = require("@root/config"); // load the config file
 
     /**
