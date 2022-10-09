@@ -4,7 +4,6 @@ const { getSettings } = require("@schemas/Guild");
 
 /**
  * @param {import('@src/structures').BotClient} client
- * @param {import('discord.js').Message} message
  */
 module.exports = async (client) => {
   client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
