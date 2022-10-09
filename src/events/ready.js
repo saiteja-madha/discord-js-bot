@@ -4,6 +4,7 @@ const { getSettings } = require("@schemas/Guild");
 
 /**
  * @param {import('@src/structures').BotClient} client
+ * @param {import('discord.js').Message} message
  */
 module.exports = async (client) => {
   client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
@@ -33,6 +34,14 @@ module.exports = async (client) => {
 
   // Load reaction roles to cache
   await cacheReactionRoles(client);
+
+  client.cluster
+    .broadcastEval(c => c.guilds.cache.size)
+    .then(results => client.logger.success(`${results.reduce((prev, val) => prev + val, 0)} total guilds`));
+
+  client.logger.success(`Total Clusters: ${client.cluster.count}`);
+  client.logger.success(`Connected to cluster ${client.cluster.id}`);
+  client.logger.success(`Total Shards: ${client.cluster.info.TOTAL_SHARDS}`);
 
   for (const guild of client.guilds.cache.values()) {
     const settings = await getSettings(guild);
