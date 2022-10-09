@@ -10,11 +10,13 @@ const { checkForUpdates } = require("@helpers/BotUtils");
 const { initializeMongoose } = require("@src/database/mongoose");
 const { BotClient } = require("@src/structures");
 const { validateConfiguration } = require("@helpers/Validator");
+const Cluster = require('discord-hybrid-sharding');
 
 validateConfiguration();
 
 // initialize client
 const client = new BotClient();
+client.cluster = new Cluster.Client(client); 
 client.loadCommands("src/commands");
 client.loadContexts("src/contexts");
 client.loadEvents("src/events");
