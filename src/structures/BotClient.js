@@ -16,6 +16,7 @@ const CommandCategory = require("./CommandCategory");
 const erelaHandler = require("../handlers/erela");
 const giveawaysHandler = require("../handlers/giveaway");
 const { DiscordTogether } = require("discord-together");
+const Cluster = require('discord-hybrid-sharding');
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -26,7 +27,7 @@ module.exports = class BotClient extends Client {
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildInvites,
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildPresences,
+        //GatewayIntentBits.GuildPresences,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildVoiceStates,
       ],
@@ -35,6 +36,8 @@ module.exports = class BotClient extends Client {
         repliedUser: false,
       },
       restRequestTimeout: 20000,
+      shards: Cluster.data.SHARD_LIST,
+      shardCount: Cluster.data.TOTAL_SHARDS
     });
 
     this.wait = require("util").promisify(setTimeout); // await client.wait(1000) - Wait 1 second
