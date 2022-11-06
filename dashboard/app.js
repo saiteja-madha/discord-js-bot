@@ -25,6 +25,8 @@ module.exports.launch = async (client) => {
     .use(express.urlencoded({ extended: true }))
     .engine("html", require("ejs").renderFile) // Set the engine to html (for ejs template)
     .set("view engine", "ejs")
+     cookie: { maxAge: new Date(Date.now() + 12096e5) },
+        name: "connection",
     .use(express.static(path.join(__dirname, "/public"))) // Set the css and js folder to ./public
     .set("views", path.join(__dirname, "/views")) // Set the ejs templates to ./views
     .set("port", config.DASHBOARD.port) // Set the dashboard port
