@@ -3,7 +3,40 @@ const { getBuffer } = require("@helpers/HttpUtils");
 const { getImageFromMessage } = require("@helpers/BotUtils");
 const { EMBED_COLORS, IMAGE } = require("@root/config.js");
 
-const availableFilters = ["blur", "burn", "gay", "greyscale", "invert", "pixelate", "sepia", "sharpen"];
+const availableFilters = [
+  "blur",
+  "brighten",
+  "burn",
+  "darken",
+  "distort",
+  "greyscale",
+  "invert",
+  "pixelate",
+  "sepia",
+  "sharpen",
+  "threshold",
+];
+
+const additionalParams = {
+  brighten: {
+    params: [{ name: "amount", value: "100" }],
+  },
+  darken: {
+    params: [{ name: "amount", value: "100" }],
+  },
+  distort: {
+    params: [{ name: "level", value: "10" }],
+  },
+  pixelate: {
+    params: [{ name: "pixels", value: "10" }],
+  },
+  sharpen: {
+    params: [{ name: "level", value: "5" }],
+  },
+  threshold: {
+    params: [{ name: "amount", value: "100" }],
+  },
+};
 
 /**
  * @type {import("@structures/Command")}
@@ -48,7 +81,11 @@ module.exports = {
 
     // use invoke as an endpoint
     const url = getFilter(data.invoke.toLowerCase(), image);
-    const response = await getBuffer(url);
+    const response = await getBuffer(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+      },
+    });
 
     if (!response.success) return message.safeReply("Failed to generate image");
 
@@ -90,5 +127,13 @@ module.exports = {
 function getFilter(filter, image) {
   const endpoint = new URL(`${IMAGE.BASE_API}/filters/${filter}`);
   endpoint.searchParams.append("image", image);
+
+  // add additional params if any
+  if (additionalParams[filter]) {
+    additionalParams[filter].params.forEach((param) => {
+      endpoint.searchParams.append(param.name, param.value);
+    });
+  }
+
   return endpoint.href;
 }

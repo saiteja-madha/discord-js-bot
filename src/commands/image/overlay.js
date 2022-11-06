@@ -3,66 +3,49 @@ const { getBuffer } = require("@helpers/HttpUtils");
 const { getImageFromMessage } = require("@helpers/BotUtils");
 const { EMBED_COLORS, IMAGE } = require("@root/config.js");
 
-const availableGenerators = [
-  "ad",
-  "affect",
-  "beautiful",
-  "bobross",
-  "challenger",
-  "confusedstonk",
-  "delete",
-  "dexter",
-  "facepalm",
-  "hitler",
-  "jail",
-  "jokeoverhead",
-  "karaba",
-  "kyon-gun",
-  "mms",
-  "notstonk",
-  "poutine",
-  "rip",
-  "shit",
-  "stonk",
-  "tattoo",
-  "thomas",
-  "trash",
-  "wanted",
-  "worthless",
+const availableOverlays = [
+  "approved",
+  "brazzers",
+  "gay",
+  "halloween",
+  "rejected",
+  "thuglife",
+  "to-be-continued",
+  "wasted",
 ];
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "generator",
-  description: "generates a meme for the provided image",
-  cooldown: 1,
+  name: "overlay",
+  description: "add overlay over the provided image",
+  cooldown: 5,
   category: "IMAGE",
   botPermissions: ["EmbedLinks", "AttachFiles"],
   command: {
     enabled: true,
-    aliases: availableGenerators,
+    aliases: availableOverlays,
   },
   slashCommand: {
     enabled: true,
     options: [
       {
         name: "name",
-        description: "the type of generator",
+        description: "the type of overlay",
         type: ApplicationCommandOptionType.String,
         required: true,
-        choices: availableGenerators.map((gen) => ({ name: gen, value: gen })),
+        choices: availableOverlays.map((overlay) => ({ name: overlay, value: overlay })),
       },
       {
         name: "user",
-        description: "the user to whose avatar the generator needs to applied",
+        description: "the user to whose avatar the overlay needs to applied",
         type: ApplicationCommandOptionType.User,
         required: false,
       },
       {
         name: "link",
-        description: "the image link to which the generator needs to applied",
+        description: "the image link to which the overlay needs to applied",
         type: ApplicationCommandOptionType.String,
         required: false,
       },
@@ -73,8 +56,12 @@ module.exports = {
     const image = await getImageFromMessage(message, args);
 
     // use invoke as an endpoint
-    const url = getGenerator(data.invoke.toLowerCase(), image);
-    const response = await getBuffer(url);
+    const url = getOverlay(data.invoke.toLowerCase(), image);
+    const response = await getBuffer(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+      },
+    });
 
     if (!response.success) return message.safeReply("Failed to generate image");
 
@@ -91,21 +78,17 @@ module.exports = {
     const author = interaction.user;
     const user = interaction.options.getUser("user");
     const imageLink = interaction.options.getString("link");
-    const generator = interaction.options.getString("name");
+    const filter = interaction.options.getString("name");
 
     let image;
     if (user) image = user.displayAvatarURL({ size: 256, extension: "png" });
     if (!image && imageLink) image = imageLink;
     if (!image) image = author.displayAvatarURL({ size: 256, extension: "png" });
 
-    const url = getGenerator(generator, image);
-    const response = await getBuffer(url, {
-      headers: {
-        Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
-      },
-    });
+    const url = getOverlay(filter, image);
+    const response = await getBuffer(url);
 
-    if (!response.success) return interaction.followUp("Failed to generate image");
+    if (!response.success) return interaction.followUp("Failed to generate image overlay");
 
     const attachment = new AttachmentBuilder(response.buffer, { name: "attachment.png" });
     const embed = new EmbedBuilder()
@@ -117,8 +100,8 @@ module.exports = {
   },
 };
 
-function getGenerator(genName, image) {
-  const endpoint = new URL(`${IMAGE.BASE_API}/generators/${genName}`);
+function getOverlay(filter, image) {
+  const endpoint = new URL(`${IMAGE.BASE_API}/overlays/${filter}`);
   endpoint.searchParams.append("image", image);
   return endpoint.href;
 }
