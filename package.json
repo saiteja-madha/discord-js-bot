@@ -43,6 +43,7 @@
     "iso-639-1": "^2.1.15",
     "module-alias": "^2.2.2",
     "moment": "^2.29.4",
+    "connect-mongo": "^4.6.0",
     "mongoose": "^6.5.0",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.6.1",
