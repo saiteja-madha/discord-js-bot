@@ -2,6 +2,7 @@ const { EmbedBuilder, escapeInlineCode, ApplicationCommandOptionType } = require
 const { EMBED_COLORS } = require("@root/config");
 const { getInvitesLb } = require("@schemas/Member");
 const { getXpLb } = require("@schemas/MemberStats");
+const { getReputationLb } = require("@schemas/User");
 
 /**
  * @type {import("@structures/Command")}
@@ -15,7 +16,7 @@ module.exports = {
     enabled: true,
     aliases: ["lb"],
     minArgsCount: 1,
-    usage: "<xp|invite>",
+    usage: "<xp|invite|rep>",
   },
   slashCommand: {
     enabled: true,
@@ -34,6 +35,10 @@ module.exports = {
             name: "invite",
             value: "invite",
           },
+          {
+            name: "rep",
+            value: "rep",
+          },
         ],
       },
     ],
@@ -45,6 +50,7 @@ module.exports = {
 
     if (type === "xp") response = await getXpLeaderboard(message, message.author, data.settings);
     else if (type === "invite") response = await getInviteLeaderboard(message, message.author, data.settings);
+    else if (type === "rep") response = await getRepLeaderboard(message.author);
     else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
     await message.safeReply(response);
   },
@@ -55,6 +61,7 @@ module.exports = {
 
     if (type === "xp") response = await getXpLeaderboard(interaction, interaction.user, data.settings);
     else if (type === "invite") response = await getInviteLeaderboard(interaction, interaction.user, data.settings);
+    else if (type === "rep") response = await getRepLeaderboard(interaction.user);
     else response = "Invalid Leaderboard type. Choose either `xp` or `invite`";
 
     await interaction.followUp(response);
@@ -108,6 +115,23 @@ async function getInviteLeaderboard({ guild }, author, settings) {
 
   const embed = new EmbedBuilder()
     .setAuthor({ name: "Invite Leaderboard" })
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription(collector)
+    .setFooter({ text: `Requested by ${author.tag}` });
+
+  return { embeds: [embed] };
+}
+
+async function getRepLeaderboard(author) {
+  const lb = await getReputationLb(10);
+  if (lb.length === 0) return "No users in the leaderboard";
+
+  const collector = lb
+    .map((user, i) => `**#${(i + 1).toString()}** - ${escapeInlineCode(user.username)} (${user.reputation?.received})`)
+    .join("\n");
+
+  const embed = new EmbedBuilder()
+    .setAuthor({ name: "Reputation Leaderboard" })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(collector)
     .setFooter({ text: `Requested by ${author.tag}` });
