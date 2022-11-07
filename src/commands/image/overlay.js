@@ -86,7 +86,11 @@ module.exports = {
     if (!image) image = author.displayAvatarURL({ size: 256, extension: "png" });
 
     const url = getOverlay(filter, image);
-    const response = await getBuffer(url);
+    const response = await getBuffer(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+      },
+    });
 
     if (!response.success) return interaction.followUp("Failed to generate image overlay");
 

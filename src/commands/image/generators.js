@@ -74,7 +74,11 @@ module.exports = {
 
     // use invoke as an endpoint
     const url = getGenerator(data.invoke.toLowerCase(), image);
-    const response = await getBuffer(url);
+    const response = await getBuffer(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+      },
+    });
 
     if (!response.success) return message.safeReply("Failed to generate image");
 
