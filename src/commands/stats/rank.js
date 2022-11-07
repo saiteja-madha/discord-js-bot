@@ -70,7 +70,11 @@ async function getRank({ guild }, member, settings) {
   url.searchParams.append("status", member?.presence?.status?.toString() || "idle");
   if (pos !== -1) url.searchParams.append("rank", pos);
 
-  const response = await getBuffer(url.href);
+  const response = await getBuffer(url.href, {
+    headers: {
+      Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+    },
+  });
   if (!response.success) return "Failed to generate rank-card";
 
   const attachment = new AttachmentBuilder(response.buffer, { name: "rank.png" });

@@ -8,10 +8,12 @@ module.exports = class HttpUtils {
   /**
    * Returns JSON response from url
    * @param {string} url
+   * @param {object} options
    */
-  static async getJson(url) {
+  static async getJson(url, options) {
     try {
-      const response = await fetch(url);
+      // with auth
+      const response = options ? await fetch(url, options) : await fetch(url);
       const json = await response.json();
       return {
         success: response.status === 200 ? true : false,
@@ -30,10 +32,11 @@ module.exports = class HttpUtils {
   /**
    * Returns buffer from url
    * @param {string} url
+   * @param {object} options
    */
-  static async getBuffer(url) {
+  static async getBuffer(url, options) {
     try {
-      const response = await fetch(url);
+      const response = options ? await fetch(url, options) : await fetch(url);
       const buffer = await response.buffer();
       if (response.status !== 200) debug(response);
       return {

@@ -73,7 +73,7 @@ module.exports = {
 
   IMAGE: {
     ENABLED: false,
-    BASE_API: "https://image-api.strangebot.xyz",
+    BASE_API: "https://strangeapi.fun/api",
   },
 
   INVITE: {
