@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { OWNER_IDS, PREFIX, EMBED_COLORS } = require("@root/config");
+const { OWNER_IDS, PREFIX_COMMANDS, EMBED_COLORS } = require("@root/config");
 const { parsePermissions } = require("@helpers/Utils");
 const { timeformat } = require("@helpers/Utils");
 const { getSettings } = require("@schemas/Guild");
@@ -153,7 +153,7 @@ module.exports = {
    * @param {string} invoke - alias that was used to trigger this command
    * @param {string} [title] - the embed title
    */
-  getCommandUsage(cmd, prefix = PREFIX, invoke, title = "Usage") {
+  getCommandUsage(cmd, prefix = PREFIX_COMMANDS.DEFAULT_PREFIX, invoke, title = "Usage") {
     let desc = "";
     if (cmd.command.subcommands && cmd.command.subcommands.length > 0) {
       cmd.command.subcommands.forEach((sub) => {
