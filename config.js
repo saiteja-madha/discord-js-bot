@@ -50,18 +50,18 @@ module.exports = {
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
 
-  ERELA_JS: {
+  MUSIC: {
     ENABLED: false,
     IDLE_TIME: 60, // Time in seconds before the bot disconnects from the voice channel
     MAX_SEARCH_RESULTS: 5,
     // Add any number of lavalink nodes here
     // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
-    NODES: [
+    LAVALINK_NODES: [
       {
         host: "localhost",
         port: 2333,
         password: "youshallnotpass",
-        identifier: "Local Node",
+        id: "Local Node",
         secure: false,
       },
     ],

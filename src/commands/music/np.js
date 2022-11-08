@@ -9,7 +9,7 @@ const { splitBar } = require("string-progressbar");
 module.exports = {
   name: "np",
   description: "show's what track is currently being played",
-  category: "ERELA_JS",
+  category: "MUSIC",
   botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
@@ -30,12 +30,15 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
+ */
 function nowPlaying({ client, guildId }) {
-  const player = client.erelaManager.get(guildId);
+  const player = client.musicManager.getPlayer(guildId);
   if (!player || !player.queue.current) return "🚫 No music is being played!";
 
   const track = player.queue.current;
-  const end = track.duration > 6.048e8 ? "🔴 LIVE" : new Date(track.duration).toISOString().slice(11, 19);
+  const end = track.length > 6.048e8 ? "🔴 LIVE" : new Date(track.length).toISOString().slice(11, 19);
 
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
@@ -44,12 +47,12 @@ function nowPlaying({ client, guildId }) {
     .addFields(
       {
         name: "Song Duration",
-        value: "`" + prettyMs(track.duration, { colonNotation: true }) + "`",
+        value: "`" + prettyMs(track.length, { colonNotation: true }) + "`",
         inline: true,
       },
       {
         name: "Requested By",
-        value: track.requester.tag || "Unknown",
+        value: track.requester || "Unknown",
         inline: true,
       },
       {
@@ -57,14 +60,12 @@ function nowPlaying({ client, guildId }) {
         value:
           new Date(player.position).toISOString().slice(11, 19) +
           " [" +
-          splitBar(track.duration > 6.048e8 ? player.position : track.duration, player.position, 15)[0] +
+          splitBar(track.length > 6.048e8 ? player.position : track.length, player.position, 15)[0] +
           "] " +
           end,
         inline: false,
       }
     );
-
-  if (typeof track.displayThumbnail === "function") embed.setThumbnail(track.displayThumbnail("hqdefault"));
 
   return { embeds: [embed] };
 }

@@ -6,7 +6,7 @@ const { musicValidations } = require("@helpers/BotUtils");
 module.exports = {
   name: "shuffle",
   description: "shuffle the queue",
-  category: "ERELA_JS",
+  category: "MUSIC",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -26,8 +26,11 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
+ */
 function shuffle({ client, guildId }) {
-  const player = client.erelaManager.get(guildId);
+  const player = client.musicManager.getPlayer(guildId);
   player.queue.shuffle();
   return "🎶 Queue has been shuffled";
 }
