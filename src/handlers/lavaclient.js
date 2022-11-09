@@ -1,12 +1,22 @@
 const { EmbedBuilder } = require("discord.js");
 const { Cluster } = require("lavaclient");
 const prettyMs = require("pretty-ms");
+const { load, SpotifyItemType } = require("@lavaclient/spotify");
 require("@lavaclient/queue/register");
 
 /**
  * @param {import("@structures/BotClient")} client
  */
 module.exports = (client) => {
+  load({
+    client: {
+      id: process.env.SPOTIFY_CLIENT_ID,
+      secret: process.env.SPOTIFY_CLIENT_SECRET,
+    },
+    autoResolveYoutubeTracks: false,
+    loaders: [SpotifyItemType.Album, SpotifyItemType.Artist, SpotifyItemType.Playlist, SpotifyItemType.Track],
+  });
+
   const lavaclient = new Cluster({
     nodes: client.config.MUSIC.LAVALINK_NODES,
     sendGatewayPayload: (id, payload) => client.guilds.cache.get(id)?.shard?.send(payload),

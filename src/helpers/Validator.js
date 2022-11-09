@@ -49,7 +49,7 @@ module.exports = class Validator {
     if (!process.env.STRANGE_API_KEY) warn("env: STRANGE_API_KEY is missing. Image commands won't work");
     if (config.MUSIC.ENABLED) {
       if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
-        warn("env: SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET are missing. Spotify music won't work in ErelaJS");
+        warn("env: SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET are missing. Spotify music links won't work");
       }
       if (config.MUSIC.LAVALINK_NODES.length == 0) {
         warn("config.js: There must be at least one node for Lavalink");
