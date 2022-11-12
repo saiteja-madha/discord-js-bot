@@ -6,7 +6,13 @@ const {
   ComponentType,
 } = require("discord.js");
 const prettyMs = require("pretty-ms");
-const { EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS, MUSIC } = require("@root/config");
+
+const search_prefix = {
+  YT: "ytsearch",
+  YTM: "ytmsearch",
+  SC: "scsearch",
+};
 
 /**
  * @type {import("@structures/Command")}
@@ -57,7 +63,7 @@ async function search({ member, guild, channel }, query) {
   let player = guild.client.musicManager.getPlayer(guild.id);
   if (player && !guild.members.me.voice.channel) {
     player.disconnect();
-    await player.destroy();
+    await guild.client.musicManager.destroyPlayer(guild.id);
   }
   if (player && member.voice.channel !== guild.members.me.voice.channel) {
     return "🚫 You must be in the same voice channel as mine";
@@ -65,7 +71,9 @@ async function search({ member, guild, channel }, query) {
 
   let res;
   try {
-    res = await guild.client.musicManager.rest.loadTracks(/^https?:\/\//.test(query) ? query : `ytsearch:${query}`);
+    res = await guild.client.musicManager.rest.loadTracks(
+      /^https?:\/\//.test(query) ? query : `${search_prefix[MUSIC.DEFAULT_SOURCE]}:${query}`
+    );
   } catch (err) {
     return "🚫 There was an error while searching";
   }

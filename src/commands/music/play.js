@@ -1,7 +1,13 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const prettyMs = require("pretty-ms");
-const { EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS, MUSIC } = require("@root/config");
 const { SpotifyItemType } = require("@lavaclient/spotify");
+
+const search_prefix = {
+  YT: "ytsearch",
+  YTM: "ytmsearch",
+  SC: "scsearch",
+};
 
 /**
  * @type {import("@structures/Command")}
@@ -97,7 +103,7 @@ async function play({ member, guild, channel }, query) {
       }
     } else {
       const res = await guild.client.musicManager.rest.loadTracks(
-        /^https?:\/\//.test(query) ? query : `ytsearch:${query}`
+        /^https?:\/\//.test(query) ? query : `${search_prefix[MUSIC.DEFAULT_SOURCE]}:${query}`
       );
       switch (res.loadType) {
         case "LOAD_FAILED":
