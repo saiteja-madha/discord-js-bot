@@ -1,14 +1,14 @@
-FROM node:16-alpine
+FROM node:current-alpine3.15
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm ci --production
+RUN npm install
+RUN npm start
 
 COPY . .
 
-EXPOSE 8080 / 8089
-EXPOSED 449
+EXPOSE 8080 8081 8082 8083 8084 8085 8087 8088 8089 449 
 
 CMD [ "node", "bot.js" ]
