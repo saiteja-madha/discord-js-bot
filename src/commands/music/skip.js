@@ -6,10 +6,11 @@ const { musicValidations } = require("@helpers/BotUtils");
 module.exports = {
   name: "skip",
   description: "skip the current song",
-  category: "ERELA_JS",
+  category: "MUSIC",
   validations: musicValidations,
   command: {
     enabled: true,
+    aliases: ["next"],
   },
   slashCommand: {
     enabled: true,
@@ -26,9 +27,11 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
+ */
 function skip({ client, guildId }) {
-  const player = client.erelaManager.get(guildId);
+  const player = client.musicManager.getPlayer(guildId);
   const { title } = player.queue.current;
-  player.stop();
-  return `⏯️ ${title} was skipped.`;
+  return player.queue.next() ? `⏯️ ${title} was skipped.` : "⏯️ There is no song to skip.";
 }

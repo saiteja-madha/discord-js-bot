@@ -1,7 +1,10 @@
 module.exports = {
   OWNER_IDS: [], // Bot owner ID's
-  PREFIX: "!", // Default prefix for the bot
   SUPPORT_SERVER: "", // Your bot support server
+  PREFIX_COMMANDS: {
+    ENABLED: true, // Enable/Disable prefix commands
+    DEFAULT_PREFIX: "!", // Default prefix for the bot
+  },
   INTERACTIONS: {
     SLASH: false, // Should the interactions be enabled
     CONTEXT: false, // Should contexts be enabled
@@ -47,18 +50,19 @@ module.exports = {
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
 
-  ERELA_JS: {
+  MUSIC: {
     ENABLED: false,
-    IDLE_TIME: 60, // Time in seconds before the bot disconnects from the voice channel
+    IDLE_TIME: 60, // Time in seconds before the bot disconnects from an idle voice channel
     MAX_SEARCH_RESULTS: 5,
+    DEFAULT_SOURCE: "SC", // YT or YTM or SC
     // Add any number of lavalink nodes here
     // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
-    NODES: [
+    LAVALINK_NODES: [
       {
         host: "localhost",
         port: 2333,
         password: "youshallnotpass",
-        identifier: "Local Node",
+        id: "Local Node",
         secure: false,
       },
     ],
@@ -73,7 +77,7 @@ module.exports = {
 
   IMAGE: {
     ENABLED: false,
-    BASE_API: "https://image-api.strangebot.xyz",
+    BASE_API: "https://strangeapi.fun/api",
   },
 
   INVITE: {

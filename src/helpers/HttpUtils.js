@@ -2,16 +2,18 @@ const ISO6391 = require("iso-639-1");
 const sourcebin = require("sourcebin_js");
 const { error, debug } = require("@helpers/Logger");
 const fetch = require("node-fetch");
-const gTranslate = require("@vitalets/google-translate-api");
+const { translate: gTranslate } = require("@vitalets/google-translate-api");
 
 module.exports = class HttpUtils {
   /**
    * Returns JSON response from url
    * @param {string} url
+   * @param {object} options
    */
-  static async getJson(url) {
+  static async getJson(url, options) {
     try {
-      const response = await fetch(url);
+      // with auth
+      const response = options ? await fetch(url, options) : await fetch(url);
       const json = await response.json();
       return {
         success: response.status === 200 ? true : false,
@@ -30,10 +32,11 @@ module.exports = class HttpUtils {
   /**
    * Returns buffer from url
    * @param {string} url
+   * @param {object} options
    */
-  static async getBuffer(url) {
+  static async getBuffer(url, options) {
     try {
-      const response = await fetch(url);
+      const response = options ? await fetch(url, options) : await fetch(url);
       const buffer = await response.buffer();
       if (response.status !== 200) debug(response);
       return {
@@ -57,13 +60,13 @@ module.exports = class HttpUtils {
    */
   static async translate(content, outputCode) {
     try {
-      const response = await gTranslate(content, { to: outputCode });
+      const { text, raw } = await gTranslate(content, { to: outputCode });
       return {
-        input: response.from.text.value,
-        output: response.text,
-        inputCode: response.from.language.iso,
+        input: raw.src,
+        output: text,
+        inputCode: raw.src,
         outputCode,
-        inputLang: ISO6391.getName(response.from.language.iso),
+        inputLang: ISO6391.getName(raw.src),
         outputLang: ISO6391.getName(outputCode),
       };
     } catch (ex) {

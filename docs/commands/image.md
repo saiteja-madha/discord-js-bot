@@ -12,9 +12,24 @@ description: 32 commands
 - **Cooldown**: 5 seconds
 - **Available Filters**:
 
-| blur   | burn     | gay   | greyscale |
-| ------ | -------- | ----- | --------- |
-| invert | pixelate | sepia | sharpen   |
+|         |           |           |          |
+| ------- | --------- | --------- | -------- |
+| blur    | brighten  | burn      | darken   |
+| distort | greyscale | invert    | pixelate |
+| sepia   | sharpen   | threshold |          |
+
+### Overlays
+
+- **Description**: add overlay over the provided image
+- **Command Usage**: `!{available overlays}`
+- **Slash Usage**: `/overlay <name>`;
+- **Cooldown**: 5 seconds
+- **Available Filters**:
+
+|          |          |                 |           |
+| -------- | -------- | --------------- | --------- |
+| approved | brazzers | gay             | halloween |
+| rejected | thuglife | to-be-continued | wasted    |
 
 ### Generators
 
@@ -24,8 +39,9 @@ description: 32 commands
 - **Cooldown**: 5 seconds
 - **Available Generators**:
 
-| ad     | affect        | beautiful    | bobross  |
+|        |               |              |          |
 | ------ | ------------- | ------------ | -------- |
+| ad     | affect        | beautiful    | bobross  |
 | color  | confusedstonk | delete       | facepalm |
 | hitler | jail          | jokeoverhead | karaba   |
 | mms    | notstonk      | poutine      | rainbow  |

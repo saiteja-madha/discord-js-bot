@@ -9,6 +9,11 @@ These commands can only be used by members who have **MANAGE_SERVER** permission
 - **Description**: Set bot prefix
 - **Usage**: `!setprefix <newPrefix>`
 
+### Embed
+
+- **Description**: Send an embed message
+- **Usage**: `!embed <#channel>`
+
 ### Automoderation
 
 {% hint style="info" %}

@@ -90,8 +90,14 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import("discord.js").Message | import("discord.js").CommandInteraction} message
+ * @param {import("discord.js").Role} role
+ * @param {import("@models/Guild")} settings
+ */
 async function setAutoRole({ guild }, role, settings) {
   if (role) {
+    if (role.id === guild.roles.everyone.id) return "You cannot set `@everyone` as the autorole";
     if (!guild.members.me.permissions.has("ManageRoles")) return "I don't have the `ManageRoles` permission";
     if (guild.members.me.roles.highest.position < role.position)
       return "I don't have the permissions to assign this role";

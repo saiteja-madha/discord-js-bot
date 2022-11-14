@@ -56,7 +56,7 @@ module.exports = {
     options: [
       {
         name: "status",
-        description: "enable or disable welcome message",
+        description: "enable or disable suggestion status",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
