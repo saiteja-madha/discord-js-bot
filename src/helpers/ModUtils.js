@@ -164,6 +164,7 @@ module.exports = class ModUtils {
    * @param {import('discord.js').BaseGuildTextChannel} channel
    * @param {"ATTACHMENT"|"BOT"|"LINK"|"TOKEN"|"USER"|"ALL"} type
    * @param {number} amount
+   * @param {any} argument
    */
   static async purgeMessages(issuer, channel, type, amount, argument) {
     if (!channel.permissionsFor(issuer).has(["ManageMessages", "ReadMessageHistory"])) {
@@ -182,6 +183,7 @@ module.exports = class ModUtils {
       for (const message of messages.values()) {
         if (toDelete.size >= amount) break;
         if (!message.deletable) continue;
+        if (message.createdTimestamp < Date.now() - 1209600000) continue; // skip messages older than 14 days
 
         if (type === "ALL") {
           toDelete.set(message.id, message);
@@ -209,6 +211,10 @@ module.exports = class ModUtils {
       }
 
       if (toDelete.size === 0) return "NO_MESSAGES";
+      if (toDelete.size === 1 && toDelete.first().author.id === issuer.id) {
+        await toDelete.first().delete();
+        return "NO_MESSAGES";
+      }
 
       const deletedMessages = await channel.bulkDelete(toDelete, true);
       await logModeration(issuer, "", "", "Purge", {
