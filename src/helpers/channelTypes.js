@@ -11,13 +11,13 @@ module.exports = (type) => {
       return "Guild Voice";
     case ChannelType.GuildCategory:
       return "Guild Category";
-    case ChannelType.GuildNews:
-      return "Guild News";
-    case ChannelType.GuildNewsThread:
-      return "Guild News Thread";
-    case ChannelType.GuildPublicThread:
+    case ChannelType.GuildAnnouncement:
+      return "Guild Announcement";
+    case ChannelType.AnnouncementThread:
+      return "Guild Announcement Thread";
+    case ChannelType.PublicThread:
       return "Guild Public Thread";
-    case ChannelType.GuildPrivateThread:
+    case ChannelType.PrivateThread:
       return "Guild Private Thread";
     case ChannelType.GuildStageVoice:
       return "Guild Stage Voice";
