@@ -57,9 +57,9 @@ module.exports = {
     image: "https://icons.iconarchive.com/icons/lawyerwordpress/law/128/Gavel-Law-icon.png",
     emoji: "🔨",
   },
-  ERELA_JS: {
+  MUSIC: {
     name: "Music",
-    enabled: config.ERELA_JS.ENABLED,
+    enabled: config.MUSIC.ENABLED,
     image: "https://icons.iconarchive.com/icons/wwalczyszyn/iwindows/256/Music-Library-icon.png",
     emoji: "🎵",
   },

@@ -6,7 +6,7 @@
   "author": "Sai Teja M",
   "license": "ISC",
   "engines": {
-    "node": ">=16.9.0"
+    "node": ">=16.11.0"
   },
   "scripts": {
     "dev": "nodemon .",
@@ -21,10 +21,13 @@
     "url": "https://github.com/saiteja-madha/discord-js-bot/issues"
   },
   "dependencies": {
-    "@vitalets/google-translate-api": "^8.0.0",
+    "@lavaclient/queue": "^2.1.1",
+    "@lavaclient/spotify": "^3.1.0",
+    "@vitalets/google-translate-api": "^9.0.0",
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
     "common-tags": "^1.8.2",
+    "connect-mongo": "^4.6.0",
     "country-emoji-languages": "^1.0.0",
     "discord-giveaways": "^6.0.1",
     "discord-together": "^1.3.31",
@@ -32,18 +35,14 @@
     "dotenv": "^16.0.2",
     "ejs": "^3.1.8",
     "enhanced-ms": "^1.0.2",
-    "erela.js": "github:menudocs/erela.js#build",
-    "erela.js-deezer": "^1.0.7",
-    "erela.js-facebook": "^1.0.4",
-    "erela.js-spotify": "^1.2.0",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "fixedsize-map": "^1.0.1",
     "fs": "0.0.2",
     "iso-639-1": "^2.1.15",
+    "lavaclient": "^4.1.1",
     "module-alias": "^2.2.2",
     "moment": "^2.29.4",
-    "connect-mongo": "^4.6.0",
     "mongoose": "^6.5.0",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.6.1",
@@ -67,7 +66,7 @@
   "devDependencies": {
     "eslint": "^8.23.0",
     "eslint-plugin-jsdoc": "^39.3.6",
-    "node": "^16.9.0",
+    "node": "^16.11.0",
     "nodemon": "^2.0.19",
     "prettier": "2.7.1"
   },

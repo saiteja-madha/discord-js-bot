@@ -7,7 +7,7 @@ const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
   name: "queue",
   description: "displays the current music queue",
-  category: "ERELA_JS",
+  category: "MUSIC",
   botPermissions: ["EmbedLinks"],
   command: {
     enabled: true,
@@ -38,8 +38,12 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
+ * @param {number} pgNo
+ */
 function getQueue({ client, guild }, pgNo) {
-  const player = client.erelaManager.get(guild.id);
+  const player = client.musicManager.getPlayer(guild.id);
   if (!player) return "🚫 There is no music playing in this guild.";
 
   const queue = player.queue;
@@ -52,13 +56,13 @@ function getQueue({ client, guild }, pgNo) {
   const end = page * multiple;
   const start = end - multiple;
 
-  const tracks = queue.slice(start, end);
+  const tracks = queue.tracks.slice(start, end);
 
   if (queue.current) embed.addFields({ name: "Current", value: `[${queue.current.title}](${queue.current.uri})` });
   if (!tracks.length) embed.setDescription(`No tracks in ${page > 1 ? `page ${page}` : "the queue"}.`);
   else embed.setDescription(tracks.map((track, i) => `${start + ++i} - [${track.title}](${track.uri})`).join("\n"));
 
-  const maxPages = Math.ceil(queue.length / multiple);
+  const maxPages = Math.ceil(queue.tracks.length / multiple);
 
   embed.setFooter({ text: `Page ${page > maxPages ? maxPages : page} of ${maxPages}` });
 

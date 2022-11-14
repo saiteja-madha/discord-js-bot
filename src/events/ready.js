@@ -9,8 +9,8 @@ module.exports = async (client) => {
   client.logger.success(`Logged in as ${client.user.tag}! (${client.user.id})`);
 
   // Initialize Music Manager
-  if (client.config.ERELA_JS.ENABLED) {
-    client.erelaManager.init(client.user.id);
+  if (client.config.MUSIC.ENABLED) {
+    client.musicManager.connect(client.user.id);
     client.logger.success("Music Manager initialized");
   }
 

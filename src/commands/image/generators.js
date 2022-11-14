@@ -8,26 +8,27 @@ const availableGenerators = [
   "affect",
   "beautiful",
   "bobross",
-  "color",
+  "challenger",
   "confusedstonk",
   "delete",
+  "dexter",
   "facepalm",
   "hitler",
   "jail",
   "jokeoverhead",
   "karaba",
+  "kyon-gun",
   "mms",
   "notstonk",
   "poutine",
-  "rainbow",
   "rip",
   "shit",
   "stonk",
-  "tatoo",
+  "tattoo",
   "thomas",
   "trash",
   "wanted",
-  "wasted",
+  "worthless",
 ];
 
 /**
@@ -36,7 +37,7 @@ const availableGenerators = [
 module.exports = {
   name: "generator",
   description: "generates a meme for the provided image",
-  cooldown: 5,
+  cooldown: 1,
   category: "IMAGE",
   botPermissions: ["EmbedLinks", "AttachFiles"],
   command: {
@@ -73,7 +74,11 @@ module.exports = {
 
     // use invoke as an endpoint
     const url = getGenerator(data.invoke.toLowerCase(), image);
-    const response = await getBuffer(url);
+    const response = await getBuffer(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+      },
+    });
 
     if (!response.success) return message.safeReply("Failed to generate image");
 
@@ -98,7 +103,11 @@ module.exports = {
     if (!image) image = author.displayAvatarURL({ size: 256, extension: "png" });
 
     const url = getGenerator(generator, image);
-    const response = await getBuffer(url);
+    const response = await getBuffer(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+      },
+    });
 
     if (!response.success) return interaction.followUp("Failed to generate image");
 
