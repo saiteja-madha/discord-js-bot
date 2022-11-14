@@ -7,7 +7,7 @@ const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
   name: "loop",
   description: "loops the song or queue",
-  category: "ERELA_JS",
+  category: "MUSIC",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -50,18 +50,22 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
+ * @param {"queue"|"track"} type
+ */
 function toggleLoop({ client, guildId }, type) {
-  const player = client.erelaManager.get(guildId);
+  const player = client.musicManager.getPlayer(guildId);
 
   // track
   if (type === "track") {
-    player.setTrackRepeat(!player.trackRepeat);
+    player.queue.setLoop(2);
     return `Track loop ${player.trackRepeat ? "enabled" : "disabled"}`;
   }
 
   // queue
   else if (type === "queue") {
-    player.setQueueRepeat(!player.queueRepeat);
+    player.queue.setLoop(1);
     return `Queue loop ${player.queueRepeat ? "enabled" : "disabled"}`;
   }
 }

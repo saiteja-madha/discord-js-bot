@@ -9,7 +9,7 @@ const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
   name: "seek",
   description: "sets the playing track's position to the specified position",
-  category: "ERELA_JS",
+  category: "MUSIC",
   validations: musicValidations,
   command: {
     enabled: true,
@@ -40,11 +40,15 @@ module.exports = {
   },
 };
 
+/**
+ * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
+ * @param {number} time
+ */
 function seekTo({ client, guildId }, time) {
-  const player = client.erelaManager?.get(guildId);
+  const player = client.musicManager?.getPlayer(guildId);
   const seekTo = durationToMillis(time);
 
-  if (seekTo > player.queue.current.duration) {
+  if (seekTo > player.queue.current.length) {
     return "The duration you provide exceeds the duration of the current track";
   }
 
