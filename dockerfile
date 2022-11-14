@@ -9,6 +9,6 @@ RUN npm start
 
 COPY . .
 
-EXPOSE 8080 8081 8082 8083 8084 8085 8087 8088 8089 449 
+EXPOSE 8080-8089 449
 
 CMD [ "node", "bot.js" ]
