@@ -244,7 +244,7 @@ async function getStatus(settings, guild) {
   `;
 
   const embed = new EmbedBuilder()
-    .setAuthor({ name: "Automod Configuration", icon_url: guild.iconURL() })
+    .setAuthor({ name: "Automod Configuration", iconURL: guild.iconURL() })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(desc)
     .addFields(
