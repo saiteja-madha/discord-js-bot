@@ -117,6 +117,13 @@ async function embedSetup(channel, member) {
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("color")
+            .setLabel("Embed Color")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
       ],
     })
   );
@@ -137,9 +144,11 @@ async function embedSetup(channel, member) {
   const author = modal.fields.getTextInputValue("author");
   const description = modal.fields.getTextInputValue("description");
   const footer = modal.fields.getTextInputValue("footer");
+  const color = modal.fields.getTextInputValue("color");
 
   const embed = new EmbedBuilder();
   if (title) embed.setTitle(title);
+  if (color) embed.setColor(color);
   if (author) embed.setAuthor({ name: author });
   if (description) embed.setDescription(description);
   if (footer) embed.setFooter({ text: footer });
