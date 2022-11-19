@@ -118,7 +118,7 @@ async function embedSetup(channel, member) {
             .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
-          new TextInputBuilder()
+          new TextInputBuilder() 
             .setCustomId("color")
             .setLabel("Embed Color")
             .setStyle(TextInputStyle.Short)
