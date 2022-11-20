@@ -55,6 +55,6 @@ async function kick(issuer, target, reason) {
   const response = await kickTarget(issuer, target, reason);
   if (typeof response === "boolean") return `${target.user.tag} is kicked!`;
   if (response === "BOT_PERM") return `I do not have permission to warn ${target.user.tag}`;
-  else if (response === "MEMBER_PERM") return `You do not have permission to warn ${target.user.tag}`;
+  else if (response === "MEMBER_PERM") return `You do not have permission to kick ${target.user.tag}`;
   else return `Failed to warn ${target.user.tag}`;
 }
