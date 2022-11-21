@@ -24,7 +24,7 @@ module.exports = {
                 name: "query",
                 type: ApplicationCommandOptionType.String,
                 description: "find lyric of the song",
-                require: true,
+                required: true,
             },
         ],
     },
