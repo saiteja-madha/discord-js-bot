@@ -224,7 +224,7 @@ async function embedSetup(channel, member) {
 
       const name = modal.fields.getTextInputValue("name");
       const value = modal.fields.getTextInputValue("value");
-      let inline = modal.fields.getTextInputValue("inline");
+      let inline = modal.fields.getTextInputValue("inline").toLowerCase();
 
       if (inline === "true") inline = true;
       else if (inline === "false") inline = false;
@@ -238,13 +238,13 @@ async function embedSetup(channel, member) {
     // remove field
     else if (interaction.customId === "EMBED_FIELD_REM") {
       const fields = embed.data.fields;
-      if (fields.length > 0) {
+      if (fields) {
         fields.pop();
+        embed.setFields(fields);
         interaction.reply({ content: "Field removed", ephemeral: true});
       } else { 
         interaction.reply({ content: "There are no fields to remove", ephemeral: true});
       }
-      embed.setFields(fields);
     }
 
     // done
