@@ -33,7 +33,7 @@ module.exports.launch = async (client) => {
     .use(
       session({
         secret: process.env.SESSION_PASSWORD,
-        cookie: { maxAge: new Date(Date.now() + 12096e5) },
+        cookie: { maxAge: 336 * 60 * 60 * 1000 },
         name: "djs_connection_cookie",
         resave: true,
         saveUninitialized: false,
