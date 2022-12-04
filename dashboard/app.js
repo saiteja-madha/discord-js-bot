@@ -21,6 +21,8 @@ module.exports.launch = async (client) => {
   client.states = {};
   client.config = config;
 
+  const db = await mongoose.initializeMongoose();
+
   /* App configuration */
   app
     .use(express.json()) // For post methods
@@ -38,9 +40,9 @@ module.exports.launch = async (client) => {
         resave: true,
         saveUninitialized: false,
         store: MongoStore.create({
-          client: await mongoose.initializeMongoose(),
-          dbName: process.env.SESSION_DATABASE,
-          collectionName: process.env.SESSION_COLLECTION,
+          client: db.getClient(),
+          dbName: db.name,
+          collectionName: 'sessions',
           stringify: false,
           autoRemove: "interval",
           autoRemoveInterval: 1
