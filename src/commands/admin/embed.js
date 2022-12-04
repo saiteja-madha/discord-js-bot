@@ -227,7 +227,12 @@ async function embedSetup(channel, member) {
     // remove field
     else if (interaction.customId === "EMBED_FIELD_REM") {
       const fields = embed.data.fields;
-      fields.pop();
+      if (fields.length > 0) {
+        fields.pop();
+        interaction.reply({ content: "Field removed", ephemeral: true});
+      } else { 
+        interaction.reply({ content: "There are no fields to remove", ephemeral: true});
+      }
       embed.setFields(fields);
     }
 
