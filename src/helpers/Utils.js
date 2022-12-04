@@ -1,3 +1,4 @@
+const { COLORS } = require("@src/data.json");
 const { readdirSync, lstatSync } = require("fs");
 const { join, extname } = require("path");
 const permissions = require("./permissions");
@@ -37,6 +38,16 @@ module.exports = class Utils {
    */
   static isHex(text) {
     return /^#[0-9A-F]{6}$/i.test(text);
+  }
+
+  /**
+   * Checks if a string is a valid Hex color
+   * @param {string} text
+   */
+  static isValidColor(text) {
+    if (COLORS.indexOf(text) > -1) {
+      return true
+    } else return false;
   }
 
   /**

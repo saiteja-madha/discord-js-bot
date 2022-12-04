@@ -10,6 +10,7 @@ const {
   ComponentType,
   EmbedBuilder,
 } = require("discord.js");
+const { isValidColor, isHex } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}
@@ -112,6 +113,13 @@ async function embedSetup(channel, member) {
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
+            .setCustomId("color")
+            .setLabel("Embed Color")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
             .setCustomId("footer")
             .setLabel("Embed Footer")
             .setStyle(TextInputStyle.Short)
@@ -136,6 +144,7 @@ async function embedSetup(channel, member) {
   const title = modal.fields.getTextInputValue("title");
   const author = modal.fields.getTextInputValue("author");
   const description = modal.fields.getTextInputValue("description");
+  const color = modal.fields.getTextInputValue("color");
   const footer = modal.fields.getTextInputValue("footer");
 
   if (!title && !author && !description && !footer) return sentMsg.edit({ content: "You can't send an empty embed!", components: [] });
@@ -145,6 +154,8 @@ async function embedSetup(channel, member) {
   if (author) embed.setAuthor({ name: author });
   if (description) embed.setDescription(description);
   if (footer) embed.setFooter({ text: footer });
+  if (color && isValidColor(color) || color && isHex(color)) embed.setColor(color);
+  
 
   // add/remove field button
   const buttonRow = new ActionRowBuilder().addComponents(
