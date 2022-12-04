@@ -138,7 +138,7 @@ async function embedSetup(channel, member) {
   const description = modal.fields.getTextInputValue("description");
   const footer = modal.fields.getTextInputValue("footer");
 
-  if (!title || !author || !description || !footer) return sentMsg.edit({ content: "You can't send an empty embed!", components: [] });
+  if (!title && !author && !description && !footer) return sentMsg.edit({ content: "You can't send an empty embed!", components: [] });
 
   const embed = new EmbedBuilder();
   if (title) embed.setTitle(title);
