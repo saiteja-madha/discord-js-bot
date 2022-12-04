@@ -11,6 +11,8 @@ module.exports = {
       });
 
       success("Mongoose: Database connection established");
+
+      return mongoose.connection.getClient()
     } catch (err) {
       error("Mongoose: Failed to connect to database", err);
       process.exit(1);
