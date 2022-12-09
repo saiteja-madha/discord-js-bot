@@ -3,7 +3,7 @@ const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 const {
   EmbedBuilder,
   ActionRowBuilder,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   Message,
   ButtonBuilder,
   CommandInteraction,
@@ -99,7 +99,10 @@ async function getHelpMenu({ client, guild }) {
   }
 
   const menuRow = new ActionRowBuilder().addComponents(
-    new SelectMenuBuilder().setCustomId("help-menu").setPlaceholder("Choose the command category").addOptions(options)
+    new StringSelectMenuBuilder()
+      .setCustomId("help-menu")
+      .setPlaceholder("Choose the command category")
+      .addOptions(options)
   );
 
   // Buttons Row

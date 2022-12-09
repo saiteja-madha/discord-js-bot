@@ -1,7 +1,7 @@
 const {
   EmbedBuilder,
   ActionRowBuilder,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   ApplicationCommandOptionType,
   ComponentType,
 } = require("discord.js");
@@ -158,7 +158,7 @@ async function search({ member, guild, channel }, query) {
       }));
 
       const menuRow = new ActionRowBuilder().addComponents(
-        new SelectMenuBuilder()
+        new StringSelectMenuBuilder()
           .setCustomId("search-results")
           .setPlaceholder("Choose Search Results")
           .setMaxValues(max)
