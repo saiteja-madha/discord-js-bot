@@ -23,7 +23,6 @@ client.loadEvents("src/events");
 process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
 (async () => {
-
   // check for updates
   await checkForUpdates();
 
@@ -32,7 +31,7 @@ process.on("unhandledRejection", (err) => client.logger.error(`Unhandled excepti
     client.logger.log("Launching dashboard");
     try {
       const { launch } = require("@root/dashboard/app");
-      
+
       // let the dashboard initialize the database
       await launch(client);
     } catch (ex) {

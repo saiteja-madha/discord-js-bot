@@ -8,7 +8,7 @@ module.exports.launch = async (client) => {
   const express = require("express"),
     session = require("express-session"),
     MongoStore = require("connect-mongo"),
-    mongoose = require('@src/database/mongoose'),
+    mongoose = require("@src/database/mongoose"),
     path = require("path"),
     app = express();
 
@@ -42,11 +42,11 @@ module.exports.launch = async (client) => {
         store: MongoStore.create({
           client: db.getClient(),
           dbName: db.name,
-          collectionName: 'sessions',
+          collectionName: "sessions",
           stringify: false,
           autoRemove: "interval",
-          autoRemoveInterval: 1
-          })
+          autoRemoveInterval: 1,
+        }),
       })
     ) // Set the express session password and configuration
     .use(async function (req, res, next) {
