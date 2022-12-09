@@ -100,7 +100,7 @@ async function waitForBan(issuer, reason, sent) {
     filter: (m) => m.member.id === issuer.id && m.customId === "unban-menu" && sent.id === m.message.id,
     time: 20000,
     max: 1,
-    componentType: ComponentType.SelectMenu,
+    componentType: ComponentType.StringSelect,
   });
 
   //

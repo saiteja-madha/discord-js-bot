@@ -192,7 +192,7 @@ async function handleTicketOpen(interaction) {
     await interaction.followUp({ content: "Please choose a ticket category", components: [menuRow] });
     const res = await interaction.channel
       .awaitMessageComponent({
-        componentType: ComponentType.SelectMenu,
+        componentType: ComponentType.StringSelect,
         time: 60 * 1000,
       })
       .catch((err) => {

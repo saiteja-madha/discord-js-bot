@@ -179,7 +179,7 @@ async function search({ member, guild, channel }, query) {
         const response = await channel.awaitMessageComponent({
           filter: (reactor) => reactor.message.id === sentMsg.id && reactor.user.id === member.id,
           idle: 30 * 1000,
-          componentType: ComponentType.SelectMenu,
+          componentType: ComponentType.StringSelect,
         });
 
         await sentMsg.delete();
