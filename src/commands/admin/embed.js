@@ -125,13 +125,6 @@ async function embedSetup(channel, member) {
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
-        new ActionRowBuilder().addComponents(
-          new TextInputBuilder()
-            .setCustomId("color")
-            .setLabel("Embed Color")
-            .setStyle(TextInputStyle.Short)
-            .setRequired(false)
-        ),
       ],
     })
   );
@@ -151,20 +144,18 @@ async function embedSetup(channel, member) {
   const title = modal.fields.getTextInputValue("title");
   const author = modal.fields.getTextInputValue("author");
   const description = modal.fields.getTextInputValue("description");
-  const color = modal.fields.getTextInputValue("color");
   const footer = modal.fields.getTextInputValue("footer");
   const color = modal.fields.getTextInputValue("color");
 
-  if (!title && !author && !description && !footer) return sentMsg.edit({ content: "You can't send an empty embed!", components: [] });
+  if (!title && !author && !description && !footer)
+    return sentMsg.edit({ content: "You can't send an empty embed!", components: [] });
 
   const embed = new EmbedBuilder();
   if (title) embed.setTitle(title);
-  if (color) embed.setColor(color);
   if (author) embed.setAuthor({ name: author });
   if (description) embed.setDescription(description);
   if (footer) embed.setFooter({ text: footer });
-  if (color && isValidColor(color) || color && isHex(color)) embed.setColor(color);
-  
+  if ((color && isValidColor(color)) || (color && isHex(color))) embed.setColor(color);
 
   // add/remove field button
   const buttonRow = new ActionRowBuilder().addComponents(
@@ -250,9 +241,9 @@ async function embedSetup(channel, member) {
       if (fields) {
         fields.pop();
         embed.setFields(fields);
-        interaction.reply({ content: "Field removed", ephemeral: true});
-      } else { 
-        interaction.reply({ content: "There are no fields to remove", ephemeral: true});
+        interaction.reply({ content: "Field removed", ephemeral: true });
+      } else {
+        interaction.reply({ content: "There are no fields to remove", ephemeral: true });
       }
     }
 
