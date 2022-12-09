@@ -101,6 +101,8 @@ async function play({ member, guild, channel }, query) {
         default:
           return "🚫 An error occurred while searching for the song";
       }
+
+      if (!tracks) guild.client.logger.debug({ query, item });
     } else {
       const res = await guild.client.musicManager.rest.loadTracks(
         /^https?:\/\//.test(query) ? query : `${search_prefix[MUSIC.DEFAULT_SOURCE]}:${query}`
@@ -126,14 +128,18 @@ async function play({ member, guild, channel }, query) {
         }
 
         default:
-          guild.client.logger.debug("Unknown loadType", res.loadType);
+          guild.client.logger.debug("Unknown loadType", res);
           return "🚫 An error occurred while searching for the song";
       }
+
+      if (!tracks) guild.client.logger.debug({ query, res });
     }
   } catch (error) {
     guild.client.logger.error("Search Exception", error);
     return "🚫 An error occurred while searching for the song";
   }
+
+  if (!tracks) return "🚫 An error occurred while searching for the song";
 
   if (tracks.length === 1) {
     const track = tracks[0];
