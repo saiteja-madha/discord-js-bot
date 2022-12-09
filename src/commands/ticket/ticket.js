@@ -167,7 +167,7 @@ module.exports = {
       if (args.length < 2) return message.safeReply("Please provide a number");
       const limit = args[1];
       if (isNaN(limit)) return message.safeReply("Please provide a number input");
-      response = await setupLimit(message, limit, data.settings);
+      response = await setupLimit(limit, data.settings);
     }
 
     // Close ticket
@@ -236,7 +236,7 @@ module.exports = {
     // Limit
     else if (sub === "limit") {
       const limit = interaction.options.getInteger("amount");
-      response = await setupLimit(interaction, limit, data.settings);
+      response = await setupLimit(limit, data.settings);
     }
 
     // Close
