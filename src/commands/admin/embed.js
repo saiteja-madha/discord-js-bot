@@ -10,6 +10,7 @@ const {
   ComponentType,
   EmbedBuilder,
 } = require("discord.js");
+const { isValidColor, isHex } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}
@@ -112,6 +113,13 @@ async function embedSetup(channel, member) {
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
+            .setCustomId("color")
+            .setLabel("Embed Color")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
             .setCustomId("footer")
             .setLabel("Embed Footer")
             .setStyle(TextInputStyle.Short)
@@ -143,8 +151,11 @@ async function embedSetup(channel, member) {
   const title = modal.fields.getTextInputValue("title");
   const author = modal.fields.getTextInputValue("author");
   const description = modal.fields.getTextInputValue("description");
+  const color = modal.fields.getTextInputValue("color");
   const footer = modal.fields.getTextInputValue("footer");
   const color = modal.fields.getTextInputValue("color");
+
+  if (!title && !author && !description && !footer) return sentMsg.edit({ content: "You can't send an empty embed!", components: [] });
 
   const embed = new EmbedBuilder();
   if (title) embed.setTitle(title);
@@ -152,6 +163,8 @@ async function embedSetup(channel, member) {
   if (author) embed.setAuthor({ name: author });
   if (description) embed.setDescription(description);
   if (footer) embed.setFooter({ text: footer });
+  if (color && isValidColor(color) || color && isHex(color)) embed.setColor(color);
+  
 
   // add/remove field button
   const buttonRow = new ActionRowBuilder().addComponents(
@@ -161,7 +174,7 @@ async function embedSetup(channel, member) {
   );
 
   await sentMsg.edit({
-    content: "Please add fields using the buttons below. Click done when you are done",
+    content: "Please add fields using the buttons below. Click done when you are done.",
     embeds: [embed],
     components: [buttonRow],
   });
@@ -220,7 +233,7 @@ async function embedSetup(channel, member) {
 
       const name = modal.fields.getTextInputValue("name");
       const value = modal.fields.getTextInputValue("value");
-      let inline = modal.fields.getTextInputValue("inline");
+      let inline = modal.fields.getTextInputValue("inline").toLowerCase();
 
       if (inline === "true") inline = true;
       else if (inline === "false") inline = false;
@@ -234,8 +247,13 @@ async function embedSetup(channel, member) {
     // remove field
     else if (interaction.customId === "EMBED_FIELD_REM") {
       const fields = embed.data.fields;
-      fields.pop();
-      embed.setFields(fields);
+      if (fields) {
+        fields.pop();
+        embed.setFields(fields);
+        interaction.reply({ content: "Field removed", ephemeral: true});
+      } else { 
+        interaction.reply({ content: "There are no fields to remove", ephemeral: true});
+      }
     }
 
     // done
