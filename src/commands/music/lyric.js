@@ -8,59 +8,59 @@ const BASE_URL = "https://some-random-api.ml/lyrics";
  * @type {import("@structures/Command")}
  */
 module.exports = {
-    name: "lyric",
-    description: "find lyric of the song",
-    category: "MUSIC",
-    botPermissions: ["EmbedLinks"],
-    command: {
-        enabled: true,
-        minArgsCount: 1,
-        usage: "<Song Title - singer>",
-    },
-    slashCommand: {
-        enabled: true,
-        options: [
-            {
-                name: "query",
-                type: ApplicationCommandOptionType.String,
-                description: "find lyric of the song",
-                required: true,
-            },
-        ],
-    },
+  name: "lyric",
+  description: "find lyric of the song",
+  category: "MUSIC",
+  botPermissions: ["EmbedLinks"],
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    usage: "<Song Title - singer>",
+  },
+  slashCommand: {
+    enabled: true,
+    options: [
+      {
+        name: "query",
+        type: ApplicationCommandOptionType.String,
+        description: "find lyric of the song",
+        required: true,
+      },
+    ],
+  },
 
-    async messageRun(message, args) {
-        const choise = args.join(" ");
-        if(!choise) {
-            return message.safeReply("Invalid Lyric selected.");
-        };
-        const response = await getLyric(message.author, choise);
-        return message.safeReply(response);
-    },
+  async messageRun(message, args) {
+    const choise = args.join(" ");
+    if (!choise) {
+      return message.safeReply("Invalid Lyric selected.");
+    }
+    const response = await getLyric(message.author, choise);
+    return message.safeReply(response);
+  },
 
-    async interactionRun(interaction) {
-        const choise = interaction.options.getString("query");
-        const response = await getLyric(interaction.user, choise);
-        await interaction.followUp(response)
-    },
+  async interactionRun(interaction) {
+    const choise = interaction.options.getString("query");
+    const response = await getLyric(interaction.user, choise);
+    await interaction.followUp(response);
+  },
 };
 
 async function getLyric(user, choise) {
-    const lyric = await getJson(`${BASE_URL}?title=${choise}`);
-    if(!lyric.success) return MESSAGES.API_ERROR;
+  const lyric = await getJson(`${BASE_URL}?title=${choise}`);
+  if (!lyric.success) return MESSAGES.API_ERROR;
 
-    const thumbnail = lyric.data?.thumbnail.genius;
-    const author = lyric.data?.author;
-    const lyrics = lyric.data?.lyrics;
-    const title = lyric.data?.title;
+  const thumbnail = lyric.data?.thumbnail.genius;
+  const author = lyric.data?.author;
+  const lyrics = lyric.data?.lyrics;
+  const title = lyric.data?.title;
 
-    const embed = new EmbedBuilder();
-    embed
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setTitle(`${author} - ${title}`)
-      .setThumbnail(thumbnail)
-      .setDescription(lyrics)
-      .setFooter({ text: `Request By: ${user.tag}` });
+  const embed = new EmbedBuilder();
+  embed
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setTitle(`${author} - ${title}`)
+    .setThumbnail(thumbnail)
+    .setDescription(lyrics)
+    .setFooter({ text: `Request By: ${user.tag}` });
 
-    return { embeds: [embed] };
+  return { embeds: [embed] };
 }

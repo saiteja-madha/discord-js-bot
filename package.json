@@ -10,7 +10,8 @@
   },
   "scripts": {
     "dev": "nodemon .",
-    "start": "node ."
+    "start": "node .",
+    "format": "prettier --write src"
   },
   "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
   "repository": {

@@ -46,7 +46,7 @@ module.exports = class Utils {
    */
   static isValidColor(text) {
     if (COLORS.indexOf(text) > -1) {
-      return true
+      return true;
     } else return false;
   }
 
@@ -83,10 +83,12 @@ module.exports = class Utils {
    * @param {string} duration
    */
   static durationToMillis(duration) {
-    return duration
-      .split(":")
-      .map(Number)
-      .reduce((acc, curr) => curr + acc * 60) * 1000;
+    return (
+      duration
+        .split(":")
+        .map(Number)
+        .reduce((acc, curr) => curr + acc * 60) * 1000
+    );
   }
 
   /**
