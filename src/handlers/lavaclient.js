@@ -43,14 +43,18 @@ module.exports = (client) => {
 
   lavaclient.on("nodeTrackStart", (_node, queue, song) => {
     const fields = [];
-    const identifier = song.identifier;
-    const thumbnail = `https://img.youtube.com/vi/${identifier}/hqdefault.jpg`;
+
     const embed = new EmbedBuilder()
       .setAuthor({ name: "Now Playing" })
       .setColor(client.config.EMBED_COLORS.BOT_EMBED)
       .setDescription(`[${song.title}](${song.uri})`)
-      .setFooter({ text: `Requested By: ${song.requester}` })
-      .setThumbnail(thumbnail);
+      .setFooter({ text: `Requested By: ${song.requester}` });
+
+    if (song.sourceName === "youtube") {
+      const identifier = song.identifier;
+      const thumbnail = `https://img.youtube.com/vi/${identifier}/hqdefault.jpg`;
+      embed.setThumbnail(thumbnail);
+    }
 
     fields.push({
       name: "Song Duration",
