@@ -183,6 +183,7 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
     }
 
     if (data.channels?.length) {
+      if (typeof data.channels === "string") data.channels = [data.channels];
       settings.automod.wh_channels = data.channels
         .map((ch) => guild.channels.cache.find((c) => "#" + c.name === ch)?.id)
         .filter((c) => c);

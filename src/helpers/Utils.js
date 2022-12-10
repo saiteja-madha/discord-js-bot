@@ -1,3 +1,4 @@
+const { COLORS } = require("@src/data.json");
 const { readdirSync, lstatSync } = require("fs");
 const { join, extname } = require("path");
 const permissions = require("./permissions");
@@ -40,6 +41,16 @@ module.exports = class Utils {
   }
 
   /**
+   * Checks if a string is a valid Hex color
+   * @param {string} text
+   */
+  static isValidColor(text) {
+    if (COLORS.indexOf(text) > -1) {
+      return true;
+    } else return false;
+  }
+
+  /**
    * Returns hour difference between two dates
    * @param {Date} dt2
    * @param {Date} dt1
@@ -72,10 +83,12 @@ module.exports = class Utils {
    * @param {string} duration
    */
   static durationToMillis(duration) {
-    return duration
-      .split(":")
-      .map(Number)
-      .reduce((acc, curr) => curr + acc * 60) * 1000;
+    return (
+      duration
+        .split(":")
+        .map(Number)
+        .reduce((acc, curr) => curr + acc * 60) * 1000
+    );
   }
 
   /**

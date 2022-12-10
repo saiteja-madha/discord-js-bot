@@ -1,5 +1,10 @@
 const { unBanTarget } = require("@helpers/ModUtils");
-const { ActionRowBuilder, SelectMenuBuilder, ApplicationCommandOptionType, ComponentType } = require("discord.js");
+const {
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+  ApplicationCommandOptionType,
+  ComponentType,
+} = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -84,7 +89,7 @@ async function getMatchingBans(guild, match) {
   }
 
   const menuRow = new ActionRowBuilder().addComponents(
-    new SelectMenuBuilder().setCustomId("unban-menu").setPlaceholder("Choose a user to unban").addOptions(options)
+    new StringSelectMenuBuilder().setCustomId("unban-menu").setPlaceholder("Choose a user to unban").addOptions(options)
   );
 
   return { content: "Please select a user you wish to unban", components: [menuRow] };
@@ -100,7 +105,7 @@ async function waitForBan(issuer, reason, sent) {
     filter: (m) => m.member.id === issuer.id && m.customId === "unban-menu" && sent.id === m.message.id,
     time: 20000,
     max: 1,
-    componentType: ComponentType.SelectMenu,
+    componentType: ComponentType.StringSelect,
   });
 
   //

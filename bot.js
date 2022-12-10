@@ -23,9 +23,6 @@ client.loadEvents("src/events");
 process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
 (async () => {
-  // initialize the database
-  await initializeMongoose();
-
   // check for updates
   await checkForUpdates();
 
@@ -34,10 +31,15 @@ process.on("unhandledRejection", (err) => client.logger.error(`Unhandled excepti
     client.logger.log("Launching dashboard");
     try {
       const { launch } = require("@root/dashboard/app");
+
+      // let the dashboard initialize the database
       await launch(client);
     } catch (ex) {
       client.logger.error("Failed to launch dashboard", ex);
     }
+  } else {
+    // initialize the database
+    await initializeMongoose();
   }
 
   // start the client

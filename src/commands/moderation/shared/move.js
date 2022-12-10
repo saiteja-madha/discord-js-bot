@@ -3,7 +3,7 @@ const { moveTarget } = require("@helpers/ModUtils");
 module.exports = async ({ member }, target, reason, channel) => {
   const response = await moveTarget(member, target, reason, channel);
   if (typeof response === "boolean") {
-    return `${target.user.tag} is deafened in this server`;
+    return `${target.user.tag} was successfully moved to: ${channel}`;
   }
   if (response === "MEMBER_PERM") {
     return `You do not have permission to disconnect ${target.user.tag}`;

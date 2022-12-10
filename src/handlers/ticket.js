@@ -4,7 +4,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
   ChannelType,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   ComponentType,
 } = require("discord.js");
 const { TICKET } = require("@root/config.js");
@@ -183,7 +183,7 @@ async function handleTicketOpen(interaction) {
     const options = [];
     settings.ticket.categories.forEach((cat) => options.push({ label: cat.name, value: cat.name }));
     const menuRow = new ActionRowBuilder().addComponents(
-      new SelectMenuBuilder()
+      new StringSelectMenuBuilder()
         .setCustomId("ticket-menu")
         .setPlaceholder("Choose the ticket category")
         .addOptions(options)
@@ -192,7 +192,7 @@ async function handleTicketOpen(interaction) {
     await interaction.followUp({ content: "Please choose a ticket category", components: [menuRow] });
     const res = await interaction.channel
       .awaitMessageComponent({
-        componentType: ComponentType.SelectMenu,
+        componentType: ComponentType.StringSelect,
         time: 60 * 1000,
       })
       .catch((err) => {

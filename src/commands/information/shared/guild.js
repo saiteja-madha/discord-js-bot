@@ -18,7 +18,7 @@ module.exports = async (guild) => {
     (c) => c.type === ChannelType.GuildVoice || c.type === ChannelType.GuildStageVoice
   ).size;
   const threadChannels = channels.cache.filter(
-    (c) => c.type === ChannelType.GuildPrivateThread || c.type === ChannelType.GuildPublicThread
+    (c) => c.type === ChannelType.PrivateThread || c.type === ChannelType.PublicThread
   ).size;
 
   const memberCache = guild.members.cache;
@@ -105,7 +105,7 @@ module.exports = async (guild) => {
       }
     );
 
-  if (guild.splashURL()) embed.setImage(guild.splashURL({extension: "png", size: 256}));
+  if (guild.splashURL()) embed.setImage(guild.splashURL({ extension: "png", size: 256 }));
 
   return { embeds: [embed] };
 };
