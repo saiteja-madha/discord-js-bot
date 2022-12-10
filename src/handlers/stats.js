@@ -96,7 +96,7 @@ module.exports = {
     if (!newState.member) return;
 
     const member = await newState.member.fetch().catch(() => {});
-    if (member.user.bot) return;
+    if (!member || member.user.bot) return;
 
     // Member joined a voice channel
     if (!oldChannel && newChannel) {
