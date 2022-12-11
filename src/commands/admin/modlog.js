@@ -42,7 +42,12 @@ module.exports = {
   },
 
   async interactionRun(interaction, data) {
-    const response = await setChannel(interaction.options.getChannel("channel"), data.settings);
+    const channel = interaction.options.getChannel("channel")
+    const settings = data.settings
+    if (!channel && !settings.modlog_channel) {
+      return interaction.followUp({ content: "It is already disabled" })
+    }
+    const response = await setChannel(channel, settings);
     return interaction.followUp(response);
   },
 };
