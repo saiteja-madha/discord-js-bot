@@ -12,7 +12,7 @@ const leaderboardTypes = ["xp", "invite", "rep"];
 
 module.exports = {
   name: "leaderboard",
-  description: "mostrar la tabla de clasificación de XP",
+  description: "display the XP, invite and rep leaderboard",
   category: "INFORMATION",
   botPermissions: ["EmbedLinks"],
   command: {
@@ -26,7 +26,7 @@ module.exports = {
     options: [
       {
         name: "type",
-        description: "tipo de tabla de clasificación para mostrar",
+        description: "type of leaderboard to display",
         required: true,
         type: ApplicationCommandOptionType.String,
         choices: leaderboardTypes.map((type) => ({
@@ -51,7 +51,7 @@ module.exports = {
         response = await getRepLeaderboard(message.author);
         break;
       default:
-        response = "Tipo de tabla de clasificación no válido. Elija cualquiera `xp` o `invite`";
+        response = "Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
     }
 
     await message.safeReply(response);
@@ -72,7 +72,7 @@ module.exports = {
         response = await getRepLeaderboard(interaction.user);
         break;
       default:
-        response = "Tipo de tabla de clasificación no válido. Elija cualquiera `xp` o `invite`";
+        response = "Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
     }
     await interaction.followUp(response);
   },
