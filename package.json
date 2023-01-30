@@ -24,7 +24,7 @@
   "dependencies": {
     "@lavaclient/queue": "^2.1.1",
     "@lavaclient/spotify": "^3.1.0",
-    "@vitalets/google-translate-api": "^9.0.0",
+    "@vitalets/google-translate-api": "^9.1.0",
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
     "common-tags": "^1.8.2",
@@ -43,11 +43,11 @@
     "lavaclient": "^4.1.1",
     "module-alias": "^2.2.2",
     "moment": "^2.29.4",
-    "mongoose": "^6.8.0",
+    "mongoose": "^6.9.0",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.6.7",
     "os": "^0.1.2",
-    "pino": "^8.7.0",
+    "pino": "^8.8.0",
     "pino-pretty": "^9.1.1",
     "pretty-ms": "^7.0.1",
     "snakecord": "^1.0.9",
@@ -60,15 +60,15 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
     "erlpack": "^0.1.4",
-    "utf-8-validate": "^5.0.10",
+    "utf-8-validate": "^6.0.2",
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "eslint": "^8.29.0",
-    "eslint-plugin-jsdoc": "^39.6.4",
+    "eslint": "^8.33.0",
+    "eslint-plugin-jsdoc": "^39.7.4",
     "node": "^16.11.0",
     "nodemon": "^2.0.20",
-    "prettier": "2.8.1"
+    "prettier": "2.8.3"
   },
   "keywords": [
     "discord",
