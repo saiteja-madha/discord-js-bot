@@ -42,17 +42,17 @@ module.exports = {
   },
 
   async interactionRun(interaction, data) {
-    const channel = interaction.options.getChannel("channel")
-    const settings = data.settings
-    if (!channel && !settings.modlog_channel) {
-      return interaction.followUp({ content: "It is already disabled" })
-    }
-    const response = await setChannel(channel, settings);
+    const channel = interaction.options.getChannel("channel");
+    const response = await setChannel(channel, data.settings);
     return interaction.followUp(response);
   },
 };
 
 async function setChannel(targetChannel, settings) {
+  if (!targetChannel && !settings.modlog_channel) {
+    return "It is already disabled";
+  }
+
   if (targetChannel && !targetChannel.canSendEmbeds()) {
     return "Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";
   }
