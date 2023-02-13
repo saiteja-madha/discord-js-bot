@@ -247,8 +247,8 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     }
 
     data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.welcome.channel_id) {
-      settings.welcome.channel_id = data.channel;
+    if (data.channel !== settings.welcome.channel) {
+      settings.welcome.channel = data.channel;
     }
 
     if (!settings.welcome.enabled) settings.welcome.enabled = true;
@@ -290,8 +290,8 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     }
 
     data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.farewell.channel_id) {
-      settings.farewell.channel_id = data.channel;
+    if (data.channel !== settings.farewell.channel) {
+      settings.farewell.channel = data.channel;
     }
 
     if (!settings.farewell.enabled) settings.farewell.enabled = true;
