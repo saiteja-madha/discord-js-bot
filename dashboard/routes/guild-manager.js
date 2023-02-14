@@ -140,7 +140,7 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
 
   // AUTOMOD CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "automodUpdate")) {
-    if (data.max_strikes != settings.automod.strikes) {
+    if (data.max_strikes && data.max_strikes !== settings.automod.strikes) {
       settings.automod.strikes = data.max_strikes;
     }
 
