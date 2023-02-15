@@ -10,7 +10,7 @@ const { getSettings } = require("@schemas/Guild");
 const { getMember } = require("@schemas/Member");
 const { addModLogToDb } = require("@schemas/ModLog");
 
-const DEFAULT_TIMEOUT_HOURS = 7; //hours
+const DEFAULT_TIMEOUT_HOURS = 24; //hours
 
 const memberInteract = (issuer, target) => {
   const { guild } = issuer;
