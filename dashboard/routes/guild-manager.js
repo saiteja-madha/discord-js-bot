@@ -144,7 +144,7 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
       settings.automod.strikes = data.max_strikes;
     }
 
-    if (data.automod_action !== settings.automod.action) {
+    if (data.automod_action && data.automod_action !== settings.automod.action) {
       settings.automod.action = data.automod_action;
     }
 
