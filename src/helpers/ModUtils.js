@@ -10,7 +10,7 @@ const { getSettings } = require("@schemas/Guild");
 const { getMember } = require("@schemas/Member");
 const { addModLogToDb } = require("@schemas/ModLog");
 
-const DEFAULT_TIMEOUT_LENGTH = 6.048e+8; //milliseconds
+const DEFAULT_TIMEOUT_HOURS = 7; //hours
 
 const memberInteract = (issuer, target) => {
   const { guild } = issuer;
@@ -146,7 +146,7 @@ module.exports = class ModUtils {
   static async addModAction(issuer, target, reason, action) {
     switch (action) {
       case "TIMEOUT":
-        return ModUtils.timeoutTarget(issuer, target, DEFAULT_TIMEOUT_LENGTH, reason);
+        return ModUtils.timeoutTarget(issuer, target, DEFAULT_TIMEOUT_HOURS * 60 * 60 * 1000, reason);
 
       case "KICK":
         return ModUtils.kickTarget(issuer, target, reason);
