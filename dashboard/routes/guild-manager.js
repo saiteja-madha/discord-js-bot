@@ -224,8 +224,16 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
       settings.welcome.content = data.content;
     }
 
+    if(!data.content){
+      settings.welcome.content = data.content;
+    }
+    
     data.description = data.description?.replaceAll(/\r\n/g, "\\n");
     if (data.description && data.description !== settings.welcome.embed?.description) {
+      settings.welcome.embed.description = data.description;
+    }
+    
+    if(!data.description){
       settings.welcome.embed.description = data.description;
     }
 
@@ -233,11 +241,23 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
       settings.welcome.embed.footer = data.footer;
     }
 
+    if(!data.footer){
+      settings.welcome.embed.footer = data.footer;
+    }
+    
     if (data.hexcolor && data.hexcolor !== settings.welcome.embed?.color) {
       settings.welcome.embed.color = data.hexcolor;
     }
-
+    
+    if(!data.hexcolor){
+      settings.welcome.embed.color = data.hexcolor;
+    }
+    
     if (data.image && data.image !== settings.welcome.embed?.image) {
+      settings.welcome.embed.image = data.image;
+    }
+    
+    if(!data.image){
       settings.welcome.embed.image = data.image;
     }
 
@@ -247,8 +267,8 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     }
 
     data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.welcome.channel_id) {
-      settings.welcome.channel_id = data.channel;
+    if (data.channel !== settings.welcome.channel) {
+      settings.welcome.channel = data.channel;
     }
 
     if (!settings.welcome.enabled) settings.welcome.enabled = true;
@@ -266,21 +286,41 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     if (data.content && data.content !== settings.farewell.content) {
       settings.farewell.content = data.content;
     }
+    
+    if(!data.content){
+      settings.farewell.content = data.content;
+    }
 
     data.description = data.description?.replaceAll(/\r\n/g, "\\n");
     if (data.description && data.description !== settings.farewell.embed?.description) {
       settings.farewell.embed.description = data.description;
     }
-
+    
+    if(!data.description){
+      settings.farewell.embed.description = data.description;
+    }
+    
     if (data.footer && data.footer !== settings.farewell.embed?.footer) {
+      settings.farewell.embed.footer = data.footer;
+    }
+    
+    if(!data.footer){
       settings.farewell.embed.footer = data.footer;
     }
 
     if (data.hexcolor && data.hexcolor !== settings.farewell.embed?.color) {
       settings.farewell.embed.color = data.hexcolor;
     }
+    
+    if(!data.hexcolor){
+      settings.farewell.embed.color = data.hexcolor;
+    }
 
     if (data.image && data.image !== settings.farewell.embed?.image) {
+      settings.farewell.embed.image = data.image;
+    }
+    
+    if(!data.image){
       settings.farewell.embed.image = data.image;
     }
 
