@@ -2,16 +2,16 @@
 <aside class="main-sidebar">
   <!-- sidebar: style can be found in sidebar.less -->
   <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <div class="user-panel">
-          <div class="pull-left image">
-              <img src="<%= user.displayAvatar %>" class="img-circle" alt="User Image">
-          </div>
-          <div class="pull-left info">
-              <p><%= user.username %></p>
-          </div>
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        <img src="<%= user.displayAvatar %>" class="img-circle" alt="User Image" />
       </div>
-
+      <div class="pull-left info">
+        <p><%= user.username %></p>
+      </div>
+    </div>
+    <!-- search form -->
     <form action="/selector" method="get" class="sidebar-form">
       <div class="input-group">
         <input
@@ -24,39 +24,40 @@
         <span class="input-group-btn"> </span>
       </div>
     </form>
-
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">SERVERS MANAGEMENT</li>
-      <li class="treeview menu-open">
-          <li><a href="/selector"><i class="fa fa-home"></i> <span>Selector</span></a></li>
+      <li class="treeview menu-open"></li>
+      <li>
+        <a href="/selector"><i class="fa fa-home"></i><span>Selector</span></a>
       </li>
-  </ul>
-    <% if (locals.guild){%>
-      <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">CONFIGURATION</li>
-        <li class="treeview menu-open">
-          <li>
-            <a href="/manage/<%= guild.id %>/general"><i class="fa fa-user"></i> <span>General</span></a>
-          </li>
-          <li>
-            <a href="/manage/<%= guild.id %>/stats"><i class="fa fa-bar-chart"></i> <span>Statistics</span></a>
-          </li>
-          <li>
-            <a href="/manage/<%= guild.id %>/moderation"><i class="fa fa-gear"></i> <span>Moderation</span></a>
-          </li>
-          <li>
-            <a href="/manage/<%= guild.id %>/automod"><i class="fa fa-magic"></i> <span>Auto Moderation</span></a>
-          </li>
-          <li>
-            <a href="/manage/<%= guild.id %>/ticket"><i class="fa fa-ticket"></i> <span>Ticket</span></a>
-          </li>
-          <li>
-            <a href="/manage/<%= guild.id %>/welcome"><i class="fa fa-plus"></i> <span>Welcome</span></a>
-          </li>
-          <li>
-            <a href="/manage/<%= guild.id %>/farewell"><i class="fa fa-minus"></i> <span>Farewell</span></a>
-          </li>
-        </li>
+    </ul>
+    <% if (locals.guild){ %>
+    <ul class="sidebar-menu" data-widget="tree">
+      <li class="header">CONFIGURATION</li>
+      <li class="treeview menu-open"></li>
+      <li>
+        <a href="/manage/<%= guild.id %>/general"><i class="fa fa-user"></i> <span>General</span></a>
+      </li>
+      <li>
+        <a href="/manage/<%= guild.id %>/stats"><i class="fa fa-bar-chart"></i> <span>Statistics</span></a>
+      </li>
+      <li>
+        <a href="/manage/<%= guild.id %>/moderation"><i class="fa fa-gear"></i> <span>Moderation</span></a>
+      </li>
+      <li>
+        <a href="/manage/<%= guild.id %>/automod"><i class="fa fa-magic"></i> <span>Auto Moderation</span></a>
+      </li>
+      <li>
+        <a href="/manage/<%= guild.id %>/ticket"><i class="fa fa-ticket"></i> <span>Ticket</span></a>
+      </li>
+      <li>
+        <a href="/manage/<%= guild.id %>/welcome"><i class="fa fa-plus"></i> <span>Welcome</span></a>
+      </li>
+      <li>
+        <a href="/manage/<%= guild.id %>/farewell"><i class="fa fa-minus"></i> <span>Farewell</span></a>
+      </li>
     </ul>
     <% } %>
   </section>
@@ -73,6 +74,7 @@
     noMatches = ul.getElementsByClassName("noMatches");
     totalHidden = 0;
     totalServers = 0;
+
     for (i = 0; i < li.length; i++) {
       if (!li[i].getElementsByTagName("h3")[0]) continue;
       name = li[i].getElementsByTagName("h3")[0].innerHTML;
@@ -84,9 +86,11 @@
       }
       totalServers++;
     }
+
     if (totalHidden >= totalServers) noMatches[0].style.display = "block";
     else noMatches[0].style.display = "none";
   }
+
   $(document).ready(function () {
     // get current URL path and assign 'active' class
     let pathname = window.location.pathname;
