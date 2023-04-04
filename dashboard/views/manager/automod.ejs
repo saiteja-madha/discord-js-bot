@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../includes/head') %>
+
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+      <!-- The header is the topbar -->
+      <%- include('../includes/header') %>
+
+      <!-- The sidebar includes the menu -->
+      <%- include('../includes/sidebar') %>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h3>Auto Moderation</h3>
+          <ol class="breadcrumb">
+            <li>
+              <a href="/"><i class="fa fa-home"></i>Selector</a>
+            </li>
+            <li><a href="<%=`/manage/${guild.id}/`%>"><%=guild.name%></a></li>
+            <li class="active">Auto Moderation</li>
+          </ol>
+        </section>
+
+        <section class="content">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- AUTOMOD CONFIGURATION -->
+              <div class="box box-warning">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Ticket</h3>
+                </div>
+                <form role="form" action="/manage/<%= guild.id %>/automod/" method="POST">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label>Max Strikes</label>
+                      <input
+                        type="number"
+                        name="max_strikes"
+                        class="form-control"
+                        placeholder="<%= guild.automod.strikes %>"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Max Strikes Action</label>
+                      <select class="form-control" name="automod_action">
+                        <option selected="selected"><%= guild.automod.action %></option>
+                        <% if(guild.automod.action !== "TIMEOUT") { %>
+                        <option>TIMEOUT</option>
+                        <% } %> <% if(guild.automod.action !== "KICK") { %>
+                        <option>KICK</option>
+                        <% } %> <% if(guild.automod.action !== "BAN") { %>
+                        <option>BAN</option>
+                        <% } %>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Max Lines</label>
+                      <input
+                        type="number"
+                        name="max_lines"
+                        class="form-control"
+                        placeholder="<%= guild.automod.max_lines %>"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.automod.anti_attachments) { %>
+                          <input type="checkbox" name="anti_attachments" checked />Anti Attachments <% } else { %>
+                          <input type="checkbox" name="anti_attachments" />Anti Attachments <% } %>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.automod.anti_invites) { %>
+                          <input type="checkbox" name="anti_invites" checked />Anti Invites <% } else { %>
+                          <input type="checkbox" name="anti_invites" />Anti Invites <% } %>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.automod.anti_links) { %>
+                          <input type="checkbox" name="anti_links" checked />Anti Links <% } else { %>
+                          <input type="checkbox" name="anti_links" />Anti Links <% } %>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.automod.anti_spam) { %>
+                          <input type="checkbox" name="anti_spam" checked />Anti Spam <% } else { %>
+                          <input type="checkbox" name="anti_spam" />Anti Spam <% } %>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.automod.anti_ghostping) { %>
+                          <input type="checkbox" name="anti_ghostping" checked />Anti Ghostping <% } else { %>
+                          <input type="checkbox" name="anti_ghostping" />Anti Ghostping <% } %>
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.automod.anti_massmention) { %>
+                          <input type="checkbox" name="anti_massmention" checked />Anti Massmention <% } else { %>
+                          <input type="checkbox" name="anti_massmention" />Anti Massmention <% } %>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Whitelisted Channels</label>
+                      <select class="form-control" name="channels" multiple>
+                        <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %> <%
+                        if(guild.automod.wh_channels.includes(ch.id) ){ %>
+                        <option selected="selected">#<%= ch.name %></option>
+                        <% } else { %>
+                        <option>#<%= ch.name %></option>
+                        <% } %> <% }); %>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="box-footer">
+                    <button type="submit" name="automodUpdate" class="btn btn-primary">Update</button>
+                  </div>
+                </form>
+              </div>
+              <!-- END: AUTOMOD CONFIGURATION -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

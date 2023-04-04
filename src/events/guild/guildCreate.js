@@ -7,7 +7,7 @@ const { getSettings: registerGuild } = require("@schemas/Guild");
  */
 module.exports = async (client, guild) => {
   if (!guild.available) return;
-  if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true }).catch(() => {});
+  if (!guild.members.cache.has(guild.ownerId)) await guild.fetchOwner({ cache: true }).catch(() => { });
   client.logger.log(`Guild Joined: ${guild.name} Members: ${guild.memberCount}`);
   await registerGuild(guild);
 

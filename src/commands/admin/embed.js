@@ -81,7 +81,7 @@ async function embedSetup(channel, member) {
       filter: (i) => i.customId === "EMBED_ADD" && i.member.id === member.id && i.message.id === sentMsg.id,
       time: 20000,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!btnInteraction) return sentMsg.edit({ content: "No response received", components: [] });
 
@@ -135,11 +135,11 @@ async function embedSetup(channel, member) {
       time: 1 * 60 * 1000,
       filter: (m) => m.customId === "EMBED_MODAL" && m.member.id === member.id && m.message.id === sentMsg.id,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!modal) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
 
-  modal.reply({ content: "Embed sent", ephemeral: true }).catch((ex) => {});
+  modal.reply({ content: "Embed sent", ephemeral: true }).catch((ex) => { });
 
   const title = modal.fields.getTextInputValue("title");
   const author = modal.fields.getTextInputValue("author");
@@ -216,11 +216,11 @@ async function embedSetup(channel, member) {
           time: 5 * 60 * 1000,
           filter: (m) => m.customId === "EMBED_ADD_FIELD_MODAL" && m.member.id === member.id,
         })
-        .catch((ex) => {});
+        .catch((ex) => { });
 
       if (!modal) return sentMsg.edit({ components: [] });
 
-      modal.reply({ content: "Field added", ephemeral: true }).catch((ex) => {});
+      modal.reply({ content: "Field added", ephemeral: true }).catch((ex) => { });
 
       const name = modal.fields.getTextInputValue("name");
       const value = modal.fields.getTextInputValue("value");

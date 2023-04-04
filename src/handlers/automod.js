@@ -156,7 +156,7 @@ async function performAutomod(message, settings) {
     message
       .delete()
       .then(() => channel.safeSend("> Auto-Moderation! Message deleted", 5))
-      .catch(() => {});
+      .catch(() => { });
   }
 
   if (strikesTotal > 0) {
@@ -166,7 +166,7 @@ async function performAutomod(message, settings) {
 
     // log to db
     const reason = fields.map((field) => field.name + ": " + field.value).join("\n");
-    addAutoModLogToDb(member, content, reason, strikesTotal).catch(() => {});
+    addAutoModLogToDb(member, content, reason, strikesTotal).catch(() => { });
 
     // send automod log
     if (logChannel) {
@@ -192,11 +192,11 @@ async function performAutomod(message, settings) {
       .addFields(fields)
       .setDescription(
         `You have received ${strikesTotal} strikes!\n\n` +
-          `**Guild:** ${guild.name}\n` +
-          `**Total Strikes:** ${memberDb.strikes} out of ${automod.strikes}`
+        `**Guild:** ${guild.name}\n` +
+        `**Total Strikes:** ${memberDb.strikes} out of ${automod.strikes}`
       );
 
-    author.send({ embeds: [strikeEmbed] }).catch((ex) => {});
+    author.send({ embeds: [strikeEmbed] }).catch((ex) => { });
 
     // check if max strikes are received
     if (memberDb.strikes >= automod.strikes) {
@@ -204,7 +204,7 @@ async function performAutomod(message, settings) {
       memberDb.strikes = 0;
 
       // Add Moderation Action
-      await addModAction(guild.members.me, member, "Automod: Max strikes received", automod.action).catch(() => {});
+      await addModAction(guild.members.me, member, "Automod: Max strikes received", automod.action).catch(() => { });
     }
 
     await memberDb.save();

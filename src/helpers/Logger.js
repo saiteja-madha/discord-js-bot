@@ -46,7 +46,7 @@ function sendWebhook(content, err) {
     );
 
   embed.addFields({ name: "Description", value: content || err?.message || "NA" });
-  webhookLogger.send({ username: "Logs", embeds: [embed] }).catch((ex) => {});
+  webhookLogger.send({ username: "Logs", embeds: [embed] }).catch((ex) => { });
 }
 
 module.exports = class Logger {

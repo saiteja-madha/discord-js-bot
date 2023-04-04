@@ -23,7 +23,7 @@ GuildChannel.prototype.safeSend = async function (content, seconds) {
   try {
     if (!seconds) return await this.send(content);
     const reply = await this.send(content);
-    setTimeout(() => reply.deletable && reply.delete().catch((ex) => {}), seconds * 1000);
+    setTimeout(() => reply.deletable && reply.delete().catch((ex) => { }), seconds * 1000);
   } catch (ex) {
     this.client.logger.error(`safeSend`, ex);
   }

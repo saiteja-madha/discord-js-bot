@@ -31,7 +31,7 @@ module.exports = {
 
     async messageRun(message, args) {
         const choice = args.join(" ");
-        if(!choice) {
+        if (!choice) {
             return message.safeReply("Invalid Lyric selected.");
         }
         const response = await getLyric(message.author, choice);
@@ -47,7 +47,7 @@ module.exports = {
 
 async function getLyric(user, choice) {
     const lyric = await getJson(`${BASE_URL}?title=${choice}`);
-    if(!lyric.success) return MESSAGES.API_ERROR;
+    if (!lyric.success) return MESSAGES.API_ERROR;
 
     const thumbnail = lyric.data?.thumbnail.genius;
     const author = lyric.data?.author;
@@ -56,11 +56,11 @@ async function getLyric(user, choice) {
 
     const embed = new EmbedBuilder();
     embed
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setTitle(`${author} - ${title}`)
-      .setThumbnail(thumbnail)
-      .setDescription(lyrics)
-      .setFooter({ text: `Request By: ${user.tag}` });
+        .setColor(EMBED_COLORS.BOT_EMBED)
+        .setTitle(`${author} - ${title}`)
+        .setThumbnail(thumbnail)
+        .setDescription(lyrics)
+        .setFooter({ text: `Request By: ${user.tag}` });
 
     return { embeds: [embed] };
 }

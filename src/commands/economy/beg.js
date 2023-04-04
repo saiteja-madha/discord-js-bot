@@ -69,7 +69,7 @@ async function beg(user) {
     .setAuthor({ name: `${user.username}`, iconURL: user.displayAvatarURL() })
     .setDescription(
       `**${users[Math.floor(Math.random() * users.length)]}** donated you **${amount}** ${ECONOMY.CURRENCY}\n` +
-        `**Updated Balance:** **${userDb.coins}** ${ECONOMY.CURRENCY}`
+      `**Updated Balance:** **${userDb.coins}** ${ECONOMY.CURRENCY}`
     );
 
   return { embeds: [embed] };

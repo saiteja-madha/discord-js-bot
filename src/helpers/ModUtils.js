@@ -351,7 +351,7 @@ module.exports = class ModUtils {
    * @param {string} reason
    */
   static async banTarget(issuer, target, reason) {
-    const targetMem = await issuer.guild.members.fetch(target.id).catch(() => {});
+    const targetMem = await issuer.guild.members.fetch(target.id).catch(() => { });
 
     if (targetMem && !memberInteract(issuer, targetMem)) return "MEMBER_PERM";
     if (targetMem && !memberInteract(issuer.guild.members.me, targetMem)) return "BOT_PERM";

@@ -78,12 +78,12 @@ Guild.prototype.resolveMember = async function (query, exact = false) {
   const patternMatch = query.match(MEMBER_MENTION);
   if (patternMatch) {
     const id = patternMatch[1];
-    const fetched = await this.members.fetch({ user: id }).catch(() => {});
+    const fetched = await this.members.fetch({ user: id }).catch(() => { });
     if (fetched) return fetched;
   }
 
   // Fetch and cache members from API
-  await this.members.fetch({ query }).catch(() => {});
+  await this.members.fetch({ query }).catch(() => { });
 
   // Check if exact tag is matched
   const matchingTags = this.members.cache.filter((mem) => mem.user.tag === query);

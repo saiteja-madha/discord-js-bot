@@ -12,7 +12,7 @@ module.exports = {
     const member = await reaction.message.guild.members.fetch(user.id);
     if (!member) return;
 
-    await member.roles.add(role).catch(() => {});
+    await member.roles.add(role).catch(() => { });
   },
 
   /**
@@ -26,7 +26,7 @@ module.exports = {
     const member = await reaction.message.guild.members.fetch(user.id);
     if (!member) return;
 
-    await member.roles.remove(role).catch(() => {});
+    await member.roles.remove(role).catch(() => { });
   },
 };
 

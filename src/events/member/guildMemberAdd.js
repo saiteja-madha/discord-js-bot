@@ -14,7 +14,7 @@ module.exports = async (client, member) => {
   // Autorole
   if (settings.autorole) {
     const role = guild.roles.cache.get(settings.autorole);
-    if (role) member.roles.add(role).catch((err) => {});
+    if (role) member.roles.add(role).catch((err) => { });
   }
 
   // Check for counter channel

@@ -6,10 +6,10 @@ const express = require("express"),
   router = express.Router();
 
 router.get("/:serverID", CheckAuth, async (req, res) => {
-  res.redirect(`/manage/${req.params.serverID}/basic`);
+  res.redirect(`/manage/${req.params.serverID}/general`);
 });
 
-router.get("/:serverID/basic", CheckAuth, async (req, res) => {
+router.get("/:serverID/general", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
   const guild = req.client.guilds.cache.get(req.params.serverID);
   if (
@@ -26,7 +26,7 @@ router.get("/:serverID/basic", CheckAuth, async (req, res) => {
   // Fetch guild informations
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
-  res.render("manager/basic", {
+  res.render("manager/general", {
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -34,7 +34,7 @@ router.get("/:serverID/basic", CheckAuth, async (req, res) => {
   });
 });
 
-router.get("/:serverID/greeting", CheckAuth, async (req, res) => {
+router.get("/:serverID/ticket", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
   const guild = req.client.guilds.cache.get(req.params.serverID);
   if (
@@ -51,7 +51,7 @@ router.get("/:serverID/greeting", CheckAuth, async (req, res) => {
   // Fetch guild informations
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
-  res.render("manager/greeting", {
+  res.render("manager/ticket", {
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -59,7 +59,133 @@ router.get("/:serverID/greeting", CheckAuth, async (req, res) => {
   });
 });
 
-router.post("/:serverID/basic", CheckAuth, async (req, res) => {
+router.get("/:serverID/farewell", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  // Fetch guild informations
+  const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
+
+  res.render("manager/farewell", {
+    guild: guildInfos,
+    user: req.userInfos,
+    bot: req.client,
+    currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+  });
+});
+
+router.get("/:serverID/welcome", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  // Fetch guild informations
+  const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
+
+  res.render("manager/welcome", {
+    guild: guildInfos,
+    user: req.userInfos,
+    bot: req.client,
+    currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+  });
+});
+
+
+router.get("/:serverID/moderation", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  // Fetch guild informations
+  const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
+
+  res.render("manager/moderation", {
+    guild: guildInfos,
+    user: req.userInfos,
+    bot: req.client,
+    currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+  });
+});
+
+router.get("/:serverID/stats", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  // Fetch guild informations
+  const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
+
+  res.render("manager/stats", {
+    guild: guildInfos,
+    user: req.userInfos,
+    bot: req.client,
+    currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+  });
+});
+
+router.get("/:serverID/automod", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  // Fetch guild informations
+  const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
+
+  res.render("manager/automod", {
+    guild: guildInfos,
+    user: req.userInfos,
+    bot: req.client,
+    currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+  });
+});
+
+router.post("/:serverID/moderation", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
   const guild = req.client.guilds.cache.get(req.params.serverID);
   if (
@@ -76,52 +202,6 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
   const settings = await getSettings(guild);
   const data = req.body;
 
-  // BASIC CONFIGURATION
-  if (Object.prototype.hasOwnProperty.call(data, "basicUpdate")) {
-    if (data.prefix && data.prefix !== settings.prefix) {
-      settings.prefix = data.prefix;
-    }
-
-    data.flag_translation = data.flag_translation === "on" ? true : false;
-    if (data.flag_translation !== (settings.flag_translation.enabled || false)) {
-      settings.flag_translation.enabled = data.flag_translation;
-    }
-
-    data.invite_tracking = data.invite_tracking === "on" ? true : false;
-    if (data.invite_tracking !== (settings.invite.tracking || false)) {
-      settings.invite.tracking = data.invite_tracking;
-    }
-  }
-
-  // STATISTICS CONFIGURATION
-  if (Object.prototype.hasOwnProperty.call(data, "statsUpdate")) {
-    data.ranking = data.ranking === "on" ? true : false;
-    if (data.ranking !== (settings.stats.enabled || false)) {
-      settings.stats.enabled = data.ranking;
-    }
-
-    if (data.levelup_message && data.levelup_message !== settings.stats.xp.message) {
-      settings.stats.xp.message = data.levelup_message;
-    }
-
-    data.levelup_channel = guild.channels.cache.find((ch) => "#" + ch.name === data.levelup_channel)?.id || null;
-    if (data.levelup_channel !== settings.stats.xp.channel) {
-      settings.stats.xp.channel = data.levelup_channel;
-    }
-  }
-
-  // TICKET CONFIGURATION
-  if (Object.prototype.hasOwnProperty.call(data, "ticketUpdate")) {
-    if (data.limit && data.limit != settings.ticket.limit) {
-      settings.ticket.limit = data.limit;
-    }
-
-    data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.ticket.log_channel) {
-      settings.ticket.log_channel = data.channel;
-    }
-  }
-
   // MODERATION CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "modUpdate")) {
     if (data.max_warnings && data.max_warnings != settings.max_warn.limit) {
@@ -137,6 +217,27 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
       settings.modlog_channel = data.modlog_channel;
     }
   }
+
+  await settings.save();
+  res.redirect(303, `/manage/${guild.id}/moderation`);
+});
+
+router.post("/:serverID/automod", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  const settings = await getSettings(guild);
+  const data = req.body;
 
   // AUTOMOD CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "automodUpdate")) {
@@ -191,12 +292,150 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/basic`);
+  res.redirect(303, `/manage/${guild.id}/automod`);
 });
 
-router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
+router.post("/:serverID/ticket", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
   const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  const settings = await getSettings(guild);
+  const data = req.body;
+
+  // TICKET CONFIGURATION
+  if (Object.prototype.hasOwnProperty.call(data, "ticketUpdate")) {
+    if (data.limit && data.limit != settings.ticket.limit) {
+      settings.ticket.limit = data.limit;
+    }
+
+    data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
+    if (data.channel !== settings.ticket.log_channel) {
+      settings.ticket.log_channel = data.channel;
+    }
+  }
+
+  await settings.save();
+  res.redirect(303, `/manage/${guild.id}/ticket`);
+});
+
+router.post("/:serverID/general", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  const settings = await getSettings(guild);
+  const data = req.body;
+
+  // BASIC CONFIGURATION
+  if (Object.prototype.hasOwnProperty.call(data, "basicUpdate")) {
+    if (data.prefix && data.prefix !== settings.prefix) {
+      settings.prefix = data.prefix;
+    }
+
+    data.flag_translation = data.flag_translation === "on" ? true : false;
+    if (data.flag_translation !== (settings.flag_translation.enabled || false)) {
+      settings.flag_translation.enabled = data.flag_translation;
+    }
+
+    data.invite_tracking = data.invite_tracking === "on" ? true : false;
+    if (data.invite_tracking !== (settings.invite.tracking || false)) {
+      settings.invite.tracking = data.invite_tracking;
+    }
+  }
+
+  await settings.save();
+  res.redirect(303, `/manage/${guild.id}/general`);
+});
+
+
+router.post("/:serverID/farewell", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+  if (
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
+  ) {
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  const settings = await getSettings(guild);
+  const data = req.body;
+
+  if (Object.prototype.hasOwnProperty.call(data, "farewellDisable")) {
+    settings.farewell.enabled = false;
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(data, "farewellEnable") ||
+    Object.prototype.hasOwnProperty.call(data, "farewellUpdate")
+  ) {
+    data.content = data.content.replace(/\r?\n/g, "\\n");
+    if (data.content && data.content !== settings.farewell.content) {
+      settings.farewell.content = data.content;
+    }
+
+    data.description = data.description?.replaceAll(/\r\n/g, "\\n");
+    if (data.description && data.description !== settings.farewell.embed?.description) {
+      settings.farewell.embed.description = data.description;
+    }
+
+    if (data.footer && data.footer !== settings.farewell.embed?.footer) {
+      settings.farewell.embed.footer = data.footer;
+    }
+
+    if (data.hexcolor && data.hexcolor !== settings.farewell.embed?.color) {
+      settings.farewell.embed.color = data.hexcolor;
+    }
+
+    if (data.image && data.image !== settings.farewell.embed?.image) {
+      settings.farewell.embed.image = data.image;
+    }
+
+    data.thumbnail = data.thumbnail === "on" ? true : false;
+    if (data.thumbnail !== (settings.farewell.embed?.thumbnail || false)) {
+      settings.farewell.embed.thumbnail = data.thumbnail;
+    }
+
+    data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
+    if (data.channel !== settings.farewell.channel_id) {
+      settings.farewell.channel_id = data.channel;
+    }
+
+    if (!settings.farewell.enabled) settings.farewell.enabled = true;
+  }
+
+  await settings.save();
+  res.redirect(303, `/manage/${guild.id}/farewell`);
+});
+
+
+router.post("/:serverID/welcome", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
+
   if (
     !guild ||
     !req.userInfos.displayedGuilds ||
@@ -254,51 +493,48 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     if (!settings.welcome.enabled) settings.welcome.enabled = true;
   }
 
-  if (Object.prototype.hasOwnProperty.call(data, "farewellDisable")) {
-    settings.farewell.enabled = false;
-  }
+  await settings.save();
+  res.redirect(303, `/manage/${guild.id}/welcome`);
+});
+
+
+router.post("/:serverID/stats", CheckAuth, async (req, res) => {
+  // Check if the user has the permissions to edit this guild
+  const guild = req.client.guilds.cache.get(req.params.serverID);
 
   if (
-    Object.prototype.hasOwnProperty.call(data, "farewellEnable") ||
-    Object.prototype.hasOwnProperty.call(data, "farewellUpdate")
+    !guild ||
+    !req.userInfos.displayedGuilds ||
+    !req.userInfos.displayedGuilds.find((g) => g.id === req.params.serverID)
   ) {
-    data.content = data.content.replace(/\r?\n/g, "\\n");
-    if (data.content && data.content !== settings.farewell.content) {
-      settings.farewell.content = data.content;
+    return res.render("404", {
+      user: req.userInfos,
+      currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
+    });
+  }
+
+  const settings = await getSettings(guild);
+  const data = req.body;
+
+  // STATISTICS CONFIGURATION
+  if (Object.prototype.hasOwnProperty.call(data, "statsUpdate")) {
+    data.ranking = data.ranking === "on" ? true : false;
+    if (data.ranking !== (settings.stats.enabled || false)) {
+      settings.stats.enabled = data.ranking;
     }
 
-    data.description = data.description?.replaceAll(/\r\n/g, "\\n");
-    if (data.description && data.description !== settings.farewell.embed?.description) {
-      settings.farewell.embed.description = data.description;
+    if (data.levelup_message && data.levelup_message !== settings.stats.xp.message) {
+      settings.stats.xp.message = data.levelup_message;
     }
 
-    if (data.footer && data.footer !== settings.farewell.embed?.footer) {
-      settings.farewell.embed.footer = data.footer;
+    data.levelup_channel = guild.channels.cache.find((ch) => "#" + ch.name === data.levelup_channel)?.id || null;
+    if (data.levelup_channel !== settings.stats.xp.channel) {
+      settings.stats.xp.channel = data.levelup_channel;
     }
-
-    if (data.hexcolor && data.hexcolor !== settings.farewell.embed?.color) {
-      settings.farewell.embed.color = data.hexcolor;
-    }
-
-    if (data.image && data.image !== settings.farewell.embed?.image) {
-      settings.farewell.embed.image = data.image;
-    }
-
-    data.thumbnail = data.thumbnail === "on" ? true : false;
-    if (data.thumbnail !== (settings.farewell.embed?.thumbnail || false)) {
-      settings.farewell.embed.thumbnail = data.thumbnail;
-    }
-
-    data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.farewell.channel_id) {
-      settings.farewell.channel_id = data.channel;
-    }
-
-    if (!settings.farewell.enabled) settings.farewell.enabled = true;
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/greeting`);
+  res.redirect(303, `/manage/${guild.id}/stats`);
 });
 
 module.exports = router;

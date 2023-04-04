@@ -10,7 +10,7 @@ module.exports = async (client, interaction) => {
   if (!interaction.guild) {
     return interaction
       .reply({ content: "Command can only be executed in a discord server", ephemeral: true })
-      .catch(() => {});
+      .catch(() => { });
   }
 
   // Slash Commands
@@ -22,7 +22,7 @@ module.exports = async (client, interaction) => {
   else if (interaction.isContextMenuCommand()) {
     const context = client.contextMenus.get(interaction.commandName);
     if (context) await contextHandler.handleContext(interaction, context);
-    else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
+    else return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => { });
   }
 
   // Buttons
@@ -62,5 +62,5 @@ module.exports = async (client, interaction) => {
   const settings = await getSettings(interaction.guild);
 
   // track stats
-  if (settings.stats.enabled) statsHandler.trackInteractionStats(interaction).catch(() => {});
+  if (settings.stats.enabled) statsHandler.trackInteractionStats(interaction).catch(() => { });
 };

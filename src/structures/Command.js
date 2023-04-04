@@ -70,6 +70,6 @@ module.exports = {
     ephemeral: false,
     options: [],
   },
-  messageRun: (message, args, data) => {},
-  interactionRun: (interaction, data) => {},
+  messageRun: (message, args, data) => { },
+  interactionRun: (interaction, data) => { },
 };

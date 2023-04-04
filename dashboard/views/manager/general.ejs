@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../includes/head') %>
+
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+      <!-- The header is the topbar -->
+      <%- include('../includes/header') %>
+
+      <!-- The sidebar includes the menu -->
+      <%- include('../includes/sidebar') %>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h3>General</h3>
+          <ol class="breadcrumb">
+            <li>
+              <a href="/"><i class="fa fa-home"></i>Selector</a>
+            </li>
+            <li><a href="<%=`/manage/${guild.id}/`%>"><%=guild.name%></a></li>
+            <li class="active">General</li>
+          </ol>
+        </section>
+
+        <section class="content">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- GENERAL CONFIGURATION -->
+              <div class="box box-warning">
+                <div class="box-header with-border">
+                  <h3 class="box-title">General</h3>
+                </div>
+                <form role="form" action="/manage/<%= guild.id %>/general/" method="POST">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label>Prefix</label>
+                      <input type="text" name="prefix" class="form-control" placeholder="<%= guild.prefix %>" />
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.flag_translation?.enabled) { %>
+                          <input type="checkbox" name="flag_translation" checked />Flag Translation <% } else { %>
+                          <input type="checkbox" name="flag_translation" />Flag Translation <% } %>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.invite.tracking) { %>
+                          <input type="checkbox" name="invite_tracking" checked />Invite Tracking <% } else { %>
+                          <input type="checkbox" name="invite_tracking" />Invite Tracking <% } %>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="box-footer">
+                    <button type="submit" name="GeneralUpdate" class="btn btn-primary">Update</button>
+                  </div>
+                </form>
+              </div>
+              <!-- END: GENERAL CONFIGURATION -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

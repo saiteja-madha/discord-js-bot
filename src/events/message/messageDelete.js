@@ -22,8 +22,8 @@ module.exports = async (client, message) => {
       .setAuthor({ name: "Ghost ping detected" })
       .setDescription(
         `**Message:**\n${message.content}\n\n` +
-          `**Author:** ${message.author.tag} \`${message.author.id}\`\n` +
-          `**Channel:** ${message.channel.toString()}`
+        `**Author:** ${message.author.tag} \`${message.author.id}\`\n` +
+        `**Channel:** ${message.channel.toString()}`
       )
       .addFields(
         {

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../includes/head') %>
+
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+      <!-- The header is the topbar -->
+      <%- include('../includes/header') %>
+
+      <!-- The sidebar includes the menu -->
+      <%- include('../includes/sidebar') %>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h3>Farewell</h3>
+          <ol class="breadcrumb">
+            <li>
+              <a href="/"><i class="fa fa-home"></i>Selector</a>
+            </li>
+            <li><a href="<%=`/manage/${guild.id}/`%>"><%=guild.name%></a></li>
+            <li class="active">Farewell</li>
+          </ol>
+        </section>
+
+        <section class="content">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- FAREWELL CONFIGURATION -->
+              <div class="box box-warning">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Farewell</h3>
+                </div>
+                <form role="form" action="/manage/<%= guild.id %>/farewell/" method="POST">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label>Content</label>
+                      <% if(guild.farewell.embed.description || guild.farewell.content) {%>
+                      <textarea rows="3" name="content" class="form-control">
+<%- guild.farewell.content?.replaceAll(/\\n/g, '&#10;') %></textarea
+                      >
+                      <% } else { %>
+                      <textarea
+                        rows="3"
+                        name="content"
+                        class="form-control"
+                        placeholder="<%= '{member:tag} has left the server 👋' %>"
+                      ></textarea>
+                      <% } %>
+                    </div>
+                    <div class="form-group">
+                      <label>Description</label>
+                      <textarea rows="3" name="description" class="form-control">
+<%- guild.farewell.embed.description?.replaceAll(/\\n/g, '&#10;') %></textarea
+                      >
+                    </div>
+                    <div class="form-group">
+                      <label>Footer</label>
+                      <input
+                        type="text"
+                        name="footer"
+                        class="form-control"
+                        value="<%= guild.farewell.embed.footer %>"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Hex Color</label>
+                      <input
+                        type="text"
+                        name="hexcolor"
+                        class="form-control"
+                        value="<%= guild.farewell.embed.color %>"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Image URL</label>
+                      <input type="text" name="image" class="form-control" value="<%= guild.farewell.embed.image %>" />
+                    </div>
+                    <div class="form-group">
+                      <label>Channel</label>
+                      <select class="form-control" name="channel">
+                        <% if(bot.channels.cache.has(guild.farewell.channel)){ %>
+                        <option selected="selected">#<%= bot.channels.cache.get(guild.farewell.channel).name %></option>
+                        <% guild.channels.cache.filter((ch) => ch.id !== guild.farewell.channel && ch.type ===
+                        0).forEach((ch) => { %>
+                        <option>#<%= ch.name %></option>
+                        <% }); } else { %>
+                        <option disabled selected value>-- select an option --</option>
+                        <% guild.channels.cache.filter((ch) => ch.id !== guild.channels.cache.first().id && ch.type ===
+                        0).forEach((ch) => { %>
+                        <option>#<%= ch.name %></option>
+                        <% }); %> <% } %>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.farewell.embed.thumbnail) { %>
+                          <input type="checkbox" name="thumbnail" checked />Thumbnail <% } else { %>
+                          <input type="checkbox" name="thumbnail" />Thumbnail <% } %>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="box-footer">
+                    <% if(guild.farewell.enabled){ %>
+                    <button type="submit" name="farewellDisable" class="btn btn-danger">Disable Messages</button>
+                    <button type="submit" name="farewellUpdate" class="btn btn-primary pull-right">Update</button>
+                    <% } else { %>
+                    <button type="submit" name="farewellEnable" class="btn btn-success">Enable Message</button>
+                    <% } %>
+                  </div>
+                </form>
+              </div>
+              <!-- END: FAREWELL CONFIGURATION -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

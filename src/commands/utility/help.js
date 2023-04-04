@@ -119,10 +119,10 @@ async function getHelpMenu({ client, guild }) {
     .setThumbnail(client.user.displayAvatarURL())
     .setDescription(
       "**About Me:**\n" +
-        `Hello I am ${guild.members.me.displayName}!\n` +
-        "A cool multipurpose discord bot which can serve all your needs\n\n" +
-        `**Invite Me:** [Here](${client.getInvite()})\n` +
-        `**Support Server:** [Join](${SUPPORT_SERVER})`
+      `Hello I am ${guild.members.me.displayName}!\n` +
+      "A cool multipurpose discord bot which can serve all your needs\n\n" +
+      `**Invite Me:** [Here](${client.getInvite()})\n` +
+      `**Support Server:** [Join](${SUPPORT_SERVER})`
     );
 
   return {
@@ -251,9 +251,8 @@ function getSlashCategoryEmbeds(client, category) {
       const subCmds = cmd.slashCommand.options?.filter((opt) => opt.type === "SUB_COMMAND");
       const subCmdsString = subCmds?.map((s) => s.name).join(", ");
 
-      return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
-        !subCmds?.length ? "" : `❯ **SubCommands [${subCmds?.length}]**: ${subCmdsString}\n`
-      } `;
+      return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${!subCmds?.length ? "" : `❯ **SubCommands [${subCmds?.length}]**: ${subCmdsString}\n`
+        } `;
     });
 
     arrSplitted.push(toAdd);

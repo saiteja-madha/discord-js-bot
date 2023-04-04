@@ -10,9 +10,8 @@ module.exports = async (self, target, coins) => {
   const userDb = await getUser(self);
 
   if (userDb.bank < coins) {
-    return `Insufficient bank balance! You only have ${userDb.bank}${ECONOMY.CURRENCY} in your bank account.${
-      userDb.coins > 0 && "\nYou must deposit your coins in bank before you can transfer"
-    } `;
+    return `Insufficient bank balance! You only have ${userDb.bank}${ECONOMY.CURRENCY} in your bank account.${userDb.coins > 0 && "\nYou must deposit your coins in bank before you can transfer"
+      } `;
   }
 
   const targetDb = await getUser(target);

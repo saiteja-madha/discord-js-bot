@@ -132,7 +132,7 @@ module.exports = {
           const userDb = await getUser(owner);
           await userDb.save();
         })
-        .catch((ex) => {});
+        .catch((ex) => { });
 
       // create a new guild model
       guildData = new Model({

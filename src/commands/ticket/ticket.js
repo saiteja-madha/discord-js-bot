@@ -288,7 +288,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
       filter: (i) => i.customId === "ticket_btnSetup" && i.member.id === member.id && i.message.id === sentMsg.id,
       time: 20000,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!btnInteraction) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
 
@@ -336,7 +336,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
       time: 1 * 60 * 1000,
       filter: (m) => m.customId === "ticket-modalSetup" && m.member.id === member.id && m.message.id === sentMsg.id,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!modal) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
 

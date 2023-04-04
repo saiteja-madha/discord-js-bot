@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../includes/head') %>
+
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+      <!-- The header is the topbar -->
+      <%- include('../includes/header') %>
+
+      <!-- The sidebar includes the menu -->
+      <%- include('../includes/sidebar') %>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h3>Statistics</h3>
+          <ol class="breadcrumb">
+            <li>
+              <a href="/"><i class="fa fa-home"></i>Selector</a>
+            </li>
+            <li><a href="<%=`/manage/${guild.id}/`%>"><%=guild.name%></a></li>
+            <li class="active">Statistics</li>
+          </ol>
+        </section>
+
+        <section class="content">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- STATS CONFIGURATION -->
+              <div class="box box-warning">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Statistics</h3>
+                </div>
+                <form role="form" action="/manage/<%= guild.id %>/stats/" method="POST">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label>
+                          <% if(guild.stats.enabled) { %>
+                          <input type="checkbox" name="ranking" checked />Tracking <% } else { %>
+                          <input type="checkbox" name="ranking" />Tracking <% } %>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Levelup Message</label>
+                      <input
+                        type="text"
+                        name="levelup_message"
+                        class="form-control"
+                        placeholder="<%= guild.stats.xp.message %>"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Levelup Channel</label>
+                      <select class="form-control" name="levelup_channel">
+                        <% if(guild.stats.xp.channel && bot.channels.cache.has(guild.stats.xp.channel)){ %>
+                        <option selected="selected">#<%= bot.channels.cache.get(guild.stats.xp.channel).name %></option>
+                        <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !==
+                        guild.stats.xp.channel).forEach((ch) => { %>
+                        <option>#<%= ch.name %></option>
+                        <% }); %>
+                        <option>No channel</option>
+                        <% } else { %>
+                        <option disabled selected value>-- select an option --</option>
+                        <% guild.channels.cache.filter((ch) => ch.type === 0).forEach((ch) => { %>
+                        <option>#<%= ch.name %></option>
+                        <% }); %> <% } %>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="box-footer">
+                    <button type="submit" name="statsUpdate" class="btn btn-primary">Update</button>
+                  </div>
+                </form>
+              </div>
+              <!-- END: STATS CONFIGURATION -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

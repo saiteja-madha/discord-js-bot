@@ -81,7 +81,7 @@ module.exports = {
    */
   handleSlashCommand: async function (interaction) {
     const cmd = interaction.client.slashCommands.get(interaction.commandName);
-    if (!cmd) return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => {});
+    if (!cmd) return interaction.reply({ content: "An error has occurred", ephemeral: true }).catch(() => { });
 
     // callback validations
     if (cmd.validations) {

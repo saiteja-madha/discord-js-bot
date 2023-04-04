@@ -316,7 +316,7 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
       filter: (i) => i.customId === "giveaway_btnSetup" && i.member.id === member.id && i.message.id === sentMsg.id,
       time: 20000,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!btnInteraction) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
 
@@ -372,11 +372,11 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
       time: 1 * 60 * 1000,
       filter: (m) => m.customId === "giveaway-modalSetup" && m.member.id === member.id && m.message.id === sentMsg.id,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!modal) return sentMsg.edit({ content: "No response received, cancelling setup", components: [] });
 
-  sentMsg.delete().catch(() => {});
+  sentMsg.delete().catch(() => { });
   await modal.reply("Setting up giveaway...");
 
   // duration
@@ -435,7 +435,7 @@ async function runModalEdit(message, messageId) {
       filter: (i) => i.customId === "giveaway_btnEdit" && i.member.id === member.id && i.message.id === sentMsg.id,
       time: 20000,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!btnInteraction) return sentMsg.edit({ content: "No response received, cancelling update", components: [] });
 
@@ -477,11 +477,11 @@ async function runModalEdit(message, messageId) {
       time: 1 * 60 * 1000,
       filter: (m) => m.customId === "giveaway-modalEdit" && m.member.id === member.id && m.message.id === sentMsg.id,
     })
-    .catch((ex) => {});
+    .catch((ex) => { });
 
   if (!modal) return sentMsg.edit({ content: "No response received, cancelling update", components: [] });
 
-  sentMsg.delete().catch(() => {});
+  sentMsg.delete().catch(() => { });
   await modal.reply("Updating the giveaway...");
 
   // duration

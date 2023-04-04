@@ -1,6 +1,168 @@
+/*The whole webpage */
+body {
+  color: #fff !important;
+  background-color: #151515 !important;
+}
+
+/* Background */
+.content-wrapper {
+  background-color: #343a40 !important;
+  color: #fff !important;
+}
+
+/* Selector boxes */
+.box {
+  background: #222629 !important;
+  color: #fff !important;
+  border-radius: 17px !important;
+}
+
+.box.box-warning {
+  border-top-color: #464e54 !important;
+}
+
+.box-footer {
+  background-color: #222629 !important;
+  border-top-color: #222629 !important;
+  border-radius: 17px !important;
+}
+
+.box-header.with-border {
+  border-bottom-color: #222629 !important;
+  color: #fff !important;
+}
+
+.box.box-warning {
+  border-top-left-radius: 3px !important;
+  border-top-right-radius: 3px !important;
+}
+
 .server-name {
-    overflow: hidden;
-    width: calc(80%);
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  width: calc(80%);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* The bar at the top */
+.skin-blue .main-header .navbar {
+  background-color: #222629 !important;
+}
+
+.skin-blue .main-header .logo {
+  background-color: #222629 !important;
+}
+
+.skin-blue .main-header .logo:hover {
+  background-color: #222629 !important;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+  background-color: #343a40 !important;
+}
+
+/* The sidebar */
+.skin-blue .wrapper,
+.skin-blue .main-sidebar,
+.skin-blue .left-side {
+  background-color: #222629 !important;
+  color: #fff !important;
+}
+
+.skin-blue .sidebar-menu > li > a {
+  background-color: #222629 !important;
+}
+
+.skin-blue .sidebar-menu > li > a {
+  background-color: #222629 !important;
+}
+
+.skin-blue .sidebar-menu > li.active > a {
+  background-color: #343a40 !important;
+}
+
+.skin-blue .sidebar-menu > li.header {
+  background-color: #222629 !important;
+  color: #fff !important;
+}
+
+/* Bar at the bottom */
+.main-footer {
+  background-color: #222629 !important;
+  color: #fff !important;
+  border-top-color: #222629 !important;
+}
+
+/* Buttons */
+.btn-primary {
+  border-radius: 17px !important;
+}
+
+.btn-danger {
+  border-radius: 17px !important;
+}
+
+.btn-success {
+  border-radius: 17px !important;
+}
+
+.dropdown-toggle {
+  width: 60px !important;
+  height: 50px !important;
+}
+
+.navbar-nav > .user-menu > .dropdown-menu > .user-footer .btn-default {
+  border-radius: 17px !important;
+}
+
+/* Text for the navigation */
+.content-header > .breadcrumb > li > a {
+  color: #fff !important;
+}
+
+.breadcrumb > .active {
+  color: #fff !important;
+}
+
+.content-header > .breadcrumb {
+  background-color: transparent !important;
+}
+
+/* Forms */
+.form-control {
+  background-color: #343a40 !important;
+  border-color: #222629 !important;
+  color: #fff !important;
+  border-radius: 9px !important;
+}
+
+/* Search on the sidebar */
+.skin-blue .sidebar-form {
+  color: #fff !important;
+  border-color: #222629 !important;
+}
+
+/* Sign out */
+.navbar-nav > .user-menu > .dropdown-menu > .user-footer {
+  background-color: #202020 !important;
+  border-color: #202020 !important;
+  border-radius: 17px !important;
+}
+
+.navbar-nav > .user-menu > .dropdown-menu > .user-footer .btn-default {
+  background-color: #2f3438 !important;
+  border-color: #2f3438 !important;
+  color: red !important;
+}
+
+.navbar-nav > .user-menu > .dropdown-menu > .user-footer .btn-default:hover {
+  background-color: red !important;
+  border-color: red !important;
+  color: #fff !important;
+}
+
+.navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+  background-color: #1c2024 !important;
+  border-color: #1c2024 !important;
+  border-radius: 10px !important;
 }
