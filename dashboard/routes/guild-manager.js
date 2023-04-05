@@ -27,6 +27,7 @@ router.get("/:serverID/general", CheckAuth, async (req, res) => {
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
   res.render("manager/general", {
+    config: req.client.config,
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -52,6 +53,7 @@ router.get("/:serverID/ticket", CheckAuth, async (req, res) => {
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
   res.render("manager/ticket", {
+    config: req.client.config,
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -77,6 +79,7 @@ router.get("/:serverID/farewell", CheckAuth, async (req, res) => {
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
   res.render("manager/farewell", {
+    config: req.client.config,
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -102,6 +105,7 @@ router.get("/:serverID/welcome", CheckAuth, async (req, res) => {
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
   res.render("manager/welcome", {
+    config: req.client.config,
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -128,6 +132,7 @@ router.get("/:serverID/moderation", CheckAuth, async (req, res) => {
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
   res.render("manager/moderation", {
+    config: req.client.config,
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -153,6 +158,7 @@ router.get("/:serverID/stats", CheckAuth, async (req, res) => {
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
   res.render("manager/stats", {
+    config: req.client.config,
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -178,6 +184,7 @@ router.get("/:serverID/automod", CheckAuth, async (req, res) => {
   const guildInfos = await utils.fetchGuild(guild.id, req.client, req.user.guilds);
 
   res.render("manager/automod", {
+    config: req.client.config,
     guild: guildInfos,
     user: req.userInfos,
     bot: req.client,
@@ -298,7 +305,7 @@ router.post("/:serverID/automod", CheckAuth, async (req, res) => {
   setTimeout(() => {
     res.redirect(303, `/manage/${guild.id}/automod`)
   }, 700);
-  
+
 });
 
 router.post("/:serverID/ticket", CheckAuth, async (req, res) => {
@@ -430,8 +437,8 @@ router.post("/:serverID/farewell", CheckAuth, async (req, res) => {
     }
 
     data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.farewell.channel_id) {
-      settings.farewell.channel_id = data.channel;
+    if (data.channel !== settings.farewell.channel) {
+      settings.farewell.channel = data.channel;
     }
 
     if (!settings.farewell.enabled) settings.farewell.enabled = true;
@@ -499,8 +506,8 @@ router.post("/:serverID/welcome", CheckAuth, async (req, res) => {
     }
 
     data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.welcome.channel_id) {
-      settings.welcome.channel_id = data.channel;
+    if (data.channel !== settings.welcome.channel) {
+      settings.welcome.channel = data.channel;
     }
 
     if (!settings.welcome.enabled) settings.welcome.enabled = true;
