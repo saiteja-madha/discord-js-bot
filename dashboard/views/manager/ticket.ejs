@@ -58,120 +58,143 @@
                                             <div class="row">
                                               <div class="col-md-6">
                                                 <!-- TICKET CONFIGURATION -->
-                                                        <% if(config.DASHBOARD.style == "dark"){ %>
-  <div class="box box-warning box-custom-dark box-warning-custom-dark">
-          <%} else {%>
-<div class="box box-warning">
-            <%}%>                   
-                    <% if(config.DASHBOARD.style == "dark"){ %>
-   <div class="box-header with-border box-header-custom-dark with-border-custom-dark">
-          <%} else {%>
- <div class="box-header with-border">
-            <%}%>
-                                                 
-                                                    <h3 class="box-title">Ticket</h3>
+                                                <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                  <div class="box box-warning box-custom-dark box-warning-custom-dark">
+                                                    <%} else {%>
+                                                      <div class="box box-warning">
+                                                        <%}%>
+                                                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                            <div
+                                                              class="box-header with-border box-header-custom-dark with-border-custom-dark">
+                                                              <%} else {%>
+                                                                <div class="box-header with-border">
+                                                                  <%}%>
+
+                                                                    <h3 class="box-title">Ticket</h3>
+                                                                </div>
+                                                                <form role="form"
+                                                                  action="/manage/<%= guild.id %>/ticket/" method="POST"
+                                                                  id="ticketForm">
+                                                                  <div class="box-body">
+                                                                    <div class="form-group">
+                                                                      <label>Ticket Limit</label>
+                                                                      <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                        <input type="number" name="limit"
+                                                                          class="form-control form-control-custom-dark"
+                                                                          placeholder="<%= guild.ticket.limit %>" />
+                                                                        <%} else {%>
+                                                                          <input type="number" name="limit"
+                                                                            class="form-control"
+                                                                            placeholder="<%= guild.ticket.limit %>" />
+                                                                          <%}%>
+
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                      <label>Ticket Logs</label>
+                                                                      <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                        <select
+                                                                          class="form-control form-control-custom-dark"
+                                                                          name="channel">
+                                                                          <% if(guild.ticket.log_channel &&
+                                                                            bot.channels.cache.has(guild.ticket.log_channel)){
+                                                                            %>
+                                                                            <option selected="selected">
+                                                                              #<%=
+                                                                                bot.channels.cache.get(guild.ticket.log_channel).name
+                                                                                %>
+                                                                            </option>
+                                                                            <% guild.channels.cache.filter((ch)=>
+                                                                              ch.type === 0 && ch.id
+                                                                              !==
+                                                                              guild.ticket.log_channel).forEach((ch) =>
+                                                                              { %>
+                                                                              <option>#<%= ch.name %>
+                                                                              </option>
+                                                                              <% }); %>
+                                                                                <option>No channel</option>
+                                                                                <% } else { %>
+                                                                                  <option disabled selected value>--
+                                                                                    select an option --
+                                                                                  </option>
+                                                                                  <% guild.channels.cache.filter((ch)=>
+                                                                                    ch.type ===
+                                                                                    0).forEach((ch) => { %>
+                                                                                    <option>#<%= ch.name %>
+                                                                                    </option>
+                                                                                    <% }); %>
+                                                                                      <% } %>
+                                                                        </select>
+                                                                        <%} else {%>
+                                                                          <select class="form-control" name="channel">
+                                                                            <% if(guild.ticket.log_channel &&
+                                                                              bot.channels.cache.has(guild.ticket.log_channel)){
+                                                                              %>
+                                                                              <option selected="selected">
+                                                                                #<%=
+                                                                                  bot.channels.cache.get(guild.ticket.log_channel).name
+                                                                                  %>
+                                                                              </option>
+                                                                              <% guild.channels.cache.filter((ch)=>
+                                                                                ch.type === 0 && ch.id
+                                                                                !==
+                                                                                guild.ticket.log_channel).forEach((ch)
+                                                                                => { %>
+                                                                                <option>#<%= ch.name %>
+                                                                                </option>
+                                                                                <% }); %>
+                                                                                  <option>No channel</option>
+                                                                                  <% } else { %>
+                                                                                    <option disabled selected value>--
+                                                                                      select an option --
+                                                                                    </option>
+                                                                                    <%
+                                                                                      guild.channels.cache.filter((ch)=>
+                                                                                      ch.type ===
+                                                                                      0).forEach((ch) => { %>
+                                                                                      <option>#<%= ch.name %>
+                                                                                      </option>
+                                                                                      <% }); %>
+                                                                                        <% } %>
+                                                                          </select>
+                                                                          <%}%>
+
+                                                                    </div>
+                                                                  </div>
+                                                                  <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                    <div class="box-footer box-footer-custom-dark">
+                                                                      <%} else {%>
+                                                                        <div class="box-footer">
+                                                                          <%}%>
+                                                                            <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                              <button type="submit"
+                                                                                onerror="errorresponse()"
+                                                                                name="ticketUpdate"
+                                                                                class="btn btn-primary btn-custom-dark btn-primary-custom-dark">
+                                                                                Update
+                                                                              </button>
+                                                                              <%} else {%>
+                                                                                <button type="submit"
+                                                                                  onerror="errorresponse()"
+                                                                                  name="ticketUpdate"
+                                                                                  class="btn btn-primary">
+                                                                                  Update
+                                                                                </button>
+                                                                                <%}%>
+
+                                                                        </div>
+                                                                </form>
+                                                            </div>
+                                                            <!-- END: TICKET CONFIGURATION -->
+                                                      </div>
+                                                      <div class="alert alert-success pull-right" id="response"
+                                                        style="display: none; width: 30% !important">
+                                                        <strong>Success!</strong> Configuration saved!
+                                                      </div>
+                                                      <div class="alert alert-danger pull-right" id="errorresponse"
+                                                        style="display: none; width: 30% !important">
+                                                        <strong>Error!</strong> There was an error, please try again!
+                                                      </div>
                                                   </div>
-                                                  <form role="form" action="/manage/<%= guild.id %>/ticket/"
-                                                    method="POST" id="ticketForm">
-                                                    <div class="box-body">
-                                                      <div class="form-group">
-                                                        <label>Ticket Limit</label>
-                                                                <% if(config.DASHBOARD.style == "dark"){ %>
-   <input type="number" name="limit" class="form-control form-control-custom-dark"
-                                                          placeholder="<%= guild.ticket.limit %>" />
-          <%} else {%>
- <input type="number" name="limit" class="form-control"
-                                                          placeholder="<%= guild.ticket.limit %>" />
-            <%}%>
-                                                       
-                                                      </div>
-                                                      <div class="form-group">
-                                                        <label>Ticket Logs</label>
-                                                                <% if(config.DASHBOARD.style == "dark"){ %>
-  <select class="form-control form-control-custom-dark" name="channel">
-                                                          <% if(guild.ticket.log_channel &&
-                                                            bot.channels.cache.has(guild.ticket.log_channel)){ %>
-                                                            <option selected="selected">
-                                                              #<%= bot.channels.cache.get(guild.ticket.log_channel).name
-                                                                %>
-                                                            </option>
-                                                            <% guild.channels.cache.filter((ch)=> ch.type === 0 && ch.id
-                                                              !==
-                                                              guild.ticket.log_channel).forEach((ch) => { %>
-                                                              <option>#<%= ch.name %>
-                                                              </option>
-                                                              <% }); %>
-                                                                <option>No channel</option>
-                                                                <% } else { %>
-                                                                  <option disabled selected value>-- select an option --
-                                                                  </option>
-                                                                  <% guild.channels.cache.filter((ch)=> ch.type ===
-                                                                    0).forEach((ch) => { %>
-                                                                    <option>#<%= ch.name %>
-                                                                    </option>
-                                                                    <% }); %>
-                                                                      <% } %>
-                                                        </select>
-          <%} else {%>
-<select class="form-control" name="channel">
-                                                          <% if(guild.ticket.log_channel &&
-                                                            bot.channels.cache.has(guild.ticket.log_channel)){ %>
-                                                            <option selected="selected">
-                                                              #<%= bot.channels.cache.get(guild.ticket.log_channel).name
-                                                                %>
-                                                            </option>
-                                                            <% guild.channels.cache.filter((ch)=> ch.type === 0 && ch.id
-                                                              !==
-                                                              guild.ticket.log_channel).forEach((ch) => { %>
-                                                              <option>#<%= ch.name %>
-                                                              </option>
-                                                              <% }); %>
-                                                                <option>No channel</option>
-                                                                <% } else { %>
-                                                                  <option disabled selected value>-- select an option --
-                                                                  </option>
-                                                                  <% guild.channels.cache.filter((ch)=> ch.type ===
-                                                                    0).forEach((ch) => { %>
-                                                                    <option>#<%= ch.name %>
-                                                                    </option>
-                                                                    <% }); %>
-                                                                      <% } %>
-                                                        </select>
-            <%}%>
-                                                        
-                                                      </div>
-                                                    </div>
-                                                            <% if(config.DASHBOARD.style == "dark"){ %>
-   <div class="box-footer box-footer-custom-dark">
-          <%} else {%>
- <div class="box-footer">
-            <%}%>
-                                                            <% if(config.DASHBOARD.style == "dark"){ %>
-   <button type="submit" onerror="errorresponse()"
-                                                        name="ticketUpdate" class="btn btn-primary btn-custom-dark btn-primary-custom-dark">
-                                                        Update
-                                                      </button>
-          <%} else {%>
- <button type="submit" onerror="errorresponse()"
-                                                        name="ticketUpdate" class="btn btn-primary">
-                                                        Update
-                                                      </button>
-            <%}%>
-                                                     
-                                                    </div>
-                                                  </form>
-                                                </div>
-                                                <!-- END: TICKET CONFIGURATION -->
-                                              </div>
-                                              <div class="alert alert-success pull-right" id="response"
-                                                style="display: none; width: 30% !important">
-                                                <strong>Success!</strong> Configuration saved!
-                                              </div>
-                                              <div class="alert alert-danger pull-right" id="errorresponse"
-                                                style="display: none; width: 30% !important">
-                                                <strong>Error!</strong> There was an error, please try again!
-                                              </div>
-                                            </div>
                                           </section>
                                 </div>
                             </div>

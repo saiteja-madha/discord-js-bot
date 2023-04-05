@@ -91,8 +91,8 @@
 }
 
 .sidebarform-custom-light {
-  background-color: #343a40!important;
-  border-color: #343a40!important;
+  background-color: #343a40 !important;
+  border-color: #343a40 !important;
 }
 
 .sidebar-menu-custom-dark > li.active-custom-dark > a {
@@ -186,11 +186,11 @@
 }
 
 .sidebar-form {
-  background-color: transparent!important;
-  border-color: transparent!important;
+  background-color: transparent !important;
+  border-color: transparent !important;
 }
 
 .custom-dark {
-  background-color: #1c2024!important;
-  color: #fff!important;
+  background-color: #1c2024 !important;
+  color: #fff !important;
 }
