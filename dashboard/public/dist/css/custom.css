@@ -85,6 +85,11 @@
   background-color: #222629 !important;
 }
 
+.sidebarform-custom-light {
+  background-color: #343a40!important;
+  border-color: #343a40!important;
+}
+
 .sidebar-menu-custom-dark > li.active-custom-dark > a {
   background-color: #343a40 !important;
 }
