@@ -219,7 +219,9 @@ router.post("/:serverID/moderation", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/moderation`);
+  setTimeout(() => {
+    res.redirect(303, `/manage/${guild.id}/moderation`)
+  }, 700);
 });
 
 router.post("/:serverID/automod", CheckAuth, async (req, res) => {
@@ -292,7 +294,11 @@ router.post("/:serverID/automod", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/automod`);
+
+  setTimeout(() => {
+    res.redirect(303, `/manage/${guild.id}/automod`)
+  }, 700);
+  
 });
 
 router.post("/:serverID/ticket", CheckAuth, async (req, res) => {
@@ -325,7 +331,9 @@ router.post("/:serverID/ticket", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/ticket`);
+  setTimeout(() => {
+    res.redirect(303, `/manage/${guild.id}/ticket`)
+  }, 700);
 });
 
 router.post("/:serverID/general", CheckAuth, async (req, res) => {
@@ -363,7 +371,9 @@ router.post("/:serverID/general", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/general`);
+  setTimeout(() => {
+    res.redirect(303, `/manage/${guild.id}/general`)
+  }, 700);
 });
 
 
@@ -428,7 +438,10 @@ router.post("/:serverID/farewell", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/farewell`);
+  setTimeout(() => {
+    res.redirect(303, `/manage/${guild.id}/farewell`)
+  }, 700);
+
 });
 
 
@@ -494,7 +507,9 @@ router.post("/:serverID/welcome", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/welcome`);
+  setTimeout(() => {
+    res.redirect(303, `/manage/${guild.id}/welcome`)
+  }, 700);
 });
 
 
@@ -534,7 +549,9 @@ router.post("/:serverID/stats", CheckAuth, async (req, res) => {
   }
 
   await settings.save();
-  res.redirect(303, `/manage/${guild.id}/stats`);
+  setTimeout(() => {
+    res.redirect(303, `/manage/${guild.id}/stats`)
+  }, 700);
 });
 
 module.exports = router;

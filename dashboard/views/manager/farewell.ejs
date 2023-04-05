@@ -105,19 +105,32 @@
                   </div>
                   <div class="box-footer">
                     <% if(guild.farewell.enabled){ %>
-                    <button type="submit" name="farewellDisable" class="btn btn-danger">Disable Messages</button>
-                    <button type="submit" name="farewellUpdate" class="btn btn-primary pull-right">Update</button>
+                    <button type="submit" onclick="response()" name="farewellDisable" class="btn btn-danger">Disable Messages</button>
+                    <button type="submit" onclick="response()" name="farewellUpdate" class="btn btn-primary pull-right">Update</button>
                     <% } else { %>
-                    <button type="submit" name="farewellEnable" class="btn btn-success">Enable Message</button>
+                    <button type="submit" onclick="response()" name="farewellEnable" class="btn btn-success">Enable Message</button>
                     <% } %>
                   </div>
                 </form>
               </div>
               <!-- END: FAREWELL CONFIGURATION -->
             </div>
+            <div class="alert alert-success pull-right" id="response" style="display: none; width: 30% !important">
+              <strong>Success!</strong> Configuration saved!
+            </div>
           </div>
         </section>
       </div>
     </div>
   </body>
+  <script>
+    function response() {
+      var x = document.getElementById("response");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+  </script>
 </html>
