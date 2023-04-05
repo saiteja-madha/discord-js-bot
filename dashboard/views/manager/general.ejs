@@ -32,7 +32,7 @@
                 <div class="box-header with-border">
                   <h3 class="box-title">General</h3>
                 </div>
-                <form role="form" action="/manage/<%= guild.id %>/general/" method="POST">
+                <form role="form" action="/manage/<%= guild.id %>/general/" method="POST" id="generalForm">
                   <div class="box-body">
                     <div class="form-group">
                       <label>Prefix</label>
@@ -81,14 +81,14 @@
     </div>
   </body>
   <script>
-    function response() {
+    $("#generalForm").submit(function () {
       var x = document.getElementById("response");
       if (x.style.display === "none") {
         x.style.display = "block";
       } else {
         x.style.display = "none";
       }
-    }
+    });
 
     function errorresponse() {
       var x = document.getElementById("errorresponse");

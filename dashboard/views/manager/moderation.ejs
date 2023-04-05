@@ -32,7 +32,7 @@
                 <div class="box-header with-border">
                   <h3 class="box-title">General</h3>
                 </div>
-                <form role="form" action="/manage/<%= guild.id %>/moderation/" method="POST">
+                <form role="form" action="/manage/<%= guild.id %>/moderation/" method="POST" id="moderationForm">
                   <div class="box-body">
                     <div class="form-group">
                       <label>Max Warnings</label>
@@ -75,7 +75,9 @@
                     </div>
                   </div>
                   <div class="box-footer">
-                    <button type="submit" onerror="errorresponse()" onclick="response()" name="modUpdate" class="btn btn-primary">Update</button>
+                    <button type="submit" onerror="errorresponse()" name="modUpdate" class="btn btn-primary">
+                      Update
+                    </button>
                   </div>
                 </form>
               </div>
@@ -93,14 +95,14 @@
     </div>
   </body>
   <script>
-    function response() {
+    $("#moderationForm").submit(function () {
       var x = document.getElementById("response");
       if (x.style.display === "none") {
         x.style.display = "block";
       } else {
         x.style.display = "none";
       }
-    }
+    });
 
     function errorresponse() {
       var x = document.getElementById("errorresponse");

@@ -32,7 +32,7 @@
                 <div class="box-header with-border">
                   <h3 class="box-title">Statistics</h3>
                 </div>
-                <form role="form" action="/manage/<%= guild.id %>/stats/" method="POST">
+                <form role="form" action="/manage/<%= guild.id %>/stats/" method="POST" id="statsForm">
                   <div class="box-body">
                     <div class="form-group">
                       <div class="checkbox">
@@ -71,13 +71,7 @@
                     </div>
                   </div>
                   <div class="box-footer">
-                    <button
-                      type="submit"
-                      onerror="errorresponse()"
-                      onclick="response()"
-                      name="statsUpdate"
-                      class="btn btn-primary"
-                    >
+                    <button type="submit" onerror="errorresponse()" name="statsUpdate" class="btn btn-primary">
                       Update
                     </button>
                   </div>
@@ -97,14 +91,14 @@
     </div>
   </body>
   <script>
-    function response() {
+    $("#statsForm").submit(function () {
       var x = document.getElementById("response");
       if (x.style.display === "none") {
         x.style.display = "block";
       } else {
         x.style.display = "none";
       }
-    }
+    });
 
     function errorresponse() {
       var x = document.getElementById("errorresponse");

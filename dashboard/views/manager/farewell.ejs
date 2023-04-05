@@ -32,7 +32,7 @@
                 <div class="box-header with-border">
                   <h3 class="box-title">Farewell</h3>
                 </div>
-                <form role="form" action="/manage/<%= guild.id %>/farewell/" method="POST">
+                <form role="form" action="/manage/<%= guild.id %>/farewell/" method="POST" id="farewellForm">
                   <div class="box-body">
                     <div class="form-group">
                       <label>Content</label>
@@ -105,32 +105,19 @@
                   </div>
                   <div class="box-footer">
                     <% if(guild.farewell.enabled){ %>
-                    <button
-                      type="submit"
-                      onerror="errorresponse()"
-                      onclick="response()"
-                      name="farewellDisable"
-                      class="btn btn-danger"
-                    >
+                    <button type="submit" onerror="errorresponse()" name="farewellDisable" class="btn btn-danger">
                       Disable Messages
                     </button>
                     <button
                       type="submit"
                       onerror="errorresponse()"
-                      onclick="response()"
                       name="farewellUpdate"
                       class="btn btn-primary pull-right"
                     >
                       Update
                     </button>
                     <% } else { %>
-                    <button
-                      type="submit"
-                      onerror="errorresponse()"
-                      onclick="response()"
-                      name="farewellEnable"
-                      class="btn btn-success"
-                    >
+                    <button type="submit" onerror="errorresponse()" name="farewellEnable" class="btn btn-success">
                       Enable Message
                     </button>
                     <% } %>
@@ -151,14 +138,14 @@
     </div>
   </body>
   <script>
-    function response() {
+    $("#farewellForm").submit(function () {
       var x = document.getElementById("response");
       if (x.style.display === "none") {
         x.style.display = "block";
       } else {
         x.style.display = "none";
       }
-    }
+    });
 
     function errorresponse() {
       var x = document.getElementById("errorresponse");
