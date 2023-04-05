@@ -75,7 +75,7 @@
                     </div>
                   </div>
                   <div class="box-footer">
-                    <button type="submit" onclick="response()" name="modUpdate" class="btn btn-primary">Update</button>
+                    <button type="submit" onerror="errorresponse()" onclick="response()" name="modUpdate" class="btn btn-primary">Update</button>
                   </div>
                 </form>
               </div>
@@ -83,6 +83,9 @@
             </div>
             <div class="alert alert-success pull-right" id="response" style="display: none; width: 30% !important">
               <strong>Success!</strong> Configuration saved!
+            </div>
+            <div class="alert alert-danger pull-right" id="errorresponse" style="display: none; width: 30% !important">
+              <strong>Error!</strong> There was an error, please try again!
             </div>
           </div>
         </section>
@@ -92,6 +95,15 @@
   <script>
     function response() {
       var x = document.getElementById("response");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function errorresponse() {
+      var x = document.getElementById("errorresponse");
       if (x.style.display === "none") {
         x.style.display = "block";
       } else {

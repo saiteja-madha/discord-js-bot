@@ -58,7 +58,15 @@
                     </div>
                   </div>
                   <div class="box-footer">
-                    <button type="submit" onclick="response()" name="GeneralUpdate" class="btn btn-primary">Update</button>
+                    <button
+                      type="submit"
+                      onerror="errorresponse()"
+                      onclick="response()"
+                      name="GeneralUpdate"
+                      class="btn btn-primary"
+                    >
+                      Update
+                    </button>
                   </div>
                 </form>
               </div>
@@ -75,6 +83,15 @@
   <script>
     function response() {
       var x = document.getElementById("response");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function errorresponse() {
+      var x = document.getElementById("errorresponse");
       if (x.style.display === "none") {
         x.style.display = "block";
       } else {
