@@ -49,6 +49,11 @@
   background-color: #222629 !important;
 }
 
+.dropdown-toggle {
+  width: 60px !important;
+  height: 50px !important;
+}
+
 .logo-custom-dark {
   background-color: #222629 !important;
 }

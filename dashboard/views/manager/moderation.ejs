@@ -33,7 +33,7 @@
                                         <%} else {%>
                                           <section class="content-header">
                                             <%}%>
-                                              <h3>General</h3>
+                                              <h3>Moderation</h3>
                                               <% if(config.DASHBOARD.style=="dark" ){ %>
                                                 <ol class="breadcrumb breadcrumb-custom-dark">
                                                   <%} else {%>
@@ -46,9 +46,9 @@
                                                             <%=guild.name%>
                                                           </a></li>
                                                         <% if(config.DASHBOARD.style=="dark" ){ %>
-                                                          <li class="active active-custom-dark">General</li>
+                                                          <li class="active active-custom-dark">Moderation</li>
                                                           <%} else {%>
-                                                            <li class="active">General</li>
+                                                            <li class="active">Moderation</li>
                                                             <%}%>
 
                                                     </ol>
@@ -69,7 +69,7 @@
                                                               <%} else {%>
                                                                 <div class="box-header with-border">
                                                                   <%}%>
-                                                                    <h3 class="box-title">General</h3>
+                                                                    <h3 class="box-title">Moderation</h3>
                                                                 </div>
                                                                 <form role="form"
                                                                   action="/manage/<%= guild.id %>/moderation/"
@@ -201,12 +201,17 @@
                                                                         <div class="box-footer">
                                                                           <%}%>
                                                                             <% if(config.DASHBOARD.style=="dark" ){ %>
-
+                                                                              <button type="submit"
+                                                                                onerror="errorresponse()"
+                                                                                name="modUpdate"
+                                                                                class="btn btn-primary btn-custom-dark btn-primary-custom-dark">
+                                                                                Update
+                                                                              </button>
                                                                               <%} else {%>
                                                                                 <button type="submit"
                                                                                   onerror="errorresponse()"
                                                                                   name="modUpdate"
-                                                                                  class="btn btn-primary btn-custom-dark btn-primary-custom-dark">
+                                                                                  class="btn btn-primary">
                                                                                   Update
                                                                                 </button>
                                                                                 <%}%>
