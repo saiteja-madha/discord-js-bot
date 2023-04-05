@@ -134,10 +134,10 @@
   $(document).ready(function () {
     // get current URL path and assign 'active' class
     let pathname = window.location.pathname;
-    $(`.sidebar-menu > li > a[href="${pathname}"]`).parent().addClass("active-custom-dark");
-    $(`.sidebar-menu > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active-custom-dark");
+    $(`.sidebar-menu > li > a[href="${pathname}"]`).parent().addClass("active active-custom-dark");
+    $(`.sidebar-menu > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active active-custom-dark");
     $(`.sidebar-menu > li > a[href="/${window.location.pathname.split("/")[1]}/"]`)
       .parent()
-      .addClass("active-custom-dark");
+      .addClass("active active-custom-dark");
   });
 </script>
