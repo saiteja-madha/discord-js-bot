@@ -40,7 +40,7 @@ module.exports = {
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
     port: "8080", // port to run the bot on
-    style: "dark" // color style for dashboard - light ~ dark // dashboard colors can be edited in dashboard/public/dist/css/custom.css
+    style: "light" // color style for dashboard - light ~ dark // dashboard colors can be edited in dashboard/public/dist/css/custom.css
   },
 
   ECONOMY: {

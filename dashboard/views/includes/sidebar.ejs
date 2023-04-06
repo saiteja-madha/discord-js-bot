@@ -11,7 +11,11 @@
                 <section class="sidebar sidebar-custom-light">
                   <%}%>
                     <!-- Sidebar user panel -->
-                    <div class="user-panel">
+                    <% if(config.DASHBOARD.style=="dark"){ %>
+                    <div class="user-panel user-panel-custom-dark">
+                      <%} else {%>
+                      <div class="user-panel user-panel-custom-light">
+                        <%}%>
                       <div class="pull-left image">
                         <img src="<%= user.displayAvatar %>" class="img-circle" alt="User Image" />
                       </div>

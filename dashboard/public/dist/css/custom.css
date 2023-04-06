@@ -105,7 +105,7 @@
   border-color: #ccc !important;
 }
 
-.user-panel-custom-light > .info-custom-light > p {
+.user-panel-custom-light > .info > p {
   color: #000 !important;
 }
 
@@ -297,6 +297,10 @@
 
 .sidebar-menu-custom-dark > li > a {
   background-color: #222629 !important;
+}
+
+.user-panel-custom-dark > .info > p {
+  color: #fff !important;
 }
 
 .sidebar-menu-custom-dark > li > a {
