@@ -46,6 +46,7 @@
     "mongoose": "^6.8.0",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.6.7",
+    "openai": "^3.2.1",
     "os": "^0.1.2",
     "pino": "^8.7.0",
     "pino-pretty": "^9.1.1",
