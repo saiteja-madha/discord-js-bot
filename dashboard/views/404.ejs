@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <%- include('includes/head') %>
-  <% if(config.DASHBOARD.style=="dark" ){ %>
+  <% if(config.DASHBOARD.style=="dark"){ %>
 
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
@@ -9,7 +9,7 @@
         <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
-            <% if(config.DASHBOARD.style=="dark" ){ %>
+            <% if(config.DASHBOARD.style=="dark"){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
                   <div class="wrapper wrapper-custom-light">
@@ -22,7 +22,7 @@
                         <%- include('includes/sidebar') %>
 
                           <!-- Content Wrapper. Contains page content -->
-                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                          <% if(config.DASHBOARD.style=="dark"){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
                                 <div class="content-wrapper content-wrapper-custom-light">
@@ -44,7 +44,7 @@
 
                                           <form class="search-form" action="/selector">
                                             <div class="input-group">
-                                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                                              <% if(config.DASHBOARD.style=="dark"){ %>
                                                 <input type="text" name="q"
                                                   class="form-control form-control-custom-dark"
                                                   placeholder="Search for servers..." />

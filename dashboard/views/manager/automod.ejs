@@ -2,7 +2,7 @@
 <html>
 <%- include('../includes/head') %>
 
-  <% if(config.DASHBOARD.style=="dark" ){ %>
+  <% if(config.DASHBOARD.style=="dark"){ %>
 
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
@@ -10,7 +10,7 @@
         <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
-            <% if(config.DASHBOARD.style=="dark" ){ %>
+            <% if(config.DASHBOARD.style=="dark"){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
                   <div class="wrapper wrapper-custom-light">
@@ -22,19 +22,19 @@
                         <%- include('../includes/sidebar') %>
 
                           <!-- Content Wrapper. Contains page content -->
-                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                          <% if(config.DASHBOARD.style=="dark"){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
                                 <div class="content-wrapper content-wrapper-custom-light">
                                   <%}%>
                                     <!-- Content Header (Page header) -->
-                                    <% if(config.DASHBOARD.style=="dark" ){ %>
+                                    <% if(config.DASHBOARD.style=="dark"){ %>
                                       <section class="content-header content-header-custom-dark">
                                         <%} else {%>
                                           <section class="content-header content-header-custom-light">
                                             <%}%>
                                               <h3>Auto Moderation</h3>
-                                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                                              <% if(config.DASHBOARD.style=="dark"){ %>
                                                 <ol class="breadcrumb breadcrumb-custom-dark">
                                                   <%} else {%>
                                                     <ol class="breadcrumb breadcrumb-custom-light">
@@ -45,7 +45,7 @@
                                                         <li><a href="<%=`/manage/${guild.id}/`%>">
                                                             <%=guild.name%>
                                                           </a></li>
-                                                        <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                        <% if(config.DASHBOARD.style=="dark"){ %>
                                                           <li class="active active-custom-dark">Auto Moderation</li>
                                                           <%} else {%>
                                                             <li class="active active-custom-light">Auto Moderation</li>
@@ -65,7 +65,7 @@
                                             again!
                                           </div>
 
-                                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                                          <% if(config.DASHBOARD.style=="dark"){ %>
                                             <section class="content content-custom-dark">
                                               <%} else {%>
                                                 <section class="content content-custom-light">
@@ -74,13 +74,13 @@
                                                     <div class="row">
                                                       <div class="col-md-6">
                                                         <!-- AUTOMOD CONFIGURATION -->
-                                                        <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                        <% if(config.DASHBOARD.style=="dark"){ %>
                                                           <div
                                                             class="box box-warning box-custom-dark box-warning-custom-dark">
                                                             <%} else {%>
                                                               <div class="box box-warning box-custom-light box-warning-custom-light">
                                                                 <%}%>
-                                                                  <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                  <% if(config.DASHBOARD.style=="dark"){ %>
                                                                     <div
                                                                       class="box-header with-border box-header-custom-dark with-border-custom-dark">
                                                                       <%} else {%>
@@ -95,7 +95,7 @@
                                                                           <div class="box-body">
                                                                             <div class="form-group">
                                                                               <label>Max Strikes</label>
-                                                                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
                                                                                 <input type="number" name="max_strikes"
                                                                                   class="form-control form-control-custom-dark"
                                                                                   placeholder="<%= guild.automod.strikes %>" />
@@ -109,7 +109,7 @@
                                                                             </div>
                                                                             <div class="form-group">
                                                                               <label>Max Strikes Action</label>
-                                                                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
                                                                                 <select
                                                                                   class="form-control form-control-custom-dark"
                                                                                   name="automod_action">
@@ -137,7 +137,7 @@
                                                                             </div>
                                                                             <div class="form-group">
                                                                               <label>Max Lines</label>
-                                                                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
                                                                                 <input type="number" name="max_lines"
                                                                                   class="form-control form-control-custom-dark"
                                                                                   placeholder="<%= guild.automod.max_lines %>" />
@@ -224,7 +224,7 @@
                                                                             </div>
                                                                             <div class="form-group">
                                                                               <label>Whitelisted Channels</label>
-                                                                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
                                                                                 <select
                                                                                   class="form-control form-control-custom-dark"
                                                                                   name="channels" multiple>
@@ -264,7 +264,7 @@
 
                                                                             </div>
                                                                           </div>
-                                                                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                          <% if(config.DASHBOARD.style=="dark"){ %>
                                                                             <div
                                                                               class="box-footer box-footer-custom-dark">
                                                                               <%} else {%>

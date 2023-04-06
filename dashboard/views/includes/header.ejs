@@ -1,6 +1,6 @@
 <header class="main-header">
   <!-- Logo -->
-  <% if(config.DASHBOARD.style=="dark" ){ %>
+  <% if(config.DASHBOARD.style=="dark"){ %>
     <a href="/" class="logo logo-custom-dark">
       <%} else {%>
         <a href="/" class="logo logo-custom-light">
@@ -13,13 +13,13 @@
         </a>
 
         <!-- Header Navbar: style can be found in header.less -->
-        <% if(config.DASHBOARD.style=="dark" ){ %>
+        <% if(config.DASHBOARD.style=="dark"){ %>
           <nav class="navbar navbar-static-top navbar-custom-dark navbar-static-top-custom-dark">
             <%} else {%>
               <nav class="navbar navbar-static-top navbar-custom-light navbar-static-top-custom-light">
                 <%}%>
                   <!-- Sidebar toggle button-->
-                  <% if(config.DASHBOARD.style=="dark" ){ %>
+                  <% if(config.DASHBOARD.style=="dark"){ %>
                     <a class="sidebar-toggle sidebar-toggle-custom-dark" data-toggle="push-menu" role="button">
                       <%} else {%>
                         <a class="sidebar-toggle sidebar-toggle-custom-light" data-toggle="push-menu" role="button">
@@ -39,20 +39,20 @@
                                   <%= user.tag %>
                                 </span>
                               </a>
-                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                              <% if(config.DASHBOARD.style=="dark"){ %>
                                 <ul class="dropdown-menu dropdown-menu-custom-dark">
                                   <%} else {%>
                                     <ul class="dropdown-menu dropdown-menu-custom-light">
                                       <%}%>
                                         <!-- Menu Footer-->
-                                        <% if(config.DASHBOARD.style=="dark" ){ %>
+                                        <% if(config.DASHBOARD.style=="dark"){ %>
                                           <li class="user-footer user-footer-custom-dark"
                                             style="min-width: auto !important">
                                             <%} else {%>
                                           <li class="user-footer user-footer-custom-light" style="min-width: auto !important">
                                             <%}%>
                                               <div>
-                                                <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                <% if(config.DASHBOARD.style=="dark"){ %>
                                                   <a href="/logout"
                                                     class="btn btn-default btn-flat btn-block btn-custom-dark btn-default-custom-dark btn-flat-custom-dark btn-block-custom-dark">Sign
                                                     out</a>

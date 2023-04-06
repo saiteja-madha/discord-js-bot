@@ -2,7 +2,7 @@
 <html>
 <%- include('../includes/head') %>
 
-  <% if(config.DASHBOARD.style=="dark" ){ %>
+  <% if(config.DASHBOARD.style=="dark"){ %>
 
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
@@ -10,7 +10,7 @@
         <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
-            <% if(config.DASHBOARD.style=="dark" ){ %>
+            <% if(config.DASHBOARD.style=="dark"){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
                   <div class="wrapper wrapper-custom-light">
@@ -22,19 +22,19 @@
                         <%- include('../includes/sidebar') %>
 
                           <!-- Content Wrapper. Contains page content -->
-                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                          <% if(config.DASHBOARD.style=="dark"){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
                                 <div class="content-wrapper content-wrapper-custom-light">
                                   <%}%>
                                     <!-- Content Header (Page header) -->
-                                    <% if(config.DASHBOARD.style=="dark" ){ %>
+                                    <% if(config.DASHBOARD.style=="dark"){ %>
                                       <section class="content-header content-header-custom-dark">
                                         <%} else {%>
                                           <section class="content-header content-header-custom-light">
                                             <%}%>
                                               <h3>Moderation</h3>
-                                              <% if(config.DASHBOARD.style=="dark" ){ %>
+                                              <% if(config.DASHBOARD.style=="dark"){ %>
                                                 <ol class="breadcrumb breadcrumb-custom-dark">
                                                   <%} else {%>
                                                     <ol class="breadcrumb breadcrumb-custom-light">
@@ -45,7 +45,7 @@
                                                         <li><a href="<%=`/manage/${guild.id}/`%>">
                                                             <%=guild.name%>
                                                           </a></li>
-                                                        <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                        <% if(config.DASHBOARD.style=="dark"){ %>
                                                           <li class="active active-custom-dark">Moderation</li>
                                                           <%} else {%>
                                                             <li class="active active-custom-light">Moderation</li>
@@ -65,12 +65,12 @@
                                             <div class="row">
                                               <div class="col-md-6">
                                                 <!-- MODERATION CONFIGURATION -->
-                                                <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                <% if(config.DASHBOARD.style=="dark"){ %>
                                                   <div class="box box-warning box-custom-dark box-warning-custom-dark">
                                                     <%} else {%>
                                                       <div class="box box-warning box-custom-light box-warning-custom-light">
                                                         <%}%>
-                                                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                          <% if(config.DASHBOARD.style=="dark"){ %>
                                                             <div
                                                               class="box-header with-border box-header-custom-dark with-border-custom-dark">
                                                               <%} else {%>
@@ -84,7 +84,7 @@
                                                                   <div class="box-body">
                                                                     <div class="form-group">
                                                                       <label>Max Warnings</label>
-                                                                      <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                      <% if(config.DASHBOARD.style=="dark"){ %>
                                                                         <input type="number" name="max_warnings"
                                                                           class="form-control form-control-custom-dark"
                                                                           placeholder="<%= guild.max_warn.limit %>" />
@@ -97,7 +97,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                       <label>Max Warnings Action</label>
-                                                                      <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                      <% if(config.DASHBOARD.style=="dark"){ %>
                                                                         <select
                                                                           class="form-control form-control-custom-dark"
                                                                           name="max_warn_action">
@@ -141,7 +141,7 @@
                                                                     </div>
                                                                     <div class="form-group">
                                                                       <label>Moderation Logs</label>
-                                                                      <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                      <% if(config.DASHBOARD.style=="dark"){ %>
                                                                         <select
                                                                           class="form-control form-control-custom-dark"
                                                                           name="modlog_channel">
@@ -202,12 +202,12 @@
                                                                           <%}%>
                                                                     </div>
                                                                   </div>
-                                                                  <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                  <% if(config.DASHBOARD.style=="dark"){ %>
                                                                     <div class="box-footer box-footer-custom-dark">
                                                                       <%} else {%>
                                                                         <div class="box-footer box-footer-custom-light">
                                                                           <%}%>
-                                                                            <% if(config.DASHBOARD.style=="dark" ){ %>
+                                                                            <% if(config.DASHBOARD.style=="dark"){ %>
                                                                               <button type="submit"
                                                                                 onerror="errorresponse()"
                                                                                 name="modUpdate"

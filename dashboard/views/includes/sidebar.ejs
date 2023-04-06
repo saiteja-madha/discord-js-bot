@@ -1,11 +1,11 @@
 <!-- Left side column. contains the logo and sidebar -->
-<% if(config.DASHBOARD.style=="dark" ){ %>
+<% if(config.DASHBOARD.style=="dark"){ %>
   <aside class="main-sidebar main-sidebar-custom-dark">
     <%} else {%>
       <aside class="main-sidebar main-sidebar-custom-light">
         <%}%>
           <!-- sidebar: style can be found in sidebar.less -->
-          <% if(config.DASHBOARD.style=="dark" ){ %>
+          <% if(config.DASHBOARD.style=="dark"){ %>
             <section class="sidebar sidebar-custom-dark">
               <%} else {%>
                 <section class="sidebar sidebar-custom-light">
@@ -22,13 +22,13 @@
                       </div>
                     </div>
                     <!-- search form -->
-                    <% if(config.DASHBOARD.style=="dark" ){ %>
+                    <% if(config.DASHBOARD.style=="dark"){ %>
                       <form action="/selector" method="get" class="sidebar-form sidebar-custom-form">
                         <%} else {%>
                           <form action="/selector" method="get" class="sidebar-form sidebar-form-custom-light">
                             <%}%>
                               <div class="input-group">
-                                <% if(config.DASHBOARD.style=="dark" ){ %>
+                                <% if(config.DASHBOARD.style=="dark"){ %>
                                   <input type="search" class="form-control form-control-custom-dark" id="form-control"
                                     placeholder="Search this page..." oninput="Search()" />
                                   <%} else {%>
@@ -40,12 +40,12 @@
                           </form>
                           <!-- /.search form -->
                           <!-- sidebar menu: : style can be found in sidebar.less -->
-                          <% if(config.DASHBOARD.style=="dark" ){ %>
+                          <% if(config.DASHBOARD.style=="dark"){ %>
                             <ul class="sidebar-menu sidebar-menu-custom-dark" data-widget="tree">
                               <%} else {%>
                                 <ul class="sidebar-menu sidebar-menu-custom-light" data-widget="tree">
                                   <%}%>
-                                    <% if(config.DASHBOARD.style=="dark" ){ %>
+                                    <% if(config.DASHBOARD.style=="dark"){ %>
                                       <li class="header header-custom-dark">SERVERS MANAGEMENT</li>
                                       <%} else {%>
                                         <li class="header header-custom-light">SERVERS MANAGEMENT</li>
@@ -57,12 +57,12 @@
                                           </li>
                                 </ul>
                                 <% if (locals.guild){ %>
-                                  <% if(config.DASHBOARD.style=="dark" ){ %>
+                                  <% if(config.DASHBOARD.style=="dark"){ %>
                                     <ul class="sidebar-menu sidebar-menu-custom-dark" data-widget="tree">
                                       <%} else {%>
                                         <ul class="sidebar-menu sidebar-menu-custom-light" data-widget="tree">
                                           <%}%>
-                                            <% if(config.DASHBOARD.style=="dark" ){ %>
+                                            <% if(config.DASHBOARD.style=="dark"){ %>
                                               <li class="header header-custom-dark">CONFIGURATION</li>
                                               <%} else {%>
                                                 <li class="header header-custom-light">CONFIGURATION</li>
