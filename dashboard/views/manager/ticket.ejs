@@ -53,7 +53,14 @@
 
                                                     </ol>
                                           </section>
-
+                                          <div class="alert alert-success pull-right" id="response"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Success!</strong> Configuration saved!
+                                          </div>
+                                          <div class="alert alert-danger pull-right" id="errorresponse"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Error!</strong> There was an error, please try again!
+                                          </div>
                                           <section class="content">
                                             <div class="row">
                                               <div class="col-md-6">
@@ -186,14 +193,6 @@
                                                             </div>
                                                             <!-- END: TICKET CONFIGURATION -->
                                                       </div>
-                                                      <div class="alert alert-success pull-right" id="response"
-                                                        style="display: none; width: 30% !important">
-                                                        <strong>Success!</strong> Configuration saved!
-                                                      </div>
-                                                      <div class="alert alert-danger pull-right" id="errorresponse"
-                                                        style="display: none; width: 30% !important">
-                                                        <strong>Error!</strong> There was an error, please try again!
-                                                      </div>
                                                   </div>
                                           </section>
                                 </div>
@@ -201,11 +200,15 @@
         </body>
         <script>
           $("#ticketForm").submit(function () {
-            var x = document.getElementById("response");
-            if (x.style.display === "none") {
-              x.style.display = "block";
+            if (window.innerWidth <= 994) {
+              alert('Configuration saved!')
             } else {
-              x.style.display = "none";
+              var x = document.getElementById("response");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
             }
           });
 

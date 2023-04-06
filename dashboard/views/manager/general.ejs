@@ -53,7 +53,14 @@
 
                                                     </ol>
                                           </section>
-
+                                          <div class="alert alert-success pull-right" id="response"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Success!</strong> Configuration saved!
+                                          </div>
+                                          <div class="alert alert-danger pull-right" id="errorresponse"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Error!</strong> There was an error, please try again!
+                                          </div>
                                           <% if(config.DASHBOARD.style=="dark" ){ %>
                                             <section class="content content-custom-dark">
                                               <%} else {%>
@@ -152,10 +159,6 @@
                                                                     </div>
                                                                     <!-- END: GENERAL CONFIGURATION -->
                                                               </div>
-                                                              <div class="alert alert-success pull-right" id="response"
-                                                                style="display: none; width: 30% !important">
-                                                                <strong>Success!</strong> Configuration saved!
-                                                              </div>
                                                           </div>
                                                 </section>
                                 </div>
@@ -163,11 +166,15 @@
         </body>
         <script>
           $("#generalForm").submit(function () {
-            var x = document.getElementById("response");
-            if (x.style.display === "none") {
-              x.style.display = "block";
+            if (window.innerWidth <= 994) {
+              alert('Configuration saved!')
             } else {
-              x.style.display = "none";
+              var x = document.getElementById("response");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
             }
           });
 
