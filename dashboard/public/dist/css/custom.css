@@ -1,3 +1,216 @@
+/* ********************************** LIGHT MODE ********************************** */
+
+/*The whole webpage */
+.body-custom-light {
+  color: #000000 !important;
+  background-color: #ccc !important;
+}
+
+/* Background */
+.content-wrapper-custom-light {
+  background-color: #ccc !important;
+  color: #000000 !important;
+}
+
+/* Selector boxes */
+.box-custom-light {
+  background: #aaa !important;
+  color: #000000 !important;
+  border-radius: 17px !important;
+}
+
+.box.box-warning-custom-light {
+  border-top-color: #4a838c !important;
+}
+
+.box-footer-custom-light {
+  background-color: #aaa !important;
+  border-top-color: #aaa !important;
+  border-radius: 17px !important;
+}
+
+.box-header.with-border-custom-light {
+  border-bottom-color: #ccc !important;
+  color: #000000 !important;
+}
+
+.box.box-warning-custom-light {
+  border-top-left-radius: 3px !important;
+  border-top-right-radius: 3px !important;
+}
+
+.server-name-custom-light {
+  overflow: hidden;
+  width: calc(80%);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* The bar at the top */
+.navbar-custom-light {
+  background-color: #aaa !important;
+}
+
+.dropdown-toggle-custom-light {
+  width: 60px !important;
+  height: 50px !important;
+}
+
+.logo-custom-light {
+  background-color: #aaa !important;
+  color: #000000 !important;
+}
+
+.logo-custom-light:hover {
+  background-color: #aaa !important;
+}
+
+.sidebar-toggle-custom-light {
+  background-color: #aaa !important;
+  color: #000000 !important;
+}
+
+.sidebar-toggle-custom-light:hover {
+  background-color: #bbb !important;
+  color: #000000 !important;
+}
+
+/* The sidebar */
+.wrapper-custom-light {
+  color: #000000 !important;
+  background-color: #aaa !important;
+}
+
+.main-sidebar-custom-light {
+  color: #000000 !important;
+  background-color: #aaa !important;
+}
+
+.left-side-custom-light {
+  background-color: #aaa !important;
+  color: #000000 !important;
+}
+
+.sidebar-menu-custom-light > li > a {
+  background-color: #aaa !important;
+}
+
+.sidebar-menu-custom-light > li > a {
+  background-color: #aaa !important;
+  color: #000000 !important;
+}
+
+.sidebarform-custom-light {
+  background-color: #ccc !important;
+  border-color: #ccc !important;
+}
+
+.user-panel-custom-light > .info-custom-light > p {
+  color: #000 !important;
+}
+
+.sidebar-menu-custom-light > li.active-custom-light > a {
+  background-color: #bbb !important;
+  color: #000000 !important;
+  border-left-color: #000 !important;
+}
+
+.sidebar-menu-custom-light > li.header-custom-light {
+  background-color: #aaa !important;
+  color: #000000 !important;
+}
+
+/* Bar at the bottom */
+.main-footer-custom-light {
+  background-color: #aaa !important;
+  color: #000000 !important;
+  border-top-color: #aaa !important;
+}
+
+/* Buttons */
+.btn-primary-custom-light {
+  border-radius: 17px !important;
+  background-color: #3c8dbc !important;
+  border-color: #3c8dbc !important;
+  color: #000 !important;
+}
+
+.btn-danger-custom-light {
+  border-radius: 17px !important;
+}
+
+.btn-success-custom-light {
+  border-radius: 17px !important;
+  color: #000 !important;
+}
+
+.dropdown-toggle-custom-light {
+  width: 60px !important;
+  height: 50px !important;
+}
+
+.btn-default-custom-light {
+  border-radius: 17px !important;
+}
+
+/* Text for the navigation */
+.breadcrumb-custom-light > li > a {
+  color: #000000 !important;
+}
+
+.active-custom-light {
+  color: #000000 !important;
+}
+
+.breadcrumb-custom-light {
+  background-color: transparent !important;
+}
+
+/* Forms */
+.form-control-custom-light {
+  background-color: #ccc !important;
+  border-color: #aaa !important;
+  color: #000000 !important;
+  border-radius: 9px !important;
+}
+
+/* Search on the sidebar */
+.sidebar-form-custom-light {
+  color: #000000 !important;
+  border-color: #aaa !important;
+}
+
+/* Sign out */
+.user-footer-custom-light {
+  background-color: #bbb !important;
+  border-color: #bbb !important;
+  border-radius: 17px !important;
+}
+
+.btn-default-custom-light {
+  background-color: #ccc !important;
+  border-color: #ccc !important;
+  color: red !important;
+}
+
+.btn-default-custom-light:hover {
+  background-color: red !important;
+  border-color: red !important;
+  color: #000000 !important;
+}
+
+.dropdown-menu-custom-light {
+  background-color: #bbb !important;
+  border-color: #bbb !important;
+  border-radius: 10px !important;
+}
+
+.sidebar-form-custom-light {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+/* ********************************** DARK MODE ********************************** */
 /*The whole webpage */
 .body-custom-dark {
   color: #fff !important;
@@ -88,11 +301,6 @@
 
 .sidebar-menu-custom-dark > li > a {
   background-color: #222629 !important;
-}
-
-.sidebarform-custom-light {
-  background-color: #343a40 !important;
-  border-color: #343a40 !important;
 }
 
 .sidebar-menu-custom-dark > li.active-custom-dark > a {

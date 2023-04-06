@@ -7,13 +7,13 @@
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
 
-        <body class="hold-transition skin-blue sidebar-mini">
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
             <% if(config.DASHBOARD.style=="dark" ){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
-                  <div class="wrapper">
+                  <div class="wrapper wrapper-custom-light">
                     <%}%>
                       <!-- The header is the topbar -->
                       <%- include('../includes/header') %>
@@ -25,19 +25,19 @@
                           <% if(config.DASHBOARD.style=="dark" ){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
-                                <div class="content-wrapper">
+                                <div class="content-wrapper content-wrapper-custom-light">
                                   <%}%>
                                     <!-- Content Header (Page header) -->
                                     <% if(config.DASHBOARD.style=="dark" ){ %>
                                       <section class="content-header content-header-custom-dark">
                                         <%} else {%>
-                                          <section class="content-header">
+                                          <section class="content-header content-header-custom-light">
                                             <%}%>
                                               <h3>General</h3>
                                               <% if(config.DASHBOARD.style=="dark" ){ %>
                                                 <ol class="breadcrumb breadcrumb-custom-dark">
                                                   <%} else {%>
-                                                    <ol class="breadcrumb">
+                                                    <ol class="breadcrumb breadcrumb-custom-light">
                                                       <%}%>
                                                         <li>
                                                           <a href="/"><i class="fa fa-home"></i>Selector</a>
@@ -48,7 +48,7 @@
                                                         <% if(config.DASHBOARD.style=="dark" ){ %>
                                                           <li class="active active-custom-dark">General</li>
                                                           <%} else {%>
-                                                            <li class="active">General</li>
+                                                            <li class="active active-custom-light">General</li>
                                                             <%}%>
 
                                                     </ol>
@@ -73,13 +73,13 @@
                                                           <div
                                                             class="box box-warning box-custom-dark box-warning-custom-dark">
                                                             <%} else {%>
-                                                              <div class="box box-warning">
+                                                              <div class="box box-warning box-custom-light box-warning-custom-light">
                                                                 <%}%>
                                                                   <% if(config.DASHBOARD.style=="dark" ){ %>
                                                                     <div
                                                                       class="box-header with-border box-header-custom-dark with-border-custom-dark">
                                                                       <%} else {%>
-                                                                        <div class="box-header with-border">
+                                                                        <div class="box-header with-border box-header-custom-light with-border-custom-light">
                                                                           <%}%>
                                                                             <h3 class="box-title">General</h3>
                                                                         </div>
@@ -95,7 +95,7 @@
                                                                                   placeholder="<%= guild.prefix %>" />
                                                                                 <%} else {%>
                                                                                   <input type="text" name="prefix"
-                                                                                    class="form-control"
+                                                                                    class="form-control form-control-custom-light"
                                                                                     placeholder="<%= guild.prefix %>" />
                                                                                   <%}%>
                                                                             </div>
@@ -134,7 +134,7 @@
                                                                             <div
                                                                               class="box-footer box-footer-custom-dark">
                                                                               <%} else {%>
-                                                                                <div class="box-footer">
+                                                                                <div class="box-footer box-footer-custom-light">
                                                                                   <%}%>
                                                                                     <% if(config.DASHBOARD.style=="dark"
                                                                                       ){ %>
@@ -150,7 +150,7 @@
                                                                                           onerror="errorresponse()"
                                                                                           onclick="response()"
                                                                                           name="GeneralUpdate"
-                                                                                          class="btn btn-primary">
+                                                                                          class="btn btn-primary btn-custom-light btn-primary-custom-light">
                                                                                           Update
                                                                                         </button>
                                                                                         <%}%>

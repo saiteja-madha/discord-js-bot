@@ -7,13 +7,13 @@
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
 
-        <body class="hold-transition skin-blue sidebar-mini">
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
             <% if(config.DASHBOARD.style=="dark" ){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
-                  <div class="wrapper">
+                  <div class="wrapper wrapper-custom-light">
                     <%}%>
                       <!-- The header is the topbar -->
                       <%- include('../includes/header') %>
@@ -25,19 +25,19 @@
                           <% if(config.DASHBOARD.style=="dark" ){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
-                                <div class="content-wrapper">
+                                <div class="content-wrapper content-wrapper-custom-light">
                                   <%}%>
                                     <!-- Content Header (Page header) -->
                                     <% if(config.DASHBOARD.style=="dark" ){ %>
                                       <section class="content-header content-header-custom-dark">
                                         <%} else {%>
-                                          <section class="content-header">
+                                          <section class="content-header content-header-custom-light">
                                             <%}%>
                                               <h3>Farewell</h3>
                                               <% if(config.DASHBOARD.style=="dark" ){ %>
                                                 <ol class="breadcrumb breadcrumb-custom-dark">
                                                   <%} else {%>
-                                                    <ol class="breadcrumb">
+                                                    <ol class="breadcrumb breadcrumb-custom-light">
                                                       <%}%>
                                                         <li>
                                                           <a href="/"><i class="fa fa-home"></i>Selector</a>
@@ -48,7 +48,7 @@
                                                         <% if(config.DASHBOARD.style=="dark" ){ %>
                                                           <li class="active active-custom-dark">Farewell</li>
                                                           <%} else {%>
-                                                            <li class="active">Farewell</li>
+                                                            <li class="active active-custom-light">Farewell</li>
                                                             <%}%>
 
                                                     </ol>
@@ -68,13 +68,13 @@
                                                 <% if(config.DASHBOARD.style=="dark" ){ %>
                                                   <div class="box box-warning box-custom-dark box-warning-custom-dark">
                                                     <%} else {%>
-                                                      <div class="box box-warning">
+                                                      <div class="box box-warning box-custom-light box-warning-custom-light">
                                                         <%}%>
                                                           <% if(config.DASHBOARD.style=="dark" ){ %>
                                                             <div
                                                               class="box-header with-border box-header-custom-dark with-border-custom-dark">
                                                               <%} else {%>
-                                                                <div class="box-header with-border">
+                                                                <div class="box-header with-border box-header-custom-light with-border-custom-light">
                                                                   <%}%>
                                                                     <h3 class="box-title">Farewell</h3>
                                                                 </div>
@@ -92,7 +92,7 @@
 <%- guild.farewell.content?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                           <%} else {%>
                                                                             <textarea rows="3" name="content"
-                                                                              class="form-control">
+                                                                              class="form-control form-control-custom-light">
 <%- guild.farewell.content?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                             <%}%>
                                                                               <% } else { %>
@@ -103,7 +103,7 @@
                                                                                     placeholder="<%= '{member:tag} has left the server 👋' %>"></textarea>
                                                                                   <%} else {%>
                                                                                     <textarea rows="3" name="content"
-                                                                                      class="form-control"
+                                                                                      class="form-control form-control-custom-light"
                                                                                       placeholder="<%= '{member:tag} has left the server 👋' %>"></textarea>
                                                                                     <%}%>
 
@@ -117,7 +117,7 @@
 <%- guild.farewell.embed.description?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                         <%} else {%>
                                                                           <textarea rows="3" name="description"
-                                                                            class="form-control">
+                                                                            class="form-control form-control-custom-light">
 <%- guild.farewell.embed.description?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                           <%}%>
 
@@ -130,7 +130,7 @@
                                                                           value="<%= guild.farewell.embed.footer %>" />
                                                                         <%} else {%>
                                                                           <input type="text" name="footer"
-                                                                            class="form-control"
+                                                                            class="form-control form-control-custom-light"
                                                                             value="<%= guild.farewell.embed.footer %>" />
                                                                           <%}%>
 
@@ -143,7 +143,7 @@
                                                                           value="<%= guild.farewell.embed.color %>" />
                                                                         <%} else {%>
                                                                           <input type="text" name="hexcolor"
-                                                                            class="form-control"
+                                                                            class="form-control form-control-custom-light"
                                                                             value="<%= guild.farewell.embed.color %>" />
                                                                           <%}%>
 
@@ -156,7 +156,7 @@
                                                                           value="<%= guild.farewell.embed.image %>" />
                                                                         <%} else {%>
                                                                           <input type="text" name="image"
-                                                                            class="form-control"
+                                                                            class="form-control form-control-custom-light"
                                                                             value="<%= guild.farewell.embed.image %>" />
                                                                           <%}%>
                                                                     </div>
@@ -191,7 +191,7 @@
                                                                                     <% } %>
                                                                         </select>
                                                                         <%} else {%>
-                                                                          <select class="form-control" name="channel">
+                                                                          <select class="form-control form-control-custom-light" name="channel">
                                                                             <% if(bot.channels.cache.has(guild.farewell.channel)){
                                                                               %>
                                                                               <option selected="selected">#<%=
@@ -255,25 +255,25 @@
                                                                           <% } %>
                                                                     </div>
                                                                     <%} else {%>
-                                                                      <div class="box-footer">
+                                                                      <div class="box-footer box-footer-custom-light">
                                                                         <% if(guild.farewell.enabled){ %>
                                                                           <button type="submit"
                                                                             onerror="errorresponse()"
                                                                             name="farewellDisable"
-                                                                            class="btn btn-danger">
+                                                                            class="btn btn-danger btn-custom-light btn-danger-custom-light">
                                                                             Disable Messages
                                                                           </button>
                                                                           <button type="submit"
                                                                             onerror="errorresponse()"
                                                                             name="farewellUpdate"
-                                                                            class="btn btn-primary pull-right">
+                                                                            class="btn btn-primary pull-right btn-custom-light btn-primary-custom-light">
                                                                             Update
                                                                           </button>
                                                                           <% } else { %>
                                                                             <button type="submit"
                                                                               onerror="errorresponse()"
                                                                               name="farewellEnable"
-                                                                              class="btn btn-success">
+                                                                              class="btn btn-success btn-custom-light btn-success-custom-light">
                                                                               Enable Message
                                                                             </button>
                                                                             <% } %>

@@ -6,13 +6,13 @@
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
 
-        <body class="hold-transition skin-blue sidebar-mini">
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
             <% if(config.DASHBOARD.style=="dark" ){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
-                  <div class="wrapper">
+                  <div class="wrapper wrapper-custom-light">
                     <%}%>
 
                       <!-- The header is the topbar -->
@@ -25,19 +25,19 @@
                           <% if(config.DASHBOARD.style=="dark" ){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
-                                <div class="content-wrapper">
+                                <div class="content-wrapper content-wrapper-custom-light">
                                   <%}%>
                                     <!-- Content Header (Page header) -->
                                     <% if(config.DASHBOARD.style=="dark" ){ %>
                                       <section class="content-header content-header-custom-dark">
                                         <%} else {%>
-                                          <section class="content-header">
+                                          <section class="content-header content-header-custom-light">
                                             <%}%>
                                               <h1>Selector <small> Version 1.0.0-beta </small></h1>
                                               <% if(config.DASHBOARD.style=="dark" ){ %>
                                                 <ol class="breadcrumb breadcrumb-custom-dark">
                                                   <%} else {%>
-                                                    <ol class="breadcrumb">
+                                                    <ol class="breadcrumb breadcrumb-custom-light">
                                                       <%}%>
                                                         <li>
                                                           <a href="/"><i class="fa fa-home"></i>Selector</a>
@@ -52,15 +52,15 @@
                                                 <!-- Displays 4 servers by line -->
                                                 <div class="col-md-3">
                                                   <% if(config.DASHBOARD.style=="dark" ){ %>
-                                                    <div class="box box-solid box-custom-dark">
+                                                    <div class="box box-solid box-solid-custom-light box-custom-dark">
                                                       <%} else {%>
-                                                        <div class="box box-solid">
+                                                        <div class="box box-solid box-solid-custom-light box-custom-light">
                                                           <%}%>
                                                             <% if(config.DASHBOARD.style=="dark" ){ %>
                                                               <div
                                                                 class="box-header with-border text-center box-header-custom-dark with-border-custom-dark">
                                                                 <%} else {%>
-                                                                  <div class="box-header with-border text-center">
+                                                                  <div class="box-header with-border text-center box-header-custom-light with-border-custom-light">
                                                                     <%}%>
 
                                                                       <i class="fas fa-crown"></i>
@@ -89,14 +89,14 @@
                                                                           <% } %>
                                                                     </div>
                                                                     <%} else {%>
-                                                                      <div class="box-footer">
+                                                                      <div class="box-footer box-footer-custom-light">
                                                                         <% if(guild.settingsUrl.includes('discordapp.com'))
                                                                           { %>
                                                                           <a href="<%= guild.settingsUrl %>"><button
-                                                                              class="btn btn-block btn-primary">Invite</button></a>
+                                                                              class="btn btn-block btn-primary btn-custom-light btn-block-custom-light btn-primary-custom-light">Invite</button></a>
                                                                           <% } else { %>
                                                                             <a href="<%= guild.settingsUrl %>"><button
-                                                                                class="btn btn-block btn-success">Manage</button></a>
+                                                                                class="btn btn-block btn-success btn-block-custom-light btn-success-custom-light">Manage</button></a>
                                                                             <% } %>
                                                                       </div>
                                                                       <%}%>
@@ -112,13 +112,13 @@
                                                               <div
                                                                 class="box box-warning box-custom-dark box-warning-custom-dark">
                                                                 <%} else {%>
-                                                                  <div class="box box-warning">
+                                                                  <div class="box box-warning box-custom-light box-warning-custom-light">
                                                                     <%}%>
                                                                       <% if(config.DASHBOARD.style=="dark" ){ %>
                                                                         <div
                                                                           class="box-header with-border box-header-custom-dark with-border-custom-dark">
                                                                           <%} else {%>
-                                                                            <div class="box-header with-border">
+                                                                            <div class="box-header with-border box-header-custom-light with-border-custom-light">
                                                                               <%}%>
 
                                                                                 <h3 class="box-title">No server found
@@ -133,7 +133,7 @@
                                                                                     </button>
                                                                                     <%} else {%>
                                                                                       <button type="button"
-                                                                                        class="btn btn-box-tool"
+                                                                                        class="btn btn-box-tool btn-custom-light"
                                                                                         data-widget="collapse"></button>
                                                                                       <i class="fa fa-minus"></i>
                                                                                       </button>

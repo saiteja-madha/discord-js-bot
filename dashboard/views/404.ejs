@@ -6,13 +6,13 @@
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
 
-        <body class="hold-transition skin-blue sidebar-mini">
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
             <% if(config.DASHBOARD.style=="dark" ){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
-                  <div class="wrapper">
+                  <div class="wrapper wrapper-custom-light">
                     <%}%>
 
                       <!-- The header is the topbar -->
@@ -25,7 +25,7 @@
                           <% if(config.DASHBOARD.style=="dark" ){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
-                                <div class="content-wrapper">
+                                <div class="content-wrapper content-wrapper-custom-light">
                                   <%}%>
 
                                     <!-- Main content -->
@@ -49,7 +49,7 @@
                                                   class="form-control form-control-custom-dark"
                                                   placeholder="Search for servers..." />
                                                 <%} else {%>
-                                                  <input type="text" name="q" class="form-control"
+                                                  <input type="text" name="q" class="form-control form-control-custom-light"
                                                     placeholder="Search for servers..." />
                                                   <%}%>
 

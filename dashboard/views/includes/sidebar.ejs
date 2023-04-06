@@ -2,13 +2,13 @@
 <% if(config.DASHBOARD.style=="dark" ){ %>
   <aside class="main-sidebar main-sidebar-custom-dark">
     <%} else {%>
-      <aside class="main-sidebar">
+      <aside class="main-sidebar main-sidebar-custom-light">
         <%}%>
           <!-- sidebar: style can be found in sidebar.less -->
           <% if(config.DASHBOARD.style=="dark" ){ %>
             <section class="sidebar sidebar-custom-dark">
               <%} else {%>
-                <section class="sidebar">
+                <section class="sidebar sidebar-custom-light">
                   <%}%>
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
@@ -25,14 +25,14 @@
                     <% if(config.DASHBOARD.style=="dark" ){ %>
                       <form action="/selector" method="get" class="sidebar-form sidebar-custom-form">
                         <%} else {%>
-                          <form action="/selector" method="get" class="sidebar-form">
+                          <form action="/selector" method="get" class="sidebar-form sidebar-form-custom-light">
                             <%}%>
                               <div class="input-group">
                                 <% if(config.DASHBOARD.style=="dark" ){ %>
                                   <input type="search" class="form-control form-control-custom-dark" id="form-control"
                                     placeholder="Search this page..." oninput="Search()" />
                                   <%} else {%>
-                                    <input type="search" class="form-control sidebarform-custom-light" id="form-control"
+                                    <input type="search" class="form-control form-control-custom-light" id="form-control"
                                       placeholder="Search this page..." oninput="Search()" />
                                     <%}%>
                                       <span class="input-group-btn"> </span>
@@ -43,12 +43,12 @@
                           <% if(config.DASHBOARD.style=="dark" ){ %>
                             <ul class="sidebar-menu sidebar-menu-custom-dark" data-widget="tree">
                               <%} else {%>
-                                <ul class="sidebar-menu" data-widget="tree">
+                                <ul class="sidebar-menu sidebar-menu-custom-light" data-widget="tree">
                                   <%}%>
                                     <% if(config.DASHBOARD.style=="dark" ){ %>
                                       <li class="header header-custom-dark">SERVERS MANAGEMENT</li>
                                       <%} else {%>
-                                        <li class="header">SERVERS MANAGEMENT</li>
+                                        <li class="header header-custom-light">SERVERS MANAGEMENT</li>
                                         <%}%>
 
                                           <li class="treeview menu-open"></li>
@@ -60,12 +60,12 @@
                                   <% if(config.DASHBOARD.style=="dark" ){ %>
                                     <ul class="sidebar-menu sidebar-menu-custom-dark" data-widget="tree">
                                       <%} else {%>
-                                        <ul class="sidebar-menu" data-widget="tree">
+                                        <ul class="sidebar-menu sidebar-menu-custom-light" data-widget="tree">
                                           <%}%>
                                             <% if(config.DASHBOARD.style=="dark" ){ %>
                                               <li class="header header-custom-dark">CONFIGURATION</li>
                                               <%} else {%>
-                                                <li class="header">CONFIGURATION</li>
+                                                <li class="header header-custom-light">CONFIGURATION</li>
                                                 <%}%>
 
                                                   <li class="treeview menu-open"></li>
@@ -139,10 +139,16 @@
         $(document).ready(function () {
           // get current URL path and assign 'active' class
           let pathname = window.location.pathname;
-          $(`.sidebar-menu > li > a[href="${pathname}"]`).parent().addClass("active active-custom-dark");
-          $(`.sidebar-menu > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active active-custom-dark");
-          $(`.sidebar-menu > li > a[href="/${window.location.pathname.split("/")[1]}/"]`)
+          $(`.sidebar-menu-custom-dark > li > a[href="${pathname}"]`).parent().addClass("active active-custom-dark");
+          $(`.sidebar-menu-custom-dark > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active active-custom-dark");
+          $(`.sidebar-menu-custom-dark > li > a[href="/${window.location.pathname.split("/")[1]}/"]`)
             .parent()
-            .addClass("active active-custom-dark");
+            .addClass("active active-custom-dark"),
+            window.location.pathname;
+          $(`.sidebar-menu-custom-light > li > a[href="${pathname}"]`).parent().addClass("active active-custom-light");
+          $(`.sidebar-menu-custom-light > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active active-custom-light");
+          $(`.sidebar-menu-custom-light > li > a[href="/${window.location.pathname.split("/")[1]}/"]`)
+            .parent()
+            .addClass("active active-custom-light");
         });
       </script>

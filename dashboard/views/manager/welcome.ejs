@@ -7,13 +7,13 @@
     <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
       <%} else {%>
 
-        <body class="hold-transition skin-blue sidebar-mini">
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
           <%}%>
 
             <% if(config.DASHBOARD.style=="dark" ){ %>
               <div class="wrapper wrapper-custom-dark">
                 <%} else {%>
-                  <div class="wrapper">
+                  <div class="wrapper wrapper-custom-light">
                     <%}%>
                       <!-- The header is the topbar -->
                       <%- include('../includes/header') %>
@@ -25,19 +25,19 @@
                           <% if(config.DASHBOARD.style=="dark" ){ %>
                             <div class="content-wrapper content-wrapper-custom-dark">
                               <%} else {%>
-                                <div class="content-wrapper">
+                                <div class="content-wrapper content-wrapper-custom-light">
                                   <%}%>
                                     <!-- Content Header (Page header) -->
                                     <% if(config.DASHBOARD.style=="dark" ){ %>
                                       <section class="content-header content-header-custom-dark">
                                         <%} else {%>
-                                          <section class="content-header">
+                                          <section class="content-header content-header-custom-light">
                                             <%}%>
                                               <h3>Welcome</h3>
                                               <% if(config.DASHBOARD.style=="dark" ){ %>
                                                 <ol class="breadcrumb breadcrumb-custom-dark">
                                                   <%} else {%>
-                                                    <ol class="breadcrumb">
+                                                    <ol class="breadcrumb breadcrumb-custom-light">
                                                       <%}%>
                                                         <li>
                                                           <a href="/"><i class="fa fa-home"></i>Selector</a>
@@ -48,7 +48,7 @@
                                                         <% if(config.DASHBOARD.style=="dark" ){ %>
                                                           <li class="active active-custom-dark">Welcome</li>
                                                           <%} else {%>
-                                                            <li class="active">Welcome</li>
+                                                            <li class="active active-custom-light">Welcome</li>
                                                             <%}%>
 
                                                     </ol>
@@ -57,28 +57,26 @@
                                             style="display: none; width: 30% !important">
                                             <strong>Success!</strong> Configuration saved!
                                           </div>
-
                                           <div class="alert alert-danger pull-right" id="errorresponse"
                                             style="display: none; width: 30% !important">
-                                            <strong>Error!</strong> There was an error, please try
-                                            again!
+                                            <strong>Error!</strong> There was an error, please try again!
                                           </div>
                                           <section class="content">
                                             <div class="row">
                                               <div class="col-md-6">
-                                                <!-- WELCOME CONFIGURATION -->
+                                                <!-- welcome CONFIGURATION -->
                                                 <% if(config.DASHBOARD.style=="dark" ){ %>
                                                   <div class="box box-warning box-custom-dark box-warning-custom-dark">
                                                     <%} else {%>
-                                                      <div class="box box-warning">
+                                                      <div class="box box-warning box-custom-light box-warning-custom-light">
                                                         <%}%>
                                                           <% if(config.DASHBOARD.style=="dark" ){ %>
                                                             <div
                                                               class="box-header with-border box-header-custom-dark with-border-custom-dark">
                                                               <%} else {%>
-                                                                <div class="box-header with-border">
+                                                                <div class="box-header with-border box-header-custom-light with-border-custom-light">
                                                                   <%}%>
-                                                                    <h3 class="box-title">Welcome</h3>
+                                                                    <h3 class="box-title">welcome</h3>
                                                                 </div>
                                                                 <form role="form"
                                                                   action="/manage/<%= guild.id %>/welcome/"
@@ -94,7 +92,7 @@
 <%- guild.welcome.content?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                           <%} else {%>
                                                                             <textarea rows="3" name="content"
-                                                                              class="form-control form-control-custom-dark">
+                                                                              class="form-control form-control-custom-light">
 <%- guild.welcome.content?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                             <%}%>
                                                                               <% } else { %>
@@ -105,7 +103,7 @@
                                                                                     placeholder="<%= '{member:tag} has left the server 👋' %>"></textarea>
                                                                                   <%} else {%>
                                                                                     <textarea rows="3" name="content"
-                                                                                      class="form-control"
+                                                                                      class="form-control form-control-custom-light"
                                                                                       placeholder="<%= '{member:tag} has left the server 👋' %>"></textarea>
                                                                                     <%}%>
 
@@ -119,7 +117,7 @@
 <%- guild.welcome.embed.description?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                         <%} else {%>
                                                                           <textarea rows="3" name="description"
-                                                                            class="form-control">
+                                                                            class="form-control form-control-custom-light">
 <%- guild.welcome.embed.description?.replaceAll(/\\n/g, '&#10;') %></textarea>
                                                                           <%}%>
 
@@ -132,7 +130,7 @@
                                                                           value="<%= guild.welcome.embed.footer %>" />
                                                                         <%} else {%>
                                                                           <input type="text" name="footer"
-                                                                            class="form-control"
+                                                                            class="form-control form-control-custom-light"
                                                                             value="<%= guild.welcome.embed.footer %>" />
                                                                           <%}%>
 
@@ -145,7 +143,7 @@
                                                                           value="<%= guild.welcome.embed.color %>" />
                                                                         <%} else {%>
                                                                           <input type="text" name="hexcolor"
-                                                                            class="form-control"
+                                                                            class="form-control form-control-custom-light"
                                                                             value="<%= guild.welcome.embed.color %>" />
                                                                           <%}%>
 
@@ -158,7 +156,7 @@
                                                                           value="<%= guild.welcome.embed.image %>" />
                                                                         <%} else {%>
                                                                           <input type="text" name="image"
-                                                                            class="form-control"
+                                                                            class="form-control form-control-custom-light"
                                                                             value="<%= guild.welcome.embed.image %>" />
                                                                           <%}%>
                                                                     </div>
@@ -193,7 +191,7 @@
                                                                                     <% } %>
                                                                         </select>
                                                                         <%} else {%>
-                                                                          <select class="form-control" name="channel">
+                                                                          <select class="form-control form-control-custom-light" name="channel">
                                                                             <% if(bot.channels.cache.has(guild.welcome.channel)){
                                                                               %>
                                                                               <option selected="selected">#<%=
@@ -257,35 +255,30 @@
                                                                           <% } %>
                                                                     </div>
                                                                     <%} else {%>
-                                                                      <% if(config.DASHBOARD.style=="dark" ){ %>
-
-                                                                        <%} else {%>
-
-                                                                          <%}%>
-                                                                            <div class="box-footer">
-                                                                              <% if(guild.welcome.enabled){ %>
-                                                                                <button type="submit"
-                                                                                  onerror="errorresponse()"
-                                                                                  name="welcomeDisable"
-                                                                                  class="btn btn-danger">
-                                                                                  Disable Messages
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                  onerror="errorresponse()"
-                                                                                  name="welcomeUpdate"
-                                                                                  class="btn btn-primary pull-right">
-                                                                                  Update
-                                                                                </button>
-                                                                                <% } else { %>
-                                                                                  <button type="submit"
-                                                                                    onerror="errorresponse()"
-                                                                                    name="welcomeEnable"
-                                                                                    class="btn btn-success">
-                                                                                    Enable Message
-                                                                                  </button>
-                                                                                  <% } %>
-                                                                            </div>
-                                                                            <%}%>
+                                                                      <div class="box-footer box-footer-custom-light">
+                                                                        <% if(guild.welcome.enabled){ %>
+                                                                          <button type="submit"
+                                                                            onerror="errorresponse()"
+                                                                            name="welcomeDisable"
+                                                                            class="btn btn-danger btn-custom-light btn-danger-custom-light">
+                                                                            Disable Messages
+                                                                          </button>
+                                                                          <button type="submit"
+                                                                            onerror="errorresponse()"
+                                                                            name="welcomeUpdate"
+                                                                            class="btn btn-primary pull-right btn-custom-light btn-primary-custom-light">
+                                                                            Update
+                                                                          </button>
+                                                                          <% } else { %>
+                                                                            <button type="submit"
+                                                                              onerror="errorresponse()"
+                                                                              name="welcomeEnable"
+                                                                              class="btn btn-success btn-custom-light btn-success-custom-light">
+                                                                              Enable Message
+                                                                            </button>
+                                                                            <% } %>
+                                                                      </div>
+                                                                      <%}%>
 
                                                                 </form>
                                                             </div>
