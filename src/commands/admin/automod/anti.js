@@ -113,28 +113,33 @@ module.exports = {
     const sub = args[0].toLowerCase();
 
     let response;
+
+    // ghostping
     if (sub == "ghostping") {
       const status = args[1].toLowerCase();
+
       if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await antiGhostPing(settings, status);
     }
 
-    //
+    // spam
     else if (sub == "spam") {
       const status = args[1].toLowerCase();
+
       if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await antiSpam(settings, status);
     }
 
-    //
+    // mass mention
     else if (sub === "massmention") {
       const status = args[1].toLowerCase();
       const threshold = args[2] || 3;
+
       if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
       response = await antiMassMention(settings, status, threshold);
     }
 
-    //
+    // no input found
     else response = "Invalid command usage!";
     await message.safeReply(response);
   },
@@ -144,41 +149,60 @@ module.exports = {
     const settings = data.settings;
 
     let response;
-    if (sub == "ghostping") response = await antiGhostPing(settings, interaction.options.getString("status"));
-    else if (sub == "spam") response = await antiSpam(settings, interaction.options.getString("status"));
+
+    // ghostping
+    if (sub == "ghostping") {
+      response = await antiGhostPing(settings, interaction.options.getString("status"));
+    }
+
+    // spam
+    else if (sub == "spam") {
+      response = await antiSpam(settings, interaction.options.getString("status"));
+    }
+
+    // mass mention
     else if (sub === "massmention") {
       response = await antiMassMention(
         settings,
         interaction.options.getString("status"),
         interaction.options.getInteger("amount")
       );
-    } else response = "Invalid command usage!";
+    }
 
+    // no input found
+    else response = "Invalid command usage!";
     await interaction.followUp(response);
   },
 };
 
+// ghost ping
 async function antiGhostPing(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_ghostping = status;
+
   await settings.save();
   return `Configuration saved! Anti-Ghostping is now ${status ? "enabled" : "disabled"}`;
 }
 
+// spam
 async function antiSpam(settings, input) {
   const status = input.toUpperCase() === "ON" ? true : false;
   settings.automod.anti_spam = status;
+
   await settings.save();
   return `Antispam detection is now ${status ? "enabled" : "disabled"}`;
 }
 
+// mass mention
 async function antiMassMention(settings, input, threshold) {
   const status = input.toUpperCase() === "ON" ? true : false;
+
   if (!status) {
     settings.automod.anti_massmention = 0;
   } else {
     settings.automod.anti_massmention = threshold;
   }
+
   await settings.save();
   return `Mass mention detection is now ${status ? "enabled" : "disabled"}`;
 }

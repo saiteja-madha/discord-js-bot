@@ -1,6 +1,7 @@
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
 const { removeReactionRole } = require("@schemas/ReactionRoles");
 const { parsePermissions } = require("@helpers/Utils");
-const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 const channelPerms = ["EmbedLinks", "ReadMessageHistory", "AddReactions", "UseExternalEmojis", "ManageMessages"];
 
@@ -62,6 +63,7 @@ async function removeRR(guild, channel, messageId) {
   }
 
   let targetMessage;
+
   try {
     targetMessage = await channel.messages.fetch({ message: messageId });
   } catch (ex) {

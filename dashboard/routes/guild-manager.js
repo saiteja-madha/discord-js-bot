@@ -113,7 +113,6 @@ router.get("/:serverID/welcome", CheckAuth, async (req, res) => {
   });
 });
 
-
 router.get("/:serverID/moderation", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
   const guild = req.client.guilds.cache.get(req.params.serverID);
@@ -227,7 +226,7 @@ router.post("/:serverID/moderation", CheckAuth, async (req, res) => {
 
   await settings.save();
   setTimeout(() => {
-    res.redirect(303, `/manage/${guild.id}/moderation`)
+    res.redirect(303, `/manage/${guild.id}/moderation`);
   }, 700);
 });
 
@@ -303,9 +302,8 @@ router.post("/:serverID/automod", CheckAuth, async (req, res) => {
   await settings.save();
 
   setTimeout(() => {
-    res.redirect(303, `/manage/${guild.id}/automod`)
+    res.redirect(303, `/manage/${guild.id}/automod`);
   }, 700);
-
 });
 
 router.post("/:serverID/ticket", CheckAuth, async (req, res) => {
@@ -339,7 +337,7 @@ router.post("/:serverID/ticket", CheckAuth, async (req, res) => {
 
   await settings.save();
   setTimeout(() => {
-    res.redirect(303, `/manage/${guild.id}/ticket`)
+    res.redirect(303, `/manage/${guild.id}/ticket`);
   }, 700);
 });
 
@@ -379,10 +377,9 @@ router.post("/:serverID/general", CheckAuth, async (req, res) => {
 
   await settings.save();
   setTimeout(() => {
-    res.redirect(303, `/manage/${guild.id}/general`)
+    res.redirect(303, `/manage/${guild.id}/general`);
   }, 700);
 });
-
 
 router.post("/:serverID/farewell", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
@@ -446,11 +443,9 @@ router.post("/:serverID/farewell", CheckAuth, async (req, res) => {
 
   await settings.save();
   setTimeout(() => {
-    res.redirect(303, `/manage/${guild.id}/farewell`)
+    res.redirect(303, `/manage/${guild.id}/farewell`);
   }, 700);
-
 });
-
 
 router.post("/:serverID/welcome", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
@@ -515,10 +510,9 @@ router.post("/:serverID/welcome", CheckAuth, async (req, res) => {
 
   await settings.save();
   setTimeout(() => {
-    res.redirect(303, `/manage/${guild.id}/welcome`)
+    res.redirect(303, `/manage/${guild.id}/welcome`);
   }, 700);
 });
-
 
 router.post("/:serverID/stats", CheckAuth, async (req, res) => {
   // Check if the user has the permissions to edit this guild
@@ -557,7 +551,7 @@ router.post("/:serverID/stats", CheckAuth, async (req, res) => {
 
   await settings.save();
   setTimeout(() => {
-    res.redirect(303, `/manage/${guild.id}/stats`)
+    res.redirect(303, `/manage/${guild.id}/stats`);
   }, 700);
 });
 

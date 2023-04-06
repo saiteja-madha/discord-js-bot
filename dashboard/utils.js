@@ -1,10 +1,12 @@
 const { getUser } = require("@schemas/User");
-const Discord = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
+
+const Discord = require("discord.js");
 
 async function fetchGuild(guildID, client, guilds) {
   const guild = client.guilds.cache.get(guildID);
   const settings = await getSettings(guild);
+
   return { ...guild, ...settings._doc, ...guilds.find((g) => g.id === guild.id) };
 }
 
@@ -13,6 +15,7 @@ async function fetchUser(userData, client, query) {
     userData.guilds.forEach((guild) => {
       if (guild.permissions) {
         const perms = new Discord.PermissionsBitField(BigInt(guild.permissions));
+
         if (perms.has("ManageGuild")) guild.admin = true;
       }
       guild.settingsUrl = client.guilds.cache.get(guild.id)
@@ -32,9 +35,11 @@ async function fetchUser(userData, client, query) {
     }
   }
   const user = await client.users.fetch(userData.id);
+
   user.displayAvatar = user.displayAvatarURL();
   const userDb = await getUser(user);
   const userInfos = { ...user, ...userDb, ...userData, ...user.presence };
+
   return userInfos;
 }
 

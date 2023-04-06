@@ -49,10 +49,13 @@ module.exports = {
 
   async messageRun(message, args, data) {
     const type = args[0].toUpperCase();
+
     if (!type || !["USERS", "MEMBERS", "BOTS"].includes(type)) {
       return message.safeReply("Incorrect arguments are passed! Counter types: `users/members/bots`");
     }
+
     if (args.length < 2) return message.safeReply("Incorrect Usage! You did not provide name");
+
     args.shift();
     let channelName = args.join(" ");
 
@@ -99,6 +102,7 @@ async function setupCounter(guild, type, name, settings) {
   });
 
   const exists = settings.counters.find((v) => v.counter_type.toUpperCase() === type);
+
   if (exists) {
     exists.name = name;
     exists.channel_id = vc.id;

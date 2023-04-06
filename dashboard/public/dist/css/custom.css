@@ -146,7 +146,7 @@
 
 .btn-success-custom-light:hover {
   border-radius: 17px !important;
-    background-color: #bbb !important;
+  background-color: #bbb !important;
   border-color: #bbb !important;
   color: #000 !important;
 }
@@ -406,7 +406,6 @@
   background-color: #1c2024 !important;
   color: #fff !important;
 }
-
 
 .server-name {
   overflow: hidden;

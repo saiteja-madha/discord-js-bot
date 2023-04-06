@@ -1,5 +1,6 @@
-const { addReactionRole, getReactionRoles } = require("@schemas/ReactionRoles");
 const { parseEmoji, ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
+const { addReactionRole, getReactionRoles } = require("@schemas/ReactionRoles");
 const { parsePermissions } = require("@helpers/Utils");
 
 const channelPerms = ["EmbedLinks", "ReadMessageHistory", "AddReactions", "UseExternalEmojis", "ManageMessages"];
@@ -67,6 +68,7 @@ module.exports = {
   async interactionRun(interaction) {
     const targetChannel = interaction.options.getChannel("channel");
     const messageId = interaction.options.getString("message_id");
+
     const reaction = interaction.options.getString("emoji");
     const role = interaction.options.getRole("role");
 
@@ -81,6 +83,7 @@ async function addRR(guild, channel, messageId, reaction, role) {
   }
 
   let targetMessage;
+
   try {
     targetMessage = await channel.messages.fetch({ message: messageId });
   } catch (ex) {
@@ -100,7 +103,9 @@ async function addRR(guild, channel, messageId, reaction, role) {
   }
 
   const custom = parseEmoji(reaction);
+
   if (custom.id && !guild.emojis.cache.has(custom.id)) return "This emoji does not belong to this server";
+
   const emoji = custom.id ? custom.id : custom.name;
 
   try {
@@ -111,6 +116,7 @@ async function addRR(guild, channel, messageId, reaction, role) {
 
   let reply = "";
   const previousRoles = getReactionRoles(guild.id, channel.id, targetMessage.id);
+
   if (previousRoles.length > 0) {
     const found = previousRoles.find((rr) => rr.emote === emoji);
     if (found) reply = "A role is already configured for this emoji. Overwriting data,\n";

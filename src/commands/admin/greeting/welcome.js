@@ -1,6 +1,7 @@
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
 const { isHex } = require("@helpers/Utils");
 const { buildGreeting } = require("@handlers/greeting");
-const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}
@@ -175,6 +176,7 @@ module.exports = {
   async messageRun(message, args, data) {
     const type = args[0].toLowerCase();
     const settings = data.settings;
+
     let response;
 
     // preview
@@ -185,6 +187,7 @@ module.exports = {
     // status
     else if (type === "status") {
       const status = args[1]?.toUpperCase();
+
       if (!status || !["ON", "OFF"].includes(status))
         return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setStatus(settings, status);
@@ -193,12 +196,14 @@ module.exports = {
     // channel
     else if (type === "channel") {
       const channel = message.mentions.channels.first();
+
       response = await setChannel(settings, channel);
     }
 
     // desc
     else if (type === "desc") {
       if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
+
       const desc = args.slice(1).join(" ");
       response = await setDescription(settings, desc);
     }
@@ -206,6 +211,7 @@ module.exports = {
     // thumbnail
     else if (type === "thumbnail") {
       const status = args[1]?.toUpperCase();
+
       if (!status || !["ON", "OFF"].includes(status))
         return message.safeReply("Invalid status. Value must be `on/off`");
       response = await setThumbnail(settings, status);
@@ -214,6 +220,7 @@ module.exports = {
     // color
     else if (type === "color") {
       const color = args[1];
+
       if (!color || !isHex(color)) return message.safeReply("Invalid color. Value must be a valid hex color");
       response = await setColor(settings, color);
     }
@@ -221,6 +228,7 @@ module.exports = {
     // footer
     else if (type === "footer") {
       if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
+
       const content = args.slice(1).join(" ");
       response = await setFooter(settings, content);
     }
@@ -228,11 +236,12 @@ module.exports = {
     // image
     else if (type === "image") {
       const url = args[1];
+
       if (!url) return message.safeReply("Invalid image url. Please provide a valid url");
       response = await setImage(settings, url);
     }
 
-    //
+    // no input found
     else response = "Invalid command usage!";
     return message.safeReply(response);
   },
@@ -242,39 +251,49 @@ module.exports = {
     const settings = data.settings;
 
     let response;
+
     switch (sub) {
+      // preview
       case "preview":
         response = await sendPreview(settings, interaction.member);
         break;
 
+      // status
       case "status":
         response = await setStatus(settings, interaction.options.getString("status"));
         break;
 
+      // channel
       case "channel":
         response = await setChannel(settings, interaction.options.getChannel("channel"));
         break;
 
+      // description
       case "desc":
         response = await setDescription(settings, interaction.options.getString("content"));
         break;
 
+      // thumbnail
       case "thumbnail":
         response = await setThumbnail(settings, interaction.options.getString("status"));
         break;
 
+      // color
       case "color":
         response = await setColor(settings, interaction.options.getString("color"));
         break;
 
+      // footer
       case "footer":
         response = await setFooter(settings, interaction.options.getString("content"));
         break;
 
+      // image
       case "image":
         response = await setImage(settings, interaction.options.getString("url"));
         break;
 
+      // no input found
       default:
         response = "Invalid subcommand";
     }
@@ -283,6 +302,7 @@ module.exports = {
   },
 };
 
+// preview
 async function sendPreview(settings, member) {
   if (!settings.welcome?.enabled) return "Welcome message not enabled in this server";
 
@@ -295,13 +315,16 @@ async function sendPreview(settings, member) {
   return `Sent welcome preview to ${targetChannel.toString()}`;
 }
 
+// status
 async function setStatus(settings, status) {
   const enabled = status.toUpperCase() === "ON" ? true : false;
   settings.welcome.enabled = enabled;
+
   await settings.save();
   return `Configuration saved! Welcome message ${enabled ? "enabled" : "disabled"}`;
 }
 
+// channel
 async function setChannel(settings, channel) {
   if (!channel.canSendEmbeds()) {
     return (
@@ -310,36 +333,47 @@ async function setChannel(settings, channel) {
     );
   }
   settings.welcome.channel = channel.id;
+
   await settings.save();
   return `Configuration saved! Welcome message will be sent to ${channel ? channel.toString() : "Not found"}`;
 }
 
+// description
 async function setDescription(settings, desc) {
   settings.welcome.embed.description = desc;
+
   await settings.save();
   return "Configuration saved! Welcome message updated";
 }
 
+// thumbnail
 async function setThumbnail(settings, status) {
   settings.welcome.embed.thumbnail = status.toUpperCase() === "ON" ? true : false;
+
   await settings.save();
   return "Configuration saved! Welcome message updated";
 }
 
+// color
 async function setColor(settings, color) {
   settings.welcome.embed.color = color;
+
   await settings.save();
   return "Configuration saved! Welcome message updated";
 }
 
+// footer
 async function setFooter(settings, content) {
   settings.welcome.embed.footer = content;
+
   await settings.save();
   return "Configuration saved! Welcome message updated";
 }
 
+// image
 async function setImage(settings, url) {
   settings.welcome.embed.image = url;
+
   await settings.save();
   return "Configuration saved! Welcome message updated";
 }
