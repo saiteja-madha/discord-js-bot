@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+
 const { getUser } = require("@schemas/User");
 const { ECONOMY, EMBED_COLORS } = require("@root/config");
 

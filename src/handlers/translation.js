@@ -1,9 +1,11 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { isTranslated, logTranslation } = require("@schemas/TranslateLog");
-const data = require("@src/data.json");
+
 const { getLanguagesFromEmoji } = require("country-emoji-languages");
 const { translate } = require("@helpers/HttpUtils");
 const { timeformat } = require("@helpers/Utils");
+
+const data = require("@src/data.json");
 
 const TRANSLATE_COOLDOWN = 120;
 const cooldownCache = new Map();

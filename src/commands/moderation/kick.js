@@ -1,5 +1,5 @@
-const { kickTarget } = require("@helpers/ModUtils");
 const { ApplicationCommandOptionType } = require("discord.js");
+const { kickTarget } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}

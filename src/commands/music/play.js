@@ -1,7 +1,9 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const prettyMs = require("pretty-ms");
 const { EMBED_COLORS, MUSIC } = require("@root/config");
+
 const { SpotifyItemType } = require("@lavaclient/spotify");
+
+const prettyMs = require("pretty-ms");
 
 const search_prefix = {
   YT: "ytsearch",

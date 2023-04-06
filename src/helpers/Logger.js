@@ -1,5 +1,6 @@
-const config = require("@root/config");
 const { EmbedBuilder, WebhookClient } = require("discord.js");
+
+const config = require("@root/config");
 const pino = require("pino");
 
 const webhookLogger = process.env.ERROR_LOGS ? new WebhookClient({ url: process.env.ERROR_LOGS }) : undefined;

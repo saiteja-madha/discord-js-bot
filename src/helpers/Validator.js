@@ -1,8 +1,9 @@
+const { log, warn, error } = require("./Logger");
+const { ApplicationCommandType } = require("discord.js");
+
 const CommandCategory = require("@structures/CommandCategory");
 const permissions = require("./permissions");
 const config = require("@root/config");
-const { log, warn, error } = require("./Logger");
-const { ApplicationCommandType } = require("discord.js");
 
 module.exports = class Validator {
   static validateConfiguration() {

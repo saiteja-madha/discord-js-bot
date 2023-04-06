@@ -1,4 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+
 const { EMBED_COLORS } = require("@root/config.js");
 
 const NORMAL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_,;.?!/\\'0123456789";
@@ -60,10 +61,10 @@ module.exports = {
       message.channel.send({ embeds: [firstEmbed(message.author)] }).then((coin) => {
         // 2nd embed
         setTimeout(() => {
-          coin.edit({ embeds: [secondEmbed()] }).catch(() => { });
+          coin.edit({ embeds: [secondEmbed()] }).catch(() => {});
           // 3rd embed
           setTimeout(() => {
-            coin.edit({ embeds: [resultEmbed(toss)] }).catch(() => { });
+            coin.edit({ embeds: [resultEmbed(toss)] }).catch(() => {});
           }, 2000);
         }, 2000);
       });
@@ -90,9 +91,9 @@ module.exports = {
       await interaction.followUp({ embeds: [firstEmbed(interaction.user)] });
 
       setTimeout(() => {
-        interaction.editReply({ embeds: [secondEmbed()] }).catch(() => { });
+        interaction.editReply({ embeds: [secondEmbed()] }).catch(() => {});
         setTimeout(() => {
-          interaction.editReply({ embeds: [resultEmbed(toss)] }).catch(() => { });
+          interaction.editReply({ embeds: [resultEmbed(toss)] }).catch(() => {});
         }, 2000);
       }, 2000);
     }

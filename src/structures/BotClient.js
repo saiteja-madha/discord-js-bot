@@ -6,16 +6,20 @@ const {
   WebhookClient,
   ApplicationCommandType,
 } = require("discord.js");
-const path = require("path");
+
+const { DiscordTogether } = require("discord-together");
 const { table } = require("table");
-const Logger = require("../helpers/Logger");
+
 const { recursiveReadDirSync } = require("../helpers/Utils");
 const { validateCommand, validateContext } = require("../helpers/Validator");
 const { schemas } = require("@src/database/mongoose");
+
+const giveawaysHandler = require("../handlers/giveaway");
+const Logger = require("../helpers/Logger");
 const CommandCategory = require("./CommandCategory");
 const lavaclient = require("../handlers/lavaclient");
-const giveawaysHandler = require("../handlers/giveaway");
-const { DiscordTogether } = require("discord-together");
+
+const path = require("path");
 
 module.exports = class BotClient extends Client {
   constructor() {
@@ -283,7 +287,7 @@ module.exports = class BotClient extends Client {
     const patternMatch = search.match(/(\d{17,20})/);
     if (patternMatch) {
       const id = patternMatch[1];
-      const fetched = await this.users.fetch(id, { cache: true }).catch(() => { }); // check if mentions contains the ID
+      const fetched = await this.users.fetch(id, { cache: true }).catch(() => {}); // check if mentions contains the ID
       if (fetched) {
         users.push(fetched);
         return users;

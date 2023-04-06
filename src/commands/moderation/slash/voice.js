@@ -1,10 +1,12 @@
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
 const deafen = require("../shared/deafen");
 const vmute = require("../shared/vmute");
 const vunmute = require("../shared/vunmute");
+
 const undeafen = require("../shared/undeafen");
 const disconnect = require("../shared/disconnect");
 const move = require("../shared/move");
-const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}

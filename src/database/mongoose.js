@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
 const { log, success, error } = require("../helpers/Logger");
+const mongoose = require("mongoose");
 
 module.exports = {
   async initializeMongoose() {

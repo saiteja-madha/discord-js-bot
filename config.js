@@ -1,16 +1,19 @@
 module.exports = {
   OWNER_IDS: [], // Bot owner ID's
   SUPPORT_SERVER: "", // Your bot support server
+
   PREFIX_COMMANDS: {
     ENABLED: true, // Enable/Disable prefix commands
     DEFAULT_PREFIX: "!", // Default prefix for the bot
   },
+
   INTERACTIONS: {
     SLASH: false, // Should the interactions be enabled
     CONTEXT: false, // Should contexts be enabled
     GLOBAL: false, // Should the interactions be registered globally
     TEST_GUILD_ID: "xxxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
+
   EMBED_COLORS: {
     BOT_EMBED: "#068ADD",
     TRANSPARENT: "#36393F",
@@ -18,11 +21,13 @@ module.exports = {
     ERROR: "#D61A3C",
     WARNING: "#F7E919",
   },
+
   CACHE_SIZE: {
     GUILDS: 100,
     USERS: 10000,
     MEMBERS: 10000,
   },
+
   MESSAGES: {
     API_ERROR: "Unexpected Backend Error! Try again later or contact support server",
   },
@@ -36,11 +41,11 @@ module.exports = {
   },
 
   DASHBOARD: {
-    enabled: true, // enable or disable dashboard
+    enabled: false, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
     port: "8080", // port to run the bot on
-    style: "light" // color style for dashboard - light ~ dark // dashboard colors can be edited in dashboard/public/dist/css/custom.css
+    style: "light", // color style for dashboard - light ~ dark // dashboard colors can be edited in dashboard/public/dist/css/custom.css
   },
 
   ECONOMY: {

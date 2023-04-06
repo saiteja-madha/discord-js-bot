@@ -1,5 +1,5 @@
-const { getMember } = require("@schemas/Member");
 const { ApplicationCommandOptionType } = require("discord.js");
+const { getMember } = require("@schemas/Member");
 
 /**
  * @type {import("@structures/Command")}

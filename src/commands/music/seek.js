@@ -1,7 +1,9 @@
-const { musicValidations } = require("@helpers/BotUtils");
-const prettyMs = require("pretty-ms");
-const { durationToMillis } = require("@helpers/Utils");
 const { ApplicationCommandOptionType } = require("discord.js");
+
+const { musicValidations } = require("@helpers/BotUtils");
+const { durationToMillis } = require("@helpers/Utils");
+
+const prettyMs = require("pretty-ms");
 
 /**
  * @type {import("@structures/Command")}

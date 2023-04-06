@@ -1,5 +1,5 @@
-const { cacheGuildInvites, resetInviteCache } = require("@handlers/invite");
 const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+const { cacheGuildInvites, resetInviteCache } = require("@handlers/invite");
 
 /**
  * @type {import("@structures/Command")}

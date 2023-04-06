@@ -1,5 +1,5 @@
-const { softbanTarget } = require("@helpers/ModUtils");
 const { ApplicationCommandOptionType } = require("discord.js");
+const { softbanTarget } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}

@@ -1,6 +1,7 @@
+const { ApplicationCommandOptionType } = require("discord.js");
+
 const { musicValidations } = require("@helpers/BotUtils");
 const { LoopType } = require("@lavaclient/queue");
-const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
  * @type {import("@structures/Command")}

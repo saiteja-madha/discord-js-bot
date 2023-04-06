@@ -1,8 +1,10 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config");
 const { timeformat } = require("@helpers/Utils");
-const os = require("os");
 const { stripIndent } = require("common-tags");
+
+const os = require("os");
 
 /**
  * @param {import('@structures/BotClient')} client

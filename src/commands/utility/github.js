@@ -1,5 +1,6 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { MESSAGES } = require("@root/config.js");
+
 const { getJson } = require("@helpers/HttpUtils");
 const { stripIndent } = require("common-tags");
 

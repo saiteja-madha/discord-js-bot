@@ -1,5 +1,5 @@
-const { unTimeoutTarget } = require("@helpers/ModUtils");
 const { ApplicationCommandOptionType } = require("discord.js");
+const { unTimeoutTarget } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}

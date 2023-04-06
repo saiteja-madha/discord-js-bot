@@ -1,7 +1,9 @@
-const { EMBED_COLORS } = require("@root/config");
 const { EmbedBuilder } = require("discord.js");
-const prettyMs = require("pretty-ms");
+
+const { EMBED_COLORS } = require("@root/config");
 const { splitBar } = require("string-progressbar");
+
+const prettyMs = require("pretty-ms");
 
 /**
  * @type {import("@structures/Command")}

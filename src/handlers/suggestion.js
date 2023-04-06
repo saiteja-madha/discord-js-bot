@@ -1,6 +1,3 @@
-const { getSettings } = require("@schemas/Guild");
-const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
-const { SUGGESTIONS } = require("@root/config");
 const {
   ActionRowBuilder,
   ButtonBuilder,
@@ -10,6 +7,11 @@ const {
   ButtonStyle,
   TextInputStyle,
 } = require("discord.js");
+
+const { getSettings } = require("@schemas/Guild");
+const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
+
+const { SUGGESTIONS } = require("@root/config");
 const { stripIndents } = require("common-tags");
 
 /**

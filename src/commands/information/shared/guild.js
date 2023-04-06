@@ -1,5 +1,6 @@
 const { EmbedBuilder, ChannelType, GuildVerificationLevel } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config");
+
 const moment = require("moment");
 
 /**

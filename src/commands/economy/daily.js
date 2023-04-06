@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+
 const { getUser } = require("@schemas/User");
 const { EMBED_COLORS, ECONOMY } = require("@root/config.js");
 const { diffHours, getRemainingTime } = require("@helpers/Utils");
@@ -55,7 +56,7 @@ async function daily(user) {
     .setAuthor({ name: user.username, iconURL: user.displayAvatarURL() })
     .setDescription(
       `You got ${ECONOMY.DAILY_COINS}${ECONOMY.CURRENCY} as your daily reward\n` +
-      `**Updated Balance:** ${userDb.coins}${ECONOMY.CURRENCY}`
+        `**Updated Balance:** ${userDb.coins}${ECONOMY.CURRENCY}`
     );
 
   return { embeds: [embed] };

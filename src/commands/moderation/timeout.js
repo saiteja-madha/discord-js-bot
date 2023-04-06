@@ -1,5 +1,6 @@
-const { timeoutTarget } = require("@helpers/ModUtils");
 const { ApplicationCommandOptionType } = require("discord.js");
+const { timeoutTarget } = require("@helpers/ModUtils");
+
 const ems = require("enhanced-ms");
 
 /**

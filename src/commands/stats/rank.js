@@ -1,5 +1,7 @@
 const { AttachmentBuilder, ApplicationCommandOptionType } = require("discord.js");
+
 const { EMBED_COLORS, IMAGE } = require("@root/config");
+
 const { getBuffer } = require("@helpers/HttpUtils");
 const { getMemberStats, getXpLb } = require("@schemas/MemberStats");
 

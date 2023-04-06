@@ -1,5 +1,5 @@
-const { canModerate } = require("@helpers/ModUtils");
 const { ApplicationCommandOptionType } = require("discord.js");
+const { canModerate } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}

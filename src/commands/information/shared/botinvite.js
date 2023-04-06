@@ -1,4 +1,5 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require("discord.js");
+
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config");
 
 module.exports = (client) => {

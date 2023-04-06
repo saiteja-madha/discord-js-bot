@@ -1,8 +1,10 @@
 const { EmbedBuilder } = require("discord.js");
+
 const { Cluster } = require("lavaclient");
-const prettyMs = require("pretty-ms");
 const { load, SpotifyItemType } = require("@lavaclient/spotify");
 require("@lavaclient/queue/register");
+
+const prettyMs = require("pretty-ms");
 
 /**
  * @param {import("@structures/BotClient")} client

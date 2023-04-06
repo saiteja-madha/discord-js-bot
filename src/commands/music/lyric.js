@@ -1,4 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+
 const { getJson } = require("@helpers/HttpUtils");
 const { MESSAGES, EMBED_COLORS } = require("@root/config");
 

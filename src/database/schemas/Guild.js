@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
 const { CACHE_SIZE, PREFIX_COMMANDS, STATS } = require("@root/config.js");
-const FixedSizeMap = require("fixedsize-map");
 const { getUser } = require("./User");
+
+const mongoose = require("mongoose");
+const FixedSizeMap = require("fixedsize-map");
 
 const cache = new FixedSizeMap(CACHE_SIZE.GUILDS);
 

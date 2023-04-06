@@ -1,6 +1,7 @@
+const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+
 const { approveSuggestion, rejectSuggestion } = require("@handlers/suggestion");
 const { parsePermissions } = require("@helpers/Utils");
-const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 const CHANNEL_PERMS = ["ViewChannel", "SendMessages", "EmbedLinks", "ManageMessages", "ReadMessageHistory"];
 

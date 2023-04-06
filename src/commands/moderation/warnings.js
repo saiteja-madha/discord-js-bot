@@ -1,4 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+
 const { getWarningLogs, clearWarningLogs } = require("@schemas/ModLog");
 const { getMember } = require("@schemas/Member");
 

@@ -1,5 +1,6 @@
 const { parseEmoji, EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
+
 const { parse } = require("twemoji-parser");
 
 /**

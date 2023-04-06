@@ -1,10 +1,11 @@
-const { unBanTarget } = require("@helpers/ModUtils");
 const {
   ActionRowBuilder,
   StringSelectMenuBuilder,
   ApplicationCommandOptionType,
   ComponentType,
 } = require("discord.js");
+
+const { unBanTarget } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}

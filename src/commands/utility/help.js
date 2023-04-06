@@ -1,5 +1,3 @@
-const { CommandCategory, BotClient } = require("@src/structures");
-const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
 const {
   EmbedBuilder,
   ActionRowBuilder,
@@ -10,6 +8,10 @@ const {
   ApplicationCommandOptionType,
   ButtonStyle,
 } = require("discord.js");
+
+const { EMBED_COLORS, SUPPORT_SERVER } = require("@root/config.js");
+
+const { CommandCategory, BotClient } = require("@src/structures");
 const { getCommandUsage, getSlashUsage } = require("@handlers/command");
 
 const CMDS_PER_PAGE = 5;

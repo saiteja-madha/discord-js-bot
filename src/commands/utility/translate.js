@@ -1,5 +1,6 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
+
 const { translate } = require("@helpers/HttpUtils");
 const { GOOGLE_TRANSLATE } = require("@src/data.json");
 

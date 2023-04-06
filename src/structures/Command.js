@@ -11,7 +11,7 @@
  */
 
 /**
- * @typedef {"ADMIN"|"ANIME"|"AUTOMOD"|"ECONOMY"|"FUN"|"IMAGE"|"INFORMATION"|"INVITE"|"MODERATION"|"ERELA_JS"|"NONE"|"OWNER"|"SOCIAL"|"SUGGESTION"|"TICKET"|"UTILITY"} CommandCategory
+ * @typedef {"ADMIN"|"ANIME"|"AUTOMOD"|"ECONOMY"|"FUN"|"GIVEAWAY"|"IMAGE"|"INFORMATION"|"INVITE"|"MODERATION"|"MUSIC"|"NONE"|"OWNER"|"SOCIAL"|"STATS"|"SUGGESTION"|"TICKET"|"UTILITY"} CommandCategory
  */
 
 /**
@@ -70,6 +70,6 @@ module.exports = {
     ephemeral: false,
     options: [],
   },
-  messageRun: (message, args, data) => { },
-  interactionRun: (interaction, data) => { },
+  messageRun: (message, args, data) => {},
+  interactionRun: (interaction, data) => {},
 };

@@ -1,6 +1,7 @@
-const { getEffectiveInvites, checkInviteRewards } = require("@handlers/invite");
-const { EMBED_COLORS } = require("@root/config.js");
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const { EMBED_COLORS } = require("@root/config.js");
+
+const { getEffectiveInvites, checkInviteRewards } = require("@handlers/invite");
 const { getMember } = require("@schemas/Member");
 
 /**

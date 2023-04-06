@@ -1,5 +1,5 @@
-const { purgeMessages } = require("@helpers/ModUtils");
 const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+const { purgeMessages } = require("@helpers/ModUtils");
 
 /**
  * @type {import("@structures/Command")}
