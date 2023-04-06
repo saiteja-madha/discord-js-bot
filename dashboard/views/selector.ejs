@@ -52,7 +52,7 @@
                                                 <!-- Displays 4 servers by line -->
                                                 <div class="col-md-3">
                                                   <% if(config.DASHBOARD.style=="dark"){ %>
-                                                    <div class="box box-solid box-solid-custom-light box-custom-dark">
+                                                    <div class="box box-solid box-solid-custom-dark box-custom-dark">
                                                       <%} else {%>
                                                         <div class="box box-solid box-solid-custom-light box-custom-light">
                                                           <%}%>
@@ -62,11 +62,8 @@
                                                                 <%} else {%>
                                                                   <div class="box-header with-border text-center box-header-custom-light with-border-custom-light">
                                                                     <%}%>
-
                                                                       <i class="fas fa-crown"></i>
-                                                                      <h3 class="box-title server-name">
-                                                                        <%= guild.name %>
-                                                                      </h3>
+                                                                      <h3 class="box-title server-name"><%= guild.name %></h3>
                                                                   </div>
                                                                   <!-- /.box-header -->
                                                                   <div class="box-body">

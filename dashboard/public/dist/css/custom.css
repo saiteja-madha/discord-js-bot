@@ -39,13 +39,6 @@
   border-top-right-radius: 3px !important;
 }
 
-.server-name-custom-light {
-  overflow: hidden;
-  width: calc(80%);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
 /* The bar at the top */
 .navbar-custom-light {
   background-color: #aaa !important;
@@ -135,12 +128,26 @@
   color: #000 !important;
 }
 
+.btn-primary-custom-light:hover {
+  border-radius: 17px !important;
+  background-color: #bbb !important;
+  border-color: #bbb !important;
+  color: #000 !important;
+}
+
 .btn-danger-custom-light {
   border-radius: 17px !important;
 }
 
 .btn-success-custom-light {
   border-radius: 17px !important;
+  color: #000 !important;
+}
+
+.btn-success-custom-light:hover {
+  border-radius: 17px !important;
+    background-color: #bbb !important;
+  border-color: #bbb !important;
   color: #000 !important;
 }
 
@@ -248,13 +255,6 @@
 .box.box-warning-custom-dark {
   border-top-left-radius: 3px !important;
   border-top-right-radius: 3px !important;
-}
-
-.server-name-custom-dark {
-  overflow: hidden;
-  width: calc(80%);
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 /* The bar at the top */
@@ -405,4 +405,12 @@
 .custom-dark {
   background-color: #1c2024 !important;
   color: #fff !important;
+}
+
+
+.server-name {
+  overflow: hidden;
+  width: calc(80%);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
