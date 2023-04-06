@@ -11,9 +11,9 @@ const openai = new OpenAIApi(configuration);
 // Command Module exporting an object with the command details and properties
 module.exports = {
   name: "aichat",
-  description: "", // String describing the command
+  description: "prompt for ChatGPT", // String describing the command
   category: "FUN", // Category to which the command belongs
-  cooldown: 5,
+  cooldown: 0,
   command: {
     enabled: true, // Boolean to activate or deactivate command
     aliases: ["chat", "gpt"], // Array of alternate strings used to call command
@@ -39,7 +39,7 @@ module.exports = {
       .setTitle("ChatAI")
       .setDescription("Answering...")
       .setThumbnail(message.client.user.displayAvatarURL())
-      .setFooter({ text: `Requested by: ${message.author.tag}` });
+      .setFooter({ text: `Requested by ${message.author.tag}` });
     try {
       // Join the arguments into one string
       const prompt = args.join(" ");
@@ -68,7 +68,7 @@ module.exports = {
       .setTitle("ChatAI")
       .setDescription("Answering...")
       .setThumbnail(interaction.client.user.displayAvatarURL())
-      .setFooter({ text: `Requested by: ${interaction.user.tag}` });
+      .setFooter({ text: `Requested by ${interaction.user.tag}` });
     try {
       // Get the value of option prompt from interaction
       const prompt = interaction.options.getString("prompt");
