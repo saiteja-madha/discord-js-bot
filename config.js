@@ -42,6 +42,14 @@ module.exports = {
     port: "8080", // port to run the bot on
   },
 
+  AICHAT: {
+    MODEL: "gpt-3.5-turbo", //Model Of AI to use https://platform.openai.com/docs/models/gpt-3-5
+    TOKENS: 300, //The maximum number of tokens to generate in the completion. https://platform.openai.com/docs/api-reference/completions/create
+    PRESENCE_PENALTY: 1.5, // Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
+    TEMPERATURE: 0.4, // What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+    IMAGINEMESSAGE: "" // Message before user input, for example you can set chat to be someone" imagine you are Rayan Ghostling,you should aswer as he would, question:", if you dont want to use it just leave blank
+  },
+
   ECONOMY: {
     ENABLED: false,
     CURRENCY: "₪",
