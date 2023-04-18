@@ -75,10 +75,8 @@ module.exports = (client) => {
   });
 
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
-    const channel = client.channels.cache.get(queue.player.channelId);
-    channel.safeSend("Queue has ended.");
-    queue.player.disconnect();
-    await client.musicManager.destroyPlayer(queue.player.guildId);
+    queue.data.channel.safeSend("Queue has ended.");
+    await client.musicManager.destroyPlayer(queue.player.guildId).then(queue.player.disconnect());
   });
 
   return lavaclient;

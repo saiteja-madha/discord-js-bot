@@ -135,7 +135,7 @@ async function play({ member, guild, channel }, query) {
       if (!tracks) guild.client.logger.debug({ query, res });
     }
   } catch (error) {
-    guild.client.logger.error("Search Exception", error);
+    guild.client.logger.error("Search Exception", typeof error === "object" ? JSON.stringify(error) : error);
     return "🚫 An error occurred while searching for the song";
   }
 

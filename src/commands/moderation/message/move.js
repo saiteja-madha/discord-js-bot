@@ -8,8 +8,8 @@ module.exports = {
   name: "move",
   description: "move specified member to voice channel",
   category: "MODERATION",
-  userPermissions: ["DeafenMembers"],
-  botPermissions: ["DeafenMembers"],
+  userPermissions: ["MoveMembers"],
+  botPermissions: ["MoveMembers"],
   command: {
     enabled: true,
     usage: "<ID|@member> <channel> [reason]",

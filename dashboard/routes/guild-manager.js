@@ -140,11 +140,11 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
 
   // AUTOMOD CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "automodUpdate")) {
-    if (data.max_strikes != settings.automod.strikes) {
+    if (data.max_strikes && data.max_strikes !== settings.automod.strikes) {
       settings.automod.strikes = data.max_strikes;
     }
 
-    if (data.automod_action !== settings.automod.action) {
+    if (data.automod_action && data.automod_action !== settings.automod.action) {
       settings.automod.action = data.automod_action;
     }
 
@@ -247,8 +247,8 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     }
 
     data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.welcome.channel_id) {
-      settings.welcome.channel_id = data.channel;
+    if (data.channel !== settings.welcome.channel) {
+      settings.welcome.channel = data.channel;
     }
 
     if (!settings.welcome.enabled) settings.welcome.enabled = true;
@@ -290,8 +290,8 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     }
 
     data.channel = guild.channels.cache.find((ch) => "#" + ch.name === data.channel)?.id;
-    if (data.channel !== settings.farewell.channel_id) {
-      settings.farewell.channel_id = data.channel;
+    if (data.channel !== settings.farewell.channel) {
+      settings.farewell.channel = data.channel;
     }
 
     if (!settings.farewell.enabled) settings.farewell.enabled = true;

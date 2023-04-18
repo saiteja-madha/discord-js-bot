@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { log, success, error } = require("../helpers/Logger");
 
+mongoose.set("strictQuery", true);
+
 module.exports = {
   async initializeMongoose() {
     log(`Connecting to MongoDb...`);
