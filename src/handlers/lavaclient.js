@@ -27,10 +27,46 @@ module.exports = (client) => {
 
   lavaclient.on("nodeConnect", (node, event) => {
     client.logger.log(`Node "${node.id}" connected`);
+
+    // Because sometimes the player is disconnected and cannot resume or play again.
+    node.players.forEach(async (player) => {
+      if (player.queue.tracks.length > 0) { // Only player have tracks in queue
+        if (!player.connected) player.connect(); // Not connected but have tracks in queue because node is disconnected for a long time
+        if (player.paused) player.resume(); // Or user paused the player
+        if (!player.playing) player.play(); // If connected but not playing for some reasons
+      }
+    });
   });
 
-  lavaclient.on("nodeDisconnect", (node, event) => {
+  lavaclient.on("nodeDisconnect", async (node, event) => {
     client.logger.log(`Node "${node.id}" disconnected`);
+
+    // Log code and reason why node is disconnected. And inform that node is trying reconnecting
+    client.logger.log(`Code "${event.code}"`);
+    client.logger.log(`Reason: ${event.reason}`);
+    client.logger.log(`Node "${node.id}" reconnecting...`);
+
+    // Try reconnecting node
+    if (node.conn.canReconnect) { // If node can reconnect
+      while (true) { // Try reconnecting again and again until connection is established or max connection attempts exceeded
+        if(node.conn.active) break; // if connection is established so exit loop
+        if (!node.conn.canReconnect) { // If cannot reconnect
+          client.logger.log(`Node "${node.id}" reconnect failed!`);
+          node.conn.connect(); // We need to connect by hand because node cannot reconnect
+          break;
+        }
+        if (node.conn.reconnectTry == 10) { // Max connection attempts exceeded
+          client.logger.log(`Node "${node.id}" reconnect try times exceed!`);
+          node.conn.connect(); // We need to connect by hand because node cannot reconnect
+          break;
+        }
+        else{
+          await node.conn.reconnect(); // Try reconnect and wait for response
+        }
+      }
+    } else { // Else, we need to connect by hand
+      node.conn.connect();
+    }
   });
 
   lavaclient.on("nodeError", (node, error) => {
