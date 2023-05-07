@@ -28,14 +28,48 @@ module.exports = (client) => {
   lavaclient.on("nodeConnect", (node, event) => {
     client.logger.log(`Node "${node.id}" connected`);
 
-    // Because sometimes the player is disconnected and cannot resume or play again.
+    // Because sometimes the player is disconnected and cannot resume or play again (under investigation).
     node.players.forEach(async (player) => {
       try {
         if (player.queue.tracks.length > 0) {
           // Only player have tracks in queue
-          if (!player.connected) player.connect(); // Not connected but have tracks in queue because node is disconnected for a long time
+          // if (!player.connected) player.connect(); // Not connected but have tracks in queue because node is disconnected for a long time
           if (player.paused) player.resume(); // Or user paused the player
           if (!player.playing) player.play(); // If connected but not playing for some reasons
+
+          setInterval(async () => {
+            // Update player to re-play current song when player is connected but stuck at current song for some reasons (under investigation).
+            if (player.connected && player.playing) {
+              if (player.playingSince + player.queue.current.length < new Date.now()) {
+                player.queue.tracks.unshift(player.queue.current);
+                await player.queue.skip();
+              }
+            } else {
+              if (!player.connected) {
+                client.logger.error("Player is not connected to any voice channel.");
+              } else if (!player.playing) {
+                client.logger.error(
+                  "Player is paused or not playing. Try playing if there is at least 1 song in queue."
+                );
+                if (player.queue.current.length > 0) {
+                  if (player.paused) {
+                    client.logger.debug(
+                      `Player is paused and there is ${player.queue.current.length} ${
+                        player.queue.current.length > 1 ? "songs" : "song"
+                      } in queue. Trying to resume...`
+                    );
+                    player.resume();
+                  } else {
+                    client.logger.debug(
+                      `Player is not playing and there is ${player.queue.current.length} ${
+                        player.queue.current.length > 1 ? "songs" : "song"
+                      } in queue. Trying to play...`
+                    );
+                  }
+                }
+              }
+            }
+          }, 1000);
         }
       } catch (e) {
         client.logger.log(player.queue.tracks.length);
@@ -54,7 +88,7 @@ module.exports = (client) => {
     // Try reconnecting node
     if (node.conn.canReconnect) {
       // If node can reconnect
-      while (true) {
+      while (node.conn.reconnectTry <= 10) {
         // Try reconnecting again and again until connection is established or max connection attempts exceeded
         if (node.conn.active) break; // if connection is established so exit loop
         if (!node.conn.canReconnect) {
@@ -63,14 +97,12 @@ module.exports = (client) => {
           node.conn.connect(); // We need to connect by hand because node cannot reconnect
           break;
         }
-        if (node.conn.reconnectTry == 10) {
-          // Max connection attempts exceeded
-          client.logger.log(`Node "${node.id}" reconnect try times exceed!`);
-          node.conn.connect(); // We need to connect by hand because node cannot reconnect
-          break;
-        } else {
-          await node.conn.reconnect(); // Try reconnect and wait for response
-        }
+        await node.conn.reconnect(); // Try reconnect and wait for response
+      }
+      if (node.conn.reconnectTry > 10) {
+        // Max connection attempts exceeded
+        client.logger.log(`Node "${node.id}" reconnect try times exceed!`);
+        node.conn.connect(); // We need to connect by hand because node cannot reconnect
       }
     } else {
       // Else, we need to connect by hand
