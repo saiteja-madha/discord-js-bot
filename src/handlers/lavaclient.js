@@ -33,7 +33,7 @@ module.exports = (client) => {
       try {
         if (player.queue.tracks.length > 0) {
           // Only player have tracks in queue
-          // if (!player.connected) player.connect(); // Not connected but have tracks in queue because node is disconnected for a long time
+          if (!player.connected) player.connect(); // Not connected but have tracks in queue because node is disconnected for a long time
           if (player.paused) player.resume(); // Or user paused the player
           if (!player.playing) player.play(); // If connected but not playing for some reasons
 
