@@ -28,7 +28,7 @@ const pinoLogger = pino.default(
     {
       level: "debug",
       stream: pino.destination({
-        dest: `${process.cwd()}/logs/combined-${today.getFullYear()}.${today.getMonth()}.${today.getDate()}.log`,
+        dest: `${process.cwd()}/logs/combined-${today.getFullYear()}.${today.getMonth() + 1}.${today.getDate()}.log`,
         sync: true,
       }),
     },

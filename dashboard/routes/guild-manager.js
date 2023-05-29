@@ -249,11 +249,11 @@ router.post("/:serverID/automod", CheckAuth, async (req, res) => {
 
   // AUTOMOD CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "automodUpdate")) {
-    if (data.max_strikes != settings.automod.strikes) {
+    if (data.max_strikes && data.max_strikes !== settings.automod.strikes) {
       settings.automod.strikes = data.max_strikes;
     }
 
-    if (data.automod_action !== settings.automod.action) {
+    if (data.automod_action && data.automod_action !== settings.automod.action) {
       settings.automod.action = data.automod_action;
     }
 
@@ -374,6 +374,7 @@ router.post("/:serverID/general", CheckAuth, async (req, res) => {
       settings.invite.tracking = data.invite_tracking;
     }
   }
+
 
   await settings.save();
   setTimeout(() => {
