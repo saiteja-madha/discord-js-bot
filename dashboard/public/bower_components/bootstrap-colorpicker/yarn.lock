@@ -1238,9 +1238,10 @@ jasmine@^2.6.0:
     glob "^7.0.6"
     jasmine-core "~2.99.0"
 
-jquery@>=1.10:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+jquery@>=3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.0.tgz#fe2c01a05da500709006d8790fe21c8a39d75612"
+  integrity sha512-umpJ0/k8X0MvD1ds0P9SfowREz2LenHsQaxSohMZ5OMNEU2r0tf8pdeEFTHMFxWVxKNyU9rTtK3CWzUCTKJUeQ==
 
 js-beautify@>=1.4.2:
   version "1.7.5"

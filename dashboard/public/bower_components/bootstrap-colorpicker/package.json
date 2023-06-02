@@ -24,7 +24,7 @@
     }
   ],
   "dependencies": {
-    "jquery": ">=1.10"
+    "jquery": ">=3.7.0"
   },
   "scripts": {
     "test": "jasmine"
@@ -42,7 +42,7 @@
     "grunt-jsbeautifier": "~0.2.10",
     "grunt-strip-code": "^1.0.6",
     "jasmine": "^2.6.0",
-    "jquery": ">=1.10",
+    "jquery": ">=3.7.0",
     "jsdom": "^10.1.0"
   }
 }
