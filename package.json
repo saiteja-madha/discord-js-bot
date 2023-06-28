@@ -45,7 +45,7 @@
     "moment": "^2.29.4",
     "mongoose": "^7.0.4",
     "nekos.life": "^3.0.0",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^2.6.11",
     "os": "^0.1.2",
     "pino": "^8.11.0",
     "pino-pretty": "^10.0.0",
