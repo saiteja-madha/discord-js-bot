@@ -55,7 +55,7 @@ async function parseTicketDetails(channel) {
   const split = channel.topic?.split("|");
   const userId = split[1];
   const catName = split[2] || "Default";
-  const user = await channel.client.users.fetch(userId, { cache: false }).catch(() => {});
+  const user = await channel.client.users.fetch(userId, { cache: false }).catch(() => { });
   return { user, catName };
 }
 
@@ -126,7 +126,7 @@ async function closeTicket(channel, closedBy, reason) {
       const dmEmbed = embed
         .setDescription(`**Server:** ${channel.guild.name}\n**Category:** ${ticketDetails.catName}`)
         .setThumbnail(channel.guild.iconURL());
-      ticketDetails.user.send({ embeds: [dmEmbed], components }).catch((ex) => {});
+      ticketDetails.user.send({ embeds: [dmEmbed], components }).catch((ex) => { });
     }
 
     return "SUCCESS";
@@ -179,7 +179,6 @@ async function handleTicketOpen(interaction) {
   let catName = null;
   let catPerms = [];
   const categories = settings.ticket.categories;
-  const staffRoles = settings.ticket.staff_roles;
   if (categories.length > 0) {
     const options = [];
     settings.ticket.categories.forEach((cat) => options.push({ label: cat.name, value: cat.name }));
@@ -246,7 +245,7 @@ async function handleTicketOpen(interaction) {
     }
 
     const tktChannel = await guild.channels.create({
-      name: `ticket-${user.username}`,
+      name: `ticket-${ticketNumber}`,
       type: ChannelType.GuildText,
       topic: `ticket|${user.id}|${catName || "Default"}`,
       permissionOverwrites,
@@ -287,7 +286,7 @@ async function handleTicketOpen(interaction) {
       new ButtonBuilder().setLabel("View Channel").setURL(sent.url).setStyle(ButtonStyle.Link)
     );
 
-    user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});
+    user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => { });
 
     await interaction.editReply(`Ticket created! 🔥`);
   } catch (ex) {
