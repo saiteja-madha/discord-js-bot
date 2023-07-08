@@ -25,6 +25,7 @@ const Schema = new mongoose.Schema({
   },
   ticket: {
     log_channel: String,
+    category: String,
     limit: { type: Number, default: 10 },
     categories: [
       {
