@@ -140,11 +140,11 @@ router.post("/:serverID/basic", CheckAuth, async (req, res) => {
 
   // AUTOMOD CONFIGURATION
   if (Object.prototype.hasOwnProperty.call(data, "automodUpdate")) {
-    if (data.max_strikes && data.max_strikes !== settings.automod.strikes) {
+    if (data.max_strikes != settings.automod.strikes) {
       settings.automod.strikes = data.max_strikes;
     }
 
-    if (data.automod_action && data.automod_action !== settings.automod.action) {
+    if (data.automod_action !== settings.automod.action) {
       settings.automod.action = data.automod_action;
     }
 
@@ -219,9 +219,17 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     Object.prototype.hasOwnProperty.call(data, "welcomeEnable") ||
     Object.prototype.hasOwnProperty.call(data, "welcomeUpdate")
   ) {
+    if (!data.content) {
+      settings.welcome.content = data.content;
+    }
+
     data.content = data.content.replace(/\r?\n/g, "\\n");
     if (data.content && data.content !== settings.welcome.content) {
       settings.welcome.content = data.content;
+    }
+
+    if (!data.description) {
+      settings.welcome.embed.description = data.description;
     }
 
     data.description = data.description?.replaceAll(/\r\n/g, "\\n");
@@ -229,12 +237,24 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
       settings.welcome.embed.description = data.description;
     }
 
+    if (!data.footer) {
+      settings.welcome.embed.footer = data.footer;
+    }
+
     if (data.footer && data.footer !== settings.welcome.embed?.footer) {
       settings.welcome.embed.footer = data.footer;
     }
 
+    if (!data.hexcolor) {
+      settings.welcome.embed.hexcolor = data.hexcolor;
+    }
+
     if (data.hexcolor && data.hexcolor !== settings.welcome.embed?.color) {
       settings.welcome.embed.color = data.hexcolor;
+    }
+
+    if (!data.image) {
+      settings.welcome.embed.image = data.image;
     }
 
     if (data.image && data.image !== settings.welcome.embed?.image) {
@@ -262,9 +282,17 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
     Object.prototype.hasOwnProperty.call(data, "farewellEnable") ||
     Object.prototype.hasOwnProperty.call(data, "farewellUpdate")
   ) {
+    if (!data.content) {
+      settings.farewell.content = data.content;
+    }
+
     data.content = data.content.replace(/\r?\n/g, "\\n");
     if (data.content && data.content !== settings.farewell.content) {
       settings.farewell.content = data.content;
+    }
+
+    if (!data.description) {
+      settings.farewell.description = data.description;
     }
 
     data.description = data.description?.replaceAll(/\r\n/g, "\\n");
@@ -272,12 +300,24 @@ router.post("/:serverID/greeting", CheckAuth, async (req, res) => {
       settings.farewell.embed.description = data.description;
     }
 
+    if (!data.footer) {
+      settings.farewell.footer = data.footer;
+    }
+
     if (data.footer && data.footer !== settings.farewell.embed?.footer) {
       settings.farewell.embed.footer = data.footer;
     }
 
+    if (!data.hexcolor) {
+      settings.farewell.hexcolor = data.hexcolor;
+    }
+
     if (data.hexcolor && data.hexcolor !== settings.farewell.embed?.color) {
       settings.farewell.embed.color = data.hexcolor;
+    }
+
+    if (!data.image) {
+      settings.farewell.image = data.image;
     }
 
     if (data.image && data.image !== settings.farewell.embed?.image) {
