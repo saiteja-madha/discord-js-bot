@@ -27,6 +27,7 @@ const Schema = new mongoose.Schema({
     log_channel: String,
     category: String,
     limit: { type: Number, default: 10 },
+    staff_roles: [String],
     categories: [
       {
         _id: false,
