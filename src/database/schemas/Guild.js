@@ -26,7 +26,9 @@ const Schema = new mongoose.Schema({
   },
   ticket: {
     log_channel: String,
+    category: String,
     limit: { type: Number, default: 10 },
+    staff_roles: [String],
     categories: [
       {
         _id: false,
@@ -133,7 +135,7 @@ module.exports = {
           const userDb = await getUser(owner);
           await userDb.save();
         })
-        .catch((ex) => { });
+        .catch((ex) => {});
 
       // create a new guild model
       guildData = new Model({
