@@ -2,7 +2,7 @@ const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getJson } = require("@helpers/HttpUtils");
 const { MESSAGES, EMBED_COLORS } = require("@root/config");
 
-const BASE_URL = "https://some-random-api.ml/lyrics";
+const BASE_URL = "https://some-random-api.com/lyrics";
 
 /**
  * @type {import("@structures/Command")}
