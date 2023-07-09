@@ -100,7 +100,7 @@ module.exports = {
           {
             name: "threshold",
             description: "configuration threshold (default is 3 mentions)",
-            required: false,
+            required: true,
             type: ApplicationCommandOptionType.Integer,
           },
         ],
@@ -150,7 +150,7 @@ module.exports = {
       response = await antiMassMention(
         settings,
         interaction.options.getString("status"),
-        interaction.options.getInteger("amount")
+        interaction.options.getInteger("threshold")
       );
     } else response = "Invalid command usage!";
 

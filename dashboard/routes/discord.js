@@ -65,7 +65,7 @@ router.get("/callback", async (req, res) => {
   while (!userData.infos || !userData.guilds) {
     /* User infos */
     if (!userData.infos) {
-      response = await fetch("http://discordapp.com/api/users/@me", {
+      response = await fetch("https://discordapp.com/api/users/@me", {
         method: "GET",
         headers: { Authorization: `Bearer ${tokens.access_token}` },
       });

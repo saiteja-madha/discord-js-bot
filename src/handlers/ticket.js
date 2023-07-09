@@ -179,6 +179,7 @@ async function handleTicketOpen(interaction) {
   let catName = null;
   let catPerms = [];
   const categories = settings.ticket.categories;
+  const staffRoles = settings.ticket.staff_roles;
   if (categories.length > 0) {
     const options = [];
     settings.ticket.categories.forEach((cat) => options.push({ label: cat.name, value: cat.name }));
@@ -221,6 +222,17 @@ async function handleTicketOpen(interaction) {
         allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
       },
     ];
+
+    if (staffRoles?.length > 0) {
+      staffRoles?.forEach((roleId) => {
+        const role = guild.roles.cache.get(roleId);
+        if (!role) return;
+        permissionOverwrites.push({
+          id: role,
+          allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
+        });
+      });
+    }
 
     if (catPerms?.length > 0) {
       catPerms?.forEach((roleId) => {

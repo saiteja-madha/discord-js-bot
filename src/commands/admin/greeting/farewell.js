@@ -264,7 +264,7 @@ module.exports = {
         break;
 
       case "color":
-        response = await setColor(settings, interaction.options.getString("color"));
+        response = await setColor(settings, interaction.options.getString("hex-code"));
         break;
 
       case "footer":
