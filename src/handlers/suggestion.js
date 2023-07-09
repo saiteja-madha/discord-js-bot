@@ -1,6 +1,7 @@
 const { getSettings } = require("@schemas/Guild");
 const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
 const { SUGGESTIONS } = require("@root/config");
+
 const {
   ActionRowBuilder,
   ButtonBuilder,
@@ -16,8 +17,9 @@ const { stripIndents } = require("common-tags");
  * @param {import('discord.js').Message} message
  */
 const getStats = (message) => {
-  const upVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE)?.count || 0) - 1;
-  const downVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE)?.count || 0) - 1;
+  const upVotes = message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE).count - 1;
+  const downVotes = message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE).count - 1;
+
   return [upVotes, downVotes];
 };
 
@@ -221,6 +223,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
     }
 
     await doc.save();
+
     return "Suggestion rejected";
   } catch (ex) {
     guild.client.logger.error("rejectSuggestion", ex);
