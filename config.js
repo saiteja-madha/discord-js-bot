@@ -2,13 +2,13 @@ module.exports = {
   OWNER_IDS: [""], // Bot owner ID's
   SUPPORT_SERVER: "", // Your bot support server
   PREFIX_COMMANDS: {
-    ENABLED: true, // Enable/Disable prefix commands
+    ENABLED: false, // Enable/Disable prefix commands
     DEFAULT_PREFIX: "!", // Default prefix for the bot
   },
   INTERACTIONS: {
-    SLASH: true, // Should the interactions be enabled
-    CONTEXT: true, // Should contexts be enabled
-    GLOBAL: true, // Should the interactions be registered globally
+    SLASH: false, // Should the interactions be enabled
+    CONTEXT: false, // Should contexts be enabled
+    GLOBAL: false, // Should the interactions be registered globally
     TEST_GUILD_ID: "xxxxxxxxxxx", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
   EMBED_COLORS: {
@@ -30,20 +30,20 @@ module.exports = {
   // PLUGINS
 
   AUTOMOD: {
-    ENABLED: true,
+    ENABLED: false,
     LOG_EMBED: "#36393F",
     DM_EMBED: "#36393F",
   },
 
   DASHBOARD: {
-    enabled: true, // enable or disable dashboard
+    enabled: false, // enable or disable dashboard
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
     port: "8080", // port to run the bot on
   },
 
   ECONOMY: {
-    ENABLED: true,
+    ENABLED: false,
     CURRENCY: "₪",
     DAILY_COINS: 100, // coins to be received by daily command
     MIN_BEG_AMOUNT: 100, // minimum coins to be received when beg command is used
@@ -51,7 +51,7 @@ module.exports = {
   },
 
   MUSIC: {
-    ENABLED: true,
+    ENABLED: false,
     IDLE_TIME: 60, // Time in seconds before the bot disconnects from an idle voice channel
     MAX_SEARCH_RESULTS: 5,
     DEFAULT_SOURCE: "SC", // YT = Youtube, YTM = Youtube Music, SC = SoundCloud
@@ -71,23 +71,23 @@ module.exports = {
   },
 
   GIVEAWAYS: {
-    ENABLED: true,
+    ENABLED: false,
     REACTION: "🎁",
     START_EMBED: "#FF468A",
     END_EMBED: "#FF468A",
   },
 
   IMAGE: {
-    ENABLED: true,
+    ENABLED: false,
     BASE_API: "https://strangeapi.fun/api",
   },
 
   INVITE: {
-    ENABLED: true,
+    ENABLED: false,
   },
 
   MODERATION: {
-    ENABLED: true,
+    ENABLED: false,
     EMBED_COLORS: {
       TIMEOUT: "#102027",
       UNTIMEOUT: "#4B636E",
@@ -105,20 +105,20 @@ module.exports = {
   },
 
   PRESENCE: {
-    ENABLED: true, // Whether or not the bot should update its status
+    ENABLED: false, // Whether or not the bot should update its status
     STATUS: "online", // The bot's status [online, idle, dnd, invisible]
     TYPE: "WATCHING", // Status type for the bot [PLAYING | LISTENING | WATCHING | COMPETING]
     MESSAGE: "{members} members in {servers} servers", // Your bot status message
   },
 
   STATS: {
-    ENABLED: true,
+    ENABLED: false,
     XP_COOLDOWN: 5, // Cooldown in seconds between messages
     DEFAULT_LVL_UP_MSG: "{member:tag}, You just advanced to **Level {level}**",
   },
 
   SUGGESTIONS: {
-    ENABLED: true, // Should the suggestion system be enabled
+    ENABLED: false, // Should the suggestion system be enabled
     EMOJI: {
       UP_VOTE: "⬆️",
       DOWN_VOTE: "⬇️",
@@ -129,7 +129,7 @@ module.exports = {
   },
 
   TICKET: {
-    ENABLED: true,
+    ENABLED: false,
     CREATE_EMBED: "#068ADD",
     CLOSE_EMBED: "#068ADD",
   },

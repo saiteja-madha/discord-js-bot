@@ -360,8 +360,27 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
     new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle(ButtonStyle.Success)
   );
 
+  const permissionOverwrites = [
+    {
+      id: guild.roles.everyone,
+      deny: ["ViewChannel"],
+    },
+    {
+      id: guild.members.me.roles.highest.id,
+      allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
+    },
+  ];
+
+  // create ticket category
+  const tktCategory = await guild.channels.create({
+    name: "TICKETS",
+    type: ChannelType.GuildCategory,
+    permissionOverwrites,
+  });
+
   // save configuration
   settings.ticket.staff_roles = staffRoles;
+  settings.ticket.category = tktCategory.id;
   await settings.save();
 
   await targetChannel.send({ embeds: [embed], components: [tktBtnRow] });

@@ -249,6 +249,7 @@ async function handleTicketOpen(interaction) {
       name: `tіcket-${ticketNumber}`,
       type: ChannelType.GuildText,
       topic: `tіcket|${user.id}|${catName || "Default"}`,
+      parent: settings.ticket.category,
       permissionOverwrites,
     });
 
