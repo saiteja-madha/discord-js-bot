@@ -56,7 +56,7 @@ const genReaction = async (category, user) => {
 
     // some-random api
     if (category === "wink") {
-      const response = await getJson("https://some-random-api.ml/animu/wink");
+      const response = await getJson("https://some-random-api.com/animu/wink");
       if (!response.success) throw new Error("API error");
       imageUrl = response.data.link;
     }
