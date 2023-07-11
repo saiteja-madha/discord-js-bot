@@ -74,7 +74,7 @@ async function handleFlagReaction(emoji, message, user) {
     .setAuthor({ name: `Translation from ${src}` })
     .setDescription(desc)
     .setFooter({
-      text: `Requested by ${user.tag}`,
+      text: `Requested by ${user.username}`,
       iconURL: user.displayAvatarURL(),
     });
 

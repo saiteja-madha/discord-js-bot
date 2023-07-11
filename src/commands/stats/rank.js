@@ -47,7 +47,7 @@ async function getRank({ guild }, member, settings) {
   if (!settings.stats.enabled) return "Stats Tracking is disabled on this server";
 
   const memberStats = await getMemberStats(guild.id, user.id);
-  if (!memberStats.xp) return `${user.tag} is not ranked yet!`;
+  if (!memberStats.xp) return `${user.username} is not ranked yet!`;
 
   const lb = await getXpLb(guild.id, 100);
   let pos = -1;

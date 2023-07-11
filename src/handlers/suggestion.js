@@ -91,7 +91,7 @@ async function approveSuggestion(member, channel, messageId, reason) {
     .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.APPROVED_EMBED)
     .setAuthor({ name: "Suggestion Approved" })
-    .setFooter({ text: `Approved By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
+    .setFooter({ text: `Approved By ${member.user.username}`, iconURL: member.displayAvatarURL() })
     .setTimestamp();
 
   const fields = [];
@@ -178,7 +178,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
     .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.DENIED_EMBED)
     .setAuthor({ name: "Suggestion Rejected" })
-    .setFooter({ text: `Rejected By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
+    .setFooter({ text: `Rejected By ${member.user.username}`, iconURL: member.displayAvatarURL() })
     .setTimestamp();
 
   const fields = [];

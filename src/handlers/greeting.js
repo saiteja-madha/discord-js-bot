@@ -81,7 +81,7 @@ const buildGreeting = async (member, type, config, inviterData) => {
     content =
       type === "WELCOME"
         ? `Welcome to the server, ${member.displayName} 🎉`
-        : `${member.user.tag} has left the server 👋`;
+        : `${member.user.username} has left the server 👋`;
     return { content };
   }
 

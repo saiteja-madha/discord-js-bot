@@ -60,7 +60,7 @@ async function getLyric(user, choice) {
       .setTitle(`${author} - ${title}`)
       .setThumbnail(thumbnail)
       .setDescription(lyrics)
-      .setFooter({ text: `Request By: ${user.tag}` });
+      .setFooter({ text: `Request By: ${user.username}` });
 
     return { embeds: [embed] };
 }

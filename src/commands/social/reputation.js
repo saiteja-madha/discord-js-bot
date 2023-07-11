@@ -109,7 +109,7 @@ module.exports = {
 
 async function viewReputation(target) {
   const userData = await getUser(target);
-  if (!userData) return `${target.tag} has no reputation yet`;
+  if (!userData) return `${target.username} has no reputation yet`;
 
   const embed = new EmbedBuilder()
     .setAuthor({ name: `Reputation for ${target.username}` })
@@ -157,7 +157,7 @@ async function giveReputation(user, target) {
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(`${target.toString()} +1 Rep!`)
-    .setFooter({ text: `By ${user.tag}` })
+    .setFooter({ text: `By ${user.username}` })
     .setTimestamp(Date.now());
 
   return { embeds: [embed] };
