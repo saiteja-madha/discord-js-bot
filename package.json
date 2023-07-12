@@ -41,7 +41,7 @@
     "fixedsize-map": "^1.0.1",
     "iso-639-1": "^2.1.15",
     "lavaclient": "^4.1.1",
-    "module-alias": "^2.2.2",
+    "module-alias": "^2.2.3",
     "moment": "^2.29.4",
     "mongoose": "^7.0.4",
     "nekos.life": "^3.0.0",
