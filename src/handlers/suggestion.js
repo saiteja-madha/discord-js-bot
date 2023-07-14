@@ -17,8 +17,8 @@ const { stripIndents } = require("common-tags");
  * @param {import('discord.js').Message} message
  */
 const getStats = (message) => {
-  const upVotes = message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE).count - 1;
-  const downVotes = message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE).count - 1;
+  const upVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE)?.count || 1) - 1;
+  const downVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE)?.count || 1) - 1;
 
   return [upVotes, downVotes];
 };

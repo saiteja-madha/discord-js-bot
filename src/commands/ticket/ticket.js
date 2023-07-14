@@ -376,7 +376,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
     name: "TICKETS",
     type: ChannelType.GuildCategory,
     permissionOverwrites,
-  });
+  }).catch((ex) => {});
 
   // save configuration
   settings.ticket.staff_roles = staffRoles;
