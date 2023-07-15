@@ -371,16 +371,8 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
     },
   ];
 
-  // create ticket category
-  const tktCategory = await guild.channels.create({
-    name: "TICKETS",
-    type: ChannelType.GuildCategory,
-    permissionOverwrites,
-  }).catch((ex) => {});
-
   // save configuration
   settings.ticket.staff_roles = staffRoles;
-  settings.ticket.category = tktCategory.id;
   await settings.save();
 
   await targetChannel.send({ embeds: [embed], components: [tktBtnRow] });
