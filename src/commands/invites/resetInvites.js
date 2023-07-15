@@ -48,5 +48,5 @@ async function clearInvites({ guild }, user) {
   memberDb.invite_data.added = 0;
   await memberDb.save();
   checkInviteRewards(guild, memberDb, false);
-  return `Done! Invites cleared for \`${user.tag}\``;
+  return `Done! Invites cleared for \`${user.username}\``;
 }

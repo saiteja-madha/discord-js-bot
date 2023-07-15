@@ -40,6 +40,7 @@ const parse = async (content, member, inviterData = {}) => {
     .replaceAll(/{member:name}/g, member.user.username)
     .replaceAll(/{member:dis}/g, member.user.discriminator)
     .replaceAll(/{member:tag}/g, member.user.tag)
+    .replaceAll(/{member:mention}/g, member.toString())
     .replaceAll(/{member:avatar}/g, member.displayAvatarURL())
     .replaceAll(/{inviter:name}/g, inviteData.name)
     .replaceAll(/{inviter:tag}/g, inviteData.tag)
@@ -81,7 +82,7 @@ const buildGreeting = async (member, type, config, inviterData) => {
     content =
       type === "WELCOME"
         ? `Welcome to the server, ${member.displayName} 🎉`
-        : `${member.user.tag} has left the server 👋`;
+        : `${member.user.username} has left the server 👋`;
     return { content };
   }
 

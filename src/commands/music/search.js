@@ -101,7 +101,7 @@ async function search({ member, guild, channel }, query) {
       embed
         .setAuthor({ name: "Added Song to queue" })
         .setDescription(`[${track.info.title}](${track.info.uri})`)
-        .setFooter({ text: `Requested By: ${member.user.tag}` });
+        .setFooter({ text: `Requested By: ${member.user.username}` });
 
       fields.push({
         name: "Song Duration",
@@ -144,7 +144,7 @@ async function search({ member, guild, channel }, query) {
             inline: true,
           }
         )
-        .setFooter({ text: `Requested By: ${member.user.tag}` });
+        .setFooter({ text: `Requested By: ${member.user.username}` });
       break;
 
     case "SEARCH_RESULT": {
@@ -197,7 +197,7 @@ async function search({ member, guild, channel }, query) {
           tracks = toAdd;
           embed
             .setDescription(`🎶 Added ${toAdd.length} songs to queue`)
-            .setFooter({ text: `Requested By: ${member.user.tag}` });
+            .setFooter({ text: `Requested By: ${member.user.username}` });
         }
       } catch (err) {
         console.log(err);
@@ -216,7 +216,7 @@ async function search({ member, guild, channel }, query) {
 
   // do queue things
   const started = player.playing || player.paused;
-  player.queue.add(tracks, { requester: member.user.tag, next: false });
+  player.queue.add(tracks, { requester: member.user.username, next: false });
   if (!started) {
     await player.queue.start();
   }

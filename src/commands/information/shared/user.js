@@ -20,8 +20,8 @@ module.exports = (member) => {
     .setColor(color)
     .addFields(
       {
-        name: "User Tag",
-        value: member.user.tag,
+        name: "Username",
+        value: member.user.username,
         inline: true,
       },
       {
