@@ -2,7 +2,7 @@ const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getJson } = require("@helpers/HttpUtils");
 const { MESSAGES, EMBED_COLORS } = require("@root/config");
 
-const BASE_URL = "https://some-random-api.ml/lyrics";
+const BASE_URL = "https://some-random-api.com/lyrics";
 
 /**
  * @type {import("@structures/Command")}
@@ -60,7 +60,7 @@ async function getLyric(user, choice) {
       .setTitle(`${author} - ${title}`)
       .setThumbnail(thumbnail)
       .setDescription(lyrics)
-      .setFooter({ text: `Request By: ${user.tag}` });
+      .setFooter({ text: `Request By: ${user.username}` });
 
     return { embeds: [embed] };
 }

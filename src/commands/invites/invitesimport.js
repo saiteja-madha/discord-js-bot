@@ -63,5 +63,5 @@ async function importInvites({ guild }, user) {
     await memberDb.save();
   }
 
-  return `Done! Previous invites added to ${user ? user.tag : "all members"}`;
+  return `Done! Previous invites added to ${user ? user.username : "all members"}`;
 }

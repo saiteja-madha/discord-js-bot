@@ -177,7 +177,7 @@ async function performAutomod(message, settings) {
         .addFields(fields)
         .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
         .setFooter({
-          text: `By ${author.tag} | ${author.id}`,
+          text: `By ${author.username} | ${author.id}`,
           iconURL: author.avatarURL(),
         });
 

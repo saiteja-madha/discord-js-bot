@@ -92,7 +92,7 @@ async function getGithubUser(target, author) {
     .setDescription(`**Bio**:\n${bio || "Not Provided"}`)
     .setImage(avatarUrl)
     .setColor(0x6e5494)
-    .setFooter({ text: `Requested by ${author.tag}` });
+    .setFooter({ text: `Requested by ${author.username}` });
 
   return { embeds: [embed] };
 }
