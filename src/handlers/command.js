@@ -178,8 +178,8 @@ module.exports = {
    */
   getSlashUsage(cmd) {
     let desc = "";
-    if (cmd.slashCommand.options.find((o) => o.type === "SUB_COMMAND")) {
-      const subCmds = cmd.slashCommand.options.filter((opt) => opt.type === "SUB_COMMAND");
+    if (cmd.slashCommand.options.find((o) => o.type === ApplicationCommandOptionType.Subcommand)) {
+      const subCmds = cmd.slashCommand.options.filter((opt) => opt.type === ApplicationCommandOptionType.Subcommand);
       subCmds.forEach((sub) => {
         desc += `\`/${cmd.name} ${sub.name}\`\n❯ ${sub.description}\n\n`;
       });

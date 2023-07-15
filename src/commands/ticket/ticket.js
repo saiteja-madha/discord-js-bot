@@ -319,13 +319,6 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
-        new ActionRowBuilder().addComponents(
-          new TextInputBuilder()
-            .setCustomId("staff")
-            .setLabel("Staff Roles")
-            .setStyle(TextInputStyle.Short)
-            .setRequired(false)
-        ),
       ],
     })
   );
@@ -344,10 +337,6 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   const title = modal.fields.getTextInputValue("title");
   const description = modal.fields.getTextInputValue("description");
   const footer = modal.fields.getTextInputValue("footer");
-  const staffRoles = modal.fields
-    .getTextInputValue("staff")
-    .split(",")
-    .filter((s) => guild.roles.cache.has(s.trim()));
 
   // send ticket message
   const embed = new EmbedBuilder()
@@ -359,10 +348,6 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   const tktBtnRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle(ButtonStyle.Success)
   );
-
-  // save configuration
-  settings.ticket.staff_roles = staffRoles;
-  await settings.save();
 
   await targetChannel.send({ embeds: [embed], components: [tktBtnRow] });
   await modal.deleteReply();

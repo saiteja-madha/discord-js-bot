@@ -45,7 +45,7 @@ async function getInviter({ guild }, user, settings) {
   if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
 
   const inviteData = (await getMember(guild.id, user.id)).invite_data;
-  if (!inviteData || !inviteData.inviter) return `Cannot track how \`${user.tag}\` joined`;
+  if (!inviteData || !inviteData.inviter) return `Cannot track how \`${user.username}\` joined`;
 
   const inviter = await guild.client.users.fetch(inviteData.inviter, false, true);
   const inviterData = (await getMember(guild.id, inviteData.inviter)).invite_data;
@@ -55,7 +55,7 @@ async function getInviter({ guild }, user, settings) {
     .setAuthor({ name: `Invite data for ${user.username}` })
     .setDescription(
       stripIndent`
-      Inviter: \`${inviter?.tag || "Deleted User"}\`
+      Inviter: \`${inviter?.username || "Deleted User"}\`
       Inviter ID: \`${inviteData.inviter}\`
       Invite Code: \`${inviteData.code}\`
       Inviter Invites: \`${getEffectiveInvites(inviterData)}\`

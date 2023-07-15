@@ -69,7 +69,7 @@ async function suggest(member, suggestion, settings) {
         ${suggestion}
 
         **Submitter** 
-        ${member.user.tag} [${member.id}]
+        ${member.user.username} [${member.id}]
       `
     )
     .setTimestamp();

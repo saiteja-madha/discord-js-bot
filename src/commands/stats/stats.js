@@ -53,8 +53,8 @@ async function stats(member, settings) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .addFields(
       {
-        name: "User Tag",
-        value: member.user.tag,
+        name: "Username",
+        value: member.user.username,
         inline: true,
       },
       {

@@ -150,7 +150,7 @@ async function play({ member, guild, channel }, query) {
       embed
         .setAuthor({ name: "Added Track to queue" })
         .setDescription(`[${track.info.title}](${track.info.uri})`)
-        .setFooter({ text: `Requested By: ${member.user.tag}` });
+        .setFooter({ text: `Requested By: ${member.user.username}` });
 
       fields.push({
         name: "Song Duration",
@@ -189,7 +189,7 @@ async function play({ member, guild, channel }, query) {
           inline: true,
         }
       )
-      .setFooter({ text: `Requested By: ${member.user.tag}` });
+      .setFooter({ text: `Requested By: ${member.user.username}` });
   }
 
   // create a player and/or join the member's vc
@@ -201,7 +201,7 @@ async function play({ member, guild, channel }, query) {
 
   // do queue things
   const started = player.playing || player.paused;
-  player.queue.add(tracks, { requester: member.user.tag, next: false });
+  player.queue.add(tracks, { requester: member.user.username, next: false });
   if (!started) {
     await player.queue.start();
   }

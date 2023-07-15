@@ -9,13 +9,16 @@ const antispamCache = new Map();
 const MESSAGE_SPAM_THRESHOLD = 3000;
 
 // Cleanup the cache
-setInterval(() => {
-  antispamCache.forEach((value, key) => {
-    if (Date.now() - value.timestamp > MESSAGE_SPAM_THRESHOLD) {
-      antispamCache.delete(key);
-    }
-  });
-}, 10 * 60 * 1000);
+setInterval(
+  () => {
+    antispamCache.forEach((value, key) => {
+      if (Date.now() - value.timestamp > MESSAGE_SPAM_THRESHOLD) {
+        antispamCache.delete(key);
+      }
+    });
+  },
+  10 * 60 * 1000
+);
 
 /**
  * Check if the message needs to be moderated and has required permissions
@@ -177,7 +180,7 @@ async function performAutomod(message, settings) {
         .addFields(fields)
         .setDescription(`**Channel:** ${channel.toString()}\n**Content:**\n${content}`)
         .setFooter({
-          text: `By ${author.tag} | ${author.id}`,
+          text: `By ${author.username} | ${author.id}`,
           iconURL: author.avatarURL(),
         });
 
