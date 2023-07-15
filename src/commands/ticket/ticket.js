@@ -319,13 +319,6 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
-        new ActionRowBuilder().addComponents(
-          new TextInputBuilder()
-            .setCustomId("staff")
-            .setLabel("Staff Roles (ID separate with ,)")
-            .setStyle(TextInputStyle.Short)
-            .setRequired(false)
-        ),
       ],
     })
   );
