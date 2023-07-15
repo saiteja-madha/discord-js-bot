@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "nodemon .",
     "start": "node .",
-    "format": "prettier --write src"
+    "format": "prettier --write src",
+    "docker:build": "docker build -t saitejamadha/discord-js-bot:5.4.0 ."
   },
   "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
   "repository": {
