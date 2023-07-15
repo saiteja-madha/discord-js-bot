@@ -322,7 +322,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId("staff")
-            .setLabel("Staff Roles (ID separate with ,)")
+            .setLabel("Staff Roles")
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
@@ -359,17 +359,6 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   const tktBtnRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle(ButtonStyle.Success)
   );
-
-  const permissionOverwrites = [
-    {
-      id: guild.roles.everyone,
-      deny: ["ViewChannel"],
-    },
-    {
-      id: guild.members.me.roles.highest.id,
-      allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
-    },
-  ];
 
   // save configuration
   settings.ticket.staff_roles = staffRoles;

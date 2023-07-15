@@ -76,7 +76,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     let content = "";
     reversed.forEach((m) => {
-      content += `[${new Date(m.createdAt).toLocaleString("en-US")}] - ${m.author.username}\n`;
+      content += `[${new Date(m.createdAt).toLocaleString("en-US")}] - ${m.author.tag}\n`;
       if (m.cleanContent !== "") content += `${m.cleanContent}\n`;
       if (m.attachments.size > 0) content += `${m.attachments.map((att) => att.proxyURL).join(", ")}\n`;
       content += "\n";
@@ -103,12 +103,12 @@ async function closeTicket(channel, closedBy, reason) {
     fields.push(
       {
         name: "Opened By",
-        value: ticketDetails.user ? ticketDetails.user.username : "Unknown",
+        value: ticketDetails.user ? ticketDetails.user.tag : "Unknown",
         inline: true,
       },
       {
         name: "Closed By",
-        value: closedBy ? closedBy.username : "Unknown",
+        value: closedBy ? closedBy.tag : "Unknown",
         inline: true,
       }
     );
