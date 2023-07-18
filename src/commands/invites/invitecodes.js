@@ -41,7 +41,7 @@ module.exports = {
 async function getInviteCodes({ guild }, user) {
   const invites = await guild.invites.fetch({ cache: false });
   const reqInvites = invites.filter((inv) => inv.inviter.id === user.id);
-  if (reqInvites.size === 0) return `\`${user.tag}\` has no invites in this server`;
+  if (reqInvites.size === 0) return `\`${user.username}\` has no invites in this server`;
 
   let str = "";
   reqInvites.forEach((inv) => {

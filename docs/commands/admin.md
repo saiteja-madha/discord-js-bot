@@ -175,6 +175,7 @@ _Enabling this feature will allow members to simply react to any message with a 
 - {member:name} : Member Name&#x20;
 - {member:dis} : Member Discriminator&#x20;
 - {member:tag} : Member Tag&#x20;
+- {member:mention} : Member Mention&#x20;
 - {member:avatar} : Member Avatar URL&#x20;
 - {inviter:name} : Inviter Name&#x20;
 - {inviter:tag} : Inviter Tag&#x20;

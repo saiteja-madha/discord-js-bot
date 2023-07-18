@@ -114,8 +114,8 @@ async function waitForBan(issuer, reason, sent) {
     const user = await issuer.client.users.fetch(userId, { cache: true });
 
     const status = await unBanTarget(issuer, user, reason);
-    if (typeof status === "boolean") return sent.edit({ content: `${user.tag} is un-banned!`, components: [] });
-    else return sent.edit({ content: `Failed to unban ${user.tag}`, components: [] });
+    if (typeof status === "boolean") return sent.edit({ content: `${user.username} is un-banned!`, components: [] });
+    else return sent.edit({ content: `Failed to unban ${user.username}`, components: [] });
   });
 
   // collect user and unban

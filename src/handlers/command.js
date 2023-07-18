@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { OWNER_IDS, PREFIX_COMMANDS, EMBED_COLORS } = require("@root/config");
 const { parsePermissions } = require("@helpers/Utils");
 const { timeformat } = require("@helpers/Utils");
@@ -178,8 +178,8 @@ module.exports = {
    */
   getSlashUsage(cmd) {
     let desc = "";
-    if (cmd.slashCommand.options.find((o) => o.type === "SUB_COMMAND")) {
-      const subCmds = cmd.slashCommand.options.filter((opt) => opt.type === "SUB_COMMAND");
+    if (cmd.slashCommand.options.find((o) => o.type === ApplicationCommandOptionType.Subcommand)) {
+      const subCmds = cmd.slashCommand.options.filter((opt) => opt.type === ApplicationCommandOptionType.Subcommand);
       subCmds.forEach((sub) => {
         desc += `\`/${cmd.name} ${sub.name}\`\n❯ ${sub.description}\n\n`;
       });

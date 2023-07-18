@@ -267,7 +267,8 @@ module.exports = {
     //
     else if (sub === "edit") {
       const messageId = interaction.options.getString("message_id");
-      const addDurationMs = ems(interaction.options.getInteger("add_duration"));
+      const addDur = interaction.options.getInteger("add_duration");
+      const addDurationMs = addDur ? ems(addDur) : null;
       if (!addDurationMs) {
         return interaction.followUp("Not a valid duration");
       }
