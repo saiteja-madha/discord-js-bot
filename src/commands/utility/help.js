@@ -137,7 +137,7 @@ async function getHelpMenu({ client, guild }) {
  * @param {string} prefix
  */
 const waiter = (msg, userId, prefix) => {
-  const collector = msg.channel.createMessageComponentCollector({
+  const collector = msg.createMessageComponentCollector({
     filter: (reactor) => reactor.user.id === userId && msg.id === reactor.message.id,
     idle: IDLE_TIMEOUT * 1000,
     dispose: true,
