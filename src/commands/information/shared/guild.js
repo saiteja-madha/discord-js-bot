@@ -39,7 +39,7 @@ module.exports = async (guild) => {
     .map((r) => `${r.name}[${getMembersInRole(memberCache, r)}]`)
     .join(", ");
 
-  if (rolesString.length > 1024) rolesString = rolesString.substring(0, 1020) + "...";
+  if (rolesString.length > 1000) rolesString = rolesString.substring(0, 1000) + "...";
 
   let { verificationLevel } = guild;
   switch (guild.verificationLevel) {
