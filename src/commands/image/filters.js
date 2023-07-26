@@ -93,7 +93,7 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
-      .setFooter({ text: `Requested by: ${message.author.tag}` });
+      .setFooter({ text: `Requested by: ${message.author.username}` });
 
     await message.safeReply({ embeds: [embed], files: [attachment] });
   },
@@ -122,7 +122,7 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.TRANSPARENT)
       .setImage("attachment://attachment.png")
-      .setFooter({ text: `Requested by: ${author.tag}` });
+      .setFooter({ text: `Requested by: ${author.username}` });
 
     await interaction.followUp({ embeds: [embed], files: [attachment] });
   },

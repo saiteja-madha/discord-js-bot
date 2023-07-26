@@ -53,8 +53,8 @@ module.exports = {
 
 async function kick(issuer, target, reason) {
   const response = await kickTarget(issuer, target, reason);
-  if (typeof response === "boolean") return `${target.user.tag} is kicked!`;
-  if (response === "BOT_PERM") return `I do not have permission to kick ${target.user.tag}`;
-  else if (response === "MEMBER_PERM") return `You do not have permission to kick ${target.user.tag}`;
-  else return `Failed to kick ${target.user.tag}`;
+  if (typeof response === "boolean") return `${target.user.username} is kicked!`;
+  if (response === "BOT_PERM") return `I do not have permission to kick ${target.user.username}`;
+  else if (response === "MEMBER_PERM") return `You do not have permission to kick ${target.user.username}`;
+  else return `Failed to kick ${target.user.username}`;
 }

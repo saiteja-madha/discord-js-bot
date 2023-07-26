@@ -58,7 +58,7 @@ module.exports = async (guild) => {
   let desc = "";
   desc = `${desc + "❯"} **Id:** ${id}\n`;
   desc = `${desc + "❯"} **Name:** ${name}\n`;
-  desc = `${desc + "❯"} **Owner:** ${owner.user.tag}\n`;
+  desc = `${desc + "❯"} **Owner:** ${owner.user.username}\n`;
   desc = `${desc + "❯"} **Region:** ${preferredLocale}\n`;
   desc += "\n";
 

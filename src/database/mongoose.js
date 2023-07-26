@@ -8,9 +8,7 @@ module.exports = {
     log(`Connecting to MongoDb...`);
 
     try {
-      await mongoose.connect(process.env.MONGO_CONNECTION, {
-        keepAlive: true,
-      });
+      await mongoose.connect(process.env.MONGO_CONNECTION);
 
       success("Mongoose: Database connection established");
 

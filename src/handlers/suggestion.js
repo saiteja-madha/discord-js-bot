@@ -1,6 +1,7 @@
 const { getSettings } = require("@schemas/Guild");
 const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
 const { SUGGESTIONS } = require("@root/config");
+
 const {
   ActionRowBuilder,
   ButtonBuilder,
@@ -16,8 +17,9 @@ const { stripIndents } = require("common-tags");
  * @param {import('discord.js').Message} message
  */
 const getStats = (message) => {
-  const upVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE)?.count || 0) - 1;
-  const downVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE)?.count || 0) - 1;
+  const upVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE)?.count || 1) - 1;
+  const downVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE)?.count || 1) - 1;
+
   return [upVotes, downVotes];
 };
 
@@ -89,7 +91,7 @@ async function approveSuggestion(member, channel, messageId, reason) {
     .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.APPROVED_EMBED)
     .setAuthor({ name: "Suggestion Approved" })
-    .setFooter({ text: `Approved By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
+    .setFooter({ text: `Approved By ${member.user.username}`, iconURL: member.displayAvatarURL() })
     .setTimestamp();
 
   const fields = [];
@@ -176,7 +178,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
     .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.DENIED_EMBED)
     .setAuthor({ name: "Suggestion Rejected" })
-    .setFooter({ text: `Rejected By ${member.user.tag}`, iconURL: member.displayAvatarURL() })
+    .setFooter({ text: `Rejected By ${member.user.username}`, iconURL: member.displayAvatarURL() })
     .setTimestamp();
 
   const fields = [];
@@ -221,6 +223,7 @@ async function rejectSuggestion(member, channel, messageId, reason) {
     }
 
     await doc.save();
+
     return "Suggestion rejected";
   } catch (ex) {
     guild.client.logger.error("rejectSuggestion", ex);

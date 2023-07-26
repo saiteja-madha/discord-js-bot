@@ -96,15 +96,15 @@ module.exports = {
 
 async function nickname({ member, guild }, target, name) {
   if (!canModerate(member, target)) {
-    return `Oops! You cannot manage nickname of ${target.user.tag}`;
+    return `Oops! You cannot manage nickname of ${target.user.username}`;
   }
   if (!canModerate(guild.members.me, target)) {
-    return `Oops! I cannot manage nickname of ${target.user.tag}`;
+    return `Oops! I cannot manage nickname of ${target.user.username}`;
   }
 
   try {
     await target.setNickname(name);
-    return `Successfully ${name ? "changed" : "reset"} nickname of ${target.user.tag}`;
+    return `Successfully ${name ? "changed" : "reset"} nickname of ${target.user.username}`;
   } catch (ex) {
     return `Failed to ${name ? "change" : "reset"} nickname for ${target.displayName}. Did you provide a valid name?`;
   }

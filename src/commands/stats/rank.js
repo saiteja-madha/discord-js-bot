@@ -47,7 +47,7 @@ async function getRank({ guild }, member, settings) {
   if (!settings.stats.enabled) return "Stats Tracking is disabled on this server";
 
   const memberStats = await getMemberStats(guild.id, user.id);
-  if (!memberStats.xp) return `${user.tag} is not ranked yet!`;
+  if (!memberStats.xp) return `${user.username} is not ranked yet!`;
 
   const lb = await getXpLb(guild.id, 100);
   let pos = -1;
@@ -61,7 +61,7 @@ async function getRank({ guild }, member, settings) {
 
   const url = new URL(`${IMAGE.BASE_API}/utils/rank-card`);
   url.searchParams.append("name", user.username);
-  url.searchParams.append("discriminator", user.discriminator);
+  if (user.discriminator != 0) url.searchParams.append("discriminator", user.discriminator);
   url.searchParams.append("avatar", user.displayAvatarURL({ extension: "png", size: 128 }));
   url.searchParams.append("currentxp", memberStats.xp);
   url.searchParams.append("reqxp", xpNeeded);

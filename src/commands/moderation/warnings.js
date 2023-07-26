@@ -112,11 +112,11 @@ async function listWarnings(target, { guildId }) {
   if (target.user.bot) return "Bots don't have warnings";
 
   const warnings = await getWarningLogs(guildId, target.id);
-  if (!warnings.length) return `${target.user.tag} has no warnings`;
+  if (!warnings.length) return `${target.user.username} has no warnings`;
 
-  const acc = warnings.map((warning, i) => `${i + 1}. ${warning.reason} [By ${warning.admin.tag}]`).join("\n");
+  const acc = warnings.map((warning, i) => `${i + 1}. ${warning.reason} [By ${warning.admin.username}]`).join("\n");
   const embed = new EmbedBuilder({
-    author: { name: `${target.user.tag}'s warnings` },
+    author: { name: `${target.user.username}'s warnings` },
     description: acc,
   });
 
@@ -132,5 +132,5 @@ async function clearWarnings(target, { guildId }) {
   await memberDb.save();
 
   await clearWarningLogs(guildId, target.id);
-  return `${target.user.tag}'s warnings have been cleared`;
+  return `${target.user.username}'s warnings have been cleared`;
 }
