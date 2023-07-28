@@ -37,7 +37,7 @@ module.exports = (client) => {
           if (player.paused) player.resume(); // Or user paused the player
           if (!player.playing) player.play(); // If connected but not playing for some reasons
 
-          setInterval(async () => {
+          const rePlayInterval = setInterval(async () => {
             // Update player to re-play current song when player is connected but stuck at current song for some reasons (under investigation).
             if (player.connected && player.playing) {
               if (player.playingSince + player.queue.current.length < new Date.now()) {
@@ -47,6 +47,8 @@ module.exports = (client) => {
             } else {
               if (!player.connected) {
                 client.logger.error("Player is not connected to any voice channel.");
+                player.stop();
+                clearInterval(rePlayInterval);
               } else if (!player.playing) {
                 client.logger.error(
                   "Player is paused or not playing. Try playing if there is at least 1 song in queue."
@@ -65,6 +67,7 @@ module.exports = (client) => {
                         player.queue.current.length > 1 ? "songs" : "song"
                       } in queue. Trying to play...`
                     );
+                    player.play();
                   }
                 }
               }
