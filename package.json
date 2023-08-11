@@ -49,7 +49,7 @@
     "node-fetch": "^2.6.12",
     "os": "^0.1.2",
     "pino": "^8.14.1",
-    "pino-pretty": "^10.0.1",
+    "pino-pretty": "^10.1.0",
     "pretty-ms": "^7.0.1",
     "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
