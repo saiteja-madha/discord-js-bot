@@ -204,7 +204,7 @@ module.exports = class ModUtils {
             toDelete.set(message.id, message);
           }
         } else if (type === "USER") {
-          if (message.author.id === argument) {
+          if (message.author.id === argument.id) {
             toDelete.set(message.id, message);
           }
         }
