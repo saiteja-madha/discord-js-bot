@@ -178,7 +178,38 @@ module.exports = class ModUtils {
     const toDelete = new Collection();
 
     try {
-      const messages = await channel.messages.fetch({ limit: amount, cache: false, force: true });
+      let messages;
+      switch(type) {
+        case "ALL":
+          messages = await channel.messages.fetch({ limit: amount, cache: false, force: true });
+          break;
+        case "BOT": {
+          messages = await channel.messages.fetch({cache: false, force: true });
+          messages = messages.filter(message => message.author.bot).first(amount);
+          break;
+        }
+        case "LINK": {
+          messages = await channel.messages.fetch({cache: false, force: true });
+          messages = messages.filter(message => containsLink(message.content)).first(amount);
+          break;
+        }
+        case "TOKEN": {
+          messages = await channel.messages.fetch({cache: false, force: true });
+          messages = messages.filter(message => message.content.includes(argument)).first(amount);
+          break;
+        }
+        case "ATTACHMENT": {
+          messages = await channel.messages.fetch({cache: false, force: true });
+          messages = messages.filter(message => message.attachments.size > 0).first(amount);
+          break;
+        }
+        case "USER": {
+          messages = await channel.messages.fetch({cache: false, force: true });
+          messages = messages.filter(message => message.author.id === argument).first(amount);
+          console.log(messages)
+          break;
+        }
+      }
 
       for (const message of messages.values()) {
         if (toDelete.size >= amount) break;
