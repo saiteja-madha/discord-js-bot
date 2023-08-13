@@ -206,7 +206,6 @@ module.exports = class ModUtils {
         case "USER": {
           messages = await channel.messages.fetch({cache: false, force: true });
           messages = messages.filter(message => message.author.id === argument).first(amount);
-          console.log(messages)
           break;
         }
       }
