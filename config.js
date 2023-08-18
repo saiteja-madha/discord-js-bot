@@ -58,6 +58,8 @@ module.exports = {
     MAX_SEARCH_RESULTS: 5,
     DEFAULT_SOURCE: "SC", // YT = Youtube, YTM = Youtube Music, SC = SoundCloud
     LAVALINK_NODES: [
+      // Add any number of lavalink nodes here
+      // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
       {
         host: "localhost",
         port: 2333,
@@ -65,8 +67,6 @@ module.exports = {
         id: "Local Node",
         secure: false,
       },
-      // Add any number of lavalink nodes here
-      // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
     ],
   },
 
