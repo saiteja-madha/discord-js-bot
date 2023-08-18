@@ -10,6 +10,9 @@
 .content-wrapper-custom-light {
   background-color: #ccc !important;
   color: #000000 !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
 }
 
 /* Selector boxes */
@@ -228,6 +231,9 @@
 .content-wrapper-custom-dark {
   background-color: #343a40 !important;
   color: #fff !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
 }
 
 /* Selector boxes */
