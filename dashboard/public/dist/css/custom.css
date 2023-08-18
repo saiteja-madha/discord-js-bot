@@ -1,9 +1,11 @@
 /* ********************************** LIGHT MODE ********************************** */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 /*The whole webpage */
 .body-custom-light {
   color: #000000 !important;
   background-color: #ccc !important;
+  font-family: "Poppins", sans-serif !important;
 }
 
 /* Background */
@@ -225,6 +227,7 @@
 .body-custom-dark {
   color: #fff !important;
   background-color: #343a40 !important;
+  font-family: "Poppins", sans-serif !important;
 }
 
 /* Background */
