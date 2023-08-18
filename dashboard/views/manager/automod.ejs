@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<%- include('../includes/head') %>
+
+  <% if(config.DASHBOARD.style=="dark"){ %>
+
+    <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
+      <%} else {%>
+
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
+          <%}%>
+
+            <% if(config.DASHBOARD.style=="dark"){ %>
+              <div class="wrapper wrapper-custom-dark">
+                <%} else {%>
+                  <div class="wrapper wrapper-custom-light">
+                    <%}%>
+                      <!-- The header is the topbar -->
+                      <%- include('../includes/header') %>
+
+                        <!-- The sidebar includes the menu -->
+                        <%- include('../includes/sidebar') %>
+
+                          <!-- Content Wrapper. Contains page content -->
+                          <% if(config.DASHBOARD.style=="dark"){ %>
+                            <div class="content-wrapper content-wrapper-custom-dark">
+                              <%} else {%>
+                                <div class="content-wrapper content-wrapper-custom-light">
+                                  <%}%>
+                                    <!-- Content Header (Page header) -->
+                                    <% if(config.DASHBOARD.style=="dark"){ %>
+                                      <section class="content-header content-header-custom-dark">
+                                        <%} else {%>
+                                          <section class="content-header content-header-custom-light">
+                                            <%}%>
+                                              <h3>Auto Moderation</h3>
+                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                <ol class="breadcrumb breadcrumb-custom-dark">
+                                                  <%} else {%>
+                                                    <ol class="breadcrumb breadcrumb-custom-light">
+                                                      <%}%>
+                                                        <li>
+                                                          <a href="/"><i class="fa fa-home"></i>Selector</a>
+                                                        </li>
+                                                        <li><a href="<%=`/manage/${guild.id}/`%>">
+                                                            <%=guild.name%>
+                                                          </a></li>
+                                                        <% if(config.DASHBOARD.style=="dark"){ %>
+                                                          <li class="active active-custom-dark">Auto Moderation</li>
+                                                          <%} else {%>
+                                                            <li class="active active-custom-light">Auto Moderation</li>
+                                                            <%}%>
+
+                                                    </ol>
+                                          </section>
+
+                                          <div class="alert alert-success pull-right" id="response"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Success!</strong> Configuration saved!
+                                          </div>
+
+                                          <div class="alert alert-danger pull-right" id="errorresponse"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Error!</strong> There was an error, please try
+                                            again!
+                                          </div>
+
+                                          <% if(config.DASHBOARD.style=="dark"){ %>
+                                            <section class="content content-custom-dark">
+                                              <%} else {%>
+                                                <section class="content content-custom-light">
+                                                  <%}%>
+
+                                                    <div class="row">
+                                                      <div class="col-md-6">
+                                                        <!-- AUTOMOD CONFIGURATION -->
+                                                        <% if(config.DASHBOARD.style=="dark"){ %>
+                                                          <div
+                                                            class="box box-warning box-custom-dark box-warning-custom-dark">
+                                                            <%} else {%>
+                                                              <div class="box box-warning box-custom-light box-warning-custom-light">
+                                                                <%}%>
+                                                                  <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                    <div
+                                                                      class="box-header with-border box-header-custom-dark with-border-custom-dark">
+                                                                      <%} else {%>
+                                                                        <div class="box-header with-border box-header-custom-light with-border-custom-light">
+                                                                          <%}%>
+
+                                                                            <h3 class="box-title">Auto Moderation</h3>
+                                                                        </div>
+                                                                        <form role="form"
+                                                                          action="/manage/<%= guild.id %>/automod/"
+                                                                          method="POST" id="automodForm">
+                                                                          <div class="box-body">
+                                                                            <div class="form-group">
+                                                                              <label>Max Strikes</label>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                                <input type="number" name="max_strikes"
+                                                                                  class="form-control form-control-custom-dark"
+                                                                                  placeholder="<%= guild.automod.strikes %>" />
+                                                                                <%} else {%>
+                                                                                  <input type="number"
+                                                                                    name="max_strikes"
+                                                                                    class="form-control form-control-custom-light"
+                                                                                    placeholder="<%= guild.automod.strikes %>" />
+                                                                                  <%}%>
+
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                              <label>Max Strikes Action</label>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                                <select
+                                                                                  class="form-control form-control-custom-dark"
+                                                                                  name="automod_action">
+                                                                                  <%} else {%>
+                                                                                    <select class="form-control form-control-custom-light"
+                                                                                      name="automod_action">
+                                                                                      <%}%>
+
+                                                                                        <option selected="selected">
+                                                                                          <%= guild.automod.action %>
+                                                                                        </option>
+                                                                                        <% if(guild.automod.action
+                                                                                          !=="TIMEOUT" ) { %>
+                                                                                          <option>TIMEOUT</option>
+                                                                                          <% } %>
+                                                                                            <% if(guild.automod.action
+                                                                                              !=="KICK" ) { %>
+                                                                                              <option>KICK</option>
+                                                                                              <% } %>
+                                                                                                <% if(guild.automod.action
+                                                                                                  !=="BAN" ) { %>
+                                                                                                  <option>BAN</option>
+                                                                                                  <% } %>
+                                                                                    </select>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                              <label>Max Lines</label>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                                <input type="number" name="max_lines"
+                                                                                  class="form-control form-control-custom-dark"
+                                                                                  placeholder="<%= guild.automod.max_lines %>" />
+                                                                                <%} else {%>
+                                                                                  <input type="number" name="max_lines"
+                                                                                    class="form-control form-control-custom-light"
+                                                                                    placeholder="<%= guild.automod.max_lines %>" />
+                                                                                  <%}%>
+
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                              <div class="checkbox">
+                                                                                <label>
+                                                                                  <% if(guild.automod.anti_attachments)
+                                                                                    { %>
+                                                                                    <input type="checkbox"
+                                                                                      name="anti_attachments"
+                                                                                      checked />Anti Attachments <% }
+                                                                                      else { %>
+                                                                                      <input type="checkbox"
+                                                                                        name="anti_attachments" />Anti
+                                                                                      Attachments <% } %>
+                                                                                </label>
+                                                                              </div>
+                                                                              <div class="checkbox">
+                                                                                <label>
+                                                                                  <% if(guild.automod.anti_invites) { %>
+                                                                                    <input type="checkbox"
+                                                                                      name="anti_invites" checked />Anti
+                                                                                    Invites <% } else { %>
+                                                                                      <input type="checkbox"
+                                                                                        name="anti_invites" />Anti
+                                                                                      Invites <% } %>
+                                                                                </label>
+                                                                              </div>
+                                                                              <div class="checkbox">
+                                                                                <label>
+                                                                                  <% if(guild.automod.anti_links) { %>
+                                                                                    <input type="checkbox"
+                                                                                      name="anti_links" checked />Anti
+                                                                                    Links <% } else { %>
+                                                                                      <input type="checkbox"
+                                                                                        name="anti_links" />Anti Links
+                                                                                      <% } %>
+                                                                                </label>
+                                                                              </div>
+                                                                              <div class="checkbox">
+                                                                                <label>
+                                                                                  <% if(guild.automod.anti_spam) { %>
+                                                                                    <input type="checkbox"
+                                                                                      name="anti_spam" checked />Anti
+                                                                                    Spam <% } else { %>
+                                                                                      <input type="checkbox"
+                                                                                        name="anti_spam" />Anti Spam <%
+                                                                                        } %>
+                                                                                </label>
+                                                                              </div>
+                                                                              <div class="checkbox">
+                                                                                <label>
+                                                                                  <% if(guild.automod.anti_ghostping) {
+                                                                                    %>
+                                                                                    <input type="checkbox"
+                                                                                      name="anti_ghostping"
+                                                                                      checked />Anti Ghostping <% } else
+                                                                                      { %>
+                                                                                      <input type="checkbox"
+                                                                                        name="anti_ghostping" />Anti
+                                                                                      Ghostping <% } %>
+                                                                                </label>
+                                                                              </div>
+                                                                              <div class="checkbox">
+                                                                                <label>
+                                                                                  <% if(guild.automod.anti_massmention)
+                                                                                    { %>
+                                                                                    <input type="checkbox"
+                                                                                      name="anti_massmention"
+                                                                                      checked />Anti Massmention <% }
+                                                                                      else { %>
+                                                                                      <input type="checkbox"
+                                                                                        name="anti_massmention" />Anti
+                                                                                      Massmention <% } %>
+                                                                                </label>
+                                                                              </div>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                              <label>Whitelisted Channels</label>
+                                                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                                <select
+                                                                                  class="form-control form-control-custom-dark"
+                                                                                  name="channels" multiple>
+                                                                                  <% guild.channels.cache.filter((ch)=>
+                                                                                    ch.type ===
+                                                                                    0).forEach((ch) => { %> <%
+                                                                                      if(guild.automod.wh_channels.includes(ch.id)
+                                                                                      ){ %>
+                                                                                      <option selected="selected">#<%=
+                                                                                          ch.name %>
+                                                                                      </option>
+                                                                                      <% } else { %>
+                                                                                        <option>#<%= ch.name %>
+                                                                                        </option>
+                                                                                        <% } %>
+                                                                                          <% }); %>
+                                                                                </select>
+                                                                                <%} else {%>
+                                                                                  <select class="form-control form-control-custom-light"
+                                                                                    name="channels" multiple>
+                                                                                    <%
+                                                                                      guild.channels.cache.filter((ch)=>
+                                                                                      ch.type ===
+                                                                                      0).forEach((ch) => { %> <%
+                                                                                        if(guild.automod.wh_channels.includes(ch.id)
+                                                                                        ){ %>
+                                                                                        <option selected="selected">#<%=
+                                                                                            ch.name %>
+                                                                                        </option>
+                                                                                        <% } else { %>
+                                                                                          <option>#<%= ch.name %>
+                                                                                          </option>
+                                                                                          <% } %>
+                                                                                            <% }); %>
+                                                                                  </select>
+                                                                                  <%}%>
+
+                                                                            </div>
+                                                                          </div>
+                                                                          <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                            <div
+                                                                              class="box-footer box-footer-custom-dark">
+                                                                              <%} else {%>
+                                                                                <div class="box-footer box-footer-custom-light">
+                                                                                  <%}%>
+                                                                                    <% if(config.DASHBOARD.style=="dark"
+                                                                                      ){ %>
+                                                                                      <button type="submit"
+                                                                                        onerror="errorresponse()"
+                                                                                        name="automodUpdate"
+                                                                                        class="btn btn-primary btn-custom-dark btn-primary-custom-dark">
+                                                                                        Update
+                                                                                      </button>
+                                                                                      <%} else {%>
+                                                                                        <button type="submit"
+                                                                                          onerror="errorresponse()"
+                                                                                          name="automodUpdate"
+                                                                                          class="btn btn-primary btn-custom-light btn-primary-custom-light">
+                                                                                          Update
+                                                                                        </button>
+                                                                                        <%}%>
+
+                                                                                </div>
+                                                                        </form>
+                                                                    </div>
+                                                                    <!-- END: AUTOMOD CONFIGURATION -->
+                                                              </div>
+                                                          </div>
+                                                </section>
+                                </div>
+                            </div>
+        </body>
+        <script>
+          $("#automodForm").submit(function () {
+            if (window.innerWidth <= 994) {
+              alert('Configuration saved!')
+            } else {
+              var x = document.getElementById("response");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
+            }
+          });
+
+          function errorresponse() {
+            var x = document.getElementById("errorresponse");
+            if (x.style.display === "none") {
+              x.style.display = "block";
+            } else {
+              x.style.display = "none";
+            }
+          }
+        </script>
+
+</html>

@@ -1,90 +1,163 @@
 <!DOCTYPE html>
 <html>
-  <%- include('includes/head') %>
+<%- include('includes/head') %>
+  <% if(config.DASHBOARD.style=="dark"){ %>
 
-  <body class="hold-transition skin-blue sidebar-mini">
-    <div class="wrapper">
-      <!-- The header is the topbar -->
-      <%- include('includes/header') %>
+    <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
+      <%} else {%>
 
-      <!-- The sidebar includes the menu -->
-      <%- include('includes/sidebar') %>
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
+          <%}%>
 
-      <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-          <h1>Selector <small> Version 1.0.0-beta </small></h1>
-          <ol class="breadcrumb">
-            <li class="active">
-              <a href="/"><i class="fa fa-home"></i>Selector</a>
-            </li>
-          </ol>
-        </section>
+            <% if(config.DASHBOARD.style=="dark"){ %>
+              <div class="wrapper wrapper-custom-dark">
+                <%} else {%>
+                  <div class="wrapper wrapper-custom-light">
+                    <%}%>
 
-        <section class="content">
-          <div class="row">
-            <% if(user.displayedGuilds){ user.displayedGuilds.forEach(function(guild) { %>
-            <!-- Displays 4 servers by line -->
-            <div class="col-md-3">
-              <div class="box box-solid">
-                <div class="box-header with-border text-center">
-                  <i class="fas fa-crown"></i>
-                  <h3 class="box-title server-name"><%= guild.name %></h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <div class="text-center">
-                    <img
-                      src="<%= guild.iconURL %>"
-                      style="border-radius: 100%"
-                      width="100"
-                      height="100"
-                      class="img-fluid"
-                    />
-                  </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                  <% if(guild.settingsUrl.includes('discordapp.com')) { %>
-                  <a href="<%= guild.settingsUrl %>"><button class="btn btn-block btn-primary">Invite</button></a>
-                  <% } else { %>
-                  <a href="<%= guild.settingsUrl %>"><button class="btn btn-block btn-success">Manage</button></a>
-                  <% } %>
-                </div>
-                <!-- /.box-footer -->
-              </div>
-              <!-- /.box -->
-            </div>
-            <!-- /.col -->
-            <% }); } else { %>
-            <div class="col-md-12">
-              <div class="box box-warning">
-                <div class="box-header with-border">
-                  <h3 class="box-title">No server found</h3>
-                  <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                      <i class="fa fa-minus"></i>
-                    </button>
-                  </div>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  No server to display. Make sure you are logged in with the right account and try again
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <!-- /.box -->
-            </div>
-            <% } %>
-          </div>
-        </section>
-      </div>
+                      <!-- The header is the topbar -->
+                      <%- include('includes/header') %>
 
-      <!-- Footer includes credits and version -->
-      <%- include('includes/footer') %>
-    </div>
-    <!-- ./wrapper -->
-  </body>
+                        <!-- The sidebar includes the menu -->
+                        <%- include('includes/sidebar') %>
+
+                          <!-- Content Wrapper. Contains page content -->
+                          <% if(config.DASHBOARD.style=="dark"){ %>
+                            <div class="content-wrapper content-wrapper-custom-dark">
+                              <%} else {%>
+                                <div class="content-wrapper content-wrapper-custom-light">
+                                  <%}%>
+                                    <!-- Content Header (Page header) -->
+                                    <% if(config.DASHBOARD.style=="dark"){ %>
+                                      <section class="content-header content-header-custom-dark">
+                                        <%} else {%>
+                                          <section class="content-header content-header-custom-light">
+                                            <%}%>
+                                              <h1>Selector <small> Version 1.0.0-beta </small></h1>
+                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                <ol class="breadcrumb breadcrumb-custom-dark">
+                                                  <%} else {%>
+                                                    <ol class="breadcrumb breadcrumb-custom-light">
+                                                      <%}%>
+                                                        <li>
+                                                          <a href="/"><i class="fa fa-home"></i>Selector</a>
+                                                        </li>
+                                                    </ol>
+                                          </section>
+
+                                          <section class="content">
+                                            <div class="row" id="server-list">
+                                              <% if(user.displayedGuilds){ user.displayedGuilds.forEach(function(guild)
+                                                { %>
+                                                <!-- Displays 4 servers by line -->
+                                                <div class="col-md-3">
+                                                  <% if(config.DASHBOARD.style=="dark"){ %>
+                                                    <div class="box box-solid box-solid-custom-dark box-custom-dark">
+                                                      <%} else {%>
+                                                        <div class="box box-solid box-solid-custom-light box-custom-light">
+                                                          <%}%>
+                                                            <% if(config.DASHBOARD.style=="dark"){ %>
+                                                              <div
+                                                                class="box-header with-border text-center box-header-custom-dark with-border-custom-dark">
+                                                                <%} else {%>
+                                                                  <div class="box-header with-border text-center box-header-custom-light with-border-custom-light">
+                                                                    <%}%>
+                                                                      <i class="fas fa-crown"></i>
+                                                                      <h3 class="box-title server-name"><%= guild.name %></h3>
+                                                                  </div>
+                                                                  <!-- /.box-header -->
+                                                                  <div class="box-body">
+                                                                    <div class="text-center">
+                                                                      <img src="<%= guild.iconURL %>"
+                                                                        style="border-radius: 100%" width="100"
+                                                                        height="100" class="img-fluid" />
+                                                                    </div>
+                                                                  </div>
+                                                                  <!-- /.box-body -->
+                                                                  <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                    <div class="box-footer box-footer-custom-dark">
+                                                                      <% if(guild.settingsUrl.includes('discordapp.com'))
+                                                                        { %>
+                                                                        <a href="<%= guild.settingsUrl %>"><button
+                                                                            class="btn btn-block btn-primary btn-custom-dark btn-block-custom-dark btn-primary-custom-dark">Invite</button></a>
+                                                                        <% } else { %>
+                                                                          <a href="<%= guild.settingsUrl %>"><button
+                                                                              class="btn btn-block btn-success btn-custom-dark btn-block-custom-dark btn-success-custom-dark">Manage</button></a>
+                                                                          <% } %>
+                                                                    </div>
+                                                                    <%} else {%>
+                                                                      <div class="box-footer box-footer-custom-light">
+                                                                        <% if(guild.settingsUrl.includes('discordapp.com'))
+                                                                          { %>
+                                                                          <a href="<%= guild.settingsUrl %>"><button
+                                                                              class="btn btn-block btn-primary btn-custom-light btn-block-custom-light btn-primary-custom-light">Invite</button></a>
+                                                                          <% } else { %>
+                                                                            <a href="<%= guild.settingsUrl %>"><button
+                                                                                class="btn btn-block btn-success btn-block-custom-light btn-success-custom-light">Manage</button></a>
+                                                                            <% } %>
+                                                                      </div>
+                                                                      <%}%>
+
+                                                                        <!-- /.box-footer -->
+                                                              </div>
+                                                              <!-- /.box -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                        <% }); } else { %>
+                                                          <div class="col-md-12">
+                                                            <% if(config.DASHBOARD.style=="dark"){ %>
+                                                              <div
+                                                                class="box box-warning box-custom-dark box-warning-custom-dark">
+                                                                <%} else {%>
+                                                                  <div class="box box-warning box-custom-light box-warning-custom-light">
+                                                                    <%}%>
+                                                                      <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                        <div
+                                                                          class="box-header with-border box-header-custom-dark with-border-custom-dark">
+                                                                          <%} else {%>
+                                                                            <div class="box-header with-border box-header-custom-light with-border-custom-light">
+                                                                              <%}%>
+
+                                                                                <h3 class="box-title">No server found
+                                                                                </h3>
+                                                                                <div class="box-tools pull-right">
+                                                                                  <% if(config.DASHBOARD.style=="dark"
+                                                                                    ){ %>
+                                                                                    <button type="button"
+                                                                                      class="btn btn-box-tool btn-custom-dark"
+                                                                                      data-widget="collapse"></button>
+                                                                                    <i class="fa fa-minus"></i>
+                                                                                    </button>
+                                                                                    <%} else {%>
+                                                                                      <button type="button"
+                                                                                        class="btn btn-box-tool btn-custom-light"
+                                                                                        data-widget="collapse"></button>
+                                                                                      <i class="fa fa-minus"></i>
+                                                                                      </button>
+                                                                                      <%}%>
+                                                                                </div>
+                                                                                <!-- /.box-tools -->
+                                                                            </div>
+                                                                            <!-- /.box-header -->
+                                                                            <div class="box-body">
+                                                                              No server to display. Make sure you are
+                                                                              logged in with
+                                                                              the right
+                                                                              account and try again
+                                                                            </div>
+                                                                            <!-- /.box-body -->
+                                                                        </div>
+                                                                        <!-- /.box -->
+                                                                  </div>
+                                                                  <% } %>
+                                                              </div>
+                                          </section>
+                                </div>
+
+                                <!-- Footer includes credits and version -->
+                                <%- include('includes/footer') %>
+                            </div>
+                            <!-- ./wrapper -->
+        </body>
+
 </html>

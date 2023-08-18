@@ -8,6 +8,7 @@ router.get("/", CheckAuth, async (req, res) => {
 
 router.get("/selector", CheckAuth, async (req, res) => {
   res.render("selector", {
+    config: req.client.config,
     user: req.userInfos,
     currentURL: `${req.client.config.DASHBOARD.baseURL}/${req.originalUrl}`,
   });

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<%- include('../includes/head') %>
+
+  <% if(config.DASHBOARD.style=="dark"){ %>
+
+    <body class="hold-transition skin-blue sidebar-mini body-custom-dark">
+      <%} else {%>
+
+        <body class="hold-transition skin-blue sidebar-mini body-custom-light">
+          <%}%>
+
+            <% if(config.DASHBOARD.style=="dark"){ %>
+              <div class="wrapper wrapper-custom-dark">
+                <%} else {%>
+                  <div class="wrapper wrapper-custom-light">
+                    <%}%>
+                      <!-- The header is the topbar -->
+                      <%- include('../includes/header') %>
+
+                        <!-- The sidebar includes the menu -->
+                        <%- include('../includes/sidebar') %>
+
+                          <!-- Content Wrapper. Contains page content -->
+                          <% if(config.DASHBOARD.style=="dark"){ %>
+                            <div class="content-wrapper content-wrapper-custom-dark">
+                              <%} else {%>
+                                <div class="content-wrapper content-wrapper-custom-light">
+                                  <%}%>
+                                    <!-- Content Header (Page header) -->
+                                    <% if(config.DASHBOARD.style=="dark"){ %>
+                                      <section class="content-header content-header-custom-dark">
+                                        <%} else {%>
+                                          <section class="content-header content-header-custom-light">
+                                            <%}%>
+                                              <h3>Statistics</h3>
+                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                <ol class="breadcrumb breadcrumb-custom-dark">
+                                                  <%} else {%>
+                                                    <ol class="breadcrumb breadcrumb-custom-light">
+                                                      <%}%>
+                                                        <li>
+                                                          <a href="/"><i class="fa fa-home"></i>Selector</a>
+                                                        </li>
+                                                        <li><a href="<%=`/manage/${guild.id}/`%>">
+                                                            <%=guild.name%>
+                                                          </a></li>
+                                                        <% if(config.DASHBOARD.style=="dark"){ %>
+                                                          <li class="active active-custom-dark">Statistics</li>
+                                                          <%} else {%>
+                                                            <li class="active active-custom-light">Statistics</li>
+                                                            <%}%>
+
+                                                    </ol>
+                                          </section>
+                                          <div class="alert alert-success pull-right" id="response"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Success!</strong> Configuration saved!
+                                          </div>
+                                          <div class="alert alert-danger pull-right" id="errorresponse"
+                                            style="display: none; width: 30% !important">
+                                            <strong>Error!</strong> There was an error, please try again!
+                                          </div>
+                                          <section class="content">
+                                            <div class="row">
+                                              <div class="col-md-6">
+                                                <!-- STATS CONFIGURATION -->
+                                                <% if(config.DASHBOARD.style=="dark"){ %>
+                                                  <div class="box box-warning box-custom-dark box-warning-custom-dark">
+                                                    <%} else {%>
+                                                      <div class="box box-warning box-custom-light box-warning-custom-light">
+                                                        <%}%>
+                                                          <% if(config.DASHBOARD.style=="dark"){ %>
+                                                            <div
+                                                              class="box-header with-border box-header-custom-dark with-border-custom-dark">
+                                                              <%} else {%>
+                                                                <div class="box-header with-border box-header-custom-light with-border-custom-light">
+                                                                  <%}%>
+
+                                                                    <h3 class="box-title">Statistics</h3>
+                                                                </div>
+                                                                <form role="form"
+                                                                  action="/manage/<%= guild.id %>/stats/" method="POST"
+                                                                  id="statsForm">
+                                                                  <div class="box-body">
+                                                                    <div class="form-group">
+                                                                      <div class="checkbox">
+                                                                        <label>
+                                                                          <% if(guild.stats.enabled) { %>
+                                                                            <input type="checkbox" name="ranking"
+                                                                              checked />Tracking
+                                                                            <% } else { %>
+                                                                              <input type="checkbox"
+                                                                                name="ranking" />Tracking <% } %>
+                                                                        </label>
+                                                                      </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                      <label>Levelup Message</label>
+                                                                      <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                        <input type="text" name="levelup_message"
+                                                                          class="form-control form-control-custom-dark"
+                                                                          placeholder="<%= guild.stats.xp.message %>" />
+                                                                        <%} else {%>
+                                                                          <input type="text" name="levelup_message"
+                                                                            class="form-control form-control-custom-light"
+                                                                            placeholder="<%= guild.stats.xp.message %>" />
+                                                                          <%}%>
+
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                      <label>Levelup Channel</label>
+                                                                      <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                        <select
+                                                                          class="form-control form-control-custom-dark"
+                                                                          name="levelup_channel">
+                                                                          <% if(guild.stats.xp.channel &&
+                                                                            bot.channels.cache.has(guild.stats.xp.channel)){
+                                                                            %>
+                                                                            <option selected="selected">#<%=
+                                                                                bot.channels.cache.get(guild.stats.xp.channel).name
+                                                                                %>
+                                                                            </option>
+                                                                            <% guild.channels.cache.filter((ch)=>
+                                                                              ch.type === 0 && ch.id
+                                                                              !==
+                                                                              guild.stats.xp.channel).forEach((ch) => {
+                                                                              %>
+                                                                              <option>#<%= ch.name %>
+                                                                              </option>
+                                                                              <% }); %>
+                                                                                <option>No channel</option>
+                                                                                <% } else { %>
+                                                                                  <option disabled selected value>--
+                                                                                    select an option --
+                                                                                  </option>
+                                                                                  <% guild.channels.cache.filter((ch)=>
+                                                                                    ch.type ===
+                                                                                    0).forEach((ch) => { %>
+                                                                                    <option>#<%= ch.name %>
+                                                                                    </option>
+                                                                                    <% }); %>
+                                                                                      <% } %>
+                                                                        </select>
+                                                                        <%} else {%>
+                                                                          <select class="form-control form-control-custom-light"
+                                                                            name="levelup_channel">
+                                                                            <% if(guild.stats.xp.channel &&
+                                                                              bot.channels.cache.has(guild.stats.xp.channel)){
+                                                                              %>
+                                                                              <option selected="selected">#<%=
+                                                                                  bot.channels.cache.get(guild.stats.xp.channel).name
+                                                                                  %>
+                                                                              </option>
+                                                                              <% guild.channels.cache.filter((ch)=>
+                                                                                ch.type === 0 && ch.id
+                                                                                !==
+                                                                                guild.stats.xp.channel).forEach((ch) =>
+                                                                                { %>
+                                                                                <option>#<%= ch.name %>
+                                                                                </option>
+                                                                                <% }); %>
+                                                                                  <option>No channel</option>
+                                                                                  <% } else { %>
+                                                                                    <option disabled selected value>--
+                                                                                      select an option --
+                                                                                    </option>
+                                                                                    <%
+                                                                                      guild.channels.cache.filter((ch)=>
+                                                                                      ch.type ===
+                                                                                      0).forEach((ch) => { %>
+                                                                                      <option>#<%= ch.name %>
+                                                                                      </option>
+                                                                                      <% }); %>
+                                                                                        <% } %>
+                                                                          </select>
+                                                                          <%}%>
+
+                                                                    </div>
+                                                                  </div>
+                                                                  <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                    <div class="box-footer box-footer-custom-dark">
+                                                                      <%} else {%>
+                                                                        <div class="box-footer box-footer-custom-light">
+                                                                          <%}%>
+                                                                            <% if(config.DASHBOARD.style=="dark"){ %>
+                                                                              <button type="submit"
+                                                                                onerror="errorresponse()"
+                                                                                name="statsUpdate"
+                                                                                class="btn btn-primary btn-custom-dark btn-primary-custom-dark">
+                                                                                Update
+                                                                              </button>
+                                                                              <%} else {%>
+                                                                                <button type="submit"
+                                                                                  onerror="errorresponse()"
+                                                                                  name="statsUpdate"
+                                                                                  class="btn btn-primary btn-custom-light btn-primary-custom-light">
+                                                                                  Update
+                                                                                </button>
+                                                                                <%}%>
+
+                                                                        </div>
+                                                                </form>
+                                                            </div>
+                                                            <!-- END: STATS CONFIGURATION -->
+                                                      </div>
+                                                  </div>
+                                          </section>
+                                </div>
+                            </div>
+        </body>
+        <script>
+          $("#statsForm").submit(function () {
+            if (window.innerWidth <= 994) {
+              alert('Configuration saved!')
+            } else {
+              var x = document.getElementById("response");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
+            }
+          });
+
+          function errorresponse() {
+            var x = document.getElementById("errorresponse");
+            if (x.style.display === "none") {
+              x.style.display = "block";
+            } else {
+              x.style.display = "none";
+            }
+          }
+        </script>
+
+</html>

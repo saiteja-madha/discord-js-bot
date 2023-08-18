@@ -61,6 +61,7 @@ module.exports.launch = async (client) => {
     .use("/", mainRouter)
     .use(CheckAuth, function (req, res) {
       res.status(404).render("404", {
+        config: req.client.config,
         user: req.userInfos,
         currentURL: `${req.protocol}://${req.get("host")}${req.originalUrl}`,
       });
@@ -69,6 +70,7 @@ module.exports.launch = async (client) => {
       console.error(err.stack);
       if (!req.user) return res.redirect("/");
       res.status(500).render("500", {
+        config: req.client.config,
         user: req.userInfos,
         currentURL: `${req.protocol}://${req.get("host")}${req.originalUrl}`,
       });

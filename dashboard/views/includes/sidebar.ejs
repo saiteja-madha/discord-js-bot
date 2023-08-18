@@ -1,54 +1,158 @@
 <!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-        <!-- Sidebar user panel -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <img src="<%= user.displayAvatar %>" class="img-circle" alt="User Image">
-            </div>
-            <div class="pull-left info">
-                <p><%= user.username %></p>
-            </div>
-        </div>
-        <!-- search form -->
-        <form action="/selector" method="get" class="sidebar-form">
-        <div class="input-group">
-            <input type="text" name="q" class="form-control" placeholder="Search for servers...">
-            <span class="input-group-btn">
-                <button type="submit" id="search-btn" class="btn btn-flat">
-                    <i class="fa fa-search"></i>
-                </button>
-            </span>
-        </div>
-        </form>
-        <!-- /.search form -->
-        <!-- sidebar menu: : style can be found in sidebar.less -->
-        <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">SERVERS MANAGEMENT</li>
-            <li class="treeview menu-open">
-                <li><a href="/selector"><i class="fa fa-home"></i> <span>Selector</span></a></li>
-            </li>
-        </ul>
-        <% if (locals.guild){ %>
-        <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">CONFIGURATION</li>
-            <li class="treeview menu-open">
-                <li><a href="/manage/<%= guild.id %>/basic"><i class="fa fa-gear"></i> <span>Basic</span></a></li>
-                <li><a href="/manage/<%= guild.id %>/greeting"><i class="fa fa-bullhorn"></i> <span>Greeting</span></a></li>
-            </li>
-        </ul>
-        <% } %>
-    </section>
-    <!-- /.sidebar -->
-</aside>
-
-<script>
-    $(document).ready(function() {
-        // get current URL path and assign 'active' class
-        let pathname = window.location.pathname;
-        $(`.sidebar-menu > li > a[href="${pathname}"]`).parent().addClass("active");
-        $(`.sidebar-menu > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active");
-        $(`.sidebar-menu > li > a[href="/${window.location.pathname.split("/")[1]}/"]`).parent().addClass("active");
-    });
-</script>
+<% if(config.DASHBOARD.style=="dark"){ %>
+    <aside class="main-sidebar main-sidebar-custom-dark">
+      <%} else {%>
+        <aside class="main-sidebar main-sidebar-custom-light">
+          <%}%>
+            <!-- sidebar: style can be found in sidebar.less -->
+            <% if(config.DASHBOARD.style=="dark"){ %>
+              <section class="sidebar sidebar-custom-dark">
+                <%} else {%>
+                  <section class="sidebar sidebar-custom-light">
+                    <%}%>
+                      <!-- Sidebar user panel -->
+                      <% if(config.DASHBOARD.style=="dark"){ %>
+                      <div class="user-panel user-panel-custom-dark">
+                        <%} else {%>
+                        <div class="user-panel user-panel-custom-light">
+                          <%}%>
+                        <div class="pull-left image">
+                          <img src="<%= user.displayAvatar %>" class="img-circle" alt="User Image" />
+                        </div>
+                        <div class="pull-left info">
+                          <p>
+                            <%= user.username %>
+                          </p>
+                        </div>
+                      </div>
+                      <!-- search form -->
+                      <% if(config.DASHBOARD.style=="dark"){ %>
+                        <form action="/selector" method="get" class="sidebar-form sidebar-custom-form">
+                          <%} else {%>
+                            <form action="/selector" method="get" class="sidebar-form sidebar-form-custom-light">
+                              <%}%>
+                                <div class="input-group">
+                                  <% if(config.DASHBOARD.style=="dark"){ %>
+                                    <input type="search" class="form-control form-control-custom-dark" id="form-control"
+                                      placeholder="Search this page..." oninput="Search()" />
+                                    <%} else {%>
+                                      <input type="search" class="form-control form-control-custom-light" id="form-control"
+                                        placeholder="Search this page..." oninput="Search()" />
+                                      <%}%>
+                                        <span class="input-group-btn"> </span>
+                                </div>
+                            </form>
+                            <!-- /.search form -->
+                            <!-- sidebar menu: : style can be found in sidebar.less -->
+                            <% if(config.DASHBOARD.style=="dark"){ %>
+                              <ul class="sidebar-menu sidebar-menu-custom-dark" data-widget="tree">
+                                <%} else {%>
+                                  <ul class="sidebar-menu sidebar-menu-custom-light" data-widget="tree">
+                                    <%}%>
+                                      <% if(config.DASHBOARD.style=="dark"){ %>
+                                        <li class="header header-custom-dark">SERVERS MANAGEMENT</li>
+                                        <%} else {%>
+                                          <li class="header header-custom-light">SERVERS MANAGEMENT</li>
+                                          <%}%>
+  
+                                            <li class="treeview menu-open"></li>
+                                            <li>
+                                              <a href="/selector"><i class="fa fa-home"></i><span>Selector</span></a>
+                                            </li>
+                                  </ul>
+                                  <% if (locals.guild){ %>
+                                    <% if(config.DASHBOARD.style=="dark"){ %>
+                                      <ul class="sidebar-menu sidebar-menu-custom-dark" data-widget="tree">
+                                        <%} else {%>
+                                          <ul class="sidebar-menu sidebar-menu-custom-light" data-widget="tree">
+                                            <%}%>
+                                              <% if(config.DASHBOARD.style=="dark"){ %>
+                                                <li class="header header-custom-dark">CONFIGURATION</li>
+                                                <%} else {%>
+                                                  <li class="header header-custom-light">CONFIGURATION</li>
+                                                  <%}%>
+  
+                                                    <li class="treeview menu-open"></li>
+                                                    <li>
+                                                      <a href="/manage/<%= guild.id %>/general"><i class="fa fa-user"></i>
+                                                        <span>General</span></a>
+                                                    </li>
+                                                    <li>
+                                                      <a href="/manage/<%= guild.id %>/stats"><i
+                                                          class="fa fa-bar-chart"></i>
+                                                        <span>Statistics</span></a>
+                                                    </li>
+                                                    <li>
+                                                      <a href="/manage/<%= guild.id %>/moderation"><i
+                                                          class="fa fa-gear"></i>
+                                                        <span>Moderation</span></a>
+                                                    </li>
+                                                    <li>
+                                                      <a href="/manage/<%= guild.id %>/automod"><i
+                                                          class="fa fa-magic"></i>
+                                                        <span>Auto
+                                                          Moderation</span></a>
+                                                    </li>
+                                                    <li>
+                                                      <a href="/manage/<%= guild.id %>/ticket"><i
+                                                          class="fa fa-ticket"></i>
+                                                        <span>Ticket</span></a>
+                                                    </li>
+                                                    <li>
+                                                      <a href="/manage/<%= guild.id %>/welcome"><i class="fa fa-plus"></i>
+                                                        <span>Welcome</span></a>
+                                                    </li>
+                                                    <li>
+                                                      <a href="/manage/<%= guild.id %>/farewell"><i
+                                                          class="fa fa-minus"></i>
+                                                        <span>Farewell</span></a>
+                                                    </li>
+                                          </ul>
+                                          <% } %>
+                  </section>
+                  <!-- /.sidebar -->
+        </aside>
+  
+        <script>
+          function Search() {
+            var input, filter, ul, li, a, i, txtValue, totalHidden;
+            input = document.querySelector("input[type=search]");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("server-list");
+            li = ul.getElementsByTagName("div");
+            noMatches = ul.getElementsByClassName("noMatches");
+            totalHidden = 0;
+            totalServers = 0;
+  
+            for (i = 0; i < li.length; i++) {
+              if (!li[i].getElementsByTagName("h3")[0]) continue;
+              name = li[i].getElementsByTagName("h3")[0].innerHTML;
+              if (name.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+              } else {
+                li[i].style.display = "none";
+                totalHidden++;
+              }
+              totalServers++;
+            }
+  
+            if (totalHidden >= totalServers) noMatches[0].style.display = "block";
+            else noMatches[0].style.display = "none";
+          }
+  
+          $(document).ready(function () {
+            // get current URL path and assign 'active' class
+            let pathname = window.location.pathname;
+            $(`.sidebar-menu-custom-dark > li > a[href="${pathname}"]`).parent().addClass("active active-custom-dark");
+            $(`.sidebar-menu-custom-dark > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active active-custom-dark");
+            $(`.sidebar-menu-custom-dark > li > a[href="/${window.location.pathname.split("/")[1]}/"]`)
+              .parent()
+              .addClass("active active-custom-dark"),
+              window.location.pathname;
+            $(`.sidebar-menu-custom-light > li > a[href="${pathname}"]`).parent().addClass("active active-custom-light");
+            $(`.sidebar-menu-custom-light > li > ul > li > a[href="${window.location.pathname}"]`).parent().addClass("active active-custom-light");
+            $(`.sidebar-menu-custom-light > li > a[href="/${window.location.pathname.split("/")[1]}/"]`)
+              .parent()
+              .addClass("active active-custom-light");
+          });
+        </script>
