@@ -31,6 +31,10 @@ module.exports = (client) => {
 
   lavaclient.on("nodeDisconnect", (node, event) => {
     client.logger.log(`Node "${node.id}" disconnected`);
+    const reconnectInterval = 5000; // Time in MS, change as needed.
+    setTimeout(() => {
+      node.connect();
+    }, reconnectInterval);
   });
 
   lavaclient.on("nodeError", (node, error) => {
