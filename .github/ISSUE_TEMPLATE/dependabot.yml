@@ -11,9 +11,17 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 5
     reviewers:
-      - "vikkshan"
+      - "vixshan"
     labels:
       - "dependencies"
     ignore:
-      - dependency-name: "discord.js"
-      - dependency-name: "pretty-ms"
+ #     - dependency-name: "discord.js"
+ #     - dependency-name: "pretty-ms"
+
+ # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for a `Dockerfile` in the `root` directory
+    directory: "/"
+    # Check for updates once a week
+    schedule:
+      interval: "daily"
