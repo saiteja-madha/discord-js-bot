@@ -23,3 +23,4 @@ _**Global slash commands** can take upto 1 hour to be shown across all guilds_
     port: "8080", // port to run the bot on
   },
 ```
+- To run your dashboard on your own domain, follow this guide [🔌 | Connect Dashboard - DJS Bot - Ubuntu - Apache](https://blog.riverdev.wtf/connect-dashboard-djs-bot-ubuntu-apache) by [River](https://github.com/River198)

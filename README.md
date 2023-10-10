@@ -26,35 +26,14 @@
 
 ## 🔗 Resource Links
 
-- 🤖 Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=1013236808353599488&permissions=397602323830&scope=bot%20applications.commands)
-- 🤝 Support Server: [Join Here](https://discord.gg/2gPy75zgbW)
-- 📂 Documentation URL: [Visit Here](https://docs.strangebot.xyz)
+- 🤖 Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=1009149789914546287&permissions=397602323830&scope=bot%20applications.commands)
+- 🤝 Support Server: [Join Here](https://discord.gg/wMxe5PsnNg)
+- 📂 Documentation URL: Coming Soon [Visit Here](https://docs.strangebot.xyz)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
+- 📦 Self Host: [Guide](./self-host.md)
 
-## 📦 Prerequisites
-
-- [Node.js](https://nodejs.org/en/) v16.11.0 or higher
-- [Git](https://git-scm.com/downloads)
-- [MongoDB](https://www.mongodb.com)
-
-## 🚀 Getting Started
-
-- Open the terminal and run the following commands
-
-```
-git clone https://github.com/saiteja-madha/discord-js-bot.git
-cd discord-js-bot
-npm install
-```
-
-- Wait for all the dependencies to be installed
-- Rename `.env.example` to `.env` and fill the values
-- Optionally edit `config.js`
-- Type `npm run start` to start the bot
-
-If you need any additional help, make sure to read our guides [here](docs/additional/installation.md)
-
-<br>
+## Set Up your own bot
+You can set up your own bot by following this guide: [Setup Guide](./self-host.md)
 
 <h1 align="center"> ✨ Features ✨ </h1>
 
