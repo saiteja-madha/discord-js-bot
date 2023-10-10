@@ -44,7 +44,7 @@ You also need to enable the Message Content Intent:
 - Clone the project:
 
 ```bash
-git clone https://github.com/vikkshan/mochi.git
+git clone https://github.com/vixshan/mochi.git
 cd mochi
 ```
 (in windows, right-click somewhere in the folder and select "Open In Terminal")
@@ -68,6 +68,7 @@ Ensure that your `.env` looks like this:
   <summary> [EXPAND] Click to see .env</summary>
   
 ```bash
+@@ -1,23 +0,0 @@
 # Bot Token [Required]
 BOT_TOKEN=
 
@@ -91,6 +92,13 @@ STRANGE_API_KEY=
 # SPOTFIY [Required for Spotify Support]
 SPOTIFY_CLIENT_ID=
 SPOTIFY_CLIENT_SECRET=
+
+# Required for OpenAI (https://beta.openai.com/)
+OPENAI=
+
+# Required for few anime commands (https://docs.waifu.it)
+WAIFU_IT_KEY=
+
 ```
 </details>
 
@@ -112,6 +120,8 @@ Extras:
 - STRANGE_API_KEY: (Optional) The API key for strangeapi.fun
 - SPOTIFY_CLIENT_ID: (Optional) The client ID for Spotify
 - SPOTIFY_CLIENT_SECRET: (Optional) The client secret for Spotify
+- OPENAI: (Optional) The API key for OpenAI
+- WAIFU_IT_KEY: (Optional) The API key for [waifu.it](https://docs.waifu.it)
 
 ## Start your bot
 Set up the environment variables as described above.
@@ -177,7 +187,7 @@ You can also restart it from the [pm2.io dashboard](https://pm2.io/) as shown be
 
 ```
 git init
-git remote add origin https://github.com/vikkshan/mochi.git
+git remote add origin https://github.com/vixshan/mochi.git
 ```
 - Create a new file in the hooks directory of your Git repository:
 ```
