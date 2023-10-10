@@ -35,7 +35,7 @@
     "discord-gamecord": "^4.4.1",
     "discord-giveaways": "^6.0.1",
     "discord-together": "^1.3.31",
-    "discord.js": "^14.11.0",
+    "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "enhanced-ms": "^2.3.0",
@@ -59,7 +59,8 @@
     "string-progressbar": "^1.0.4",
     "table": "^6.8.1",
     "timestamp-to-date": "^1.1.0",
-    "twemoji-parser": "^14.0.0"
+    "twemoji-parser": "^14.0.0",
+    "waifu.it": "^1.1.1"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",

@@ -338,6 +338,20 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   const description = modal.fields.getTextInputValue("description");
   const footer = modal.fields.getTextInputValue("footer");
 
+   // create ticket channel category
+   if (!guild.channels.cache.find((ch) => ch.name === "Tickets" && ch.type === ChannelType.GuildCategory)) {
+    guild.channels.create({
+      name: "Tickets",
+      type: ChannelType.GuildCategory,
+      permissionsOverwrites: [
+        {
+          id: guild.roles.everyone,
+          deny: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
+        },
+      ],
+    });
+  }
+
   // send ticket message
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)

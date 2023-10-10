@@ -209,8 +209,8 @@ module.exports = class BotClient extends Client {
       }
     }
 
-    const userContexts = this.contextMenus.filter((ctx) => ctx.type === "USER").size;
-    const messageContexts = this.contextMenus.filter((ctx) => ctx.type === "MESSAGE").size;
+    const userContexts = this.contextMenus.filter((ctx) => ctx.type === ApplicationCommandType.User).size;
+    const messageContexts = this.contextMenus.filter((ctx) => ctx.type === ApplicationCommandType.Message).size;
 
     if (userContexts > 3) throw new Error("A maximum of 3 USER contexts can be enabled");
     if (messageContexts > 3) throw new Error("A maximum of 3 MESSAGE contexts can be enabled");

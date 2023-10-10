@@ -232,6 +232,7 @@ module.exports = {
     //
     if (sub === "start") {
       const channel = interaction.options.getChannel("channel");
+      await interaction.followUp("Starting Giveaway system...");
       return await runModalSetup(interaction, channel);
     }
 

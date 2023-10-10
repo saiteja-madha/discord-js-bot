@@ -4,7 +4,7 @@ const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "ticketcat",
+  name: "ticket-category",
   description: "manage ticket categories",
   category: "TICKET",
   userPermissions: ["ManageGuild"],

@@ -50,6 +50,15 @@ module.exports = {
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
 
+  AICHAT: {
+    MODEL: "gpt-3.5-turbo", //Model Of AI to use https://platform.openai.com/docs/models/gpt-3-5
+    TOKENS: 300, //The maximum number of tokens to generate in the completion. https://platform.openai.com/docs/api-reference/completions/create
+    PRESENCE_PENALTY: 1.5, // Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
+    TEMPERATURE: 0.4, // What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+    IMAGINEMESSAGE: "" // Allows the chatbot to tailor its responses to your intended persona. for example: "imagine you are Rayan Ghostling,you should answer like he would". This feature is optional and can be left blank if not needed.
+  },
+
+
   MUSIC: {
     ENABLED: true,
     IDLE_TIME: 60, // Time in seconds before the bot disconnects from an idle voice channel

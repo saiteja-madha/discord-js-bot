@@ -47,7 +47,8 @@ async function performAutomod(message, settings) {
   const { automod } = settings;
 
   if (automod.wh_channels.includes(message.channelId)) return;
-  if (!automod.debug && !shouldModerate(message)) return;
+  if (!automod.debug) return;
+  if (!shouldModerate(message)) return;
 
   const { channel, member, guild, content, author, mentions } = message;
   const logChannel = settings.modlog_channel ? channel.guild.channels.cache.get(settings.modlog_channel) : null;
