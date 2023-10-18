@@ -8,19 +8,14 @@
 [![MIT License][license-shield]][license-url]
 <center><img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Mochi&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=gradient" /></center>
 
-<br />
-
-[![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi)
-[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
-
 <!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <a href="https://github.com/vixshan/Mochi">
-    <img src="https://cdn.discordapp.com/attachments/1072562937732026439/1163539374282117140/logo.png?ex=653ff17c&is=652d7c7c&hm=08950e60af5c841343b546e12bb805a05a9b7edc69ca051b21c6c6877316c6b7&" alt="Pbot-plus" width="200" height="200">
-  </a>
-
-  <h3 align="center">Mochi</h3>
+<h1 align="center">
+  <br>
+  <a href="https://github.com/vixshan"><img src="./docs/.gitbook/assets/tmpng.png" height="200" alt="MOCHI"></a>
+  <br>
+  MOCHI
+  <br>
+</h1>
 
   <p align="center">
     <br />
@@ -31,101 +26,6 @@
   </p>
 </p>
 
-<!-- NOTICE -->
-
-### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" width="20px" height="20px"> 》Notice 
-> You may not claim this as your own! The original source was created by [Dotwood Media](https://github.com/DotwoodMedia) and [Graphix Development](https://github.com/GraphixDevelopment). The source is modified and being updated by Vikshan
-
-> Mochi is a multipurpose Discord bot base in [Discord.js](https://github.com/Discordjs/discordjs)
-If you like this repository, feel free to leave a star ⭐ to motivate me!
-
-<!-- ABOUT THE PROJECT -->
-
-## <img src="https://cdn.discordapp.com/emojis/859424401186095114.png" width="20px" height="20px">》Description 
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=vixshan&repo=Mochi&theme=tokyonight)](https://github.com/vixshan/Mochi)
-## <img src="https://cdn.discordapp.com/emojis/852881450667081728.gif" width="20px" height="20px">》Feature
-- [x] Slash Commands 
-- [x] Upto date with Discord.js v14
-- [x] Automod
-- [x] Custom Commands
-- [x] Music Commands
-- [x] Tickets
-- [x] Utility Commands
-- [x] Suggestions 
-- [x] Reaction Roles
-- [x] Family
-- [x] Giveaways 
-- [x] Easy to use
-- [x] Don't wanna host it yourself? [Use our public bot](https://discord.com/api/oauth2/authorize?client_id=1009149789914546287&permissions=8&scope=bot%20applications.commands)
-## <img src="https://cdn.discordapp.com/emojis/1028680849195020308.png" width="25px" height="25px">》Screenshots
-<br />
-<p align="center">
-  <a href="https://github.com/vixshan/Mochi">
-    <img src="https://cdn.discordapp.com/attachments/778665159316209748/1055832339328024666/207117434-d98356b1-bf19-418e-9e12-0ef83e0d9a21.png">
-  </a>
-</p>
-
-## <img src="https://cdn.discordapp.com/emojis/1009754836314628146.gif" width="25px" height="25px">》Requirements
-- NodeJs v17+
-- Java v13 for lavalink server.
-- PM2 for process management.
-- Discord Token. Get it from [Discord Developers Portal](https://discord.com/developers/applications)
-- Mongo Database URL. Get it from [MongoDB](https://cloud.mongodb.com/v2/635277bf9f5c7b5620db28a4#clusters)
-- Giphy API Token. Get it from [Giphy Developers Portal](https://developers.giphy.com/)
-- OpenAI API Key `for ai chatbot`. Get it from [OpenAi Developers Portal](https://beta.openai.com/account/api-keys)
-- ClientID `for loading slash commands.`
-- Spotify client ID `for spotify support` [Click here to get](https://developer.spotify.com/dashboard/login)
-- Spotify client Secret `for spotify support` [Click here to get](https://developer.spotify.com/dashboard/login)
-
-## <img src="https://cdn.discordapp.com/emojis/814216203466965052.png" width="25px" height="25px">》Installation Guide
-
-### <img src="https://cdn.discordapp.com/emojis/1028680849195020308.png" width="15px" height="15px"> Installing via [NPM](https://www.npmjs.com/)
-
-
-- Clone the repo and install dependancies by running
-```bash
-git clone https://github.com/vixshan/Mochi.git
-cd Mochi
-npm install
-```
-- After cloning Fill all requirement in `.env` **(rename `.env.example` to `.env`)**
-
-- To start your bot for development 
-
-```js
-node src/index.js
-```
-or 
-```js
-node .
-```
-
-- Install pm2 globally by running 
-```js
-npm i -g pm2
-```
-
-- To start your bot using pm2
-```js
-npm run start
-```
-> Note: If you are using pm2, make sure to install pm2 globally using `npm i -g pm2`
-
-## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
-[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
-
-[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
-
-# <img src="https://cdn.discordapp.com/emojis/1015745034076819516.png" width="25px" height="25px">》
-
-
-<h1 align="center">
-  <br>
-  <a href="https://github.com/saiteja-madha"><img src="./docs/.gitbook/assets/tmpng.png" height="200" alt="Discord.js v14 Bot"></a>
-  <br>
-  Discord.js v14 Bot
-  <br>
-</h1>
 
 <p align="center">Admin, AutoMod, Anime, Economy, Fun, Giveaway, Image, Invite, Information, Moderation, Music, Owner, Social, Statistics, Suggestion, Ticket, Utility and More...</p>
 
@@ -145,7 +45,15 @@ npm run start
 
 <br>
 
+## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
+[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+
+[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
+
+
 ## 🔗 Resource Links
+[![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi)
+[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
 
 - 🤖 Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=1009149789914546287&permissions=397602323830&scope=bot%20applications.commands)
 - 🤝 Support Server: [Join Here](https://discord.gg/wMxe5PsnNg)
@@ -253,13 +161,17 @@ You can set up your own bot by following this guide: [Setup Guide](./self-host.m
 <h1 align="center"> 🤝 Contributing 🤝 </h1>
 
 - Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool discord bot projects
-- Feel free to [Fork](https://github.com/saiteja-madha/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
-- You can keep track of all the planned features [here](https://github.com/saiteja-madha/discord-js-bot/projects) or make a request for one at our discord
+- Feel free to [Fork](https://github.com/vixshan/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
+- You can keep track of all the planned features [here](https://github.com/vixshan/discord-js-bot/projects) or make a request for one at our discord
 
 
-# Donate
 
- By Donating, You Will Help Me To Maintain This Project 
+### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" width="20px" height="20px"> 》Notice 
+> You may not claim this as your own! The original source was created by [saiteja-madha](https://github.com/saiteja-madha). The source is modified and being updated by Vikshan
+
+> Mochi is a multipurpose Discord bot base in [Discord.js](https://github.com/Discordjs/discordjs)
+If you like this repository, feel free to leave a star ⭐ to motivate me!
+
 
 <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="15px" height="15px"> 》[Sponsor](https://github.com/sponsors/vixshan)
 
