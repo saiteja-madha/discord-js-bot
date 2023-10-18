@@ -1,3 +1,24 @@
+## 🚀 Setup
+
+- You can see the [Replit installation guide here](./replit.md)
+
+- Or you can set it up on your machine.
+
+
+- ## <img src="https://cdn.discordapp.com/emojis/1009754836314628146.gif" width="25px" height="25px">》Requirements
+- [Git](https://git-scm.com/downloads)
+- [MongoDB](https://www.mongodb.com)
+- [Nodejs](https://nodejs.org/en/): (18 or above)
+- Java v13 for lavalink server.
+- [pm2](https://pm2.io/docs/runtime/guide/installation/): To keep your bot alive 24/7
+- Discord Token. Get it from [Discord Developers Portal](https://discord.com/developers/applications)
+- Mongo Database URL. Get it from [MongoDB](https://cloud.mongodb.com/v2/635277bf9f5c7b5620db28a4#clusters)
+- Giphy API Token. Get it from [Giphy Developers Portal](https://developers.giphy.com/)
+- OpenAI API Key `for ai chatbot`. Get it from [OpenAi Developers Portal](https://beta.openai.com/account/api-keys)
+- ClientID `for loading slash commands.`
+- Spotify client ID `for spotify support` [Click here to get](https://developer.spotify.com/dashboard/login)
+- Spotify client Secret `for spotify support` [Click here to get](https://developer.spotify.com/dashboard/login)
+
 ## Creating a Discord Bot
 Please set up a discord bot [here](https://discord.com/developers/applications/) and add it to your server.
 
@@ -24,39 +45,19 @@ You also need to enable the Message Content Intent:
 
 </details>
 
-## Setup
 
-- You can see the [Replit installation guide here](./replit.md)
+## <img src="https://cdn.discordapp.com/emojis/814216203466965052.png" width="25px" height="25px">》Installation Guide
 
-- Or you can set it up on your machine.
+### <img src="https://cdn.discordapp.com/emojis/1028680849195020308.png" width="15px" height="15px"> Installing via [NPM](https://www.npmjs.com/)
 
-### 📦 Prerequisites:
 
-- [Nodejs](https://nodejs.org/en/): (18 or above)
-
-- [Git](https://git-scm.com/downloads)
-
-- [MongoDB](https://www.mongodb.com)
-
-- [pm2](https://pm2.io/docs/runtime/guide/installation/): To keep your bot alive 24/7
-
-## 🚀 Setup
-- Clone the project:
-
+- Clone the repo and install dependancies by running
 ```bash
 git clone https://github.com/vixshan/mochi.git
 cd mochi
-```
-(in windows, right-click somewhere in the folder and select "Open In Terminal")
-if you see something about PowerShell, type `cmd` and hit enter to go to the more spartan command line terminal.
-
-- Install dependencies:
-
-```bash
 npm install
 ```
-
-If you need any additional help setting up the dashboard, make sure to read our guides [here](./README.md##-dashboard-setup)
+- After cloning Fill all requirement in `.env` **(rename `.env.example` to `.env`)**
 
 ## Setting up Environment Variables
 
@@ -100,7 +101,6 @@ OPENAI=
 WAIFU_IT_KEY=
 
 ```
-</details>
 
 
 MongoDB:
@@ -122,30 +122,16 @@ Extras:
 - SPOTIFY_CLIENT_SECRET: (Optional) The client secret for Spotify
 - OPENAI: (Optional) The API key for OpenAI
 - WAIFU_IT_KEY: (Optional) The API key for [waifu.it](https://docs.waifu.it)
+</details>
 
 ## Start your bot
 Set up the environment variables as described above.
-- Install pm2:
 
-With npm:
-
-```bash
-npm install pm2 -g
+- Install pm2 globally by running 
+```js
+npm i -g pm2
 ```
-
-With yarn:
-
-```bash
-yarn global add pm2
-```
-
-With Debian, use the install script:
-
-```bash
-apt update && apt install sudo curl && curl -sL https://raw.githubusercontent.com/Unitech/pm2/master/packager/setup.deb.sh | sudo -E bash -
-```
-- Then, to start the bot, run:
-
+- Start the bot
 ```bash
 npm start
 ```
@@ -153,7 +139,10 @@ npm start
 >You can also run `npm run start` to start the bot.
 
 - NOTE: running `npm start` or `npm run start` will start the bot with PM2 and give it the name "mochi." You can replace "mochi" with a name of your choice in [package.json](./package.json). It will also show logs for the bot and save the pm2 processes.
->NOTE: If you get the error:
+
+<details>
+<summary> [EXPAND] COMMON ERRORS </summary>
+  
 ```js
 [PM2][ERROR] Script already launched, add -f option to force re-execution
 ```
@@ -165,6 +154,8 @@ pm2 delete mochi
 ```
 pm2 restart mochi
 ```
+
+</details>
 
 - If you are in a dev environment, use `node .` or `npm run dev` to test your code:
 ```
@@ -181,6 +172,25 @@ You can also restart it from the [pm2.io dashboard](https://pm2.io/) as shown be
 ![image](https://cdn.discordapp.com/attachments/1072834906742345808/1076183450417123358/image.png)
 
 </details>
+
+
+
+# <img src="https://cdn.discordapp.com/emojis/1015745034076819516.png" width="25px" height="25px">》MISCELLANEOUS
+
+## Dashboard Setup
+
+- In the config.js, make sure you set dashboard enabled to **true**
+- Add your base URL and `http://localhost:8080/api/callback` in your application OAuth2 redirects page in the [discord developer portal](https://discord.com/developers/applications)
+
+```js
+  DASHBOARD: {
+    enabled: true, // enable or disable dashboard
+    baseURL: "http://localhost:8080", // base url
+    failureURL: "http://localhost:8080", // failure redirect URL
+    port: "8080", // port to run the bot on
+  },
+```
+- To run your dashboard on your domain, follow this guide [🔌 | Connect Dashboard - DJS Bot - Ubuntu - Apache](https://blog.riverdev.wtf/connect-dashboard-djs-bot-ubuntu-apache) by [River](https://github.com/River198) or view this [discussion](https://github.com/Androz2091/AtlantaBot/discussions/371),
 
 #### Auto-restarting your bot on git pull
 - Add your GitHub repository as the remote origin:
@@ -212,23 +222,6 @@ Every time you run `git pull`, it will automatically run the post-merge hook and
 >NOTE:<br>
 If you want to use `git pull` to update your code automatically, you must keep your GitHub repository public. If you're going to keep your code private, consider using a different method, such as deploying from your machine or using a continuous integration/continuous delivery (CI/CD) tool such as Jenkins, TravisCI, CircleCI, etc. These tools allow you to securely deploy code from a private repository without exposing it publicly.
 
-## Dashboard Setup
-
-- In the config.js, make sure you set dashboard enabled to **true**
-- Add your base URL and `http://localhost:8080/api/callback` in your application OAuth2 redirects page in the [discord developer portal](https://discord.com/developers/applications)
-
-```js
-  DASHBOARD: {
-    enabled: true, // enable or disable dashboard
-    baseURL: "http://localhost:8080", // base url
-    failureURL: "http://localhost:8080", // failure redirect URL
-    port: "8080", // port to run the bot on
-  },
-```
-- To run your dashboard on your domain, follow this guide [🔌 | Connect Dashboard - DJS Bot - Ubuntu - Apache](https://blog.riverdev.wtf/connect-dashboard-djs-bot-ubuntu-apache) by [River](https://github.com/River198) or view this [discussion](https://github.com/Androz2091/AtlantaBot/discussions/371),
-
-## Extra Setup
-
 ### Setting up Slash Commands
 
 - Slash commands are disabled by default
@@ -236,3 +229,9 @@ If you want to use `git pull` to update your code automatically, you must keep y
 - Once you are happy with the commands, set **`GLOBAL = true`** to register these interactions globally
 
 >**Global slash commands** can take up to 1 hour to be shown across all guilds. You can use the `m!reload` command to sync the commands across all guilds. This will also update the commands if you have made any changes.
+
+
+## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
+[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+
+[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
