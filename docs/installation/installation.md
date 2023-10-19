@@ -1,6 +1,6 @@
 ## 🚀 Setup
 
-- You can see the [Replit installation guide here](https://docs.vikshan.me/additional/replit)
+- You can see the [Replit installation guide here](installation/replit.md)
 
 - Or you can set it up on your machine.
 
