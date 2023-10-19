@@ -36,7 +36,7 @@ Typing the command in the terminal is a bit tedious, so you can use the start bu
 If you wish to commit the changes, always make sure to change the start script based on your environment.
 
 ## Step 3: Setting Up The Environment Variables
-You need to set up the environment variables. To do this, go to the `secrets` tab and add the following environment discused in the [installation.md](./installation.md#setting-up-environment-variables)
+You need to set up the environment variables. To do this, go to the `secrets` tab and add the following environment discused in the [installation.md](installation/installation.md#setting-up-environment-variables)
 
 ## Running the Bot 24/7
 Docs coming soon.

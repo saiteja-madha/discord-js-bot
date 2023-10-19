@@ -18,7 +18,12 @@
   - [🛠 Utility](commands/utility.md)
 - [🗒 Contexts](contexts.md)
 
-## Additional
+## Installation
 
-- [✍ Guides](additional/installation.md)
+- [✍ Self-Host](installation/installation.md)
+- [🤖 Replit](installation/replit.md)
+- [🔌 Connect Dashboard](installation/dashboard.md)
+- [📚 Miscellaneous](installation/misc.md)
+
+## FAQ
 - [❓ FAQ](additional/faq.md)
