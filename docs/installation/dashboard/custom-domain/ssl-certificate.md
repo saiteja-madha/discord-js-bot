@@ -14,7 +14,13 @@ Follow these instructions on [snapcraft's site to install snapd](https://snapcra
 
 ### 3. Remove certbot-auto and any Certbot OS packages
 
-If you have any Certbot packages installed using an OS package manager like `apt`, `dnf`, or `yum`, you should remove them before installing the Certbot snap to ensure that when you run the command `certbot` the snap is used rather than the installation from your OS package manager. The exact command to do this depends on your OS, but common examples are `sudo apt-get remove certbot`, `sudo dnf remove certbot`, or `sudo yum remove certbot`.
+If you have any Certbot packages installed using an OS package manager like `apt`, `dnf`, or `yum`, you should remove them before installing the Certbot snap to ensure that when you run the command `certbot` the snap is used rather than the installation from your OS package manager. The exact command to do this depends on your OS, but common examples are:
+
+```
+sudo apt-get remove certbot
+sudo dnf remove certbot
+sudo yum remove certbot.
+```
 
 ### 4. Install Certbot
 

@@ -4,7 +4,7 @@
 
 Go to your DNS Registrar - E.G Namecheap, Google Domains, Namecom etc....
 
-For this example, I will be using [Cloudflare](https://www.cloudflare.com/en-gb/)
+For this example, I will be using [Cloudflare](https://dash.cloudflare.com/)
 
 **Locate your DNS Records**
 
