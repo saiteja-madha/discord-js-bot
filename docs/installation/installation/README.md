@@ -1,8 +1,8 @@
-# ✍ Self-Host
+# ✍ Installation
 
 ### 🚀 Setup
 
-* You can see the [Replit installation guide here](installation/replit.md)
+* You can see the [Replit installation guide here](replit.md)
 * Or you can set it up on your machine.
 * ### ![](https://cdn.discordapp.com/emojis/1009754836314628146.gif)》Requirements
 * [Git](https://git-scm.com/downloads)
@@ -48,11 +48,11 @@ You also need to enable the Message Content Intent:
 
 </details>
 
-### ![](https://cdn.discordapp.com/emojis/814216203466965052.png)》Installation Guide
+### 》Installation Guide
 
-#### ![](https://cdn.discordapp.com/emojis/1028680849195020308.png) Installing via [NPM](https://www.npmjs.com/)
+#### &#x20;Installing via [NPM](https://www.npmjs.com/)
 
-* Clone the repo and install dependancies by running
+* Clone the repo and install dependencies by running
 
 ```bash
 git clone https://github.com/vixshan/mochi.git
@@ -150,7 +150,7 @@ npm start
 
 > You can also run `npm run start` to start the bot.
 
-* NOTE: running `npm start` or `npm run start` will start the bot with PM2 and give it the name "mochi." You can replace "mochi" with a name of your choice in [package.json](package.json). It will also show logs for the bot and save the pm2 processes.
+* NOTE: running `npm start` or `npm run start` will start the bot with PM2 and give it the name "mochi." You can replace "mochi" with a name of your choice in [package.json](../package.json). It will also show logs for the bot and save the pm2 processes.
 
 <details>
 

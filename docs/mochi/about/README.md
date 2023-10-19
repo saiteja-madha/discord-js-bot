@@ -1,11 +1,11 @@
 # 🤖 About Mochi
 
-[![Version](https://img.shields.io/github/package-json/v/vixshan/Mochi?style=for-the-badge)](../../version-url/) [![Contributors](https://img.shields.io/github/contributors/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/graphs/contributors) [![PRs](https://img.shields.io/github/issues-pr/vixshan/Mochi?style=for-the-badge)](https://github.com/vixshan/Mochi/pulls) [![Forks](https://img.shields.io/github/forks/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/network/members) [![Stargazers](https://img.shields.io/github/stars/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/stargazers) [![Issues](https://img.shields.io/github/issues/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/issues) [![MIT License](https://img.shields.io/github/license/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/blob/master/LICENSE)
+[![Version](https://img.shields.io/github/package-json/v/vixshan/Mochi?style=for-the-badge)](../../../version-url/) [![Contributors](https://img.shields.io/github/contributors/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/graphs/contributors) [![PRs](https://img.shields.io/github/issues-pr/vixshan/Mochi?style=for-the-badge)](https://github.com/vixshan/Mochi/pulls) [![Forks](https://img.shields.io/github/forks/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/network/members) [![Stargazers](https://img.shields.io/github/stars/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/stargazers) [![Issues](https://img.shields.io/github/issues/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/issues) [![MIT License](https://img.shields.io/github/license/vixshan/Mochi.svg?style=for-the-badge)](https://github.com/vixshan/Mochi/blob/master/LICENSE)
 
 ![](https://capsule-render.vercel.app/api?type=waving\&color=gradient\&height=200\&section=header\&text=Mochi\&fontSize=80\&fontAlignY=35\&animation=twinkling\&fontColor=gradient)
 
 \
-[![MOCHI](../.gitbook/assets/tmpng.png)](https://github.com/vixshan)\
+[![MOCHI](../../.gitbook/assets/tmpng.png)](https://github.com/vixshan)\
 MOCHI\
 
 
@@ -19,7 +19,7 @@ Admin, AutoMod, Anime, Economy, Fun, Giveaway, Image, Invite, Information, Moder
 \
 
 
-[Resource Links](about.md#-resource-links) • [Prerequisites](about.md#-prerequisites) • [Getting Started](about.md#-getting-started) • [Features](about.md#-features) • [Contributing](about.md#-contributing)
+[Resource Links](./#-resource-links) • [Prerequisites](./#-prerequisites) • [Getting Started](./#-getting-started) • [Features](./#-features) • [Contributing](./#-contributing)
 
 \
 
@@ -43,7 +43,7 @@ Admin, AutoMod, Anime, Economy, Fun, Giveaway, Image, Invite, Information, Moder
 
 ### Set Up your own bot
 
-You can set up your own bot by following this guide: [Setup Guide](../../self-host.md)
+You can set up your own bot by following this guide: [Setup Guide](../../../self-host.md)
 
 ## ✨ Features ✨
 

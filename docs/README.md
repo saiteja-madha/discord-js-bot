@@ -28,7 +28,7 @@ There are several ways you can support Mochi better.
 * Helping out other people on the support server.&#x20;
 * Writing code.
 
-Visit [Helping out](mochi/helping-out.md) and [Donating](mochi/donating.md) for more information
+Visit [Helping out](mochi/about/helping-out.md) and [Donating](mochi/about/donating.md) for more information
 
 ## Reporting issues
 

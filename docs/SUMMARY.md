@@ -3,34 +3,46 @@
 ## MOCHI
 
 * [👋 Hello there!](README.md)
-* [🤖 About Mochi](bot/about.md)
+* [🤖 About Mochi](mochi/about/README.md)
+  * [🤲 Helping Out](mochi/about/helping-out.md)
+  * [♥ Donating](mochi/about/donating.md)
 * [🚀 Getting Started](mochi/getting-started.md)
-* [🤲 Helping Out](mochi/helping-out.md)
-* [♥ Donating](mochi/donating.md)
-* [📘 Commands](bot/commands/README.md)
-  * [⚙ Admin](bot/commands/admin.md)
-  * [🔞 Anime](bot/commands/anime.md)
-  * [🪙 Economy](bot/commands/economy.md)
-  * [😂 Fun](bot/commands/fun.md)
-  * [🎉 Giveaways](bot/commands/giveaways.md)
-  * [🖼 Image](bot/commands/image.md)
-  * [🪧 Information](bot/commands/information.md)
-  * [📨 Invites](bot/commands/invites.md)
-  * [🔨 Moderation](bot/commands/moderation.md)
-  * [🎵 Music](bot/commands/music.md)
-  * [🔏 Owner](bot/commands/owner.md)
-  * [🧑 Social](bot/commands/social.md)
-  * [📈 Stats](bot/commands/stats.md)
-  * [🛠 Utility](bot/commands/utility.md)
-* [🗒 Contexts](contexts.md)
+
+## CORE
+
+* [⚙ Command Settings](core/command-settings.md)
+* [🗒 Custom Commands](core/contexts.md)
+* [📘 All Commands](core/commands/README.md)
+  * [⚙ Admin](core/commands/admin.md)
+  * [🔞 Anime](core/commands/anime.md)
+  * [🪙 Economy](core/commands/economy.md)
+  * [😂 Fun](core/commands/fun.md)
+  * [🎉 Giveaways](core/commands/giveaways.md)
+  * [🖼 Image](core/commands/image.md)
+  * [🪧 Information](core/commands/information.md)
+  * [📨 Invites](core/commands/invites.md)
+  * [🔨 Moderation](core/commands/moderation.md)
+  * [🎵 Music](core/commands/music.md)
+  * [🔏 Owner](core/commands/owner.md)
+  * [🧑 Social](core/commands/social.md)
+  * [📈 Stats](core/commands/stats.md)
+  * [🛠 Utility](core/commands/utility.md)
 
 ## Installation
 
-* [✍ Self-Host](installation/installation.md)
-* [🤖 Replit](installation/replit.md)
-* [🔌 Connect Dashboard](installation/dashboard.md)
+* [✍ Installation](installation/installation/README.md)
+  * [🤖 Replit Installation](installation/installation/replit.md)
+* [🔌 Connect Dashboard](installation/dashboard/README.md)
+  * [Custom Domain](installation/dashboard/custom-domain/README.md)
+    * [SSL Certificate](installation/dashboard/custom-domain/ssl-certificate.md)
 * [📚 Miscellaneous](installation/misc.md)
 
 ## Others
 
-* [❓ FAQ](others/faq.md)
+* [Acknowledgement](others/acknowledgement.md)
+* [FAQ](others/faq.md)
+
+## Refrence
+
+* [CC Limit](refrence/cc-limit.md)
+* [CC Interface](refrence/cc-interface.md)

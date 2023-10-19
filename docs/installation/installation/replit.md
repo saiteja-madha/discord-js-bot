@@ -1,4 +1,4 @@
-# 🤖 Replit
+# 🤖 Replit Installation
 
 This guide will show you how to run the bot on replit.
 
@@ -50,7 +50,7 @@ Typing the command in the terminal is a bit tedious, so you can use the start bu
 
 ## Step 3: Setting Up The Environment Variables
 
-You need to set up the environment variables. To do this, go to the `secrets` tab and add the following environment discused in the [installation.md](installation/installation.md#setting-up-environment-variables)
+You need to set up the environment variables. To do this, go to the `secrets` tab and add the following environment discused in the [general installation guide](./#setting-up-environment-variables)
 
 ## Running the Bot 24/7
 

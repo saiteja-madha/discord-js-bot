@@ -6,7 +6,7 @@ description: 7 commands
 
 | Command / Slash                   | Description              |
 | --------------------------------- | ------------------------ |
-| **!giveaway start \<#channel>**   | setup a new giveaway     |
+| **!giveaway start <#channel>**    | setup a new giveaway     |
 | **!giveaway pause \<messageId>**  | pause a giveaway         |
 | **!giveaway resume \<messageId>** | resume a paused giveaway |
 | **!giveaway end \<messageId>**    | end a giveaway           |
@@ -14,8 +14,8 @@ description: 7 commands
 | **!giveaway list \<messageId>**   | list all giveaways       |
 | **!giveaway edit \<messageId>**   | edit a giveaway          |
 
+## ![](https://cdn.discordapp.com/emojis/1036083490292244493.png)》Support Server
 
-## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
 [![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
 
 [Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite

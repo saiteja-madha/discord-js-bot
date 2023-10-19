@@ -6,7 +6,7 @@ You can add and manage the bot if you have the **Manage Server** permission.
 
 ### Setup <a href="#setup" id="setup"></a>
 
-The setup for YAGPDB is pretty simple.
+The setup for Mochi is pretty simple.
 
 1. Go to [mochi.vikshan.me​](https://mochi.vikshan.me)
 2. Click on **Login**
@@ -20,4 +20,4 @@ You should start out by visiting the commands tab, making sure the prefix does n
 * **Auto role** can help with assigning roles when members join.
 * **Role commands** can help with members assigning roles to themselves through either commands or reactions.
 
-For a _soundboard or reputation_, check out the **Fun** tab. Click through the various pages and explore a little to see what the bot offers. If you need help read around in the control panel, the docs, or our [FAQ ](../others/faq.md)page. If you still need help, you can visit our support server. We have a limited number of volunteer support staff, and we are losing money hosting this bot for you. \*_If you're being rude in the support server, chances are you're gonna get banned.\*_ If you wish to help us out, please see the [Helping out](helping-out.md) page.
+For a _soundboard or reputation_, check out the **Fun** tab. Click through the various pages and explore a little to see what the bot offers. If you need help read around in the control panel, the docs, or our [FAQ ](../others/faq.md)page. If you still need help, you can visit our support server. We have a limited number of volunteer support staff, and we are losing money hosting this bot for you. \*_If you're being rude in the support server, chances are you're gonna get banned.\*_ If you wish to help us out, please see the [Helping out](broken-reference) page.
