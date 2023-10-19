@@ -36,10 +36,15 @@ Typing the command in the terminal is a bit tedious, so you can use the start bu
 If you wish to commit the changes, always make sure to change the start script based on your environment.
 
 ## Step 3: Setting Up The Environment Variables
-You need to set up the environment variables. To do this, go to the `secrets` tab and add the following environment discused in the [README.md](./self-host.md#setting-up-environment-variables)
+You need to set up the environment variables. To do this, go to the `secrets` tab and add the following environment discused in the [installation.md](./installation.md#setting-up-environment-variables)
 
 ## Running the Bot 24/7
 Docs coming soon.
 
 ## Troubleshooting
-Everything should be working now. If you have any issues, feel free to open an issue or join the [Discord server](https://discord.gg/Dwnf3vQSz4).
+Everything should be working now. If you have any issues, feel free to open an issue or join the [Discord server](https://discord.gg/uMgS9evnmv).
+
+## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
+[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+
+[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite

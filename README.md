@@ -59,7 +59,8 @@
 - 🤝 Support Server: [Join Here](https://discord.gg/wMxe5PsnNg)
 - 📂 Documentation URL: Coming Soon [Visit Here](https://docs.strangebot.xyz)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
-- 📦 Self Host: [Guide](./self-host.md)
+- 📑 Docs : [docs.vikshan.me](https://docs.vikshan.me)
+- 📦 Self Host: [Guide](https://docs.vikshan.me/additional/installation)
 
 ## Set Up your own bot
 You can set up your own bot by following this guide: [Setup Guide](./self-host.md)
