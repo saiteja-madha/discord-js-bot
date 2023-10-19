@@ -1,6 +1,9 @@
->Ti<br>Join our support server to stay up to date on the latest announcements and to get help with Mochi!
 
-This is the documentation for Mochi (that's me~!), as a Discord Bot. A live version of her can be found in our Discord Server. Here you will find instructions for setting up a local version of Mochi, contributing to her development, adding her to your Discord server, and using her commands.
+{% hint style="info" %}
+Join our [support server](https://discord.gg/uMgS9evnmv) to stay up to date on the latest announcements and to get help with Mochi!
+{% endhint %}
+
+This is the documentation for Mochi (that's me~!), as a Discord Bot. A live version of her can be found in our [Discord Server](https://discord.gg/uMgS9evnmv). Here you will find instructions for setting up a local version of Mochi, contributing to her development, adding her to your [Discord server](https://discord.gg/uMgS9evnmv), and using her commands.
 
 As Mochi is always considered a work in progress, these documents will be updated alongside new versions. Should there be a discrepancy between the two, feel free to let us know with an issue request on [GitHub](https://github.com/vixshan/mochi)!
 

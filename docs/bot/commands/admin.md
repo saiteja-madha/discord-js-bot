@@ -214,3 +214,8 @@ _Enabling this feature will allow members to simply react to any message with a 
 - **!ticketcat list**: list all ticket categories
 - **!ticketcat add \<category> \| \<name>**: create a new ticket category
 - **!ticketcat remove \<category>**: remove a ticket category
+
+## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
+[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+
+[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite

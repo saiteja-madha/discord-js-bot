@@ -1,7 +1,7 @@
 # Table of contents
 ## MOCHI
 - [📖 Introduction](bot/welcome.md)
-- [🤖 About](../README.md)
+- [🤖 About Mochi](bot/about.md)
 - [📘 Commands](bot/commands/README.md)
   - [⚙ Admin](bot/commands/admin.md)
   - [🔞 Anime](bot/commands/anime.md)
