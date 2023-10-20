@@ -14,7 +14,6 @@ const {
 module.exports = {
     name: "add-btn",
     description: "add a button",
-    cooldown: 0,
     category: "ADMIN",
     userPermissions: ["ManageMessages"],
     
@@ -43,14 +42,6 @@ module.exports = {
         ],
     },
 
-    async messageRun(message, args) {
-        const msgID = args[0];
-        const btnLabel = args.slice(1, -1).join(' ');
-        const btnURL = args[args.length - 1];
-
-        const response = await addButtons(message, msgID, btnLabel, btnURL);
-        await message.safeReply(response);
-    },
 
     async interactionRun(interaction) {
         const msgID = interaction.options.getString("msgid");
