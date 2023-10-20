@@ -9,18 +9,11 @@ const leaderboardTypes = ["xp", "invite", "rep"];
 /**
  * @type {import("@structures/Command")}
  */
-
 module.exports = {
   name: "leaderboard",
-  description: "display the XP, invite and rep leaderboard",
+  description: "display the XP, invite, and rep leaderboard",
   category: "INFORMATION",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    aliases: ["lb"],
-    minArgsCount: 1,
-    usage: "<xp|invite|rep>",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -36,43 +29,22 @@ module.exports = {
       },
     ],
   },
-  async messageRun(message, args, data) {
-    const type = args[0].toLowerCase();
-    let response;
-
-    switch (type) {
-      case "xp":
-        response = await getXpLeaderboard(message, message.author, data.settings);
-        break;
-      case "invite":
-        response = await getInviteLeaderboard(message, message.author, data.settings);
-        break;
-      case "rep":
-        response = await getRepLeaderboard(message.author);
-        break;
-      default:
-        response = "Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
-    }
-
-    await message.safeReply(response);
-  },
-
-  async interactionRun(interaction, data) {
+  async interactionRun(interaction) {
     const type = interaction.options.getString("type");
     let response;
 
     switch (type) {
       case "xp":
-        response = await getXpLeaderboard(interaction, interaction.user, data.settings);
+        response = await getXpLeaderboard(interaction, interaction.user);
         break;
       case "invite":
-        response = await getInviteLeaderboard(interaction, interaction.user, data.settings);
+        response = await getInviteLeaderboard(interaction, interaction.user);
         break;
       case "rep":
         response = await getRepLeaderboard(interaction.user);
         break;
       default:
-        response = "Invalid Leaderboard type. Choose either `xp`, `invite`or `rep`";
+        response = "Invalid Leaderboard type. Choose either `xp`, `invite`, or `rep`";
     }
     await interaction.followUp(response);
   },

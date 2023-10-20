@@ -7,7 +7,7 @@ const {
 } = require("discord.js");
 const { timeformat } = require("@helpers/Utils");
 const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require("@root/config.js");
-const botstats = require("../shared/botstats");
+const botstats = require("./sub/botstats");
 
 /**
  * @type {import("@structures/Command")}
@@ -17,9 +17,6 @@ module.exports = {
   description: "bot related commands",
   category: "INFORMATION",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: false,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -38,6 +35,16 @@ module.exports = {
         description: "get bot's uptime",
         type: ApplicationCommandOptionType.Subcommand,
       },
+      {
+        name: "donate",
+        description: "donate to the bot",
+        type: ApplicationCommandOptionType.Subcommand,
+      },
+      {
+        name: "ping",
+        description: "get bot's ping",
+        type: ApplicationCommandOptionType.Subcommand,
+      }
     ],
   },
 
@@ -56,6 +63,41 @@ module.exports = {
       }
     }
 
+    // Donate
+    else if (sub === "donate") {
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: "Donate" })
+        .setColor(EMBED_COLORS.BOT_EMBED)
+        .setThumbnail(interaction.client.user.displayAvatarURL())
+        .setDescription("Hey there! Thanks for considering to donate to me\nUse the button below to navigate where you want");
+
+      // Buttons
+      let components = [];
+      components.push(
+        new ButtonBuilder()
+          .setLabel("Ko-fi")
+          .setURL("https://ko-fi.com/vikshan")
+          .setStyle(ButtonStyle.Link)
+      );
+
+      components.push(
+        new ButtonBuilder()
+          .setLabel("Github Sponsors")
+          .setURL("https://github.com/sponsors/vixshan")
+          .setStyle(ButtonStyle.Link)
+      );
+      
+      components.push(
+        new ButtonBuilder()
+          .setLabel("Patreon")
+          .setURL("https://www.patreon.com/vikshan")
+          .setStyle(ButtonStyle.Link)
+      );
+
+      let buttonsRow = new ActionRowBuilder().addComponents(components);
+      return interaction.followUp({ embeds: [embed], components: [buttonsRow] });
+    }
+
     // Stats
     else if (sub === "stats") {
       const response = botstats(interaction.client);
@@ -65,6 +107,13 @@ module.exports = {
     // Uptime
     else if (sub === "uptime") {
       await interaction.followUp(`My Uptime: \`${timeformat(process.uptime())}\``);
+    }
+
+    // Ping
+    else if (sub === "ping") {
+      const msg = await interaction.followUp("Pinging...");
+      const ping = msg.createdTimestamp - interaction.createdTimestamp;
+      await msg.edit(`Pong! :ping_pong:\nLatency: \`${ping}ms\``);
     }
   },
 };

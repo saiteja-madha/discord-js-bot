@@ -1,9 +1,8 @@
-const user = require("../shared/user");
-const channelInfo = require("../shared/channel");
-const guildInfo = require("../shared/guild");
-const avatar = require("../shared/avatar");
-const emojiInfo = require("../shared/emoji");
-const botInfo = require("../shared/botstats");
+const user = require("./shared/user");
+const channelInfo = require("./shared/channel");
+const guildInfo = require("./shared/guild");
+const avatar = require("./shared/avatar");
+const emojiInfo = require("./shared/emoji");
 const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
@@ -14,9 +13,6 @@ module.exports = {
   description: "show various information",
   category: "INFORMATION",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: false,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -49,11 +45,6 @@ module.exports = {
       {
         name: "guild",
         description: "get guild information",
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-      {
-        name: "bot",
-        description: "get bot information",
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
@@ -106,11 +97,6 @@ module.exports = {
     // guild
     else if (sub === "guild") {
       response = await guildInfo(interaction.guild);
-    }
-
-    // bot
-    else if (sub === "bot") {
-      response = botInfo(interaction.client);
     }
 
     // avatar
