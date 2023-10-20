@@ -1,9 +1,0 @@
-.DS_Store
-node_modules/
-.git/
-.vscode/
-docs/
-*.log
-*.tar.gz
-*.tar
-.env
