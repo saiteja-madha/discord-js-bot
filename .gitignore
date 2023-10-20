@@ -4,3 +4,5 @@ node_modules/
 *.log
 *.tar.gz
 .env
+config.js
+package-lock.json

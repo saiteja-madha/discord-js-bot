@@ -20,4 +20,20 @@
   <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="/bower_components/fastclick/lib/fastclick.js"></script>
   <script src="/dist/js/adminlte.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer>
+    const button = new Crate({
+      server: '1072214895598248030',
+      channel: '1072214897615720456',
+      location: ['bottom', 'left'],
+      defer: true
+    })
+    
+    // Random color every 2000 milliseconds
+    setInterval(() => {
+      button.options.color = "#000000".replace(/0/g, () => {
+            return (~~(Math.random() * 16)).toString(16)
+          })
+    }, 2000)
+    
+  </script>
 </head>
