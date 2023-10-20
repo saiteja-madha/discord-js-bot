@@ -12,20 +12,6 @@ module.exports = {
   description: "flips a coin or message",
   category: "FUN",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "coin",
-        description: "flips a coin heads or tails",
-      },
-      {
-        trigger: "text <input>",
-        description: "reverses the given message",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -50,37 +36,7 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args) {
-    const sub = args[0].toLowerCase();
-
-    if (sub === "coin") {
-      const items = ["HEAD", "TAIL"];
-      const toss = items[Math.floor(Math.random() * items.length)];
-
-      message.channel.send({ embeds: [firstEmbed(message.author)] }).then((coin) => {
-        // 2nd embed
-        setTimeout(() => {
-          coin.edit({ embeds: [secondEmbed()] }).catch(() => {});
-          // 3rd embed
-          setTimeout(() => {
-            coin.edit({ embeds: [resultEmbed(toss)] }).catch(() => {});
-          }, 2000);
-        }, 2000);
-      });
-    }
-
-    //
-    else if (sub === "text") {
-      if (args.length < 2) return message.channel.send("Please enter a text");
-      const input = args.join(" ");
-      const response = await flipText(input);
-      await message.safeReply(response);
-    }
-
-    // else
-    else await message.safeReply("Incorrect command usage");
-  },
-
+  // This function runs when a user interacts with the slash command
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand("type");
 
@@ -95,10 +51,7 @@ module.exports = {
           interaction.editReply({ embeds: [resultEmbed(toss)] }).catch(() => {});
         }, 2000);
       }, 2000);
-    }
-
-    //
-    else if (sub === "text") {
+    } else if (sub === "text") {
       const input = interaction.options.getString("input");
       const response = await flipText(input);
       await interaction.followUp(response);

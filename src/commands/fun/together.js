@@ -30,32 +30,20 @@ const discordTogether = [
  */
 module.exports = {
   name: "together",
-  description: "discord together",
+  description: "Start a Discord Together activity",
   category: "FUN",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    aliases: ["discordtogether"],
-    usage: "<game>",
-  },
   slashCommand: {
     enabled: true,
     options: [
       {
         name: "type",
-        description: "type",
+        description: "Select a Discord Together activity",
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: discordTogether.map((game) => ({ name: game, value: game })),
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const input = args[0];
-    const response = await getTogetherInvite(message.member, input);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
@@ -76,5 +64,5 @@ async function getTogetherInvite(member, choice) {
   }
 
   const invite = await member.client.discordTogether.createTogetherCode(vc, choice);
-  return `${invite.code}`;
+  return `Click [here](https://discord.com/invite/${invite.code}) to join the ${choice} activity!`;
 }

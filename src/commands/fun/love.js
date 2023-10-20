@@ -3,19 +3,10 @@ const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 /**
  * @type {import("@structures/Command")}
  */
-
 module.exports = {
   name: "love",
   description: "Get the love percentage of two users.",
-  cooldown: 10,
   category: "FUN",
-  botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    aliases: [],
-    usage: "love <user1> <user2>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -25,7 +16,6 @@ module.exports = {
         type: ApplicationCommandOptionType.User,
         required: true,
       },
-
       {
         name: "user2",
         description: "The second user",
@@ -33,13 +23,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const user1 = args[0];
-    const user2 = args[1];
-    const response = await getUserLove(user1, user2, message.author);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

@@ -10,16 +10,10 @@ const BASE_URL = "https://some-random-api.com/animal";
  */
 module.exports = {
   name: "facts",
-  description: "shows a random animal facts",
+  description: "shows a random animal fact",
   cooldown: 5,
   category: "FUN",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<animal>",
-    aliases: ["fact"],
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -33,15 +27,7 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args) {
-    const choice = args[0];
-    if (!animals.includes(choice)) {
-      return message.safeReply(`Invalid animal selected. Available animals:\n${animals.join(", ")}`);
-    }
-    const response = await getFact(message.author, choice);
-    return message.safeReply(response);
-  },
-
+  // This function runs when a user interacts with the slash command
   async interactionRun(interaction) {
     const choice = interaction.options.getString("name");
     const response = await getFact(interaction.user, choice);
