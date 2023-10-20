@@ -28,5 +28,6 @@ module.exports = {
     TranslateLog: require("./schemas/TranslateLog").model,
     User: require("./schemas/User"),
     Suggestions: require("./schemas/Suggestions").model,
+    TruthOrDare: require("./schemas/TruthOrDare").model,
   },
 };
