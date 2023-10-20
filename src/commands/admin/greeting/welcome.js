@@ -10,44 +10,6 @@ module.exports = {
   description: "setup welcome message",
   category: "ADMIN",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "status <on|off>",
-        description: "enable or disable welcome message",
-      },
-      {
-        trigger: "channel <#channel>",
-        description: "configure welcome message",
-      },
-      {
-        trigger: "preview",
-        description: "preview the configured welcome message",
-      },
-      {
-        trigger: "desc <text>",
-        description: "set embed description",
-      },
-      {
-        trigger: "thumbnail <ON|OFF>",
-        description: "enable/disable embed thumbnail",
-      },
-      {
-        trigger: "color <hexcolor>",
-        description: "set embed color",
-      },
-      {
-        trigger: "footer <text>",
-        description: "set embed footer content",
-      },
-      {
-        trigger: "image <url>",
-        description: "set embed image",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -170,71 +132,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const type = args[0].toLowerCase();
-    const settings = data.settings;
-    let response;
-
-    // preview
-    if (type === "preview") {
-      response = await sendPreview(settings, message.member);
-    }
-
-    // status
-    else if (type === "status") {
-      const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status))
-        return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await setStatus(settings, status);
-    }
-
-    // channel
-    else if (type === "channel") {
-      const channel = message.mentions.channels.first();
-      response = await setChannel(settings, channel);
-    }
-
-    // desc
-    else if (type === "desc") {
-      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
-      const desc = args.slice(1).join(" ");
-      response = await setDescription(settings, desc);
-    }
-
-    // thumbnail
-    else if (type === "thumbnail") {
-      const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status))
-        return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await setThumbnail(settings, status);
-    }
-
-    // color
-    else if (type === "color") {
-      const color = args[1];
-      if (!color || !isHex(color)) return message.safeReply("Invalid color. Value must be a valid hex color");
-      response = await setColor(settings, color);
-    }
-
-    // footer
-    else if (type === "footer") {
-      if (args.length < 2) return message.safeReply("Insufficient arguments! Please provide valid content");
-      const content = args.slice(1).join(" ");
-      response = await setFooter(settings, content);
-    }
-
-    // image
-    else if (type === "image") {
-      const url = args[1];
-      if (!url) return message.safeReply("Invalid image url. Please provide a valid url");
-      response = await setImage(settings, url);
-    }
-
-    //
-    else response = "Invalid command usage!";
-    return message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

@@ -10,40 +10,6 @@ module.exports = {
   description: "various automod configuration",
   category: "AUTOMOD",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "status",
-        description: "check automod configuration for this guild",
-      },
-      {
-        trigger: "strikes <number>",
-        description: "maximum number of strikes a member can receive before taking an action",
-      },
-      {
-        trigger: "action <TIMEOUT|KICK|BAN>",
-        description: "set action to be performed after receiving maximum strikes",
-      },
-      {
-        trigger: "debug <on|off>",
-        description: "turns on automod for messages sent by admins and moderators",
-      },
-      {
-        trigger: "whitelist",
-        description: "list of channels that are whitelisted",
-      },
-      {
-        trigger: "whitelistadd <channel>",
-        description: "add a channel to the whitelist",
-      },
-      {
-        trigger: "whitelistremove <channel>",
-        description: "remove a channel from the whitelist",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -150,54 +116,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const input = args[0].toLowerCase();
-    const settings = data.settings;
-
-    let response;
-    if (input === "status") {
-      response = await getStatus(settings, message.guild);
-    } else if (input === "strikes") {
-      const strikes = args[1];
-      if (isNaN(strikes) || Number.parseInt(strikes) < 1) {
-        return message.safeReply("Strikes must be a valid number greater than 0");
-      }
-      response = await setStrikes(settings, strikes);
-    } else if (input === "action") {
-      const action = args[1].toUpperCase();
-      if (!action || !["TIMEOUT", "KICK", "BAN"].includes(action))
-        return message.safeReply("Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
-      response = await setAction(settings, message.guild, action);
-    } else if (input === "debug") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await setDebug(settings, status);
-    }
-
-    // whitelist
-    else if (input === "whitelist") {
-      response = getWhitelist(message.guild, settings);
-    }
-
-    // whitelist add
-    else if (input === "whitelistadd") {
-      const match = message.guild.findMatchingChannels(args[1]);
-      if (!match.length) return message.safeReply(`No channel found matching ${args[1]}`);
-      response = await whiteListAdd(settings, match[0].id);
-    }
-
-    // whitelist remove
-    else if (input === "whitelistremove") {
-      const match = message.guild.findMatchingChannels(args[1]);
-      if (!match.length) return message.safeReply(`No channel found matching ${args[1]}`);
-      response = await whiteListRemove(settings, match[0].id);
-    }
-
-    //
-    else response = "Invalid command usage!";
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

@@ -12,11 +12,6 @@ module.exports = {
   description: "setup reaction role for the specified message",
   category: "ADMIN",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    usage: "<#channel> <messageId> <emote> <role>",
-    minArgsCount: 4,
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -49,21 +44,6 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args) {
-    const targetChannel = message.guild.findMatchingChannels(args[0]);
-    if (targetChannel.length === 0) return message.safeReply(`No channels found matching ${args[0]}`);
-
-    const targetMessage = args[1];
-
-    const role = message.guild.findMatchingRoles(args[3])[0];
-    if (!role) return message.safeReply(`No roles found matching ${args[3]}`);
-
-    const reaction = args[2];
-
-    const response = await addRR(message.guild, targetChannel[0], targetMessage, reaction, role);
-    await message.safeReply(response);
-  },
-
   async interactionRun(interaction) {
     const targetChannel = interaction.options.getChannel("channel");
     const messageId = interaction.options.getString("message_id");
@@ -84,7 +64,7 @@ async function addRR(guild, channel, messageId, reaction, role) {
   try {
     targetMessage = await channel.messages.fetch({ message: messageId });
   } catch (ex) {
-    return "Could not fetch message. Did you provide a valid messageId?";
+    return "Could not fetch the message. Did you provide a valid messageId?";
   }
 
   if (role.managed) {

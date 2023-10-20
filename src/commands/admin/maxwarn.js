@@ -8,20 +8,6 @@ module.exports = {
   description: "set max warnings configuration",
   category: "ADMIN",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "limit <number>",
-        description: "set max warnings a member can receive before taking an action",
-      },
-      {
-        trigger: "action <timeout|kick|ban>",
-        description: "set action to performed after receiving maximum warnings",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -41,7 +27,7 @@ module.exports = {
       },
       {
         name: "action",
-        description: "set action to performed after receiving maximum warnings",
+        description: "set action to perform after receiving maximum warnings",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -67,27 +53,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const input = args[0].toLowerCase();
-    if (!["limit", "action"].includes(input)) return message.safeReply("Invalid command usage");
-
-    let response;
-    if (input === "limit") {
-      const max = parseInt(args[1]);
-      if (isNaN(max) || max < 1) return message.safeReply("Max Warnings must be a valid number greater than 0");
-      response = await setLimit(max, data.settings);
-    }
-
-    if (input === "action") {
-      const action = args[1]?.toUpperCase();
-      if (!action || !["TIMEOUT", "KICK", "BAN"].includes(action))
-        return message.safeReply("Not a valid action. Action can be `Timeout`/`Kick`/`Ban`");
-      response = await setAction(message.guild, action, data.settings);
-    }
-
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

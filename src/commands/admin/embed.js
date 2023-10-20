@@ -20,12 +20,6 @@ module.exports = {
   description: "send embed message",
   category: "ADMIN",
   userPermissions: ["ManageMessages"],
-  command: {
-    enabled: true,
-    usage: "<#channel>",
-    minArgsCount: 1,
-    aliases: ["say"],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -38,17 +32,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]);
-    if (!channel) return message.reply("Please provide a valid channel");
-    if (channel.type !== ChannelType.GuildText) return message.reply("Please provide a valid channel");
-    if (!channel.canSendEmbeds()) {
-      return message.reply("I don't have permission to send embeds in that channel");
-    }
-    message.reply(`Embed setup started in ${channel}`);
-    await embedSetup(channel, message.member);
   },
 
   async interactionRun(interaction) {

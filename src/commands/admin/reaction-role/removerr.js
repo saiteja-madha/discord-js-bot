@@ -12,11 +12,6 @@ module.exports = {
   description: "remove configured reaction for the specified message",
   category: "ADMIN",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    usage: "<#channel> <messageId>",
-    minArgsCount: 2,
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -30,21 +25,11 @@ module.exports = {
       },
       {
         name: "message_id",
-        description: "message id for which reaction roles was configured",
+        description: "message id for which reaction roles were configured",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const targetChannel = message.guild.findMatchingChannels(args[0]);
-    if (targetChannel.length === 0) return message.safeReply(`No channels found matching ${args[0]}`);
-
-    const targetMessage = args[1];
-    const response = await removeRR(message.guild, targetChannel[0], targetMessage);
-
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
@@ -65,7 +50,7 @@ async function removeRR(guild, channel, messageId) {
   try {
     targetMessage = await channel.messages.fetch({ message: messageId });
   } catch (ex) {
-    return "Could not fetch message. Did you provide a valid messageId?";
+    return "Could not fetch the message. Did you provide a valid messageId?";
   }
 
   try {

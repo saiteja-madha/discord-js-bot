@@ -8,11 +8,6 @@ module.exports = {
   description: "enable or disable moderation logs",
   category: "ADMIN",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    usage: "<#channel|off>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -25,20 +20,6 @@ module.exports = {
         channelTypes: [ChannelType.GuildText],
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const input = args[0].toLowerCase();
-    let targetChannel;
-
-    if (input === "none" || input === "off" || input === "disable") targetChannel = null;
-    else {
-      if (message.mentions.channels.size === 0) return message.safeReply("Incorrect command usage");
-      targetChannel = message.mentions.channels.first();
-    }
-
-    const response = await setChannel(targetChannel, data.settings);
-    return message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

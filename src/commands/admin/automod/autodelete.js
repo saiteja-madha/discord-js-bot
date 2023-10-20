@@ -8,35 +8,13 @@ module.exports = {
   description: "manage the autodelete settings for the server",
   category: "AUTOMOD",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 2,
-    subcommands: [
-      {
-        trigger: "attachments <on|off>",
-        description: "allow or disallow attachments in message",
-      },
-      {
-        trigger: "invites <on|off>",
-        description: "allow or disallow invites in message",
-      },
-      {
-        trigger: "links <on|off>",
-        description: "allow or disallow links in message",
-      },
-      {
-        trigger: "maxlines <number>",
-        description: "sets maximum lines allowed per message [0 to disable]",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
     options: [
       {
         name: "attachments",
-        description: "allow or disallow attachments in message",
+        description: "allow or disallow attachments in messages",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -59,7 +37,7 @@ module.exports = {
       },
       {
         name: "invites",
-        description: "allow or disallow discord invites in message",
+        description: "allow or disallow discord invites in messages",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -82,7 +60,7 @@ module.exports = {
       },
       {
         name: "links",
-        description: "allow or disallow links in message",
+        description: "allow or disallow links in messages",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -117,45 +95,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const settings = data.settings;
-    const sub = args[0].toLowerCase();
-    let response;
-
-    if (sub == "attachments") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiAttachments(settings, status);
-    }
-
-    //
-    else if (sub === "invites") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiInvites(settings, status);
-    }
-
-    //
-    else if (sub == "links") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antilinks(settings, status);
-    }
-
-    //
-    else if (sub === "maxlines") {
-      const max = args[1];
-      if (isNaN(max) || Number.parseInt(max) < 1) {
-        return message.safeReply("Max Lines must be a valid number greater than 0");
-      }
-      response = await maxLines(settings, max);
-    }
-
-    //
-    else response = "Invalid command usage!";
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

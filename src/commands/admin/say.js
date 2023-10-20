@@ -1,10 +1,5 @@
 const { 
     EmbedBuilder, 
-    ApplicationCommandOptionType, 
-    ActionRowBuilder, 
-    ButtonBuilder, 
-    ButtonStyle, 
-    ComponentType, 
   } = require("discord.js");
   
   module.exports = {
@@ -113,14 +108,6 @@ const {
       console.error(error);
       await interaction.followUp({ content: "An error occurred while processing this command.", ephemeral: true });
     }
-  },
-  
-    async messageRun(message, args, data) {
-    const replyEmbed = new EmbedBuilder()
-      .setTitle("Command Deprecated")
-      .setDescription("Please use the slash command instead.\n\n**Usage:** /say <message> [channel] [message_id] [edit] [ping]");
-  
-    return message.reply({ embeds: [replyEmbed], ephemeral: true });
   },
   
     async interactionRun(interaction) {

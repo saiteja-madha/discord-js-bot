@@ -9,11 +9,6 @@ module.exports = {
   category: "ADMIN",
   userPermissions: ["ManageGuild"],
   botPermissions: ["ManageChannels"],
-  command: {
-    enabled: true,
-    usage: "<type> <channel-name>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -45,19 +40,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const type = args[0].toUpperCase();
-    if (!type || !["USERS", "MEMBERS", "BOTS"].includes(type)) {
-      return message.safeReply("Incorrect arguments are passed! Counter types: `users/members/bots`");
-    }
-    if (args.length < 2) return message.safeReply("Incorrect Usage! You did not provide name");
-    args.shift();
-    let channelName = args.join(" ");
-
-    const response = await setupCounter(message.guild, type, channelName, data.settings);
-    return message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

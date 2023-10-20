@@ -8,24 +8,6 @@ module.exports = {
   description: "manage various automod settings for the server",
   category: "AUTOMOD",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 2,
-    subcommands: [
-      {
-        trigger: "ghostping <on|off>",
-        description: "detect and logs ghost mentions in your server",
-      },
-      {
-        trigger: "spam <on|off>",
-        description: "enable or disable antispam detection",
-      },
-      {
-        trigger: "massmention <on|off> [threshold]",
-        description: "enable or disable massmention detection [default threshold is 3 mentions]",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -106,37 +88,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const settings = data.settings;
-    const sub = args[0].toLowerCase();
-
-    let response;
-    if (sub == "ghostping") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiGhostPing(settings, status);
-    }
-
-    //
-    else if (sub == "spam") {
-      const status = args[1].toLowerCase();
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiSpam(settings, status);
-    }
-
-    //
-    else if (sub === "massmention") {
-      const status = args[1].toLowerCase();
-      const threshold = args[2] || 3;
-      if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await antiMassMention(settings, status, threshold);
-    }
-
-    //
-    else response = "Invalid command usage!";
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

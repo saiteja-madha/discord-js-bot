@@ -6,6 +6,7 @@ const {
     ButtonStyle,
     ComponentType,
 } = require("discord.js");
+
 /**
 * @type {import("@structures/Command")}
 */
@@ -16,37 +17,32 @@ module.exports = {
     cooldown: 0,
     category: "ADMIN",
     userPermissions: ["ManageMessages"],
-    command: {
-      enabled: true,
-      aliases: ["addbtn"],
-      usage: "[Message ID] [Button Label] [Button URL]",
-      minArgsCount: 3,
-    },
+    
     slashCommand: {
-      ephemeral: true,
-      enabled: true,
-      options: [
-        {
-            name: "msgid",
-            description: "Target Message ID (must be of my own)",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        },
-        {
-            name: "label",
-            description: "Button label",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        },
-        {
-            name: "url",
-            description: "URL to be assigned to the button",
-            type: ApplicationCommandOptionType.String,
-            required: true
-        }
-      ],
+        ephemeral: true,
+        enabled: true,
+        options: [
+            {
+                name: "msgid",
+                description: "Target Message ID (must be of my own)",
+                type: ApplicationCommandOptionType.String,
+                required: true
+            },
+            {
+                name: "label",
+                description: "Button label",
+                type: ApplicationCommandOptionType.String,
+                required: true
+            },
+            {
+                name: "url",
+                description: "URL to be assigned to the button",
+                type: ApplicationCommandOptionType.String,
+                required: true
+            }
+        ],
     },
-  
+
     async messageRun(message, args) {
         const msgID = args[0];
         const btnLabel = args.slice(1, -1).join(' ');
@@ -55,6 +51,7 @@ module.exports = {
         const response = await addButtons(message, msgID, btnLabel, btnURL);
         await message.safeReply(response);
     },
+
     async interactionRun(interaction) {
         const msgID = interaction.options.getString("msgid");
         const btnLabel = interaction.options.getString("label");
@@ -62,11 +59,11 @@ module.exports = {
 
         const response = await addButtons(interaction, msgID, btnLabel, btnURL);
         await interaction.followUp(response);
-    }    
+    }
 }
 
 /**
- * Function to add button
+ * Function to add a button to a message
  * @param {import("discord.js").Message|import("discord.js").CommandInteraction} context
  * @param {string} msgID 
  * @param {string} btnLabel 
@@ -74,20 +71,22 @@ module.exports = {
  * @returns {Promise<string>}
  */
 async function addButtons(context, msgID, btnLabel, URL) {
-    // Checking input
-    if(!containsLink(URL)) return "Please Enter a valid URL";
-    if(!isSnowflake(msgID)) return "Provided message ID not a valid ID";
+    // Check input validity
+    if (!containsLink(URL)) return "Please enter a valid URL";
+    if (!isSnowflake(msgID)) return "Provided message ID is not valid";
 
-    // Fetching message from channel
+    // Fetch the message from the channel
     let msg = await context.channel.messages.fetch(msgID);
-    if (!msg) return "Failed to fetch message!";
-    if(msg.author.id !== context.client.user.id) return "Cannot edit a message authored by another user";
+    if (!msg) return "Failed to fetch the message!";
+    if (msg.author.id !== context.client.user.id) return "Cannot edit a message authored by another user";
 
     // Get the existing action rows from the message, if any
     const oldActionRows = msg.components;
-    if(oldActionRows.length == 5 && oldActionRows[4].components.length == 5) return "Sorry but you've reached the max amount of buttons in single message";
-    
-    // Find the last action row, if any, that has less than 5 buttons
+    if (oldActionRows.length === 5 && oldActionRows[4].components.length === 5) {
+        return "Sorry, but you've reached the maximum number of buttons in a single message";
+    }
+
+    // Find the last action row that has less than 5 buttons
     let lastActionRowWithSpace;
     for (const actionRow of oldActionRows) {
         const buttonCount = actionRow.components.filter(component => component.type === ComponentType.Button).length;
@@ -97,12 +96,13 @@ async function addButtons(context, msgID, btnLabel, URL) {
         }
     }
 
-    // If there's a suitable action row, add the button to it; otherwise, create a new one
+    // Create a new ButtonComponent
     const ButtonComponent = new ButtonBuilder()
         .setLabel(btnLabel)
         .setStyle(ButtonStyle.Link)
         .setURL(URL);
 
+    // If there's a suitable action row, add the button to it; otherwise, create a new one
     if (lastActionRowWithSpace) {
         lastActionRowWithSpace.components.push(ButtonComponent);
     } else {
@@ -114,12 +114,12 @@ async function addButtons(context, msgID, btnLabel, URL) {
     await msg.edit({
         components: msg.components
     });
-    
-    return "Successfully added button";
+
+    return "Successfully added the button";
 }
 
 /**
- * Check if provided ID is a snowflake
+ * Check if the provided ID is a snowflake
  * @param {string} snowflake 
  */
 function isSnowflake(snowflake) {
