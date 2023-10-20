@@ -3,27 +3,19 @@ const { EMBED_COLORS } = require("@root/config");
 const Client = require("waifu.it");
 const api = new Client(process.env.WAIFU_IT_KEY);
 
-
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: "waifu",
-  description: "get a anime waifu",
+  description: "Get an anime waifu.",
   enabled: true,
   category: "ANIME",
   cooldown: 5,
-  command: {
-    enabled: true,
-  },
   slashCommand: {
     enabled: true,
+    description: "Receive a random anime waifu.",
     options: [],
-  },
-
-  async messageRun(message) {
-    const embed = await genWaifu(message.author);
-    await message.safeReply({ embeds: [embed] });
   },
 
   async interactionRun(interaction) {
@@ -44,7 +36,7 @@ const genWaifu = async (user) => {
   } catch (ex) {
     return new EmbedBuilder()
       .setColor(EMBED_COLORS.ERROR)
-      .setDescription("Failed to fetch. Try again!")
-      .setFooter({ text: `Requested by ${user.user.username}` });
+      .setDescription("Failed to fetch a waifu. Please try again.")
+      .setFooter({ text: `Requested by ${user.username}` });
   }
 };

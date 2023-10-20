@@ -14,11 +14,6 @@ module.exports = {
   cooldown: 5,
   category: "FUN",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<type>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -32,15 +27,7 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args) {
-    const choice = args[0];
-    if (!animals.includes(choice)) {
-      return message.safeReply(`Invalid animal selected. Available animals:\n${animals.join(", ")}`);
-    }
-    const response = await getAnimal(message.author, choice);
-    return message.safeReply(response);
-  },
-
+  // This function runs when an interaction with option "name" is received
   async interactionRun(interaction) {
     const choice = interaction.options.getString("name");
     const response = await getAnimal(interaction.user, choice);

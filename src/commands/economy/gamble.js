@@ -11,12 +11,6 @@ module.exports = {
   description: "try your luck by gambling",
   category: "ECONOMY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<amount>",
-    minArgsCount: 1,
-    aliases: ["slot"],
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -27,13 +21,6 @@ module.exports = {
         type: ApplicationCommandOptionType.Integer,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const betAmount = parseInt(args[0]);
-    if (isNaN(betAmount)) return message.safeReply("Bet amount needs to be a valid number input");
-    const response = await gamble(message.author, betAmount);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

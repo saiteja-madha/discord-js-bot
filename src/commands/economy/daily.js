@@ -11,16 +11,8 @@ module.exports = {
   description: "receive a daily bonus",
   category: "ECONOMY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-  },
   slashCommand: {
     enabled: true,
-  },
-
-  async messageRun(message, args) {
-    const response = await daily(message.author);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

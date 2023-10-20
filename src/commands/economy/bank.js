@@ -12,28 +12,6 @@ module.exports = {
   description: "access to bank operations",
   category: "ECONOMY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "balance",
-        description: "check your balance",
-      },
-      {
-        trigger: "deposit <coins>",
-        description: "deposit coins to your bank account",
-      },
-      {
-        trigger: "withdraw <coins>",
-        description: "withdraw coins from your bank account",
-      },
-      {
-        trigger: "transfer <user> <coins>",
-        description: "transfer coins to another user",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -96,47 +74,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const sub = args[0];
-    let response;
-
-    if (sub === "balance") {
-      const resolved = (await message.guild.resolveMember(args[1])) || message.member;
-      response = await balance(resolved.user);
-    }
-
-    //
-    else if (sub === "deposit") {
-      const coins = args.length && parseInt(args[1]);
-      if (isNaN(coins)) return message.safeReply("Provide a valid number of coins you wish to deposit");
-      response = await deposit(message.author, coins);
-    }
-
-    //
-    else if (sub === "withdraw") {
-      const coins = args.length && parseInt(args[1]);
-      if (isNaN(coins)) return message.safeReply("Provide a valid number of coins you wish to withdraw");
-      response = await withdraw(message.author, coins);
-    }
-
-    //
-    else if (sub === "transfer") {
-      if (args.length < 3) return message.safeReply("Provide a valid user and coins to transfer");
-      const target = await message.guild.resolveMember(args[1], true);
-      if (!target) return message.safeReply("Provide a valid user to transfer coins to");
-      const coins = parseInt(args[2]);
-      if (isNaN(coins)) return message.safeReply("Provide a valid number of coins you wish to transfer");
-      response = await transfer(message.author, target.user, coins);
-    }
-
-    //
-    else {
-      return message.safeReply("Invalid command usage");
-    }
-
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
