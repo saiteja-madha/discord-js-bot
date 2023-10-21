@@ -12,44 +12,6 @@ module.exports = {
   description: "configure suggestion system",
   category: "SUGGESTION",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 2,
-    subcommands: [
-      {
-        trigger: "status <on|off>",
-        description: "enable/disable suggestion system",
-      },
-      {
-        trigger: "channel <#channel|off>",
-        description: "configure suggestion channel or disable it",
-      },
-      {
-        trigger: "appch <#channel>",
-        description: "configure approved suggestions channel or disable it",
-      },
-      {
-        trigger: "rejch <#channel>",
-        description: "configure rejected suggestions channel or disable it",
-      },
-      {
-        trigger: "approve <channel> <messageId> [reason]",
-        description: "approve a suggestion",
-      },
-      {
-        trigger: "reject <channel> <messageId> [reason]",
-        description: "reject a suggestion",
-      },
-      {
-        trigger: "staffadd <roleId>",
-        description: "add a staff role",
-      },
-      {
-        trigger: "staffremove <roleId>",
-        description: "remove a staff role",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -200,93 +162,6 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args, data) {
-    const sub = args[0];
-    let response;
-
-    // status
-    if (sub == "status") {
-      const status = args[1]?.toUpperCase();
-      if (!status || !["ON", "OFF"].includes(status))
-        return message.safeReply("Invalid status. Value must be `on/off`");
-      response = await setStatus(data.settings, status);
-    }
-
-    // channel
-    else if (sub == "channel") {
-      const input = args[1];
-      let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
-      else response = await setChannel(data.settings, matched[0]);
-    }
-
-    // appch
-    else if (sub == "appch") {
-      const input = args[1];
-      let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
-      else response = await setApprovedChannel(data.settings, matched[0]);
-    }
-
-    // appch
-    else if (sub == "rejch") {
-      const input = args[1];
-      let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
-      else response = await setRejectedChannel(data.settings, matched[0]);
-    }
-
-    // approve
-    else if (sub == "approve") {
-      const input = args[1];
-      let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
-      else {
-        const messageId = args[2];
-        const reason = args.slice(3).join(" ");
-        response = await approveSuggestion(message.member, matched[0], messageId, reason);
-      }
-    }
-
-    // reject
-    else if (sub == "reject") {
-      const input = args[1];
-      let matched = message.guild.findMatchingChannels(input);
-      if (matched.length == 0) response = `No matching channels found for ${input}`;
-      else if (matched.length > 1) response = `Multiple channels found for ${input}. Please be more specific.`;
-      else {
-        const messageId = args[2];
-        const reason = args.slice(3).join(" ");
-        response = await rejectSuggestion(message.member, matched[0], messageId, reason);
-      }
-    }
-
-    // staffadd
-    else if (sub == "staffadd") {
-      const input = args[1];
-      let matched = message.guild.findMatchingRoles(input);
-      if (matched.length == 0) response = `No matching roles found for ${input}`;
-      else if (matched.length > 1) response = `Multiple roles found for ${input}. Please be more specific.`;
-      else response = await addStaffRole(data.settings, matched[0]);
-    }
-
-    // staffremove
-    else if (sub == "staffremove") {
-      const input = args[1];
-      let matched = message.guild.findMatchingRoles(input);
-      if (matched.length == 0) response = `No matching roles found for ${input}`;
-      else if (matched.length > 1) response = `Multiple roles found for ${input}. Please be more specific.`;
-      else response = await removeStaffRole(data.settings, matched[0]);
-    }
-
-    // else
-    else response = "Not a valid subcommand";
-    await message.safeReply(response);
-  },
 
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();

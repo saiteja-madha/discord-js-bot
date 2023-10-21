@@ -8,24 +8,6 @@ module.exports = {
   description: "manage ticket categories",
   category: "TICKET",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "list",
-        description: "list all ticket categories",
-      },
-      {
-        trigger: "add <category> | <staff_roles>",
-        description: "add a ticket category",
-      },
-      {
-        trigger: "remove <category>",
-        description: "remove a ticket category",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -70,36 +52,7 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args, data) {
-    const sub = args[0].toLowerCase();
-    let response;
 
-    // list
-    if (sub === "list") {
-      response = listCategories(data);
-    }
-
-    // add
-    else if (sub === "add") {
-      const split = args.slice(1).join(" ").split("|");
-      const category = split[0].trim();
-      const staff_roles = split[1]?.trim();
-      response = await addCategory(message.guild, data, category, staff_roles);
-    }
-
-    // remove
-    else if (sub === "remove") {
-      const category = args.slice(1).join(" ").trim();
-      response = await removeCategory(data, category);
-    }
-
-    // invalid subcommand
-    else {
-      response = "Invalid subcommand.";
-    }
-
-    await message.safeReply(response);
-  },
 
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();

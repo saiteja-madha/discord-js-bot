@@ -6,7 +6,7 @@ const { ApplicationCommandOptionType } = require("discord.js");
 module.exports = {
   name: "setprefix",
   description: "sets a new prefix for this server",
-  category: "ADMIN",
+  category: "OWNER",
   userPermissions: ["ManageGuild"],
   command: {
     enabled: true,

@@ -17,11 +17,6 @@ module.exports = {
   description: "submit a suggestion",
   category: "SUGGESTION",
   cooldown: 20,
-  command: {
-    enabled: true,
-    usage: "<suggestion>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -32,13 +27,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const suggestion = args.join(" ");
-    const response = await suggest(message.member, suggestion, data.settings);
-    if (typeof response === "boolean") return message.channel.safeSend("Your suggestion has been submitted!", 5);
-    else await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

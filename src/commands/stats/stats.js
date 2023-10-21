@@ -9,12 +9,7 @@ const { stripIndents } = require("common-tags");
 module.exports = {
   name: "stats",
   description: "displays members stats in this server",
-  cooldown: 5,
   category: "STATS",
-  command: {
-    enabled: true,
-    usage: "[@member|id]",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -27,11 +22,6 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args, data) {
-    const target = (await message.guild.resolveMember(args[0])) || message.member;
-    const response = await stats(target, data.settings);
-    await message.safeReply(response);
-  },
 
   async interactionRun(interaction, data) {
     const member = interaction.options.getMember("user") || interaction.member;

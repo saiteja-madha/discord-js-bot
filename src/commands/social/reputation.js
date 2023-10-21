@@ -11,21 +11,6 @@ module.exports = {
   description: "give reputation to a user",
   category: "SOCIAL",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    aliases: ["reputation"],
-    subcommands: [
-      {
-        trigger: "view [user]",
-        description: "view reputation for a user",
-      },
-      {
-        trigger: "give [user]",
-        description: "give reputation to a user",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -58,34 +43,6 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args) {
-    const sub = args[0];
-    let response;
-
-    // status
-    if (sub === "view") {
-      let target = message.author;
-      if (args.length > 1) {
-        const resolved = (await message.guild.resolveMember(args[1])) || message.member;
-        if (resolved) target = resolved.user;
-      }
-      response = await viewReputation(target);
-    }
-
-    // give
-    else if (sub === "give") {
-      const target = await message.guild.resolveMember(args[1]);
-      if (!target) return message.safeReply("Please provide a valid user to give reputation to");
-      response = await giveReputation(message.author, target.user);
-    }
-
-    //
-    else {
-      response = "Incorrect command usage";
-    }
-
-    await message.safeReply(response);
-  },
 
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand();

@@ -21,40 +21,6 @@ module.exports = {
   description: "various ticketing commands",
   category: "TICKET",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "setup <#channel>",
-        description: "start an interactive ticket setup",
-      },
-      {
-        trigger: "log <#channel>",
-        description: "setup log channel for tickets",
-      },
-      {
-        trigger: "limit <number>",
-        description: "set maximum number of concurrent open tickets",
-      },
-      {
-        trigger: "close",
-        description: "close the ticket",
-      },
-      {
-        trigger: "closeall",
-        description: "close all open tickets",
-      },
-      {
-        trigger: "add <userId|roleId>",
-        description: "add user/role to the ticket",
-      },
-      {
-        trigger: "remove <userId|roleId>",
-        description: "remove user/role from the ticket",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -138,78 +104,6 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args, data) {
-    const input = args[0].toLowerCase();
-    let response;
-
-    // Setup
-    if (input === "setup") {
-      if (!message.guild.members.me.permissions.has("ManageChannels")) {
-        return message.safeReply("I am missing `Manage Channels` to create ticket channels");
-      }
-      const targetChannel = message.guild.findMatchingChannels(args[1])[0];
-      if (!targetChannel) {
-        return message.safeReply("I could not find channel with that name");
-      }
-      return ticketModalSetup(message, targetChannel, data.settings);
-    }
-
-    // log ticket
-    else if (input === "log") {
-      if (args.length < 2) return message.safeReply("Please provide a channel where ticket logs must be sent");
-      const target = message.guild.findMatchingChannels(args[1]);
-      if (target.length === 0) return message.safeReply("Could not find any matching channel");
-      response = await setupLogChannel(target[0], data.settings);
-    }
-
-    // Set limit
-    else if (input === "limit") {
-      if (args.length < 2) return message.safeReply("Please provide a number");
-      const limit = args[1];
-      if (isNaN(limit)) return message.safeReply("Please provide a number input");
-      response = await setupLimit(limit, data.settings);
-    }
-
-    // Close ticket
-    else if (input === "close") {
-      response = await close(message, message.author);
-      if (!response) return;
-    }
-
-    // Close all tickets
-    else if (input === "closeall") {
-      let sent = await message.safeReply("Closing tickets ...");
-      response = await closeAll(message, message.author);
-      return sent.editable ? sent.edit(response) : message.channel.send(response);
-    }
-
-    // Add user to ticket
-    else if (input === "add") {
-      if (args.length < 2) return message.safeReply("Please provide a user or role to add to the ticket");
-      let inputId;
-      if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
-      else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
-      else inputId = args[1];
-      response = await addToTicket(message, inputId);
-    }
-
-    // Remove user from ticket
-    else if (input === "remove") {
-      if (args.length < 2) return message.safeReply("Please provide a user or role to remove");
-      let inputId;
-      if (message.mentions.users.size > 0) inputId = message.mentions.users.first().id;
-      else if (message.mentions.roles.size > 0) inputId = message.mentions.roles.first().id;
-      else inputId = args[1];
-      response = await removeFromTicket(message, inputId);
-    }
-
-    // Invalid input
-    else {
-      return message.safeReply("Incorrect command usage");
-    }
-
-    if (response) await message.safeReply(response);
-  },
 
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
