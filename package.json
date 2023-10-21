@@ -13,7 +13,8 @@
     "start": "pm2 start bot.js --name mochi && pm2 save && pm2 logs",
     "format": "prettier --write src",
     "docker:build": "docker build -t saitejamadha/discord-js-bot:5.4.0 .",
-    "start-replit": "node bot.js"
+    "start-replit": "node bot.js",
+    "migrate-db": "node ./scripts/db-v4-to-v5.js"
   },
   "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
   "repository": {

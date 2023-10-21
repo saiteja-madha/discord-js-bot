@@ -78,7 +78,6 @@ async function beg(user) {
     "Someone from the HUB",
     "A sugar daddy who probably ain't after you",
     "A sugar mommy who probably ain't after you",
-    
   ];
 
   let amount = Math.floor(Math.random() * `${ECONOMY.MAX_BEG_AMOUNT}` + `${ECONOMY.MIN_BEG_AMOUNT}`);

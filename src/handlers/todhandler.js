@@ -1,4 +1,4 @@
-const { ButtonInteraction, MessageButton, ButtonStyle } = require('discord.js');
+const { ButtonInteraction, MessageButton, ButtonStyle } = require("discord.js");
 
 /**
  * @param {ButtonInteraction} interaction
@@ -34,16 +34,16 @@ async function handleRandomButton(interaction, questionId) {
  * @param {import('discord.js').MessageComponentInteraction} interaction
  */
 function handleButtonInteraction(interaction) {
-  const [action, questionId] = interaction.customId.split('_');
+  const [action, questionId] = interaction.customId.split("_");
 
   switch (action) {
-    case 'truth':
+    case "truth":
       handleTruthButton(interaction, questionId);
       break;
-    case 'dare':
+    case "dare":
       handleDareButton(interaction, questionId);
       break;
-    case 'random':
+    case "random":
       handleRandomButton(interaction, questionId);
       break;
     default:

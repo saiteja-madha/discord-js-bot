@@ -48,9 +48,7 @@ module.exports = {
     } catch (error) {
       // Log the error to console
       // Send an interaction with a message that there was an API error
-      embed.setDescription(
-        "API Error, try again or check if the API key is correct or the quota is full."
-      );
+      embed.setDescription("API Error, try again or check if the API key is correct or the quota is full.");
       await interaction.editReply({ embeds: [embed] });
     }
   },
