@@ -7,16 +7,10 @@ const { checkInviteRewards } = require("@handlers/invite");
  */
 module.exports = {
   name: "resetinvites",
-  description: "clear a users added invites",
+  description: "Clear a user's added invites",
   category: "INVITE",
   userPermissions: ["ManageGuild"],
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<@member>",
-    aliases: ["clearinvites"],
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -27,13 +21,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply("Incorrect syntax. You must mention a target");
-    const response = await clearInvites(message, target.user);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

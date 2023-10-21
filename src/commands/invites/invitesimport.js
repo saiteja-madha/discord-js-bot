@@ -10,10 +10,6 @@ module.exports = {
   category: "INVITE",
   botPermissions: ["ManageGuild"],
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    usage: "[@member]",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -24,12 +20,6 @@ module.exports = {
         required: false,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0]);
-    const response = await importInvites(message, target?.user);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
