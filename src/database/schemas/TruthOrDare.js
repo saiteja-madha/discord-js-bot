@@ -5,19 +5,11 @@ const reqString = {
   required: true,
 };
 
-const Schema = new mongoose.Schema(
-  {
-    category: reqString, // e.g., "truth," "dare," "paranoia," or "nhie"
-    questionId: reqString, // e.g., "T123," "D456," "P789," "NHIE101"
-    question: reqString,
-  },
-  {
-    timestamps: {
-      createdAt: "created_at",
-      updatedAt: false,
-    },
-  }
-);
+const Schema = new mongoose.Schema({
+  category: reqString, // e.g., "truth," "dare," "paranoia," "nhie," "wyr," "hye," "wwyd"
+  questionId: reqString, // e.g., "T123," "D456," "P789," "NHIE101," "WYR202," "HYE303," "WWYD404
+  question: reqString,
+});
 
 const Model = mongoose.model("truth-or-dare-questions", Schema);
 
@@ -35,6 +27,12 @@ module.exports = {
       questionId = "P1"; // Default question ID format for "paranoia" category
     } else if (category === "nhie") {
       questionId = "NHIE1"; // Default question ID format for "nhie" category
+    } else if (category === "wyr") {
+      questionId = "WYR1"; // Default question ID format for "wyr" category
+    } else if (category === "hye") {
+      questionId = "HYE1"; // Default question ID format for "hye" category
+    } else if (category === "wwyd") {
+      questionId = "WWYD1"; // Default question ID format for "wwyd" category
     }
 
     if (latestQuestion) {
