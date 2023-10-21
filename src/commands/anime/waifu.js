@@ -11,7 +11,7 @@ module.exports = {
   description: "Get an anime waifu.",
   enabled: true,
   category: "ANIME",
-  cooldown: 5,
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     description: "Receive a random anime waifu.",

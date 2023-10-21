@@ -16,6 +16,7 @@ module.exports = {
   name: "meme",
   description: "Get a random meme",
   category: "FUN",
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     options: [

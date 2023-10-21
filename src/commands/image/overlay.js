@@ -21,6 +21,7 @@ module.exports = {
   description: "add overlay over the provided image",
   category: "IMAGE",
   botPermissions: ["EmbedLinks", "AttachFiles"],
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     options: [

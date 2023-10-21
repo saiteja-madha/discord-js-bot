@@ -7,7 +7,7 @@ const { ApplicationCommandOptionType, EmbedBuilder } = require("discord.js");
 module.exports = {
   name: "tictactoe",
   description: "Play Tic Tac Toe with your friends",
-  cooldown: 15,
+  cooldown: 1,
   category: "FUN",
   botPermissions: ["SendMessages", "EmbedLinks", "AddReactions", "ReadMessageHistory", "ManageMessages"],
   slashCommand: {

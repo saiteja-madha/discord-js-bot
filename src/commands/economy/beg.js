@@ -9,7 +9,7 @@ module.exports = {
   name: "beg",
   description: "beg from someone",
   category: "ECONOMY",
-  cooldown: 21600,
+  cooldown: 10,
   botPermissions: ["EmbedLinks"],
   slashCommand: {
     enabled: true,

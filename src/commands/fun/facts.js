@@ -11,7 +11,7 @@ const BASE_URL = "https://some-random-api.com/animal";
 module.exports = {
   name: "facts",
   description: "shows a random animal fact",
-  cooldown: 5,
+  cooldown: 1,
   category: "FUN",
   botPermissions: ["EmbedLinks"],
   slashCommand: {
