@@ -45,6 +45,7 @@ module.exports = {
   description: "add filter to the provided image",
   category: "IMAGE",
   botPermissions: ["EmbedLinks", "AttachFiles"],
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     options: [

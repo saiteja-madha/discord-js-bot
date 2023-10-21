@@ -9,13 +9,9 @@ const { getMember } = require("@schemas/Member");
  */
 module.exports = {
   name: "inviter",
-  description: "shows inviter information",
+  description: "Shows inviter information",
   category: "INVITE",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "[@member|id]",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -26,12 +22,6 @@ module.exports = {
         required: false,
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const target = (await message.guild.resolveMember(args[0])) || message.member;
-    const response = await getInviter(message, target.user, data.settings);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

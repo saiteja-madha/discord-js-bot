@@ -14,7 +14,6 @@ module.exports = {
   description: "Anime reactions.",
   enabled: true,
   category: "ANIME",
-  cooldown: 5,
   slashCommand: {
     enabled: true,
     description: "Send an anime reaction.",

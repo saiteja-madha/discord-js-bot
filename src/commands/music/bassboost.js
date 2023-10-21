@@ -16,11 +16,6 @@ module.exports = {
   description: "set bassboost level",
   category: "MUSIC",
   validations: musicValidations,
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    usage: "<none|low|medium|high>",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -49,13 +44,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    let level = "none";
-    if (args.length && args[0].toLowerCase() in levels) level = args[0].toLowerCase();
-    const response = setBassBoost(message, level);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

@@ -8,15 +8,10 @@ const { getMember } = require("@schemas/Member");
  */
 module.exports = {
   name: "addinvites",
-  description: "add invites to a member",
+  description: "Add invites to a member",
   category: "INVITE",
   userPermissions: ["ManageGuild"],
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<@member|id> <invites>",
-    minArgsCount: 2,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -33,17 +28,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
-    const amount = parseInt(args[1]);
-
-    if (!target) return message.safeReply("Incorrect syntax. You must mention a target");
-    if (isNaN(amount)) return message.safeReply("Invite amount must be a number");
-
-    const response = await addInvites(message, target.user, parseInt(amount));
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

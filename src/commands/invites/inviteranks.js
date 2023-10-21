@@ -6,19 +6,11 @@ const { EMBED_COLORS } = require("@root/config");
  */
 module.exports = {
   name: "inviteranks",
-  description: "shows the invite ranks configured on this guild",
+  description: "Shows the invite ranks configured on this guild",
   category: "INVITE",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-  },
   slashCommand: {
     enabled: true,
-  },
-
-  async messageRun(message, args, data) {
-    const response = await getInviteRanks(message, data.settings);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {

@@ -11,7 +11,7 @@ module.exports = {
   description: "Get a random anime quote.",
   enabled: true,
   category: "ANIME",
-  cooldown: 5,
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     description: "Get a random anime quote.",

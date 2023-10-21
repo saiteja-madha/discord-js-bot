@@ -8,17 +8,8 @@ module.exports = {
   description: "skip the current song",
   category: "MUSIC",
   validations: musicValidations,
-  command: {
-    enabled: true,
-    aliases: ["next"],
-  },
   slashCommand: {
     enabled: true,
-  },
-
-  async messageRun(message, args) {
-    const response = skip(message);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

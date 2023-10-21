@@ -6,15 +6,9 @@ const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
  */
 module.exports = {
   name: "invitetracker",
-  description: "enable or disable invite tracking in the server",
+  description: "Enable or disable invite tracking in the server",
   category: "INVITE",
   userPermissions: ["ManageGuild"],
-  command: {
-    enabled: true,
-    aliases: ["invitetracking"],
-    usage: "<ON|OFF>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -35,13 +29,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    const status = args[0].toLowerCase();
-    if (!["on", "off"].includes(status)) return message.safeReply("Invalid status. Value must be `on/off`");
-    const response = await setStatus(message, status, data.settings);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {
