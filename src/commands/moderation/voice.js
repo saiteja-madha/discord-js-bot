@@ -1,9 +1,9 @@
-const deafen = require("../shared/deafen");
-const vmute = require("../shared/vmute");
-const vunmute = require("../shared/vunmute");
-const undeafen = require("../shared/undeafen");
-const disconnect = require("../shared/disconnect");
-const move = require("../shared/move");
+const deafen = require("./shared/deafen");
+const vmute = require("./shared/vmute");
+const vunmute = require("./shared/vunmute");
+const undeafen = require("./shared/undeafen");
+const disconnect = require("./shared/disconnect");
+const move = require("./shared/move");
 const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
 
 /**
@@ -15,9 +15,6 @@ module.exports = {
   category: "MODERATION",
   userPermissions: ["MuteMembers", "MoveMembers", "DeafenMembers"],
   botPermissions: ["MuteMembers", "MoveMembers", "DeafenMembers"],
-  command: {
-    enabled: false,
-  },
   slashCommand: {
     enabled: true,
     options: [

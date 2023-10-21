@@ -11,12 +11,6 @@ module.exports = {
   category: "MODERATION",
   botPermissions: ["ModerateMembers"],
   userPermissions: ["ModerateMembers"],
-  command: {
-    enabled: true,
-    aliases: ["mute"],
-    usage: "<ID|@member> <duration> [reason]",
-    minArgsCount: 2,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -41,18 +35,6 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-
-    // parse time
-    const ms = ems(args[1]);
-    if (!ms) return message.safeReply("Please provide a valid duration. Example: 1d/1h/1m/1s");
-
-    const reason = args.slice(2).join(" ").trim();
-    const response = await timeout(message.member, target, ms, reason);
-    await message.safeReply(response);
-  },
 
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");

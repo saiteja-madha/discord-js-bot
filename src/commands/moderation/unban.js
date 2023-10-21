@@ -15,11 +15,6 @@ module.exports = {
   category: "MODERATION",
   botPermissions: ["BanMembers"],
   userPermissions: ["BanMembers"],
-  command: {
-    enabled: true,
-    usage: "<ID|@member> [reason]",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -37,15 +32,6 @@ module.exports = {
         required: false,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const match = args[0];
-    const reason = message.content.split(args[0])[1].trim();
-
-    const response = await getMatchingBans(message.guild, match);
-    const sent = await message.safeReply(response);
-    if (typeof response !== "string") await waitForBan(message.member, reason, sent);
   },
 
   async interactionRun(interaction) {

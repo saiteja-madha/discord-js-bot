@@ -10,11 +10,6 @@ module.exports = {
   category: "MODERATION",
   botPermissions: ["BanMembers"],
   userPermissions: ["KickMembers"],
-  command: {
-    enabled: true,
-    usage: "<ID|@member> [reason]",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -32,15 +27,7 @@ module.exports = {
       },
     ],
   },
-
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-    const reason = message.content.split(args[0])[1].trim();
-    const response = await softban(message.member, target, reason);
-    await message.safeReply(response);
-  },
-
+  
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");
     const reason = interaction.options.getString("reason");

@@ -10,12 +10,6 @@ module.exports = {
   category: "MODERATION",
   botPermissions: ["ModerateMembers"],
   userPermissions: ["ModerateMembers"],
-  command: {
-    enabled: true,
-    aliases: ["unmute"],
-    usage: "<ID|@member> [reason]",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -32,14 +26,6 @@ module.exports = {
         required: false,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-    const reason = args.slice(1).join(" ").trim();
-    const response = await untimeout(message.member, target, reason);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

@@ -9,9 +9,6 @@ module.exports = {
   description: "purge commands",
   category: "MODERATION",
   userPermissions: ["ManageMessages"],
-  command: {
-    enabled: false,
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
