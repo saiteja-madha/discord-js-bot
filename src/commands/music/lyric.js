@@ -12,11 +12,6 @@ module.exports = {
   description: "find lyric of the song",
   category: "MUSIC",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    usage: "<Song Title - singer>",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -27,15 +22,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const choice = args.join(" ");
-    if (!choice) {
-      return message.safeReply("Invalid Lyric selected.");
-    }
-    const response = await getLyric(message.author, choice);
-    return message.safeReply(response);
   },
 
   async interactionRun(interaction) {

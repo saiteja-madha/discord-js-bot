@@ -8,16 +8,8 @@ module.exports = {
   description: "resumes the music player",
   category: "MUSIC",
   validations: musicValidations,
-  command: {
-    enabled: true,
-  },
   slashCommand: {
     enabled: true,
-  },
-
-  async messageRun(message, args) {
-    const response = resumePlayer(message);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

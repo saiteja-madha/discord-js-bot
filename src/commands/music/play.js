@@ -17,11 +17,6 @@ module.exports = {
   description: "play a song from youtube",
   category: "MUSIC",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<song-name>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -32,12 +27,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const query = args.join(" ");
-    const response = await play(message, query);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

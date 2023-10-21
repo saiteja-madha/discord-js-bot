@@ -11,10 +11,6 @@ module.exports = {
   description: "sets the playing track's position to the specified position",
   category: "MUSIC",
   validations: musicValidations,
-  command: {
-    enabled: true,
-    usage: "<duration>",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -25,12 +21,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const time = args.join(" ");
-    const response = seekTo(message, time);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
