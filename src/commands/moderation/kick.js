@@ -6,44 +6,35 @@ const { ApplicationCommandOptionType } = require("discord.js");
  */
 module.exports = {
   name: "kick",
-  description: "kicks the specified member",
+  description: "Kicks the specified member",
   category: "MODERATION",
   botPermissions: ["KickMembers"],
   userPermissions: ["KickMembers"],
-  command: {
-    enabled: true,
-    usage: "<ID|@member> [reason]",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
-    options: [
-      {
-        name: "user",
-        description: "the target member",
-        type: ApplicationCommandOptionType.User,
-        required: true,
-      },
-      {
-        name: "reason",
-        description: "reason for kick",
-        type: ApplicationCommandOptionType.String,
-        required: false,
-      },
-    ],
-  },
-
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true);
-    if (!target) return message.safeReply(`No user found matching ${args[0]}`);
-    const reason = message.content.split(args[0])[1].trim();
-    const response = await kick(message.member, target, reason);
-    await message.safeReply(response);
+    data: {
+      name: "kick",
+      description: "Kicks the specified member",
+      options: [
+        {
+          name: "user",
+          description: "The target member",
+          type: ApplicationCommandOptionType.User, // Use .User instead of .USER
+          required: true,
+        },
+        {
+          name: "reason",
+          description: "Reason for kick",
+          type: ApplicationCommandOptionType.String, // Use .String instead of .STRING
+          required: false,
+        },
+      ],
+    },
   },
 
   async interactionRun(interaction) {
-    const user = interaction.options.getUser("user");
-    const reason = interaction.options.getString("reason");
+    const user = interaction.options.getUser("user"); // Use .getUser instead of .user
+    const reason = interaction.options.getString("reason"); // Use .getString instead of .string
     const target = await interaction.guild.members.fetch(user.id);
 
     const response = await kick(interaction.member, target, reason);

@@ -10,20 +10,6 @@ module.exports = {
   description: "list or clear user warnings",
   category: "MODERATION",
   userPermissions: ["KickMembers"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    subcommands: [
-      {
-        trigger: "list [member]",
-        description: "list all warnings for a user",
-      },
-      {
-        trigger: "clear <member>",
-        description: "clear all warnings for a user",
-      },
-    ],
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -54,31 +40,6 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const sub = args[0]?.toLowerCase();
-    let response = "";
-
-    if (sub === "list") {
-      const target = (await message.guild.resolveMember(args[1], true)) || message.member;
-      if (!target) return message.safeReply(`No user found matching ${args[1]}`);
-      response = await listWarnings(target, message);
-    }
-
-    //
-    else if (sub === "clear") {
-      const target = await message.guild.resolveMember(args[1], true);
-      if (!target) return message.safeReply(`No user found matching ${args[1]}`);
-      response = await clearWarnings(target, message);
-    }
-
-    // else
-    else {
-      response = `Invalid subcommand ${sub}`;
-    }
-
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
