@@ -150,17 +150,17 @@ module.exports = {
 };
 
 async function sendQuestion(interaction, category) {
-    const questions = await getQuestions(1, category);
-    if (questions.length === 0) {
-      await interaction.followUp("No questions available in the specified category.");
-      return;
-    }
-  
-    const question = questions[0];
-    const embed = new EmbedBuilder()
-      .setColor("Blue")
-      .setTitle("Truth or Dare")
-      .setDescription(question.question)
-      .setFooter({ text: `Question ID: ${question.questionId} | Requested by: ${interaction.user.tag}` });
-    await interaction.followUp({ embeds: [embed] });
+  const questions = await getQuestions(1, category);
+  if (questions.length === 0) {
+    await interaction.followUp("No questions available in the specified category.");
+    return;
+  }
+
+  const question = questions[0];
+  const embed = new EmbedBuilder()
+    .setColor("Blue")
+    .setTitle("Truth or Dare")
+    .setDescription(question.question)
+    .setFooter({ text: `Question ID: ${question.questionId} | Requested by: ${interaction.user.tag}` });
+  await interaction.followUp({ embeds: [embed] });
 }

@@ -49,11 +49,11 @@ module.exports = {
 
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
-    
+
     if (sub === "add") {
       const role = interaction.options.getRole("role");
       const invites = interaction.options.getInteger("invites");
-      
+
       const response = await addInviteRank(interaction, role, invites, data.settings);
       await interaction.followUp(response);
     } else if (sub === "remove") {

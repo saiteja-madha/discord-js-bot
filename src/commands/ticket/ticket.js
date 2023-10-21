@@ -338,8 +338,8 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   const description = modal.fields.getTextInputValue("description");
   const footer = modal.fields.getTextInputValue("footer");
 
-   // create ticket channel category
-   if (!guild.channels.cache.find((ch) => ch.name === "Tickets" && ch.type === ChannelType.GuildCategory)) {
+  // create ticket channel category
+  if (!guild.channels.cache.find((ch) => ch.name === "Tickets" && ch.type === ChannelType.GuildCategory)) {
     guild.channels.create({
       name: "Tickets",
       type: ChannelType.GuildCategory,

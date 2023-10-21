@@ -31,7 +31,9 @@ const genFact = async (user) => {
       .setTitle("Anime Fact:")
       .setDescription(`${data.fact}`)
       .setColor("Random")
-      .setThumbnail("https://cdn.discordapp.com/attachments/847226847804260433/1129116403983724727/01ggAAAABJRU5ErkJggg.png")
+      .setThumbnail(
+        "https://cdn.discordapp.com/attachments/847226847804260433/1129116403983724727/01ggAAAABJRU5ErkJggg.png"
+      )
       .setFooter({ text: `Requested by ${user.username}` });
   } catch (ex) {
     return new EmbedBuilder()

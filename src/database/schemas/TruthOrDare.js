@@ -57,16 +57,16 @@ module.exports = {
 
   getQuestions: async (limit = 10, category = "random") => {
     const aggregate = [
-        {
-          $sample: { size: limit },
-        },
-      ];
-      
-      if (category !== "random") {
-        aggregate.unshift({
-          $match: { category },
-        });
-      }      
+      {
+        $sample: { size: limit },
+      },
+    ];
+
+    if (category !== "random") {
+      aggregate.unshift({
+        $match: { category },
+      });
+    }
 
     const questions = await Model.aggregate(aggregate);
     return questions;

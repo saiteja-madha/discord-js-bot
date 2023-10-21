@@ -235,7 +235,7 @@ async function handleTicketOpen(interaction) {
 
     // get channel parent ("Tickets" category)
     const parent = guild.channels.cache.find((ch) => ch.name === "Tickets" && ch.type === ChannelType.GuildCategory);
-    
+
     const tktChannel = await guild.channels.create({
       name: `tіcket-${ticketNumber}`,
       parent: parent?.id,

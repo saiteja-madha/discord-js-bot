@@ -44,7 +44,7 @@ module.exports = {
         name: "ping",
         description: "get bot's ping",
         type: ApplicationCommandOptionType.Subcommand,
-      }
+      },
     ],
   },
 
@@ -69,15 +69,14 @@ module.exports = {
         .setAuthor({ name: "Donate" })
         .setColor(EMBED_COLORS.BOT_EMBED)
         .setThumbnail(interaction.client.user.displayAvatarURL())
-        .setDescription("Hey there! Thanks for considering to donate to me\nUse the button below to navigate where you want");
+        .setDescription(
+          "Hey there! Thanks for considering to donate to me\nUse the button below to navigate where you want"
+        );
 
       // Buttons
       let components = [];
       components.push(
-        new ButtonBuilder()
-          .setLabel("Ko-fi")
-          .setURL("https://ko-fi.com/vikshan")
-          .setStyle(ButtonStyle.Link)
+        new ButtonBuilder().setLabel("Ko-fi").setURL("https://ko-fi.com/vikshan").setStyle(ButtonStyle.Link)
       );
 
       components.push(
@@ -86,12 +85,9 @@ module.exports = {
           .setURL("https://github.com/sponsors/vixshan")
           .setStyle(ButtonStyle.Link)
       );
-      
+
       components.push(
-        new ButtonBuilder()
-          .setLabel("Patreon")
-          .setURL("https://www.patreon.com/vikshan")
-          .setStyle(ButtonStyle.Link)
+        new ButtonBuilder().setLabel("Patreon").setURL("https://www.patreon.com/vikshan").setStyle(ButtonStyle.Link)
       );
 
       let buttonsRow = new ActionRowBuilder().addComponents(components);

@@ -77,7 +77,7 @@ module.exports = {
  */
 async function setAutoRole(interaction, role, settings) {
   const guild = interaction.guild;
-  
+
   if (role) {
     if (role.id === guild.roles.everyone.id) return "You cannot set `@everyone` as the autorole";
     if (!guild.members.me.permissions.has("ManageRoles")) return "I don't have the `ManageRoles` permission";
