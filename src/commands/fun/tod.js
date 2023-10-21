@@ -1,7 +1,7 @@
-const { ApplicationCommandOptionType } = require("discord.js");
+const { ApplicationCommandOptionType, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { getQuestions } = require("@schemas/TruthOrDare");
 const { EmbedBuilder } = require("discord.js");
-const { getUsername } = require("@helpers/Utils");
+const { handleTodButtonClick } = require("@handlers/todhandler"); // Import the handleTodButtonClick function from your todhandler
 
 /**
  * @type {import("@structures/Command")}
@@ -55,7 +55,14 @@ module.exports = {
       },
     ],
   },
+
+  
   async interactionRun(interaction) {
+    // Handle button clicks
+    if (interaction.isButton()) {
+      return handleTodButtonClick(interaction);
+    }
+
     const subcommand = interaction.options.getSubcommand();
 
     switch (subcommand) {
@@ -84,7 +91,7 @@ module.exports = {
         sendRandomQuestion(interaction);
         break;
     }
-  },
+  }
 };
 
 async function sendQuestion(interaction, category) {
@@ -100,9 +107,24 @@ async function sendQuestion(interaction, category) {
     .setTitle("Truth or Dare")
     .setDescription(question.question)
     .setFooter({
-      text: `Category: ${category} | Question ID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
+      text: `Type: ${category} | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
     });
-  await interaction.followUp({ embeds: [embed] });
+
+  const buttons = new ActionRowBuilder()
+    .addComponents(
+      new ButtonBuilder()
+      .setCustomId("truthBtn")
+      .setStyle(ButtonStyle.Primary).setLabel("Truth")
+    );
+  buttons.addComponents(new ButtonBuilder().setCustomId("dareBtn").setStyle(ButtonStyle.Success).setLabel("Dare"));
+  buttons.addComponents(
+    new ButtonBuilder().setCustomId("randomBtn").setStyle(ButtonStyle.Danger).setLabel("Random")
+  );
+
+  await interaction.followUp({
+    embeds: [embed],
+    components: [buttons],
+  });
 }
 
 async function sendRandomQuestion(interaction) {
@@ -118,7 +140,14 @@ async function sendRandomQuestion(interaction) {
     .setTitle("Truth or Dare")
     .setDescription(question.question)
     .setFooter({
-      text: `Category: Random | Question ID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
+      text: `Type: RANDOM | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
     });
-  await interaction.followUp({ embeds: [embed] });
+
+  const buttons = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId("truthBtn").setStyle(ButtonStyle.Primary).setLabel("Truth")
+  );
+  buttons.addComponents(new ButtonBuilder().setCustomId("dareBtn").setStyle(ButtonStyle.Success).setLabel("Dare"));
+  buttons.addComponents(new ButtonBuilder().setCustomId("randomBtn").setStyle(ButtonStyle.Danger).setLabel("Random"));
+
+  await interaction.followUp({ embeds: [embed], components: [buttons] });
 }
