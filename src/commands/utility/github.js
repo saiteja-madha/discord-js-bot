@@ -12,12 +12,6 @@ module.exports = {
   cooldown: 10,
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    aliases: ["git"],
-    usage: "<username>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -28,12 +22,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const username = args.join(" ");
-    const response = await getGithubUser(username, message.author);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

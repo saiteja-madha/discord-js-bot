@@ -11,12 +11,7 @@ module.exports = {
   description: "shows pokemon information",
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  cooldown: 5,
-  command: {
-    enabled: true,
-    usage: "<pokemon>",
-    minArgsCount: 1,
-  },
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     options: [
@@ -27,12 +22,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const pokemon = args.join(" ");
-    const response = await pokedex(pokemon);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

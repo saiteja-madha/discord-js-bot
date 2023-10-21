@@ -35,7 +35,6 @@ module.exports = {
     ],
   },
 
-
   async interactionRun(interaction) {
     const user = interaction.options.getUser("user");
 

@@ -162,7 +162,6 @@ module.exports = {
     ],
   },
 
-
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand();
     let response;

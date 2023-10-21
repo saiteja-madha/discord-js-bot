@@ -31,7 +31,6 @@ module.exports = {
     ],
   },
 
-
   async interactionRun(interaction, data) {
     const response = await setStatus(interaction.options.getString("status"), data.settings);
     await interaction.followUp(response);

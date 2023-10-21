@@ -9,9 +9,6 @@ module.exports = {
   description: "Generate a QR code with the url that is provided",
   category: "ADMIN",
   botPermissions: ["ManageGuild"],
-  command: {
-    enabled: false,
-  },
   slashCommand: {
     enabled: true,
     ephemeral: true,

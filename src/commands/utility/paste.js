@@ -7,14 +7,8 @@ const { postToBin } = require("@helpers/HttpUtils");
 module.exports = {
   name: "paste",
   description: "Paste something in sourceb.in",
-  cooldown: 5,
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    minArgsCount: 2,
-    usage: "<title> <content>",
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -31,13 +25,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const title = args.shift();
-    const content = args.join(" ");
-    const response = await paste(content, title);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

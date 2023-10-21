@@ -17,12 +17,6 @@ module.exports = {
   cooldown: 20,
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    aliases: ["tr"],
-    usage: "<iso-code> <message>",
-    minArgsCount: 2,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -40,26 +34,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    let embed = new EmbedBuilder();
-    const outputCode = args.shift();
-
-    if (!GOOGLE_TRANSLATE[outputCode]) {
-      embed
-        .setColor(EMBED_COLORS.WARNING)
-        .setDescription(
-          "Invalid translation code. Visit [here](https://cloud.google.com/translate/docs/languages) to see list of supported translation codes"
-        );
-      return message.safeReply({ embeds: [embed] });
-    }
-
-    const input = args.join(" ");
-    if (!input) message.safeReply("Provide some valid translation text");
-
-    const response = await getTranslation(message.author, input, outputCode);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

@@ -10,12 +10,7 @@ module.exports = {
   description: "enlarge an emoji",
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<emoji>",
-    aliases: ["enlarge"],
-    minArgsCount: 1,
-  },
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     options: [
@@ -26,12 +21,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const emoji = args[0];
-    const response = getEmoji(message.author, emoji);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

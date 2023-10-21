@@ -9,14 +9,8 @@ const moment = require("moment");
 module.exports = {
   name: "urban",
   description: "searches the urban dictionary",
-  cooldown: 5,
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<word>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -27,12 +21,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const word = args.join(" ");
-    const response = await urban(word);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

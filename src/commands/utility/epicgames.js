@@ -10,20 +10,10 @@ module.exports = {
   cooldown: 10,
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    aliases: ["egs"],
-    usage: "epicgames",
-    minArgsCount: 1,
-  },
+  cooldown: 1,
   slashCommand: {
     enabled: true,
     options: [],
-  },
-
-  async messageRun(message, args) {
-    const response = await searchGame(message.author);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

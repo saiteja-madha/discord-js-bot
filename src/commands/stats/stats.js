@@ -22,7 +22,6 @@ module.exports = {
     ],
   },
 
-
   async interactionRun(interaction, data) {
     const member = interaction.options.getMember("user") || interaction.member;
     const response = await stats(member, data.settings);

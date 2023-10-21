@@ -13,11 +13,6 @@ module.exports = {
   cooldown: 5,
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<place>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -28,12 +23,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const place = args.join(" ");
-    const response = await weather(place);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

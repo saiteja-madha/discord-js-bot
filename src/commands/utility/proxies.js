@@ -9,14 +9,8 @@ const PROXY_TYPES = ["all", "http", "socks4", "socks5"];
 module.exports = {
   name: "proxies",
   description: "fetch proxies. Available types: http, socks4, socks5",
-  cooldown: 5,
   category: "UTILITY",
   botPermissions: ["EmbedLinks", "AttachFiles"],
-  command: {
-    enabled: true,
-    usage: "[type]",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -28,20 +22,6 @@ module.exports = {
         choices: PROXY_TYPES.map((p) => ({ name: p, value: p })),
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    let type = "all";
-
-    if (args[0]) {
-      if (PROXY_TYPES.includes(args[0].toLowerCase())) type = args[0].toLowerCase();
-      else return message.safeReply("Incorrect proxy type. Available types: `http`, `socks4`, `socks5`");
-    }
-
-    const msg = await message.channel.send("Fetching proxies... Please wait");
-    const response = await getProxies(type);
-    if (msg.deletable) await msg.delete();
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {

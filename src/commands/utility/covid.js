@@ -12,11 +12,6 @@ module.exports = {
   cooldown: 5,
   category: "UTILITY",
   botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    usage: "<country>",
-    minArgsCount: 1,
-  },
   slashCommand: {
     enabled: true,
     options: [
@@ -27,12 +22,6 @@ module.exports = {
         required: true,
       },
     ],
-  },
-
-  async messageRun(message, args) {
-    const country = args.join(" ");
-    const response = await getCovid(country);
-    await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
