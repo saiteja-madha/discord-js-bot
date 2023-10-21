@@ -56,7 +56,6 @@ module.exports = {
     ],
   },
 
-  
   async interactionRun(interaction) {
     // Handle button clicks
     if (interaction.isButton()) {
@@ -91,7 +90,7 @@ module.exports = {
         sendRandomQuestion(interaction);
         break;
     }
-  }
+  },
 };
 
 async function sendQuestion(interaction, category) {
@@ -104,22 +103,17 @@ async function sendQuestion(interaction, category) {
   const question = questions[0];
   const embed = new EmbedBuilder()
     .setColor("Blue")
-    .setTitle("Truth or Dare")
-    .setDescription(question.question)
+    .setTitle(`TOD: ${category}`)
+    .setDescription(`Alright ${interaction.user.tag};\n**${question.question}**\n \n \n \n \n`)
     .setFooter({
       text: `Type: ${category} | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
     });
 
-  const buttons = new ActionRowBuilder()
-    .addComponents(
-      new ButtonBuilder()
-      .setCustomId("truthBtn")
-      .setStyle(ButtonStyle.Primary).setLabel("Truth")
-    );
-  buttons.addComponents(new ButtonBuilder().setCustomId("dareBtn").setStyle(ButtonStyle.Success).setLabel("Dare"));
-  buttons.addComponents(
-    new ButtonBuilder().setCustomId("randomBtn").setStyle(ButtonStyle.Danger).setLabel("Random")
+  const buttons = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId("truthBtn").setStyle(ButtonStyle.Primary).setLabel("Truth")
   );
+  buttons.addComponents(new ButtonBuilder().setCustomId("dareBtn").setStyle(ButtonStyle.Success).setLabel("Dare"));
+  buttons.addComponents(new ButtonBuilder().setCustomId("randomBtn").setStyle(ButtonStyle.Danger).setLabel("Random"));
 
   await interaction.followUp({
     embeds: [embed],
@@ -137,8 +131,8 @@ async function sendRandomQuestion(interaction) {
   const question = questions[0];
   const embed = new EmbedBuilder()
     .setColor("Blue")
-    .setTitle("Truth or Dare")
-    .setDescription(question.question)
+    .setTitle("Random Truth or Dare")
+    .setDescription(` \n**${question.question}**\n \n \n \n \n`)
     .setFooter({
       text: `Type: RANDOM | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
     });
