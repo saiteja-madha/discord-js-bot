@@ -4,6 +4,7 @@ module.exports = {
   DOCS_URL: "https://docs.vikshan.me", // Your bot documentation website
   DONATE_URL: "https://ko-fi.com/vikshan", // Your donation link
   GITHUB_URL: "https://github.com/vixshan/mochi", // Your bot github repository
+  AMINA: "https://discord.com/oauth2/authorize?client_id=1035629678632915055&permissions=67584&scope=bot%20applications.commands", // Your second bot invite link
   PREFIX_COMMANDS: {
     ENABLED: true, // Enable/Disable prefix commands
     DEFAULT_PREFIX: "!", // Default prefix for the bot
