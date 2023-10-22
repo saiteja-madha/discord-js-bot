@@ -6,7 +6,14 @@ const {
   ButtonStyle,
 } = require('discord.js')
 const { timeformat } = require('@helpers/Utils')
-const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require('@root/config.js')
+const {
+  EMBED_COLORS,
+  SUPPORT_SERVER,
+  DASHBOARD,
+  DONATE_URL,
+  DOCS_URL,
+  GITHUB_URL,
+} = require('@root/config.js')
 const botstats = require('./sub/botstats')
 
 /**
@@ -38,6 +45,16 @@ module.exports = {
       {
         name: 'donate',
         description: 'donate to the bot',
+        type: ApplicationCommandOptionType.Subcommand,
+      },
+      {
+        name: 'docs',
+        description: "get bot's documentation",
+        type: ApplicationCommandOptionType.Subcommand,
+      },
+      {
+        name: 'github',
+        description: "get bot's github",
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
@@ -82,7 +99,7 @@ module.exports = {
       components.push(
         new ButtonBuilder()
           .setLabel('Ko-fi')
-          .setURL('https://ko-fi.com/vikshan')
+          .setURL(DONATE_URL)
           .setStyle(ButtonStyle.Link)
       )
 
@@ -117,11 +134,59 @@ module.exports = {
       )
     }
 
+    // Docs
+    else if (sub === 'docs') {
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: 'Documentation' })
+        .setColor(EMBED_COLORS.BOT_EMBED)
+        .setThumbnail(interaction.client.user.displayAvatarURL())
+        .setDescription(
+          'Hey there! Ah you want to know more about me? Or you are just lost? \nWell, Use the button below to see my documentation\n\nIf you are lost, you can also use the `help` command to see all my commands'
+        )
+        .setFooter({ text: 'Free Cookies!' })
+
+      // Buttons
+      let components = []
+      components.push(
+        new ButtonBuilder()
+          .setLabel('Documentation')
+          .setURL(DOCS_URL)
+          .setStyle(ButtonStyle.Link)
+      )
+
+      let buttonsRow = new ActionRowBuilder().addComponents(components)
+      return interaction.followUp({ embeds: [embed], components: [buttonsRow] })
+    }
+
+    // Github Repo
+    else if (sub === 'github') {
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: 'Github' })
+        .setColor(EMBED_COLORS.BOT_EMBED)
+        .setThumbnail(interaction.client.user.displayAvatarURL())
+        .setDescription(
+          'Hey there! Thanks for considering to check my github repo, I am Open Source!\nUse the button below to see my repo, and maybe give it a star :star:'
+        )
+
+      // Buttons
+      let components = []
+      components.push(
+        new ButtonBuilder()
+          .setLabel('Github')
+          .setURL(GITHUB_URL)
+          .setStyle(ButtonStyle.Link)
+      )
+
+      let buttonsRow = new ActionRowBuilder().addComponents(components)
+      return interaction.followUp({ embeds: [embed], components: [buttonsRow] })
+    }
+
     // Ping
     else if (sub === 'ping') {
       const msg = await interaction.followUp('Pinging...')
-      const ping = msg.createdTimestamp - interaction.createdTimestamp
-      await msg.edit(`Pong! :ping_pong:\nLatency: \`${ping}ms\``)
+      await msg.edit(
+        `🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``
+      )
     }
   },
 }
