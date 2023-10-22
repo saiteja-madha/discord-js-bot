@@ -50,18 +50,18 @@
  * @type {CommandData}
  */
 module.exports = {
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   cooldown: 0,
   isPremium: false,
-  category: "NONE",
+  category: 'NONE',
   botPermissions: [],
   userPermissions: [],
   validations: [],
   command: {
     enabled: true,
     aliases: [],
-    usage: "",
+    usage: '',
     minArgsCount: 0,
     subcommands: [],
   },
@@ -72,4 +72,4 @@ module.exports = {
   },
   messageRun: (message, args, data) => {},
   interactionRun: (interaction, data) => {},
-};
+}

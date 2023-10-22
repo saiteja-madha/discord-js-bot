@@ -1,30 +1,30 @@
-const { cacheGuildInvites, resetInviteCache } = require("@handlers/invite");
-const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+const { cacheGuildInvites, resetInviteCache } = require('@handlers/invite')
+const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "invitetracker",
-  description: "Enable or disable invite tracking in the server",
-  category: "INVITE",
-  userPermissions: ["ManageGuild"],
+  name: 'invitetracker',
+  description: 'Enable or disable invite tracking in the server',
+  category: 'INVITE',
+  userPermissions: ['ManageGuild'],
   slashCommand: {
     enabled: true,
     options: [
       {
-        name: "status",
-        description: "configuration status",
+        name: 'status',
+        description: 'configuration status',
         required: true,
         type: ApplicationCommandOptionType.String,
         choices: [
           {
-            name: "ON",
-            value: "ON",
+            name: 'ON',
+            value: 'ON',
           },
           {
-            name: "OFF",
-            value: "OFF",
+            name: 'OFF',
+            value: 'OFF',
           },
         ],
       },
@@ -32,37 +32,43 @@ module.exports = {
   },
 
   async interactionRun(interaction, data) {
-    const status = interaction.options.getString("status");
-    const response = await setStatus(interaction, status, data.settings);
-    await interaction.followUp(response);
+    const status = interaction.options.getString('status')
+    const response = await setStatus(interaction, status, data.settings)
+    await interaction.followUp(response)
   },
-};
+}
 
 async function setStatus({ guild }, input, settings) {
-  const status = input.toUpperCase() === "ON" ? true : false;
+  const status = input.toUpperCase() === 'ON' ? true : false
 
   if (status) {
-    if (!guild.members.me.permissions.has(["ManageGuild", "ManageChannels"])) {
-      return "Oops! I am missing `Manage Server`, `Manage Channels` permission!\nI cannot track invites";
+    if (!guild.members.me.permissions.has(['ManageGuild', 'ManageChannels'])) {
+      return 'Oops! I am missing `Manage Server`, `Manage Channels` permission!\nI cannot track invites'
     }
 
     const channelMissing = guild.channels.cache
-      .filter((ch) => ch.type === ChannelType.GuildText && !ch.permissionsFor(guild.members.me).has("ManageChannels"))
-      .map((ch) => ch.name);
+      .filter(
+        ch =>
+          ch.type === ChannelType.GuildText &&
+          !ch.permissionsFor(guild.members.me).has('ManageChannels')
+      )
+      .map(ch => ch.name)
 
     if (channelMissing.length > 1) {
       return `I may not be able to track invites properly\nI am missing \`Manage Channel\` permission in the following channels \`\`\`${channelMissing.join(
-        ", "
-      )}\`\`\``;
+        ', '
+      )}\`\`\``
     }
 
-    await cacheGuildInvites(guild);
+    await cacheGuildInvites(guild)
   } else {
-    resetInviteCache(guild.id);
+    resetInviteCache(guild.id)
   }
 
-  settings.invite.tracking = status;
-  await settings.save();
+  settings.invite.tracking = status
+  await settings.save()
 
-  return `Configuration saved! Invite tracking is now ${status ? "enabled" : "disabled"}`;
+  return `Configuration saved! Invite tracking is now ${
+    status ? 'enabled' : 'disabled'
+  }`
 }

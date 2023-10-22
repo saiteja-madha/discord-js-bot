@@ -1,23 +1,23 @@
-const { getEffectiveInvites } = require("@handlers/invite");
-const { EMBED_COLORS } = require("@root/config.js");
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const { stripIndent } = require("common-tags");
-const { getMember } = require("@schemas/Member");
+const { getEffectiveInvites } = require('@handlers/invite')
+const { EMBED_COLORS } = require('@root/config.js')
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
+const { stripIndent } = require('common-tags')
+const { getMember } = require('@schemas/Member')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "inviter",
-  description: "Shows inviter information",
-  category: "INVITE",
-  botPermissions: ["EmbedLinks"],
+  name: 'inviter',
+  description: 'Shows inviter information',
+  category: 'INVITE',
+  botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,
     options: [
       {
-        name: "user",
-        description: "the user to get the inviter information for",
+        name: 'user',
+        description: 'the user to get the inviter information for',
         type: ApplicationCommandOptionType.User,
         required: false,
       },
@@ -25,32 +25,39 @@ module.exports = {
   },
 
   async interactionRun(interaction, data) {
-    const user = interaction.options.getUser("user") || interaction.user;
-    const response = await getInviter(interaction, user, data.settings);
-    await interaction.followUp(response);
+    const user = interaction.options.getUser('user') || interaction.user
+    const response = await getInviter(interaction, user, data.settings)
+    await interaction.followUp(response)
   },
-};
+}
 
 async function getInviter({ guild }, user, settings) {
-  if (!settings.invite.tracking) return `Invite tracking is disabled in this server`;
+  if (!settings.invite.tracking)
+    return `Invite tracking is disabled in this server`
 
-  const inviteData = (await getMember(guild.id, user.id)).invite_data;
-  if (!inviteData || !inviteData.inviter) return `Cannot track how \`${user.username}\` joined`;
+  const inviteData = (await getMember(guild.id, user.id)).invite_data
+  if (!inviteData || !inviteData.inviter)
+    return `Cannot track how \`${user.username}\` joined`
 
-  const inviter = await guild.client.users.fetch(inviteData.inviter, false, true);
-  const inviterData = (await getMember(guild.id, inviteData.inviter)).invite_data;
+  const inviter = await guild.client.users.fetch(
+    inviteData.inviter,
+    false,
+    true
+  )
+  const inviterData = (await getMember(guild.id, inviteData.inviter))
+    .invite_data
 
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: `Invite data for ${user.username}` })
     .setDescription(
       stripIndent`
-      Inviter: \`${inviter?.username || "Deleted User"}\`
+      Inviter: \`${inviter?.username || 'Deleted User'}\`
       Inviter ID: \`${inviteData.inviter}\`
       Invite Code: \`${inviteData.code}\`
       Inviter Invites: \`${getEffectiveInvites(inviterData)}\`
       `
-    );
+    )
 
-  return { embeds: [embed] };
+  return { embeds: [embed] }
 }

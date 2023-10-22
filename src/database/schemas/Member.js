@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
-const { CACHE_SIZE } = require("@root/config.js");
-const FixedSizeMap = require("fixedsize-map");
+const mongoose = require('mongoose')
+const { CACHE_SIZE } = require('@root/config.js')
+const FixedSizeMap = require('fixedsize-map')
 
-const cache = new FixedSizeMap(CACHE_SIZE.MEMBERS);
+const cache = new FixedSizeMap(CACHE_SIZE.MEMBERS)
 
 const ReqString = {
   type: String,
   required: true,
-};
+}
 
 const Schema = new mongoose.Schema(
   {
@@ -26,29 +26,29 @@ const Schema = new mongoose.Schema(
   },
   {
     timestamps: {
-      createdAt: "created_at",
-      updatedAt: "updated_at",
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     },
   }
-);
+)
 
-const Model = mongoose.model("members", Schema);
+const Model = mongoose.model('members', Schema)
 
 module.exports = {
   getMember: async (guildId, memberId) => {
-    const key = `${guildId}|${memberId}`;
-    if (cache.contains(key)) return cache.get(key);
+    const key = `${guildId}|${memberId}`
+    if (cache.contains(key)) return cache.get(key)
 
-    let member = await Model.findOne({ guild_id: guildId, member_id: memberId });
+    let member = await Model.findOne({ guild_id: guildId, member_id: memberId })
     if (!member) {
       member = new Model({
         guild_id: guildId,
         member_id: memberId,
-      });
+      })
     }
 
-    cache.add(key, member);
-    return member;
+    cache.add(key, member)
+    return member
   },
 
   getInvitesLb: async (guildId, limit = 10) =>
@@ -56,11 +56,11 @@ module.exports = {
       { $match: { guild_id: guildId } },
       {
         $project: {
-          member_id: "$member_id",
+          member_id: '$member_id',
           invites: {
             $subtract: [
-              { $add: ["$invite_data.tracked", "$invite_data.added"] },
-              { $add: ["$invite_data.left", "$invite_data.fake"] },
+              { $add: ['$invite_data.tracked', '$invite_data.added'] },
+              { $add: ['$invite_data.left', '$invite_data.fake'] },
             ],
           },
         },
@@ -69,4 +69,4 @@ module.exports = {
       { $sort: { invites: -1 } },
       { $limit: limit },
     ]),
-};
+}

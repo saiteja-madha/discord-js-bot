@@ -1,16 +1,16 @@
-const mongoose = require("mongoose");
-const { CACHE_SIZE, PREFIX_COMMANDS, STATS } = require("@root/config.js");
-const FixedSizeMap = require("fixedsize-map");
-const { getUser } = require("./User");
+const mongoose = require('mongoose')
+const { CACHE_SIZE, PREFIX_COMMANDS, STATS } = require('@root/config.js')
+const FixedSizeMap = require('fixedsize-map')
+const { getUser } = require('./User')
 
-const cache = new FixedSizeMap(CACHE_SIZE.GUILDS);
+const cache = new FixedSizeMap(CACHE_SIZE.GUILDS)
 
 const Schema = new mongoose.Schema({
   _id: String,
   data: {
     name: String,
     region: String,
-    owner: { type: String, ref: "users" },
+    owner: { type: String, ref: 'users' },
     joinedAt: Date,
     leftAt: Date,
     bots: { type: Number, default: 0 },
@@ -37,7 +37,7 @@ const Schema = new mongoose.Schema({
   automod: {
     debug: Boolean,
     strikes: { type: Number, default: 10 },
-    action: { type: String, default: "TIMEOUT" },
+    action: { type: String, default: 'TIMEOUT' },
     wh_channels: [String],
     anti_attachments: Boolean,
     anti_invites: Boolean,
@@ -63,8 +63,8 @@ const Schema = new mongoose.Schema({
   max_warn: {
     action: {
       type: String,
-      enum: ["TIMEOUT", "KICK", "BAN"],
-      default: "KICK",
+      enum: ['TIMEOUT', 'KICK', 'BAN'],
+      default: 'KICK',
     },
     limit: { type: Number, default: 5 },
   },
@@ -108,31 +108,31 @@ const Schema = new mongoose.Schema({
     rejected_channel: String,
     staff_roles: [String],
   },
-});
+})
 
-const Model = mongoose.model("guild", Schema);
+const Model = mongoose.model('guild', Schema)
 
 module.exports = {
   /**
    * @param {import('discord.js').Guild} guild
    */
-  getSettings: async (guild) => {
-    if (!guild) throw new Error("Guild is undefined");
-    if (!guild.id) throw new Error("Guild Id is undefined");
+  getSettings: async guild => {
+    if (!guild) throw new Error('Guild is undefined')
+    if (!guild.id) throw new Error('Guild Id is undefined')
 
-    const cached = cache.get(guild.id);
-    if (cached) return cached;
+    const cached = cache.get(guild.id)
+    if (cached) return cached
 
-    let guildData = await Model.findById(guild.id);
+    let guildData = await Model.findById(guild.id)
     if (!guildData) {
       // save owner details
       guild
         .fetchOwner()
-        .then(async (owner) => {
-          const userDb = await getUser(owner);
-          await userDb.save();
+        .then(async owner => {
+          const userDb = await getUser(owner)
+          await userDb.save()
         })
-        .catch((ex) => {});
+        .catch(ex => {})
 
       // create a new guild model
       guildData = new Model({
@@ -143,11 +143,11 @@ module.exports = {
           owner: guild.ownerId,
           joinedAt: guild.joinedAt,
         },
-      });
+      })
 
-      await guildData.save();
+      await guildData.save()
     }
-    cache.add(guild.id, guildData);
-    return guildData;
+    cache.add(guild.id, guildData)
+    return guildData
   },
-};
+}

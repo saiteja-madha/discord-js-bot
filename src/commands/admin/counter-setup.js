@@ -1,41 +1,41 @@
-const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
+const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "counter",
-  description: "setup counter channel in the guild",
-  category: "ADMIN",
-  userPermissions: ["ManageGuild"],
-  botPermissions: ["ManageChannels"],
+  name: 'counter',
+  description: 'setup counter channel in the guild',
+  category: 'ADMIN',
+  userPermissions: ['ManageGuild'],
+  botPermissions: ['ManageChannels'],
   slashCommand: {
     enabled: true,
     ephemeral: true,
     options: [
       {
-        name: "type",
-        description: "type of counter channel",
+        name: 'type',
+        description: 'type of counter channel',
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: [
           {
-            name: "users",
-            value: "USERS",
+            name: 'users',
+            value: 'USERS',
           },
           {
-            name: "members",
-            value: "MEMBERS",
+            name: 'members',
+            value: 'MEMBERS',
           },
           {
-            name: "bots",
-            value: "BOTS",
+            name: 'bots',
+            value: 'BOTS',
           },
         ],
       },
       {
-        name: "name",
-        description: "name of the counter channel",
+        name: 'name',
+        description: 'name of the counter channel',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -43,13 +43,18 @@ module.exports = {
   },
 
   async interactionRun(interaction, data) {
-    const type = interaction.options.getString("type");
-    const name = interaction.options.getString("name");
+    const type = interaction.options.getString('type')
+    const name = interaction.options.getString('name')
 
-    const response = await setupCounter(interaction.guild, type.toUpperCase(), name, data.settings);
-    return interaction.followUp(response);
+    const response = await setupCounter(
+      interaction.guild,
+      type.toUpperCase(),
+      name,
+      data.settings
+    )
+    return interaction.followUp(response)
   },
-};
+}
 
 /**
  * @param {import('discord.js').Guild} guild
@@ -58,12 +63,12 @@ module.exports = {
  * @param {object} settings
  */
 async function setupCounter(guild, type, name, settings) {
-  let channelName = name;
+  let channelName = name
 
-  const stats = await guild.fetchMemberStats();
-  if (type === "USERS") channelName += ` : ${stats[0]}`;
-  else if (type === "MEMBERS") channelName += ` : ${stats[2]}`;
-  else if (type === "BOTS") channelName += ` : ${stats[1]}`;
+  const stats = await guild.fetchMemberStats()
+  if (type === 'USERS') channelName += ` : ${stats[0]}`
+  else if (type === 'MEMBERS') channelName += ` : ${stats[2]}`
+  else if (type === 'BOTS') channelName += ` : ${stats[1]}`
 
   const vc = await guild.channels.create({
     name: channelName,
@@ -71,29 +76,31 @@ async function setupCounter(guild, type, name, settings) {
     permissionOverwrites: [
       {
         id: guild.roles.everyone,
-        deny: ["Connect"],
+        deny: ['Connect'],
       },
       {
         id: guild.members.me.id,
-        allow: ["ViewChannel", "ManageChannels", "Connect"],
+        allow: ['ViewChannel', 'ManageChannels', 'Connect'],
       },
     ],
-  });
+  })
 
-  const exists = settings.counters.find((v) => v.counter_type.toUpperCase() === type);
+  const exists = settings.counters.find(
+    v => v.counter_type.toUpperCase() === type
+  )
   if (exists) {
-    exists.name = name;
-    exists.channel_id = vc.id;
+    exists.name = name
+    exists.channel_id = vc.id
   } else {
     settings.counters.push({
       counter_type: type,
       channel_id: vc.id,
       name,
-    });
+    })
   }
 
-  settings.data.bots = stats[1];
-  await settings.save();
+  settings.data.bots = stats[1]
+  await settings.save()
 
-  return "Configuration saved! Counter channel created";
+  return 'Configuration saved! Counter channel created'
 }

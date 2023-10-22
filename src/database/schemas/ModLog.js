@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const reqString = {
   type: String,
   required: true,
-};
+}
 
 const Schema = new mongoose.Schema(
   {
@@ -18,20 +18,20 @@ const Schema = new mongoose.Schema(
       type: String,
       required: true,
       enum: [
-        "PURGE",
-        "WARN",
-        "TIMEOUT",
-        "UNTIMEOUT",
-        "KICK",
-        "SOFTBAN",
-        "BAN",
-        "UNBAN",
-        "VMUTE",
-        "VUNMUTE",
-        "DEAFEN",
-        "UNDEAFEN",
-        "DISCONNECT",
-        "MOVE",
+        'PURGE',
+        'WARN',
+        'TIMEOUT',
+        'UNTIMEOUT',
+        'KICK',
+        'SOFTBAN',
+        'BAN',
+        'UNBAN',
+        'VMUTE',
+        'VUNMUTE',
+        'DEAFEN',
+        'UNDEAFEN',
+        'DISCONNECT',
+        'MOVE',
       ],
     },
   },
@@ -39,13 +39,13 @@ const Schema = new mongoose.Schema(
     versionKey: false,
     autoIndex: false,
     timestamps: {
-      createdAt: "created_at",
+      createdAt: 'created_at',
       updatedAt: false,
     },
   }
-);
+)
 
-const Model = mongoose.model("mod-logs", Schema);
+const Model = mongoose.model('mod-logs', Schema)
 
 module.exports = {
   model: Model,
@@ -66,13 +66,13 @@ module.exports = {
     Model.find({
       guild_id: guildId,
       member_id: targetId,
-      type: "WARN",
+      type: 'WARN',
     }).lean(),
 
   clearWarningLogs: async (guildId, targetId) =>
     Model.deleteMany({
       guild_id: guildId,
       member_id: targetId,
-      type: "WARN",
+      type: 'WARN',
     }),
-};
+}

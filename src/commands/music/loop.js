@@ -1,31 +1,31 @@
-const { musicValidations } = require("@helpers/BotUtils");
-const { LoopType } = require("@lavaclient/queue");
-const { ApplicationCommandOptionType } = require("discord.js");
+const { musicValidations } = require('@helpers/BotUtils')
+const { LoopType } = require('@lavaclient/queue')
+const { ApplicationCommandOptionType } = require('discord.js')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "loop",
-  description: "loops the song or queue",
-  category: "MUSIC",
+  name: 'loop',
+  description: 'loops the song or queue',
+  category: 'MUSIC',
   validations: musicValidations,
   slashCommand: {
     enabled: true,
     options: [
       {
-        name: "type",
+        name: 'type',
         type: ApplicationCommandOptionType.String,
-        description: "The entity you want to loop",
+        description: 'The entity you want to loop',
         required: false,
         choices: [
           {
-            name: "queue",
-            value: "queue",
+            name: 'queue',
+            value: 'queue',
           },
           {
-            name: "track",
-            value: "track",
+            name: 'track',
+            value: 'track',
           },
         ],
       },
@@ -33,28 +33,28 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const type = interaction.options.getString("type") || "track";
-    const response = toggleLoop(interaction, type);
-    await interaction.followUp(response);
+    const type = interaction.options.getString('type') || 'track'
+    const response = toggleLoop(interaction, type)
+    await interaction.followUp(response)
   },
-};
+}
 
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  * @param {"queue"|"track"} type
  */
 function toggleLoop({ client, guildId }, type) {
-  const player = client.musicManager.getPlayer(guildId);
+  const player = client.musicManager.getPlayer(guildId)
 
   // track
-  if (type === "track") {
-    player.queue.setLoop(LoopType.Song);
-    return "Loop mode is set to `track`";
+  if (type === 'track') {
+    player.queue.setLoop(LoopType.Song)
+    return 'Loop mode is set to `track`'
   }
 
   // queue
-  else if (type === "queue") {
-    player.queue.setLoop(1);
-    return "Loop mode is set to `queue`";
+  else if (type === 'queue') {
+    player.queue.setLoop(1)
+    return 'Loop mode is set to `queue`'
   }
 }

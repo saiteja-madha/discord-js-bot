@@ -1,22 +1,22 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getJson } = require("@helpers/HttpUtils");
-const moment = require("moment");
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
+const { MESSAGES, EMBED_COLORS } = require('@root/config.js')
+const { getJson } = require('@helpers/HttpUtils')
+const moment = require('moment')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "urban",
-  description: "searches the urban dictionary",
-  category: "UTILITY",
-  botPermissions: ["EmbedLinks"],
+  name: 'urban',
+  description: 'searches the urban dictionary',
+  category: 'UTILITY',
+  botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,
     options: [
       {
-        name: "word",
-        description: "the word for which you want to urban meaning",
+        name: 'word',
+        description: 'the word for which you want to urban meaning',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -24,20 +24,22 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const word = interaction.options.getString("word");
-    const response = await urban(word);
-    await interaction.followUp(response);
+    const word = interaction.options.getString('word')
+    const response = await urban(word)
+    await interaction.followUp(response)
   },
-};
+}
 
 async function urban(word) {
-  const response = await getJson(`http://api.urbandictionary.com/v0/define?term=${word}`);
-  if (!response.success) return MESSAGES.API_ERROR;
+  const response = await getJson(
+    `http://api.urbandictionary.com/v0/define?term=${word}`
+  )
+  if (!response.success) return MESSAGES.API_ERROR
 
-  const json = response.data;
-  if (!json.list[0]) return `Nothing found matching \`${word}\``;
+  const json = response.data
+  if (!json.list[0]) return `Nothing found matching \`${word}\``
 
-  const data = json.list[0];
+  const data = json.list[0]
   const embed = new EmbedBuilder()
     .setTitle(data.word)
     .setURL(data.permalink)
@@ -45,27 +47,27 @@ async function urban(word) {
     .setDescription(`**Definition**\`\`\`css\n${data.definition}\`\`\``)
     .addFields(
       {
-        name: "Author",
+        name: 'Author',
         value: data.author,
         inline: true,
       },
       {
-        name: "ID",
+        name: 'ID',
         value: data.defid.toString(),
         inline: true,
       },
       {
-        name: "Likes / Dislikes",
+        name: 'Likes / Dislikes',
         value: `👍 ${data.thumbs_up} | 👎 ${data.thumbs_down}`,
         inline: true,
       },
       {
-        name: "Example",
+        name: 'Example',
         value: data.example,
         inline: false,
       }
     )
-    .setFooter({ text: `Created ${moment(data.written_on).fromNow()}` });
+    .setFooter({ text: `Created ${moment(data.written_on).fromNow()}` })
 
-  return { embeds: [embed] };
+  return { embeds: [embed] }
 }

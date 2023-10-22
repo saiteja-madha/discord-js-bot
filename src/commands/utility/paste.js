@@ -1,26 +1,26 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const { postToBin } = require("@helpers/HttpUtils");
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
+const { postToBin } = require('@helpers/HttpUtils')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "paste",
-  description: "Paste something in sourceb.in",
-  category: "UTILITY",
-  botPermissions: ["EmbedLinks"],
+  name: 'paste',
+  description: 'Paste something in sourceb.in',
+  category: 'UTILITY',
+  botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,
     options: [
       {
-        name: "title",
-        description: "title for your content",
+        name: 'title',
+        description: 'title for your content',
         required: true,
         type: ApplicationCommandOptionType.String,
       },
       {
-        name: "content",
-        description: "content to be posted to bin",
+        name: 'content',
+        description: 'content to be posted to bin',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -28,20 +28,20 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const title = interaction.options.getString("title");
-    const content = interaction.options.getString("content");
-    const response = await paste(content, title);
-    await interaction.followUp(response);
+    const title = interaction.options.getString('title')
+    const content = interaction.options.getString('content')
+    const response = await paste(content, title)
+    await interaction.followUp(response)
   },
-};
+}
 
 async function paste(content, title) {
-  const response = await postToBin(content, title);
-  if (!response) return "❌ Something went wrong";
+  const response = await postToBin(content, title)
+  if (!response) return '❌ Something went wrong'
 
   const embed = new EmbedBuilder()
-    .setAuthor({ name: "Paste links" })
-    .setDescription(`🔸 Normal: ${response.url}\n🔹 Raw: ${response.raw}`);
+    .setAuthor({ name: 'Paste links' })
+    .setDescription(`🔸 Normal: ${response.url}\n🔹 Raw: ${response.raw}`)
 
-  return { embeds: [embed] };
+  return { embeds: [embed] }
 }

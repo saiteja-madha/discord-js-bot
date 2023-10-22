@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const reqString = {
   type: String,
   required: true,
-};
+}
 
 const Schema = new mongoose.Schema(
   {
@@ -16,13 +16,13 @@ const Schema = new mongoose.Schema(
     versionKey: false,
     autoIndex: false,
     timestamps: {
-      createdAt: "created_at",
+      createdAt: 'created_at',
       updatedAt: false,
     },
   }
-);
+)
 
-const Model = mongoose.model("logs-translation", Schema);
+const Model = mongoose.model('logs-translation', Schema)
 
 module.exports = {
   model: Model,
@@ -42,4 +42,4 @@ module.exports = {
       message_id: message.id,
       emoji: code,
     }).save(),
-};
+}

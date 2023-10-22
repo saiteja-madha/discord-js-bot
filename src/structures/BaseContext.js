@@ -15,12 +15,12 @@
  * @type {ContextData} data - The context information
  */
 module.exports = {
-  name: "",
-  description: "",
-  type: "",
+  name: '',
+  description: '',
+  type: '',
   enabled: false,
   ephemeral: false,
   options: true,
   userPermissions: [],
   cooldown: 0,
-};
+}

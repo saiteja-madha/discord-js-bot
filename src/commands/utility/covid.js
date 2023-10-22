@@ -1,23 +1,23 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getJson } = require("@helpers/HttpUtils");
-const timestampToDate = require("timestamp-to-date");
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
+const { MESSAGES, EMBED_COLORS } = require('@root/config.js')
+const { getJson } = require('@helpers/HttpUtils')
+const timestampToDate = require('timestamp-to-date')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "covid",
-  description: "get covid statistics for a country",
+  name: 'covid',
+  description: 'get covid statistics for a country',
   cooldown: 5,
-  category: "UTILITY",
-  botPermissions: ["EmbedLinks"],
+  category: 'UTILITY',
+  botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,
     options: [
       {
-        name: "country",
-        description: "country name to get covid statistics for",
+        name: 'country',
+        description: 'country name to get covid statistics for',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -25,72 +25,75 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const country = interaction.options.getString("country");
-    const response = await getCovid(country);
-    await interaction.followUp(response);
+    const country = interaction.options.getString('country')
+    const response = await getCovid(country)
+    await interaction.followUp(response)
   },
-};
+}
 
 async function getCovid(country) {
-  const response = await getJson(`https://corona.lmao.ninja/v2/countries/${country}`);
+  const response = await getJson(
+    `https://corona.lmao.ninja/v2/countries/${country}`
+  )
 
-  if (response.status === 404) return "```css\nCountry with the provided name is not found```";
-  if (!response.success) return MESSAGES.API_ERROR;
-  const { data } = response;
+  if (response.status === 404)
+    return '```css\nCountry with the provided name is not found```'
+  if (!response.success) return MESSAGES.API_ERROR
+  const { data } = response
 
-  const mg = timestampToDate(data?.updated, "dd.MM.yyyy at HH:mm");
+  const mg = timestampToDate(data?.updated, 'dd.MM.yyyy at HH:mm')
   const embed = new EmbedBuilder()
     .setTitle(`Covid - ${data?.country}`)
     .setThumbnail(data?.countryInfo.flag)
     .setColor(EMBED_COLORS.BOT_EMBED)
     .addFields(
       {
-        name: "Cases Total",
+        name: 'Cases Total',
         value: data?.cases.toString(),
         inline: true,
       },
       {
-        name: "Cases Today",
+        name: 'Cases Today',
         value: data?.todayCases.toString(),
         inline: true,
       },
       {
-        name: "Deaths Total",
+        name: 'Deaths Total',
         value: data?.deaths.toString(),
         inline: true,
       },
       {
-        name: "Deaths Today",
+        name: 'Deaths Today',
         value: data?.todayDeaths.toString(),
         inline: true,
       },
       {
-        name: "Recovered",
+        name: 'Recovered',
         value: data?.recovered.toString(),
         inline: true,
       },
       {
-        name: "Active",
+        name: 'Active',
         value: data?.active.toString(),
         inline: true,
       },
       {
-        name: "Critical",
+        name: 'Critical',
         value: data?.critical.toString(),
         inline: true,
       },
       {
-        name: "Cases per 1 million",
+        name: 'Cases per 1 million',
         value: data?.casesPerOneMillion.toString(),
         inline: true,
       },
       {
-        name: "Deaths per 1 million",
+        name: 'Deaths per 1 million',
         value: data?.deathsPerOneMillion.toString(),
         inline: true,
       }
     )
-    .setFooter({ text: `Last updated on ${mg}` });
+    .setFooter({ text: `Last updated on ${mg}` })
 
-  return { embeds: [embed] };
+  return { embeds: [embed] }
 }

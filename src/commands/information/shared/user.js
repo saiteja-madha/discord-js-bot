@@ -1,15 +1,16 @@
-const { EmbedBuilder } = require("discord.js");
-const { EMBED_COLORS } = require("@root/config");
+const { EmbedBuilder } = require('discord.js')
+const { EMBED_COLORS } = require('@root/config')
 
 /**
  * @param {import('discord.js').GuildMember} member
  */
-module.exports = (member) => {
-  let color = member.displayHexColor;
-  if (color === "#000000") color = EMBED_COLORS.BOT_EMBED;
+module.exports = member => {
+  let color = member.displayHexColor
+  if (color === '#000000') color = EMBED_COLORS.BOT_EMBED
 
-  let rolesString = member.roles.cache.map((r) => r.name).join(", ");
-  if (rolesString.length > 1024) rolesString = rolesString.substring(0, 1020) + "...";
+  let rolesString = member.roles.cache.map(r => r.name).join(', ')
+  if (rolesString.length > 1024)
+    rolesString = rolesString.substring(0, 1020) + '...'
 
   const embed = new EmbedBuilder()
     .setAuthor({
@@ -20,21 +21,21 @@ module.exports = (member) => {
     .setColor(color)
     .addFields(
       {
-        name: "Username",
+        name: 'Username',
         value: member.user.username,
         inline: true,
       },
       {
-        name: "ID",
+        name: 'ID',
         value: member.id,
         inline: true,
       },
       {
-        name: "Guild Joined",
+        name: 'Guild Joined',
         value: member.joinedAt.toUTCString(),
       },
       {
-        name: "Discord Registered",
+        name: 'Discord Registered',
         value: member.user.createdAt.toUTCString(),
       },
       {
@@ -42,12 +43,12 @@ module.exports = (member) => {
         value: rolesString,
       },
       {
-        name: "Avatar-URL",
-        value: member.user.displayAvatarURL({ extension: "png" }),
+        name: 'Avatar-URL',
+        value: member.user.displayAvatarURL({ extension: 'png' }),
       }
     )
     .setFooter({ text: `Requested by ${member.user.tag}` })
-    .setTimestamp(Date.now());
+    .setTimestamp(Date.now())
 
-  return { embeds: [embed] };
-};
+  return { embeds: [embed] }
+}

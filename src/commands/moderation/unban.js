@@ -1,33 +1,33 @@
-const { unBanTarget } = require("@helpers/ModUtils");
+const { unBanTarget } = require('@helpers/ModUtils')
 const {
   ActionRowBuilder,
   StringSelectMenuBuilder,
   ApplicationCommandOptionType,
   ComponentType,
-} = require("discord.js");
+} = require('discord.js')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "unban",
-  description: "unbans the specified member",
-  category: "MODERATION",
-  botPermissions: ["BanMembers"],
-  userPermissions: ["BanMembers"],
+  name: 'unban',
+  description: 'unbans the specified member',
+  category: 'MODERATION',
+  botPermissions: ['BanMembers'],
+  userPermissions: ['BanMembers'],
   slashCommand: {
     enabled: true,
     ephemeral: true,
     options: [
       {
-        name: "name",
-        description: "match the name of the member",
+        name: 'name',
+        description: 'match the name of the member',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
-        name: "reason",
-        description: "reason for ban",
+        name: 'reason',
+        description: 'reason for ban',
         type: ApplicationCommandOptionType.String,
         required: false,
       },
@@ -35,50 +35,57 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const match = interaction.options.getString("name");
-    const reason = interaction.options.getString("reason");
+    const match = interaction.options.getString('name')
+    const reason = interaction.options.getString('reason')
 
-    const response = await getMatchingBans(interaction.guild, match);
-    const sent = await interaction.followUp(response);
-    if (typeof response !== "string") await waitForBan(interaction.member, reason, sent);
+    const response = await getMatchingBans(interaction.guild, match)
+    const sent = await interaction.followUp(response)
+    if (typeof response !== 'string')
+      await waitForBan(interaction.member, reason, sent)
   },
-};
+}
 
 /**
  * @param {import('discord.js').Guild} guild
  * @param {string} match
  */
 async function getMatchingBans(guild, match) {
-  const bans = await guild.bans.fetch({ cache: false });
+  const bans = await guild.bans.fetch({ cache: false })
 
-  const matched = [];
+  const matched = []
   for (const [, ban] of bans) {
-    if (ban.user.partial) await ban.user.fetch();
+    if (ban.user.partial) await ban.user.fetch()
 
     // exact match
     if (ban.user.id === match || ban.user.tag === match) {
-      matched.push(ban.user);
-      break;
+      matched.push(ban.user)
+      break
     }
 
     // partial match
     if (ban.user.username.toLowerCase().includes(match.toLowerCase())) {
-      matched.push(ban.user);
+      matched.push(ban.user)
     }
   }
 
-  if (matched.length === 0) return `No user found matching ${match}`;
+  if (matched.length === 0) return `No user found matching ${match}`
 
-  const options = [];
+  const options = []
   for (const user of matched) {
-    options.push({ label: user.tag, value: user.id });
+    options.push({ label: user.tag, value: user.id })
   }
 
   const menuRow = new ActionRowBuilder().addComponents(
-    new StringSelectMenuBuilder().setCustomId("unban-menu").setPlaceholder("Choose a user to unban").addOptions(options)
-  );
+    new StringSelectMenuBuilder()
+      .setCustomId('unban-menu')
+      .setPlaceholder('Choose a user to unban')
+      .addOptions(options)
+  )
 
-  return { content: "Please select a user you wish to unban", components: [menuRow] };
+  return {
+    content: 'Please select a user you wish to unban',
+    components: [menuRow],
+  }
 }
 
 /**
@@ -88,24 +95,36 @@ async function getMatchingBans(guild, match) {
  */
 async function waitForBan(issuer, reason, sent) {
   const collector = sent.channel.createMessageComponentCollector({
-    filter: (m) => m.member.id === issuer.id && m.customId === "unban-menu" && sent.id === m.message.id,
+    filter: m =>
+      m.member.id === issuer.id &&
+      m.customId === 'unban-menu' &&
+      sent.id === m.message.id,
     time: 20000,
     max: 1,
     componentType: ComponentType.StringSelect,
-  });
+  })
 
   //
-  collector.on("collect", async (response) => {
-    const userId = response.values[0];
-    const user = await issuer.client.users.fetch(userId, { cache: true });
+  collector.on('collect', async response => {
+    const userId = response.values[0]
+    const user = await issuer.client.users.fetch(userId, { cache: true })
 
-    const status = await unBanTarget(issuer, user, reason);
-    if (typeof status === "boolean") return sent.edit({ content: `${user.username} is un-banned!`, components: [] });
-    else return sent.edit({ content: `Failed to unban ${user.username}`, components: [] });
-  });
+    const status = await unBanTarget(issuer, user, reason)
+    if (typeof status === 'boolean')
+      return sent.edit({
+        content: `${user.username} is un-banned!`,
+        components: [],
+      })
+    else
+      return sent.edit({
+        content: `Failed to unban ${user.username}`,
+        components: [],
+      })
+  })
 
   // collect user and unban
-  collector.on("end", async (collected) => {
-    if (collected.size === 0) return sent.edit("Oops! Timed out. Try again later.");
-  });
+  collector.on('end', async collected => {
+    if (collected.size === 0)
+      return sent.edit('Oops! Timed out. Try again later.')
+  })
 }

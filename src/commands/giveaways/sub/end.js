@@ -3,29 +3,29 @@
  * @param {string} messageId
  */
 module.exports = async (member, messageId) => {
-  if (!messageId) return "You must provide a valid message id.";
+  if (!messageId) return 'You must provide a valid message id.'
 
   // Permissions
-  if (!member.permissions.has("ManageMessages")) {
-    return "You need to have the manage messages permissions to start giveaways.";
+  if (!member.permissions.has('ManageMessages')) {
+    return 'You need to have the manage messages permissions to start giveaways.'
   }
 
   // Search with messageId
   const giveaway = member.client.giveawaysManager.giveaways.find(
-    (g) => g.messageId === messageId && g.guildId === member.guild.id
-  );
+    g => g.messageId === messageId && g.guildId === member.guild.id
+  )
 
   // If no giveaway was found
-  if (!giveaway) return `Unable to find a giveaway for messageId: ${messageId}`;
+  if (!giveaway) return `Unable to find a giveaway for messageId: ${messageId}`
 
   // Check if the giveaway is ended
-  if (giveaway.ended) return "The giveaway has already ended.";
+  if (giveaway.ended) return 'The giveaway has already ended.'
 
   try {
-    await giveaway.end();
-    return "Success! The giveaway has ended!";
+    await giveaway.end()
+    return 'Success! The giveaway has ended!'
   } catch (error) {
-    member.client.logger.error("Giveaway End", error);
-    return `An error occurred while ending the giveaway: ${error.message}`;
+    member.client.logger.error('Giveaway End', error)
+    return `An error occurred while ending the giveaway: ${error.message}`
   }
-};
+}

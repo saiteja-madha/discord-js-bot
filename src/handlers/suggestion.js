@@ -1,6 +1,6 @@
-const { getSettings } = require("@schemas/Guild");
-const { findSuggestion, deleteSuggestionDb } = require("@schemas/Suggestions");
-const { SUGGESTIONS } = require("@root/config");
+const { getSettings } = require('@schemas/Guild')
+const { findSuggestion, deleteSuggestionDb } = require('@schemas/Suggestions')
+const { SUGGESTIONS } = require('@root/config')
 
 const {
   ActionRowBuilder,
@@ -10,44 +10,52 @@ const {
   EmbedBuilder,
   ButtonStyle,
   TextInputStyle,
-} = require("discord.js");
-const { stripIndents } = require("common-tags");
+} = require('discord.js')
+const { stripIndents } = require('common-tags')
 
 /**
  * @param {import('discord.js').Message} message
  */
-const getStats = (message) => {
-  const upVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE)?.count || 1) - 1;
-  const downVotes = (message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE)?.count || 1) - 1;
+const getStats = message => {
+  const upVotes =
+    (message.reactions.resolve(SUGGESTIONS.EMOJI.UP_VOTE)?.count || 1) - 1
+  const downVotes =
+    (message.reactions.resolve(SUGGESTIONS.EMOJI.DOWN_VOTE)?.count || 1) - 1
 
-  return [upVotes, downVotes];
-};
+  return [upVotes, downVotes]
+}
 
 /**
  * @param {number} upVotes
  * @param {number} downVotes
  */
 const getVotesMessage = (upVotes, downVotes) => {
-  const total = upVotes + downVotes;
+  const total = upVotes + downVotes
   if (total === 0) {
     return stripIndents`
   _Upvotes: NA_
   _Downvotes: NA_
-  `;
+  `
   } else {
     return stripIndents`
-  _Upvotes: ${upVotes} [${Math.round((upVotes / (upVotes + downVotes)) * 100)}%]_
-  _Downvotes: ${downVotes} [${Math.round((downVotes / (upVotes + downVotes)) * 100)}%]_
-  `;
+  _Upvotes: ${upVotes} [${Math.round(
+    (upVotes / (upVotes + downVotes)) * 100
+  )}%]_
+  _Downvotes: ${downVotes} [${Math.round(
+    (downVotes / (upVotes + downVotes)) * 100
+  )}%]_
+  `
   }
-};
+}
 
 const hasPerms = (member, settings) => {
   return (
-    member.permissions.has("ManageGuild") ||
-    member.roles.cache.find((r) => settings.suggestions.staff_roles.includes(r.id))
-  );
-};
+    member.permissions.has('ManageGuild') ||
+    member.roles.cache.find(r =>
+      settings.suggestions.staff_roles.includes(r.id)
+    )
+  )
+}
 
 /**
  * @param {import('discord.js').GuildMember} member
@@ -56,90 +64,112 @@ const hasPerms = (member, settings) => {
  * @param {string} [reason]
  */
 async function approveSuggestion(member, channel, messageId, reason) {
-  const { guild } = member;
-  const settings = await getSettings(guild);
+  const { guild } = member
+  const settings = await getSettings(guild)
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "You don't have permission to approve suggestions!";
+  if (!hasPerms(member, settings))
+    return "You don't have permission to approve suggestions!"
 
   // validate if document exists
-  const doc = await findSuggestion(guild.id, messageId);
-  if (!doc) return "Suggestion not found";
-  if (doc.status === "APPROVED") return "Suggestion already approved";
+  const doc = await findSuggestion(guild.id, messageId)
+  if (!doc) return 'Suggestion not found'
+  if (doc.status === 'APPROVED') return 'Suggestion already approved'
 
   /**
    * @type {import('discord.js').Message}
    */
-  let message;
+  let message
   try {
-    message = await channel.messages.fetch({ message: messageId, force: true });
+    message = await channel.messages.fetch({ message: messageId, force: true })
   } catch (err) {
-    return "Suggestion message not found";
+    return 'Suggestion message not found'
   }
 
   let buttonsRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
-      .setCustomId("SUGGEST_APPROVE")
-      .setLabel("Approve")
+      .setCustomId('SUGGEST_APPROVE')
+      .setLabel('Approve')
       .setStyle(ButtonStyle.Success)
       .setDisabled(true),
-    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle(ButtonStyle.Danger),
-    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle(ButtonStyle.Secondary)
-  );
+    new ButtonBuilder()
+      .setCustomId('SUGGEST_REJECT')
+      .setLabel('Reject')
+      .setStyle(ButtonStyle.Danger),
+    new ButtonBuilder()
+      .setCustomId('SUGGEST_DELETE')
+      .setLabel('Delete')
+      .setStyle(ButtonStyle.Secondary)
+  )
 
   const approvedEmbed = new EmbedBuilder()
     .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.APPROVED_EMBED)
-    .setAuthor({ name: "Suggestion Approved" })
-    .setFooter({ text: `Approved By ${member.user.username}`, iconURL: member.displayAvatarURL() })
-    .setTimestamp();
+    .setAuthor({ name: 'Suggestion Approved' })
+    .setFooter({
+      text: `Approved By ${member.user.username}`,
+      iconURL: member.displayAvatarURL(),
+    })
+    .setTimestamp()
 
-  const fields = [];
+  const fields = []
 
   // add stats if it doesn't exist
-  const statsField = message.embeds[0].fields.find((field) => field.name === "Stats");
+  const statsField = message.embeds[0].fields.find(
+    field => field.name === 'Stats'
+  )
   if (!statsField) {
-    const [upVotes, downVotes] = getStats(message);
-    doc.stats.upvotes = upVotes;
-    doc.stats.downvotes = downVotes;
-    fields.push({ name: "Stats", value: getVotesMessage(upVotes, downVotes) });
+    const [upVotes, downVotes] = getStats(message)
+    doc.stats.upvotes = upVotes
+    doc.stats.downvotes = downVotes
+    fields.push({ name: 'Stats', value: getVotesMessage(upVotes, downVotes) })
   } else {
-    fields.push(statsField);
+    fields.push(statsField)
   }
 
   // update reason
-  if (reason) fields.push({ name: "Reason", value: "```" + reason + "```" });
+  if (reason) fields.push({ name: 'Reason', value: '```' + reason + '```' })
 
-  approvedEmbed.addFields(fields);
+  approvedEmbed.addFields(fields)
 
   try {
-    doc.status = "APPROVED";
-    doc.status_updates.push({ user_id: member.id, status: "APPROVED", reason, timestamp: new Date() });
+    doc.status = 'APPROVED'
+    doc.status_updates.push({
+      user_id: member.id,
+      status: 'APPROVED',
+      reason,
+      timestamp: new Date(),
+    })
 
-    let approveChannel;
+    let approveChannel
     if (settings.suggestions.approved_channel) {
-      approveChannel = guild.channels.cache.get(settings.suggestions.approved_channel);
+      approveChannel = guild.channels.cache.get(
+        settings.suggestions.approved_channel
+      )
     }
 
     // suggestions-approve channel is not configured
     if (!approveChannel) {
-      await message.edit({ embeds: [approvedEmbed], components: [buttonsRow] });
-      await message.reactions.removeAll();
+      await message.edit({ embeds: [approvedEmbed], components: [buttonsRow] })
+      await message.reactions.removeAll()
     }
 
     // suggestions-approve channel is configured
     else {
-      const sent = await approveChannel.send({ embeds: [approvedEmbed], components: [buttonsRow] });
-      doc.channel_id = approveChannel.id;
-      doc.message_id = sent.id;
-      await message.delete();
+      const sent = await approveChannel.send({
+        embeds: [approvedEmbed],
+        components: [buttonsRow],
+      })
+      doc.channel_id = approveChannel.id
+      doc.message_id = sent.id
+      await message.delete()
     }
 
-    await doc.save();
-    return "Suggestion approved";
+    await doc.save()
+    return 'Suggestion approved'
   } catch (ex) {
-    guild.client.logger.error("approveSuggestion", ex);
-    return "Failed to approve suggestion";
+    guild.client.logger.error('approveSuggestion', ex)
+    return 'Failed to approve suggestion'
   }
 }
 
@@ -150,84 +180,110 @@ async function approveSuggestion(member, channel, messageId, reason) {
  * @param {string} [reason]
  */
 async function rejectSuggestion(member, channel, messageId, reason) {
-  const { guild } = member;
-  const settings = await getSettings(guild);
+  const { guild } = member
+  const settings = await getSettings(guild)
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "You don't have permission to reject suggestions!";
+  if (!hasPerms(member, settings))
+    return "You don't have permission to reject suggestions!"
 
   // validate if document exists
-  const doc = await findSuggestion(guild.id, messageId);
-  if (!doc) return "Suggestion not found";
-  if (doc.is_rejected) return "Suggestion already rejected";
+  const doc = await findSuggestion(guild.id, messageId)
+  if (!doc) return 'Suggestion not found'
+  if (doc.is_rejected) return 'Suggestion already rejected'
 
-  let message;
+  let message
   try {
-    message = await channel.messages.fetch({ message: messageId });
+    message = await channel.messages.fetch({ message: messageId })
   } catch (err) {
-    return "Suggestion message not found";
+    return 'Suggestion message not found'
   }
 
   let buttonsRow = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId("SUGGEST_APPROVE").setLabel("Approve").setStyle(ButtonStyle.Success),
-    new ButtonBuilder().setCustomId("SUGGEST_REJECT").setLabel("Reject").setStyle(ButtonStyle.Danger).setDisabled(true),
-    new ButtonBuilder().setCustomId("SUGGEST_DELETE").setLabel("Delete").setStyle(ButtonStyle.Secondary)
-  );
+    new ButtonBuilder()
+      .setCustomId('SUGGEST_APPROVE')
+      .setLabel('Approve')
+      .setStyle(ButtonStyle.Success),
+    new ButtonBuilder()
+      .setCustomId('SUGGEST_REJECT')
+      .setLabel('Reject')
+      .setStyle(ButtonStyle.Danger)
+      .setDisabled(true),
+    new ButtonBuilder()
+      .setCustomId('SUGGEST_DELETE')
+      .setLabel('Delete')
+      .setStyle(ButtonStyle.Secondary)
+  )
 
   const rejectedEmbed = new EmbedBuilder()
     .setDescription(message.embeds[0].data.description)
     .setColor(SUGGESTIONS.DENIED_EMBED)
-    .setAuthor({ name: "Suggestion Rejected" })
-    .setFooter({ text: `Rejected By ${member.user.username}`, iconURL: member.displayAvatarURL() })
-    .setTimestamp();
+    .setAuthor({ name: 'Suggestion Rejected' })
+    .setFooter({
+      text: `Rejected By ${member.user.username}`,
+      iconURL: member.displayAvatarURL(),
+    })
+    .setTimestamp()
 
-  const fields = [];
+  const fields = []
 
   // add stats if it doesn't exist
-  const statsField = message.embeds[0].fields.find((field) => field.name === "Stats");
+  const statsField = message.embeds[0].fields.find(
+    field => field.name === 'Stats'
+  )
   if (!statsField) {
-    const [upVotes, downVotes] = getStats(message);
-    doc.stats.upvotes = upVotes;
-    doc.stats.downvotes = downVotes;
-    fields.push({ name: "Stats", value: getVotesMessage(upVotes, downVotes) });
+    const [upVotes, downVotes] = getStats(message)
+    doc.stats.upvotes = upVotes
+    doc.stats.downvotes = downVotes
+    fields.push({ name: 'Stats', value: getVotesMessage(upVotes, downVotes) })
   } else {
-    fields.push(statsField);
+    fields.push(statsField)
   }
 
   // update reason
-  if (reason) fields.push({ name: "Reason", value: "```" + reason + "```" });
+  if (reason) fields.push({ name: 'Reason', value: '```' + reason + '```' })
 
-  rejectedEmbed.addFields(fields);
+  rejectedEmbed.addFields(fields)
 
   try {
-    doc.status = "REJECTED";
-    doc.status_updates.push({ user_id: member.id, status: "REJECTED", reason, timestamp: new Date() });
+    doc.status = 'REJECTED'
+    doc.status_updates.push({
+      user_id: member.id,
+      status: 'REJECTED',
+      reason,
+      timestamp: new Date(),
+    })
 
-    let rejectChannel;
+    let rejectChannel
     if (settings.suggestions.rejected_channel) {
-      rejectChannel = guild.channels.cache.get(settings.suggestions.rejected_channel);
+      rejectChannel = guild.channels.cache.get(
+        settings.suggestions.rejected_channel
+      )
     }
 
     // suggestions-reject channel is not configured
     if (!rejectChannel) {
-      await message.edit({ embeds: [rejectedEmbed], components: [buttonsRow] });
-      await message.reactions.removeAll();
+      await message.edit({ embeds: [rejectedEmbed], components: [buttonsRow] })
+      await message.reactions.removeAll()
     }
 
     // suggestions-reject channel is configured
     else {
-      const sent = await rejectChannel.send({ embeds: [rejectedEmbed], components: [buttonsRow] });
-      doc.channel_id = rejectChannel.id;
-      doc.message_id = sent.id;
-      await message.delete();
+      const sent = await rejectChannel.send({
+        embeds: [rejectedEmbed],
+        components: [buttonsRow],
+      })
+      doc.channel_id = rejectChannel.id
+      doc.message_id = sent.id
+      await message.delete()
     }
 
-    await doc.save();
+    await doc.save()
 
-    return "Suggestion rejected";
+    return 'Suggestion rejected'
   } catch (ex) {
-    guild.client.logger.error("rejectSuggestion", ex);
-    return "Failed to reject suggestion";
+    guild.client.logger.error('rejectSuggestion', ex)
+    return 'Failed to reject suggestion'
   }
 }
 
@@ -238,19 +294,20 @@ async function rejectSuggestion(member, channel, messageId, reason) {
  * @param {string} [reason]
  */
 async function deleteSuggestion(member, channel, messageId, reason) {
-  const { guild } = member;
-  const settings = await getSettings(guild);
+  const { guild } = member
+  const settings = await getSettings(guild)
 
   // validate permissions
-  if (!hasPerms(member, settings)) return "You don't have permission to delete suggestions!";
+  if (!hasPerms(member, settings))
+    return "You don't have permission to delete suggestions!"
 
   try {
-    await channel.messages.delete(messageId);
-    await deleteSuggestionDb(guild.id, messageId, member.id, reason);
-    return "Suggestion deleted";
+    await channel.messages.delete(messageId)
+    await deleteSuggestionDb(guild.id, messageId, member.id, reason)
+    return 'Suggestion deleted'
   } catch (ex) {
-    guild.client.logger.error("deleteSuggestion", ex);
-    return "Failed to delete suggestion! Please delete manually";
+    guild.client.logger.error('deleteSuggestion', ex)
+    return 'Failed to delete suggestion! Please delete manually'
   }
 }
 
@@ -260,29 +317,34 @@ async function deleteSuggestion(member, channel, messageId, reason) {
 async function handleApproveBtn(interaction) {
   await interaction.showModal(
     new ModalBuilder({
-      title: "Approve Suggestion",
-      customId: "SUGGEST_APPROVE_MODAL",
+      title: 'Approve Suggestion',
+      customId: 'SUGGEST_APPROVE_MODAL',
       components: [
         new ActionRowBuilder().addComponents([
           new TextInputBuilder()
-            .setCustomId("reason")
-            .setLabel("reason")
+            .setCustomId('reason')
+            .setLabel('reason')
             .setStyle(TextInputStyle.Paragraph)
             .setMinLength(4),
         ]),
       ],
     })
-  );
+  )
 }
 
 /**
  * @param {import('discord.js').ModalSubmitInteraction} modal
  */
 async function handleApproveModal(modal) {
-  await modal.deferReply({ ephemeral: true });
-  const reason = modal.fields.getTextInputValue("reason");
-  const response = await approveSuggestion(modal.member, modal.channel, modal.message.id, reason);
-  await modal.followUp(response);
+  await modal.deferReply({ ephemeral: true })
+  const reason = modal.fields.getTextInputValue('reason')
+  const response = await approveSuggestion(
+    modal.member,
+    modal.channel,
+    modal.message.id,
+    reason
+  )
+  await modal.followUp(response)
 }
 
 /**
@@ -291,29 +353,34 @@ async function handleApproveModal(modal) {
 async function handleRejectBtn(interaction) {
   await interaction.showModal(
     new ModalBuilder({
-      title: "Reject Suggestion",
-      customId: "SUGGEST_REJECT_MODAL",
+      title: 'Reject Suggestion',
+      customId: 'SUGGEST_REJECT_MODAL',
       components: [
         new ActionRowBuilder().addComponents([
           new TextInputBuilder()
-            .setCustomId("reason")
-            .setLabel("reason")
+            .setCustomId('reason')
+            .setLabel('reason')
             .setStyle(TextInputStyle.Paragraph)
             .setMinLength(4),
         ]),
       ],
     })
-  );
+  )
 }
 
 /**
  * @param {import('discord.js').ModalSubmitInteraction} modal
  */
 async function handleRejectModal(modal) {
-  await modal.deferReply({ ephemeral: true });
-  const reason = modal.fields.getTextInputValue("reason");
-  const response = await rejectSuggestion(modal.member, modal.channel, modal.message.id, reason);
-  await modal.followUp(response);
+  await modal.deferReply({ ephemeral: true })
+  const reason = modal.fields.getTextInputValue('reason')
+  const response = await rejectSuggestion(
+    modal.member,
+    modal.channel,
+    modal.message.id,
+    reason
+  )
+  await modal.followUp(response)
 }
 
 /**
@@ -322,29 +389,34 @@ async function handleRejectModal(modal) {
 async function handleDeleteBtn(interaction) {
   await interaction.showModal(
     new ModalBuilder({
-      title: "Delete Suggestion",
-      customId: "SUGGEST_DELETE_MODAL",
+      title: 'Delete Suggestion',
+      customId: 'SUGGEST_DELETE_MODAL',
       components: [
         new ActionRowBuilder().addComponents([
           new TextInputBuilder()
-            .setCustomId("reason")
-            .setLabel("reason")
+            .setCustomId('reason')
+            .setLabel('reason')
             .setStyle(TextInputStyle.Paragraph)
             .setMinLength(4),
         ]),
       ],
     })
-  );
+  )
 }
 
 /**
  * @param {import('discord.js').ModalSubmitInteraction} modal
  */
 async function handleDeleteModal(modal) {
-  await modal.deferReply({ ephemeral: true });
-  const reason = modal.fields.getTextInputValue("reason");
-  const response = await deleteSuggestion(modal.member, modal.channel, modal.message.id, reason);
-  await modal.followUp({ content: response, ephemeral: true });
+  await modal.deferReply({ ephemeral: true })
+  const reason = modal.fields.getTextInputValue('reason')
+  const response = await deleteSuggestion(
+    modal.member,
+    modal.channel,
+    modal.message.id,
+    reason
+  )
+  await modal.followUp({ content: response, ephemeral: true })
 }
 
 module.exports = {
@@ -357,4 +429,4 @@ module.exports = {
   approveSuggestion,
   rejectSuggestion,
   deleteSuggestion,
-};
+}

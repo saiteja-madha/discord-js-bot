@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
-const { CACHE_SIZE } = require("@root/config.js");
-const FixedSizeMap = require("fixedsize-map");
+const mongoose = require('mongoose')
+const { CACHE_SIZE } = require('@root/config.js')
+const FixedSizeMap = require('fixedsize-map')
 
-const cache = new FixedSizeMap(CACHE_SIZE.USERS);
+const cache = new FixedSizeMap(CACHE_SIZE.USERS)
 
 const Schema = new mongoose.Schema(
   {
@@ -24,49 +24,49 @@ const Schema = new mongoose.Schema(
   },
   {
     timestamps: {
-      createdAt: "created_at",
-      updatedAt: "updated_at",
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     },
   }
-);
+)
 
-const Model = mongoose.model("user", Schema);
+const Model = mongoose.model('user', Schema)
 
 module.exports = {
   /**
    * @param {import('discord.js').User} user
    */
-  getUser: async (user) => {
-    if (!user) throw new Error("User is required.");
-    if (!user.id) throw new Error("User Id is required.");
+  getUser: async user => {
+    if (!user) throw new Error('User is required.')
+    if (!user.id) throw new Error('User Id is required.')
 
-    const cached = cache.get(user.id);
-    if (cached) return cached;
+    const cached = cache.get(user.id)
+    if (cached) return cached
 
-    let userDb = await Model.findById(user.id);
+    let userDb = await Model.findById(user.id)
     if (!userDb) {
       userDb = new Model({
         _id: user.id,
         username: user.username,
         discriminator: user.discriminator,
-      });
+      })
     }
 
     // Temporary fix for users who where added to DB before v5.0.0
     // Update username and discriminator in previous DB
     else if (!userDb.username || !userDb.discriminator) {
-      userDb.username = user.username;
-      userDb.discriminator = user.discriminator;
+      userDb.username = user.username
+      userDb.discriminator = user.discriminator
     }
 
-    cache.add(user.id, userDb);
-    return userDb;
+    cache.add(user.id, userDb)
+    return userDb
   },
 
   getReputationLb: async (limit = 10) => {
-    return Model.find({ "reputation.received": { $gt: 0 } })
-      .sort({ "reputation.received": -1, "reputation.given": 1 })
+    return Model.find({ 'reputation.received': { $gt: 0 } })
+      .sort({ 'reputation.received': -1, 'reputation.given': 1 })
       .limit(limit)
-      .lean();
+      .lean()
   },
-};
+}

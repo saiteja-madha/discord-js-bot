@@ -1,31 +1,31 @@
-const { ChannelType } = require("discord.js");
+const { ChannelType } = require('discord.js')
 
 /**
  * @param {number} type
  */
-module.exports = (type) => {
+module.exports = type => {
   switch (type) {
     case ChannelType.GuildText:
-      return "Guild Text";
+      return 'Guild Text'
     case ChannelType.GuildVoice:
-      return "Guild Voice";
+      return 'Guild Voice'
     case ChannelType.GuildCategory:
-      return "Guild Category";
+      return 'Guild Category'
     case ChannelType.GuildAnnouncement:
-      return "Guild Announcement";
+      return 'Guild Announcement'
     case ChannelType.AnnouncementThread:
-      return "Guild Announcement Thread";
+      return 'Guild Announcement Thread'
     case ChannelType.PublicThread:
-      return "Guild Public Thread";
+      return 'Guild Public Thread'
     case ChannelType.PrivateThread:
-      return "Guild Private Thread";
+      return 'Guild Private Thread'
     case ChannelType.GuildStageVoice:
-      return "Guild Stage Voice";
+      return 'Guild Stage Voice'
     case ChannelType.GuildDirectory:
-      return "Guild Directory";
+      return 'Guild Directory'
     case ChannelType.GuildForum:
-      return "Guild Forum";
+      return 'Guild Forum'
     default:
-      return "Unknown";
+      return 'Unknown'
   }
-};
+}

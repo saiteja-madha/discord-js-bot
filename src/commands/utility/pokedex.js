@@ -1,23 +1,23 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const { MESSAGES, EMBED_COLORS } = require("@root/config.js");
-const { getJson } = require("@helpers/HttpUtils");
-const { stripIndent } = require("common-tags");
+const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
+const { MESSAGES, EMBED_COLORS } = require('@root/config.js')
+const { getJson } = require('@helpers/HttpUtils')
+const { stripIndent } = require('common-tags')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: "pokedex",
-  description: "shows pokemon information",
-  category: "UTILITY",
-  botPermissions: ["EmbedLinks"],
+  name: 'pokedex',
+  description: 'shows pokemon information',
+  category: 'UTILITY',
+  botPermissions: ['EmbedLinks'],
   cooldown: 1,
   slashCommand: {
     enabled: true,
     options: [
       {
-        name: "pokemon",
-        description: "pokemon name to get information for",
+        name: 'pokemon',
+        description: 'pokemon name to get information for',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -25,18 +25,20 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const pokemon = interaction.options.getString("pokemon");
-    const response = await pokedex(pokemon);
-    await interaction.followUp(response);
+    const pokemon = interaction.options.getString('pokemon')
+    const response = await pokedex(pokemon)
+    await interaction.followUp(response)
   },
-};
+}
 
 async function pokedex(pokemon) {
-  const response = await getJson(`https://pokeapi.glitch.me/v1/pokemon/${pokemon}`);
-  if (response.status === 404) return "```The given pokemon is not found```";
-  if (!response.success) return MESSAGES.API_ERROR;
+  const response = await getJson(
+    `https://pokeapi.glitch.me/v1/pokemon/${pokemon}`
+  )
+  if (response.status === 404) return '```The given pokemon is not found```'
+  if (!response.success) return MESSAGES.API_ERROR
 
-  const json = response.data[0];
+  const json = response.data[0]
 
   const embed = new EmbedBuilder()
     .setTitle(`Pokédex - ${json.name}`)
@@ -62,7 +64,7 @@ async function pokedex(pokemon) {
             ♢ **Is Generation?**: ${json.gen}
             `
     )
-    .setFooter({ text: json.description });
+    .setFooter({ text: json.description })
 
-  return { embeds: [embed] };
+  return { embeds: [embed] }
 }
