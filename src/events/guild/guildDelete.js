@@ -1,4 +1,15 @@
-const { EmbedBuilder } = require('discord.js')
+const {
+  EmbedBuilder,
+  ButtonBuilder,
+  ActionRowBuilder,
+  ButtonStyle,
+} = require('discord.js')
+const {
+  SUPPORT_SERVER,
+  DOCS_URL,
+  DONATE_URL,
+  GITHUB_URL,
+} = require('@root/config.js')
 const { getSettings } = require('@schemas/Guild')
 
 /**
@@ -15,27 +26,27 @@ module.exports = async (client, guild) => {
 
   if (!client.joinLeaveWebhook) return
 
-  let ownerTag
+  let ownerTag = 'Deleted User'
   const ownerId = guild.ownerId || settings.data.owner
   try {
     const owner = await client.users.fetch(ownerId)
     ownerTag = owner.tag
   } catch (err) {
-    ownerTag = 'Deleted User'
+    // Handle the error here, if needed.
   }
 
   const embed = new EmbedBuilder()
-    .setTitle('Guild Left')
+    .setTitle(`Left the folks at ${guild.name}`)
     .setThumbnail(guild.iconURL())
     .setColor(client.config.EMBED_COLORS.ERROR)
     .addFields(
       {
-        name: 'Guild Name',
+        name: 'Server Name',
         value: guild.name || 'NA',
         inline: false,
       },
       {
-        name: 'ID',
+        name: 'Server ID',
         value: guild.id,
         inline: false,
       },
@@ -57,4 +68,44 @@ module.exports = async (client, guild) => {
     avatarURL: client.user.displayAvatarURL(),
     embeds: [embed],
   })
+
+  try {
+    // Send a thank you DM to the guild owner
+    let components = [
+      new ButtonBuilder()
+        .setLabel('Donate')
+        .setStyle(ButtonStyle.Link)
+        .setURL(DONATE_URL),
+      new ButtonBuilder()
+        .setLabel('Docs')
+        .setStyle(ButtonStyle.Link)
+        .setURL(DOCS_URL),
+      new ButtonBuilder()
+        .setLabel('Support Server')
+        .setStyle(ButtonStyle.Link)
+        .setURL(SUPPORT_SERVER),
+      new ButtonBuilder()
+        .setLabel('Github')
+        .setStyle(ButtonStyle.Link)
+        .setURL(GITHUB_URL),
+    ]
+
+    let row = new ActionRowBuilder().addComponents(components)
+
+    // Send the DM to the guild owner
+    owner
+      .send({
+        content: `Goodbye, <@${ownerId}>! 😢 I've left your server.\n I sure won't miss you! **JK, I will miss you silly, you are amazing!**\n On your way out, please lmk how I can improve by creating an issue on my Github repo.\n\n> PS I am Open Source!`,
+        embeds: [embed], // You can add an embed here
+        components: [row],
+      })
+      .then(() => {
+        console.log('Sent thank you DM to the server owner.')
+      })
+      .catch(error => {
+        console.error(`Error sending DM: ${error}`)
+      })
+  } catch (err) {
+    console.error(err)
+  }
 }
