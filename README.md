@@ -182,8 +182,8 @@ If you like this repository, feel free to leave a star ⭐ to motivate me!
 [forks-shield]: https://img.shields.io/github/forks/vixshan/mochi.svg?style=for-the-badge
 [forks-url]: https://github.com/vixshan/mochi/network/members
 [stars-shield]: https://img.shields.io/mochi/stars/vixshan/mochi.svg?style=for-the-badge
-[stars-url]: https://mochi.com/vixshan/mochi/stargazers
+[stars-url]: https://github.com/vixshan/mochi/stargazers
 [issues-shield]: https://img.shields.io/mochi/issues/vixshan/mochi.svg?style=for-the-badge
-[issues-url]: https://mochi.com/vixshan/mochi/issues
+[issues-url]: https://github.com/vixshan/mochi/issues
 [license-shield]: https://img.shields.io/github/license/vixshan/mochi.svg?style=for-the-badge
 [license-url]: https://github.com/vixshan/mochi/blob/master/LICENSE
