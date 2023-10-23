@@ -11,21 +11,31 @@ const { getQuestions } = require('@schemas/TruthOrDare') // Import the getQuesti
  * @param {import("discord.js").ButtonInteraction} interaction
  */
 async function handleTodButtonClick(interaction) {
-  await interaction.deferUpdate()
-
   const customId = interaction.customId
 
-  // Handle the button clicks based on their custom IDs
-  if (customId === 'truthBtn') {
-    sendQuestion(interaction, 'truth')
-  } else if (customId === 'dareBtn') {
-    sendQuestion(interaction, 'dare')
-  } else if (customId === 'randomBtn') {
-    sendRandomQuestion(interaction)
+  switch (customId) {
+    case 'truthBtn':
+      await sendQuestion(interaction, 'truth')
+      break
+    case 'dareBtn':
+      await sendQuestion(interaction, 'dare')
+      break
+    case 'randomBtn':
+      await sendRandomQuestion(interaction)
+      break
   }
 }
 
+/**
+ * @param {ButtonInteraction} interaction
+ * @param {string} category
+ */
 async function sendQuestion(interaction, category) {
+  await interaction.reply({
+    content: 'Inaminit! Someone tell Maria I love her SFM...',
+    ephemeral: true,
+  })
+
   const questions = await getQuestions(1, category)
   if (questions.length === 0) {
     await interaction.followUp(
@@ -42,7 +52,7 @@ async function sendQuestion(interaction, category) {
       `Alright ${interaction.user.tag};\n**${question.question}**\n \n \n \n \n`
     )
     .setFooter({
-      text: `Type: ${category} | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
+      text: `Type: ${category} | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(
@@ -72,7 +82,15 @@ async function sendQuestion(interaction, category) {
   })
 }
 
+/**
+ * @param {ButtonInteraction} interaction
+ */
 async function sendRandomQuestion(interaction) {
+  await interaction.reply({
+    content: 'Inaminit! Someone tell Maria I love her SFM...',
+    ephemeral: true,
+  })
+
   const questions = await getQuestions(1)
   if (questions.length === 0) {
     await interaction.followUp('No questions available.')
@@ -85,7 +103,7 @@ async function sendRandomQuestion(interaction) {
     .setTitle('Random Truth or Dare')
     .setDescription(` \n**${question.question}**\n \n \n \n \n`)
     .setFooter({
-      text: `Type: RANDOM | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
+      text: `Type: RANDOM | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(

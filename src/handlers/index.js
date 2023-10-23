@@ -11,4 +11,5 @@ module.exports = {
   suggestionHandler: require('./suggestion'),
   ticketHandler: require('./ticket'),
   translationHandler: require('./translation'),
+  todHandler: require('./todhandler'),
 }

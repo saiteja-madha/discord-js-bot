@@ -10,7 +10,7 @@ const { getLanguagesFromEmoji } = require('country-emoji-languages')
 const { translate } = require('@helpers/HttpUtils')
 const { timeformat } = require('@helpers/Utils')
 
-const TRANSLATE_COOLDOWN = 120
+const TRANSLATE_COOLDOWN = 5
 const cooldownCache = new Map()
 
 /**

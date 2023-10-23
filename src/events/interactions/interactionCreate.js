@@ -5,6 +5,7 @@ const {
   statsHandler,
   suggestionHandler,
   ticketHandler,
+  todHandler,
 } = require('@src/handlers')
 const { InteractionType } = require('discord.js')
 
@@ -54,6 +55,15 @@ module.exports = async (client, interaction) => {
 
       case 'SUGGEST_DELETE':
         return suggestionHandler.handleDeleteBtn(interaction)
+
+      case 'truthBtn':
+        return todHandler.handleTodButtonClick(interaction)
+
+      case 'dareBtn':
+        return todHandler.handleTodButtonClick(interaction)
+
+      case 'randomBtn':
+        return todHandler.handleTodButtonClick(interaction)
     }
   }
 
@@ -73,7 +83,7 @@ module.exports = async (client, interaction) => {
 
   const settings = await getSettings(interaction.guild)
 
-  // track stats
+  // Track stats
   if (settings.stats.enabled)
     statsHandler.trackInteractionStats(interaction).catch(() => {})
 }

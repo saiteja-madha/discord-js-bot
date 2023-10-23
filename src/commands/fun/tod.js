@@ -6,6 +6,7 @@ const {
 } = require('discord.js')
 const { getQuestions } = require('@schemas/TruthOrDare')
 const { EmbedBuilder } = require('discord.js')
+const { handleTodButtonClick } = require('@handlers/todhandler')
 
 /**
  * @type {import("@structures/Command")}
@@ -95,20 +96,6 @@ module.exports = {
         break
     }
   },
-
-  async handleTodButtonClick(interaction) {
-    switch (interaction.customId) {
-      case 'truthBtn':
-        sendQuestion(interaction, 'truth')
-        break
-      case 'dareBtn':
-        sendQuestion(interaction, 'dare')
-        break
-      case 'randomBtn':
-        sendRandomQuestion(interaction)
-        break
-    }
-  },
 }
 
 async function sendQuestion(interaction, category) {
@@ -128,7 +115,7 @@ async function sendQuestion(interaction, category) {
       `Alright ${interaction.user.tag};\n**${question.question}**\n \n \n \n \n`
     )
     .setFooter({
-      text: `Type: ${category} | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
+      text: `Type: ${category} | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(
@@ -169,7 +156,7 @@ async function sendRandomQuestion(interaction) {
     .setTitle('Random Truth or Dare')
     .setDescription(` \n**${question.question}**\n \n \n \n \n`)
     .setFooter({
-      text: `Type: RANDOM | QID: ${question.questionId} | Requested by: ${interaction.user.tag}`,
+      text: `Type: RANDOM | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(
