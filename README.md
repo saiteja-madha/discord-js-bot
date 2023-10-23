@@ -20,7 +20,7 @@
   <p align="center">
     <br />
     <br />
-    <a href="https://github.com/vixshan/Mochi/issues">Report Bug</a>
+    <a href="https://github.com/vixshan/mochi/issues">Report Bug</a>
     ·
     <a href="https://github.com/vixshan/Mochi/issues">Request Feature</a>
   </p>
@@ -32,15 +32,15 @@
 <br>
 
 <p align="center">
-  <a href="#-resource-links">Resource Links</a>
+  <a href="ko-fi.com/vikshan">Donate</a>
   •
-  <a href="#-prerequisites">Prerequisites</a>
+  <a href="docs.vikshan.me">Docs</a>
   •
-  <a href="#-getting-started">Getting Started</a>
+  <a href="https://discord.com/api/oauth2/authorize?client_id=1009149789914546287&scope=bot+applications.commands&permissions=1374891928950">Invite Mochi</a>
   •
-  <a href="#-features">Features</a>
+  <a href="#-features-">Mochi's Features</a>
   •
-  <a href="#-contributing">Contributing</a>
+  <a href="#--contributing--">Contributing</a>
 </p>
 
 <br>
@@ -55,17 +55,14 @@
 [![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi)
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
 
-- 🤖 Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=1009149789914546287&permissions=397602323830&scope=bot%20applications.commands)
-- 🤝 Support Server: [Join Here](https://discord.gg/wMxe5PsnNg)
-- 📂 Documentation URL: Coming Soon [Visit Here](https://docs.strangebot.xyz)
+- 🤖 Mochi: [Invite Here](https://discord.com/oauth2/authorize?client_id=1009149789914546287&permissions=397602323830&scope=bot%20applications.commands)
+- ❤️ Buy me a coffee: [Ko-Fi](ko-fi.com/vikshan)
+- 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
-- 📑 Docs : [docs.vikshan.me](https://docs.vikshan.me)
+- 📑 Documentation : [docs.vikshan.me](https://docs.vikshan.me)
 - 📦 Self Host: [Guide](https://docs.vikshan.me/additional/installation)
 
-## Set Up your own bot
-You can set up your own bot by following this guide: [Setup Guide](./self-host.md)
-
-<h1 align="center"> ✨ Features ✨ </h1>
+## ✨ Features ✨
 
 ### 📡 **Advanced Dashboard**
 
@@ -161,32 +158,32 @@ You can set up your own bot by following this guide: [Setup Guide](./self-host.m
 
 <h1 align="center"> 🤝 Contributing 🤝 </h1>
 
-- Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool discord bot projects
-- Feel free to [Fork](https://github.com/vixshan/discord-js-bot/fork) this repository, create a feature branch and submit a pull request
-- You can keep track of all the planned features [here](https://github.com/vixshan/discord-js-bot/projects) or make a request for one at our discord
+- Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool discord bot projects.
+- Feel free to [Fork](https://github.com/vixshan/mochi/fork) this repository, create a feature branch and submit a pull request
+- You can keep track of all the planned features [here](https://github.com/vixshan/mochi/projects) or make a request for one at our discord
 
 
 
 ### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" width="20px" height="20px"> 》Notice 
-> You may not claim this as your own! The original source was created by [saiteja-madha](https://github.com/saiteja-madha). The source is modified and being updated by Vikshan
+> You may not claim this as your own! The original source was created by [saiteja-madha](https://github.com/saiteja-madha). The source is modified and being updated by Vikshan.
 
-> Mochi is a multipurpose Discord bot base in [Discord.js](https://github.com/Discordjs/discordjs)
+> Mochi is a multipurpose Discord bot build in [Discord.js](https://github.com/Discordjs/discordjs)
 If you like this repository, feel free to leave a star ⭐ to motivate me!
 
 
 <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="15px" height="15px"> 》[Sponsor](https://github.com/sponsors/vixshan)
 
-[version-shield]: https://img.shields.io/github/package-json/v/vixshan/Mochi?style=for-the-badge
-[version-url]: https://github.com/brblacky/WaveMusic
-[pr-shield]: https://img.shields.io/github/issues-pr/vixshan/Mochi?style=for-the-badge
-[pr-url]: https://github.com/vixshan/Mochi/pulls
-[contributors-shield]: https://img.shields.io/github/contributors/vixshan/Mochi.svg?style=for-the-badge
-[contributors-url]: https://github.com/vixshan/Mochi/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/vixshan/Mochi.svg?style=for-the-badge
-[forks-url]: https://github.com/vixshan/Mochi/network/members
-[stars-shield]: https://img.shields.io/github/stars/vixshan/Mochi.svg?style=for-the-badge
-[stars-url]: https://github.com/vixshan/Mochi/stargazers
-[issues-shield]: https://img.shields.io/github/issues/vixshan/Mochi.svg?style=for-the-badge
-[issues-url]: https://github.com/vixshan/Mochi/issues
-[license-shield]: https://img.shields.io/github/license/vixshan/Mochi.svg?style=for-the-badge
-[license-url]: https://github.com/vixshan/Mochi/blob/master/LICENSE
+[version-shield]: https://img.shields.io/github/package-json/v/vixshan/mochi?style=for-the-badge
+[version-url]: https://github.com/vixshan/mochi
+[pr-shield]: https://img.shields.io/github/issues-pr/vixshan/mochi?style=for-the-badge
+[pr-url]: https://github.com/vixshan/mochi/pulls
+[contributors-shield]: https://img.shields.io/github/contributors/vixshan/mochi.svg?style=for-the-badge
+[contributors-url]: https://github.com/vixshan/mochi/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/vixshan/mochi.svg?style=for-the-badge
+[forks-url]: https://github.com/vixshan/mochi/network/members
+[stars-shield]: https://img.shields.io/mochi/stars/vixshan/mochi.svg?style=for-the-badge
+[stars-url]: https://mochi.com/vixshan/mochi/stargazers
+[issues-shield]: https://img.shields.io/mochi/issues/vixshan/mochi.svg?style=for-the-badge
+[issues-url]: https://mochi.com/vixshan/mochi/issues
+[license-shield]: https://img.shields.io/github/license/vixshan/mochi.svg?style=for-the-badge
+[license-url]: https://github.com/vixshan/mochi/blob/master/LICENSE
