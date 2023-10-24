@@ -27,7 +27,7 @@ module.exports = {
           },
           {
             name: 'amount',
-            description: 'number of messages to be deleted (Max 99)',
+            description: 'number of messages to be deleted (Max 500)',
             type: ApplicationCommandOptionType.Integer,
             required: false,
           },
@@ -153,12 +153,13 @@ module.exports = {
 
     const sub = options.getSubcommand()
     const channel = options.getChannel('channel')
-    const amount = options.getInteger('amount') || 99
+    const amount = Math.min(options.getInteger('amount') || 500, 500) // Max 500 messages at a time
 
-    if (amount > 100)
+    if (amount <= 0) {
       return interaction.followUp(
-        'The max amount of messages that I can delete is 99'
+        'Please specify a valid number of messages to delete.'
       )
+    }
 
     let response
     switch (sub) {

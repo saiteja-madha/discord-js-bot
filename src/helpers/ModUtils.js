@@ -209,6 +209,10 @@ module.exports = class ModUtils {
       return 'BOT_PERM'
     }
 
+    if (amount <= 0 || amount > 500) {
+      return 'INVALID_AMOUNT'
+    }
+
     const toDelete = new Collection()
 
     try {
