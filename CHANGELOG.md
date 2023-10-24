@@ -4,6 +4,8 @@
 
 * [x] 🤖 Bot is now Mochi
 * [x] 📜 Mochi now has ToD
+* [x] 📜 Mochi now has a changelog command
+* [x] 📜 Mochi now can purge up to 500 messages
 
 ### Fixes
 - [x] 🛠 Fixed rank card username
