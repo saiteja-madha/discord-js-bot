@@ -31,6 +31,6 @@
   - pino-pretty (10.0.0 to 10.0.1)
 
 ### Removed
-* [x] 🗑️ Unnecessary commands removed
+* [x] 🗑️ Removed nnecessary commands
 
 
