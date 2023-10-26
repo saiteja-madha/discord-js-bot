@@ -14,7 +14,7 @@ updates:
       - "vixshan"
     labels:
       - "dependencies"
-    ignore:
+ #   ignore:
  #     - dependency-name: "discord.js"
  #     - dependency-name: "pretty-ms"
 
