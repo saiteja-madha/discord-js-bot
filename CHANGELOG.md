@@ -1,8 +1,9 @@
-## Mochi v1.0.0
+## Mochi v1.0.1
 
 ### New
 
 * [x] 🤖 Bot is now Mochi
+* [x] 📜 Mochi can start giveaways in announcement channels
 * [x] 📜 Mochi now has ToD
 * [x] 📜 Mochi now has a changelog command
 * [x] 📜 Mochi now can purge up to 500 messages

@@ -41,7 +41,10 @@ module.exports = {
             name: 'channel',
             description: 'the channel to start the giveaway in',
             type: ApplicationCommandOptionType.Channel,
-            channelTypes: [ChannelType.GuildText],
+            channelTypes: [
+              ChannelType.GuildText,
+              ChannelType.GuildAnnouncement,
+            ],
             required: true,
           },
         ],
@@ -277,6 +280,7 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
           new TextInputBuilder()
             .setCustomId('prize')
             .setLabel('What is the prize?')
+            .setPlaceholder('Nitro / Steam Gift Card / etc')
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
         ),
@@ -284,6 +288,7 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
           new TextInputBuilder()
             .setCustomId('winners')
             .setLabel('Number of winners?')
+            .setPlaceholder('1, 20')
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
         ),
@@ -291,6 +296,7 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
           new TextInputBuilder()
             .setCustomId('roles')
             .setLabel("RoleId's that can take part in the giveaway")
+            .setPlaceholder('1161271489446809611, 1167163232117600256')
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
@@ -298,6 +304,7 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
           new TextInputBuilder()
             .setCustomId('host')
             .setLabel('User Id hosting the giveaway')
+            .setPlaceholder('929835843479302204')
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),

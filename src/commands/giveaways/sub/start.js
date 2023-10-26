@@ -20,12 +20,25 @@ module.exports = async (
 ) => {
   try {
     if (!host) host = member.user
+
+    // Check if the bot has "Add Reactions" permission
+    if (
+      !giveawayChannel.permissionsFor(member.client.user).has('AddReactions')
+    ) {
+      return `I do not have permission to add reactions in ${giveawayChannel}. Please make sure I have the "Add Reactions" permission.`
+    }
+
     if (!member.permissions.has('ManageMessages')) {
       return 'You need to have the manage messages permissions to start giveaways.'
     }
 
-    if (!giveawayChannel.type === ChannelType.GuildText) {
-      return 'You can only start giveaways in text channels.'
+    if (
+      !(
+        giveawayChannel.type === ChannelType.GuildText ||
+        giveawayChannel.type === ChannelType.GuildAnnouncement
+      )
+    ) {
+      return 'You can only start giveaways in text or announcement channels.'
     }
 
     /**
