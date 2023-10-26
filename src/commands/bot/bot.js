@@ -12,9 +12,9 @@ const {
   DASHBOARD,
   DONATE_URL,
   DOCS_URL,
-  GITHUB_URL,
 } = require('@root/config.js')
 const botstats = require('./sub/botstats')
+const { Octokit } = require('@octokit/rest')
 
 /**
  * @type {import("@structures/Command")}
@@ -52,14 +52,15 @@ module.exports = {
         description: "get bot's documentation",
         type: ApplicationCommandOptionType.Subcommand,
       },
-      {
-        name: 'github',
-        description: "get bot's github",
-        type: ApplicationCommandOptionType.Subcommand,
-      },
+
       {
         name: 'ping',
         description: "get bot's ping",
+        type: ApplicationCommandOptionType.Subcommand,
+      },
+      {
+        name: 'changelog',
+        description: "Get the bot's changelog from GitHub",
         type: ApplicationCommandOptionType.Subcommand,
       },
     ],
@@ -158,35 +159,41 @@ module.exports = {
       return interaction.followUp({ embeds: [embed], components: [buttonsRow] })
     }
 
-    // Github Repo
-    else if (sub === 'github') {
-      const embed = new EmbedBuilder()
-        .setAuthor({ name: 'Github' })
-        .setColor(EMBED_COLORS.BOT_EMBED)
-        .setThumbnail(interaction.client.user.displayAvatarURL())
-        .setDescription(
-          'Hey there! Thanks for considering to check my github repo, I am Open Source!\nUse the button below to see my repo, and maybe give it a star :star:'
-        )
-
-      // Buttons
-      let components = []
-      components.push(
-        new ButtonBuilder()
-          .setLabel('Github')
-          .setURL(GITHUB_URL)
-          .setStyle(ButtonStyle.Link)
-      )
-
-      let buttonsRow = new ActionRowBuilder().addComponents(components)
-      return interaction.followUp({ embeds: [embed], components: [buttonsRow] })
-    }
-
     // Ping
     else if (sub === 'ping') {
       const msg = await interaction.followUp('Pinging...')
       await msg.edit(
         `🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``
       )
+    }
+
+    // Changelog
+    else if (sub === 'changelog') {
+      try {
+        const octokit = new Octokit()
+        const response = await octokit.repos.getContent({
+          owner: 'vixshan',
+          repo: 'mochi',
+          path: 'CHANGELOG.md',
+        })
+
+        const changelogContent = Buffer.from(
+          response.data.content,
+          'base64'
+        ).toString('utf-8')
+
+        const embed = new EmbedBuilder()
+          .setAuthor({ name: 'Changelog' })
+          .setColor(EMBED_COLORS.BOT_EMBED)
+          .setDescription(changelogContent)
+
+        return interaction.followUp({ embeds: [embed] })
+      } catch (error) {
+        console.error('Error fetching changelog:', error)
+        return interaction.followUp(
+          'Error fetching the changelog. Please try again later.'
+        )
+      }
     }
   },
 }
