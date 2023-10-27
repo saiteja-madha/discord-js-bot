@@ -1,4 +1,4 @@
-const { ChannelType } = require('discord.js');
+const { ChannelType } = require('discord.js')
 
 /**
  * @param {import('discord.js').GuildMember} member
@@ -22,12 +22,14 @@ module.exports = async (
     if (!host) host = member.user
 
     // Check if the bot has "Add Reactions" permission
-    if (!giveawayChannel.permissionsFor(member.client.user).has('AddReactions')) {
-      return `I do not have permission to add reactions in ${giveawayChannel}.`;
+    if (
+      !giveawayChannel.permissionsFor(member.client.user).has('AddReactions')
+    ) {
+      return `I do not have permission to add reactions in ${giveawayChannel}.`
     }
 
     if (!member.permissions.has('ManageMessages')) {
-      return 'You need to have the manage messages permissions to start giveaways.';
+      return 'You need to have the manage messages permissions to start giveaways.'
     }
 
     if (
@@ -36,14 +38,14 @@ module.exports = async (
         giveawayChannel.type === ChannelType.GuildAnnouncement
       )
     ) {
-      return 'You can only start giveaways in text or announcement channels.';
+      return 'You can only start giveaways in text or announcement channels.'
     }
 
     // Mention the allowed roles
-    const mentionedRoles = allowedRoles.map((roleId) => `<@&${roleId}>`).join(' ');
+    const mentionedRoles = allowedRoles.map(roleId => `<@&${roleId}>`).join(' ')
 
     // Send the message with the mentioned roles
-    await giveawayChannel.send(`${mentionedRoles}`);
+    await giveawayChannel.send(`${mentionedRoles}`)
 
     /**
      * @type {import("discord-giveaways").GiveawayStartOptions}
@@ -64,15 +66,15 @@ module.exports = async (
     }
 
     if (allowedRoles.length > 0) {
-      options.exemptMembers = (member) =>
-        !member.roles.cache.find((role) => allowedRoles.includes(role.id));
+      options.exemptMembers = member =>
+        !member.roles.cache.find(role => allowedRoles.includes(role.id))
     }
 
-    await member.client.giveawaysManager.start(giveawayChannel, options);
+    await member.client.giveawaysManager.start(giveawayChannel, options)
 
-    return `Giveaway started in ${giveawayChannel}`;
+    return `Giveaway started in ${giveawayChannel}`
   } catch (error) {
-    member.client.logger.error('Giveaway Start', error);
-    return `An error occurred while starting the giveaway: ${error.message}`;
+    member.client.logger.error('Giveaway Start', error)
+    return `An error occurred while starting the giveaway: ${error.message}`
   }
-};
+}

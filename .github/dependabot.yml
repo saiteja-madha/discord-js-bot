@@ -14,9 +14,10 @@ updates:
       - "vixshan"
     labels:
       - "dependencies"
- #   ignore:
+    ignore:
  #     - dependency-name: "discord.js"
- #     - dependency-name: "pretty-ms"
+        - dependency-name: "pretty-ms"
+        - dependency-name: "node-fetch"
 
  # Enable version updates for Docker
   - package-ecosystem: "docker"
