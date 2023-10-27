@@ -50,7 +50,7 @@
     "moment": "^2.29.4",
     "mongoose": "^7.3.4",
     "nekos.life": "^3.0.0",
-    "node-fetch": "^2.6.12",
+    "node-fetch": "^3.3.2",
     "openai": "^4.11.1",
     "os": "^0.1.2",
     "pino": "^8.14.1",
