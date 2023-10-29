@@ -50,6 +50,10 @@
 
 [Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
 
+Mochi is Powered by Dgital Ocean, [Get free $200](https://m.do.co/c/c5587212fe39) credits to deploy your own copy of Mochi
+
+
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 ## 🔗 Resource Links
 [![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi)
@@ -172,6 +176,8 @@ If you like this repository, feel free to leave a star ⭐ to motivate me!
 
 
 <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="15px" height="15px"> 》[Sponsor](https://github.com/sponsors/vixshan)
+
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 [version-shield]: https://img.shields.io/github/package-json/v/vixshan/mochi?style=for-the-badge
 [version-url]: https://github.com/vixshan/mochi
