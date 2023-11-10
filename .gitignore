@@ -6,3 +6,4 @@ node_modules/
 .env
 config.js
 package-lock.json
+.gitpod.yml
