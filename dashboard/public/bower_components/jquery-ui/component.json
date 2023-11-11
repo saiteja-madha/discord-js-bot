@@ -3,9 +3,7 @@
   "repo": "components/jqueryui",
   "version": "1.11.4",
   "license": "MIT",
-  "scripts": [
-    "jquery-ui.js"
-  ],
+  "scripts": ["jquery-ui.js"],
   "main": "jquery-ui.js",
   "dependencies": {
     "components/jquery": "*"

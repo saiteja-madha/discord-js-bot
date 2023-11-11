@@ -1,9 +1,9 @@
-jvm.SVGGroupElement = function(){
-  jvm.SVGGroupElement.parentClass.call(this, 'g');
+jvm.SVGGroupElement = function () {
+  jvm.SVGGroupElement.parentClass.call(this, 'g')
 }
 
-jvm.inherits(jvm.SVGGroupElement, jvm.SVGElement);
+jvm.inherits(jvm.SVGGroupElement, jvm.SVGElement)
 
-jvm.SVGGroupElement.prototype.add = function(element){
-  this.node.appendChild( element.node );
-};
+jvm.SVGGroupElement.prototype.add = function (element) {
+  this.node.appendChild(element.node)
+}

@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","es-mx",{toolbar:"Guardar"});
+﻿CKEDITOR.plugins.setLang('save', 'es-mx', { toolbar: 'Guardar' })

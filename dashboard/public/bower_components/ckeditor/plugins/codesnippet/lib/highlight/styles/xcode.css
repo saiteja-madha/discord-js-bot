@@ -5,8 +5,10 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 */
 
 .hljs {
-  display: block; padding: 0.5em;
-  background: #fff; color: black;
+  display: block;
+  padding: 0.5em;
+  background: #fff;
+  color: black;
 }
 
 .hljs-comment,
@@ -91,7 +93,7 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 }
 
 .hljs-variable {
- color: #3f6e74;
+  color: #3f6e74;
 }
 .css .hljs-tag,
 .hljs-rules .hljs-property,
@@ -102,7 +104,7 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 
 .css .hljs-class,
 .css .hljs-id {
-  color: #9B703F;
+  color: #9b703f;
 }
 
 .hljs-value .hljs-important {
@@ -111,13 +113,13 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 }
 
 .hljs-rules .hljs-keyword {
-  color: #C5AF75;
+  color: #c5af75;
 }
 
 .hljs-annotation,
 .apache .hljs-sqbracket,
 .nginx .hljs-built_in {
-  color: #9B859D;
+  color: #9b859d;
 }
 
 .hljs-preprocessor,
@@ -127,7 +129,7 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 }
 
 .tex .hljs-formula {
-  background-color: #EEE;
+  background-color: #eee;
   font-style: italic;
 }
 
@@ -138,15 +140,15 @@ XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
 }
 
 .diff .hljs-change {
-  background-color: #BCCFF9;
+  background-color: #bccff9;
 }
 
 .hljs-addition {
-  background-color: #BAEEBA;
+  background-color: #baeeba;
 }
 
 .hljs-deletion {
-  background-color: #FFC8BD;
+  background-color: #ffc8bd;
 }
 
 .hljs-comment .hljs-yardoctag {

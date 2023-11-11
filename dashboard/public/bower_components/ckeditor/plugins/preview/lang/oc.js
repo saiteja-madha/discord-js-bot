@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("preview","oc",{preview:"Previsualizar"});
+﻿CKEDITOR.plugins.setLang('preview', 'oc', { preview: 'Previsualizar' })

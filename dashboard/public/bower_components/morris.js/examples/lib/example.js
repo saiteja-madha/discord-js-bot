@@ -1,4 +1,4 @@
 $(function () {
-  eval($('#code').text());
-  prettyPrint();
-});
+  eval($('#code').text())
+  prettyPrint()
+})

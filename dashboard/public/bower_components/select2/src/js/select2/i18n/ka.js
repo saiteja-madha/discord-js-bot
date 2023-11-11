@@ -2,39 +2,39 @@ define(function () {
   // Georgian
   return {
     errorLoading: function () {
-      return 'მონაცემების ჩატვირთვა შეუძლებელია.';
+      return 'მონაცემების ჩატვირთვა შეუძლებელია.'
     },
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      var message = 'გთხოვთ აკრიფეთ ' + overChars + ' სიმბოლოთი ნაკლები';
+      var message = 'გთხოვთ აკრიფეთ ' + overChars + ' სიმბოლოთი ნაკლები'
 
-      return message;
+      return message
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      var message = 'გთხოვთ აკრიფეთ ' + remainingChars + ' სიმბოლო ან მეტი';
+      var message = 'გთხოვთ აკრიფეთ ' + remainingChars + ' სიმბოლო ან მეტი'
 
-      return message;
+      return message
     },
     loadingMore: function () {
-      return 'მონაცემების ჩატვირთვა…';
+      return 'მონაცემების ჩატვირთვა…'
     },
     maximumSelected: function (args) {
-      var message = 'თქვენ შეგიძლიათ აირჩიოთ არაუმეტეს ' + args.maximum +
-        ' ელემენტი';
+      var message =
+        'თქვენ შეგიძლიათ აირჩიოთ არაუმეტეს ' + args.maximum + ' ელემენტი'
 
-      return message;
+      return message
     },
     noResults: function () {
-      return 'რეზულტატი არ მოიძებნა';
+      return 'რეზულტატი არ მოიძებნა'
     },
     searching: function () {
-      return 'ძიება…';
+      return 'ძიება…'
     },
     removeAllItems: function () {
-      return 'ამოიღე ყველა ელემენტი';
-    }
-  };
-});
+      return 'ამოიღე ყველა ელემენტი'
+    },
+  }
+})

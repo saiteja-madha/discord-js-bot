@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("showblocks","cy",{toolbar:"Dangos Blociau"});
+﻿CKEDITOR.plugins.setLang('showblocks', 'cy', { toolbar: 'Dangos Blociau' })

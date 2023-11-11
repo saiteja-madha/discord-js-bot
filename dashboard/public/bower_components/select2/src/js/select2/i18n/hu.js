@@ -2,32 +2,32 @@ define(function () {
   // Hungarian
   return {
     errorLoading: function () {
-      return 'Az eredmények betöltése nem sikerült.';
+      return 'Az eredmények betöltése nem sikerült.'
     },
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      return 'Túl hosszú. ' + overChars + ' karakterrel több, mint kellene.';
+      return 'Túl hosszú. ' + overChars + ' karakterrel több, mint kellene.'
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      return 'Túl rövid. Még ' + remainingChars + ' karakter hiányzik.';
+      return 'Túl rövid. Még ' + remainingChars + ' karakter hiányzik.'
     },
     loadingMore: function () {
-      return 'Töltés…';
+      return 'Töltés…'
     },
     maximumSelected: function (args) {
-      return 'Csak ' + args.maximum + ' elemet lehet kiválasztani.';
+      return 'Csak ' + args.maximum + ' elemet lehet kiválasztani.'
     },
     noResults: function () {
-      return 'Nincs találat.';
+      return 'Nincs találat.'
     },
     searching: function () {
-      return 'Keresés…';
+      return 'Keresés…'
     },
     removeAllItems: function () {
-      return 'Távolítson el minden elemet';
-    }
-  };
-});
+      return 'Távolítson el minden elemet'
+    },
+  }
+})

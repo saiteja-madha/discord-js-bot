@@ -4,8 +4,8 @@ module.exports = function (grunt) {
     'jquery.select2',
     'almond',
 
-    'jquery-mousewheel' // shimmed for non-full builds
-  ];
+    'jquery-mousewheel', // shimmed for non-full builds
+  ]
 
   fullIncludes = [
     'jquery',
@@ -21,68 +21,66 @@ module.exports = function (grunt) {
     'select2/dropdown/attachContainer',
     'select2/dropdown/stopPropagation',
 
-    'select2/selection/stopPropagation'
-  ].concat(includes);
+    'select2/selection/stopPropagation',
+  ].concat(includes)
 
-  var i18nModules = [];
-  var i18nPaths = {};
+  var i18nModules = []
+  var i18nPaths = {}
 
-  var i18nFiles = grunt.file.expand({
-    cwd: 'src/js'
-  }, 'select2/i18n/*.js');
+  var i18nFiles = grunt.file.expand(
+    {
+      cwd: 'src/js',
+    },
+    'select2/i18n/*.js'
+  )
 
-  var testFiles = grunt.file.expand('tests/**/*.html');
+  var testFiles = grunt.file.expand('tests/**/*.html')
   var testUrls = testFiles.map(function (filePath) {
-    return 'http://localhost:9999/' + filePath;
-  });
+    return 'http://localhost:9999/' + filePath
+  })
 
-  var testBuildNumber = "unknown";
+  var testBuildNumber = 'unknown'
 
   if (process.env.TRAVIS_JOB_ID) {
-    testBuildNumber = "travis-" + process.env.TRAVIS_JOB_ID;
+    testBuildNumber = 'travis-' + process.env.TRAVIS_JOB_ID
   } else {
-    var currentTime = new Date();
+    var currentTime = new Date()
 
-    testBuildNumber = "manual-" + currentTime.getTime();
+    testBuildNumber = 'manual-' + currentTime.getTime()
   }
 
   for (var i = 0; i < i18nFiles.length; i++) {
-    var file = i18nFiles[i];
-    var name = file.split('.')[0];
+    var file = i18nFiles[i]
+    var name = file.split('.')[0]
 
     i18nModules.push({
-      name: name
-    });
+      name: name,
+    })
 
-    i18nPaths[name] = '../../' + name;
+    i18nPaths[name] = '../../' + name
   }
 
-  var minifiedBanner = '/*! Select2 <%= package.version %> | https://github.com/select2/select2/blob/master/LICENSE.md */';
+  var minifiedBanner =
+    '/*! Select2 <%= package.version %> | https://github.com/select2/select2/blob/master/LICENSE.md */'
 
   grunt.initConfig({
     package: grunt.file.readJSON('package.json'),
 
     concat: {
-      'dist': {
+      dist: {
         options: {
           banner: grunt.file.read('src/js/wrapper.start.js'),
         },
-        src: [
-          'dist/js/select2.js',
-          'src/js/wrapper.end.js'
-        ],
-        dest: 'dist/js/select2.js'
+        src: ['dist/js/select2.js', 'src/js/wrapper.end.js'],
+        dest: 'dist/js/select2.js',
       },
       'dist.full': {
         options: {
           banner: grunt.file.read('src/js/wrapper.start.js'),
         },
-        src: [
-          'dist/js/select2.full.js',
-          'src/js/wrapper.end.js'
-        ],
-        dest: 'dist/js/select2.full.js'
-      }
+        src: ['dist/js/select2.full.js', 'src/js/wrapper.end.js'],
+        dest: 'dist/js/select2.full.js',
+      },
     },
 
     connect: {
@@ -90,76 +88,76 @@ module.exports = function (grunt) {
         options: {
           base: '.',
           hostname: '127.0.0.1',
-          port: 9999
-        }
-      }
+          port: 9999,
+        },
+      },
     },
 
     uglify: {
-      'dist': {
+      dist: {
         src: 'dist/js/select2.js',
         dest: 'dist/js/select2.min.js',
         options: {
-          banner: minifiedBanner
-        }
+          banner: minifiedBanner,
+        },
       },
       'dist.full': {
         src: 'dist/js/select2.full.js',
         dest: 'dist/js/select2.full.min.js',
         options: {
-          banner: minifiedBanner
-        }
-      }
+          banner: minifiedBanner,
+        },
+      },
     },
 
     qunit: {
       all: {
         options: {
-          urls: testUrls
-        }
-      }
+          urls: testUrls,
+        },
+      },
     },
 
     jshint: {
       options: {
         jshintrc: true,
-        reporterOutput: ''
+        reporterOutput: '',
       },
       code: {
-        src: ['src/js/**/*.js']
+        src: ['src/js/**/*.js'],
       },
       tests: {
-        src: ['tests/**/*.js']
-      }
+        src: ['tests/**/*.js'],
+      },
     },
 
     sass: {
       dist: {
         options: {
-          outputStyle: 'compressed'
+          outputStyle: 'compressed',
         },
         files: {
           'dist/css/select2.min.css': [
             'src/scss/core.scss',
-            'src/scss/theme/default/layout.css'
-          ]
-        }
+            'src/scss/theme/default/layout.css',
+          ],
+        },
       },
       dev: {
         options: {
-          outputStyle: 'nested'
+          outputStyle: 'nested',
         },
         files: {
           'dist/css/select2.css': [
             'src/scss/core.scss',
-            'src/scss/theme/default/layout.css'
-          ]
-        }
-      }
+            'src/scss/theme/default/layout.css',
+          ],
+        },
+      },
     },
 
     requirejs: {
-      'dist': {
+      dist: {
         options: {
           baseUrl: 'src/js',
           optimize: 'none',
@@ -168,15 +166,15 @@ module.exports = function (grunt) {
           include: includes,
           namespace: 'S2',
           paths: {
-            'almond': require.resolve('almond').slice(0, -3),
-            'jquery': 'jquery.shim',
-            'jquery-mousewheel': 'jquery.mousewheel.shim'
+            almond: require.resolve('almond').slice(0, -3),
+            jquery: 'jquery.shim',
+            'jquery-mousewheel': 'jquery.mousewheel.shim',
           },
           wrap: {
             startFile: 'src/js/banner.start.js',
-            endFile: 'src/js/banner.end.js'
-          }
-        }
+            endFile: 'src/js/banner.end.js',
+          },
+        },
       },
       'dist.full': {
         options: {
@@ -187,17 +185,19 @@ module.exports = function (grunt) {
           include: fullIncludes,
           namespace: 'S2',
           paths: {
-            'almond': require.resolve('almond').slice(0, -3),
-            'jquery': 'jquery.shim',
-            'jquery-mousewheel': require.resolve('jquery-mousewheel').slice(0, -3)
+            almond: require.resolve('almond').slice(0, -3),
+            jquery: 'jquery.shim',
+            'jquery-mousewheel': require
+              .resolve('jquery-mousewheel')
+              .slice(0, -3),
           },
           wrap: {
             startFile: 'src/js/banner.start.js',
-            endFile: 'src/js/banner.end.js'
-          }
-        }
+            endFile: 'src/js/banner.end.js',
+          },
+        },
       },
-      'i18n': {
+      i18n: {
         options: {
           baseUrl: 'src/js/select2/i18n',
           dir: 'dist/js/i18n',
@@ -206,55 +206,46 @@ module.exports = function (grunt) {
           namespace: 'S2',
           wrap: {
             start: minifiedBanner + grunt.file.read('src/js/banner.start.js'),
-            end: grunt.file.read('src/js/banner.end.js')
-          }
-        }
-      }
+            end: grunt.file.read('src/js/banner.end.js'),
+          },
+        },
+      },
     },
 
     watch: {
       js: {
-        files: [
-          'src/js/select2/**/*.js',
-          'tests/**/*.js'
-        ],
-        tasks: [
-          'compile',
-          'test',
-          'minify'
-        ]
+        files: ['src/js/select2/**/*.js', 'tests/**/*.js'],
+        tasks: ['compile', 'test', 'minify'],
       },
       css: {
-        files: [
-          'src/scss/**/*.scss'
-        ],
-        tasks: [
-          'compile',
-          'minify'
-        ]
-      }
-    }
-  });
+        files: ['src/scss/**/*.scss'],
+        tasks: ['compile', 'minify'],
+      },
+    },
+  })
 
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat')
+  grunt.loadNpmTasks('grunt-contrib-connect')
+  grunt.loadNpmTasks('grunt-contrib-jshint')
+  grunt.loadNpmTasks('grunt-contrib-qunit')
+  grunt.loadNpmTasks('grunt-contrib-requirejs')
+  grunt.loadNpmTasks('grunt-contrib-uglify')
+  grunt.loadNpmTasks('grunt-contrib-watch')
 
-  grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-sass')
 
-  grunt.registerTask('default', ['compile', 'test', 'minify']);
+  grunt.registerTask('default', ['compile', 'test', 'minify'])
 
   grunt.registerTask('compile', [
-    'requirejs:dist', 'requirejs:dist.full', 'requirejs:i18n',
-    'concat:dist', 'concat:dist.full',
-    'sass:dev'
-  ]);
-  grunt.registerTask('minify', ['uglify', 'sass:dist']);
-  grunt.registerTask('test', ['connect:tests', 'qunit', 'jshint']);
+    'requirejs:dist',
+    'requirejs:dist.full',
+    'requirejs:i18n',
+    'concat:dist',
+    'concat:dist.full',
+    'sass:dev',
+  ])
+  grunt.registerTask('minify', ['uglify', 'sass:dist'])
+  grunt.registerTask('test', ['connect:tests', 'qunit', 'jshint'])
 
-  grunt.registerTask('ci', ['compile', 'test']);
-};
+  grunt.registerTask('ci', ['compile', 'test'])
+}

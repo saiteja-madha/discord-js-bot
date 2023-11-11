@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","de-ch",{toolbar:"Speichern"});
+﻿CKEDITOR.plugins.setLang('save', 'de-ch', { toolbar: 'Speichern' })

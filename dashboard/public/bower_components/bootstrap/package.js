@@ -4,29 +4,27 @@
 /* global Package:true */
 
 Package.describe({
-  name: 'twbs:bootstrap',  // https://atmospherejs.com/twbs/bootstrap
-  summary: 'The most popular front-end framework for developing responsive, mobile first projects on the web.',
+  name: 'twbs:bootstrap', // https://atmospherejs.com/twbs/bootstrap
+  summary:
+    'The most popular front-end framework for developing responsive, mobile first projects on the web.',
   version: '3.4.1',
-  git: 'https://github.com/twbs/bootstrap.git'
-});
+  git: 'https://github.com/twbs/bootstrap.git',
+})
 
 Package.onUse(function (api) {
-  api.versionsFrom('METEOR@1.0');
-  api.use('jquery', 'client');
+  api.versionsFrom('METEOR@1.0')
+  api.use('jquery', 'client')
   var assets = [
     'dist/fonts/glyphicons-halflings-regular.eot',
     'dist/fonts/glyphicons-halflings-regular.svg',
     'dist/fonts/glyphicons-halflings-regular.ttf',
     'dist/fonts/glyphicons-halflings-regular.woff',
-    'dist/fonts/glyphicons-halflings-regular.woff2'
-  ];
+    'dist/fonts/glyphicons-halflings-regular.woff2',
+  ]
   if (api.addAssets) {
-    api.addAssets(assets, 'client');
+    api.addAssets(assets, 'client')
   } else {
-    api.addFiles(assets, 'client', { isAsset: true });
+    api.addFiles(assets, 'client', { isAsset: true })
   }
-  api.addFiles([
-    'dist/css/bootstrap.css',
-    'dist/js/bootstrap.js'
-  ], 'client');
-});
+  api.addFiles(['dist/css/bootstrap.css', 'dist/js/bootstrap.js'], 'client')
+})

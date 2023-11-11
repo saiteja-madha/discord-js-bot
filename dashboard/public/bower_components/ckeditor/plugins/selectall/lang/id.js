@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("selectall","id",{toolbar:"Pilih Semua"});
+﻿CKEDITOR.plugins.setLang('selectall', 'id', { toolbar: 'Pilih Semua' })

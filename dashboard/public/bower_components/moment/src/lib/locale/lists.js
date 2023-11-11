@@ -1,31 +1,31 @@
-import isNumber from '../utils/is-number';
-import { getLocale } from './locales';
-import { createUTC } from '../create/utc';
+import isNumber from '../utils/is-number'
+import { getLocale } from './locales'
+import { createUTC } from '../create/utc'
 
-function get (format, index, field, setter) {
-    var locale = getLocale();
-    var utc = createUTC().set(setter, index);
-    return locale[field](utc, format);
+function get(format, index, field, setter) {
+  var locale = getLocale()
+  var utc = createUTC().set(setter, index)
+  return locale[field](utc, format)
 }
 
-function listMonthsImpl (format, index, field) {
-    if (isNumber(format)) {
-        index = format;
-        format = undefined;
-    }
+function listMonthsImpl(format, index, field) {
+  if (isNumber(format)) {
+    index = format
+    format = undefined
+  }
 
-    format = format || '';
+  format = format || ''
 
-    if (index != null) {
-        return get(format, index, field, 'month');
-    }
+  if (index != null) {
+    return get(format, index, field, 'month')
+  }
 
-    var i;
-    var out = [];
-    for (i = 0; i < 12; i++) {
-        out[i] = get(format, i, field, 'month');
-    }
-    return out;
+  var i
+  var out = []
+  for (i = 0; i < 12; i++) {
+    out[i] = get(format, i, field, 'month')
+  }
+  return out
 }
 
 // ()
@@ -36,58 +36,58 @@ function listMonthsImpl (format, index, field) {
 // (true, 5)
 // (true, fmt, 5)
 // (true, fmt)
-function listWeekdaysImpl (localeSorted, format, index, field) {
-    if (typeof localeSorted === 'boolean') {
-        if (isNumber(format)) {
-            index = format;
-            format = undefined;
-        }
-
-        format = format || '';
-    } else {
-        format = localeSorted;
-        index = format;
-        localeSorted = false;
-
-        if (isNumber(format)) {
-            index = format;
-            format = undefined;
-        }
-
-        format = format || '';
+function listWeekdaysImpl(localeSorted, format, index, field) {
+  if (typeof localeSorted === 'boolean') {
+    if (isNumber(format)) {
+      index = format
+      format = undefined
     }
 
-    var locale = getLocale(),
-        shift = localeSorted ? locale._week.dow : 0;
+    format = format || ''
+  } else {
+    format = localeSorted
+    index = format
+    localeSorted = false
 
-    if (index != null) {
-        return get(format, (index + shift) % 7, field, 'day');
+    if (isNumber(format)) {
+      index = format
+      format = undefined
     }
 
-    var i;
-    var out = [];
-    for (i = 0; i < 7; i++) {
-        out[i] = get(format, (i + shift) % 7, field, 'day');
-    }
-    return out;
+    format = format || ''
+  }
+
+  var locale = getLocale(),
+    shift = localeSorted ? locale._week.dow : 0
+
+  if (index != null) {
+    return get(format, (index + shift) % 7, field, 'day')
+  }
+
+  var i
+  var out = []
+  for (i = 0; i < 7; i++) {
+    out[i] = get(format, (i + shift) % 7, field, 'day')
+  }
+  return out
 }
 
-export function listMonths (format, index) {
-    return listMonthsImpl(format, index, 'months');
+export function listMonths(format, index) {
+  return listMonthsImpl(format, index, 'months')
 }
 
-export function listMonthsShort (format, index) {
-    return listMonthsImpl(format, index, 'monthsShort');
+export function listMonthsShort(format, index) {
+  return listMonthsImpl(format, index, 'monthsShort')
 }
 
-export function listWeekdays (localeSorted, format, index) {
-    return listWeekdaysImpl(localeSorted, format, index, 'weekdays');
+export function listWeekdays(localeSorted, format, index) {
+  return listWeekdaysImpl(localeSorted, format, index, 'weekdays')
 }
 
-export function listWeekdaysShort (localeSorted, format, index) {
-    return listWeekdaysImpl(localeSorted, format, index, 'weekdaysShort');
+export function listWeekdaysShort(localeSorted, format, index) {
+  return listWeekdaysImpl(localeSorted, format, index, 'weekdaysShort')
 }
 
-export function listWeekdaysMin (localeSorted, format, index) {
-    return listWeekdaysImpl(localeSorted, format, index, 'weekdaysMin');
+export function listWeekdaysMin(localeSorted, format, index) {
+  return listWeekdaysImpl(localeSorted, format, index, 'weekdaysMin')
 }

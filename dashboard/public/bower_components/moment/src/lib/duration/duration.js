@@ -1,16 +1,16 @@
 // Side effect imports
-import './prototype';
+import './prototype'
 
-import { createDuration } from './create';
-import { isDuration } from './constructor';
+import { createDuration } from './create'
+import { isDuration } from './constructor'
 import {
-    getSetRelativeTimeRounding,
-    getSetRelativeTimeThreshold
-} from './humanize';
+  getSetRelativeTimeRounding,
+  getSetRelativeTimeThreshold,
+} from './humanize'
 
 export {
-    createDuration,
-    isDuration,
-    getSetRelativeTimeRounding,
-    getSetRelativeTimeThreshold
-};
+  createDuration,
+  isDuration,
+  getSetRelativeTimeRounding,
+  getSetRelativeTimeThreshold,
+}

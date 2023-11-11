@@ -2,49 +2,49 @@ define(function () {
   // Macedonian
   return {
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      var message = 'Ве молиме внесете ' + args.maximum + ' помалку карактер';
+      var message = 'Ве молиме внесете ' + args.maximum + ' помалку карактер'
 
       if (args.maximum !== 1) {
-        message += 'и';
+        message += 'и'
       }
 
-      return message;
+      return message
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      var message = 'Ве молиме внесете уште ' + args.maximum + ' карактер';
+      var message = 'Ве молиме внесете уште ' + args.maximum + ' карактер'
 
       if (args.maximum !== 1) {
-        message += 'и';
+        message += 'и'
       }
 
-      return message;
+      return message
     },
     loadingMore: function () {
-      return 'Вчитување резултати…';
+      return 'Вчитување резултати…'
     },
     maximumSelected: function (args) {
-      var message = 'Можете да изберете само ' + args.maximum + ' ставк';
+      var message = 'Можете да изберете само ' + args.maximum + ' ставк'
 
       if (args.maximum === 1) {
-        message += 'а';
+        message += 'а'
       } else {
-        message += 'и';
+        message += 'и'
       }
 
-      return message;
+      return message
     },
     noResults: function () {
-      return 'Нема пронајдено совпаѓања';
+      return 'Нема пронајдено совпаѓања'
     },
     searching: function () {
-      return 'Пребарување…';
+      return 'Пребарување…'
     },
     removeAllItems: function () {
-      return 'Отстрани ги сите предмети';
-    }
-  };
-});
+      return 'Отстрани ги сите предмети'
+    },
+  }
+})

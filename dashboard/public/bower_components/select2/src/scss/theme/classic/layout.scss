@@ -1,9 +1,9 @@
-@import "defaults";
-@import "../../mixins/gradients";
+@import 'defaults';
+@import '../../mixins/gradients';
 
 .select2-container--classic {
-  @import "single";
-  @import "multiple";
+  @import 'single';
+  @import 'multiple';
 
   .select2-search--dropdown {
     .select2-search__field {
@@ -38,11 +38,11 @@
   }
 
   .select2-results__option {
-    &[role=group] {
+    &[role='group'] {
       padding: 0;
     }
 
-    &[aria-disabled=true] {
+    &[aria-disabled='true'] {
       color: $results-choice-fg-unselectable-color;
     }
   }

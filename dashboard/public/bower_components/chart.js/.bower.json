@@ -4,9 +4,7 @@
   "description": "Simple HTML5 Charts using the canvas element",
   "homepage": "https://github.com/nnnick/Chart.js",
   "author": "nnnick",
-  "main": [
-    "Chart.js"
-  ],
+  "main": ["Chart.js"],
   "dependencies": {},
   "_release": "1.0.2",
   "_resolution": {

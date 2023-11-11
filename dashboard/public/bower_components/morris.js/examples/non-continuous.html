@@ -5,15 +5,21 @@
   <script src="../morris.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.min.js"></script>
   <script src="lib/example.js"></script>
-  <link rel="stylesheet" href="lib/example.css">
-  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.min.css">
-  <link rel="stylesheet" href="../morris.css">
+  <link rel="stylesheet" href="lib/example.css" />
+  <link
+    rel="stylesheet"
+    href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.min.css"
+  />
+  <link rel="stylesheet" href="../morris.css" />
 </head>
 <body>
-<h1>Non-continuous data</h1>
-<p>Null series values will break the line when rendering, missing values will be skipped</p>
-<div id="graph"></div>
-<pre id="code" class="prettyprint linenums">
+  <h1>Non-continuous data</h1>
+  <p>
+    Null series values will break the line when rendering, missing values will
+    be skipped
+  </p>
+  <div id="graph"></div>
+  <pre id="code" class="prettyprint linenums">
 /* data stolen from http://howmanyleft.co.uk/vehicle/jaguar_'e'_type */
 var day_data = [
   {"period": "2012-10-01", "licensed": 3407},
@@ -38,5 +44,6 @@ Morris.Line({
   /* setting `xLabels` is recommended when using xLabelFormat */
   xLabels: 'day'
 });
-</pre>
+</pre
+  >
 </body>

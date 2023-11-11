@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","sl",{toolbar:"Shrani"});
+﻿CKEDITOR.plugins.setLang('save', 'sl', { toolbar: 'Shrani' })

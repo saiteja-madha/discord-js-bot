@@ -5,24 +5,28 @@ anchor: getting-started
 
 ###Include Chart.js
 
-First we need to include the Chart.js library on the page. The library occupies a global variable of `Chart`.
+First we need to include the Chart.js library on the page. The library occupies
+a global variable of `Chart`.
 
 ```html
 <script src="Chart.js"></script>
 ```
 
-Alternatively, if you're using an AMD loader for JavaScript modules, that is also supported in the Chart.js core. Please note: the library will still occupy a global variable of `Chart`, even if it detects `define` and `define.amd`. If this is a problem, you can call `noConflict` to restore the global Chart variable to it's previous owner.
+Alternatively, if you're using an AMD loader for JavaScript modules, that is
+also supported in the Chart.js core. Please note: the library will still occupy
+a global variable of `Chart`, even if it detects `define` and `define.amd`. If
+this is a problem, you can call `noConflict` to restore the global Chart
+variable to it's previous owner.
 
 ```javascript
 // Using requirejs
-require(['path/to/Chartjs'], function(Chart){
-	// Use Chart.js as normal here.
+require(['path/to/Chartjs'], function (Chart) {
+  // Use Chart.js as normal here.
 
-	// Chart.noConflict restores the Chart global variable to it's previous owner
-	// The function returns what was previously Chart, allowing you to reassign.
-	var Chartjs = Chart.noConflict();
-
-});
+  // Chart.noConflict restores the Chart global variable to it's previous owner
+  // The function returns what was previously Chart, allowing you to reassign.
+  var Chartjs = Chart.noConflict()
+})
 ```
 
 You can also grab Chart.js using bower:
@@ -33,7 +37,8 @@ bower install Chart.js --save
 
 ###Creating a chart
 
-To create a chart, we need to instantiate the `Chart` class. To do this, we need to pass in the 2d context of where we want to draw the chart. Here's an example.
+To create a chart, we need to instantiate the `Chart` class. To do this, we need
+to pass in the 2d context of where we want to draw the chart. Here's an example.
 
 ```html
 <canvas id="myChart" width="400" height="400"></canvas>
@@ -41,32 +46,41 @@ To create a chart, we need to instantiate the `Chart` class. To do this, we need
 
 ```javascript
 // Get the context of the canvas element we want to select
-var ctx = document.getElementById("myChart").getContext("2d");
-var myNewChart = new Chart(ctx).PolarArea(data);
+var ctx = document.getElementById('myChart').getContext('2d')
+var myNewChart = new Chart(ctx).PolarArea(data)
 ```
 
-We can also get the context of our canvas with jQuery. To do this, we need to get the DOM node out of the jQuery collection, and call the `getContext("2d")` method on that.
+We can also get the context of our canvas with jQuery. To do this, we need to
+get the DOM node out of the jQuery collection, and call the `getContext("2d")`
+method on that.
 
 ```javascript
 // Get context with jQuery - using jQuery's .get() method.
-var ctx = $("#myChart").get(0).getContext("2d");
+var ctx = $('#myChart').get(0).getContext('2d')
 // This will get the first returned node in the jQuery collection.
-var myNewChart = new Chart(ctx);
+var myNewChart = new Chart(ctx)
 ```
 
-After we've instantiated the Chart class on the canvas we want to draw on, Chart.js will handle the scaling for retina displays.
+After we've instantiated the Chart class on the canvas we want to draw on,
+Chart.js will handle the scaling for retina displays.
 
-With the Chart class set up, we can go on to create one of the charts Chart.js has available. In the example below, we would be drawing a Polar area chart.
+With the Chart class set up, we can go on to create one of the charts Chart.js
+has available. In the example below, we would be drawing a Polar area chart.
 
 ```javascript
-new Chart(ctx).PolarArea(data, options);
+new Chart(ctx).PolarArea(data, options)
 ```
 
-We call a method of the name of the chart we want to create. We pass in the data for that chart type, and the options for that chart as parameters. Chart.js will merge the global defaults with chart type specific defaults, then merge any options passed in as a second argument after data.
+We call a method of the name of the chart we want to create. We pass in the data
+for that chart type, and the options for that chart as parameters. Chart.js will
+merge the global defaults with chart type specific defaults, then merge any
+options passed in as a second argument after data.
 
 ###Global chart configuration
 
-This concept was introduced in Chart.js 1.0 to keep configuration DRY, and allow for changing options globally across chart types, avoiding the need to specify options for each instance, or the default for a particular chart type.
+This concept was introduced in Chart.js 1.0 to keep configuration DRY, and allow
+for changing options globally across chart types, avoiding the need to specify
+options for each instance, or the default for a particular chart type.
 
 ```javascript
 Chart.defaults.global = {
@@ -194,10 +208,11 @@ Chart.defaults.global = {
 }
 ```
 
-If for example, you wanted all charts created to be responsive, and resize when the browser window does, the following setting can be changed:
+If for example, you wanted all charts created to be responsive, and resize when
+the browser window does, the following setting can be changed:
 
 ```javascript
-Chart.defaults.global.responsive = true;
+Chart.defaults.global.responsive = true
 ```
 
 Now, every time we create a chart, `options.responsive` will be `true`.

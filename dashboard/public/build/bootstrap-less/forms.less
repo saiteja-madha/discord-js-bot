@@ -2,7 +2,6 @@
 // Forms
 // --------------------------------------------------
 
-
 // Normalize non-controls
 //
 // Restyle and baseline non-control form elements.
@@ -36,7 +35,6 @@ label {
   font-weight: bold;
 }
 
-
 // Normalize form controls
 //
 // While most of our form styles require extra classes, some basic normalization
@@ -44,24 +42,24 @@ label {
 // address browser inconsistencies.
 
 // Override content-box in Normalize (* isn't specific enough)
-input[type="search"] {
+input[type='search'] {
   .box-sizing(border-box);
 }
 
 // Position radios and checkboxes better
-input[type="radio"],
-input[type="checkbox"] {
+input[type='radio'],
+input[type='checkbox'] {
   margin: 4px 0 0;
   margin-top: 1px \9; // IE8-9
   line-height: normal;
 }
 
-input[type="file"] {
+input[type='file'] {
   display: block;
 }
 
 // Make range inputs behave like textual form controls
-input[type="range"] {
+input[type='range'] {
   display: block;
   width: 100%;
 }
@@ -73,9 +71,9 @@ select[size] {
 }
 
 // Focus for file, radio, and checkbox
-input[type="file"]:focus,
-input[type="radio"]:focus,
-input[type="checkbox"]:focus {
+input[type='file']:focus,
+input[type='radio']:focus,
+input[type='checkbox']:focus {
   .tab-focus();
 }
 
@@ -87,7 +85,6 @@ output {
   line-height: @line-height-base;
   color: @input-color;
 }
-
 
 // Common form controls
 //
@@ -123,8 +120,8 @@ output {
   background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
   border: 1px solid @input-border;
   border-radius: @input-border-radius; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
-  .box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
-  .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
+  .box-shadow(inset 0 1px 1px rgba(0,0,0,0.075));
+  .transition(~'border-color ease-in-out .15s, box-shadow ease-in-out .15s');
 
   // Customize the `:focus` state to imitate native WebKit styles.
   .form-control-focus();
@@ -161,7 +158,6 @@ output {
   }
 }
 
-
 // Search inputs in iOS
 //
 // This overrides the extra rounded corners on search inputs in iOS so that our
@@ -169,10 +165,9 @@ output {
 // be added to `.form-control` as it's not specific enough. For details, see
 // https://github.com/twbs/bootstrap/issues/11586.
 
-input[type="search"] {
+input[type='search'] {
   -webkit-appearance: none;
 }
-
 
 // Special styles for iOS temporal inputs
 //
@@ -184,10 +179,10 @@ input[type="search"] {
 // Note that as of 9.3, iOS doesn't support `week`.
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  input[type="date"],
-  input[type="time"],
-  input[type="datetime-local"],
-  input[type="month"] {
+  input[type='date'],
+  input[type='time'],
+  input[type='datetime-local'],
+  input[type='month'] {
     &.form-control {
       line-height: @input-height-base;
     }
@@ -204,7 +199,6 @@ input[type="search"] {
   }
 }
 
-
 // Form groups
 //
 // Designed to help with the organization and spacing of vertical forms. For
@@ -213,7 +207,6 @@ input[type="search"] {
 .form-group {
   margin-bottom: @form-group-margin-bottom;
 }
-
 
 // Checkboxes and radios
 //
@@ -234,10 +227,10 @@ input[type="search"] {
     cursor: pointer;
   }
 }
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
+.radio input[type='radio'],
+.radio-inline input[type='radio'],
+.checkbox input[type='checkbox'],
+.checkbox-inline input[type='checkbox'] {
   position: absolute;
   margin-left: -20px;
   margin-top: 4px \9;
@@ -269,8 +262,8 @@ input[type="search"] {
 // Some special care is needed because <label>s don't inherit their parent's `cursor`.
 //
 // Note: Neither radios nor checkboxes can be readonly.
-input[type="radio"],
-input[type="checkbox"] {
+input[type='radio'],
+input[type='checkbox'] {
   &[disabled],
   &.disabled,
   fieldset[disabled] & {
@@ -296,7 +289,6 @@ input[type="checkbox"] {
   }
 }
 
-
 // Static form control text
 //
 // Apply class to a `p` element to make any string of text align with labels in
@@ -316,7 +308,6 @@ input[type="checkbox"] {
     padding-right: 0;
   }
 }
-
 
 // Form control sizing
 //
@@ -382,7 +373,6 @@ input[type="checkbox"] {
   }
 }
 
-
 // Form control feedback states
 //
 // Apply contextual and semantic states to individual form controls.
@@ -437,7 +427,6 @@ input[type="checkbox"] {
 
 // Reposition feedback icon if input has visible label above
 .has-feedback label {
-
   & ~ .form-control-feedback {
     top: (@line-height-computed + 5); // Height of the `label` and its margin
   }
@@ -445,7 +434,6 @@ input[type="checkbox"] {
     top: 0;
   }
 }
-
 
 // Help text
 //
@@ -459,7 +447,6 @@ input[type="checkbox"] {
   color: lighten(@text-color, 25%); // lighten the text some for contrast
 }
 
-
 // Inline forms
 //
 // Make forms appear inline(-block) by adding the `.form-inline` class. Inline
@@ -472,7 +459,6 @@ input[type="checkbox"] {
 // Heads up! This is mixin-ed into `.navbar-form` in navbars.less.
 
 .form-inline {
-
   // Kick in the inline
   @media (min-width: @screen-sm-min) {
     // Inline-block all the things for "inline"
@@ -528,8 +514,8 @@ input[type="checkbox"] {
         padding-left: 0;
       }
     }
-    .radio input[type="radio"],
-    .checkbox input[type="checkbox"] {
+    .radio input[type='radio'],
+    .checkbox input[type='checkbox'] {
       position: relative;
       margin-left: 0;
     }
@@ -541,14 +527,12 @@ input[type="checkbox"] {
   }
 }
 
-
 // Horizontal forms
 //
 // Horizontal forms are built on grid classes and allow you to create forms with
 // labels on the left and inputs on the right.
 
 .form-horizontal {
-
   // Consistent vertical alignment of radios and checkboxes
   //
   // Labels also get some reset styles, but that is scoped to a media query below.
@@ -578,7 +562,9 @@ input[type="checkbox"] {
     .control-label {
       text-align: right;
       margin-bottom: 0;
-      padding-top: (@padding-base-vertical + 1); // Default padding plus a border
+      padding-top: (
+        @padding-base-vertical + 1
+      ); // Default padding plus a border
     }
   }
 

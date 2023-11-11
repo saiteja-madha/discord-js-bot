@@ -2,38 +2,38 @@ define(function () {
   // Thai
   return {
     errorLoading: function () {
-      return 'ไม่สามารถค้นข้อมูลได้';
+      return 'ไม่สามารถค้นข้อมูลได้'
     },
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      var message = 'โปรดลบออก ' + overChars + ' ตัวอักษร';
+      var message = 'โปรดลบออก ' + overChars + ' ตัวอักษร'
 
-      return message;
+      return message
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      var message = 'โปรดพิมพ์เพิ่มอีก ' + remainingChars + ' ตัวอักษร';
+      var message = 'โปรดพิมพ์เพิ่มอีก ' + remainingChars + ' ตัวอักษร'
 
-      return message;
+      return message
     },
     loadingMore: function () {
-      return 'กำลังค้นข้อมูลเพิ่ม…';
+      return 'กำลังค้นข้อมูลเพิ่ม…'
     },
     maximumSelected: function (args) {
-      var message = 'คุณสามารถเลือกได้ไม่เกิน ' + args.maximum + ' รายการ';
+      var message = 'คุณสามารถเลือกได้ไม่เกิน ' + args.maximum + ' รายการ'
 
-      return message;
+      return message
     },
     noResults: function () {
-      return 'ไม่พบข้อมูล';
+      return 'ไม่พบข้อมูล'
     },
     searching: function () {
-      return 'กำลังค้นข้อมูล…';
+      return 'กำลังค้นข้อมูล…'
     },
     removeAllItems: function () {
-      return 'ลบรายการทั้งหมด';
-    }
-  };
-});
+      return 'ลบรายการทั้งหมด'
+    },
+  }
+})

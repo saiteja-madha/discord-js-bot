@@ -1,1 +1,4 @@
-﻿CKEDITOR.plugins.setLang("sourcedialog","ar",{toolbar:"المصدر",title:"المصدر"});
+﻿CKEDITOR.plugins.setLang('sourcedialog', 'ar', {
+  toolbar: 'المصدر',
+  title: 'المصدر',
+})

@@ -22,7 +22,7 @@
 }
 
 .pace .pace-progress {
-  background-color: #FF0000;
+  background-color: #ff0000;
   position: fixed;
   top: 0;
   right: 100%;
@@ -35,10 +35,26 @@
   -o-border-radius: 0 0 4px 0;
   border-radius: 0 0 4px 0;
 
-  -webkit-box-shadow: inset -1px 0 #AF0000, inset 0 -1px #AF0000, inset 0 2px rgba(255, 255, 255, 0.5), inset 0 6px rgba(255, 255, 255, .3);
-  -moz-box-shadow: inset -1px 0 #AF0000, inset 0 -1px #AF0000, inset 0 2px rgba(255, 255, 255, 0.5), inset 0 6px rgba(255, 255, 255, .3);
-  -o-box-shadow: inset -1px 0 #AF0000, inset 0 -1px #AF0000, inset 0 2px rgba(255, 255, 255, 0.5), inset 0 6px rgba(255, 255, 255, .3);
-  box-shadow: inset -1px 0 #AF0000, inset 0 -1px #AF0000, inset 0 2px rgba(255, 255, 255, 0.5), inset 0 6px rgba(255, 255, 255, .3);
+  -webkit-box-shadow:
+    inset -1px 0 #af0000,
+    inset 0 -1px #af0000,
+    inset 0 2px rgba(255, 255, 255, 0.5),
+    inset 0 6px rgba(255, 255, 255, 0.3);
+  -moz-box-shadow:
+    inset -1px 0 #af0000,
+    inset 0 -1px #af0000,
+    inset 0 2px rgba(255, 255, 255, 0.5),
+    inset 0 6px rgba(255, 255, 255, 0.3);
+  -o-box-shadow:
+    inset -1px 0 #af0000,
+    inset 0 -1px #af0000,
+    inset 0 2px rgba(255, 255, 255, 0.5),
+    inset 0 6px rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset -1px 0 #af0000,
+    inset 0 -1px #af0000,
+    inset 0 2px rgba(255, 255, 255, 0.5),
+    inset 0 6px rgba(255, 255, 255, 0.3);
 }
 
 .pace .pace-activity {
@@ -48,10 +64,22 @@
   right: -28px;
   bottom: 0;
 
-  -webkit-background-image: radial-gradient(rgba(255, 255, 255, .65) 0%, rgba(255, 255, 255, .15) 100%);
-  -moz-background-image: radial-gradient(rgba(255, 255, 255, .65) 0%, rgba(255, 255, 255, .15) 100%);
-  -o-background-image: radial-gradient(rgba(255, 255, 255, .65) 0%, rgba(255, 255, 255, .15) 100%);
-  background-image: radial-gradient(rgba(255, 255, 255, .65) 0%, rgba(255, 255, 255, .15) 100%);
+  -webkit-background-image: radial-gradient(
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  -moz-background-image: radial-gradient(
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  -o-background-image: radial-gradient(
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
 
   -webkit-background-size: 28px 100%;
   -moz-background-size: 28px 100%;
@@ -66,22 +94,52 @@
 }
 
 @-webkit-keyframes pace-theme-mac-osx-motion {
-  0% { -webkit-transform: none; transform: none; }
-  100% { -webkit-transform: translate(-28px, 0); transform: translate(-28px, 0); }
+  0% {
+    -webkit-transform: none;
+    transform: none;
+  }
+  100% {
+    -webkit-transform: translate(-28px, 0);
+    transform: translate(-28px, 0);
+  }
 }
 @-moz-keyframes pace-theme-mac-osx-motion {
-  0% { -moz-transform: none; transform: none; }
-  100% { -moz-transform: translate(-28px, 0); transform: translate(-28px, 0); }
+  0% {
+    -moz-transform: none;
+    transform: none;
+  }
+  100% {
+    -moz-transform: translate(-28px, 0);
+    transform: translate(-28px, 0);
+  }
 }
 @-o-keyframes pace-theme-mac-osx-motion {
-  0% { -o-transform: none; transform: none; }
-  100% { -o-transform: translate(-28px, 0); transform: translate(-28px, 0); }
+  0% {
+    -o-transform: none;
+    transform: none;
+  }
+  100% {
+    -o-transform: translate(-28px, 0);
+    transform: translate(-28px, 0);
+  }
 }
 @-ms-keyframes pace-theme-mac-osx-motion {
-  0% { -ms-transform: none; transform: none; }
-  100% { -ms-transform: translate(-28px, 0); transform: translate(-28px, 0); }
+  0% {
+    -ms-transform: none;
+    transform: none;
+  }
+  100% {
+    -ms-transform: translate(-28px, 0);
+    transform: translate(-28px, 0);
+  }
 }
 @keyframes pace-theme-mac-osx-motion {
-  0% { transform: none; transform: none; }
-  100% { transform: translate(-28px, 0); transform: translate(-28px, 0); }
+  0% {
+    transform: none;
+    transform: none;
+  }
+  100% {
+    transform: translate(-28px, 0);
+    transform: translate(-28px, 0);
+  }
 }

@@ -4,7 +4,6 @@
 // Tables
 // --------------------------------------------------
 
-
 table {
   background-color: @table-bg;
 
@@ -12,7 +11,7 @@ table {
   //
   // Reset default table behavior
 
-  col[class*="col-"] {
+  col[class*='col-'] {
     position: static; // Prevent border hiding in Firefox and IE9-11 (see https://github.com/twbs/bootstrap/issues/11623)
     display: table-column;
     float: none;
@@ -20,7 +19,7 @@ table {
 
   td,
   th {
-    &[class*="col-"] {
+    &[class*='col-'] {
       position: static; // Prevent border hiding in Firefox and IE9-11 (see https://github.com/twbs/bootstrap/issues/11623)
       display: table-cell;
       float: none;
@@ -38,7 +37,6 @@ caption {
 th {
   text-align: left;
 }
-
 
 // Baseline styles
 
@@ -87,7 +85,6 @@ th {
   }
 }
 
-
 // Condensed table w/ half padding
 
 .table-condensed {
@@ -102,7 +99,6 @@ th {
     }
   }
 }
-
 
 // Bordered version
 //
@@ -128,7 +124,6 @@ th {
   }
 }
 
-
 // Zebra-striping
 //
 // Default zebra-stripe styles (alternating gray and transparent backgrounds)
@@ -139,7 +134,6 @@ th {
   }
 }
 
-
 // Hover effect
 //
 // Placed here since it has to come after the potential zebra striping
@@ -149,7 +143,6 @@ th {
     background-color: @table-bg-hover;
   }
 }
-
 
 // Table backgrounds
 //
@@ -163,7 +156,6 @@ th {
 .table-row-variant(warning; @state-warning-bg);
 .table-row-variant(danger; @state-danger-bg);
 
-
 // Responsive tables
 //
 // Wrap your tables in `.table-responsive` and we'll make them mobile friendly
@@ -171,12 +163,12 @@ th {
 // will display normally.
 
 .table-responsive {
-  min-height: .01%; // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837)
+  min-height: 0.01%; // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837)
   overflow-x: auto;
 
   @media screen and (max-width: @screen-xs-max) {
     width: 100%;
-    margin-bottom: (@line-height-computed * .75);
+    margin-bottom: (@line-height-computed * 0.75);
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     border: 1px solid @table-border-color;
@@ -230,7 +222,6 @@ th {
           }
         }
       }
-
     }
   }
 }

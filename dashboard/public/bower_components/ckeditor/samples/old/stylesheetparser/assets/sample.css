@@ -1,70 +1,68 @@
-body
-{
-	font-family: Arial, Verdana, sans-serif;
-	font-size: 12px;
-	color: #222;
-	background-color: #fff;
+body {
+  font-family: Arial, Verdana, sans-serif;
+  font-size: 12px;
+  color: #222;
+  background-color: #fff;
 }
 
 /* preserved spaces for rtl list item bullets. (#6249)*/
-ol,ul,dl
-{
-	padding-right:40px;
+ol,
+ul,
+dl {
+  padding-right: 40px;
 }
 
-h1,h2,h3,h4
-{
-	font-family: Georgia, Times, serif;
+h1,
+h2,
+h3,
+h4 {
+  font-family: Georgia, Times, serif;
 }
 
-h1.lightBlue
-{
-	color: #00A6C7;
-	font-size: 1.8em;
-	font-weight:normal;
+h1.lightBlue {
+  color: #00a6c7;
+  font-size: 1.8em;
+  font-weight: normal;
 }
 
-h3.green
-{
-	color: #739E39;
-	font-weight:normal;
+h3.green {
+  color: #739e39;
+  font-weight: normal;
 }
 
-span.markYellow { background-color: yellow; }
-span.markGreen { background-color: lime; }
-
-img.left
-{
-	padding: 5px;
-	margin-right: 5px;
-	float:left;
-	border:2px solid #DDD;
+span.markYellow {
+  background-color: yellow;
+}
+span.markGreen {
+  background-color: lime;
 }
 
-img.right
-{
-	padding: 5px;
-	margin-right: 5px;
-	float:right;
-	border:2px solid #DDD;
+img.left {
+  padding: 5px;
+  margin-right: 5px;
+  float: left;
+  border: 2px solid #ddd;
 }
 
-a.green
-{
-	color:#739E39;
+img.right {
+  padding: 5px;
+  margin-right: 5px;
+  float: right;
+  border: 2px solid #ddd;
 }
 
-table.grey
-{
-	background-color : #F5F5F5;
+a.green {
+  color: #739e39;
 }
 
-table.grey th
-{
-	background-color : #DDD;
+table.grey {
+  background-color: #f5f5f5;
 }
 
-ul.square
-{
-	list-style-type : square;
+table.grey th {
+  background-color: #ddd;
+}
+
+ul.square {
+  list-style-type: square;
 }

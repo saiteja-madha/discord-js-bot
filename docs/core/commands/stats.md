@@ -8,30 +8,30 @@ description: 5 commands
 
 **Trackings**
 
-* **Description**: enable or disable tracking stats in the server
-* **Usage**: `!statstracking <on|off>`
+- **Description**: enable or disable tracking stats in the server
+- **Usage**: `!statstracking <on|off>`
 
 **Levelup Message**
 
-* **Description**: set custom level up message
-* **Usage**: `!levelup message <new-message>`
+- **Description**: set custom level up message
+- **Usage**: `!levelup message <new-message>`
 
 **Levelup Channel**
 
-* **Description**: set the channel to send level up messages to
-* **Usage**: `!levelup channel <#channel>`
+- **Description**: set the channel to send level up messages to
+- **Usage**: `!levelup channel <#channel>`
 
 ### User Commands
 
 **Stats**
 
-* **Description**: get your stats
-* **Usage**: `!stats`
+- **Description**: get your stats
+- **Usage**: `!stats`
 
 **Rank**
 
-* **Description**: displays members rank in this server
-* **Usage**: `!rank`
+- **Description**: displays members rank in this server
+- **Usage**: `!rank`
 
 ## ![](https://cdn.discordapp.com/emojis/1036083490292244493.png)》Support Server
 

@@ -2,38 +2,38 @@ define(function () {
   // Japanese
   return {
     errorLoading: function () {
-      return '結果が読み込まれませんでした';
+      return '結果が読み込まれませんでした'
     },
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      var message = overChars + ' 文字を削除してください';
+      var message = overChars + ' 文字を削除してください'
 
-      return message;
+      return message
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      var message = '少なくとも ' + remainingChars + ' 文字を入力してください';
+      var message = '少なくとも ' + remainingChars + ' 文字を入力してください'
 
-      return message;
+      return message
     },
     loadingMore: function () {
-      return '読み込み中…';
+      return '読み込み中…'
     },
     maximumSelected: function (args) {
-      var message = args.maximum + ' 件しか選択できません';
+      var message = args.maximum + ' 件しか選択できません'
 
-      return message;
+      return message
     },
     noResults: function () {
-      return '対象が見つかりません';
+      return '対象が見つかりません'
     },
     searching: function () {
-      return '検索しています…';
+      return '検索しています…'
     },
     removeAllItems: function () {
-      return 'すべてのアイテムを削除';
-    }
-  };
-});
+      return 'すべてのアイテムを削除'
+    },
+  }
+})

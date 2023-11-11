@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("print","af",{toolbar:"Druk"});
+﻿CKEDITOR.plugins.setLang('print', 'af', { toolbar: 'Druk' })

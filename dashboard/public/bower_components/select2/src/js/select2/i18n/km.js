@@ -2,38 +2,38 @@ define(function () {
   // Khmer
   return {
     errorLoading: function () {
-      return 'មិនអាចទាញយកទិន្នន័យ';
+      return 'មិនអាចទាញយកទិន្នន័យ'
     },
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      var message = 'សូមលុបចេញ  ' + overChars + ' អក្សរ';
+      var message = 'សូមលុបចេញ  ' + overChars + ' អក្សរ'
 
-      return message;
+      return message
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      var message = 'សូមបញ្ចូល' + remainingChars + ' អក្សរ រឺ ច្រើនជាងនេះ';
+      var message = 'សូមបញ្ចូល' + remainingChars + ' អក្សរ រឺ ច្រើនជាងនេះ'
 
-      return message;
+      return message
     },
     loadingMore: function () {
-      return 'កំពុងទាញយកទិន្នន័យបន្ថែម...';
+      return 'កំពុងទាញយកទិន្នន័យបន្ថែម...'
     },
     maximumSelected: function (args) {
-      var message = 'អ្នកអាចជ្រើសរើសបានតែ ' + args.maximum + ' ជម្រើសប៉ុណ្ណោះ';
+      var message = 'អ្នកអាចជ្រើសរើសបានតែ ' + args.maximum + ' ជម្រើសប៉ុណ្ណោះ'
 
-      return message;
+      return message
     },
     noResults: function () {
-      return 'មិនមានលទ្ធផល';
+      return 'មិនមានលទ្ធផល'
     },
     searching: function () {
-      return 'កំពុងស្វែងរក...';
+      return 'កំពុងស្វែងរក...'
     },
     removeAllItems: function () {
-      return 'លុបធាតុទាំងអស់';
-    }
-  };
-});
+      return 'លុបធាតុទាំងអស់'
+    },
+  }
+})

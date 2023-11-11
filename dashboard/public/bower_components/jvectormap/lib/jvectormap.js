@@ -2,18 +2,17 @@
  * @namespace jvm Holds core methods and classes used by jVectorMap.
  */
 var jvm = {
-
   /**
    * Inherits child's prototype from the parent's one.
    * @param {Function} child
    * @param {Function} parent
    */
-  inherits: function(child, parent) {
+  inherits: function (child, parent) {
     function temp() {}
-    temp.prototype = parent.prototype;
-    child.prototype = new temp();
-    child.prototype.constructor = child;
-    child.parentClass = parent;
+    temp.prototype = parent.prototype
+    child.prototype = new temp()
+    child.prototype.constructor = child
+    child.parentClass = parent
   },
 
   /**
@@ -21,79 +20,79 @@ var jvm = {
    * @param {Function} target
    * @param {Function} source
    */
-  mixin: function(target, source){
-    var prop;
+  mixin: function (target, source) {
+    var prop
 
     for (prop in source.prototype) {
       if (source.prototype.hasOwnProperty(prop)) {
-        target.prototype[prop] = source.prototype[prop];
+        target.prototype[prop] = source.prototype[prop]
       }
     }
   },
 
-  min: function(values){
+  min: function (values) {
     var min = Number.MAX_VALUE,
-        i;
+      i
 
     if (values instanceof Array) {
       for (i = 0; i < values.length; i++) {
         if (values[i] < min) {
-          min = values[i];
+          min = values[i]
         }
       }
     } else {
       for (i in values) {
         if (values[i] < min) {
-          min = values[i];
+          min = values[i]
         }
       }
     }
-    return min;
+    return min
   },
 
-  max: function(values){
+  max: function (values) {
     var max = Number.MIN_VALUE,
-        i;
+      i
 
     if (values instanceof Array) {
       for (i = 0; i < values.length; i++) {
         if (values[i] > max) {
-          max = values[i];
+          max = values[i]
         }
       }
     } else {
       for (i in values) {
         if (values[i] > max) {
-          max = values[i];
+          max = values[i]
         }
       }
     }
-    return max;
+    return max
   },
 
-  keys: function(object){
+  keys: function (object) {
     var keys = [],
-        key;
+      key
 
     for (key in object) {
-      keys.push(key);
+      keys.push(key)
     }
-    return keys;
+    return keys
   },
 
-  values: function(object){
+  values: function (object) {
     var values = [],
-        key,
-        i;
+      key,
+      i
 
     for (i = 0; i < arguments.length; i++) {
-      object = arguments[i];
+      object = arguments[i]
       for (key in object) {
-        values.push(object[key]);
+        values.push(object[key])
       }
     }
-    return values;
-  }
-};
+    return values
+  },
+}
 
-jvm.$ = jQuery;
+jvm.$ = jQuery

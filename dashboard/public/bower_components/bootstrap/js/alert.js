@@ -6,15 +6,14 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-
-+function ($) {
-  'use strict';
+;+(function ($) {
+  'use strict'
 
   // ALERT CLASS DEFINITION
   // ======================
 
   var dismiss = '[data-dismiss="alert"]'
-  var Alert   = function (el) {
+  var Alert = function (el) {
     $(el).on('click', dismiss, this.close)
   }
 
@@ -23,7 +22,7 @@
   Alert.TRANSITION_DURATION = 150
 
   Alert.prototype.close = function (e) {
-    var $this    = $(this)
+    var $this = $(this)
     var selector = $this.attr('data-target')
 
     if (!selector) {
@@ -31,7 +30,7 @@
       selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
     }
 
-    selector    = selector === '#' ? [] : selector
+    selector = selector === '#' ? [] : selector
     var $parent = $(document).find(selector)
 
     if (e) e.preventDefault()
@@ -40,7 +39,7 @@
       $parent = $this.closest('.alert')
     }
 
-    $parent.trigger(e = $.Event('close.bs.alert'))
+    $parent.trigger((e = $.Event('close.bs.alert')))
 
     if (e.isDefaultPrevented()) return
 
@@ -51,13 +50,12 @@
       $parent.detach().trigger('closed.bs.alert').remove()
     }
 
-    $.support.transition && $parent.hasClass('fade') ?
-      $parent
-        .one('bsTransitionEnd', removeElement)
-        .emulateTransitionEnd(Alert.TRANSITION_DURATION) :
-      removeElement()
+    $.support.transition && $parent.hasClass('fade')
+      ? $parent
+          .one('bsTransitionEnd', removeElement)
+          .emulateTransitionEnd(Alert.TRANSITION_DURATION)
+      : removeElement()
   }
-
 
   // ALERT PLUGIN DEFINITION
   // =======================
@@ -65,7 +63,7 @@
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this)
-      var data  = $this.data('bs.alert')
+      var data = $this.data('bs.alert')
 
       if (!data) $this.data('bs.alert', (data = new Alert(this)))
       if (typeof option == 'string') data[option].call($this)
@@ -74,9 +72,8 @@
 
   var old = $.fn.alert
 
-  $.fn.alert             = Plugin
+  $.fn.alert = Plugin
   $.fn.alert.Constructor = Alert
-
 
   // ALERT NO CONFLICT
   // =================
@@ -86,10 +83,8 @@
     return this
   }
 
-
   // ALERT DATA-API
   // ==============
 
   $(document).on('click.bs.alert.data-api', dismiss, Alert.prototype.close)
-
-}(jQuery);
+})(jQuery)

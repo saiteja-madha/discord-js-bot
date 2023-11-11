@@ -1,1 +1,4 @@
-﻿CKEDITOR.plugins.setLang("sourcedialog","cs",{toolbar:"Zdroj",title:"Zdroj"});
+﻿CKEDITOR.plugins.setLang('sourcedialog', 'cs', {
+  toolbar: 'Zdroj',
+  title: 'Zdroj',
+})

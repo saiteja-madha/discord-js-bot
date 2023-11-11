@@ -2,7 +2,6 @@
 // Grid system
 // --------------------------------------------------
 
-
 // Container widths
 //
 // Set the container width, and override it for fixed navbars in media queries.
@@ -21,7 +20,6 @@
   }
 }
 
-
 // Fluid container
 //
 // Utilizes the mixin meant for fixed width containers, but without any defined
@@ -30,7 +28,6 @@
 .container-fluid {
   .container-fixed();
 }
-
 
 // Row
 //
@@ -44,12 +41,11 @@
   margin-right: 0;
   margin-left: 0;
 
-  [class*="col-"] {
+  [class*='col-'] {
     padding-right: 0;
     padding-left: 0;
   }
 }
-
 
 // Columns
 //
@@ -57,14 +53,12 @@
 
 .make-grid-columns();
 
-
 // Extra small grid
 //
 // Columns, offsets, pushes, and pulls for extra small devices like
 // smartphones.
 
 .make-grid(xs);
-
 
 // Small grid
 //
@@ -75,7 +69,6 @@
   .make-grid(sm);
 }
 
-
 // Medium grid
 //
 // Columns, offsets, pushes, and pulls for the desktop device range.
@@ -83,7 +76,6 @@
 @media (min-width: @screen-md-min) {
   .make-grid(md);
 }
-
 
 // Large grid
 //

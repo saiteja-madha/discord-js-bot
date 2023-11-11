@@ -17,42 +17,43 @@ var defaults = {
       maxLeft: 100,
       maxTop: 100,
       callLeft: 'setSaturation',
-      callTop: 'setBrightness'
+      callTop: 'setBrightness',
     },
     hue: {
       maxLeft: 0,
       maxTop: 100,
       callLeft: false,
-      callTop: 'setHue'
+      callTop: 'setHue',
     },
     alpha: {
       maxLeft: 0,
       maxTop: 100,
       callLeft: false,
-      callTop: 'setAlpha'
-    }
+      callTop: 'setAlpha',
+    },
   },
   slidersHorz: {
     saturation: {
       maxLeft: 100,
       maxTop: 100,
       callLeft: 'setSaturation',
-      callTop: 'setBrightness'
+      callTop: 'setBrightness',
     },
     hue: {
       maxLeft: 100,
       maxTop: 0,
       callLeft: 'setHue',
-      callTop: false
+      callTop: false,
     },
     alpha: {
       maxLeft: 100,
       maxTop: 0,
       callLeft: 'setAlpha',
-      callTop: false
-    }
+      callTop: false,
+    },
   },
-  template: '<div class="colorpicker dropdown-menu">' +
+  template:
+    '<div class="colorpicker dropdown-menu">' +
     '<div class="colorpicker-saturation"><i><b></b></i></div>' +
     '<div class="colorpicker-hue"><i></i></div>' +
     '<div class="colorpicker-alpha"><i></i></div>' +
@@ -61,5 +62,5 @@ var defaults = {
     '</div>',
   align: 'right',
   customClass: null, // custom class added to the colorpicker element
-  colorSelectors: null // custom color aliases
-};
+  colorSelectors: null, // custom color aliases
+}

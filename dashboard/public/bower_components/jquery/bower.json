@@ -2,13 +2,6 @@
   "name": "jquery",
   "main": "dist/jquery.js",
   "license": "MIT",
-  "ignore": [
-    "package.json"
-  ],
-  "keywords": [
-    "jquery",
-    "javascript",
-    "browser",
-    "library"
-  ]
+  "ignore": ["package.json"],
+  "keywords": ["jquery", "javascript", "browser", "library"]
 }

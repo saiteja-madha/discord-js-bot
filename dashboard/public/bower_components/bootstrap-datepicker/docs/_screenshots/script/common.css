@@ -2,8 +2,8 @@
 @import url('../../../dist/css/bootstrap-datepicker3.min.css');
 
 body {
-    /* Padding around all elements to allow space for screenshots */
-    padding: 10px;
-    /* Transparent background for PNG screenshots */
-    background: none;
+  /* Padding around all elements to allow space for screenshots */
+  padding: 10px;
+  /* Transparent background for PNG screenshots */
+  background: none;
 }

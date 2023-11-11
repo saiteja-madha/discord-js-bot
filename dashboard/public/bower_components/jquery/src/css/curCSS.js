@@ -1,65 +1,68 @@
-define( [
-	"../core",
-	"./var/rboxStyle",
-	"./var/rnumnonpx",
-	"./var/getStyles",
-	"./support",
-	"../selector" // Get jQuery.contains
-], function( jQuery, rboxStyle, rnumnonpx, getStyles, support ) {
+define([
+  '../core',
+  './var/rboxStyle',
+  './var/rnumnonpx',
+  './var/getStyles',
+  './support',
+  '../selector', // Get jQuery.contains
+], function (jQuery, rboxStyle, rnumnonpx, getStyles, support) {
+  'use strict'
 
-"use strict";
+  function curCSS(elem, name, computed) {
+    var width,
+      minWidth,
+      maxWidth,
+      ret,
+      // Support: Firefox 51+
+      // Retrieving style before computed somehow
+      // fixes an issue with getting wrong values
+      // on detached elements
+      style = elem.style
 
-function curCSS( elem, name, computed ) {
-	var width, minWidth, maxWidth, ret,
+    computed = computed || getStyles(elem)
 
-		// Support: Firefox 51+
-		// Retrieving style before computed somehow
-		// fixes an issue with getting wrong values
-		// on detached elements
-		style = elem.style;
+    // getPropertyValue is needed for:
+    //   .css('filter') (IE 9 only, #12537)
+    //   .css('--customProperty) (#3144)
+    if (computed) {
+      ret = computed.getPropertyValue(name) || computed[name]
 
-	computed = computed || getStyles( elem );
+      if (ret === '' && !jQuery.contains(elem.ownerDocument, elem)) {
+        ret = jQuery.style(elem, name)
+      }
 
-	// getPropertyValue is needed for:
-	//   .css('filter') (IE 9 only, #12537)
-	//   .css('--customProperty) (#3144)
-	if ( computed ) {
-		ret = computed.getPropertyValue( name ) || computed[ name ];
+      // A tribute to the "awesome hack by Dean Edwards"
+      // Android Browser returns percentage for some values,
+      // but width seems to be reliably pixels.
+      // This is against the CSSOM draft spec:
+      // https://drafts.csswg.org/cssom/#resolved-values
+      if (
+        !support.pixelBoxStyles() &&
+        rnumnonpx.test(ret) &&
+        rboxStyle.test(name)
+      ) {
+        // Remember the original values
+        width = style.width
+        minWidth = style.minWidth
+        maxWidth = style.maxWidth
 
-		if ( ret === "" && !jQuery.contains( elem.ownerDocument, elem ) ) {
-			ret = jQuery.style( elem, name );
-		}
+        // Put in the new values to get a computed value out
+        style.minWidth = style.maxWidth = style.width = ret
+        ret = computed.width
 
-		// A tribute to the "awesome hack by Dean Edwards"
-		// Android Browser returns percentage for some values,
-		// but width seems to be reliably pixels.
-		// This is against the CSSOM draft spec:
-		// https://drafts.csswg.org/cssom/#resolved-values
-		if ( !support.pixelBoxStyles() && rnumnonpx.test( ret ) && rboxStyle.test( name ) ) {
+        // Revert the changed values
+        style.width = width
+        style.minWidth = minWidth
+        style.maxWidth = maxWidth
+      }
+    }
 
-			// Remember the original values
-			width = style.width;
-			minWidth = style.minWidth;
-			maxWidth = style.maxWidth;
+    return ret !== undefined
+      ? // Support: IE <=9 - 11 only
+        // IE returns zIndex value as an integer.
+        ret + ''
+      : ret
+  }
 
-			// Put in the new values to get a computed value out
-			style.minWidth = style.maxWidth = style.width = ret;
-			ret = computed.width;
-
-			// Revert the changed values
-			style.width = width;
-			style.minWidth = minWidth;
-			style.maxWidth = maxWidth;
-		}
-	}
-
-	return ret !== undefined ?
-
-		// Support: IE <=9 - 11 only
-		// IE returns zIndex value as an integer.
-		ret + "" :
-		ret;
-}
-
-return curCSS;
-} );
+  return curCSS
+})

@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("newpage","sr-latn",{toolbar:"Nova stranica"});
+﻿CKEDITOR.plugins.setLang('newpage', 'sr-latn', { toolbar: 'Nova stranica' })

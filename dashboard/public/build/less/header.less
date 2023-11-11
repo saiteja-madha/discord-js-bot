@@ -21,12 +21,12 @@
   }
   //Navbar search text input
   #navbar-search-input.form-control {
-    background: rgba(255, 255, 255, .2);
+    background: rgba(255, 255, 255, 0.2);
     border-color: transparent;
     &:focus,
     &:active {
-      border-color: rgba(0, 0, 0, .1);
-      background: rgba(255, 255, 255, .9);
+      border-color: rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.9);
     }
     &::-moz-placeholder {
       color: #ccc;
@@ -72,7 +72,7 @@
     //Add the fontawesome bars icon
     font-family: fontAwesome;
     &:before {
-      content: "\f0c9";
+      content: '\f0c9';
     }
     &:hover {
       color: #fff;
@@ -83,9 +83,9 @@
     }
 
     &.fa5 {
-      font-family: "Font Awesome\ 5 Free";
+      font-family: 'Font Awesome\ 5 Free';
       &:before {
-        content: "\f0c9";
+        content: '\f0c9';
         font-weight: 900;
       }
     }
@@ -110,7 +110,7 @@
     text-align: center;
     font-size: 9px;
     padding: 2px 3px;
-    line-height: .9;
+    line-height: 0.9;
   }
 
   //Logo bar
@@ -123,7 +123,7 @@
     line-height: 50px;
     text-align: center;
     width: @sidebar-width;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 0 15px;
     font-weight: 300;
     overflow: hidden;
@@ -207,7 +207,9 @@
       color: #444;
       text-decoration: none;
       display: inline-block;
-      > .fa, > .glyphicon, > .ion {
+      > .fa,
+      > .glyphicon,
+      > .ion {
         margin-right: 5px;
       }
     }

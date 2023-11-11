@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("preview","et",{preview:"Eelvaade"});
+﻿CKEDITOR.plugins.setLang('preview', 'et', { preview: 'Eelvaade' })

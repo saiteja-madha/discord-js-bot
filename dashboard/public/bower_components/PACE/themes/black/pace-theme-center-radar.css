@@ -58,17 +58,25 @@
 }
 
 @-webkit-keyframes spin {
-  100% { -webkit-transform: rotate(359deg); }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
 }
 
 @-moz-keyframes spin {
-  100% { -moz-transform: rotate(359deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
 }
 
 @-o-keyframes spin {
-  100% { -moz-transform: rotate(359deg); }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
 }
 
 @keyframes spin {
-  100% {  transform: rotate(359deg); }
+  100% {
+    transform: rotate(359deg);
+  }
 }

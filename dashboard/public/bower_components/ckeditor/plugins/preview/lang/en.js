@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("preview","en",{preview:"Preview"});
+﻿CKEDITOR.plugins.setLang('preview', 'en', { preview: 'Preview' })

@@ -14,12 +14,12 @@ description: 7 commands
 | **!meme \[category]**  | **/meme**      | get a random meme           |
 | **!together \[game]**  | **/together**  | discord together            |
 
-{% hint style="success" %}
-**Available games:**
+{% hint style="success" %} **Available games:**
 
 ```
 askaway, awkword, betrayal, bobble, checkers, chess, chessdev, doodlecrew, fishing, land, lettertile, meme, ocho, poker, puttparty, puttpartyqa, sketchheads, sketchyartist, spellcast, wordsnack, youtube, youtubedev
 ```
+
 {% endhint %}
 
 ## ![](https://cdn.discordapp.com/emojis/1036083490292244493.png)》Support Server

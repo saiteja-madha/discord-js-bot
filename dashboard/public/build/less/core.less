@@ -43,8 +43,9 @@ body {
 .content-wrapper,
 .main-footer {
   // Using disposable variable to join statements with a comma
-  @transition-rule: @transition-speed @transition-fn,
-  margin @transition-speed @transition-fn;
+  @transition-rule:
+    @transition-speed @transition-fn,
+    margin @transition-speed @transition-fn;
   .transition-transform(@transition-rule);
   margin-left: @sidebar-width;
   z-index: 820;
@@ -69,15 +70,15 @@ body {
   }
 }
 
-.content-wrapper  {
-  min-height: ~"calc(100vh - 101px)";
+.content-wrapper {
+  min-height: ~'calc(100vh - 101px)';
   background-color: @content-bg;
   z-index: 800;
 }
 
 @media (max-width: @screen-header-collapse) {
-  .content-wrapper  {
-    min-height: ~"calc(100vh - 151px)";
+  .content-wrapper {
+    min-height: ~'calc(100vh - 151px)';
   }
 }
 

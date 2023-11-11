@@ -8,13 +8,15 @@
  */
 
 // Import variables and mixins as a reference for separate plugins version
-@import (reference) "../bootstrap-less/mixins";
-@import (reference) "../bootstrap-less/variables";
-@import (reference) "variables";
-@import (reference) "mixins";
+@import (reference) '../bootstrap-less/mixins';
+@import (reference) '../bootstrap-less/variables';
+@import (reference) 'variables';
+@import (reference) 'mixins';
 
 @bs-height-base: (@line-height-computed + @padding-base-vertical * 2);
-@bs-height-lg: (floor(@font-size-large * @line-height-base) + @padding-large-vertical * 2);
+@bs-height-lg: (
+  floor(@font-size-large * @line-height-base) + @padding-large-vertical * 2
+);
 @bs-height-sm: (floor(@font-size-small * 1.5) + @padding-small-vertical * 2);
 @bs-height-xs: (floor(@font-size-small * 1.2) + @padding-small-vertical + 1);
 
@@ -94,7 +96,7 @@
 
 .btn-social(@color-bg, @color: #fff) {
   background-color: @color-bg;
-  .button-variant(@color, @color-bg, rgba(0, 0, 0, .2));
+  .button-variant(@color, @color-bg, rgba(0, 0, 0, 0.2));
 }
 
 .btn-adn {

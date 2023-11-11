@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("showblocks","no",{toolbar:"Vis blokker"});
+﻿CKEDITOR.plugins.setLang('showblocks', 'no', { toolbar: 'Vis blokker' })

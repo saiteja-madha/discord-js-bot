@@ -2,53 +2,53 @@ define(function () {
   // Basque
   return {
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      var message = 'Idatzi ';
+      var message = 'Idatzi '
 
       if (overChars == 1) {
-        message += 'karaktere bat';
+        message += 'karaktere bat'
       } else {
-        message += overChars + ' karaktere';
+        message += overChars + ' karaktere'
       }
 
-      message += ' gutxiago';
+      message += ' gutxiago'
 
-      return message;
+      return message
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      var message = 'Idatzi ';
+      var message = 'Idatzi '
 
       if (remainingChars == 1) {
-        message += 'karaktere bat';
+        message += 'karaktere bat'
       } else {
-        message += remainingChars + ' karaktere';
+        message += remainingChars + ' karaktere'
       }
 
-      message += ' gehiago';
+      message += ' gehiago'
 
-      return message;
+      return message
     },
     loadingMore: function () {
-      return 'Emaitza gehiago kargatzen…';
+      return 'Emaitza gehiago kargatzen…'
     },
     maximumSelected: function (args) {
       if (args.maximum === 1) {
-        return 'Elementu bakarra hauta dezakezu';
+        return 'Elementu bakarra hauta dezakezu'
       } else {
-        return args.maximum + ' elementu hauta ditzakezu soilik';
+        return args.maximum + ' elementu hauta ditzakezu soilik'
       }
     },
     noResults: function () {
-      return 'Ez da bat datorrenik aurkitu';
+      return 'Ez da bat datorrenik aurkitu'
     },
     searching: function () {
-      return 'Bilatzen…';
+      return 'Bilatzen…'
     },
     removeAllItems: function () {
-      return 'Kendu elementu guztiak';
-    }
-  };
-});
+      return 'Kendu elementu guztiak'
+    },
+  }
+})

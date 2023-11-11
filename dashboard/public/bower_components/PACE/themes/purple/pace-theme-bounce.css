@@ -18,11 +18,11 @@
 }
 
 .pace.pace-active {
-  -webkit-transform: scale(.25);
-  -moz-transform: scale(.25);
-  -ms-transform: scale(.25);
-  -o-transform: scale(.25);
-  transform: scale(.25);
+  -webkit-transform: scale(0.25);
+  -moz-transform: scale(0.25);
+  -ms-transform: scale(0.25);
+  -o-transform: scale(0.25);
+  transform: scale(0.25);
   opacity: 1;
 }
 
@@ -50,19 +50,19 @@
   margin-left: -30px;
   width: 60px;
   height: 75px;
-  background: rgba(20, 20, 20, .1);
-  box-shadow: 0 0 20px 35px rgba(20, 20, 20, .1);
+  background: rgba(20, 20, 20, 0.1);
+  box-shadow: 0 0 20px 35px rgba(20, 20, 20, 0.1);
   border-radius: 30px / 40px;
-  -webkit-transform: scaleY(.3) !important;
-  -moz-transform: scaleY(.3) !important;
-  -ms-transform: scaleY(.3) !important;
-  -o-transform: scaleY(.3) !important;
-  transform: scaleY(.3) !important;
-  -webkit-animation: pace-compress .5s infinite alternate;
-  -moz-animation: pace-compress .5s infinite alternate;
-  -o-animation: pace-compress .5s infinite alternate;
-  -ms-animation: pace-compress .5s infinite alternate;
-  animation: pace-compress .5s infinite alternate;
+  -webkit-transform: scaleY(0.3) !important;
+  -moz-transform: scaleY(0.3) !important;
+  -ms-transform: scaleY(0.3) !important;
+  -o-transform: scaleY(0.3) !important;
+  transform: scaleY(0.3) !important;
+  -webkit-animation: pace-compress 0.5s infinite alternate;
+  -moz-animation: pace-compress 0.5s infinite alternate;
+  -o-animation: pace-compress 0.5s infinite alternate;
+  -ms-animation: pace-compress 0.5s infinite alternate;
+  animation: pace-compress 0.5s infinite alternate;
 }
 
 @-webkit-keyframes pace-bounce {
@@ -70,7 +70,8 @@
     top: 0;
     -webkit-animation-timing-function: ease-in;
   }
-  40% {}
+  40% {
+  }
   50% {
     top: 140px;
     height: 140px;
@@ -103,7 +104,8 @@
     top: 0;
     -moz-animation-timing-function: ease-in;
   }
-  40% {}
+  40% {
+  }
   50% {
     top: 140px;
     height: 140px;
@@ -119,12 +121,14 @@
     top: 120px;
     height: 140px;
     border-radius: 70px;
-    -moz-animation-timing-function: ease-out;}
+    -moz-animation-timing-function: ease-out;
+  }
   95% {
     top: 0;
     -moz-animation-timing-function: ease-in;
   }
-  100% {top: 0;
+  100% {
+    top: 0;
     -moz-animation-timing-function: ease-in;
   }
 }
@@ -167,8 +171,8 @@
     margin-left: -30px;
     width: 60px;
     height: 75px;
-    background: rgba(20, 20, 20, .1);
-    box-shadow: 0 0 20px 35px rgba(20, 20, 20, .1);
+    background: rgba(20, 20, 20, 0.1);
+    box-shadow: 0 0 20px 35px rgba(20, 20, 20, 0.1);
     border-radius: 30px / 40px;
     -webkit-animation-timing-function: ease-in;
   }
@@ -177,8 +181,8 @@
     margin-left: -10px;
     width: 20px;
     height: 5px;
-    background: rgba(20, 20, 20, .3);
-    box-shadow: 0 0 20px 35px rgba(20, 20, 20, .3);
+    background: rgba(20, 20, 20, 0.3);
+    box-shadow: 0 0 20px 35px rgba(20, 20, 20, 0.3);
     border-radius: 20px / 20px;
     -webkit-animation-timing-function: ease-out;
   }
@@ -190,8 +194,8 @@
     margin-left: -30px;
     width: 60px;
     height: 75px;
-    background: rgba(20, 20, 20, .1);
-    box-shadow: 0 0 20px 35px rgba(20, 20, 20, .1);
+    background: rgba(20, 20, 20, 0.1);
+    box-shadow: 0 0 20px 35px rgba(20, 20, 20, 0.1);
     border-radius: 30px / 40px;
     -moz-animation-timing-function: ease-in;
   }
@@ -200,8 +204,8 @@
     margin-left: -10px;
     width: 20px;
     height: 5px;
-    background: rgba(20, 20, 20, .3);
-    box-shadow: 0 0 20px 35px rgba(20, 20, 20, .3);
+    background: rgba(20, 20, 20, 0.3);
+    box-shadow: 0 0 20px 35px rgba(20, 20, 20, 0.3);
     border-radius: 20px / 20px;
     -moz-animation-timing-function: ease-out;
   }
@@ -213,8 +217,8 @@
     margin-left: -30px;
     width: 60px;
     height: 75px;
-    background: rgba(20, 20, 20, .1);
-    box-shadow: 0 0 20px 35px rgba(20, 20, 20, .1);
+    background: rgba(20, 20, 20, 0.1);
+    box-shadow: 0 0 20px 35px rgba(20, 20, 20, 0.1);
     border-radius: 30px / 40px;
     animation-timing-function: ease-in;
   }
@@ -223,8 +227,8 @@
     margin-left: -10px;
     width: 20px;
     height: 5px;
-    background: rgba(20, 20, 20, .3);
-    box-shadow: 0 0 20px 35px rgba(20, 20, 20, .3);
+    background: rgba(20, 20, 20, 0.3);
+    box-shadow: 0 0 20px 35px rgba(20, 20, 20, 0.3);
     border-radius: 20px / 20px;
     animation-timing-function: ease-out;
   }

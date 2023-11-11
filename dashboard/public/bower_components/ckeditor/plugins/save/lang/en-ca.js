@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","en-ca",{toolbar:"Save"});
+﻿CKEDITOR.plugins.setLang('save', 'en-ca', { toolbar: 'Save' })

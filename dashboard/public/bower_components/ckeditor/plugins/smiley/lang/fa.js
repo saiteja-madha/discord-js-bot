@@ -1,1 +1,5 @@
-﻿CKEDITOR.plugins.setLang("smiley","fa",{options:"گزینه​های خندانک",title:"گنجاندن خندانک",toolbar:"خندانک"});
+﻿CKEDITOR.plugins.setLang('smiley', 'fa', {
+  options: 'گزینه​های خندانک',
+  title: 'گنجاندن خندانک',
+  toolbar: 'خندانک',
+})

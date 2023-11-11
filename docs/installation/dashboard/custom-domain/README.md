@@ -8,9 +8,9 @@ For this example, I will be using [Cloudflare](https://dash.cloudflare.com/)
 
 **Locate your DNS Records**
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668104209190/mvCRkv8\_P.png?auto=compress,format\&format=webp)
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668104209190/mvCRkv8_P.png?auto=compress,format&format=webp)
 
-***
+---
 
 **Add an "A Record" With the following information**
 
@@ -18,15 +18,16 @@ For this example, I will be using [Cloudflare](https://dash.cloudflare.com/)
 | -------------------------------------- | ------------------------ |
 | Subdomain or @ to use the whole domain | your servers IPV4 Adress |
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668104547518/QwVvKB-Ox.png?auto=compress,format\&format=webp)
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668104547518/QwVvKB-Ox.png?auto=compress,format&format=webp)
 
-***
+---
 
 ## 2. Apache Config <a href="#heading-4" id="heading-4"></a>
 
 SSH into the server running your HTTP website as a user with sudo privileges.
 
-You will need to be able to access your servers terminal for these following steps
+You will need to be able to access your servers terminal for these following
+steps
 
 ```bash
 sudo apt update
@@ -55,11 +56,12 @@ As indicated by the output, there are three profiles available for Apache:
 
 Apache: This profile opens only port 80 (normal, unencrypted web traffic)
 
-Apache Full: This profile opens both port 80 (normal, unencrypted web traffic) and port 443 (TLS/SSL encrypted traffic)
+Apache Full: This profile opens both port 80 (normal, unencrypted web traffic)
+and port 443 (TLS/SSL encrypted traffic)
 
 Apache Secure: This profile opens only port 443 (TLS/SSL encrypted traffic)
 
-***
+---
 
 ### **Enable the following Apache Modules** <a href="#heading-5" id="heading-5"></a>
 
@@ -78,7 +80,7 @@ sudo systemctl restart apache2
 
 ## **Configuring our webserver** <a href="#heading-6" id="heading-6"></a>
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668105558953/doaPFoXH\_.png?auto=compress,format\&format=webp)
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668105558953/doaPFoXH_.png?auto=compress,format&format=webp)
 
 ```bash
 cd /etc/apache2/sites-available
@@ -86,7 +88,7 @@ cd /etc/apache2/sites-available
 
 **Once you run `ls` you should see 000-default.conf**
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668105642911/n\_ltZ0oTO.png?auto=compress,format\&format=webp)
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668105642911/n_ltZ0oTO.png?auto=compress,format&format=webp)
 
 **Copying the default configuration**
 
@@ -94,8 +96,6 @@ cd /etc/apache2/sites-available
 cp 000-default.conf dashboard.conf
 nano dashboard.conf
 ```
-
-
 
 **Edit the default configuration to the below configuration**
 
@@ -146,16 +146,17 @@ systemctl reload apache2
 
 ## 3. **Setting up our Discord application redirect** <a href="#heading-7" id="heading-7"></a>
 
-Go to [discord.dev](https://discord.dev/) and go to your application **-**> Oauth2 -> General
+Go to [discord.dev](https://discord.dev/) and go to your application **-**>
+Oauth2 -> General
 
 Add 2 Redirects with the following contents
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668812746494/UGjM9bOpl.png?auto=compress,format\&format=webp)
+![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668812746494/UGjM9bOpl.png?auto=compress,format&format=webp)
 
 **important -> Change http and https depending if you have SSL or not!**
 
 Now you should be able to access and login to your bots dashboard!
 
-***
+---
 
 \

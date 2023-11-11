@@ -14,10 +14,7 @@
   "homepage": "https://getbootstrap.com/",
   "license": "MIT",
   "moduleType": "globals",
-  "main": [
-    "less/bootstrap.less",
-    "dist/js/bootstrap.js"
-  ],
+  "main": ["less/bootstrap.less", "dist/js/bootstrap.js"],
   "ignore": [
     "/.*",
     "_config.yml",

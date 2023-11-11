@@ -15,17 +15,8 @@
     "Adam Bradley <adam@drifty.com>",
     "Max Lynch <max@drifty.com>"
   ],
-  "keywords": [
-    "fonts",
-    "icon font",
-    "icons",
-    "ionic",
-    "web font"
-  ],
-  "main": [
-    "css/ionicons.css",
-    "fonts/*"
-  ],
+  "keywords": ["fonts", "icon font", "icons", "ionic", "web font"],
+  "main": ["css/ionicons.css", "fonts/*"],
   "homepage": "https://github.com/driftyco/ionicons",
   "description": "Ionicons - free and beautiful icons from the creators of Ionic Framework",
   "_release": "2.0.1",

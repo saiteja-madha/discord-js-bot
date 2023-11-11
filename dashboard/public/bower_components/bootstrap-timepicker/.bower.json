@@ -27,11 +27,7 @@
   "devDependencies": {
     "autotype": "https://raw.github.com/mmonteleone/jquery.autotype/master/jquery.autotype.js"
   },
-  "keywords": [
-    "widget",
-    "timepicker",
-    "time"
-  ],
+  "keywords": ["widget", "timepicker", "time"],
   "homepage": "https://github.com/jdewit/bootstrap-timepicker",
   "_release": "0.5.2",
   "_resolution": {

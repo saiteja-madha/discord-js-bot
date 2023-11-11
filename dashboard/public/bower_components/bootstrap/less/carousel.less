@@ -4,7 +4,6 @@
 // Carousel
 // --------------------------------------------------
 
-
 // Wrapper for the slide container and indicators
 .carousel {
   position: relative;
@@ -18,7 +17,7 @@
   > .item {
     position: relative;
     display: none;
-    .transition(.6s ease-in-out left);
+    .transition(0.6s ease-in-out left);
 
     // Account for jankitude on images
     > img,
@@ -29,8 +28,8 @@
 
     // WebKit CSS3 transforms for supported devices
     @media all and (transform-3d), (-webkit-transform-3d) {
-      .transition-transform(~"0.6s ease-in-out");
-      .backface-visibility(~"hidden");
+      .transition-transform(~'0.6s ease-in-out');
+      .backface-visibility(~'hidden');
       .perspective(1000px);
 
       &.next,
@@ -86,7 +85,6 @@
   > .active.right {
     left: 100%;
   }
-
 }
 
 // Left/right controls for nav
@@ -109,12 +107,12 @@
 
   // Set gradients for backgrounds
   &.left {
-    #gradient > .horizontal(@start-color: rgba(0, 0, 0, .5); @end-color: rgba(0, 0, 0, .0001));
+    #gradient > .horizontal(@start-color: rgba(0, 0, 0, .5); @end-color: rgba(0, 0, 0, .0001));;
   }
   &.right {
     right: 0;
     left: auto;
-    #gradient > .horizontal(@start-color: rgba(0, 0, 0, .0001); @end-color: rgba(0, 0, 0, .5));
+    #gradient > .horizontal(@start-color: rgba(0, 0, 0, .0001); @end-color: rgba(0, 0, 0, .5));;
   }
 
   // Hover/focus state
@@ -123,7 +121,7 @@
     color: @carousel-control-color;
     text-decoration: none;
     outline: 0;
-    .opacity(.9);
+    .opacity(0.9);
   }
 
   // Toggles
@@ -157,12 +155,12 @@
 
   .icon-prev {
     &:before {
-      content: "\2039";// SINGLE LEFT-POINTING ANGLE QUOTATION MARK (U+2039)
+      content: '\2039'; // SINGLE LEFT-POINTING ANGLE QUOTATION MARK (U+2039)
     }
   }
   .icon-next {
     &:before {
-      content: "\203a";// SINGLE RIGHT-POINTING ANGLE QUOTATION MARK (U+203A)
+      content: '\203a'; // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK (U+203A)
     }
   }
 }
@@ -234,10 +232,8 @@
   }
 }
 
-
 // Scale up controls for tablets and up
 @media screen and (min-width: @screen-sm-min) {
-
   // Scale up the controls a smidge
   .carousel-control {
     .glyphicon-chevron-left,

@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","cy",{toolbar:"Cadw"});
+﻿CKEDITOR.plugins.setLang('save', 'cy', { toolbar: 'Cadw' })

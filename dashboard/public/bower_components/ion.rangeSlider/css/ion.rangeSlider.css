@@ -207,7 +207,7 @@ Build date: 2018-12-11 23:23:51
 .irs--flat .irs-single:before {
   position: absolute;
   display: block;
-  content: "";
+  content: '';
   bottom: -6px;
   left: 50%;
   width: 0;
@@ -259,15 +259,17 @@ Build date: 2018-12-11 23:23:51
   height: 30px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-color: #cbcfd5;
-  background: linear-gradient(to bottom, white 0%, #B4B9BE 30%, white 100%);
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2), inset 0 0 3px 1px white;
+  background: linear-gradient(to bottom, white 0%, #b4b9be 30%, white 100%);
+  box-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 0 3px 1px white;
   border-radius: 30px;
 }
 .irs--big .irs-handle.state_hover,
 .irs--big .irs-handle:hover {
   border-color: rgba(0, 0, 0, 0.45);
   background-color: #939ba7;
-  background: linear-gradient(to bottom, white 0%, #919BA5 30%, white 100%);
+  background: linear-gradient(to bottom, white 0%, #919ba5 30%, white 100%);
 }
 .irs--big .irs-min,
 .irs--big .irs-max {
@@ -407,7 +409,7 @@ Build date: 2018-12-11 23:23:51
 .irs--modern .irs-single:before {
   position: absolute;
   display: block;
-  content: "";
+  content: '';
   bottom: -6px;
   left: 50%;
   width: 0;
@@ -505,7 +507,7 @@ Build date: 2018-12-11 23:23:51
 .irs--sharp .irs-single:before {
   position: absolute;
   display: block;
-  content: "";
+  content: '';
   bottom: -6px;
   left: 50%;
   width: 0;
@@ -589,7 +591,7 @@ Build date: 2018-12-11 23:23:51
 .irs--round .irs-single:before {
   position: absolute;
   display: block;
-  content: "";
+  content: '';
   bottom: -6px;
   left: 50%;
   width: 0;

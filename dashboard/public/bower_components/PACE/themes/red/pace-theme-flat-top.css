@@ -16,9 +16,9 @@
   -ms-transform: translate3d(0, -50px, 0);
   transform: translate3d(0, -50px, 0);
 
-  -webkit-transition: -webkit-transform .5s ease-out;
-  -ms-transition: -webkit-transform .5s ease-out;
-  transition: transform .5s ease-out;
+  -webkit-transition: -webkit-transform 0.5s ease-out;
+  -ms-transition: -webkit-transform 0.5s ease-out;
+  transition: transform 0.5s ease-out;
 }
 
 .pace.pace-active {

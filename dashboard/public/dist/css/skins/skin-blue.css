@@ -103,26 +103,26 @@
   border: 1px solid #374850;
   margin: 10px 10px;
 }
-.skin-blue .sidebar-form input[type="text"],
+.skin-blue .sidebar-form input[type='text'],
 .skin-blue .sidebar-form .btn {
   box-shadow: none;
   background-color: #374850;
   border: 1px solid transparent;
   height: 35px;
 }
-.skin-blue .sidebar-form input[type="text"] {
+.skin-blue .sidebar-form input[type='text'] {
   color: #666;
   border-top-left-radius: 2px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 2px;
 }
-.skin-blue .sidebar-form input[type="text"]:focus,
-.skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+.skin-blue .sidebar-form input[type='text']:focus,
+.skin-blue .sidebar-form input[type='text']:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
 }
-.skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+.skin-blue .sidebar-form input[type='text']:focus + .input-group-btn .btn {
   border-left-color: #fff;
 }
 .skin-blue .sidebar-form .btn {

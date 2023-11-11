@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("selectall","fo",{toolbar:"Markera alt"});
+﻿CKEDITOR.plugins.setLang('selectall', 'fo', { toolbar: 'Markera alt' })

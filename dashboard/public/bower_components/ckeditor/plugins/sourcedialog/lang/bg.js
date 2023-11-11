@@ -1,1 +1,4 @@
-﻿CKEDITOR.plugins.setLang("sourcedialog","bg",{toolbar:"Източник",title:"Източник"});
+﻿CKEDITOR.plugins.setLang('sourcedialog', 'bg', {
+  toolbar: 'Източник',
+  title: 'Източник',
+})

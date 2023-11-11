@@ -2,17 +2,11 @@
   "name": "jvectormap",
   "title": "jVectorMap",
   "description": "jQuery plugin for embedding vector maps with reach API and methods for data visualization to the web-pages.",
-  "keywords": [
-    "map",
-    "vector",
-    "world",
-    "usa",
-    "choropleth"
-  ],
+  "keywords": ["map", "vector", "world", "usa", "choropleth"],
   "version": "1.2.2",
   "author": {
     "name": "Kirill Lebedev",
-    "email" : "echo.bjornd@gmail.com"
+    "email": "echo.bjornd@gmail.com"
   },
   "licenses": [
     {

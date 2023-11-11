@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","fo",{toolbar:"Goym"});
+﻿CKEDITOR.plugins.setLang('save', 'fo', { toolbar: 'Goym' })

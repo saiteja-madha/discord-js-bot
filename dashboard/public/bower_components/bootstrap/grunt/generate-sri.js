@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-'use strict';
+'use strict'
 
 /*!
  * Script to generate SRI hashes for use in our docs.
@@ -12,12 +12,12 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-var crypto = require('crypto');
-var fs = require('fs');
-var path = require('path');
-var replace = require('replace-in-file');
+var crypto = require('crypto')
+var fs = require('fs')
+var path = require('path')
+var replace = require('replace-in-file')
 
-var configFile = path.join(__dirname, '../_config.yml');
+var configFile = path.join(__dirname, '../_config.yml')
 
 // Array of objects which holds the files to generate SRI hashes for.
 // `file` is the path from the root folder
@@ -25,38 +25,40 @@ var configFile = path.join(__dirname, '../_config.yml');
 var files = [
   {
     file: 'dist/css/bootstrap.min.css',
-    configPropertyName: 'css_hash'
+    configPropertyName: 'css_hash',
   },
   {
     file: 'dist/css/bootstrap-theme.min.css',
-    configPropertyName: 'css_theme_hash'
+    configPropertyName: 'css_theme_hash',
   },
   {
     file: 'dist/js/bootstrap.min.js',
-    configPropertyName: 'js_hash'
-  }
-];
+    configPropertyName: 'js_hash',
+  },
+]
 
 files.forEach(function (file) {
   fs.readFile(file.file, 'utf8', function (err, data) {
     if (err) {
-      throw err;
+      throw err
     }
 
-    var algo = 'sha384';
-    var hash = crypto.createHash(algo).update(data, 'utf8').digest('base64');
-    var integrity = algo + '-' + hash;
+    var algo = 'sha384'
+    var hash = crypto.createHash(algo).update(data, 'utf8').digest('base64')
+    var integrity = algo + '-' + hash
 
-    console.log(file.configPropertyName + ': ' + integrity);
+    console.log(file.configPropertyName + ': ' + integrity)
 
     try {
       replace.sync({
         files: configFile,
-        from: new RegExp('(\\s' + file.configPropertyName + ':\\s+"|\')(\\S+)("|\')'),
-        to: '$1' + integrity + '$3'
-      });
+        from: new RegExp(
+          '(\\s' + file.configPropertyName + ':\\s+"|\')(\\S+)("|\')'
+        ),
+        to: '$1' + integrity + '$3',
+      })
     } catch (error) {
-      console.error('Error occurred:', error);
+      console.error('Error occurred:', error)
     }
-  });
-});
+  })
+})

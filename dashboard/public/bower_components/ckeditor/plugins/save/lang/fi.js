@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","fi",{toolbar:"Tallenna"});
+﻿CKEDITOR.plugins.setLang('save', 'fi', { toolbar: 'Tallenna' })

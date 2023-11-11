@@ -2,54 +2,54 @@ define(function () {
   // Catalan
   return {
     errorLoading: function () {
-      return 'La càrrega ha fallat';
+      return 'La càrrega ha fallat'
     },
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      var message = 'Si us plau, elimina ' + overChars + ' car';
+      var message = 'Si us plau, elimina ' + overChars + ' car'
 
       if (overChars == 1) {
-        message += 'àcter';
+        message += 'àcter'
       } else {
-        message += 'àcters';
+        message += 'àcters'
       }
 
-      return message;
+      return message
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      var message = 'Si us plau, introdueix ' + remainingChars + ' car';
+      var message = 'Si us plau, introdueix ' + remainingChars + ' car'
 
       if (remainingChars == 1) {
-        message += 'àcter';
+        message += 'àcter'
       } else {
-        message += 'àcters';
+        message += 'àcters'
       }
 
-      return message;
+      return message
     },
     loadingMore: function () {
-      return 'Carregant més resultats…';
+      return 'Carregant més resultats…'
     },
     maximumSelected: function (args) {
-      var message = 'Només es pot seleccionar ' + args.maximum + ' element';
+      var message = 'Només es pot seleccionar ' + args.maximum + ' element'
 
       if (args.maximum != 1) {
-        message += 's';
+        message += 's'
       }
 
-      return message;
+      return message
     },
     noResults: function () {
-      return 'No s\'han trobat resultats';
+      return "No s'han trobat resultats"
     },
     searching: function () {
-      return 'Cercant…';
+      return 'Cercant…'
     },
     removeAllItems: function () {
-      return 'Treu tots els elements';
-    }
-  };
-});
+      return 'Treu tots els elements'
+    },
+  }
+})

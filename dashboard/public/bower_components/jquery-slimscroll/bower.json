@@ -14,18 +14,13 @@
     "ecosystem:jquery"
   ],
   "homepage": "http://rocha.la/jQuery-slimScroll/",
-  "authors": [
-    { "name": "Piotr Rochala", "homepage": "http://rocha.la/" }
-  ],
+  "authors": [{ "name": "Piotr Rochala", "homepage": "http://rocha.la/" }],
   "repository": {
     "type": "git",
     "url": "https://github.com/rochal/jQuery-slimScroll.git"
   },
-  "main": [
-    "jquery.slimscroll.js",
-    "jquery.slimscroll.min.js"
-  ],
-  "licenses" : [
+  "main": ["jquery.slimscroll.js", "jquery.slimscroll.min.js"],
+  "licenses": [
     {
       "type": "MIT",
       "url": "http://www.opensource.org/licenses/mit-license.php"
@@ -36,11 +31,5 @@
     }
   ],
   "moduleType": [],
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"]
 }

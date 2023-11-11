@@ -14,5 +14,5 @@
   "strict": false,
   "trailing": true,
   "undef": true,
-  "predef" : ["define"]
+  "predef": ["define"]
 }

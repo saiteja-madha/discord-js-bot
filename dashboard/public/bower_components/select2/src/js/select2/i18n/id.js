@@ -2,32 +2,32 @@ define(function () {
   // Indonesian
   return {
     errorLoading: function () {
-      return 'Data tidak boleh diambil.';
+      return 'Data tidak boleh diambil.'
     },
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      return 'Hapuskan ' + overChars + ' huruf';
+      return 'Hapuskan ' + overChars + ' huruf'
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      return 'Masukkan ' + remainingChars + ' huruf lagi';
+      return 'Masukkan ' + remainingChars + ' huruf lagi'
     },
     loadingMore: function () {
-      return 'Mengambil data…';
+      return 'Mengambil data…'
     },
     maximumSelected: function (args) {
-      return 'Anda hanya dapat memilih ' + args.maximum + ' pilihan';
+      return 'Anda hanya dapat memilih ' + args.maximum + ' pilihan'
     },
     noResults: function () {
-      return 'Tidak ada data yang sesuai';
+      return 'Tidak ada data yang sesuai'
     },
     searching: function () {
-      return 'Mencari…';
+      return 'Mencari…'
     },
     removeAllItems: function () {
-      return 'Hapus semua item';
-    }
-  };
-});
+      return 'Hapus semua item'
+    },
+  }
+})

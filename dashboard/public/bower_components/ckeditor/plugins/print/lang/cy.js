@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("print","cy",{toolbar:"Argraffu"});
+﻿CKEDITOR.plugins.setLang('print', 'cy', { toolbar: 'Argraffu' })

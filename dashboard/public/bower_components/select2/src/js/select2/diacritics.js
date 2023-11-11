@@ -1,6 +1,4 @@
-define([
-
-], function () {
+define([], function () {
   var diacritics = {
     '\u24B6': 'A',
     '\uFF21': 'A',
@@ -843,8 +841,8 @@ define([
     '\u03B0': '\u03C5',
     '\u03CE': '\u03C9',
     '\u03C2': '\u03C3',
-    '\u2019': '\''
-  };
+    '\u2019': "'",
+  }
 
-  return diacritics;
-});
+  return diacritics
+})

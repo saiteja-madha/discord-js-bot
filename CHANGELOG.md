@@ -2,13 +2,14 @@
 
 ### New
 
-* [x] 🤖 Bot is now Mochi
-* [x] 📜 Mochi can start giveaways in announcement channels
-* [x] 📜 Mochi now has ToD
-* [x] 📜 Mochi now has a changelog command
-* [x] 📜 Mochi now can purge up to 500 messages
+- [x] 🤖 Bot is now Mochi
+- [x] 📜 Mochi can start giveaways in announcement channels
+- [x] 📜 Mochi now has ToD
+- [x] 📜 Mochi now has a changelog command
+- [x] 📜 Mochi now can purge up to 500 messages
 
 ### Fixes
+
 - [x] 🛠 Fixed rank card username
 - [x] 🛠 Fixed greeting fields can't be deleted in dashboard
 - [x] 🛠 Fixed greeting fields not updating in dashboard
@@ -20,6 +21,7 @@
 - [x] 🛠 Fixed Broken API links
 
 ### Developer
+
 - [x] ⚙️ Updated all dependencies to latest versions.
   - @vitalets/google-translate-api (9.1.0 to 9.2.0)
   - discord.js (14.9.0 to 14.12.1)
@@ -32,6 +34,5 @@
   - pino-pretty (10.0.0 to 10.0.1)
 
 ### Removed
-* [x] 🗑️ Removed nnecessary commands
 
-
+- [x] 🗑️ Removed nnecessary commands

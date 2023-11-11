@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","tr",{toolbar:"Kaydet"});
+﻿CKEDITOR.plugins.setLang('save', 'tr', { toolbar: 'Kaydet' })

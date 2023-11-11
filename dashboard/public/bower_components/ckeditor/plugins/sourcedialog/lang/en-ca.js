@@ -1,1 +1,4 @@
-﻿CKEDITOR.plugins.setLang("sourcedialog","en-ca",{toolbar:"Source",title:"Source"});
+﻿CKEDITOR.plugins.setLang('sourcedialog', 'en-ca', {
+  toolbar: 'Source',
+  title: 'Source',
+})

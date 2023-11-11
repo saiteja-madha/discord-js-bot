@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("newpage","lv",{toolbar:"Jauna lapa"});
+﻿CKEDITOR.plugins.setLang('newpage', 'lv', { toolbar: 'Jauna lapa' })

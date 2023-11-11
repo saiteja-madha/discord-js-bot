@@ -39,7 +39,7 @@
   color: #fff;
   background: #2299dd;
   border-radius: 50%;
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
   font-size: 14px;
   font-weight: 100;
   line-height: 1;
@@ -114,18 +114,34 @@
 }
 
 @-webkit-keyframes pace-theme-center-atom-spin {
-  0%   { -webkit-transform: rotate(0deg) }
-  100% { -webkit-transform: rotate(359deg) }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
 }
 @-moz-keyframes pace-theme-center-atom-spin {
-  0%   { -moz-transform: rotate(0deg) }
-  100% { -moz-transform: rotate(359deg) }
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
 }
 @-o-keyframes pace-theme-center-atom-spin {
-  0%   { -o-transform: rotate(0deg) }
-  100% { -o-transform: rotate(359deg) }
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
 }
 @keyframes pace-theme-center-atom-spin {
-  0%   { transform: rotate(0deg) }
-  100% { transform: rotate(359deg) }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
 }

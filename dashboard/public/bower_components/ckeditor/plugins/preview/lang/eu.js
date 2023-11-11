@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("preview","eu",{preview:"Aurrebista"});
+﻿CKEDITOR.plugins.setLang('preview', 'eu', { preview: 'Aurrebista' })

@@ -2,16 +2,8 @@
   "name": "jquery-sparkline",
   "version": "2.1.3",
   "homepage": "https://github.com/rkgrep/jquery.sparkline",
-  "authors": [
-    "Gareth Watts <gareth@omnipotent.net>"
-  ],
+  "authors": ["Gareth Watts <gareth@omnipotent.net>"],
   "main": "dist/jquery.sparkline.js",
   "license": "BSD 3",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"]
 }

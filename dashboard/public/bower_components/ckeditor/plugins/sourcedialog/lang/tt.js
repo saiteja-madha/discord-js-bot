@@ -1,1 +1,4 @@
-﻿CKEDITOR.plugins.setLang("sourcedialog","tt",{toolbar:"Чыганак",title:"Чыганак"});
+﻿CKEDITOR.plugins.setLang('sourcedialog', 'tt', {
+  toolbar: 'Чыганак',
+  title: 'Чыганак',
+})

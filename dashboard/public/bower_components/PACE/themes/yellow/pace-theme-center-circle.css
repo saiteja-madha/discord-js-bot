@@ -42,7 +42,7 @@
   border-radius: 50%;
   background: rgba(252, 210, 90, 0.8);
   color: #fff;
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
   font-weight: 100;
   text-align: center;
 
@@ -65,26 +65,46 @@
 }
 
 @-webkit-keyframes pace-theme-center-circle-spin {
-  from { -webkit-transform: rotateY(0deg) }
-  to { -webkit-transform: rotateY(360deg) }
+  from {
+    -webkit-transform: rotateY(0deg);
+  }
+  to {
+    -webkit-transform: rotateY(360deg);
+  }
 }
 
 @-moz-keyframes pace-theme-center-circle-spin {
-  from { -moz-transform: rotateY(0deg) }
-  to { -moz-transform: rotateY(360deg) }
+  from {
+    -moz-transform: rotateY(0deg);
+  }
+  to {
+    -moz-transform: rotateY(360deg);
+  }
 }
 
 @-ms-keyframes pace-theme-center-circle-spin {
-  from { -ms-transform: rotateY(0deg) }
-  to { -ms-transform: rotateY(360deg) }
+  from {
+    -ms-transform: rotateY(0deg);
+  }
+  to {
+    -ms-transform: rotateY(360deg);
+  }
 }
 
 @-o-keyframes pace-theme-center-circle-spin {
-  from { -o-transform: rotateY(0deg) }
-  to { -o-transform: rotateY(360deg) }
+  from {
+    -o-transform: rotateY(0deg);
+  }
+  to {
+    -o-transform: rotateY(360deg);
+  }
 }
 
 @keyframes pace-theme-center-circle-spin {
-  from { transform: rotateY(0deg) }
-  to { transform: rotateY(360deg) }
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
 }

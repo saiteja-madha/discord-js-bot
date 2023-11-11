@@ -2,18 +2,10 @@
   "name": "eve-raphael",
   "description": "Simple custom events",
   "main": "./eve.js",
-  "authors": [
-    "Tomas Alabes (http://tomasalabes.me)"
-  ],
+  "authors": ["Tomas Alabes (http://tomasalabes.me)"],
   "license": "MIT",
   "homepage": "https://github.com/tomasAlabes/eve",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
   "version": "0.5.0",
   "_release": "0.5.0",
   "_resolution": {

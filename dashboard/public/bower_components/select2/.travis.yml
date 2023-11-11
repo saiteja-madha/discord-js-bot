@@ -17,6 +17,6 @@ notifications:
   email: false
   irc:
     channels:
-      - "chat.freenode.net#select2"
+      - 'chat.freenode.net#select2'
     on_success: change
     on_failure: always

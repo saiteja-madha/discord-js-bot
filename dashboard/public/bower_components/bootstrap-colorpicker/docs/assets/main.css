@@ -8,8 +8,8 @@ h4 ~ p {
 
 .well .markup,
 .example-content .example-code {
-  background: #2B2B2B;
-  color: #BABABA;
+  background: #2b2b2b;
+  color: #bababa;
   position: relative;
   padding: 15px 15px 15px;
   margin: 15px 0 0 0;
@@ -20,13 +20,13 @@ h4 ~ p {
   word-break: break-all;
   word-wrap: break-word;
   border: 1px solid #000;
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
   white-space: pre;
   overflow: auto;
 }
 
 .well .markup::after {
-  content: "Source code";
+  content: 'Source code';
   position: absolute;
   top: 15px;
   left: 15px;
@@ -44,18 +44,17 @@ h4 ~ p {
   line-height: 1.5;
 }
 
-
-.example-title{
+.example-title {
   font-size: 14px;
   margin: 10px 0 10px 2px;
   font-weight: bold;
 }
-.example-description{
+.example-description {
   margin: 10px 0 10px 2px;
 }
-.example-code{
-  display:none;
+.example-code {
+  display: none;
 }
-.example-content-widget{
+.example-content-widget {
   margin-bottom: 2px;
 }

@@ -1,1 +1,1 @@
-﻿CKEDITOR.plugins.setLang("save","eu",{toolbar:"Gorde"});
+﻿CKEDITOR.plugins.setLang('save', 'eu', { toolbar: 'Gorde' })

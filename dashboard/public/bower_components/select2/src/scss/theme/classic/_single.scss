@@ -6,7 +6,12 @@
 
   outline: 0;
 
-  @include gradient-vertical($selection-bg-top-color, $selection-bg-bottom-color, 50%, 100%);
+  @include gradient-vertical(
+    $selection-bg-top-color,
+    $selection-bg-bottom-color,
+    50%,
+    100%
+  );
 
   &:focus {
     border: 1px solid $focus-border-color;
@@ -66,7 +71,7 @@
   }
 }
 
-&[dir="rtl"] {
+&[dir='rtl'] {
   .select2-selection--single {
     .select2-selection__clear {
       float: left;
@@ -108,7 +113,12 @@
       border-top-left-radius: 0;
       border-top-right-radius: 0;
 
-      @include gradient-vertical($selection-opened-bg-bottom-color, $selection-opened-bg-top-color, 0%, 50%);
+      @include gradient-vertical(
+        $selection-opened-bg-bottom-color,
+        $selection-opened-bg-top-color,
+        0%,
+        50%
+      );
     }
   }
 
@@ -118,7 +128,12 @@
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
 
-      @include gradient-vertical($selection-opened-bg-top-color, $selection-opened-bg-bottom-color, 50%, 100%);
+      @include gradient-vertical(
+        $selection-opened-bg-top-color,
+        $selection-opened-bg-bottom-color,
+        50%,
+        100%
+      );
     }
   }
 }

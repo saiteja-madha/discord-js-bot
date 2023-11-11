@@ -61,6 +61,5 @@
     "jquery-mousewheel": "~3.1.13",
     "node-sass": "^4.5.3"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

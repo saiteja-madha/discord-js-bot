@@ -6,10 +6,10 @@ description: 10 commands
 
 ### Reactions
 
-* **Description**: anime reactions
-* **Command Usage**: `!anime <reaction>`
-* **Slash Usage**: `/anime`
-* **Cooldown**: 5 seconds
+- **Description**: anime reactions
+- **Command Usage**: `!anime <reaction>`
+- **Slash Usage**: `/anime`
+- **Cooldown**: 5 seconds
 
 |      |      |        |
 | ---- | ---- | ------ |

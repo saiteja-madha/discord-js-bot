@@ -1,1 +1,4 @@
-﻿CKEDITOR.plugins.setLang("sourcedialog","gl",{toolbar:"Orixe",title:"Orixe"});
+﻿CKEDITOR.plugins.setLang('sourcedialog', 'gl', {
+  toolbar: 'Orixe',
+  title: 'Orixe',
+})

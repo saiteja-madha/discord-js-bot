@@ -2,29 +2,29 @@ define(function () {
   // Azerbaijani
   return {
     inputTooLong: function (args) {
-      var overChars = args.input.length - args.maximum;
+      var overChars = args.input.length - args.maximum
 
-      return overChars + ' simvol silin';
+      return overChars + ' simvol silin'
     },
     inputTooShort: function (args) {
-      var remainingChars = args.minimum - args.input.length;
+      var remainingChars = args.minimum - args.input.length
 
-      return remainingChars + ' simvol daxil edin';
+      return remainingChars + ' simvol daxil edin'
     },
     loadingMore: function () {
-      return 'Daha çox nəticə yüklənir…';
+      return 'Daha çox nəticə yüklənir…'
     },
     maximumSelected: function (args) {
-      return 'Sadəcə ' + args.maximum + ' element seçə bilərsiniz';
+      return 'Sadəcə ' + args.maximum + ' element seçə bilərsiniz'
     },
     noResults: function () {
-      return 'Nəticə tapılmadı';
+      return 'Nəticə tapılmadı'
     },
     searching: function () {
-      return 'Axtarılır…';
+      return 'Axtarılır…'
     },
-     removeAllItems: function () {
-      return 'Bütün elementləri sil';
-    }
-  };
-});
+    removeAllItems: function () {
+      return 'Bütün elementləri sil'
+    },
+  }
+})
