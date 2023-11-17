@@ -2,15 +2,15 @@
 
 ## 1. Domain Config <a href="#heading-1" id="heading-1"></a>
 
-Go to your DNS Registrar - E.G Namecheap, Google Domains, Namecom etc....
+Go to your DNS Registrar - E.G, Namecheap, Google Domains, Namecom, etc...
 
-For this example, I will be using [Cloudflare](https://dash.cloudflare.com/)
+For this example, I will be using [Cloudflare](https://dash.cloudflare.com/).
 
 **Locate your DNS Records**
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668104209190/mvCRkv8_P.png?auto=compress,format&format=webp)
+<figure><img src="../../../.gitbook/assets/image (2).png" alt=""><figcaption><p>locate your DNS Records</p></figcaption></figure>
 
----
+***
 
 **Add an "A Record" With the following information**
 
@@ -18,16 +18,15 @@ For this example, I will be using [Cloudflare](https://dash.cloudflare.com/)
 | -------------------------------------- | ------------------------ |
 | Subdomain or @ to use the whole domain | your servers IPV4 Adress |
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668104547518/QwVvKB-Ox.png?auto=compress,format&format=webp)
+<figure><img src="../../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
----
+***
 
 ## 2. Apache Config <a href="#heading-4" id="heading-4"></a>
 
 SSH into the server running your HTTP website as a user with sudo privileges.
 
-You will need to be able to access your servers terminal for these following
-steps
+You will need to be able to access your server's terminal for these following steps.
 
 ```bash
 sudo apt update
@@ -43,25 +42,17 @@ sudo ufw app list
 
 **You will receive a list of the application profiles:**
 
-```bash
-Output
-Available applications:
-  Apache
-  Apache Full
-  Apache Secure
-  OpenSSH
-```
+<figure><img src="../../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 As indicated by the output, there are three profiles available for Apache:
 
 Apache: This profile opens only port 80 (normal, unencrypted web traffic)
 
-Apache Full: This profile opens both port 80 (normal, unencrypted web traffic)
-and port 443 (TLS/SSL encrypted traffic)
+Apache Full: This profile opens both port 80 (normal, unencrypted web traffic) and port 443 (TLS/SSL encrypted traffic)
 
 Apache Secure: This profile opens only port 443 (TLS/SSL encrypted traffic)
 
----
+***
 
 ### **Enable the following Apache Modules** <a href="#heading-5" id="heading-5"></a>
 
@@ -80,26 +71,25 @@ sudo systemctl restart apache2
 
 ## **Configuring our webserver** <a href="#heading-6" id="heading-6"></a>
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668105558953/doaPFoXH_.png?auto=compress,format&format=webp)
-
 ```bash
 cd /etc/apache2/sites-available
 ```
 
-**Once you run `ls` you should see 000-default.conf**
+**Once you run `ls` you should see 000-default.conf and any other available configs**
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668105642911/n_ltZ0oTO.png?auto=compress,format&format=webp)
+<figure><img src="../../../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 
 **Copying the default configuration**
 
 ```bash
-cp 000-default.conf dashboard.conf
-nano dashboard.conf
+sudo cp 000-default.conf dashboard.conf
+sudo nano dashboard.conf
 ```
 
 **Edit the default configuration to the below configuration**
 
 ```bash
+  GNU nano 7.2                                                   dashboard.conf                                                             
 <VirtualHost *:80>
         # The ServerName directive sets the request scheme, hostname and port that
         # the server uses to identify itself. This is used when creating
@@ -110,12 +100,16 @@ nano dashboard.conf
         # However, you must set it for any further virtual host explicitly.
         #ServerName www.example.com
 
-        ServerName yourdomain.com
+        ServerName mochi.vikshan.me
         ProxyRequests On
         ProxyPreserveHost On
 
-        ProxyPass / http://localhost:8080/ # <-- Change the port if your bot is running on a different port
+        ProxyPass / http://localhost:8080/
+        # <-- Change the port if your bot is running on a different port
         ProxyPassReverse / http://localhost:8080/
+
+        # ServerAdmin webmaster@localhost
+        # DocumentRoot /var/www/html
 
         # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
         # error, crit, alert, emerg.
@@ -125,38 +119,27 @@ nano dashboard.conf
 
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-        # For most configuration files from conf-available/, which are
-        # enabled or disabled at a global level, it is possible to
-        # include a line for only one particular virtual host. For example the
-        # following line enables the CGI configuration for this host only
-        # after it has been globally disabled with "a2disconf".
-        #Include conf-available/serve-cgi-bin.conf
-</VirtualHost>
 ```
 
-> Press `CTRL + X` or `Command-X` for Mac then press Enter to save changes
+> Press `CTRL + X` or `Command-X` for Mac, then press `Enter` to save changes.
 
-**Now run the following command**
+**Now run the following command.**
 
-```bash
-a2ensite dashboard.conf
-systemctl reload apache2
-```
+<pre class="language-bash"><code class="lang-bash"><strong>sudo a2ensite dashboard.conf
+</strong>sudo systemctl reload apache2
+</code></pre>
 
 ## 3. **Setting up our Discord application redirect** <a href="#heading-7" id="heading-7"></a>
 
-Go to [discord.dev](https://discord.dev/) and go to your application **-**>
-Oauth2 -> General
+Go to [Discord Dev](https://discord.com/developers/applications) and go to your application **-**> Oauth2 -> General.
 
-Add 2 Redirects with the following contents
+Add 2 Redirects to your dashboard.
 
-![image.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1668812746494/UGjM9bOpl.png?auto=compress,format&format=webp)
+<figure><img src="../../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 
-**important -> Change http and https depending if you have SSL or not!**
+**Important -> Change http and https depending on whether you have SSL or not!**
 
-Now you should be able to access and login to your bots dashboard!
+Now, you should be able to access and log in to your bot's dashboard!
 
----
+***
 
-\
