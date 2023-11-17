@@ -1,7 +1,7 @@
 # 👋 Hello there!
 
 {% hint style="warning" %}
-This is the documentation, the actual configuration is not done here. Visit \[mochi.vikshan.me]\(https://mochi.vikshan.me) to manage your server.
+This is the documentation, the actual configuration is not done here. Visit [mochi.vikshan.me](https://mochi.vikshan.me) to manage your server.
 {% endhint %}
 
 ### Index
@@ -17,7 +17,7 @@ As Mochi is always considered a work in progress, these documents will be update
 ### Supporting Mochi
 
 {% hint style="info" %}
-\[Ko-Fi]\(https://ko-fi.com/vikshan) is the most consistent form of support that allows us to continuously host the bot on costly servers.
+[Ko-Fi](https://ko-fi.com/vikshan) is the most consistent form of support that allows us to continuously host the bot on costly servers.
 {% endhint %}
 
 There are several ways you can support Mochi better.
@@ -39,4 +39,4 @@ If you have a suggestion for a new feature or improvements, you can either send 
 
 ### 》Support Server
 
-[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+<figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>

@@ -2,10 +2,8 @@
 
 ## Dashboard Setup
 
-- In the `config.js`, make sure you set dashboard enabled to **true**
-- Add your base URL and `http://localhost:8080/api/callback` in your application
-  OAuth2 redirects page in the
-  [discord developer portal](https://discord.com/developers/applications)
+* In the `config.js`, make sure you set dashboard enabled to **true**
+* Add your base URL and `http://localhost:8080/api/callback` in your application OAuth2 redirects page in the [discord developer portal](https://discord.com/developers/applications)
 
 ```js
   DASHBOARD: {
@@ -18,4 +16,4 @@
 
 ## 》Support Server
 
-[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+<figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>

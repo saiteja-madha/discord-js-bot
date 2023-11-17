@@ -29,7 +29,7 @@ SSH into the server running your HTTP website as a user with sudo privileges.
 You will need to be able to access your server's terminal for these following steps.
 
 ```bash
-sudo apt update
+sudo apt update && sudo apt upgrade -y
 
 sudo apt install apache2
 ```
@@ -125,9 +125,10 @@ sudo nano dashboard.conf
 
 **Now run the following command.**
 
-<pre class="language-bash"><code class="lang-bash"><strong>sudo a2ensite dashboard.conf
-</strong>sudo systemctl reload apache2
-</code></pre>
+```bash
+sudo a2ensite dashboard.conf
+sudo systemctl reload apache2
+```
 
 ## 3. **Setting up our Discord application redirect** <a href="#heading-7" id="heading-7"></a>
 
@@ -142,4 +143,6 @@ Add 2 Redirects to your dashboard.
 Now, you should be able to access and log in to your bot's dashboard!
 
 ***
+
+<figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>
 

@@ -176,13 +176,13 @@ pm2 restart mochi
 
 * If you are in a dev environment, use `node .` or `npm run dev` to test your code:
 
-```
+```bash
 node .
 ```
 
 Once you are satisfied with the changes, run the following:
 
-```
+```bash
 pm2 restart mochi && pm2 logs
 ```
 
@@ -196,8 +196,10 @@ You can also restart it from the [pm2.io dashboard](https://pm2.io/) as shown be
 
 </details>
 
-### ![](https://cdn.discordapp.com/emojis/1036083490292244493.png)》Support Server
+***
 
-[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+### 》Support Server
+
+<figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>
 
 [Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
