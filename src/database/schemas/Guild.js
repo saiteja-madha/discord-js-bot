@@ -17,12 +17,13 @@ const Schema = new mongoose.Schema({
   },
   prefix: { type: String, default: PREFIX_COMMANDS.DEFAULT_PREFIX },
   stats: {
-    enabled: Boolean,
+    enabled: { type: Boolean, default: true }, // Set default value for stats.enabled
     xp: {
       message: { type: String, default: STATS.DEFAULT_LVL_UP_MSG },
       channel: String,
     },
   },
+
   ticket: {
     log_channel: String,
     limit: { type: Number, default: 10 },
@@ -48,7 +49,7 @@ const Schema = new mongoose.Schema({
     max_lines: Number,
   },
   invite: {
-    tracking: Boolean,
+    tracking: { type: Boolean, default: true },
     ranks: [
       {
         invites: { type: Number, required: true },

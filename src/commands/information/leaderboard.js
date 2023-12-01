@@ -58,7 +58,7 @@ module.exports = {
 // Create a Map object to store cache entries
 const cache = new Map()
 
-async function getXpLeaderboard({ guild }, author, settings) {
+async function getXpLeaderboard({ guild }, author, settings = {}) {
   // Create a cache key using the guild ID and the type of leaderboard
   const cacheKey = `${guild.id}:xp`
 
@@ -68,8 +68,10 @@ async function getXpLeaderboard({ guild }, author, settings) {
     return cache.get(cacheKey)
   }
 
-  if (!settings.stats.enabled)
+  // Check if settings.stats is enabled
+  if (!settings.stats || !settings.stats.enabled) {
     return 'The leaderboard is disabled on this server'
+  }
 
   const lb = await getXpLb(guild.id, 10)
   if (lb.length === 0) return 'There are no users in the leaderboard'
@@ -97,7 +99,7 @@ async function getXpLeaderboard({ guild }, author, settings) {
   return { embeds: [embed] }
 }
 
-async function getInviteLeaderboard({ guild }, author, settings) {
+async function getInviteLeaderboard({ guild }, author, settings = {}) {
   // Create a cache key using the guild ID and the type of leaderboard
   const cacheKey = `${guild.id}:invite`
 
@@ -107,8 +109,10 @@ async function getInviteLeaderboard({ guild }, author, settings) {
     return cache.get(cacheKey)
   }
 
-  if (!settings.invite.tracking)
+  // Check if settings.invite.tracking is enabled
+  if (!settings.invite || !settings.invite.tracking) {
     return 'Invite tracking is disabled on this server'
+  }
 
   const lb = await getInvitesLb(guild.id, 10)
   if (lb.length === 0) return 'There are no users in the leaderboard'
@@ -117,11 +121,11 @@ async function getInviteLeaderboard({ guild }, author, settings) {
   for (let i = 0; i < lb.length; i++) {
     try {
       const memberId = lb[i].member_id
-      if (memberId === 'VANITY')
+      if (memberId === 'VANITY') {
         collector += `**#${(i + 1).toString()}** - Vanity URL [${
           lb[i].invites
         }]\n`
-      else {
+      } else {
         const user = await author.client.users.fetch(lb[i].member_id)
         collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(
           user.tag
