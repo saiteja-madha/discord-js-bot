@@ -1,5 +1,7 @@
 # 👋 Hello there!
 
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/C0C1PUABU)
+
 {% hint style="warning" %}
 This is the documentation, the actual configuration is not done here. Visit [mochi.vikshan.me](https://mochi.vikshan.me) to manage your server.
 {% endhint %}

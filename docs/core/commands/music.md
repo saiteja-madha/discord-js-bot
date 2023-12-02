@@ -4,6 +4,10 @@ description: 13 commands
 
 # 🎵 Music
 
+{% hint style="danger" %}
+Subject to change due to YouTube TOS
+{% endhint %}
+
 | Command                 | Slash          | Description                                                 |
 | ----------------------- | -------------- | ----------------------------------------------------------- |
 | **!bassboost \<level>** | **/bassboost** | set bassboost level                                         |
