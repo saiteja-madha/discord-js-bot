@@ -1,4 +1,3 @@
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C1PUABU)
 ## Mochi v1.0.2
 
 ### New
