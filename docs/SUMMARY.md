@@ -22,7 +22,7 @@
   * [📨 Invites](core/commands/invites.md)
   * [🔨 Moderation](core/commands/moderation.md)
   * [🎵 Music](core/commands/music.md)
-  * [🔏 Owner](core/commands/owner.md)
+  * [🔏 Developer](core/commands/developer.md)
   * [🧑 Social](core/commands/social.md)
   * [📈 Stats](core/commands/stats.md)
   * [🛠 Utility](core/commands/utility.md)
