@@ -10,10 +10,12 @@
       set would send error instead of explaining it
 
 ### Developer
-- [ ] ⚙️ removed `npm run format` from the `npm run update` script to eliminate the
-      possibility of formatting an already formatted code resulting in git errors
-- [ ] ⚙️ excluded `docs` folder from `npm run format` script to prevent formatting
-      the documentation files, which breaks links in gitbook.
+
+- [ ] ⚙️ removed `npm run format` from the `npm run update` script to eliminate
+      the possibility of formatting an already formatted code resulting in git
+      errors
+- [ ] ⚙️ excluded `docs` folder from `npm run format` script to prevent
+      formatting the documentation files, which breaks links in gitbook.
 
 ## Mochi v1.0.1
 

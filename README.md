@@ -1,3 +1,4 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C1PUABU)
 [![Version][version-shield]](version-url)
 [![Contributors][contributors-shield]][contributors-url]
 [![PRs][pr-shield]][pr-url] [![Forks][forks-shield]][forks-url]
