@@ -15,7 +15,7 @@ const MAX_PER_PAGE = 10 // max number of embed fields per page
 module.exports = {
   name: 'listservers',
   description: 'lists all/matching servers',
-  category: 'OWNER',
+  category: 'DEV',
   botPermissions: ['EmbedLinks'],
   command: {
     enabled: true,

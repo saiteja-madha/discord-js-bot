@@ -4,7 +4,7 @@
 module.exports = {
   name: 'leaveserver',
   description: 'leave a server.',
-  category: 'OWNER',
+  category: 'DEV',
   botPermissions: ['EmbedLinks'],
   command: {
     enabled: true,

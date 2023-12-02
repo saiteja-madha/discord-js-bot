@@ -40,7 +40,7 @@ const categories = [
 module.exports = {
   name: 'mtod',
   description: 'Manage Truth or Dare questions',
-  category: 'OWNER',
+  category: 'DEV',
   enabled: true,
   slashCommand: {
     enabled: true,

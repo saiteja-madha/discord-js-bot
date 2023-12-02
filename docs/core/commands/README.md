@@ -20,7 +20,7 @@ The comands are divided into the following categories.
 
 [music.md](music.md "mention")
 
-[owner.md](owner.md "mention")
+[developer.md](developer.md "mention")
 
 [social.md](social.md "mention")
 
