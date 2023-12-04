@@ -1,15 +1,15 @@
-## Mochi v1.0.2
+# Mochi v1.0.2
 
-### New
+## New
 
 - [x] 📜 Stats and invites will be tracked by default
 
-### Fixes
+## Fixes & Improvements
 
 - [x] 🛠 Fixed `leaderboard` command in which servers whose leaderboard is not
       set would send error instead of explaining it
 
-### Developer
+## Developer Notes
 
 - [ ] ⚙️ removed `npm run format` from the `npm run update` script to eliminate
       the possibility of formatting an already formatted code resulting in git
@@ -17,9 +17,9 @@
 - [ ] ⚙️ excluded `docs` folder from `npm run format` script to prevent
       formatting the documentation files, which breaks links in gitbook.
 
-## Mochi v1.0.1
+# Mochi v1.0.1
 
-### New
+## New
 
 - [x] 🤖 Bot is now Mochi
 - [x] 📜 Mochi can start giveaways in announcement channels
@@ -27,7 +27,7 @@
 - [x] 📜 Mochi now has a changelog command
 - [x] 📜 Mochi now can purge up to 500 messages
 
-### Fixes
+## Fixes
 
 - [x] 🛠 Fixed rank card username
 - [x] 🛠 Fixed greeting fields can't be deleted in dashboard
@@ -39,7 +39,7 @@
 - [x] 🛠 Fixed suggestion null
 - [x] 🛠 Fixed Broken API links
 
-### Developer
+## Developer
 
 - [x] ⚙️ Updated all dependencies to latest versions.
   - @vitalets/google-translate-api (9.1.0 to 9.2.0)
@@ -52,6 +52,6 @@
   - pino (8.11.0 to 8.14.1)
   - pino-pretty (10.0.0 to 10.0.1)
 
-### Removed
+## Removed
 
 - [x] 🗑️ Removed nnecessary commands

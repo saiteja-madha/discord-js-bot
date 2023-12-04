@@ -11,8 +11,8 @@
   "scripts": {
     "dev": "nodemon .",
     "start": "pm2 start bot.js --name mochi && pm2 save && pm2 logs",
-    "format": "prettier --write .",
-    "update": "git pull && npm i && npm run dev",
+    "f": "prettier --write .",
+    "u": "git pull && npm i && npm run dev",
     "docker:build": "docker build -t saitejamadha/discord-js-bot:5.4.0 .",
     "start-replit": "node bot.js",
     "migrate-db": "node ./scripts/db-v4-to-v5.js"
