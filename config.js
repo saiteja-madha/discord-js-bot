@@ -90,7 +90,7 @@ module.exports = {
 
   IMAGE: {
     ENABLED: true,
-    BASE_API: "https://strangeapi.fun/api",
+    BASE_API: "https://strangeapi.hostz.me/api/",
   },
 
   INVITE: {

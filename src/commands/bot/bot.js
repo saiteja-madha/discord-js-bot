@@ -170,7 +170,10 @@ module.exports = {
     // Changelog
     else if (sub === 'changelog') {
       try {
-        const octokit = new Octokit()
+        const githubToken = process.env.GITHUB_TOKEN
+        const octokitOptions = githubToken ? { auth: githubToken } : {}
+
+        const octokit = new Octokit(octokitOptions)
         const response = await octokit.repos.getContent({
           owner: 'vixshan',
           repo: 'mochi',
@@ -182,10 +185,19 @@ module.exports = {
           'base64'
         ).toString('utf-8')
 
+        // Reduce heading sizes in the changelog content
+        const adjustedChangelogContent = changelogContent.replace(
+          /#{1,6}/g,
+          match => {
+            // Adjust the heading size based on your preference, e.g., reduce by 1 level
+            return '#' + match
+          }
+        )
+
         const embed = new EmbedBuilder()
           .setAuthor({ name: 'Changelog' })
           .setColor(EMBED_COLORS.BOT_EMBED)
-          .setDescription(changelogContent)
+          .setDescription(adjustedChangelogContent)
 
         return interaction.followUp({ embeds: [embed] })
       } catch (error) {

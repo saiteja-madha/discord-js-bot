@@ -2,46 +2,47 @@
 
 ## New
 
-- [x] 📜 Stats and invites will be tracked by default
+- 📜 Stats and invites will be tracked by default
 
 ## Fixes & Improvements
 
-- [x] 🛠 Fixed `leaderboard` command in which servers whose leaderboard is not
-      set would send error instead of explaining it
+- Improved `bot changelog` command to reduce headings of the embeded changelog
+- Fixed `leaderboard` command in which servers whose leaderboard is not set
+  would send error instead of explaining it
+- fixed image base url
 
 ## Developer Notes
 
-- [ ] ⚙️ removed `npm run format` from the `npm run update` script to eliminate
-      the possibility of formatting an already formatted code resulting in git
-      errors
-- [ ] ⚙️ excluded `docs` folder from `npm run format` script to prevent
-      formatting the documentation files, which breaks links in gitbook.
+- ⚙️ removed `npm run format` from the `npm run update` script to eliminate the
+  possibility of formatting an already formatted code resulting in git errors
+- ⚙️ excluded `docs` folder from `npm run format` script to prevent formatting
+  the documentation files, which breaks links in gitbook.
 
 # Mochi v1.0.1
 
 ## New
 
-- [x] 🤖 Bot is now Mochi
-- [x] 📜 Mochi can start giveaways in announcement channels
-- [x] 📜 Mochi now has ToD
-- [x] 📜 Mochi now has a changelog command
-- [x] 📜 Mochi now can purge up to 500 messages
+- 🤖 Bot is now Mochi
+- 📜 Mochi can start giveaways in announcement channels
+- 📜 Mochi now has ToD
+- 📜 Mochi now has a changelog command
+- 📜 Mochi now can purge up to 500 messages
 
 ## Fixes
 
-- [x] 🛠 Fixed rank card username
-- [x] 🛠 Fixed greeting fields can't be deleted in dashboard
-- [x] 🛠 Fixed greeting fields not updating in dashboard
-- [x] 🛠 Fixed anti-massmention
-- [x] 🛠 Fixed null is not snowflake error
-- [x] 🛠 Fixed command usage
-- [x] 🛠 Fixed replit issues
-- [x] 🛠 Fixed suggestion null
-- [x] 🛠 Fixed Broken API links
+- 🛠 Fixed rank card username
+- 🛠 Fixed greeting fields can't be deleted in dashboard
+- 🛠 Fixed greeting fields not updating in dashboard
+- 🛠 Fixed anti-massmention
+- 🛠 Fixed null is not snowflake error
+- 🛠 Fixed command usage
+- 🛠 Fixed replit issues
+- 🛠 Fixed suggestion null
+- 🛠 Fixed Broken API links
 
 ## Developer
 
-- [x] ⚙️ Updated all dependencies to latest versions.
+- ⚙️ Updated all dependencies to latest versions.
   - @vitalets/google-translate-api (9.1.0 to 9.2.0)
   - discord.js (14.9.0 to 14.12.1)
   - dotenv (16.1.4 to 16.3.1)
@@ -54,4 +55,4 @@
 
 ## Removed
 
-- [x] 🗑️ Removed nnecessary commands
+- 🗑️ Removed unnecessary commands
