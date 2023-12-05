@@ -32,6 +32,7 @@
     "@vitalets/google-translate-api": "^9.2.0",
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
+    "canvacord": "^5.4.10",
     "common-tags": "^1.8.2",
     "connect-mongo": "^5.0.0",
     "country-emoji-languages": "^1.0.0",
