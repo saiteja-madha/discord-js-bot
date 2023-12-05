@@ -177,7 +177,7 @@ module.exports = {
         const response = await octokit.repos.getContent({
           owner: 'vixshan',
           repo: 'mochi',
-          path: 'CHANGELOG.md',
+          path: 'src/CHANGELOG.md',
         })
 
         const changelogContent = Buffer.from(
