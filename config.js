@@ -16,11 +16,11 @@ module.exports = {
     TEST_GUILD_ID: "1072214895598248030", // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
   EMBED_COLORS: {
-    BOT_EMBED: "#068ADD",
-    TRANSPARENT: "#36393F",
-    SUCCESS: "#00A56A",
-    ERROR: "#D61A3C",
-    WARNING: "#F7E919",
+    BOT_EMBED: "#00FFFF",
+    TRANSPARENT: "#00000000",
+    SUCCESS: "#00FF00",
+    ERROR: "#FF0000",
+    WARNING: "#FFFF00",
   },
   CACHE_SIZE: {
     GUILDS: 100,

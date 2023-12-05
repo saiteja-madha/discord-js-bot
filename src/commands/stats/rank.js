@@ -1,8 +1,10 @@
-const { ApplicationCommandOptionType } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config')
+const {
+  AttachmentBuilder,
+  ApplicationCommandOptionType,
+} = require('discord.js')
+const { EMBED_COLORS, IMAGE } = require('@root/config')
+const { getBuffer } = require('@helpers/HttpUtils')
 const { getMemberStats, getXpLb } = require('@schemas/MemberStats')
-const Canvacord = require('canvacord')
-const Discord = require('discord.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -10,8 +12,13 @@ const Discord = require('discord.js')
 module.exports = {
   name: 'rank',
   description: 'displays members rank in this server',
+  cooldown: 5,
   category: 'STATS',
   botPermissions: ['AttachFiles'],
+  command: {
+    enabled: true,
+    usage: '[@member|id]',
+  },
   slashCommand: {
     enabled: true,
     options: [
@@ -22,6 +29,13 @@ module.exports = {
         required: false,
       },
     ],
+  },
+
+  async messageRun(message, args, data) {
+    const member =
+      (await message.guild.resolveMember(args[0])) || message.member
+    const response = await getRank(message, member, data.settings)
+    await message.safeReply(response)
   },
 
   async interactionRun(interaction, data) {
@@ -50,25 +64,29 @@ async function getRank({ guild }, member, settings) {
 
   const xpNeeded = memberStats.level * memberStats.level * 100
 
-  const rankCard = new Canvacord.Rank()
-    .setAvatar(user.displayAvatarURL({ dynamic: false, extension: 'png' }))
-    .setRequiredXP(xpNeeded)
-    .setCurrentXP(memberStats.xp)
-    .setLevel(memberStats.level)
-    .setProgressBar(EMBED_COLORS.BOT_EMBED, 'COLOR')
-    .setUsername(user.username)
-    .setDiscriminator(user.discriminator)
-    .setStatus(member.presence.status.toString() || 'idle')
-    .setRank(pos)
+  const url = new URL(`https://api.infinity-bot.live/utils/rank-card`)
+  url.searchParams.append('name', user.username)
+  if (user.discriminator != 0)
+    url.searchParams.append('discriminator', user.discriminator)
+  url.searchParams.append(
+    'avatar',
+    user.displayAvatarURL({ extension: 'png', size: 128 })
+  )
+  url.searchParams.append('currentxp', memberStats.xp)
+  url.searchParams.append('reqxp', xpNeeded)
+  url.searchParams.append('level', memberStats.level)
+  url.searchParams.append('barcolor', EMBED_COLORS.BOT_EMBED)
+  url.searchParams.append(
+    'status',
+    member?.presence?.status?.toString() || 'idle'
+  )
+  if (pos !== -1) url.searchParams.append('rank', pos)
 
-  try {
-    const data = await rankCard.build()
-    const attachment = new Discord.AttachmentBuilder(data, {
-      name: 'RankCard.png',
-    })
-    return { files: [attachment] }
-  } catch (error) {
-    console.error(error)
-    return 'Failed to generate rank card'
-  }
+  const response = await getBuffer(url.href)
+  if (!response.success) return 'Failed to generate rank-card'
+
+  const attachment = new AttachmentBuilder(response.buffer, {
+    name: 'rank.png',
+  })
+  return { files: [attachment] }
 }
