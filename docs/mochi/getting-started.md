@@ -1,7 +1,5 @@
 # 🚀 Getting Started
 
-[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/C0C1PUABU)
-
 You can add and manage the bot if you have the **Manage Server** permission.
 
 ### Setup <a href="#setup" id="setup"></a>
@@ -20,4 +18,10 @@ You should start out by visiting the commands tab, making sure the prefix does n
 * **Auto role** can help with assigning roles when members join.
 * **Role commands** can help with members assigning roles to themselves through either commands or reactions.
 
-For a _soundboard or reputation_, check out the **Fun** tab. Click through the various pages and explore a little to see what the bot offers. If you need help read around in the control panel, the docs, or our [FAQ ](../others/faq.md)page. If you still need help, you can visit our support server. We have a limited number of volunteer support staff, and we are losing money hosting this bot for you. \*_If you're being rude in the support server, chances are you're gonna get banned.\*_ If you wish to help us out, please see the [Helping out](broken-reference/) page.
+For a _soundboard or reputation_, check out the **Fun** tab. Click through the various pages and explore a little to see what the bot offers.&#x20;
+
+If you need help read around in the control panel, the docs, or our [FAQ ](../others/faq.md)page. If you still need help, you can visit our support server. We have a limited number of volunteer support staff, and we are losing money hosting this bot for you.&#x20;
+
+\*_If you're being rude in the support server, chances are you're gonna get banned.\*_ If you wish to help us out, please see the [Helping out](about/helping-out.md) page.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)

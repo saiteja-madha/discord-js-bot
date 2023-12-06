@@ -1,7 +1,5 @@
 # 🤲 Helping Out
 
-[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/C0C1PUABU)
-
 There are several ways you can help in making Mochi better!
 
 * Supporting Mochi through [Ko-Fi](https://ko-fi.com/vikshan)
@@ -27,3 +25,5 @@ If you are knowledgeable about the bot and you want to help others then join the
 * Been on the server and active for at least 2 weeks
 * Able to show initiative in troubleshooting problems and handling general queries
 * Able to deal with circumstances on your own and trust your own judgments
+
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)

@@ -138,11 +138,14 @@ Add 2 Redirects to your dashboard.
 
 <figure><img src="../../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 
-**Important -> Change http and https depending on whether you have SSL or not!**
+{% hint style="danger" %}
+**Change http and https depending on whether you have SSL or not!**
+{% endhint %}
 
 Now, you should be able to access and log in to your bot's dashboard!
 
 ***
 
-<figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)
 
+***

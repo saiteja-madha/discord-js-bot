@@ -4,7 +4,9 @@
 
 * You can see the [Replit installation guide here](replit.md)
 * Or you can set it up on your machine.
-* #### ![](https://cdn.discordapp.com/emojis/1009754836314628146.gif)》Requirements
+
+### <img src="https://cdn.discordapp.com/emojis/1009754836314628146.gif" alt="" data-size="line">》Requirements
+
 * [Git](https://git-scm.com/downloads)
 * [MongoDB](https://www.mongodb.com)
 * [Nodejs](https://nodejs.org/en/): (18 or above)
@@ -73,7 +75,6 @@ You can set the environment variables in any way you like or place a .env file a
 <summary>[EXPAND] Click to see .env</summary>
 
 ```bash
-@@ -1,23 +0,0 @@
 # Bot Token [Required]
 BOT_TOKEN=
 
@@ -156,17 +157,11 @@ npm start
 
 <summary>[EXPAND] COMMON ERRORS</summary>
 
-```js
+```bash
 [PM2][ERROR] Script already launched, add -f option to force re-execution
 ```
 
-It means that the bot is already running. You can delete it by running the following command followed by the command to start the bot, i.e., `npm run start`:
-
-```
-pm2 delete mochi
-```
-
-Or restart it by running:
+It means that the bot is already running. You can restart it by running:
 
 ```
 pm2 restart mochi
@@ -192,14 +187,16 @@ You can also restart it from the [pm2.io dashboard](https://pm2.io/) as shown be
 
 <summary>Expand to see image</summary>
 
-<img src="https://cdn.discordapp.com/attachments/1072834906742345808/1076183450417123358/image.png" alt="image" data-size="original">
+
+
+<img src="https://cdn.discordapp.com/attachments/1072834906742345808/1076183450417123358/image.png" alt="" data-size="original">
 
 </details>
 
 ***
 
-### 》Support Server
+### <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" alt="" data-size="line">》Support Server
 
 <figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>
 
-[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)

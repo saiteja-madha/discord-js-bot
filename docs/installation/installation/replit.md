@@ -66,4 +66,4 @@ Everything should be working now. If you have any issues, feel free to open an i
 
 <figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>
 
-[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)

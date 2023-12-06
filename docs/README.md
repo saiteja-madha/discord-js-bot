@@ -1,6 +1,6 @@
 # 👋 Hello there!
 
-[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/C0C1PUABU)
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)
 
 {% hint style="warning" %}
 This is the documentation, the actual configuration is not done here. Visit [mochi.vikshan.me](https://mochi.vikshan.me) to manage your server.
@@ -39,6 +39,6 @@ If you're having issues with the bot, check out the [Frequent](broken-reference/
 
 If you have a suggestion for a new feature or improvements, you can either send a message in the [support server](https://discord.gg/uMgS9evnmv) or open an issue in the [GitHub](https://github.com/vixshan/mochi/issues) for the bot.
 
-### 》Support Server
+### <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" alt="" data-size="line">》Support Server
 
 <figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>

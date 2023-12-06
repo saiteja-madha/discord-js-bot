@@ -35,11 +35,13 @@ chmod +x .git/hooks/post-merge
 
 Every time you run `git pull`, it will automatically run the post-merge hook and pull the latest changes from your GitHub repository. The bot will also be restarted automatically using PM2.
 
-> NOTE:\
-> If you want to use `git pull` to update your code automatically, you must keep your GitHub repository public. If you're going to keep your code private, consider using a different method, such as deploying from your machine or using a continuous integration/continuous delivery (CI/CD) tool such as Jenkins, TravisCI, CircleCI, etc. These tools allow you to securely deploy code from a private repository without exposing it publicly.
+{% hint style="warning" %}
+NOTE:\
+If you want to use `git pull` to update your code automatically, you must keep your GitHub repository public. If you're going to keep your code private, consider using a different method, such as deploying from your machine or using a continuous integration/continuous delivery (CI/CD) tool such as Jenkins, TravisCI, CircleCI, etc.&#x20;
 
-## 》Support Server
+These tools allow you to securely deploy code from a private repository without exposing it publicly.
+{% endhint %}
 
-<figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>
+***
 
-[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)

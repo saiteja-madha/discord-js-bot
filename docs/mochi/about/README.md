@@ -1,49 +1,21 @@
 # 🤖 About Mochi
 
-[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/C0C1PUABU) ![Version](https://img.shields.io/github/package-json/v/vixshan/mochi?style=for-the-badge) [![Contributors](https://img.shields.io/github/contributors/vixshan/mochi.svg?style=for-the-badge)](https://github.com/vixshan/mochi/graphs/contributors) [![PRs](https://img.shields.io/github/issues-pr/vixshan/mochi?style=for-the-badge)](https://github.com/vixshan/mochi/pulls) [![Forks](https://img.shields.io/github/forks/vixshan/mochi.svg?style=for-the-badge)](https://github.com/vixshan/mochi/network/members) [![Stargazers](https://img.shields.io/github/stars/vixshan/mochi.svg?style=for-the-badge)](https://github.com/vixshan/mochi/stargazers) [![Issues](https://img.shields.io/github/issues/vixshan/mochi.svg?style=for-the-badge)](https://github.com/vixshan/mochi/issues) [![MIT License](https://img.shields.io/github/license/vixshan/mochi.svg?style=for-the-badge)](https://github.com/vixshan/mochi/blob/master/LICENSE)
-
-![](https://capsule-render.vercel.app/api?type=waving\&color=gradient\&height=200\&section=header\&text=Mochi\&fontSize=80\&fontAlignY=35\&animation=twinkling\&fontColor=gradient)
-
-\
-\
-MOCHI\
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/C0C1PUABU) \
 
 
-
-\
-\
-[Report Bug](https://github.com/vixshan/mochi/issues) · [Request Feature](https://github.com/vixshan/Mochi/issues)
-
-Admin, AutoMod, Anime, Economy, Fun, Giveaway, Image, Invite, Information, Moderation, Music, Owner, Social, Statistics, Suggestion, Ticket, Utility and More...
-
-\
-
-
-Donate • Docs • [Invite Mochi](https://discord.com/api/oauth2/authorize?client\_id=1009149789914546287\&scope=bot+applications.commands\&permissions=1374891928950) • Mochi's Features • Contributing
-
-\
-
-
-### ![](https://cdn.discordapp.com/emojis/1036083490292244493.png)》Support Server
-
-[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
-
-[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
-
-Mochi is Powered by Dgital Ocean, [Get free $200](https://m.do.co/c/c5587212fe39) credits to deploy your own copy of Mochi
-
-[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39\&utm\_campaign=Referral\_Invite\&utm\_medium=Referral\_Program\&utm\_source=badge)
+<figure><img src="https://capsule-render.vercel.app/api?type=waving&#x26;color=gradient&#x26;height=200&#x26;section=header&#x26;text=Mochi&#x26;fontSize=80&#x26;fontAlignY=35&#x26;animation=twinkling&#x26;fontColor=gradient" alt=""><figcaption></figcaption></figure>
 
 ### 🔗 Resource Links
 
 [![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi) [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
 
 * 🤖 Mochi: [Invite Here](https://discord.com/oauth2/authorize?client\_id=1009149789914546287\&permissions=397602323830\&scope=bot%20applications.commands)
-* ❤️ Buy me a coffee: Ko-Fi
+* ❤️ Buy me a coffee: [Ko-Fi](https://ko-fi.com/vikshan/tiers)
 * 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 * 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
-* 📑 Documentation : [docs.vikshan.me](https://docs.vikshan.me)
 * 📦 Self Host: [Guide](https://docs.vikshan.me/additional/installation)
+
+Mochi is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe39) credits to deploy your own copy of Mochi.
 
 ### ✨ Features ✨
 
@@ -158,9 +130,7 @@ Mochi is Powered by Dgital Ocean, [Get free $200](https://m.do.co/c/c5587212fe39
 * **Customize other peoples avatars**\
   _Commands:_ `blur`, `greyscale`, `invert`, `pixelate`, `blur`, `sepia`, `sharpen`, `ad`, `affect`, `beautiful`, `color`...
 * **Make some images by yourself or make some art**\
-  _Commands:_ `bobross`, `confusedstonk`, `delete`, `facepalm`, `hitler`, `jail`, `jokeoverhead`, `karaba`, `mms`, `notstonk`, `poutine`, `rainbow`, `rip`, `shit`, `stonk`, `tatoo`, `thomas`, `trash`, `wanted`, `wasted`, ...
-
-\
+  _Commands:_ `bobross`, `confusedstonk`, `delete`, `facepalm`, `hitler`, `jail`, `jokeoverhead`, `karaba`, `mms`, `notstonk`, `poutine`, `rainbow`, `rip`, `shit`, `stonk`, `tatoo`, `thomas`, `trash`, `wanted`, `wasted`, ...\
 
 
 ## 🤝 Contributing 🤝
@@ -169,14 +139,16 @@ Mochi is Powered by Dgital Ocean, [Get free $200](https://m.do.co/c/c5587212fe39
 * Feel free to [Fork](https://github.com/vixshan/mochi/fork) this repository, create a feature branch and submit a pull request
 * You can keep track of all the planned features [here](https://github.com/vixshan/mochi/projects) or make a request for one at our discord
 
-#### ![](https://cdn.discordapp.com/emojis/1055803759831294013.png) 》Notice
+#### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" alt="" data-size="line"> 》Notice
 
 > You may not claim this as your own! The original source was created by [saiteja-madha](https://github.com/saiteja-madha). The source is modified and being updated by Vikshan.
 
 > Mochi is a multipurpose Discord bot build in [Discord.js](https://github.com/Discordjs/discordjs) If you like this repository, feel free to leave a star ⭐ to motivate me!
 
-![](https://cdn.discordapp.com/emojis/809085860632985630.png) 》\[Sponsor]\(https://github.com/sponsors/vixshan)
+<img src="https://cdn.discordapp.com/emojis/809085860632985630.png" alt="" data-size="line"> 》 Sponsor the project on [GitHub](https://github.com/sponsors/vixshan)
 
 ### Powered by;
 
-[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39\&utm\_campaign=Referral\_Invite\&utm\_medium=Referral\_Program\&utm\_source=badge) [![](https://www.vultr.com/media/logo\_ondark.svg)](https://www.vultr.com/?ref=9556008-8H)
+[<img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" data-size="line">](https://www.digitalocean.com/?refcode=c5587212fe39\&utm\_campaign=Referral\_Invite\&utm\_medium=Referral\_Program\&utm\_source=badge) [<img src="https://www.vultr.com/media/logo_ondark.svg" alt="" data-size="line">](https://www.vultr.com/?ref=9556008-8H)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)

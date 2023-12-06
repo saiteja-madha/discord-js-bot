@@ -73,8 +73,12 @@ The command to renew certbot is installed in one of the following locations:
 
 To confirm that your site is set up properly, visit `https://yourwebsite.com/` in your browser and look for the lock icon in the URL bar.
 
-
+{% hint style="warning" %}
+Remember to change to **https** in your  redirects you set up earlier [here](./#heading-7)​ and in the cofig.js.
+{% endhint %}
 
 ***
 
-<figure><img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt=""><figcaption></figcaption></figure>
+[![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)
+
+***
