@@ -22,6 +22,7 @@
   background: #aaa !important;
   color: #000000 !important;
   border-radius: 17px !important;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px !important;
 }
 
 .box.box-warning-custom-light {
@@ -69,8 +70,7 @@
 }
 
 .sidebar-toggle-custom-light:hover {
-  background-color: #bbb !important;
-  color: #000000 !important;
+  color: #bbb !important;
 }
 
 /* The sidebar */
@@ -111,6 +111,10 @@
   background-color: #bbb !important;
   color: #000000 !important;
   border-left-color: #000 !important;
+  border-bottom-right-radius: 40px;
+  border-top-right-radius: 40px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+  margin-bottom: 8px;
 }
 
 .sidebar-menu-custom-light > li.header-custom-light {
@@ -131,6 +135,9 @@
   background-color: #3c8dbc !important;
   border-color: #3c8dbc !important;
   color: #000 !important;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px !important;
 }
 
 .btn-primary-custom-light:hover {
@@ -147,6 +154,10 @@
 .btn-success-custom-light {
   border-radius: 17px !important;
   color: #000 !important;
+  border-color: #00a65a !important;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px !important;
 }
 
 .btn-success-custom-light:hover {
@@ -163,6 +174,7 @@
 
 .btn-default-custom-light {
   border-radius: 17px !important;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px !important;
 }
 
 /* Text for the navigation */
@@ -200,15 +212,15 @@
 }
 
 .btn-default-custom-light {
-  background-color: #ccc !important;
-  border-color: #ccc !important;
-  color: red !important;
-}
-
-.btn-default-custom-light:hover {
   background-color: red !important;
   border-color: red !important;
   color: #000000 !important;
+}
+
+.btn-default-custom-light:hover {
+  background-color: #ccc !important;
+  border-color: #ccc !important;
+  color: red !important;
 }
 
 .dropdown-menu-custom-light {
@@ -244,6 +256,7 @@
   background: #222629 !important;
   color: #fff !important;
   border-radius: 17px !important;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px !important;
 }
 
 .box.box-warning-custom-dark {
@@ -285,7 +298,8 @@
 }
 
 .sidebar-toggle-custom-dark:hover {
-  background-color: #343a40 !important;
+  color: #30353b !important;
+  background-color: #222629 !important;
 }
 
 /* The sidebar */
@@ -306,6 +320,8 @@
 
 .sidebar-menu-custom-dark > li > a {
   background-color: #222629 !important;
+  border-bottom-right-radius: 40px;
+  border-top-right-radius: 40px;
 }
 
 .user-panel-custom-dark > .info > p {
@@ -317,7 +333,10 @@
 }
 
 .sidebar-menu-custom-dark > li.active-custom-dark > a {
-  background-color: #343a40 !important;
+  background-color: #30353b !important;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+  margin-bottom: 8px;
+  margin-right: 5px;
 }
 
 .sidebar-menu-custom-dark > li.header-custom-dark {
@@ -335,6 +354,9 @@
 /* Buttons */
 .btn-primary-custom-dark {
   border-radius: 17px !important;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px !important;
 }
 
 .btn-danger-custom-dark {
@@ -343,6 +365,9 @@
 
 .btn-success-custom-dark {
   border-radius: 17px !important;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px !important;
 }
 
 .dropdown-toggle-custom-dark {
@@ -352,6 +377,7 @@
 
 .btn-default-custom-dark {
   border-radius: 17px !important;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px !important;
 }
 
 /* Text for the navigation */
@@ -389,15 +415,15 @@
 }
 
 .btn-default-custom-dark {
-  background-color: #2f3438 !important;
-  border-color: #2f3438 !important;
-  color: red !important;
-}
-
-.btn-default-custom-dark:hover {
   background-color: red !important;
   border-color: red !important;
   color: #fff !important;
+}
+
+.btn-default-custom-dark:hover {
+  background-color: #2f3438 !important;
+  border-color: #2f3438 !important;
+  color: red !important;
 }
 
 .dropdown-menu-custom-dark {
