@@ -212,15 +212,15 @@
 }
 
 .btn-default-custom-light {
-  background-color: red !important;
-  border-color: red !important;
-  color: #000000 !important;
-}
-
-.btn-default-custom-light:hover {
   background-color: #ccc !important;
   border-color: #ccc !important;
   color: red !important;
+}
+
+.btn-default-custom-light:hover {
+  background-color: red !important;
+  border-color: red !important;
+  color: #000000 !important;
 }
 
 .dropdown-menu-custom-light {
@@ -415,15 +415,15 @@
 }
 
 .btn-default-custom-dark {
-  background-color: red !important;
-  border-color: red !important;
-  color: #fff !important;
-}
-
-.btn-default-custom-dark:hover {
   background-color: #2f3438 !important;
   border-color: #2f3438 !important;
   color: red !important;
+}
+
+.btn-default-custom-dark:hover {
+  background-color: red !important;
+  border-color: red !important;
+  color: #fff !important;
 }
 
 .dropdown-menu-custom-dark {
