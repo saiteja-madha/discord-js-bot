@@ -43,8 +43,9 @@ module.exports = {
     enabled: true, // enable or disable dashboard
     baseURL: "https://mochi.vikshan.me", // base url
     failureURL: "https://docs.vikshan.me", // failure redirect url
-    port: "8080", // port to run the bot on
-  },
+    port: process.env.PORT || "8080", // use Heroku's port or 8080 if run locally
+},
+
 
   ECONOMY: {
     ENABLED: true,

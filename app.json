@@ -25,12 +25,12 @@
     },
     "BOT_SECRET": {
       "description": "required for bot dashboard",
-      "required": false,
+      "required": true,
       "value": ""
     },
     "SESSION_PASSWORD": {
       "description": "required for dashboard",
-      "required": false,
+      "required": true,
       "value": ""
     },
     "WEATHERSTACK_KEY": {
