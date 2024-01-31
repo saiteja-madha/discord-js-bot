@@ -7,6 +7,7 @@
 
 ### 🔗 Resource Links
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fvixshan%2Fmochi)
 [![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi) [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
 
 * 🤖 Mochi: [Invite Here](https://discord.com/oauth2/authorize?client\_id=1009149789914546287\&permissions=397602323830\&scope=bot%20applications.commands)

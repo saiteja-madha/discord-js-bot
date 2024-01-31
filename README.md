@@ -215,8 +215,7 @@ of Mochi
 > [Discord.js](https://github.com/Discordjs/discordjs) If you like this
 > repository, feel free to leave a star ⭐ to motivate me!
 
-<img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="15px" height="15px">
-》[Sponsor](https://github.com/sponsors/vixshan)
+<img src="https://cdn.discordapp.com/emojis/809085860632985630.png" alt="" data-size="line"> 》 Sponsor the project on [GitHub](https://github.com/sponsors/vixshan)
 
 ## Powered by;
 

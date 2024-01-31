@@ -3,6 +3,7 @@
 ### 🚀 Setup
 
 * You can see the [Replit installation guide here](replit.md)
+* You can see the [Heroku installation guide here](heroku.md)
 * Or you can set it up on your machine.
 
 ### <img src="https://cdn.discordapp.com/emojis/1009754836314628146.gif" alt="" data-size="line">》Requirements
