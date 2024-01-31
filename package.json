@@ -57,6 +57,7 @@
     "os": "^0.1.2",
     "pino": "^8.14.1",
     "pino-pretty": "^10.0.1",
+    "pm2": "^5.3.1",
     "pretty-ms": "^7.0.1",
     "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
