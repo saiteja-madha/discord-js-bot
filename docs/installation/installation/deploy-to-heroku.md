@@ -1,10 +1,4 @@
----
-description: Deploy on Heroku
----
-
 # 🚀 Deploy to Heroku
-
-Deployment to Heroku
 
 1. Give this repo a star and fork it to your GitHub account [here](https://github.com/vixshan/mochi/fork).
 2. if you do not have an Heroku account, create one [here](https://signup.heroku.com/).

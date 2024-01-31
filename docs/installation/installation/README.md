@@ -2,8 +2,8 @@
 
 ### 🚀 Setup
 
+* You can see the [Heroku installation guide here](deploy-to-heroku.md)
 * You can see the [Replit installation guide here](replit.md)
-* You can see the [Heroku installation guide here](heroku.md)
 * Or you can set it up on your machine.
 
 ### <img src="https://cdn.discordapp.com/emojis/1009754836314628146.gif" alt="" data-size="line">》Requirements
@@ -191,8 +191,6 @@ You can also restart it from the [pm2.io dashboard](https://pm2.io/) as shown be
 <details>
 
 <summary>Expand to see image</summary>
-
-
 
 <img src="https://cdn.discordapp.com/attachments/1072834906742345808/1076183450417123358/image.png" alt="" data-size="original">
 
