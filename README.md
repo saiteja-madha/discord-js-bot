@@ -56,7 +56,7 @@ of Mochi
 [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 ## 🔗 Resource Links
-
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fvixshan%2Fmochi)
 [![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi)
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
 
@@ -66,6 +66,7 @@ of Mochi
 - 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
 - 📑 Documentation : [docs.vikshan.me](https://docs.vikshan.me)
+- 📝 Changelog: [Changelog](src/CHANGELOG.md)
 - 📦 Self Host: [Guide](https://docs.vikshan.me/installation/installation)
 
 ## ✨ Features ✨

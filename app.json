@@ -3,15 +3,15 @@
   "description": "An open-source, multipurpose discord bot built using discord-js",
 
   "env": {
-    "BOT_TOKEN=": {
-      "description": "bot token",
+    "BOT_TOKEN": {
+      "description": "your bot token (https://discord.com/developers/applications)",
       "required": true,
-      "value": "this is a secret"
+      "value": ""
     },
     "MONGO_CONNECTION": {
-      "description": "mongo connection url",
+      "description": "Mongo Database Connection url (https://www.mongodb.com/cloud/atlas)",
       "required": true,
-      "value": "this is a secret"
+      "value": ""
     },
     "ERROR_LOGS": {
       "description": "webhook url for error logs",
@@ -24,13 +24,13 @@
       "value": ""
     },
     "BOT_SECRET": {
-      "description": "required for dashboard",
-      "required": true,
+      "description": "required for bot dashboard",
+      "required": false,
       "value": ""
     },
     "SESSION_PASSWORD": {
       "description": "required for dashboard",
-      "required": true,
+      "required": false,
       "value": ""
     },
     "WEATHERSTACK_KEY": {
