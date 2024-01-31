@@ -41,7 +41,7 @@ module.exports = {
 
   DASHBOARD: {
     enabled: true, // enable or disable dashboard
-    baseURL: "https://mochi.vikshan.me", // base url
+    baseURL: "https://mochidb-3d5ad3c56585.herokuapp.com", // base url
     failureURL: "https://docs.vikshan.me", // failure redirect url
     port: process.env.PORT || "8080", // use Heroku's port or 8080 if run locally
 },
