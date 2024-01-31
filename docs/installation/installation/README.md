@@ -151,7 +151,11 @@ npm start
 
 > You can also run `npm run start` to start the bot.
 
-* NOTE: running `npm start` or `npm run start` will start the bot with PM2 and give it the name "mochi." You can replace "mochi" with a name of your choice in [package.json](../package.json). It will also show logs for the bot and save the pm2 processes.
+* NOTE: running `npm start` or `npm run start` will start the bot without, so eventually it will stop once the terminal is killed. You can add the followingline of code in its start script to make it start with PM2 and give it the name "mochi." You can replace "mochi" with a name of your choice in [package.json](../package.json). It will also show logs for the bot and save the pm2 processes.
+
+```json
+"start": "pm2 start bot.js --name mochi && pm2 save && pm2 logs",
+```
 
 <details>
 

@@ -1,0 +1,81 @@
+{
+  "name": "mochi",
+  "description": "An open-source, multipurpose discord bot built using discord-js",
+
+  "env": {
+    "BOT_TOKEN=": {
+      "description": "bot token",
+      "required": true,
+      "value": "this is a secret"
+    },
+    "MONGO_CONNECTION": {
+      "description": "mongo connection url",
+      "required": true,
+      "value": "this is a secret"
+    },
+    "ERROR_LOGS": {
+      "description": "webhook url for error logs",
+      "required": false,
+      "value": ""
+    },
+    "JOIN_LEAVE_LOGS": {
+      "description": "webhook url for join/leave logs",
+      "required": false,
+      "value": ""
+    },
+    "BOT_SECRET": {
+      "description": "required for dashboard",
+      "required": true,
+      "value": ""
+    },
+    "SESSION_PASSWORD": {
+      "description": "required for dashboard",
+      "required": true,
+      "value": ""
+    },
+    "WEATHERSTACK_KEY": {
+      "description": "Required for Weather Command (https://weatherstack.com)",
+      "required": false
+    },
+    "STRANGE_API_KEY": {
+      "description": "Required for Strange API (https://strangeapi.xyz)",
+      "required": false
+    },
+    "SPOTIFY_CLIENT_ID": {
+      "description": "Required for Spotify Commands (https://developer.spotify.com/dashboard)",
+      "required": false,
+      "value": ""
+    },
+    "SPOTIFY_CLIENT_SECRET": {
+      "description": "Required for Spotify Commands (https://developer.spotify.com/dashboard)",
+      "required": false,
+      "value": ""
+    },
+    "OPENAI": {
+      "description": "Required for AI Commands (https://beta.openai.com)",
+      "required": false,
+      "value": ""
+    },
+    "WAIFU_IT_KEY": {
+      "description": "Required for Waifu Commands (https://docs.waifu.it)",
+      "required": false,
+      "value": ""
+    },
+    "GITHUB_TOKEN": {
+      "description": "Required for GitHub commands (https://github.com/settings/tokens)",
+      "required": false,
+      "value": ""
+    }
+  },
+
+  "buildpacks": [
+    { "url": "https://github.com/heroku/heroku-buildpack-nodejs#latest" },
+    { "url": "https://github.com/carlosdommor/heroku-buildpack-ffmpeg-latest" }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

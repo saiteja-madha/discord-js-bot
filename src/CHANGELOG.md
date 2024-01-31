@@ -1,3 +1,10 @@
+# Mochi v1.0.3
+
+## Developer Notes
+- Mochi now runs on Heroku
+- ⚙️ Updated all dependencies to latest versions.
+- ⚙️ Updated `package.json` to use `node .` to reflect the switch to heroku.
+
 # Mochi v1.0.2
 
 ## New

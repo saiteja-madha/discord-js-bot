@@ -66,7 +66,7 @@ of Mochi
 - 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
 - 📑 Documentation : [docs.vikshan.me](https://docs.vikshan.me)
-- 📦 Self Host: [Guide](https://docs.vikshan.me/additional/installation)
+- 📦 Self Host: [Guide](https://docs.vikshan.me/installation/installation)
 
 ## ✨ Features ✨
 

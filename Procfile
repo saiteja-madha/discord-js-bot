@@ -1,0 +1,1 @@
+web: pm2 start bot.js --name "mochi" --no-daemon

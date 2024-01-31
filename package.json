@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "nodemon .",
-    "start": "pm2 start bot.js --name mochi && pm2 save && pm2 logs",
+    "start": "node bot.js",
     "f": "prettier --write .",
     "u": "git pull && npm i && npm run dev",
     "docker:build": "docker build -t saitejamadha/discord-js-bot:5.4.0 .",
