@@ -31,6 +31,7 @@
 ## Installation
 
 * [✍ Installation](installation/installation/README.md)
+  * [🚀 Deploy to Heroku](installation/installation/deploy-to-heroku.md)
   * [🤖 Replit Installation](installation/installation/replit.md)
 * [🔌 Connect Dashboard](installation/dashboard/README.md)
   * [Custom Domain](installation/dashboard/custom-domain/README.md)
