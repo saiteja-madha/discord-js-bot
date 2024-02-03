@@ -38,6 +38,8 @@ async function getInviteRanks({ guild }, settings) {
     }
   });
 
+  if (!str) return "No invite ranks configured in this server";
+
   const embed = new EmbedBuilder()
     .setAuthor({ name: "Invite Ranks" })
     .setColor(EMBED_COLORS.BOT_EMBED)
