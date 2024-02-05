@@ -57,7 +57,7 @@
     "table": "^6.8.1",
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^14.0.0",
-    "waifu.it": "^1.1.1"
+    "waifu.it": "^1.2.1"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.7",
