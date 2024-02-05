@@ -3,7 +3,6 @@ const { EMBED_COLORS } = require("@root/config");
 const Client = require("waifu.it");
 const api = new Client(process.env.WAIFU_IT_KEY);
 
-
 /**
  * @type {import("@structures/Command")}
  */
@@ -36,11 +35,11 @@ const genWaifu = async (user) => {
   try {
     const waifu = await api.getWaifu();
     return new EmbedBuilder()
-      .setTitle(waifu.names.en)
-      .setDescription(`Anime: ${waifu.from.name}`)
-      .setImage(waifu.images[Math.floor(Math.random() * waifu.images.length)])
+      .setTitle(waifu.name.full)
+      .setDescription(`Anime: ${waifu.media.nodes[0].title.romaji}`)
+      .setImage(waifu.image.large)
       .setColor("Random")
-      .setFooter({ text: `❤️ ${waifu.statistics.fav}` });
+      .setFooter({ text: `❤️ ${waifu.favourites}` });
   } catch (ex) {
     return new EmbedBuilder()
       .setColor(EMBED_COLORS.ERROR)
@@ -48,3 +47,4 @@ const genWaifu = async (user) => {
       .setFooter({ text: `Requested by ${user.user.username}` });
   }
 };
+
