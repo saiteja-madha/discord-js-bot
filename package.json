@@ -29,7 +29,7 @@
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
     "common-tags": "^1.8.2",
-    "connect-mongo": "^5.0.0",
+    "connect-mongo": "^5.1.0",
     "country-emoji-languages": "^1.0.0",
     "discord-giveaways": "^6.0.1",
     "discord-together": "^1.3.31",
@@ -38,18 +38,18 @@
     "ejs": "^3.1.9",
     "enhanced-ms": "^2.3.0",
     "express": "^4.18.2",
-    "express-session": "^1.17.3",
+    "express-session": "^1.18.0",
     "fixedsize-map": "^1.0.1",
-    "iso-639-1": "^2.1.15",
+    "iso-639-1": "^3.1.0",
     "lavaclient": "^4.1.1",
     "module-alias": "^2.2.3",
-    "moment": "^2.29.4",
-    "mongoose": "^7.4.0",
+    "moment": "^2.30.1",
+    "mongoose": "^8.1.1",
     "nekos.life": "^3.0.0",
-    "node-fetch": "^2.6.12",
+    "node-fetch": "^2.7.0",
     "os": "^0.1.2",
-    "pino": "^8.14.1",
-    "pino-pretty": "^10.0.1",
+    "pino": "^8.18.0",
+    "pino-pretty": "^10.3.1",
     "pretty-ms": "^7.0.1",
     "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
@@ -59,17 +59,17 @@
     "twemoji-parser": "^14.0.0"
   },
   "optionalDependencies": {
-    "bufferutil": "^4.0.7",
+    "bufferutil": "^4.0.8",
     "erlpack": "^0.1.4",
     "utf-8-validate": "^6.0.3",
-    "zlib-sync": "^0.1.8"
+    "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
-    "eslint": "^8.45.0",
+    "eslint": "^8.56.0",
     "eslint-plugin-jsdoc": "^46.4.3",
-    "node": "^20.4.0",
-    "nodemon": "^3.0.1",
-    "prettier": "3.0.0"
+    "node": "^18.18.2",
+    "nodemon": "^3.0.3",
+    "prettier": "3.2.5"
   },
   "keywords": [
     "discord",
@@ -89,3 +89,4 @@
     "@structures": "src/structures/"
   }
 }
+
