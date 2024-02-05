@@ -81,7 +81,7 @@ async function search({ member, guild, channel }, query) {
   let embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED);
   let tracks;
 
-  const loadType = res.tracks.length > 0 ? res.loadType : "NO_MATCHES
+  const loadType = res.tracks.length > 0 ? res.loadType : "NO_MATCHES";
   switch (loadType) {
     case "LOAD_FAILED":
       guild.client.logger.error("Search Exception", res.exception);

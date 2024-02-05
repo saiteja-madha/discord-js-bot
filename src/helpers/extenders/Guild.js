@@ -42,7 +42,10 @@ Guild.prototype.findMatchingChannels = function (query, type = [ChannelType.Guil
  * @param {string} query
  * @param {import("discord.js").GuildChannelTypes[]} type
  */
-Guild.prototype.findMatchingVoiceChannels = function (query, type = [ChannelType.GuildVoice, ChannelType.GuildStageVoice]) {
+Guild.prototype.findMatchingVoiceChannels = function (
+  query,
+  type = [ChannelType.GuildVoice, ChannelType.GuildStageVoice]
+) {
   if (!this || !query || typeof query !== "string") return [];
 
   const channelManager = this.channels.cache.filter((ch) => type.includes(ch.type));

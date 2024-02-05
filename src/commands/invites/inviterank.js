@@ -136,7 +136,7 @@ async function addInviteRank({ guild }, role, invites, settings) {
   } else {
     settings.invite.ranks.push({ _id: role.id, invites });
   }
-  
+
   await settings.save();
   return `${msg}Success! Configuration saved.`;
 }
