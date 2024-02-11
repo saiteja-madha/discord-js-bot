@@ -10,17 +10,6 @@
 
 <br>
 
-<p align="center">
-  <a href="#-resource-links">Resource Links</a>
-  •
-  <a href="#-prerequisites">Prerequisites</a>
-  •
-  <a href="#-getting-started">Getting Started</a>
-  •
-  <a href="#-features">Features</a>
-  •
-  <a href="#-contributing">Contributing</a>
-</p>
 
 <br>
 
