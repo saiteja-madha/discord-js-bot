@@ -1,18 +1,19 @@
 {
   "name": "discord-js-bot",
-  "version": "5.4.0",
+  "version": "5.5.0",
   "description": "An open-source, multipurpose discord bot built using discord-js",
   "main": "bot.js",
   "author": "Sai Teja M",
   "license": "ISC",
   "engines": {
-    "node": ">=16.11.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "dev": "nodemon .",
     "start": "node .",
     "format": "prettier --write src",
-    "docker:build": "docker build -t saitejamadha/discord-js-bot:5.4.0 ."
+    "docker:package": "tar -cf discord-js-bot.tar dashboard logs src bot.js config.js dockerfile package.json package-lock.json",
+    "docker:build": "docker build -t saitejamadha/discord-js-bot:5.5.0 ."
   },
   "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
   "repository": {
@@ -89,4 +90,3 @@
     "@structures": "src/structures/"
   }
 }
-
