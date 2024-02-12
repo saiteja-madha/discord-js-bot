@@ -133,9 +133,10 @@ async function addInviteRank({ guild }, role, invites, settings) {
   if (exists) {
     exists.invites = invites;
     msg += "Previous configuration found for this role. Overwriting data\n";
+  } else {
+    settings.invite.ranks.push({ _id: role.id, invites });
   }
 
-  settings.invite.ranks.push({ _id: role.id, invites });
   await settings.save();
   return `${msg}Success! Configuration saved.`;
 }
