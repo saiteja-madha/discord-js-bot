@@ -91,6 +91,7 @@ module.exports = {
   async trackVoiceStats(oldState, newState) {
     const oldChannel = oldState.channel;
     const newChannel = newState.channel;
+    const now = Date.now();
 
     if (!oldChannel && !newChannel) return;
     if (!newState.member) return;
@@ -103,14 +104,14 @@ module.exports = {
       const statsDb = await getMemberStats(member.guild.id, member.id);
       statsDb.voice.connections += 1;
       await statsDb.save();
-      voiceStates.set(member.id, Date.now());
+      voiceStates.set(member.id, now);
     }
 
     // Member left a voice channel
     if (oldChannel && !newChannel) {
       const statsDb = await getMemberStats(member.guild.id, member.id);
       if (voiceStates.has(member.id)) {
-        const time = Date.now() - voiceStates.get(member.id);
+        const time = now - voiceStates.get(member.id);
         statsDb.voice.time += time / 1000; // add time in seconds
         await statsDb.save();
         voiceStates.delete(member.id);
