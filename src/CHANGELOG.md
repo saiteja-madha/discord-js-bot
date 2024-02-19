@@ -22,13 +22,13 @@
 - Renamed `./src/commands/moderation/shared` to
   `./src/commands/moderation/message`
 
-## Mochi v1.3.1
+# Mochi v1.3.1
 
-### Fixes & Improvements
+## Fixes & Improvements
 
 - Mochi now has custom domain `mochi.vikshan.tech` for the website
 
-### Developer Notes
+## Developer Notes
 
 - Added links configs in `config.js` for easier link management
   - `PATREON_URL`

@@ -197,7 +197,7 @@ module.exports = {
         )
 
         const embed = new EmbedBuilder()
-          .setAuthor({ name: 'Changelog' })
+          .setAuthor({ name: 'Behold, my Changelog!' })
           .setColor(EMBED_COLORS.BOT_EMBED)
           .setDescription(adjustedChangelogContent)
 

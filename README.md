@@ -1,9 +1,3 @@
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C1PUABU)
-[![Version][version-shield]](version-url)
-[![Contributors][contributors-shield]][contributors-url]
-[![PRs][pr-shield]][pr-url] [![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 
 <center><img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Mochi&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=gradient" /></center>
 
@@ -14,6 +8,14 @@
   <br>
   MOCHI
   <br>
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C1PUABU)
+[![Version][version-shield]](version-url)
+[![Contributors][contributors-shield]][contributors-url]
+[![PRs][pr-shield]][pr-url] [![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
 </h1>
 
   <p align="center">
