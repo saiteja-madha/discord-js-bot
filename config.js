@@ -1,7 +1,7 @@
 module.exports = {
   OWNER_IDS: ["929835843479302204"], // Bot owner ID's
   SUPPORT_SERVER: "https://discord.gg/uMgS9evnmv", // Your bot support server
-  DOCS_URL: "https://dub.sh/mochidocs", // Your bot documentation website
+  DOCS_URL: "https://docs.vikshan.tech/mochi/", // Your bot documentation website
   DONATE_URL: "https://ko-fi.com/vikshan", // Your donation link
   GITHUB_URL: "https://github.com/vixshan/mochi", // Your bot github repository
   GITHUB_SPONSORS_URL: "https://github.com/sponsors/vixshan", // Your bot github sponsors link
