@@ -1,5 +1,9 @@
 # Mochi v2.0.0
 
+## New
+
+- Add Voice channels support
+
 ## Fixes & Improvements
 
 - Fixed Cannot read properties of undefined (reading 'find')
@@ -7,6 +11,9 @@
 - Fix help subcommands not loading
 - fix music search bug
 - Fix `move` command
+- fixed rank card
+- fix duplicate ranks
+- fix invite ranks
 
 ## Developer Notes
 
@@ -27,32 +34,3 @@
   - `PATREON_URL`
   - `GITHUB_SPONSORS_URL`
   - `BOTS_URL` for a link to your other bots website
-
-# Mochi v1.3.0
-
-## Developer Notes
-
-- Mochi now runs on Heroku
-- ⚙️ Updated all dependencies to latest versions.
-- ⚙️ Updated `package.json` to use `node .` to reflect the switch to heroku.
-
-# Mochi v1.2.0
-
-## New
-
-- 📜 Stats and invites will be tracked by default
-
-## Fixes & Improvements
-
-- Moved `CHANGELOG.md` to `src/CHANGELOG.md` folder
-- Improved `bot changelog` command to reduce headings of the embeded changelog
-- Fixed `leaderboard` command in which servers whose leaderboard is not set
-  would send error instead of explaining it
-- fixed image base url, rank card now uses infinity API.
-
-## Developer Notes
-
-- ⚙️ removed `npm run format` from the `npm run update` script to eliminate the
-  possibility of formatting an already formatted code resulting in git errors
-- ⚙️ excluded `docs` folder from `npm run format` script to prevent formatting
-  the documentation files, which breaks links in gitbook.

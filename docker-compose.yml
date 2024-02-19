@@ -1,0 +1,38 @@
+version: "4"
+
+services:
+  discord-js-bot:
+    image: saitejamadha/discord-js-bot:5.4.0
+    container_name: discord-js-bot
+    restart: unless-stopped
+    networks:
+      - discord-js-net
+    volumes:
+      - ./config.js:/usr/src/app/config.js:ro
+      - ./logs:/usr/src/app/logs:rw
+
+  lavalink:
+    image: fredboat/lavalink:dev
+    container_name: discord-js-lavalink
+    hostname: lavalink
+    restart: unless-stopped
+    networks:
+      - discord-js-net
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml:ro
+
+  mongodb:
+    image: mongo:latest
+    container_name: discord-js-mongodb
+    restart: unless-stopped
+    networks:
+      - discord-js-net
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=supersecretpassword
+    volumes:
+      - ./data:/data/db:rw
+
+networks:
+  discord-js-net:
+    name: discord-js-net

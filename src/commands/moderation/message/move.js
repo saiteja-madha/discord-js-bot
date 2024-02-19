@@ -1,5 +1,5 @@
 const { ChannelType } = require('discord.js')
-const move = require('../shared/move')
+const move = require('../message/move')
 
 /**
  * @type {import("@structures/Command")}
