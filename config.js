@@ -1,10 +1,12 @@
 module.exports = {
   OWNER_IDS: ["929835843479302204"], // Bot owner ID's
   SUPPORT_SERVER: "https://discord.gg/uMgS9evnmv", // Your bot support server
-  DOCS_URL: "https://docs.vikshan.me", // Your bot documentation website
+  DOCS_URL: "https://dub.sh/mochidocs", // Your bot documentation website
   DONATE_URL: "https://ko-fi.com/vikshan", // Your donation link
   GITHUB_URL: "https://github.com/vixshan/mochi", // Your bot github repository
-  AMINA: "https://discord.com/oauth2/authorize?client_id=1035629678632915055&permissions=67584&scope=bot%20applications.commands", // Your second bot invite link
+  GITHUB_SPONSORS_URL: "https://github.com/sponsors/vixshan", // Your bot github sponsors link
+  PATREON_URL: "https://www.patreon.com/vikshan", // Your bot patreon link
+  BOTS_URL: "https://l.vikshan.tech/bots" , // Other bot's Invite Link
   PREFIX_COMMANDS: {
     ENABLED: true, // Enable/Disable prefix commands
     DEFAULT_PREFIX: "!", // Default prefix for the bot
@@ -41,8 +43,8 @@ module.exports = {
 
   DASHBOARD: {
     enabled: true, // enable or disable dashboard
-    baseURL: "https://mochidb-3d5ad3c56585.herokuapp.com", // base url
-    failureURL: "https://docs.vikshan.me", // failure redirect url
+    baseURL: "https://mochi.vikshan.tech", // base url
+    failureURL: "https://dub.sh/mochidocs", // failure redirect url
     port: process.env.PORT || "8080", // use Heroku's port or 8080 if run locally
 },
 

@@ -12,6 +12,8 @@ const {
   DASHBOARD,
   DONATE_URL,
   DOCS_URL,
+  GITHUB_SPONSORS_URL,
+  PATREON_URL,
 } = require('@root/config.js')
 const botstats = require('./sub/botstats')
 const { Octokit } = require('@octokit/rest')
@@ -107,14 +109,14 @@ module.exports = {
       components.push(
         new ButtonBuilder()
           .setLabel('Github Sponsors')
-          .setURL('https://github.com/sponsors/vixshan')
+          .setURL(GITHUB_SPONSORS_URL)
           .setStyle(ButtonStyle.Link)
       )
 
       components.push(
         new ButtonBuilder()
           .setLabel('Patreon')
-          .setURL('https://www.patreon.com/vikshan')
+          .setURL(PATREON_URL)
           .setStyle(ButtonStyle.Link)
       )
 

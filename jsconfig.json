@@ -9,8 +9,8 @@
       "@helpers/*": ["./src/helpers/*"],
       "@schemas/*": ["./src/database/schemas/*"],
       "@src/*": ["./src/*"],
-      "@structures/*": ["./src/structures/*"]
-    }
+      "@structures/*": ["./src/structures/*"],
+    },
   },
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "exclude": ["node_modules", "**/node_modules/*"],
 }

@@ -1,11 +1,25 @@
-# Mochi v1.0.3
+## Mochi v1.3.1
+
+### Fixes & Improvements
+
+- Mochi now has custom domain `mochi.vikshan.tech` for the website
+
+### Developer Notes
+
+- Added links configs in `config.js` for easier link management
+  - `PATREON_URL`
+  - `GITHUB_SPONSORS_URL`
+  - `BOTS_URL` for a link to your other bots website
+
+# Mochi v1.3.0
 
 ## Developer Notes
+
 - Mochi now runs on Heroku
 - ⚙️ Updated all dependencies to latest versions.
 - ⚙️ Updated `package.json` to use `node .` to reflect the switch to heroku.
 
-# Mochi v1.0.2
+# Mochi v1.2.0
 
 ## New
 
@@ -26,7 +40,7 @@
 - ⚙️ excluded `docs` folder from `npm run format` script to prevent formatting
   the documentation files, which breaks links in gitbook.
 
-# Mochi v1.0.1
+# Mochi v1.1.0
 
 ## New
 

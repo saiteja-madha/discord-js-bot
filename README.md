@@ -56,6 +56,7 @@ of Mochi
 [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 ## 🔗 Resource Links
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fvixshan%2Fmochi)
 [![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi)
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
@@ -215,7 +216,8 @@ of Mochi
 > [Discord.js](https://github.com/Discordjs/discordjs) If you like this
 > repository, feel free to leave a star ⭐ to motivate me!
 
-<img src="https://cdn.discordapp.com/emojis/809085860632985630.png" alt="" data-size="line"> 》 Sponsor the project on [GitHub](https://github.com/sponsors/vixshan)
+<img src="https://cdn.discordapp.com/emojis/809085860632985630.png" alt="" data-size="line">
+》 Sponsor the project on [GitHub](https://github.com/sponsors/vixshan)
 
 ## Powered by;
 

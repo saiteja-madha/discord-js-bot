@@ -5,7 +5,7 @@ const {
   EmbedBuilder,
   ButtonStyle,
 } = require('discord.js') // Import necessary Discord.js v14 components
-const { SUPPORT_SERVER, AMINA } = require('@root/config.js')
+const { SUPPORT_SERVER, BOTS_URL, DONATE_URL } = require('@root/config.js')
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -63,13 +63,13 @@ module.exports = async (client, guild) => {
     if (owner) {
       let components = [
         new ButtonBuilder()
-          .setLabel('Try Amina')
+          .setLabel('Our Bots')
           .setStyle(ButtonStyle.Link)
-          .setURL(AMINA),
+          .setURL(BOTS_URL),
         new ButtonBuilder()
           .setLabel('Donate')
           .setStyle(ButtonStyle.Link)
-          .setURL('https://ko-fi.com/vikshan'),
+          .setURL(DONATE_URL),
         new ButtonBuilder()
           .setLabel('Support Server')
           .setStyle(ButtonStyle.Link)
@@ -80,7 +80,7 @@ module.exports = async (client, guild) => {
 
       owner
         .send({
-          content: `Hey there, <@${owner.id}>! 🌸 Just wanted to say you're super cute, and I hope you're great, filled with all joy and fun! I just joined your server XD, if you ever need anything, feel free to reach out.\n\nAnd oh my silly mind, almost forgot, I have a sister! That's right, her name is **Amina** and I think you should meet her! She is a sweet AI and can talk in DMs and servers!\nLet's spread positivity and cute vibes together!\n\n I love you silly 😊💖`,
+          content: `Hey there, <@${owner.id}>! 🌸 Just wanted to say you're super cute, and I hope you're great! I just joined your server XD, if you ever need anything, feel free to reach out.\n\nAnd oh my silly mind, almost forgot, I have a sister! That's right, her name is **Amina** and I think you should meet her! She is a sweet AI and can talk in DMs and servers!\nLet's spread positivity and cute vibes together! And oh watchout for Pickle Rick\n\n I love you silly 😊💖`,
           embeds: [embed], // You can add an embed here
           components: [row],
         })
