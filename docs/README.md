@@ -3,7 +3,7 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)
 
 {% hint style="warning" %}
-This is the documentation, the actual configuration is not done here. Visit [mochi.vikshan.me](https://mochi.vikshan.me) to manage your server.
+This is the documentation, the actual configuration is not done here. Visit [mochi.vikshan.tech](https://mochi.vikshan.tech/) to manage your server on the dashboard.
 {% endhint %}
 
 ### Index
