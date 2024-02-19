@@ -95,9 +95,7 @@ async function performAutomod(message, settings) {
     if (mentions.users.size + mentions.roles.size > automod.anti_massmention) {
       fields.push({
         name: 'User/Role Mentions',
-        value: `${mentions.users.size + mentions.roles.size}/${
-          automod.anti_massmention
-        }`,
+        value: `${mentions.users.size + mentions.roles.size}/${automod.anti_massmention}`,
         inline: true,
       })
       // strikesTotal += mentions.users.size + mentions.roles.size - automod.anti_massmention;

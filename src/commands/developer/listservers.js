@@ -76,9 +76,7 @@ module.exports = {
         .setColor(client.config.EMBED_COLORS.BOT_EMBED)
         .setAuthor({ name: 'List of servers' })
         .setFooter({
-          text: `${
-            match ? 'Matched' : 'Total'
-          } Servers: ${total} • Page ${currentPage} of ${totalPages}`,
+          text: `${match ? 'Matched' : 'Total'} Servers: ${total} • Page ${currentPage} of ${totalPages}`,
         })
 
       const fields = []

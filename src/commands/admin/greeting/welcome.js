@@ -220,9 +220,7 @@ async function setStatus(settings, status) {
   const enabled = status.toUpperCase() === 'ON' ? true : false
   settings.welcome.enabled = enabled
   await settings.save()
-  return `Configuration saved! Welcome message ${
-    enabled ? 'enabled' : 'disabled'
-  }`
+  return `Configuration saved! Welcome message ${enabled ? 'enabled' : 'disabled'}`
 }
 
 async function setChannel(settings, channel) {
@@ -234,9 +232,7 @@ async function setChannel(settings, channel) {
   }
   settings.welcome.channel = channel.id
   await settings.save()
-  return `Configuration saved! Welcome message will be sent to ${
-    channel ? channel.toString() : 'Not found'
-  }`
+  return `Configuration saved! Welcome message will be sent to ${channel ? channel.toString() : 'Not found'}`
 }
 
 async function setDescription(settings, desc) {

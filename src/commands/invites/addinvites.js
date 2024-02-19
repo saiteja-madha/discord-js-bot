@@ -50,9 +50,7 @@ async function addInvites({ guild }, user, amount) {
     .setThumbnail(user.displayAvatarURL())
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(
-      `${user.username} now has ${getEffectiveInvites(
-        memberDb.invite_data
-      )} invites`
+      `${user.username} now has ${getEffectiveInvites(memberDb.invite_data)} invites`
     )
 
   checkInviteRewards(guild, memberDb, true)

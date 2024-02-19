@@ -44,9 +44,7 @@ function getEmoji(user, emoji) {
 
   if (custom.id) {
     embed.setImage(
-      `https://cdn.discordapp.com/emojis/${custom.id}.${
-        custom.animated ? 'gif' : 'png'
-      }`
+      `https://cdn.discordapp.com/emojis/${custom.id}.${custom.animated ? 'gif' : 'png'}`
     )
     return { embeds: [embed] }
   }

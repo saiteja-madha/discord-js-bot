@@ -69,12 +69,8 @@ async function nickname({ member, guild }, target, name) {
 
   try {
     await target.setNickname(name)
-    return `Successfully ${name ? 'changed' : 'reset'} nickname of ${
-      target.user.username
-    }`
+    return `Successfully ${name ? 'changed' : 'reset'} nickname of ${target.user.username}`
   } catch (ex) {
-    return `Failed to ${name ? 'change' : 'reset'} nickname for ${
-      target.displayName
-    }. Did you provide a valid name?`
+    return `Failed to ${name ? 'change' : 'reset'} nickname for ${target.displayName}. Did you provide a valid name?`
   }
 }

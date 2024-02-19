@@ -69,9 +69,7 @@ async function gamble(user, betAmount) {
 
   const userDb = await getUser(user)
   if (userDb.coins < betAmount)
-    return `You do not have sufficient coins to gamble!\n**Coin balance:** ${
-      userDb.coins || 0
-    }${ECONOMY.CURRENCY}`
+    return `You do not have sufficient coins to gamble!\n**Coin balance:** ${userDb.coins || 0}${ECONOMY.CURRENCY}`
 
   const slot1 = getEmoji()
   const slot2 = getEmoji()

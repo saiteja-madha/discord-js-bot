@@ -46,7 +46,5 @@ async function setStatus(input, settings) {
   settings.stats.enabled = status
   await settings.save()
 
-  return `Configuration saved! Stats Tracking is now ${
-    status ? 'enabled' : 'disabled'
-  }`
+  return `Configuration saved! Stats Tracking is now ${status ? 'enabled' : 'disabled'}`
 }

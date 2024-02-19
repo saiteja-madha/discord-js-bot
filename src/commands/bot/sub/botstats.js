@@ -25,27 +25,13 @@ module.exports = client => {
   const cpuUsage = `${(process.cpuUsage().user / 1024 / 1024).toFixed(2)} MB`
 
   // RAM
-  const botUsed = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(
-    2
-  )} MB`
+  const botUsed = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`
   const botAvailable = `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB`
-  const botUsage = `${(
-    (process.memoryUsage().heapUsed / os.totalmem()) *
-    100
-  ).toFixed(1)}%`
+  const botUsage = `${((process.memoryUsage().heapUsed / os.totalmem()) * 100).toFixed(1)}%`
 
-  const overallUsed = `${(
-    (os.totalmem() - os.freemem()) /
-    1024 /
-    1024 /
-    1024
-  ).toFixed(2)} GB`
-  const overallAvailable = `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(
-    2
-  )} GB`
-  const overallUsage = `${Math.floor(
-    ((os.totalmem() - os.freemem()) / os.totalmem()) * 100
-  )}%`
+  const overallUsed = `${((os.totalmem() - os.freemem()) / 1024 / 1024 / 1024).toFixed(2)} GB`
+  const overallAvailable = `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB`
+  const overallUsage = `${Math.floor(((os.totalmem() - os.freemem()) / os.totalmem()) * 100)}%`
 
   let desc = ''
   desc += `❒ Total guilds: ${guilds}\n`

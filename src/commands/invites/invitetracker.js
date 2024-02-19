@@ -68,7 +68,5 @@ async function setStatus({ guild }, input, settings) {
   settings.invite.tracking = status
   await settings.save()
 
-  return `Configuration saved! Invite tracking is now ${
-    status ? 'enabled' : 'disabled'
-  }`
+  return `Configuration saved! Invite tracking is now ${status ? 'enabled' : 'disabled'}`
 }

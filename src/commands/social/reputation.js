@@ -97,9 +97,7 @@ async function giveReputation(user, target) {
     const diff = diffHours(new Date(), lastRep)
     if (diff < 24) {
       const nextUsage = lastRep.setHours(lastRep.getHours() + 24)
-      return `You can again run this command in \`${getRemainingTime(
-        nextUsage
-      )}\``
+      return `You can again run this command in \`${getRemainingTime(nextUsage)}\``
     }
   }
 

@@ -22,9 +22,7 @@ module.exports = async user => {
       },
       {
         name: 'Net Worth',
-        value: `${(economy?.coins || 0) + (economy?.bank || 0)}${
-          ECONOMY.CURRENCY
-        }`,
+        value: `${(economy?.coins || 0) + (economy?.bank || 0)}${ECONOMY.CURRENCY}`,
         inline: true,
       }
     )

@@ -121,9 +121,7 @@ async function antiGhostPing(settings, input) {
   const status = input.toUpperCase() === 'ON' ? true : false
   settings.automod.anti_ghostping = status
   await settings.save()
-  return `Configuration saved! Anti-Ghostping is now ${
-    status ? 'enabled' : 'disabled'
-  }`
+  return `Configuration saved! Anti-Ghostping is now ${status ? 'enabled' : 'disabled'}`
 }
 
 async function antiSpam(settings, input) {

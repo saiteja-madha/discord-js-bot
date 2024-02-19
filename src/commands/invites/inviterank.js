@@ -49,7 +49,7 @@ module.exports = {
 
   async interactionRun(interaction, data) {
     const sub = interaction.options.getSubcommand()
-
+    //
     if (sub === 'add') {
       const role = interaction.options.getRole('role')
       const invites = interaction.options.getInteger('invites')
@@ -61,7 +61,10 @@ module.exports = {
         data.settings
       )
       await interaction.followUp(response)
-    } else if (sub === 'remove') {
+    }
+
+    //
+    else if (sub === 'remove') {
       const role = interaction.options.getRole('role')
       const response = await removeInviteRank(interaction, role, data.settings)
       await interaction.followUp(response)
@@ -91,9 +94,10 @@ async function addInviteRank({ guild }, role, invites, settings) {
   if (exists) {
     exists.invites = invites
     msg += 'Previous configuration found for this role. Overwriting data\n'
+  } else {
+    settings.invite.ranks.push({ _id: role.id, invites })
   }
 
-  settings.invite.ranks.push({ _id: role.id, invites })
   await settings.save()
   return `${msg}Success! Configuration saved.`
 }

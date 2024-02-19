@@ -154,11 +154,7 @@ async function antilinks(settings, input) {
   const status = input.toUpperCase() === 'ON' ? true : false
   settings.automod.anti_links = status
   await settings.save()
-  return `Messages ${
-    status
-      ? 'with links will now be automatically deleted'
-      : 'will not be filtered for links now'
-  }`
+  return `Messages ${status ? 'with links will now be automatically deleted' : 'will not be filtered for links now'}`
 }
 
 async function maxLines(settings, input) {

@@ -63,6 +63,7 @@ async function getRank({ guild }, member, settings) {
   })
 
   const xpNeeded = memberStats.level * memberStats.level * 100
+  const rank = pos !== -1 ? pos : 0
 
   const url = new URL(`https://api.infinity-bot.live/utils/rank-card`)
   url.searchParams.append('name', user.username)
@@ -80,7 +81,7 @@ async function getRank({ guild }, member, settings) {
     'status',
     member?.presence?.status?.toString() || 'idle'
   )
-  if (pos !== -1) url.searchParams.append('rank', pos)
+  url.searchParams.append('rank', rank)
 
   const response = await getBuffer(url.href)
   if (!response.success) return 'Failed to generate rank-card'

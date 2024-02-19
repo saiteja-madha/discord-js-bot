@@ -80,9 +80,7 @@ async function getXpLeaderboard({ guild }, author, settings = {}) {
   for (let i = 0; i < lb.length; i++) {
     try {
       const user = await author.client.users.fetch(lb[i].member_id)
-      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(
-        user.tag
-      )}\n`
+      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)}\n`
     } catch (ex) {
       // Ignore
     }
@@ -122,19 +120,13 @@ async function getInviteLeaderboard({ guild }, author, settings = {}) {
     try {
       const memberId = lb[i].member_id
       if (memberId === 'VANITY') {
-        collector += `**#${(i + 1).toString()}** - Vanity URL [${
-          lb[i].invites
-        }]\n`
+        collector += `**#${(i + 1).toString()}** - Vanity URL [${lb[i].invites}]\n`
       } else {
         const user = await author.client.users.fetch(lb[i].member_id)
-        collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(
-          user.tag
-        )} [${lb[i].invites}]\n`
+        collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)} [${lb[i].invites}]\n`
       }
     } catch (ex) {
-      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${
-        lb[i].invites
-      }]\n`
+      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].invites}]\n`
     }
   }
 
@@ -166,13 +158,9 @@ async function getRepLeaderboard(author) {
   for (let i = 0; i < lb.length; i++) {
     try {
       const user = await author.client.users.fetch(lb[i].member_id)
-      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(
-        user.tag
-      )} [${lb[i].rep}]\n`
+      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)} [${lb[i].rep}]\n`
     } catch (ex) {
-      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${
-        lb[i].rep
-      }]\n`
+      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].rep}]\n`
     }
   }
 

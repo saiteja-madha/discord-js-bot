@@ -46,7 +46,5 @@ async function setFlagTranslation(input, settings) {
   settings.flag_translation.enabled = status
   await settings.save()
 
-  return `Configuration saved! Flag translation is now ${
-    status ? 'enabled' : 'disabled'
-  }`
+  return `Configuration saved! Flag translation is now ${status ? 'enabled' : 'disabled'}`
 }

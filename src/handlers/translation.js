@@ -38,9 +38,7 @@ async function handleFlagReaction(emoji, message, user) {
   const remaining = getTranslationCooldown(user)
   if (remaining > 0) {
     return message.channel.safeSend(
-      `${user} You must wait ${timeformat(
-        remaining
-      )} before translating again!`,
+      `${user} You must wait ${timeformat(remaining)} before translating again!`,
       5
     )
   }

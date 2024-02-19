@@ -38,12 +38,8 @@ const getVotesMessage = (upVotes, downVotes) => {
   `
   } else {
     return stripIndents`
-  _Upvotes: ${upVotes} [${Math.round(
-    (upVotes / (upVotes + downVotes)) * 100
-  )}%]_
-  _Downvotes: ${downVotes} [${Math.round(
-    (downVotes / (upVotes + downVotes)) * 100
-  )}%]_
+  _Upvotes: ${upVotes} [${Math.round((upVotes / (upVotes + downVotes)) * 100)}%]_
+  _Downvotes: ${downVotes} [${Math.round((downVotes / (upVotes + downVotes)) * 100)}%]_
   `
   }
 }

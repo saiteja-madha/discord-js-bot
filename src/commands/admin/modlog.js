@@ -40,7 +40,5 @@ async function setChannel(targetChannel, settings) {
 
   settings.modlog_channel = targetChannel?.id
   await settings.save()
-  return `Configuration saved! Modlog channel ${
-    targetChannel ? 'updated' : 'removed'
-  }`
+  return `Configuration saved! Modlog channel ${targetChannel ? 'updated' : 'removed'}`
 }

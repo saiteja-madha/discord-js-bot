@@ -73,9 +73,7 @@ module.exports = {
 
 async function addRR(guild, channel, messageId, reaction, role) {
   if (!channel.permissionsFor(guild.members.me).has(channelPerms)) {
-    return `You need the following permissions in ${channel.toString()}\n${parsePermissions(
-      channelPerms
-    )}`
+    return `You need the following permissions in ${channel.toString()}\n${parsePermissions(channelPerms)}`
   }
 
   let targetMessage

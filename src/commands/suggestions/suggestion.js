@@ -243,9 +243,7 @@ async function setChannel(settings, channel) {
   }
 
   if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
-    return `I need the following permissions in ${channel}\n${parsePermissions(
-      CHANNEL_PERMS
-    )}`
+    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`
   }
 
   settings.suggestions.channel_id = channel.id
@@ -261,9 +259,7 @@ async function setApprovedChannel(settings, channel) {
   }
 
   if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
-    return `I need the following permissions in ${channel}\n${parsePermissions(
-      CHANNEL_PERMS
-    )}`
+    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`
   }
 
   settings.suggestions.approved_channel = channel.id
@@ -279,9 +275,7 @@ async function setRejectedChannel(settings, channel) {
   }
 
   if (!channel.permissionsFor(channel.guild.members.me).has(CHANNEL_PERMS)) {
-    return `I need the following permissions in ${channel}\n${parsePermissions(
-      CHANNEL_PERMS
-    )}`
+    return `I need the following permissions in ${channel}\n${parsePermissions(CHANNEL_PERMS)}`
   }
 
   settings.suggestions.rejected_channel = channel.id

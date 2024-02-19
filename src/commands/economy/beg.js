@@ -91,9 +91,7 @@ async function beg(user) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: `${user.username}`, iconURL: user.displayAvatarURL() })
     .setDescription(
-      `**${
-        users[Math.floor(Math.random() * users.length)]
-      }** donated you **${amount}** ${ECONOMY.CURRENCY}\n` +
+      `**${users[Math.floor(Math.random() * users.length)]}** donated you **${amount}** ${ECONOMY.CURRENCY}\n` +
         `**Updated Balance:** **${userDb.coins}** ${ECONOMY.CURRENCY}`
     )
 

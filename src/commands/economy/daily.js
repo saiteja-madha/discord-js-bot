@@ -30,9 +30,7 @@ async function daily(user) {
     const difference = diffHours(new Date(), lastUpdated)
     if (difference < 24) {
       const nextUsage = lastUpdated.setHours(lastUpdated.getHours() + 24)
-      return `You can again run this command in \`${getRemainingTime(
-        nextUsage
-      )}\``
+      return `You can again run this command in \`${getRemainingTime(nextUsage)}\``
     }
     streak = userDb.daily.streak || streak
     if (difference < 48) streak += 1

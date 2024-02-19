@@ -81,9 +81,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     let content = ''
     reversed.forEach(m => {
-      content += `[${new Date(m.createdAt).toLocaleString('en-US')}] - ${
-        m.author.username
-      }\n`
+      content += `[${new Date(m.createdAt).toLocaleString('en-US')}] - ${m.author.username}\n`
       if (m.cleanContent !== '') content += `${m.cleanContent}\n`
       if (m.attachments.size > 0)
         content += `${m.attachments.map(att => att.proxyURL).join(', ')}\n`

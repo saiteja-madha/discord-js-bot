@@ -133,9 +133,7 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
     if (type.toUpperCase() === 'TIMEOUT') {
       fields.push({
         name: 'Expires',
-        value: `<t:${Math.round(
-          target.communicationDisabledUntilTimestamp / 1000
-        )}:R>`,
+        value: `<t:${Math.round(target.communicationDisabledUntilTimestamp / 1000)}:R>`,
         inline: true,
       })
     }

@@ -244,9 +244,7 @@ async function setDebug(settings, input) {
   const status = input.toLowerCase() === 'on' ? true : false
   settings.automod.debug = status
   await settings.save()
-  return `Configuration saved! Automod debug is now ${
-    status ? 'enabled' : 'disabled'
-  }`
+  return `Configuration saved! Automod debug is now ${status ? 'enabled' : 'disabled'}`
 }
 
 function getWhitelist(guild, settings) {
