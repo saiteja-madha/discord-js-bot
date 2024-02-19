@@ -12,8 +12,8 @@ const {
 } = require('discord.js')
 const { getCommandUsage, getSlashUsage } = require('@handlers/command')
 
-const CMDS_PER_PAGE = 8
-const IDLE_TIMEOUT = 300
+const CMDS_PER_PAGE = 5
+const IDLE_TIMEOUT = 30
 
 /**
  * @type {import("@structures/Command")}
@@ -358,9 +358,7 @@ function getMsgCategoryEmbeds(client, category, prefix) {
       .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join('\n'))
       .setFooter({
-        text: `page ${index + 1} of ${
-          arrSplitted.length
-        } | Type ${prefix}help <command> for more command information`,
+        text: `page ${index + 1} of ${arrSplitted.length} | Type ${prefix}help <command> for more command information`,
       })
     arrEmbeds.push(embed)
   })

@@ -78,9 +78,7 @@ module.exports = {
       const remaining = getRemainingCooldown(message.author.id, cmd)
       if (remaining > 0) {
         return message.safeReply(
-          `You are on cooldown. You can again use the command in \`${timeformat(
-            remaining
-          )}\``
+          `You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``
         )
       }
     }
@@ -129,9 +127,7 @@ module.exports = {
     if (interaction.member && cmd.userPermissions?.length > 0) {
       if (!interaction.member.permissions.has(cmd.userPermissions)) {
         return interaction.reply({
-          content: `You need ${parsePermissions(
-            cmd.userPermissions
-          )} for this command`,
+          content: `You need ${parsePermissions(cmd.userPermissions)} for this command`,
           ephemeral: true,
         })
       }
@@ -141,9 +137,7 @@ module.exports = {
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
       if (!interaction.guild.members.me.permissions.has(cmd.botPermissions)) {
         return interaction.reply({
-          content: `I need ${parsePermissions(
-            cmd.botPermissions
-          )} for this command`,
+          content: `I need ${parsePermissions(cmd.botPermissions)} for this command`,
           ephemeral: true,
         })
       }
@@ -154,9 +148,7 @@ module.exports = {
       const remaining = getRemainingCooldown(interaction.user.id, cmd)
       if (remaining > 0) {
         return interaction.reply({
-          content: `You are on cooldown. You can again use the command in \`${timeformat(
-            remaining
-          )}\``,
+          content: `You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``,
           ephemeral: true,
         })
       }
@@ -192,17 +184,13 @@ module.exports = {
     let desc = ''
     if (cmd.command.subcommands && cmd.command.subcommands.length > 0) {
       cmd.command.subcommands.forEach(sub => {
-        desc += `\`${prefix}${invoke || cmd.name} ${sub.trigger}\`\n❯ ${
-          sub.description
-        }\n\n`
+        desc += `\`${prefix}${invoke || cmd.name} ${sub.trigger}\`\n❯ ${sub.description}\n\n`
       })
       if (cmd.cooldown) {
         desc += `**Cooldown:** ${timeformat(cmd.cooldown)}`
       }
     } else {
-      desc += `\`\`\`css\n${prefix}${invoke || cmd.name} ${
-        cmd.command.usage
-      }\`\`\``
+      desc += `\`\`\`css\n${prefix}${invoke || cmd.name} ${cmd.command.usage}\`\`\``
       if (cmd.description !== '') desc += `\n**Help:** ${cmd.description}`
       if (cmd.cooldown) desc += `\n**Cooldown:** ${timeformat(cmd.cooldown)}`
     }

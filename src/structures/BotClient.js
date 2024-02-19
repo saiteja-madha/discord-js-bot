@@ -118,9 +118,7 @@ module.exports = class BotClient extends Client {
     )
 
     this.logger.log(
-      `Loaded ${
-        success + failed
-      } events. Success (${success}) Failed (${failed})`
+      `Loaded ${success + failed} events. Success (${success}) Failed (${failed})`
     )
   }
 
@@ -193,7 +191,7 @@ module.exports = class BotClient extends Client {
       }
     }
 
-    this.logger.success(`Loaded ${this.commands.length} prefix commands`)
+    this.logger.success(`Loaded ${this.commands.length} commands`)
     this.logger.success(`Loaded ${this.slashCommands.size} slash commands`)
     if (this.slashCommands.size > 100)
       throw new Error('A maximum of 100 slash commands can be enabled')

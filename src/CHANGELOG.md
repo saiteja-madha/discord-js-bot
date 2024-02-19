@@ -1,3 +1,20 @@
+# Mochi v2.0.0
+
+## Fixes & Improvements
+
+- Fixed Cannot read properties of undefined (reading 'find')
+- Fix "Unknown Interaction" error when start a giveaway
+- Fix help subcommands not loading
+- fix music search bug
+- Fix `move` command
+
+## Developer Notes
+
+- fix: upgrade mongoose from 7.3.4 to 7.4.0
+- Fix contexts count always 0
+- Renamed `./src/commands/moderation/shared` to
+  `./src/commands/moderation/message`
+
 ## Mochi v1.3.1
 
 ### Fixes & Improvements

@@ -1,9 +1,9 @@
-const deafen = require('./shared/deafen')
-const vmute = require('./shared/vmute')
-const vunmute = require('./shared/vunmute')
-const undeafen = require('./shared/undeafen')
-const disconnect = require('./shared/disconnect')
-const move = require('./shared/move')
+const deafen = require('./message/deafen')
+const vmute = require('./message/vmute')
+const vunmute = require('./message/vunmute')
+const undeafen = require('./message/undeafen')
+const disconnect = require('./message/disconnect')
+const move = require('./message/move')
 const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
 
 /**

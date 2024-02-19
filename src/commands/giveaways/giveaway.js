@@ -28,6 +28,40 @@ module.exports = {
   name: 'giveaway',
   description: 'giveaway commands',
   category: 'GIVEAWAY',
+  command: {
+    enabled: true,
+    minArgsCount: 1,
+    subcommands: [
+      {
+        trigger: 'start <#channel>',
+        description: 'setup a new giveaway',
+      },
+      {
+        trigger: 'pause <messageId>',
+        description: 'pause a giveaway',
+      },
+      {
+        trigger: 'resume <messageId>',
+        description: 'resume a paused giveaway',
+      },
+      {
+        trigger: 'end <messageId>',
+        description: 'end a giveaway',
+      },
+      {
+        trigger: 'reroll <messageId>',
+        description: 'reroll a giveaway',
+      },
+      {
+        trigger: 'list',
+        description: 'list all giveaways',
+      },
+      {
+        trigger: 'edit <messageId>',
+        description: 'edit a giveaway',
+      },
+    ],
+  },
   slashCommand: {
     enabled: true,
     ephemeral: true,
@@ -141,6 +175,65 @@ module.exports = {
     ],
   },
 
+  async messageRun(message, args) {
+    const sub = args[0]?.toLowerCase()
+    let response
+
+    //
+    if (sub === 'start') {
+      if (!args[1])
+        return message.safeReply(
+          'Incorrect usage! Please provide a channel to start the giveaway in'
+        )
+      const match = message.guild.findMatchingChannels(args[1])
+      if (!match.length)
+        return message.safeReply(`No channel found matching ${args[1]}`)
+      return await runModalSetup(message, match[0])
+    }
+
+    //
+    else if (sub === 'pause') {
+      const messageId = args[1]
+      response = await pause(message.member, messageId)
+    }
+
+    //
+    else if (sub === 'resume') {
+      const messageId = args[1]
+      response = await resume(message.member, messageId)
+    }
+
+    //
+    else if (sub === 'end') {
+      const messageId = args[1]
+      response = await end(message.member, messageId)
+    }
+
+    //
+    else if (sub === 'reroll') {
+      const messageId = args[1]
+      response = await reroll(message.member, messageId)
+    }
+
+    //
+    else if (sub === 'list') {
+      response = await list(message.member)
+    }
+
+    //
+    else if (sub === 'edit') {
+      const messageId = args[1]
+      if (!messageId)
+        return message.safeReply('Incorrect usage! Please provide a message id')
+      return await runModalEdit(message, messageId)
+    }
+
+    //
+    else response = 'Not a valid sub command'
+
+    await message.safeReply(response)
+  },
+
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand()
     let response
@@ -225,9 +318,7 @@ async function runModalSetup({ member, channel, guild }, targetCh) {
     !targetCh.permissionsFor(guild.members.me).has(SETUP_PERMS)
   ) {
     return channel.safeSend(
-      `Giveaway setup has been cancelled.\nI need ${parsePermissions(
-        SETUP_PERMS
-      )} in ${targetCh}`
+      `Giveaway setup has been cancelled.\nI need ${parsePermissions(SETUP_PERMS)} in ${targetCh}`
     )
   }
 
