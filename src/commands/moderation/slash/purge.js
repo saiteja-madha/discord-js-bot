@@ -186,7 +186,7 @@ module.exports = {
 
       case "user": {
         const user = interaction.options.getUser("user");
-        response = await purgeMessages(member, channel, "USER", amount, user);
+        response = await purgeMessages(member, channel, "USER", amount, user.id);
         break;
       }
 
