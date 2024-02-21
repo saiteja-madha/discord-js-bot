@@ -5,6 +5,7 @@
 
 version: 2
 updates:
+  # Enable version updates for NPM
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -26,3 +27,14 @@ updates:
     # Check for updates once a week
     schedule:
       interval: 'daily'
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "vixshan"
+    labels:
+      - "actions"
