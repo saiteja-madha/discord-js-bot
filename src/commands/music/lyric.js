@@ -1,66 +1,95 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const { getJson } = require("@helpers/HttpUtils");
-const { MESSAGES, EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
+const fetch = require("node-fetch");
 
-const BASE_URL = "https://some-random-api.com/lyrics";
-
-/**
- * @type {import("@structures/Command")}
- */
 module.exports = {
-  name: "lyric",
-  description: "find lyric of the song",
-  category: "MUSIC",
-  botPermissions: ["EmbedLinks"],
-  command: {
-    enabled: true,
-    minArgsCount: 1,
-    usage: "<Song Title - singer>",
-  },
-  slashCommand: {
-    enabled: true,
-    options: [
-      {
-        name: "query",
-        type: ApplicationCommandOptionType.String,
-        description: "find lyric of the song",
-        required: true,
-      },
-    ],
-  },
+    name: "lyric",
+    description: "Get lyrics for a song.",
+    cooldown: 0,
+    category: "MUSIC",
+    botPermissions: ["EmbedLinks"],
+    userPermissions: [],
+    command: {
+        enabled: true,
+        aliases: [],
+        usage: "<Song Title - singer>",
+        minArgsCount: 0,
+    },
+    slashCommand: {
+        enabled: true,
+        options: [
+            {
+                name: "search",
+                description: "The song name to search for lyrics.",
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+        ],
+    },
 
-  async messageRun(message, args) {
-    const choice = args.join(" ");
-    if (!choice) {
-      return message.safeReply("Invalid Lyric selected.");
-    }
-    const response = await getLyric(message.author, choice);
-    return message.safeReply(response);
-  },
+    async messageRun(message, args, data) {
+        try {
+            const value = args.join(" ");
+            const response = await fetch(`https://weeb-api.vercel.app/genius?query=${encodeURIComponent(value)}`);
+            const data = await response.json();
+            const songData = data[0];
 
-  async interactionRun(interaction) {
-    const choice = interaction.options.getString("query");
-    const response = await getLyric(interaction.user, choice);
-    await interaction.followUp(response);
-  },
+            const lyricsResponse = await fetch(`https://weeb-api.vercel.app/lyrics?url=${songData.url}`);
+            const lyricsData = await lyricsResponse.json();
+
+            const lyricEmbed = new EmbedBuilder()
+                .setColor(EMBED_COLORS.BOT_EMBED)
+                .setDescription(`${lyricsData.slice(0, 4096)}\n\n[Click for more](${songData.url})`)
+                .setAuthor({
+                    name: `${songData.title} by ${songData.artist} Lyrics`,
+                    iconURL: message.author.displayAvatarURL({ size: 2048, dynamic: true }),
+                })
+                .setThumbnail(songData.image)
+                .setFooter({
+                    text: `Requested by ${message.author.username}`,
+                })
+                .setTimestamp();
+
+            message.channel.send({ embeds: [lyricEmbed] });
+        } catch (error) {
+            message.safeReply("Oops! I can't find any lyrics for this song.");
+        }
+    },
+    
+    async interactionRun(interaction, data) {
+        const value = interaction.options.getString("search");
+
+        try {
+            const response = await fetch(`https://weeb-api.vercel.app/genius?query=${value || ''}`);
+            const data = await response.json();
+            const songData = data[0];
+
+            const lyricsResponse = await fetch(`https://weeb-api.vercel.app/lyrics?url=${songData.url}`);
+            const lyricsData = await lyricsResponse.json();
+
+            const lyricEmbed = new EmbedBuilder()
+                .setColor(EMBED_COLORS.BOT_EMBED)
+                .setDescription(`${lyricsData.slice(0, 4096)}\n\n[Click for more](${songData.url})`)
+                .setAuthor({
+                    name: `${songData.title} by ${songData.artist} Lyrics`,
+                    iconURL: interaction.user.displayAvatarURL({ size: 2048, dynamic: true }),
+                })
+                .setThumbnail(songData.image)
+                .setFooter({
+                    text: `Requested by ${interaction.user.username}`,
+                })
+                .setTimestamp();
+
+            interaction.followUp({ embeds: [lyricEmbed] });
+        } catch (error) {
+            const lyricEmbed = new EmbedBuilder()
+                .setColor(EMBED_COLORS.BOT_EMBED)
+                .setDescription("Oops! I can't find any lyrics for this song.")
+                .setFooter({
+                    text: `Requested by ${interaction.user.username}`,
+                });
+
+            interaction.followUp({ embeds: [lyricEmbed], ephemeral: true });
+        }
+    },
 };
-
-async function getLyric(user, choice) {
-  const lyric = await getJson(`${BASE_URL}?title=${choice}`);
-  if (!lyric.success) return MESSAGES.API_ERROR;
-
-  const thumbnail = lyric.data?.thumbnail.genius;
-  const author = lyric.data?.author;
-  const lyrics = lyric.data?.lyrics;
-  const title = lyric.data?.title;
-
-  const embed = new EmbedBuilder();
-  embed
-    .setColor(EMBED_COLORS.BOT_EMBED)
-    .setTitle(`${author} - ${title}`)
-    .setThumbnail(thumbnail)
-    .setDescription(lyrics)
-    .setFooter({ text: `Request By: ${user.username}` });
-
-  return { embeds: [embed] };
-}
