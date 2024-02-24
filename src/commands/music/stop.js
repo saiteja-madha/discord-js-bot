@@ -34,5 +34,8 @@ async function stop({ client, guildId }) {
   const player = client.musicManager.getPlayer(guildId);
   player.disconnect();
   await client.musicManager.destroyPlayer(guildId);
+
+  // emiting a new event 'playerDestroy' to handle voice channel status reset
+  client.musicManager.emit('playerDestroy', player)
   return "🎶 The music player is stopped and queue has been cleared";
 }
