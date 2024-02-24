@@ -33,5 +33,8 @@ function resumePlayer({ client, guildId }) {
   const player = client.musicManager.getPlayer(guildId);
   if (!player.paused) return "The player is already resumed";
   player.resume();
+
+  // emiting a new event 'playerResume' to handle voice channel status reset
+  client.musicManager.emit('playerResumed', player, player.trackData)
   return "▶️ Resumed the music player";
 }

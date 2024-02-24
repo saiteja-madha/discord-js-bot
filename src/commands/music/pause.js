@@ -34,5 +34,7 @@ function pause({ client, guildId }) {
   if (player.paused) return "The player is already paused.";
 
   player.pause(true);
+  // emiting a new event 'playerPaused' to handle voice channel status reset
+  client.musicManager.emit('playerPaused', player, player.trackData)
   return "⏸️ Paused the music player.";
 }

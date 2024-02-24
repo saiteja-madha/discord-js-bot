@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const { Cluster } = require("lavaclient");
+const axios = require("axios");
 const prettyMs = require("pretty-ms");
 const { load, SpotifyItemType } = require("@lavaclient/spotify");
 require("@lavaclient/queue/register");
@@ -41,7 +42,7 @@ module.exports = (client) => {
     client.logger.debug(`Node "${node.id}" debug: ${message}`);
   });
 
-  lavaclient.on("nodeTrackStart", (_node, queue, song) => {
+  lavaclient.on("nodeTrackStart", async (_node, queue, song) => {
     const fields = [];
 
     const embed = new EmbedBuilder()
@@ -72,12 +73,47 @@ module.exports = (client) => {
 
     embed.setFields(fields);
     queue.data.channel.safeSend({ embeds: [embed] });
+
+    // update voice channel status with 'Now Playing'
+    await client.wait(1000) // waiting 1 sec, because channel id is null initially
+    await updateVoiceStatus(queue.player.channelId, `Playing **${song.title}**`)
   });
 
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
     queue.data.channel.safeSend("Queue has ended.");
     await client.musicManager.destroyPlayer(queue.player.guildId).then(queue.player.disconnect());
-  });
 
+    // reset voice channel's status
+    await updateVoiceStatus(queue.player.channelId, '')
+  });
+  
+  // for when player is paused, indicate 'paused' in the status
+  lavaclient.on('playerPaused', async (player, song) => {  
+    await updateVoiceStatus(player.channelId, `Paused **${song.title}**`) 
+  })
+  // for when player is resumed, indicate 'playing' in the status
+  lavaclient.on('playerResumed', async (player, song) => { 
+    await updateVoiceStatus(player.channelId, `Playing **${song.title}**`)     
+  })
+  // for when player is stopped, reset the status
+  lavaclient.on('playerDestroy', async (player) => {
+    await updateVoiceStatus(player.channelId, '')     
+  })
   return lavaclient;
 };
+
+
+async function updateVoiceStatus(channel, status) {
+  const url = `https://discord.com/api/v10/channels/${channel}/voice-status`;
+  const payload = {
+    status: status
+  };
+  axios.put(url, payload, {
+    headers: {
+      Authorization: `Bot ${process.env.BOT_TOKEN}`
+    }
+  })
+    .catch(error => {
+      console.error('Error updating VC status:', error.response ? error.response.data : error.message);
+    });
+}
