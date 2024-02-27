@@ -169,7 +169,16 @@ async function handleTicketOpen(interaction) {
   if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
 
   const settings = await getSettings(guild);
+  // Retrieve the category ID from guild settings
+  const categoryId = settings.ticket.category_channel;
 
+  // Get the category channel by ID
+  const categoryChannel = guild.channels.cache.get(categoryId);
+
+  // Ensure that the category channel exists and is a category
+  if (!categoryChannel || categoryChannel.type !== 4) {
+    return interaction.followUp("Invalid category ID set for ticket creation.");
+  }
   // limit check
   const existing = getTicketChannels(guild).size;
   if (existing > settings.ticket.limit) return interaction.followUp("There are too many open tickets. Try again later");
@@ -203,7 +212,11 @@ async function handleTicketOpen(interaction) {
     catName = res.values[0];
     catPerms = categories.find((cat) => cat.name === catName)?.staff_roles || [];
   }
-
+  // Retrieve category channel ID from guild settings
+  let catChannel = null;
+  if (categoryId) {
+    catChannel = guild.channels.cache.get(categoryId);
+  }
   try {
     const ticketNumber = (existing + 1).toString();
 const permissionOverwrites = [
@@ -253,8 +266,8 @@ staffRoles.forEach(roleId => {
       type: ChannelType.GuildText,
       topic: `${username}|${user.id}|${catName || "Default"}`,
       permissionOverwrites,
+      parent: categoryId,
     });
-
 
 const staffRolesPing = staffRoles.map(roleId => `<@&${roleId}>`).join(' ');
     const embed = new EmbedBuilder()
