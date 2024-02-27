@@ -34,7 +34,6 @@ const Schema = new mongoose.Schema({
       },
     ],
     staff_roles: [String], // Add this line
-    category_channel: String,
   },
   automod: {
     debug: Boolean,
