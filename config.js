@@ -6,10 +6,10 @@ module.exports = {
   GITHUB_URL: "https://github.com/vixshan/mochi", // Your bot github repository
   GITHUB_SPONSORS_URL: "https://github.com/sponsors/vixshan", // Your bot github sponsors link
   PATREON_URL: "https://www.patreon.com/vikshan", // Your bot patreon link
-  BOTS_URL: "https://l.vikshan.tech/bots" , // Other bot's Invite Link
+  BOTS_URL: "https://go.vikshan.tech/bots" , // Other bot's Invite Link
   PREFIX_COMMANDS: {
     ENABLED: true, // Enable/Disable prefix commands
-    DEFAULT_PREFIX: "!", // Default prefix for the bot
+    DEFAULT_PREFIX: "$", // Default prefix for the bot
   },
   INTERACTIONS: {
     SLASH: true, // Should the interactions be enabled

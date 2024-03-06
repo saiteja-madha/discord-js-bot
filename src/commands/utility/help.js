@@ -23,6 +23,10 @@ module.exports = {
   description: 'command help menu',
   category: 'UTILITY',
   botPermissions: ['EmbedLinks'],
+  command: {
+    enabled: true,
+    usage: '[command]',
+  },
   slashCommand: {
     enabled: true,
     options: [
@@ -33,6 +37,27 @@ module.exports = {
         type: ApplicationCommandOptionType.String,
       },
     ],
+  },
+
+  async messageRun(message, args, data) {
+    let trigger = args[0]
+
+    // !help
+    if (!trigger) {
+      const response = await getHelpMenu(message)
+      const sentMsg = await message.safeReply(response)
+      return waiter(sentMsg, message.author.id, data.prefix)
+    }
+
+    // check if command help (!help cat)
+    const cmd = message.client.getCommand(trigger)
+    if (cmd) {
+      const embed = getCommandUsage(cmd, data.prefix, trigger)
+      return message.safeReply({ embeds: [embed] })
+    }
+
+    // No matching command/category found
+    await message.safeReply('No matching command found')
   },
 
   async interactionRun(interaction) {
@@ -262,7 +287,7 @@ function getSlashCategoryEmbeds(client, category) {
 
     toAdd = toAdd.map(cmd => {
       const subCmds = cmd.slashCommand.options?.filter(
-        opt => opt.type === ApplicationCommandOptionType.Subcommand
+        opt => opt.type === 'SUB_COMMAND'
       )
       const subCmdsString = subCmds?.map(s => s.name).join(', ')
 
