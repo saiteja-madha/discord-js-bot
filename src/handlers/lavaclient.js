@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { Cluster } = require("lavaclient");
 const prettyMs = require("pretty-ms");
 const { load, SpotifyItemType } = require("@lavaclient/spotify");
@@ -24,6 +24,31 @@ module.exports = (client) => {
 
   client.ws.on("VOICE_SERVER_UPDATE", (data) => lavaclient.handleVoiceUpdate(data));
   client.ws.on("VOICE_STATE_UPDATE", (data) => lavaclient.handleVoiceUpdate(data));
+
+  // Creating Button
+  let bPause = new ButtonBuilder()
+    .setCustomId("Button_Pause")
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji("▶️")
+  let bSkip = new ButtonBuilder()
+    .setCustomId("Button_Skip")
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji("⏯")
+  let bStop = new ButtonBuilder()
+    .setCustomId("Button_Stop")
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji("⏹")
+  let bLoop = new ButtonBuilder()
+    .setCustomId("Button_Loop")
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji("🔃")
+  let bShuffle = new ButtonBuilder()
+    .setCustomId("Button_Shuffle")
+    .setStyle(ButtonStyle.Secondary)
+    .setEmoji("🔀")
+
+  const buttonRow = new ActionRowBuilder()
+    .addComponents(bPause, bSkip, bStop, bLoop, bShuffle)
 
   lavaclient.on("nodeConnect", (node, event) => {
     client.logger.log(`Node "${node.id}" connected`);
@@ -71,7 +96,7 @@ module.exports = (client) => {
     }
 
     embed.setFields(fields);
-    queue.data.channel.safeSend({ embeds: [embed] });
+    queue.data.channel.safeSend({ embeds: [embed], components: [buttonRow] });
   });
 
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
