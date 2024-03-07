@@ -1,3 +1,4 @@
+const { pauseButton, skipButton, stopButton, loopButton, shuffleButton } = require("@handlers/button");
 const { getSettings } = require("@schemas/Guild");
 const { commandHandler, contextHandler, statsHandler, suggestionHandler, ticketHandler } = require("@src/handlers");
 const { InteractionType } = require("discord.js");
@@ -42,6 +43,18 @@ module.exports = async (client, interaction) => {
 
       case "SUGGEST_DELETE":
         return suggestionHandler.handleDeleteBtn(interaction);
+
+      // Music Buttons
+      case "Button_Pause":
+        return pauseButton(client, interaction);
+      case "Button_Skip":
+        return skipButton(client, interaction);
+      case "Button_Stop":
+        return stopButton(client, interaction);
+      case "Button_Loop":
+        return loopButton(client, interaction);
+      case "Button_Shuffle":
+        return shuffleButton(client, interaction);
     }
   }
 
