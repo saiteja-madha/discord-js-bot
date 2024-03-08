@@ -9,7 +9,43 @@ const MEMBER_MENTION = /<?@?!?(\d{17,20})>?/;
  * @param {string} query
  * @param {import("discord.js").GuildChannelTypes[]} type
  */
-Guild.prototype.findMatchingChannels = function (query, type = [ChannelType.GuildText, ChannelType.GuildNews]) {
+Guild.prototype.findMatchingChannels = function (query, type = [ChannelType.GuildText, ChannelType.GuildAnnouncement]) {
+  if (!this || !query || typeof query !== "string") return [];
+
+  const channelManager = this.channels.cache.filter((ch) => type.includes(ch.type));
+
+  const patternMatch = query.match(CHANNEL_MENTION);
+  if (patternMatch) {
+    const id = patternMatch[1];
+    const channel = channelManager.find((r) => r.id === id);
+    if (channel) return [channel];
+  }
+
+  const exact = [];
+  const startsWith = [];
+  const includes = [];
+  channelManager.forEach((ch) => {
+    const lowerName = ch.name.toLowerCase();
+    if (ch.name === query) exact.push(ch);
+    if (lowerName.startsWith(query.toLowerCase())) startsWith.push(ch);
+    if (lowerName.includes(query.toLowerCase())) includes.push(ch);
+  });
+
+  if (exact.length > 0) return exact;
+  if (startsWith.length > 0) return startsWith;
+  if (includes.length > 0) return includes;
+  return [];
+};
+
+/**
+ * Get all channels that match the query
+ * @param {string} query
+ * @param {import("discord.js").GuildChannelTypes[]} type
+ */
+Guild.prototype.findMatchingVoiceChannels = function (
+  query,
+  type = [ChannelType.GuildVoice, ChannelType.GuildStageVoice]
+) {
   if (!this || !query || typeof query !== "string") return [];
 
   const channelManager = this.channels.cache.filter((ch) => type.includes(ch.type));
