@@ -4,7 +4,6 @@ const pino = require("pino");
 
 const webhookLogger = process.env.ERROR_LOGS ? new WebhookClient({ url: process.env.ERROR_LOGS }) : undefined;
 
-const today = new Date();
 const pinoLogger = pino.default(
   {
     level: "debug",
@@ -19,7 +18,7 @@ const pinoLogger = pino.default(
           translateTime: "yyyy-mm-dd HH:mm:ss",
           ignore: "pid,hostname",
           singleLine: false,
-          hideObject: true,
+          hideObject: false,
           customColors: "info:blue,warn:yellow,error:red",
         },
       }),
@@ -27,7 +26,7 @@ const pinoLogger = pino.default(
     {
       level: "debug",
       stream: pino.destination({
-        dest: `${process.cwd()}/logs/combined-${today.getFullYear()}.${today.getMonth() + 1}.${today.getDate()}.log`,
+        dest: `${process.cwd()}/logs/combined-${new Date().getFullYear()}.${new Date().getMonth() + 1}.${new Date().getDate()}.log`,
         sync: true,
         mkdir: true,
       }),
