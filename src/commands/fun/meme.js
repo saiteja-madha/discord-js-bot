@@ -135,7 +135,9 @@ async function getRandomEmbed(choice) {
     let memeUpvotes = json[0].data.children[0].data.ups;
     let memeNumComments = json[0].data.children[0].data.num_comments;
 
-    return new EmbedBuilder()
+    return (json[0].data.children[0].data.over_18 && !context.channel.nsfw) ?
+    new EmbedBuilder().setColor("Red").setTitle("Unable to send meme").setDescription("It appears that you've used a subreddit that may contain NSFW content.") :
+    new EmbedBuilder()
       .setAuthor({ name: memeTitle, url: memeUrl })
       .setImage(memeImage)
       .setColor("Random")
