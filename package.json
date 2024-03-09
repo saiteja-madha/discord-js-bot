@@ -41,7 +41,7 @@
     "express": "^4.18.2",
     "express-session": "^1.18.0",
     "fixedsize-map": "^1.0.1",
-    "iso-639-1": "^3.1.0",
+    "iso-639-1": "^3.1.1",
     "lavaclient": "^4.1.1",
     "module-alias": "^2.2.3",
     "moment": "^2.30.1",
