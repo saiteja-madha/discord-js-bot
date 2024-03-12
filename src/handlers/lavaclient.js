@@ -71,13 +71,24 @@ module.exports = (client) => {
     }
 
     embed.setFields(fields);
-    queue.data.channel.safeSend({ embeds: [embed] });
+    
+    queue.data.channel.safeSend({ embeds: [embed] }).then(message => {
+      queue.data.currentMessage = message;
+    });
   });
 
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
-    queue.data.channel.safeSend("Queue has ended.");
+    const endMessage = queue.data.currentMessage;
+    
+    if (endMessage) {
+      await endMessage.edit({
+        embeds: [new EmbedBuilder().setColor(client.config.EMBED_COLORS.BOT_EMBED).setDescription("Queue has ended.")],
+      });
+    }
+    
     await client.musicManager.destroyPlayer(queue.player.guildId).then(queue.player.disconnect());
   });
 
   return lavaclient;
 };
+                                             
