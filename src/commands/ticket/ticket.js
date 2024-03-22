@@ -359,10 +359,14 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
     new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle(ButtonStyle.Success)
   );
 
-
+  const StaffRoles = require('@schemas/StaffRoles'); // Adjust the path as needed
   // save configuration
-  settings.ticket.staff_roles = staffRoles;
-  await settings.save();
+  // Save staff roles to the database
+  const staffRolesEntry = new StaffRoles({
+    guildId: guild.id,
+    roles: staffRoles
+  });
+  await staffRolesEntry.save();
 
   await targetChannel.send({ embeds: [embed], components: [tktBtnRow] });
   await modal.deleteReply();

@@ -8,6 +8,7 @@ const {
   ComponentType,
 } = require("discord.js");
 const { TICKET } = require("@root/config.js");
+const StaffRoles = require('@schemas/StaffRoles');
 
 // schemas
 const { getSettings } = require("@schemas/Guild");
@@ -165,11 +166,20 @@ async function handleTicketOpen(interaction) {
       "Cannot create ticket channel, missing `Manage Channel` permission. Contact server manager for help!"
     );
 
-  const alreadyExists = getExistingTicketChannel(guild, user.id);
-  if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
+    const alreadyExists = getExistingTicketChannel(guild, user.id, user.username);
+    if (alreadyExists) return interaction.followUp(`You already have an open ticket`);
 
   const settings = await getSettings(guild);
+  // Retrieve the category ID from guild settings
+  const categoryId = settings.ticket.category_channel;
 
+  // Get the category channel by ID
+  const categoryChannel = guild.channels.cache.get(categoryId);
+
+  // Ensure that the category channel exists and is a category
+  if (!categoryChannel || categoryChannel.type !== 4) {
+    return interaction.followUp("Invalid category ID set for ticket creation.");
+  }
   // limit check
   const existing = getTicketChannels(guild).size;
   if (existing > settings.ticket.limit) return interaction.followUp("There are too many open tickets. Try again later");
@@ -203,7 +213,11 @@ async function handleTicketOpen(interaction) {
     catName = res.values[0];
     catPerms = categories.find((cat) => cat.name === catName)?.staff_roles || [];
   }
-
+  // Retrieve category channel ID from guild settings
+  let catChannel = null;
+  if (categoryId) {
+    catChannel = guild.channels.cache.get(categoryId);
+  }
   try {
     const ticketNumber = (existing + 1).toString();
 const permissionOverwrites = [
@@ -215,10 +229,15 @@ const permissionOverwrites = [
     id: user.id,
     allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
   },
+  {
+    id: guild.members.me.roles.highest.id,
+    allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
+  },
 ];
 
-// Get staff roles from settings
-const staffRoles = settings.ticket?.staff_roles || [];
+    // Retrieve staff roles from the StaffRoles schema
+    const staffRolesEntry = await StaffRoles.findOne({ guildId: guild.id });
+    const staffRoles = staffRolesEntry ? staffRolesEntry.roles : [];
 
 
 // Loop through each staff role ID
@@ -253,8 +272,8 @@ staffRoles.forEach(roleId => {
       type: ChannelType.GuildText,
       topic: `${username}|${user.id}|${catName || "Default"}`,
       permissionOverwrites,
+      parent: categoryId,
     });
-
 
 const staffRolesPing = staffRoles.map(roleId => `<@&${roleId}>`).join(' ');
     const embed = new EmbedBuilder()
