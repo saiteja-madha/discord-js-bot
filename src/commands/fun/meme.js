@@ -115,7 +115,7 @@ module.exports = {
 
 async function getRandomEmbed(choice) {
   const subReddits = ["meme", "Memes_Of_The_Dank", "memes", "dankmemes"];
-  let rand = choice ? choice : subReddits[getRandomInt(subReddits.length)];
+  let rand = choice ? choice : subReddits[getRandomInt(subReddits.length - 1)];
 
   const response = await getJson(`https://meme-api.com/gimme/${rand}`);
   if (!response.success || !response.data) {
@@ -124,7 +124,7 @@ async function getRandomEmbed(choice) {
 
   const json = response.data;
   if (!json.postLink || !json.url || !json.title || !json.ups) {
-    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
+    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription(`No meme found matching ${choice}`);
   }
 
   // Check if the meme is marked as NSFW
