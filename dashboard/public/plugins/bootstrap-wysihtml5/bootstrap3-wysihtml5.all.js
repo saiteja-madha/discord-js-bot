@@ -266,7 +266,7 @@ var wysihtml5 = {
     api.util.extend = function (obj, props, deep) {
       var o, p
       for (var i in props) {
-        if (props.hasOwnProperty(i)) {
+        if (Object.prototype.hasOwnProperty.call(props, i)) {
           o = obj[i]
           p = props[i]
           if (
@@ -282,7 +282,7 @@ var wysihtml5 = {
         }
       }
       // Special case for toString, which does not show up in for...in loops in IE <= 8
-      if (props.hasOwnProperty('toString')) {
+      if (Object.prototype.hasOwnProperty.call(props, 'toString')) {
         obj.toString = props.toString
       }
       return obj
@@ -5501,7 +5501,7 @@ wysihtml5.lang.object = function (obj) {
       }
 
       for (i in obj) {
-        if (obj.hasOwnProperty(i)) {
+        if (Object.prototype.hasOwnProperty.call(obj, i)) {
           if (deep) {
             newObj[i] = wysihtml5.lang.object(obj[i]).clone(deep)
           } else {
@@ -6915,7 +6915,7 @@ wysihtml5.dom.parse = function (elementOrHtml_current, config_current) {
     var sel, method, els
 
     for (sel in selectorRules) {
-      if (selectorRules.hasOwnProperty(sel)) {
+      if (Object.prototype.hasOwnProperty.call(selectorRules, sel)) {
         if (wysihtml5.lang.object(selectorRules[sel]).isFunction()) {
           method = selectorRules[sel]
         } else if (
@@ -7039,7 +7039,7 @@ wysihtml5.dom.parse = function (elementOrHtml_current, config_current) {
 
     for (type in types) {
       if (
-        types.hasOwnProperty(type) &&
+        Object.prototype.hasOwnProperty.call(types, type) &&
         rules.type_definitions &&
         rules.type_definitions[type]
       ) {
@@ -7076,7 +7076,7 @@ wysihtml5.dom.parse = function (elementOrHtml_current, config_current) {
     // test for methods
     if (definition.methods) {
       for (var m in definition.methods) {
-        if (definition.methods.hasOwnProperty(m) && typeCeckMethods[m]) {
+        if (Object.prototype.hasOwnProperty.call(definition.methods, m) && typeCeckMethods[m]) {
           if (typeCeckMethods[m](oldNode)) {
             return true
           }
@@ -7102,7 +7102,7 @@ wysihtml5.dom.parse = function (elementOrHtml_current, config_current) {
     if (nodeStyles && definition.styles) {
       nodeStyles = nodeStyles.split(';')
       for (s in definition.styles) {
-        if (definition.styles.hasOwnProperty(s)) {
+        if (Object.prototype.hasOwnProperty.call(definition.styles, s)) {
           for (var sp = nodeStyles.length; sp--; ) {
             styleProp = nodeStyles[sp].split(':')
 
@@ -7125,7 +7125,7 @@ wysihtml5.dom.parse = function (elementOrHtml_current, config_current) {
     // test for attributes in general against regex match
     if (definition.attrs) {
       for (a in definition.attrs) {
-        if (definition.attrs.hasOwnProperty(a)) {
+        if (Object.prototype.hasOwnProperty.call(definition.attrs, a)) {
           attr = wysihtml5.dom.getAttribute(oldNode, a)
           if (typeof attr === 'string') {
             if (attr.search(definition.attrs[a]) > -1) {
@@ -7142,7 +7142,7 @@ wysihtml5.dom.parse = function (elementOrHtml_current, config_current) {
     var s, v
     if (rule && rule.keep_styles) {
       for (s in rule.keep_styles) {
-        if (rule.keep_styles.hasOwnProperty(s)) {
+        if (Object.prototype.hasOwnProperty.call(rule.keep_styles, s)) {
           v =
             s === 'float'
               ? oldNode.style.styleFloat || oldNode.style.cssFloat
@@ -7170,7 +7170,7 @@ wysihtml5.dom.parse = function (elementOrHtml_current, config_current) {
   function _getAttributesBeginningWith(beginning, attributes) {
     var returnAttributes = []
     for (var attr in attributes) {
-      if (attributes.hasOwnProperty(attr) && attr.indexOf(beginning) === 0) {
+      if (Object.prototype.hasOwnProperty.call(attributes, attr) && attr.indexOf(beginning) === 0) {
         returnAttributes.push(attr)
       }
     }
@@ -8344,7 +8344,7 @@ wysihtml5.dom.getAttributes = function (node) {
   for (attr in node.attributes) {
     if (
       (node.attributes.hasOwnProperty &&
-        node.attributes.hasOwnProperty(attr)) ||
+        Object.prototype.hasOwnProperty.call(node.attributes, attr)) ||
       (!node.attributes.hasOwnProperty &&
         Object.prototype.hasOwnProperty.call(node.attributes, attr))
     ) {
@@ -8647,7 +8647,7 @@ wysihtml5.dom.isLoadedImage = function (node) {
 
         if (attrs) {
           for (var attr in attrs) {
-            if (attrs.hasOwnProperty(attr)) {
+            if (Object.prototype.hasOwnProperty.call(attrs, attr)) {
               cell.setAttribute(attr, attrs[attr])
             }
           }
@@ -9555,10 +9555,10 @@ wysihtml5.quirks.cleanPastedHTML = (function () {
       style
 
     for (tag in newRules.tags) {
-      if (newRules.tags.hasOwnProperty(tag)) {
+      if (Object.prototype.hasOwnProperty.call(newRules.tags, tag)) {
         if (newRules.tags[tag].keep_styles) {
           for (style in newRules.tags[tag].keep_styles) {
-            if (newRules.tags[tag].keep_styles.hasOwnProperty(style)) {
+            if (Object.prototype.hasOwnProperty.call(newRules.tags[tag].keep_styles, style)) {
               if (exceptStyles[style]) {
                 newRules.tags[tag].keep_styles[style] = styleToRegex(
                   exceptStyles[style]
@@ -11827,7 +11827,7 @@ wysihtml5.commands.bold = {
 
       // Set new attributes
       for (var j in attributes) {
-        if (attributes.hasOwnProperty(j)) {
+        if (Object.prototype.hasOwnProperty.call(attributes, j)) {
           anchors[a].setAttribute(j, attributes[j])
         }
       }
@@ -16663,7 +16663,7 @@ var Handlebars = (function () {
                     (g += d(a[f], { data: c }))
               else
                 for (var i in a)
-                  a.hasOwnProperty(i) &&
+                  Object.prototype.hasOwnProperty.call(a, i) &&
                     (c && ((c.key = i), (c.index = f), (c.first = 0 === f)),
                     (g += d(a[i], { data: c })),
                     f++)
@@ -18069,7 +18069,7 @@ this['wysihtml5']['tpl']['lists'] = Handlebars.template(
       this.el = el
       var toolbarOpts = $.extend(true, {}, defaultOptions, options)
       for (var t in toolbarOpts.customTemplates) {
-        if (toolbarOpts.customTemplates.hasOwnProperty(t)) {
+        if (Object.prototype.hasOwnProperty.call(toolbarOpts.customTemplates, t)) {
           wysihtml5.tpl[t] = toolbarOpts.customTemplates[t]
         }
       }
@@ -18116,7 +18116,7 @@ this['wysihtml5']['tpl']['lists'] = Handlebars.template(
 
         if (options && options.events) {
           for (var eventName in options.events) {
-            if (options.events.hasOwnProperty(eventName)) {
+            if (Object.prototype.hasOwnProperty.call(options.events, eventName)) {
               editor.on(eventName, options.events[eventName])
             }
           }
@@ -18198,7 +18198,7 @@ this['wysihtml5']['tpl']['lists'] = Handlebars.template(
           style: 'display:none',
         })
         var culture = options.locale || defaultOptions.locale || 'en'
-        if (!locale.hasOwnProperty(culture)) {
+        if (!Object.prototype.hasOwnProperty.call(locale, culture)) {
           console.debug(
             "Locale '" +
               culture +
