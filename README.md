@@ -34,7 +34,7 @@
 <p align="center">
   <a href="ko-fi.com/vikshan">Donate</a>
   •
-  <a href="docs.vikshan.me">Docs</a>
+  <a href="docs.vikshan.tech">Docs</a>
   •
   <a href="https://discord.com/api/oauth2/authorize?client_id=1009149789914546287&scope=bot+applications.commands&permissions=1374891928950">Invite Mochi</a>
   •
@@ -68,9 +68,9 @@ of Mochi
 - ❤️ Buy me a coffee: [Ko-Fi](ko-fi.com/vikshan)
 - 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
-- 📑 Documentation : [docs.vikshan.me](https://docs.vikshan.me)
+- 📑 Documentation : [docs.vikshan.tech](https://docs.vikshan.tech)
 - 📝 Changelog: [Changelog](src/CHANGELOG.md)
-- 📦 Self Host: [Guide](https://docs.vikshan.me/installation/installation)
+- 📦 Self Host: [Guide](https://docs.vikshan.tech/installation/installation)
 
 ## ✨ Features ✨
 

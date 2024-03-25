@@ -14,7 +14,7 @@
 * ❤️ Buy me a coffee: [Ko-Fi](https://ko-fi.com/vikshan/tiers)
 * 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 * 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
-* 📦 Self Host: [Guide](https://docs.vikshan.me/additional/installation)
+* 📦 Self Host: [Guide](https://docs.vikshan.tech/additional/installation)
 
 Mochi is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe39) credits to deploy your own copy of Mochi.
 
