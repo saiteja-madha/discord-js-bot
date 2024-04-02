@@ -103,6 +103,11 @@ const Schema = new mongoose.Schema({
       image: String,
     },
   },
+  music: {
+    twenty_four_seven: {
+      enabled: Boolean,
+    },
+  },
   autorole: String,
   suggestions: {
     enabled: Boolean,
@@ -135,7 +140,7 @@ module.exports = {
           const userDb = await getUser(owner);
           await userDb.save();
         })
-        .catch((ex) => { });
+        .catch((ex) => {});
 
       // create a new guild model
       guildData = new Model({

@@ -1,10 +1,8 @@
 const { EmbedBuilder } = require("discord.js");
-
 const { Cluster } = require("lavaclient");
+const prettyMs = require("pretty-ms");
 const { load, SpotifyItemType } = require("@lavaclient/spotify");
 require("@lavaclient/queue/register");
-
-const prettyMs = require("pretty-ms");
 
 /**
  * @param {import("@structures/BotClient")} client
@@ -77,8 +75,23 @@ module.exports = (client) => {
   });
 
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
-    queue.data.channel.safeSend("Queue has ended.");
-    await client.musicManager.destroyPlayer(queue.player.guildId).then(queue.player.disconnect());
+    const guildid = queue.player.guildId;
+    const guild = client.guilds.cache.get(guildid);
+    const channel = client.channels.cache.get(queue.player.channelId);
+
+    const { getSettings } = require("@schemas/Guild");
+    const settings = await getSettings(guild);
+    let ended;
+
+    if (settings.music.twenty_four_seven.enabled) {
+      ended = "Queue has ended. **24/7 mode is on so I haven't left.**";
+    } else {
+      ended = "Queue has ended. **24/7 mode is off so I have left.**";
+      queue.player.disconnect();
+      await client.musicManager.destroyPlayer(queue.player.guildId);
+    }
+
+    channel.safeSend(ended);
   });
 
   return lavaclient;
