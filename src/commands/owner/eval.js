@@ -36,7 +36,7 @@ module.exports = {
 
     let response;
     try {
-      const output = eval(input);
+      const output = await eval(input);
       response = buildSuccessResponse(output, message.client);
     } catch (ex) {
       response = buildErrorResponse(ex);
@@ -49,7 +49,7 @@ module.exports = {
 
     let response;
     try {
-      const output = eval(input);
+      const output = await eval(input);
       response = buildSuccessResponse(output, interaction.client);
     } catch (ex) {
       response = buildErrorResponse(ex);
