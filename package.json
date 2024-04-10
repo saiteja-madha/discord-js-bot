@@ -74,7 +74,7 @@
     "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
+    "eslint": "^9.0.0",
     "eslint-plugin-jsdoc": "^48.0.2",
     "node": "^21.1.0",
     "nodemon": "^3.0.3",
