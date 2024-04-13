@@ -35,7 +35,8 @@ module.exports = {
 async function stop({ client, guildId }, settings) {
   const player = client.musicManager.getPlayer(guildId);
   if (settings.music.twenty_four_seven.enabled) {
-    await client.musicManager.destroyPlayer(guildId);
+    player.queue.clear();
+    player.stop();
   } else {
     player.disconnect();
     await client.musicManager.destroyPlayer(guildId);
