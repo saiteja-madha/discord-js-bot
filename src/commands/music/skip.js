@@ -30,7 +30,7 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-function skip({ client, guildId }, settings) {
+async function skip({ client, guildId }, settings) {
   const player = client.musicManager.getPlayer(guildId);
 
   // check if current song is playing
