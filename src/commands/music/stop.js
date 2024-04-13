@@ -16,23 +16,29 @@ module.exports = {
     enabled: true,
   },
 
-  async messageRun(message, args) {
+  async messageRun(message, args, data) {
+    const settings = data.settings;
     const response = await stop(message);
-    await message.safeReply(response);
+    await message.safeReply(response, settings);
   },
 
-  async interactionRun(interaction) {
+  async interactionRun(interaction, data) {
+    const settings = data.settings;
     const response = await stop(interaction);
-    await interaction.followUp(response);
+    await interaction.followUp(response, settings);
   },
 };
 
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-async function stop({ client, guildId }) {
+async function stop({ client, guildId }, settings) {
   const player = client.musicManager.getPlayer(guildId);
-  player.disconnect();
-  await client.musicManager.destroyPlayer(guildId);
+  if (settings.music.twenty_four_seven.enabled) {
+    await client.musicManager.destroyPlayer(guildId);
+  } else {
+    player.disconnect();
+    await client.musicManager.destroyPlayer(guildId);
+  }
   return "🎶 The music player is stopped and queue has been cleared";
 }
