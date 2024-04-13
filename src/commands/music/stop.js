@@ -18,14 +18,14 @@ module.exports = {
 
   async messageRun(message, args, data) {
     const settings = data.settings;
-    const response = await stop(message);
-    await message.safeReply(response, settings);
+    const response = await stop(message, settings);
+    await message.safeReply(response);
   },
 
   async interactionRun(interaction, data) {
     const settings = data.settings;
-    const response = await stop(interaction);
-    await interaction.followUp(response, settings);
+    const response = await stop(interaction, settings);
+    await interaction.followUp(response);
   },
 };
 
@@ -42,3 +42,4 @@ async function stop({ client, guildId }, settings) {
   }
   return "🎶 The music player is stopped and queue has been cleared";
 }
+
