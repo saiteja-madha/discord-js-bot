@@ -74,18 +74,18 @@ module.exports = (client) => {
     queue.data.channel.safeSend({ embeds: [embed] });
   });
 
+  const { getSettings } = require("@schemas/Guild");
+
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
     const guildid = queue.player.guildId;
     const guild = client.guilds.cache.get(guildid);
     const channel = client.channels.cache.get(queue.player.channelId);
 
-    const { getSettings } = require("@schemas/Guild");
     const settings = await getSettings(guild);
     let ended;
 
     if (settings.music.twenty_four_seven.enabled) {
       ended = "Queue has ended. **24/7 mode is on so I haven't left.**";
-      await client.musicManager.destroyPlayer(queue.player.guildId);
     } else {
       ended = "Queue has ended. **24/7 mode is off so I have left.**";
       queue.player.disconnect();
@@ -97,3 +97,4 @@ module.exports = (client) => {
 
   return lavaclient;
 };
+
