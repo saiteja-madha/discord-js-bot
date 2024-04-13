@@ -30,24 +30,26 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-async function skip({ client, guildId }, settings) {
+function skip({ client, guildId }, settings) {
   const player = client.musicManager.getPlayer(guildId);
 
   // check if current song is playing
   if (!player.queue.current) return "⏯️ There is no song currently being played";
 
   const { title } = player.queue.current;
+
   if (player.queue.tracks.length === 0) {
     if (settings.music.twenty_four_seven.enabled) {
-       player.queue.clear();
-       player.stop();
+      player.queue.clear();
+      player.stop();
     } else {
-       player.queue.clear();
-       player.stop();
-       player.disconnect();
-			await client.musicManager.destroyPlayer(player.guildId);
+      player.queue.clear();
+      player.stop();
+      player.disconnect();
+      client.musicManager.destroyPlayer(player.guildId);
     }
     return `⏯️ ${title} was skipped.`;
   }
+
   return player.queue.next() ? `⏯️ ${title} was skipped.` : "⏯️ There is no song to skip.";
 }
