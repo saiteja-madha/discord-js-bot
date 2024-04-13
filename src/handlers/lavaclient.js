@@ -85,6 +85,7 @@ module.exports = (client) => {
 
     if (settings.music.twenty_four_seven.enabled) {
       ended = "Queue has ended. **24/7 mode is on so I haven't left.**";
+      await client.musicManager.destroyPlayer(queue.player.guildId);
     } else {
       ended = "Queue has ended. **24/7 mode is off so I have left.**";
       queue.player.disconnect();
