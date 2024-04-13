@@ -37,5 +37,10 @@ function skip({ client, guildId }) {
   if (!player.queue.current) return "⏯️ There is no song currently being played";
 
   const { title } = player.queue.current;
+  if (player.queue.tracks.length === 0) {
+    player.queue.clear();
+    player.stop();
+    return `⏯️ ${title} was skipped.`;
+  }
   return player.queue.next() ? `⏯️ ${title} was skipped.` : "⏯️ There is no song to skip.";
 }
