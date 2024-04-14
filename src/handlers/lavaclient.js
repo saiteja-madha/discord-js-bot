@@ -103,7 +103,7 @@ module.exports = (client) => {
 };
 
 
-async function updateVoiceStatus(channel, status) {
+async function updateVoiceStatus(channel, status, client) {
   const url = `/channels/${channel}/voice-status`;
   const payload = {
     status: status
