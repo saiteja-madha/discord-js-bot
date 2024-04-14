@@ -76,7 +76,7 @@ module.exports = (client) => {
 
     // update voice channel status with 'Now Playing'
     await client.wait(1000) // waiting 1 sec, because channel id is null initially
-    await updateVoiceStatus(queue.player.channelId, `Playing **${song.title}**`)
+    await updateVoiceStatus(queue.player.channelId, `Playing **${song.title}**`, client)
   });
 
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
@@ -84,36 +84,34 @@ module.exports = (client) => {
     await client.musicManager.destroyPlayer(queue.player.guildId).then(queue.player.disconnect());
 
     // reset voice channel's status
-    await updateVoiceStatus(queue.player.channelId, '')
+    await updateVoiceStatus(queue.player.channelId, '', client)
   });
   
   // for when player is paused, indicate 'paused' in the status
   lavaclient.on('playerPaused', async (player, song) => {  
-    await updateVoiceStatus(player.channelId, `Paused **${song.title}**`) 
+    await updateVoiceStatus(player.channelId, `Paused **${song.title}**`, client) 
   })
   // for when player is resumed, indicate 'playing' in the status
   lavaclient.on('playerResumed', async (player, song) => { 
-    await updateVoiceStatus(player.channelId, `Playing **${song.title}**`)     
+    await updateVoiceStatus(player.channelId, `Playing **${song.title}**`, client)     
   })
   // for when player is stopped, reset the status
   lavaclient.on('playerDestroy', async (player) => {
-    await updateVoiceStatus(player.channelId, '')     
+    await updateVoiceStatus(player.channelId, '', client)     
   })
   return lavaclient;
 };
 
 
 async function updateVoiceStatus(channel, status) {
-  const url = `https://discord.com/api/v10/channels/${channel}/voice-status`;
+  const url = `/channels/${channel}/voice-status`;
   const payload = {
     status: status
   };
-  axios.put(url, payload, {
-    headers: {
-      Authorization: `Bot ${process.env.BOT_TOKEN}`
-    }
+  await client.rest.put(url, {
+    body: {
+      status: status
+   }
   })
-    .catch(error => {
-      console.error('Error updating VC status:', error.response ? error.response.data : error.message);
-    });
+    .catch(() => {});
 }
