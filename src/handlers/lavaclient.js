@@ -1,6 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
 const { Cluster } = require("lavaclient");
-const axios = require("axios");
 const prettyMs = require("pretty-ms");
 const { load, SpotifyItemType } = require("@lavaclient/spotify");
 require("@lavaclient/queue/register");
