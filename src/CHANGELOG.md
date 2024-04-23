@@ -7,6 +7,7 @@
 
 ## Fixes & Improvements
 
+- Fixed `/bot changelog` command not working.
 - Fixed music module not working.
 
 ## Developer Notes

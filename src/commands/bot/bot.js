@@ -199,9 +199,8 @@ module.exports = {
         const embed = new EmbedBuilder()
           .setAuthor({ name: 'Behold, my Changelog!' })
           .setColor(EMBED_COLORS.BOT_EMBED)
-          .setDescription(adjustedChangelogContent)
-          .setFooter(
-            'View full changelog [here](https://github.com/vixshan/mochi/blob/main/src/CHANGELOG.md)'
+          .setDescription(
+            `${adjustedChangelogContent}\n\n[View full changelog](https://github.com/vixshan/mochi/blob/main/src/CHANGELOG.md)`
           )
 
         return interaction.followUp({ embeds: [embed] })

@@ -7,12 +7,8 @@
 
 ## Fixes & Improvements
 
+- Fixed `/bot changelog` command not working.
 - Fixed music module not working.
-
-## Developer Notes
-
-- Updated dependencies.
-- Lavalink configs are now in the env for security and easy updates.
 
 # Mochi v2.0.1
 
@@ -22,13 +18,6 @@
 - Default prefix is now `$` instead of `!`
 - Added `reload` prefix command for reloading commands and other bot stuff.
   **DEV only!**
-
-## Developer Notes
-
-- Renamed `./src/commands/developer` to `./src/commands/dev` and
-  `./src/commands/information` to `./src/commands/info`
-- Added sponsors workflow for GitHub sponsors
-- Updated dependencies
 
 # Mochi v2.0.0
 
