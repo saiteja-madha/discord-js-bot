@@ -62,7 +62,7 @@ module.exports = {
       },
       {
         name: 'changelog',
-        description: "Get the bot's changelog from GitHub",
+        description: "Get the bot's mini-changelog for the latest 3 releases",
         type: ApplicationCommandOptionType.Subcommand,
       },
     ],
@@ -179,7 +179,7 @@ module.exports = {
         const response = await octokit.repos.getContent({
           owner: 'vixshan',
           repo: 'mochi',
-          path: 'src/CHANGELOG.md',
+          path: 'src/MINILOG.md',
         })
 
         const changelogContent = Buffer.from(
@@ -200,12 +200,15 @@ module.exports = {
           .setAuthor({ name: 'Behold, my Changelog!' })
           .setColor(EMBED_COLORS.BOT_EMBED)
           .setDescription(adjustedChangelogContent)
+          .setFooter(
+            'View full changelog [here](https://github.com/vixshan/mochi/blob/main/src/CHANGELOG.md)'
+          )
 
         return interaction.followUp({ embeds: [embed] })
       } catch (error) {
         console.error('Error fetching changelog:', error)
         return interaction.followUp(
-          'Error fetching the changelog. Please try again later.'
+          'Error fetching the changelog. Please try again later or view full changelog [here](https://github.com/vixshan/mochi/blob/main/src/CHANGELOG.md).'
         )
       }
     }
