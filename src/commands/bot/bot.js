@@ -172,14 +172,14 @@ module.exports = {
     // Changelog
     else if (sub === 'changelog') {
       try {
-        const githubToken = process.env.GITHUB_TOKEN
+        const githubToken = process.env.GH_TOKEN
         const octokitOptions = githubToken ? { auth: githubToken } : {}
 
         const octokit = new Octokit(octokitOptions)
         const response = await octokit.repos.getContent({
-          owner: 'vixshan',
-          repo: 'mochi',
-          path: 'src/MINILOG.md',
+          owner: process.env.GH_USERNAME,
+          repo: process.env.GH_REPO,
+          path: process.env.MINILOG_PATH,
         })
 
         const changelogContent = Buffer.from(
@@ -200,14 +200,14 @@ module.exports = {
           .setAuthor({ name: 'Behold, my Changelog!' })
           .setColor(EMBED_COLORS.BOT_EMBED)
           .setDescription(
-            `${adjustedChangelogContent}\n\n[View full changelog](https://github.com/vixshan/mochi/blob/main/src/CHANGELOG.md)`
+            `${adjustedChangelogContent}\n\n[View full changelog](${process.env.CHANGELOG_URL})`
           )
 
         return interaction.followUp({ embeds: [embed] })
       } catch (error) {
         console.error('Error fetching changelog:', error)
         return interaction.followUp(
-          'Error fetching the changelog. Please try again later or view full changelog [here](https://github.com/vixshan/mochi/blob/main/src/CHANGELOG.md).'
+          `Error fetching the changelog. Please try again later or view full changelog [here](${process.env.CHANGELOG_URL}).`
         )
       }
     }

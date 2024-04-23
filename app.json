@@ -61,7 +61,7 @@
       "required": false,
       "value": ""
     },
-    "GITHUB_TOKEN": {
+    "GH_TOKEN": {
       "description": "Required for GitHub commands (https://github.com/settings/tokens)",
       "required": false,
       "value": ""
