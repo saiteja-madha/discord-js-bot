@@ -11,6 +11,7 @@
 - Fixed music module not working.
 
 ## Developer Notes
+
 - Moved github configs to .env
 - Updated dependencies.
 - Lavalink configs are now in the env for security and easy updates.
