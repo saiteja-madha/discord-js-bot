@@ -1,47 +1,56 @@
-require("dotenv").config();
-require("module-alias/register");
+const fs = require("fs");
+const { generateEnvFile } = require("./scripts/setup");
 
-// register extenders
-require("@helpers/extenders/Message");
-require("@helpers/extenders/Guild");
-require("@helpers/extenders/GuildChannel");
+// Check if .env file exists
+if (!fs.existsSync(".env")) {
+  generateEnvFile();
+} else {
+  // .env file exists, proceed with dotenv config
+  require("dotenv").config();
+  require("module-alias/register");
 
-const { checkForUpdates } = require("@helpers/BotUtils");
-const { initializeMongoose } = require("@src/database/mongoose");
-const { BotClient } = require("@src/structures");
-const { validateConfiguration } = require("@helpers/Validator");
+  // Register extenders
+  require("@helpers/extenders/Message");
+  require("@helpers/extenders/Guild");
+  require("@helpers/extenders/GuildChannel");
 
-validateConfiguration();
+  const { checkForUpdates } = require("@helpers/BotUtils");
+  const { initializeMongoose } = require("@src/database/mongoose");
+  const { BotClient } = require("@src/structures");
+  const { validateConfiguration } = require("@helpers/Validator");
 
-// initialize client
-const client = new BotClient();
-client.loadCommands("src/commands");
-client.loadContexts("src/contexts");
-client.loadEvents("src/events");
+  validateConfiguration();
 
-// find unhandled promise rejections
-process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
+  // Initialize client
+  const client = new BotClient();
+  client.loadCommands("src/commands");
+  client.loadContexts("src/contexts");
+  client.loadEvents("src/events");
 
-(async () => {
-  // check for updates
-  await checkForUpdates();
+  // Find unhandled promise rejections
+  process.on("unhandledRejection", (err) => client.logger.error(`Unhandled exception`, err));
 
-  // start the dashboard
-  if (client.config.DASHBOARD.enabled) {
-    client.logger.log("Launching dashboard");
-    try {
-      const { launch } = require("@root/dashboard/app");
+  (async () => {
+    // Check for updates
+    await checkForUpdates();
 
-      // let the dashboard initialize the database
-      await launch(client);
-    } catch (ex) {
-      client.logger.error("Failed to launch dashboard", ex);
+    // Start the dashboard
+    if (client.config.DASHBOARD.enabled) {
+      client.logger.log("Launching dashboard");
+      try {
+        const { launch } = require("@root/dashboard/app");
+
+        // Let the dashboard initialize the database
+        await launch(client);
+      } catch (ex) {
+        client.logger.error("Failed to launch dashboard", ex);
+      }
+    } else {
+      // Initialize the database
+      await initializeMongoose();
     }
-  } else {
-    // initialize the database
-    await initializeMongoose();
-  }
 
-  // start the client
-  await client.login(process.env.BOT_TOKEN);
-})();
+    // Start the client
+    await client.login(process.env.BOT_TOKEN);
+  })();
+}
