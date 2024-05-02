@@ -11,7 +11,7 @@ function generateEnvFile () {
   console.log(
     "Here are some tutorials to get you started:\nMongoDB connection URL: https://www.youtube.com/watch?v=nv38zCeFBHg\nBot Token: https://www.youtube.com/watch?v=aI4OmIbkJH8\nWebhook URL: https://www.youtube.com/watch?v=fKksxz2Gdnc\nBot Secret: https://support.heateor.com/discord-client-id-discord-client-secret/\nWeatherstack API Key: https://weatherstack.com/signup/free\nStrange API Key: https://strangeapi.hostz.me/dashboard\nSpotify Client ID and Secret: https://www.youtube.com/watch?v=WHugvJ0YR5I\n"
   );
-  console.log("Please provide the following information (* means required):\n");
+  console.log("Please provide the following information (* means required) - right click in the console to paste:\n");
 
   let envData = {};
 
