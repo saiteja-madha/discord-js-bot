@@ -66,7 +66,7 @@ function toggleLoop({ client, guildId }, type) {
 
   // queue
   else if (type === "queue") {
-    player.queue.setLoop(1);
+    player.queue.setLoop(LoopType.Queue);
     return "Loop mode is set to `queue`";
   }
 }
