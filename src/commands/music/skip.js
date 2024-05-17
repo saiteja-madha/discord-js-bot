@@ -17,12 +17,12 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const response = skip(message);
+    const response = await skip(message);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
-    const response = skip(interaction);
+    const response = await skip(interaction);
     await interaction.followUp(response);
   },
 };
@@ -30,12 +30,17 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-function skip({ client, guildId }) {
-  const player = client.musicManager.getPlayer(guildId);
+async function skip({ client, guildId }) {
+  const player = client.musicManager.players.resolve(guildId);
 
-  // check if current song is playing
-  if (!player.queue.current) return "⏯️ There is no song currently being played";
+  // Check if current song is playing
+  if (!player || !player.queue.current) {
+    return "⏯️ There is no song currently being played";
+  }
 
-  const { title } = player.queue.current;
-  return player.queue.next() ? `⏯️ ${title} was skipped.` : "⏯️ There is no song to skip.";
+  // Ensure the title is properly defined
+  const title = player.queue.current.info.title || "Unknown Track";
+  const skipped = await player.queue.next();
+
+  return skipped ? `⏯️ ${title} was skipped.` : "⏯️ There is no song to skip.";
 }
