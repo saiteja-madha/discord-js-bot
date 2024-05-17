@@ -47,13 +47,12 @@ module.exports = (client) => {
 
   lavaclient.on("nodeTrackStart", async (_node, queue, track) => {
     const fields = [];
-    const songTitle = track.info.title.substring(0, 19);
     
     const embed = new EmbedBuilder()
       .setAuthor({ name: "Now Playing" })
       .setColor(client.config.EMBED_COLORS.BOT_EMBED)
-      .setDescription(`[${songTitle}](${track.info.uri})`)
-      .setFooter({ text: `Requested By: ${queue.player.userData?.requesterId}` })
+      .setDescription(`[${track.info.title}](${track.info.uri})`)
+      .setFooter({ text: `Requested By: ${track.requesterId}` })
       .setThumbnail(track.info.artworkUrl);
 
     fields.push({
