@@ -70,8 +70,8 @@ module.exports = {
  * @param {number} level
  */
 function setBassBoost({ client, guildId }, level) {
-  const player = client.musicManager.getPlayer(guildId);
+  const player = client.musicManager.players.resolve(guildId);
   const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
-  player.setEqualizer(...bands);
+  player.setFilters(...bands);
   return `> Set the bassboost level to \`${level}\``;
 }
