@@ -61,9 +61,8 @@ module.exports = {
       {
         host: "localhost",
         port: 2333,
-        password: "youshallnotpass",
-        id: "Local Node",
-        secure: false,
+        auth: "youshallnotpass",
+        identifier: "Local Node",
       },
     ],
   },
