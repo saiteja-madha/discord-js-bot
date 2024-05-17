@@ -2,7 +2,6 @@ const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const prettyMs = require("pretty-ms");
 const { EMBED_COLORS, MUSIC } = require("@root/config");
 
-
 /**
  * @type {import("@structures/Command")}
  */
@@ -68,7 +67,9 @@ async function play({ member, guild, channel }, query) {
       /^https?:\/\//.test(query) ? query : `${MUSIC.DEFAULT_SOURCE}:${query}`
     );
 
-      switch (res.loadType) {
+    let track;
+
+    switch (res.loadType) {
       case "error":
         guild.client.logger.error("Search Exception", res.data);
         return "🚫 There was an error while searching";
@@ -83,8 +84,12 @@ async function play({ member, guild, channel }, query) {
         break;
 
       case "track":
+        track = res.data;
+        tracks = [track];
+        break;
+
       case "search":
-        const track = res.data[0];
+        track = res.data[0];
         tracks = [track];
         break;
 
@@ -163,7 +168,7 @@ async function play({ member, guild, channel }, query) {
 
   // do queue things
   const started = player.playing || player.paused;
-  player.queue.add(tracks, { requester: member.user.username, next: false });
+  player.queue.add(tracks, { requester: member.user.displayName, next: false });
   if (!started) {
     await player.queue.start();
   }
