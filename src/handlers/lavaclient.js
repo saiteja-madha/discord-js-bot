@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, GatewayDispatchEvents } = require("discord.js");
+const { EmbedBuilder, GatewayDispatchEvents } = require("discord.js");
 const { Cluster } = require("lavaclient");
 const prettyMs = require("pretty-ms");
 require("@lavaclient/plugin-queue");
@@ -30,8 +30,8 @@ module.exports = (client) => {
     },
   });
 
-  client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (u) => lavaclient.players.handleVoiceUpdate(u));
-  client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (u) => lavaclient.players.handleVoiceUpdate(u));
+  client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data) => lavaclient.players.handleVoiceUpdate(data));
+  client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (data) => lavaclient.players.handleVoiceUpdate(data));
 
   lavaclient.on("nodeConnected", (node, event) => {
     client.logger.log(`Node "${node.identifier}" connected`);
