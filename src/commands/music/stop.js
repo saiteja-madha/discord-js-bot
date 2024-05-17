@@ -33,6 +33,6 @@ module.exports = {
 async function stop({ client, guildId }) {
   const player = client.musicManager.players.resolve(guildId);
   player.voice.disconnect();
-  await client.musicManager.destroyPlayer(guildId);
+  await client.musicManager.players.destroy(guildId);
   return "🎶 The music player is stopped and queue has been cleared";
 }
