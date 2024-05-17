@@ -42,11 +42,15 @@ module.exports = {
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
 async function volume({ client, guildId }, volume) {
-  const player = client.musicManager.getPlayer(guildId);
+  const player = client.musicManager.players.resolve(guildId);
 
-  if (!volume) return `> The player volume is \`${player.volume}\`.`;
+  if (!volume) return `> The player volume is \`${player.volume * 100}\`.`;
   if (volume < 1 || volume > 100) return "you need to give me a volume between 1 and 100.";
 
-  await player.setVolume(volume);
+  // Convert the volume from 1-100 range to 0-1 range
+  const adjustedVolume = volume / 100;
+
+  // Set the volume using setFilters
+  await player.setFilters("volume", adjustedVolume);
   return `🎶 Music player volume is set to \`${volume}\`.`;
 }
