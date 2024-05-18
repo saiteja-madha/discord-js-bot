@@ -1,5 +1,5 @@
 const { musicValidations } = require("@helpers/BotUtils");
-const { LoopType } = require("@lavaclient/plugin-queue");
+const { LoopType } = require("@lavaclient/plugin-queue/register");
 const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
