@@ -1,7 +1,7 @@
 const { EmbedBuilder, GatewayDispatchEvents } = require("discord.js");
 const { Cluster } = require("lavaclient");
 const prettyMs = require("pretty-ms");
-require("@lavaclient/plugin-queue");
+require("@lavaclient/plugin-queue/register")
 
 /**
  * @param {import("@structures/BotClient")} client
