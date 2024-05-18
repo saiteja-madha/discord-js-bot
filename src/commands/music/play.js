@@ -1,5 +1,6 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const prettyMs = require("pretty-ms");
+require("@lavaclient/plugin-queue/register")
 const { EMBED_COLORS, MUSIC } = require("@root/config");
 
 /**
@@ -67,7 +68,7 @@ async function play({ member, guild, channel }, query) {
       /^https?:\/\//.test(query) ? query : `${MUSIC.DEFAULT_SOURCE}:${query}`
     );
 
-    let track;
+    let track; // Declare track variable outside the switch statement
 
     switch (res.loadType) {
       case "error":
