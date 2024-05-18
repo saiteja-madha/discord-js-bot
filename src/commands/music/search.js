@@ -6,6 +6,7 @@ const {
   ComponentType,
 } = require("discord.js");
 const prettyMs = require("pretty-ms");
+require("@lavaclient/plugin-queue/register")
 const { EMBED_COLORS, MUSIC } = require("@root/config");
 
 /**
