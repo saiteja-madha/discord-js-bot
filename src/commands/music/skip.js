@@ -32,15 +32,19 @@ module.exports = {
  */
 async function skip({ client, guildId }) {
   const player = client.musicManager.players.resolve(guildId);
-
-  // Check if current song is playing
+  
   if (!player || !player.queue.current) {
-    return "⏯️ There is no song currently being played";
+    return "There is no song currently being played.";
   }
 
-  // Ensure the title is properly defined
-  const title = player.queue.current.info.title || "Unknown Track";
-  const skipped = await player.queue.next();
+  const title = player.queue.current.info.title;
 
-  return skipped ? `⏯️ ${title} was skipped.` : "⏯️ There is no song to skip.";
+  // Check if there is a next song in the queue
+  if (player.queue.tracks.length === 0) {
+    return "There is no next song to skip to.";
+  }
+
+  // Skip to the next song
+  player.queue.next();
+  return `⏯️ ${title} was skipped successfully.`;
 }
