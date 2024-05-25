@@ -45,10 +45,10 @@ module.exports = {
  * @param {number} time
  */
 function seekTo({ client, guildId }, time) {
-  const player = client.musicManager?.getPlayer(guildId);
+  const player = client.musicManager?.players.resolve(guildId);
   const seekTo = durationToMillis(time);
 
-  if (seekTo > player.queue.current.length) {
+  if (seekTo > player.queue.current.info.length) {
     return "The duration you provide exceeds the duration of the current track";
   }
 

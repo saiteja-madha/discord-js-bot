@@ -1,5 +1,5 @@
 const { musicValidations } = require("@helpers/BotUtils");
-const { LoopType } = require("@lavaclient/queue");
+const { LoopType } = require("@lavaclient/plugin-queue");
 const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
@@ -56,7 +56,7 @@ module.exports = {
  * @param {"queue"|"track"} type
  */
 function toggleLoop({ client, guildId }, type) {
-  const player = client.musicManager.getPlayer(guildId);
+  const player = client.musicManager.players.resolve(guildId);
 
   // track
   if (type === "track") {
@@ -66,7 +66,7 @@ function toggleLoop({ client, guildId }, type) {
 
   // queue
   else if (type === "queue") {
-    player.queue.setLoop(1);
+    player.queue.setLoop(LoopType.Queue);
     return "Loop mode is set to `queue`";
   }
 }

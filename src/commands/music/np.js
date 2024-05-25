@@ -33,36 +33,45 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-function nowPlaying({ client, guildId }) {
-  const player = client.musicManager.getPlayer(guildId);
+function nowPlaying({ client, guildId, member }) {
+  const player = client.musicManager.players.resolve(guildId);
   if (!player || !player.queue.current) return "🚫 No music is being played!";
 
   const track = player.queue.current;
-  const end = track.length > 6.048e8 ? "🔴 LIVE" : new Date(track.length).toISOString().slice(11, 19);
+  const trackLength = track.info.isStream ? "🔴 LIVE" : prettyMs(track.info.length, { colonNotation: true });
+  const trackPosition = track.info.isStream ? "🔴 LIVE" : prettyMs(player.position, { colonNotation: true });
+
+  let progressBar = "";
+  if (!track.info.isStream) {
+    const totalLength = track.info.length > 6.048e8 ? player.position : track.info.length;
+    progressBar =
+      new Date(player.position).toISOString().slice(11, 19) +
+      " [" +
+      splitBar(totalLength, player.position, 15)[0] +
+      "] " +
+      new Date(track.info.length).toISOString().slice(11, 19);
+  } else {
+    progressBar = "🔴 LIVE";
+  }
 
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: "Now playing" })
-    .setDescription(`[${track.title}](${track.uri})`)
+    .setDescription(`[${track.info.title}](${track.info.uri})`)
     .addFields(
       {
         name: "Song Duration",
-        value: "`" + prettyMs(track.length, { colonNotation: true }) + "`",
+        value: "`" + trackLength + "`",
         inline: true,
       },
       {
         name: "Requested By",
-        value: track.requester || "Unknown",
+        value: track.requesterId || member.user.displayName,
         inline: true,
       },
       {
         name: "\u200b",
-        value:
-          new Date(player.position).toISOString().slice(11, 19) +
-          " [" +
-          splitBar(track.length > 6.048e8 ? player.position : track.length, player.position, 15)[0] +
-          "] " +
-          end,
+        value: progressBar,
         inline: false,
       }
     );

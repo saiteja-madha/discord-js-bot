@@ -1,13 +1,7 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const prettyMs = require("pretty-ms");
+require("@lavaclient/plugin-queue/register")
 const { EMBED_COLORS, MUSIC } = require("@root/config");
-const { SpotifyItemType } = require("@lavaclient/spotify");
-
-const search_prefix = {
-  YT: "ytsearch",
-  YTM: "ytmsearch",
-  SC: "scsearch",
-};
 
 /**
  * @type {import("@structures/Command")}
@@ -54,10 +48,10 @@ module.exports = {
 async function play({ member, guild, channel }, query) {
   if (!member.voice.channel) return "🚫 You need to join a voice channel first";
 
-  let player = guild.client.musicManager.getPlayer(guild.id);
+  let player = guild.client.musicManager.players.resolve(guild.id);
   if (player && !guild.members.me.voice.channel) {
-    player.disconnect();
-    await guild.client.musicManager.destroyPlayer(guild.id);
+    player.voice.disconnect();
+    await guild.client.musicManager.players.destroy(guild.id);
   }
 
   if (player && member.voice.channel !== guild.members.me.voice.channel) {
@@ -67,73 +61,45 @@ async function play({ member, guild, channel }, query) {
   let embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED);
   let tracks;
   let description = "";
+  let thumbnail;
 
   try {
-    if (guild.client.musicManager.spotify.isSpotifyUrl(query)) {
-      if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
-        return "🚫 Spotify songs cannot be played. Please contact the bot owner";
-      }
+    const res = await guild.client.musicManager.api.loadTracks(
+      /^https?:\/\//.test(query) ? query : `${MUSIC.DEFAULT_SOURCE}:${query}`
+    );
 
-      const item = await guild.client.musicManager.spotify.load(query);
-      switch (item?.type) {
-        case SpotifyItemType.Track: {
-          const track = await item.resolveYoutubeTrack();
-          tracks = [track];
-          description = `[${track.info.title}](${track.info.uri})`;
-          break;
-        }
+    let track;
 
-        case SpotifyItemType.Artist:
-          tracks = await item.resolveYoutubeTracks();
-          description = `Artist: [**${item.name}**](${query})`;
-          break;
+    switch (res.loadType) {
+      case "error":
+        guild.client.logger.error("Search Exception", res.data);
+        return "🚫 There was an error while searching";
 
-        case SpotifyItemType.Album:
-          tracks = await item.resolveYoutubeTracks();
-          description = `Album: [**${item.name}**](${query})`;
-          break;
+      case "empty":
+        return `No results found matching ${query}`;
 
-        case SpotifyItemType.Playlist:
-          tracks = await item.resolveYoutubeTracks();
-          description = `Playlist: [**${item.name}**](${query})`;
-          break;
+      case "playlist":
+        tracks = res.data.tracks;
+        description = res.data.info.name;
+        thumbnail = res.data.pluginInfo.artworkUrl;
+        break;
 
-        default:
-          return "🚫 An error occurred while searching for the song";
-      }
+      case "track":
+        track = res.data;
+        tracks = [track];
+        break;
 
-      if (!tracks) guild.client.logger.debug({ query, item });
-    } else {
-      const res = await guild.client.musicManager.rest.loadTracks(
-        /^https?:\/\//.test(query) ? query : `${search_prefix[MUSIC.DEFAULT_SOURCE]}:${query}`
-      );
-      switch (res.loadType) {
-        case "LOAD_FAILED":
-          guild.client.logger.error("Search Exception", res.exception);
-          return "🚫 There was an error while searching";
+      case "search":
+        track = res.data[0];
+        tracks = [track];
+        break;
 
-        case "NO_MATCHES":
-          return `No results found matching ${query}`;
-
-        case "PLAYLIST_LOADED":
-          tracks = res.tracks;
-          description = res.playlistInfo.name;
-          break;
-
-        case "TRACK_LOADED":
-        case "SEARCH_RESULT": {
-          const [track] = res.tracks;
-          tracks = [track];
-          break;
-        }
-
-        default:
-          guild.client.logger.debug("Unknown loadType", res);
-          return "🚫 An error occurred while searching for the song";
-      }
-
-      if (!tracks) guild.client.logger.debug({ query, res });
+      default:
+        guild.client.logger.debug("Unknown loadType", res);
+        return "🚫 An error occurred while searching for the song";
     }
+
+    if (!tracks) guild.client.logger.debug({ query, res });
   } catch (error) {
     guild.client.logger.error("Search Exception", typeof error === "object" ? JSON.stringify(error) : error);
     return "🚫 An error occurred while searching for the song";
@@ -150,6 +116,7 @@ async function play({ member, guild, channel }, query) {
       embed
         .setAuthor({ name: "Added Track to queue" })
         .setDescription(`[${track.info.title}](${track.info.uri})`)
+        .setThumbnail(track.info.artworkUrl)
         .setFooter({ text: `Requested By: ${member.user.username}` });
 
       fields.push({
@@ -170,6 +137,7 @@ async function play({ member, guild, channel }, query) {
   } else {
     embed
       .setAuthor({ name: "Added Playlist to queue" })
+      .setThumbnail(thumbnail)
       .setDescription(description)
       .addFields(
         {
@@ -194,14 +162,14 @@ async function play({ member, guild, channel }, query) {
 
   // create a player and/or join the member's vc
   if (!player?.connected) {
-    player = guild.client.musicManager.createPlayer(guild.id);
+    player = guild.client.musicManager.players.create(guild.id);
     player.queue.data.channel = channel;
-    player.connect(member.voice.channel.id, { deafened: true });
+    player.voice.connect(member.voice.channel.id, { deafened: true });
   }
 
   // do queue things
   const started = player.playing || player.paused;
-  player.queue.add(tracks, { requester: member.user.username, next: false });
+  player.queue.add(tracks, { requester: member.user.displayName, next: false });
   if (!started) {
     await player.queue.start();
   }
