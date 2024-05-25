@@ -45,6 +45,10 @@ module.exports = (client) => {
     client.logger.error(`Node "${node.identifier}" encountered an error: ${error.message}.`, error);
   });
 
+  lavaclient.on("nodeDebug", (node, event) => {
+    client.logger.debug(`Node "${node.identifier}" debug: ${event.message}`);
+  });
+        
   lavaclient.on("nodeTrackStart", async (_node, queue, track) => {
     const fields = [];
     
