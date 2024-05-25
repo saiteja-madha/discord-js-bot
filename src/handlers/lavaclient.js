@@ -7,29 +7,14 @@ require("@lavaclient/plugin-queue/register")
  * @param {import("@structures/BotClient")} client
  */
 module.exports = (client) => {
-
   const lavaclient = new Cluster({
-    nodes: client.config.MUSIC.LAVALINK_NODES.map(node => ({
-      ...node,
-      info: {
-        host: node.host,
-        port: node.port,
-        auth: node.auth,
-      },
-      ws: {
-        clientName: "Strange-bot",
-        resuming: true,
-        reconnecting: {
-          tries: Infinity,
-          delay: (attempt) => attempt * 1000
-        }
-      }
-    })),
+    nodes: client.config.MUSIC.LAVALINK_NODES,
+      ws: client.config.MUSIC.LAVALINK_WS,
     discord: {
       sendGatewayCommand: (id, payload) => client.guilds.cache.get(id)?.shard?.send(payload),
     },
   });
-
+  
   client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data) => lavaclient.players.handleVoiceUpdate(data));
   client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (data) => lavaclient.players.handleVoiceUpdate(data));
 

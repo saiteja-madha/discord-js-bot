@@ -51,17 +51,28 @@ module.exports = {
   },
 
   MUSIC: {
-    ENABLED: false,
-    IDLE_TIME: 60, // Time in seconds before the bot disconnects from an idle voice channel
+    ENABLED: true,
+    IDLE_TIME: 120, // Time in seconds before the bot disconnects from an idle voice channel
     MAX_SEARCH_RESULTS: 5,
-    DEFAULT_SOURCE: "scsearch", // ytsearch  = Youtube, ytmsearch  = Youtube Music, spsearch  = Spotify, scsearch = SoundCloud
-    // Add any number of lavalink nodes here
-    // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
+    DEFAULT_VOLUME: 60, // Default volume for the music player (0-100)
+    DEFAULT_SOURCE: "ytsearch", // ytsearch = Youtube, ytmsearch = Youtube Music, spsearch = Spotify, scsearch = SoundCloud
+    // Lavalink WebSocket configuration
+    LAVALINK_WS: {
+      clientName: "Strange-bot", // The name of the Lavalink client.
+      resuming: true, // Whether Lavalink should attempt to resume existing sessions when reconnecting.
+      reconnecting: {
+        tries: Infinity, // Number of times to attempt reconnecting.
+        delay: 20000 // Delay in milliseconds between each reconnection attempt.
+      }
+    },
+    // Add any number of Lavalink nodes here
     LAVALINK_NODES: [
       {
-        host: "localhost",
-        port: 2333,
-        auth: "youshallnotpass",
+        info: {
+          host: "localhost",
+          auth: "youshallnotpass",
+          port: 2333,
+        },
         identifier: "Local Node",
       },
     ],
