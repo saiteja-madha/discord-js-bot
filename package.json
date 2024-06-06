@@ -78,7 +78,7 @@
     "eslint-plugin-jsdoc": "^48.0.2",
     "node": "^22.0.0",
     "nodemon": "^3.0.3",
-    "prettier": "3.2.5"
+    "prettier": "3.3.1"
   },
   "keywords": [
     "discord",
