@@ -1,5 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
-const prettyMs = require("pretty-ms");
+const { formatTime } = require("@helpers/Utils");
 require("@lavaclient/plugin-queue/register")
 const { EMBED_COLORS, MUSIC } = require("@root/config");
 
@@ -68,7 +68,7 @@ async function play({ member, guild, channel }, query) {
       /^https?:\/\//.test(query) ? query : `${MUSIC.DEFAULT_SOURCE}:${query}`
     );
 
-    let track;
+    let track; // Declare track variable outside the switch statement
 
     switch (res.loadType) {
       case "error":
@@ -121,7 +121,7 @@ async function play({ member, guild, channel }, query) {
 
       fields.push({
         name: "Song Duration",
-        value: "`" + prettyMs(track.info.length, { colonNotation: true }) + "`",
+        value: "`" + formatTime(track.info.length) + "`",
         inline: true,
       });
 
@@ -149,9 +149,8 @@ async function play({ member, guild, channel }, query) {
           name: "Playlist duration",
           value:
             "`" +
-            prettyMs(
+            formatTime(
               tracks.map((t) => t.info.length).reduce((a, b) => a + b, 0),
-              { colonNotation: true }
             ) +
             "`",
           inline: true,

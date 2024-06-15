@@ -1,5 +1,6 @@
 const { EMBED_COLORS } = require("@root/config");
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
+const { formatTime } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}
@@ -47,7 +48,9 @@ async function getQueue({ client, guild }, pgNo) {
   if (!player) return "🚫 There is no music playing in this guild.";
 
   const queue = player.queue;
-  const embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED).setAuthor({ name: `Queue for ${guild.name}` });
+  const embed = new EmbedBuilder()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setAuthor({ name: `Queue for ${guild.name}` });
 
   // change for the amount of tracks per page
   const multiple = 10;
@@ -58,19 +61,28 @@ async function getQueue({ client, guild }, pgNo) {
 
   const tracks = queue.tracks.slice(start, end);
 
-  if (queue.current) embed.addFields({ name: "Current", value: `[${queue.current.info.title}](${queue.current.info.uri})` });
+  if (queue.current) {
+    const currentTrack = queue.current;
+    embed.addFields({ 
+      name: "Current", 
+      value: `[${currentTrack.info.title}](${currentTrack.info.uri}) \`[${formatTime(currentTrack.info.length)}]\`` 
+    });
+  }
 
   const queueList = tracks.map((track, index) => {
     const title = track.info.title;
     const uri = track.info.uri;
-    return `${start + index + 1}. [${title}](${uri})`;
+    const duration = formatTime(track.info.length);
+    return `${start + index + 1}. [${title}](${uri}) \`[${duration}]\``;
   });
 
-  if (!queueList.length) embed.setDescription(`No tracks in ${page > 1 ? `page ${page}` : "the queue"}.`);
-  else embed.setDescription(queueList.join("\n"));
+  if (!queueList.length) {
+    embed.setDescription(`No tracks in ${page > 1 ? `page ${page}` : "the queue"}.`);
+  } else {
+    embed.setDescription(queueList.join("\n"));
+  }
 
   const maxPages = Math.ceil(queue.tracks.length / multiple);
-
   embed.setFooter({ text: `Page ${page > maxPages ? maxPages : page} of ${maxPages}` });
 
   return { embeds: [embed] };

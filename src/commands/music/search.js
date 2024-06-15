@@ -5,8 +5,7 @@ const {
   ApplicationCommandOptionType,
   ComponentType,
 } = require("discord.js");
-const prettyMs = require("pretty-ms");
-require("@lavaclient/plugin-queue/register")
+const { formatTime } = require("@helpers/Utils");
 const { EMBED_COLORS, MUSIC } = require("@root/config");
 
 /**
@@ -100,7 +99,7 @@ async function search({ member, guild, channel }, query) {
 
       fields.push({
         name: "Song Duration",
-        value: "`" + prettyMs(track.info.length, { colonNotation: true }) + "`",
+        value: "`" + formatTime(track.info.length) + "`",
         inline: true,
       });
 
@@ -130,9 +129,8 @@ async function search({ member, guild, channel }, query) {
             name: "Playlist duration",
             value:
               "`" +
-              prettyMs(
+              formatTime(
                 res.data.tracks.map((t) => t.info.length).reduce((a, b) => a + b, 0),
-                { colonNotation: true }
               ) +
               "`",
             inline: true,

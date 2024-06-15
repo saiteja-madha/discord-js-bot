@@ -1,6 +1,6 @@
 const { EmbedBuilder, GatewayDispatchEvents } = require("discord.js");
 const { Cluster } = require("lavaclient");
-const prettyMs = require("pretty-ms");
+const { formatTime } = require("@helpers/Utils");
 require("@lavaclient/plugin-queue/register")
 
 /**
@@ -46,7 +46,7 @@ module.exports = (client) => {
 
     fields.push({
       name: "Song Duration",
-      value: "`" + prettyMs(track.info.length, { colonNotation: true }) + "`",
+      value: "`" + formatTime(track.info.length) + "`",
       inline: true,
     });
 

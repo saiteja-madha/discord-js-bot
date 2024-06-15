@@ -1,14 +1,13 @@
 const { EMBED_COLORS } = require("@root/config");
 const { EmbedBuilder } = require("discord.js");
-const prettyMs = require("pretty-ms");
-const { splitBar } = require("string-progressbar");
+const { formatTime } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: "np",
-  description: "show's what track is currently being played",
+  description: "Shows what track is currently being played",
   category: "MUSIC",
   botPermissions: ["EmbedLinks"],
   command: {
@@ -19,7 +18,7 @@ module.exports = {
     enabled: true,
   },
 
-  async messageRun(message, args) {
+  async messageRun(message) {
     const response = nowPlaying(message);
     await message.safeReply(response);
   },
@@ -38,21 +37,11 @@ function nowPlaying({ client, guildId, member }) {
   if (!player || !player.queue.current) return "🚫 No music is being played!";
 
   const track = player.queue.current;
-  const trackLength = track.info.isStream ? "🔴 LIVE" : prettyMs(track.info.length, { colonNotation: true });
-  const trackPosition = track.info.isStream ? "🔴 LIVE" : prettyMs(player.position, { colonNotation: true });
-
-  let progressBar = "";
-  if (!track.info.isStream) {
-    const totalLength = track.info.length > 6.048e8 ? player.position : track.info.length;
-    progressBar =
-      new Date(player.position).toISOString().slice(11, 19) +
-      " [" +
-      splitBar(totalLength, player.position, 15)[0] +
-      "] " +
-      new Date(track.info.length).toISOString().slice(11, 19);
-  } else {
-    progressBar = "🔴 LIVE";
-  }
+  const totalLength = track.info.length;
+  const position = player.position;
+  const progress = Math.round((position / totalLength) * 15);
+  const progressBar = `${formatTime(position)} [${"▬".repeat(
+      progress)}🔘${"▬".repeat(15 - progress)}] ${formatTime(totalLength)}`;
 
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
@@ -61,12 +50,12 @@ function nowPlaying({ client, guildId, member }) {
     .addFields(
       {
         name: "Song Duration",
-        value: "`" + trackLength + "`",
+        value: `\`${formatTime(track.info.length)}\``,
         inline: true,
       },
       {
         name: "Requested By",
-        value: track.requesterId || member.user.displayName,
+        value: track.requesterId ? track.requesterId : member.user.displayName,
         inline: true,
       },
       {
