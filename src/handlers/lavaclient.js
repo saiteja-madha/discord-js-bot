@@ -85,32 +85,34 @@ module.exports = (client) => {
     // reset voice channel's status
     await updateVoiceStatus(queue.player.channelId, '', client)
   });
-  
+
   // for when player is paused, indicate 'paused' in the status
-  lavaclient.on('playerPaused', async (player, song) => {  
-    await updateVoiceStatus(player.channelId, `Paused **${song.title}**`, client) 
+  lavaclient.on('playerPaused', async (player, song) => {
+    await updateVoiceStatus(player.channelId, `Paused **${song.title}**`, client)
   })
   // for when player is resumed, indicate 'playing' in the status
-  lavaclient.on('playerResumed', async (player, song) => { 
-    await updateVoiceStatus(player.channelId, `Playing **${song.title}**`, client)     
+  lavaclient.on('playerResumed', async (player, song) => {
+    await updateVoiceStatus(player.channelId, `Playing **${song.title}**`, client)
   })
   // for when player is stopped, reset the status
   lavaclient.on('playerDestroy', async (player) => {
-    await updateVoiceStatus(player.channelId, '', client)     
+    await updateVoiceStatus(player.channelId, '', client)
   })
   return lavaclient;
 };
 
-
+/**
+ * 
+ * @param {string} channel The channel Id to update the status
+ * @param {string} status The status
+ * @param {import("discord.js").Client} client Bot's client
+ */
 async function updateVoiceStatus(channel, status, client) {
   const url = `/channels/${channel}/voice-status`;
-  const payload = {
-    status: status
-  };
   await client.rest.put(url, {
     body: {
       status: status
-   }
+    }
   })
-    .catch(() => {});
+    .catch(() => { });
 }
