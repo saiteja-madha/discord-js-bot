@@ -79,9 +79,9 @@ module.exports = async (client, message) => {
         btn.push(new ButtonBuilder().setLabel(`Attachment ${i}`).setURL(a.proxyURL).setStyle(ButtonStyle.Link));
       });
       const row = new ActionRowBuilder().addComponents(btn);
-      logChannel.safeSend({ embeds: [logEmbed], components: [row] }).catch(() => { });
+      logChannel.safeSend({ embeds: [logEmbed], components: [row] })
     } else {
-      logChannel.safeSend({ embeds: [logEmbed] }).catch(() => { });
+      logChannel.safeSend({ embeds: [logEmbed] })
     }
   }
 };

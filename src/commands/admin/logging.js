@@ -24,6 +24,10 @@ module.exports = {
                 description: "enable logging for voice channel updates",
             },
             {
+                trigger: "emojis <#channel|off>",
+                description: "enable logging for emojis creation/updates and deletion",
+            },
+            {
                 trigger: "invites <#channel|off>",
                 description: "enable logging for invite creation and deletion",
             },
@@ -73,6 +77,20 @@ module.exports = {
             {
                 name: "voice",
                 description: "enable logging for voice channel updates",
+                type: ApplicationCommandOptionType.Subcommand,
+                options: [
+                    {
+                        name: "channel",
+                        description: "channel to send logs (leave empty to disable)",
+                        type: ApplicationCommandOptionType.Channel,
+                        required: false,
+                        channelTypes: [ChannelType.GuildText],
+                    },
+                ],
+            },
+            {
+                name: "emojis",
+                description: "enable logging for emojis updates",
                 type: ApplicationCommandOptionType.Subcommand,
                 options: [
                     {
@@ -155,7 +173,7 @@ module.exports = {
 };
 
 async function setChannel(targetChannel, settings, sub) {
-    if (!targetChannel && !settings[sub]) {
+    if (!targetChannel && !settings.logging[sub]) {
         return "It is already disabled";
     }
 
@@ -163,7 +181,7 @@ async function setChannel(targetChannel, settings, sub) {
         return "Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel";
     }
 
-    settings[sub] = targetChannel?.id;
+    settings.logging[sub] = targetChannel?.id;
     await settings.save();
     return `Configuration saved! **${parseSub(sub)} Updates** channel ${targetChannel ? `updated to ${targetChannel}` : "removed"}`;
 }

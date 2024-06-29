@@ -38,7 +38,7 @@ module.exports = async (client, oldMessage, newMessage) => {
         })
         .setTimestamp();
 
-    logChannel.safeSend({ embeds: [logEmbed] }).catch(() => { });
+    logChannel.safeSend({ embeds: [logEmbed] })
 };
 
 

@@ -29,6 +29,7 @@ module.exports = class BotClient extends Client {
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildModeration
       ],
       partials: [Partials.User, Partials.Message, Partials.Reaction],
       allowedMentions: {
@@ -283,7 +284,7 @@ module.exports = class BotClient extends Client {
     const patternMatch = search.match(/(\d{17,20})/);
     if (patternMatch) {
       const id = patternMatch[1];
-      const fetched = await this.users.fetch(id, { cache: true }).catch(() => {}); // check if mentions contains the ID
+      const fetched = await this.users.fetch(id, { cache: true }).catch(() => { }); // check if mentions contains the ID
       if (fetched) {
         users.push(fetched);
         return users;

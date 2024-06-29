@@ -60,9 +60,10 @@ const Schema = new mongoose.Schema({
     enabled: Boolean,
   },
   modlog_channel: String,
-  advance_logging: {
+  logging: {
     messages: String,
     channels: String,
+    emojis: String,
     members: String,
     roles: String,
     bans: String,

@@ -71,10 +71,10 @@ module.exports = class Utils {
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
     const seconds = Math.round(timeInSeconds % 60);
     return (
-      (days > 0 ? `${days} days, ` : "") +
-      (hours > 0 ? `${hours} hours, ` : "") +
-      (minutes > 0 ? `${minutes} minutes, ` : "") +
-      (seconds > 0 ? `${seconds} seconds` : "")
+      (days > 0 ? `${days} days` : "") +
+      (hours > 0 ? `, ${hours} hours` : "") +
+      (minutes > 0 ? `, ${minutes} minutes` : "") +
+      (seconds > 0 ? `, ${seconds} seconds` : "")
     );
   }
 
