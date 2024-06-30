@@ -1,3 +1,4 @@
+const { getSettings } = require("@root/src/database/schemas/Guild");
 const { EmbedBuilder } = require("discord.js");
 /**
  * @param {import('@src/structures').BotClient} client
@@ -8,9 +9,10 @@ module.exports = async (client, oldMessage, newMessage) => {
     if (oldMessage.partial) return;
     const { content } = oldMessage;
     const { author } = newMessage;
-    const logChannel = client.channels.cache.get("1202855179377057822");
     if (newMessage.author.bot) return;
-    if (newMessage.guild.id !== "852141490105090059") return;
+    const settings = await getSettings(newMessage.guild);
+    if (!settings.logging.messages) return;
+    const logChannel = client.channels.cache.get(settings.logging.messages)
     if (!logChannel) return;
     const logEmbed = new EmbedBuilder()
         .setAuthor({ name: "Message Edited" })

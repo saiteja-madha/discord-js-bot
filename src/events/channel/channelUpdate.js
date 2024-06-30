@@ -10,6 +10,7 @@ module.exports = async (client, oldChannel, newChannel) => {
     const settings = await getSettings(newChannel.guild);
     if (!settings.logging.channels) return;
     const logChannel = client.channels.cache.get(settings.logging.channels);
+    if (!logChannel) return;
     const embed = new EmbedBuilder()
         .setAuthor({ name: "Channel Updated" })
         .setTimestamp()
@@ -17,21 +18,18 @@ module.exports = async (client, oldChannel, newChannel) => {
     let auditLogType = AuditLogEvent.ChannelUpdate;
     // Return if category deleted, fires for every children channel and not worth logging in my opinion
     if (oldChannel.parent && !newChannel.parent) return;
-
+    let description = `### Changes to ${newChannel}\n`
+    let changed = false;
     // Name change
     if (oldChannel.name !== newChannel.name) {
-        embed
-            .setAuthor({ name: "Channel Updated" })
-            .setTitle(`Channel name updated for ${newChannel}`)
-            .setDescription(`\`${oldChannel.name}\` -> \`${newChannel.name}\``)
-            .setColor("Green")
+        changed = true;
+        description += `**Name Changed:** \`${oldChannel.name}\` -> \`${newChannel.name}\`\n`
     }
 
     // Category Changed
     if (oldChannel.parent?.id !== newChannel.parent?.id) {
-        embed
-            .setTitle(`Channel category changed for ${newChannel}`)
-            .setDescription(`\`${oldChannel.parent || "none"}\` -> \`${newChannel.parent || "none"}\``)
+        changed = true;
+        description = `### Channel category changed for ${newChannel}\n ${oldChannel.parent || "none"} -> ${newChannel.parent || "none"}\n`
 
     }
 
@@ -39,64 +37,57 @@ module.exports = async (client, oldChannel, newChannel) => {
     const changes = getDifferrence(oldChannel.permissionOverwrites.cache, newChannel.permissionOverwrites.cache)
     if (changes.changes.length > 0) {
         auditLogType = changes.entryType;
-        embed
-            .setTitle(`Permission overwrites updated in channel ${newChannel}:`)
-            .setDescription(
-                changes.changes.join("\n")
-            )
+        changed = true;
+        description = `### Permission overwrites updated in channel ${newChannel}:\n` + changes.changes.join("\n")
+
     }
 
     // Channel topic
     if (oldChannel.topic !== newChannel.topic) {
-        embed
-            .setTitle(`Topic changed for ${newChannel}`)
-            .addFields(
-                {
-                    name: "Old Topic",
-                    value: `\`${oldChannel.topic}\``
-                },
-                {
-                    name: "New Topic",
-                    value: `\`${newChannel.topic}\``
-                }
-            )
+        changed = true;
+        embed.addFields(
+            {
+                name: "Old Topic",
+                value: `\`${oldChannel.topic} \``
+            },
+            {
+                name: "New Topic",
+                value: `\`${newChannel.topic} \``
+            }
+        )
     }
 
     // nsfw
     if (oldChannel.nsfw !== newChannel.nsfw) {
-        embed
-            .setTitle(`NSFW status changed for channel ${newChannel}`)
-            .setDescription(`\`${oldChannel.nsfw}\` -> \`${newChannel.nsfw}\``)
-            .setColor("Red")
+        changed = true;
+        description += `**NSFW**: \`${oldChannel.nsfw}\` -> \`${newChannel.nsfw}\`\n`
+
     }
 
     // Slowmode
     if (oldChannel.rateLimitPerUser !== newChannel.rateLimitPerUser) {
-        embed
-            .setTitle(`Slowmode updated for ${newChannel}`)
-            .setDescription(`\`${oldChannel.rateLimitPerUser ? utils.timeformat(oldChannel.rateLimitPerUser) : "0 seconds"}\` -> \`${newChannel.rateLimitPerUser ? utils.timeformat(newChannel.rateLimitPerUser) : "0 seconds"}\``)
+        changed = true;
+        description += `**Slowmode**: \`${oldChannel.rateLimitPerUser ? utils.timeformat(oldChannel.rateLimitPerUser) : "0 seconds"}\` -> \`${newChannel.rateLimitPerUser ? utils.timeformat(newChannel.rateLimitPerUser) : "0 seconds"}\`\n`
     }
     // bitrate
     if (oldChannel.bitrate !== newChannel.bitrate) {
-        embed
-            .setTitle(`Channel bitrate changed for ${newChannel}`)
-            .setDescription(`\`${oldChannel.bitrate}kbps\` -> \`${newChannel.bitrate}kbps\``)
+        changed = true;
+        description += `**Bitrate**: \`${oldChannel.bitrate}kbps\` -> \`${newChannel.bitrate}kbps\`\n`
 
     }
 
     // User limit for voice
     if (oldChannel.userLimit !== newChannel.userLimit) {
-        embed
-            .setTitle(`Channel user limit changed for ${newChannel}`)
-            .setDescription(`\`${oldChannel.userLimit} users\` -> \`${newChannel.userLimit} users\``)
+        changed = true;
+        description += `**User limit:** \`${oldChannel.userLimit} users\` -> \`${newChannel.userLimit} users\`\n`
 
     }
 
     // Idk if i am missing anything, will add if it comes to notice
     const entry = await getAuditLog(auditLogType, newChannel.guild);
     const executor = entry.targetId === newChannel.id ? entry.executor : "Unknown"
-    embed.setFooter({ text: `ID: ${newChannel.id} | Executor: ${executor ? executor.username : "Unknown"}` });
-    if (!embed.data.title) return;
+    embed.setFooter({ text: `ID: ${newChannel.id} | Executor: ${executor ? executor.username : "Unknown"}` }).setDescription(description);
+    if (!changed) return;
     logChannel.safeSend({ embeds: [embed] });
 };
 

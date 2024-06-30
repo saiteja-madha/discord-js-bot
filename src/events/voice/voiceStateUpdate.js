@@ -50,7 +50,7 @@ module.exports = async (client, oldState, newState) => {
   }
 
   // Member moved
-  if (oldState.channel.id !== newState.channel.id) {
+  if (oldState.channel && newState.channel && oldState.channel.id !== newState.channel.id) {
     embed
       .setAuthor({ name: "Member Moved Voice Channel" })
       .setThumbnail(newState.member.user.displayAvatarURL())
@@ -76,5 +76,5 @@ module.exports = async (client, oldState, newState) => {
   }
 
 
-  if (embed.fields.length) logChannel.send({ embeds: [embed] })
+  if (embed.data.fields.length) logChannel.send({ embeds: [embed] })
 };

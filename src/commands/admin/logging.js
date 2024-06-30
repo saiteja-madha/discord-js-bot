@@ -1,5 +1,6 @@
+const { EmbedBuilder } = require("discord.js");
 const { ApplicationCommandOptionType, ChannelType } = require("discord.js");
-
+const subs = ["channels", "bans", "messages", "voice", "members", "emojis", "invites", "status"]
 /**
  * @type {import("@structures/Command")}
  */
@@ -39,8 +40,12 @@ module.exports = {
                 trigger: "bans <#channel|off>",
                 description: "enable logging for bans updates",
             },
+            {
+                trigger: "status",
+                description: "check logging setup status",
+            },
         ],
-        minArgsCount: 2,
+        minArgsCount: 1,
     },
     slashCommand: {
         enabled: true,
@@ -131,6 +136,11 @@ module.exports = {
                 ],
             },
             {
+                name: "status",
+                description: "check logging setup status",
+                type: ApplicationCommandOptionType.Subcommand,
+            },
+            {
                 name: "bans",
                 description: "enable logging for bans updates",
                 type: ApplicationCommandOptionType.Subcommand,
@@ -150,16 +160,22 @@ module.exports = {
     async messageRun(message, args, data) {
         const settings = data.settings;
         const sub = args[0].toLowerCase();
-        const input = args[1].toLowerCase();
+        const input = args[1]?.toLowerCase();
+        if (!subs.includes(sub)) return message.safeReply(`Invalid subcommands\nAvaliable Subcommands: ${subs.map((s) => `\`${s}\``).join(", ")}`)
         let targetChannel;
 
-        if (input === "none" || input === "off" || input === "disable") targetChannel = null;
+        if (input === "none" || input === "off" || input === "disable" || !input) targetChannel = null;
         else {
             if (message.mentions.channels.size === 0) return message.safeReply("Incorrect command usage");
             targetChannel = message.mentions.channels.first();
         }
-
-        const response = await setChannel(targetChannel, settings, sub);
+        let response;
+        if (sub === "status") {
+            response = getLogStatus(settings, message.client)
+        }
+        else {
+            response = await setChannel(targetChannel, settings, sub);
+        }
         return message.safeReply(response);
     },
 
@@ -167,7 +183,13 @@ module.exports = {
         const sub = interaction.options.getSubcommand();
         let channel = interaction.options.getChannel("channel");
         if (!channel) channel = null;
-        const response = await setChannel(channel, data.settings, sub);
+        let response;
+        if (sub === "status") {
+            response = getLogStatus(data.settings, interaction.client)
+        }
+        else {
+            response = await setChannel(channel, data.settings, sub);
+        }
         return interaction.followUp(response);
     },
 };
@@ -190,4 +212,19 @@ async function setChannel(targetChannel, settings, sub) {
  */
 const parseSub = (sub) => {
     return sub.charAt(0).toUpperCase() + sub.slice(1);
+}
+
+function getLogStatus(settings, client) {
+    const formatted = Object.entries(settings.logging).map(([k, v]) => {
+        if (!v) return `${parseSub(k)}: none`
+        const channel = client.channels.cache.get(v);
+        return `${parseSub(k)}: ${channel ? channel.toString() : "none"}`
+    }).join("\n")
+    return {
+        embeds: [
+            new EmbedBuilder()
+                .setTitle(`Logging Status`)
+                .setDescription(formatted)
+        ]
+    }
 }

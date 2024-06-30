@@ -9,12 +9,14 @@ const { EmbedBuilder, AuditLogEvent, time } = require("discord.js");
 module.exports = async (client, oldMember, newMember) => {
     if (oldMember.partial) return
     if (!newMember.guild) return;
+    if (!newMember.user.bot) return;
     const settings = await getSettings(newMember.guild);
     if (!settings.logging.members) return;
     const logChannel = client.channels.cache.get(settings.logging.members);
     let embed = new EmbedBuilder().setColor("Green").setTimestamp();
+
     // Onboarding
-    if (oldMember.pending && !newMember.pending) {
+    if (newMember.guild.features.includes("WELCOME_SCREEN_ENABLED") && oldMember.pending && !newMember.pending) {
         embed
             .setAuthor({ name: "Member Completed Onboarding" })
             .setThumbnail(newMember.user.displayAvatarURL())
@@ -44,10 +46,10 @@ module.exports = async (client, oldMember, newMember) => {
 
         const rolesMessage = [];
 
-        addedRoles.forEach(role => rolesMessage.push(`+ ${role}`));
-        removedRoles.forEach(role => rolesMessage.push(`- ${role}`));
+        addedRoles.forEach(role => rolesMessage.push(`+ Added ${role}`));
+        removedRoles.forEach(role => rolesMessage.push(`\\- Removed ${role}`));
         embed
-            .setAuthor({ name: "Role Updated" })
+            .setAuthor({ name: "Member Role Updated" })
             .setThumbnail(newMember.user.displayAvatarURL())
             .addFields(
                 { name: "User", value: newMember.toString(), inline: true },
@@ -57,7 +59,7 @@ module.exports = async (client, oldMember, newMember) => {
     }
 
     // Timeout
-    if (!oldMember.isCommunicationDisabled() && !newMember.isCommunicationDisabled()) {
+    if (!oldMember.isCommunicationDisabled() && newMember.isCommunicationDisabled()) {
         const auditLog = await newMember.guild.fetchAuditLogs({ type: AuditLogEvent.MemberUpdate, limit: 1 });
         const entry = auditLog.entries.first();
         const disabledTill = new Date(entry.changes[0].new);
@@ -99,7 +101,7 @@ module.exports = async (client, oldMember, newMember) => {
             .setFooter({ text: `ID: ${newMember.id}` });
     }
 
-    // Voice Mute Expires
+    // Voice Mute Removed
     if (oldMember.voice?.serverMute && !newMember.voice?.serverMute) {
         embed
             .setAuthor({ name: "Member Server Mute Removed for Voice Channels" })
@@ -111,8 +113,7 @@ module.exports = async (client, oldMember, newMember) => {
             })
             .setFooter({ text: `ID: ${newMember.id}` })
     }
-
-    if (embed.fields.length === 0) return;
+    if (embed.data.fields.length === 0) return;
     logChannel.send({ embeds: [embed] })
 
 };
