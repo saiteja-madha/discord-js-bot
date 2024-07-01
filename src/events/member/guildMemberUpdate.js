@@ -1,6 +1,8 @@
 
 const { getSettings } = require("@schemas/Guild");
 const { EmbedBuilder, AuditLogEvent, time } = require("discord.js");
+
+const timeOutMap = new Map()
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').GuildMember|import('discord.js').PartialGuildMember} oldMember
@@ -14,9 +16,10 @@ module.exports = async (client, oldMember, newMember) => {
     if (!settings.logging?.members) return;
     const logChannel = client.channels.cache.get(settings.logging.members);
     let embed = new EmbedBuilder().setColor("Green").setTimestamp();
-
+    let changed = false;
     // Onboarding
     if (newMember.guild.features.includes("WELCOME_SCREEN_ENABLED") && oldMember.pending && !newMember.pending) {
+        changed = true;
         embed
             .setAuthor({ name: "Member Completed Onboarding" })
             .setThumbnail(newMember.user.displayAvatarURL())
@@ -28,6 +31,7 @@ module.exports = async (client, oldMember, newMember) => {
 
     // Nickname change
     if (oldMember.nickname !== newMember.nickname) {
+        changed = true;
         embed
             .setAuthor({ name: "Nickname Changed" })
             .setThumbnail(newMember.user.displayAvatarURL())
@@ -41,6 +45,7 @@ module.exports = async (client, oldMember, newMember) => {
 
     // Role changes
     if (!oldMember.roles.cache.every(role => newMember.roles.cache.has(role.id)) || (oldMember.roles.cache.size !== newMember.roles.cache.size)) {
+        changed = true;
         const addedRoles = newMember.roles.cache.filter(role => !oldMember.roles.cache.has(role.id));
         const removedRoles = oldMember.roles.cache.filter(role => !newMember.roles.cache.has(role.id));
 
@@ -60,6 +65,7 @@ module.exports = async (client, oldMember, newMember) => {
 
     // Timeout
     if (!oldMember.isCommunicationDisabled() && newMember.isCommunicationDisabled()) {
+        changed = true;
         const auditLog = await newMember.guild.fetchAuditLogs({ type: AuditLogEvent.MemberUpdate, limit: 1 });
         const entry = auditLog.entries.first();
         const disabledTill = new Date(entry.changes[0].new);
@@ -71,14 +77,53 @@ module.exports = async (client, oldMember, newMember) => {
             .addFields(
                 { name: "User", value: newMember.toString(), inline: true },
                 { name: "Till", value: time(disabledTill, "F"), inline: true },
-                { name: "Executor", value: executor.toString(), inline: true }
+                { name: "Reason", value: `${entry.reason || "none"}` },
+                { name: "Executor", value: executor.toString() }
             )
-            .setFooter({ text: `ID: ${newMember.id}` })
+            .setFooter({ text: `ID: ${newMember.id}` });
 
+        // add a timeout to send a log when timeout expires
+        timeOutMap.set(newMember.id, setTimeout(() => {
+            const e = new EmbedBuilder()
+                .setAuthor({ name: "Member Untimeout" })
+                .setThumbnail(newMember.user.displayAvatarURL())
+                .setColor("Green")
+                .addFields(
+                    { name: "User", value: newMember.toString(), inline: true },
+                    { name: "Reson", value: "Timeout Expired", inline: true },
+                    { name: "Timed-out by", value: executor.toString() }
+                )
+                .setFooter({ text: `ID: ${newMember.id}` });
+            logChannel.send({ embeds: [e] })
+            timeOutMap.delete(newMember.id)
+        }, disabledTill.getTime() - Date.now()))
     }
 
+    // Untimeout
+    if (oldMember.isCommunicationDisabled() && !newMember.isCommunicationDisabled()) {
+        changed = true;
+        const timeouTinterval = timeOutMap.get(newMember.id);
+        if (timeouTinterval) {
+            clearTimeout(timeouTinterval);
+            timeOutMap.delete(newMember.id)
+        }
+        const auditLog = await newMember.guild.fetchAuditLogs({ type: AuditLogEvent.MemberUpdate, limit: 1 });
+        const entry = auditLog.entries.first();
+        const executor = entry.executor;
+
+        embed
+            .setAuthor({ name: "Member Untimeout" })
+            .setThumbnail(newMember.user.displayAvatarURL())
+            .setColor("Green")
+            .addFields(
+                { name: "User", value: newMember.toString(), inline: true },
+                { name: "Executor", value: executor.toString(), inline: true }
+            )
+            .setFooter({ text: `ID: ${newMember.id}` });
+    }
     // Guild avatar change
     if (oldMember.avatar !== newMember.avatar) {
+        changed = true;
         embed
             .setAuthor({ name: "Avatar Changed" })
             .setThumbnail(newMember.displayAvatarURL())
@@ -91,6 +136,7 @@ module.exports = async (client, oldMember, newMember) => {
 
     // Voice muted
     if (!oldMember.voice?.serverMute && newMember.voice?.serverMute) {
+        changed = true;
         embed
             .setAuthor({ name: "Member Server Muted for Voice Channels" })
             .setThumbnail(newMember.user.displayAvatarURL())
@@ -103,6 +149,7 @@ module.exports = async (client, oldMember, newMember) => {
 
     // Voice Mute Removed
     if (oldMember.voice?.serverMute && !newMember.voice?.serverMute) {
+        changed = true;
         embed
             .setAuthor({ name: "Member Server Mute Removed for Voice Channels" })
             .setThumbnail(newMember.user.displayAvatarURL())
@@ -113,7 +160,7 @@ module.exports = async (client, oldMember, newMember) => {
             })
             .setFooter({ text: `ID: ${newMember.id}` })
     }
-    if (embed.data.fields?.length === 0) return;
+    if (!changed) return;
     await logChannel.send({ embeds: [embed] })
 
 };
