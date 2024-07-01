@@ -17,6 +17,10 @@ module.exports = {
                 description: "enable logging for channel updates",
             },
             {
+                trigger: "roles <#channel|off>",
+                description: "enable logging for role updates",
+            },
+            {
                 trigger: "members <#channel|off>",
                 description: "enable logging for member updates",
             },
@@ -54,6 +58,20 @@ module.exports = {
             {
                 name: "channels",
                 description: "enable logging for channel updates",
+                type: ApplicationCommandOptionType.Subcommand,
+                options: [
+                    {
+                        name: "channel",
+                        description: "channel to send logs (leave empty to disable)",
+                        type: ApplicationCommandOptionType.Channel,
+                        required: false,
+                        channelTypes: [ChannelType.GuildText],
+                    },
+                ],
+            },
+            {
+                name: "roles",
+                description: "enable logging for role updates",
                 type: ApplicationCommandOptionType.Subcommand,
                 options: [
                     {
@@ -224,6 +242,7 @@ function getLogStatus(settings, client) {
         embeds: [
             new EmbedBuilder()
                 .setTitle(`Logging Status`)
+                .setColor(`Green`)
                 .setDescription(formatted)
         ]
     }

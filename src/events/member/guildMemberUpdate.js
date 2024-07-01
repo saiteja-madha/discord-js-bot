@@ -113,7 +113,7 @@ module.exports = async (client, oldMember, newMember) => {
             })
             .setFooter({ text: `ID: ${newMember.id}` })
     }
-    if (embed.data.fields.length === 0) return;
-    logChannel.send({ embeds: [embed] })
+    if (embed.data.fields?.length === 0) return;
+    await logChannel.send({ embeds: [embed] })
 
 };

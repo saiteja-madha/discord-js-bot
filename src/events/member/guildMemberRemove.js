@@ -30,7 +30,6 @@ module.exports = async (client, member) => {
 
   // Check if member was kicked, not needed for ban since it has its event
   const log = await member.guild.fetchAuditLogs({ limit: 5 });
-  if (member.user.bot) return;
   const possibleLog = log.entries.find((e) => e.action === AuditLogEvent.MemberKick && e.targetId === member.id);
   if (possibleLog) {
     const logChannel = client.channels.cache.get(settings.logging.members);
@@ -41,6 +40,6 @@ module.exports = async (client, member) => {
       .setDescription(`Reason: ${possibleLog.reason || "none"}`)
       .setTimestamp()
       .setFooter({ text: `ID: ${member.id} | Executor: ${possibleLog.executor.username}` })
-    logChannel.send({ embeds: [embed] })
+    await logChannel.send({ embeds: [embed] })
   }
 };

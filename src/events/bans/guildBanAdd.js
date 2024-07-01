@@ -18,9 +18,9 @@ module.exports = async (client, ban) => {
         .setAuthor({ name: "Member Banned" })
         .setTitle(`${ban.user} (${ban.user.username}) was banned!`)
         .setColor("Red")
-        .setDescription(`Reason: ${ban.reason || "None"}`)
+        .setDescription(`Reason: ${auditLog.reason || "None"}`)
         .setFooter({ text: `ID: ${ban.user.id} | Executor: ${executor?.username || "Unknown"}` })
         .setThumbnail(ban.user.displayAvatarURL());
 
-    logChannel.send({ embeds: [embed] })
+    await logChannel.send({ embeds: [embed] })
 }
