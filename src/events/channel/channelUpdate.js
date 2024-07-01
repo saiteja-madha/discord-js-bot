@@ -8,7 +8,7 @@ const utils = require("@helpers/Utils")
  */
 module.exports = async (client, oldChannel, newChannel) => {
     const settings = await getSettings(newChannel.guild);
-    if (!settings.logging.channels) return;
+    if (!settings.logging?.channels) return;
     const logChannel = client.channels.cache.get(settings.logging.channels);
     if (!logChannel) return;
     const embed = new EmbedBuilder()

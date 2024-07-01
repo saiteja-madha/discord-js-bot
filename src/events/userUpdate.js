@@ -45,7 +45,7 @@ module.exports = async (client, oldUser, newUser) => {
 
     for (const g of commonGuilds) {
         const settings = await getSettings(g);
-        if (!settings.logging.members) continue
+        if (!settings.logging?.members) continue
         const channel = client.channels.cache.get(settings.logging.members);
         if (!channel) continue;
         if (!embed.data.title) continue;

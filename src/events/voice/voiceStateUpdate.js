@@ -32,7 +32,7 @@ module.exports = async (client, oldState, newState) => {
 
   // Logging
   const settings = await getSettings(newState.guild);
-  if (!settings.logging.voice) return;
+  if (!settings.logging?.voice) return;
   const logChannel = client.channels.cache.get(settings.logging.voice);
 
   const embed = new EmbedBuilder().setColor("Green").setTimestamp();

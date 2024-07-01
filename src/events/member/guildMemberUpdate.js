@@ -9,9 +9,9 @@ const { EmbedBuilder, AuditLogEvent, time } = require("discord.js");
 module.exports = async (client, oldMember, newMember) => {
     if (oldMember.partial) return
     if (!newMember.guild) return;
-    if (!newMember.user.bot) return;
+    if (newMember.user.bot) return;
     const settings = await getSettings(newMember.guild);
-    if (!settings.logging.members) return;
+    if (!settings.logging?.members) return;
     const logChannel = client.channels.cache.get(settings.logging.members);
     let embed = new EmbedBuilder().setColor("Green").setTimestamp();
 

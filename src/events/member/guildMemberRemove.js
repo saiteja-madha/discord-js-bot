@@ -32,6 +32,7 @@ module.exports = async (client, member) => {
   const log = await member.guild.fetchAuditLogs({ limit: 5 });
   const possibleLog = log.entries.find((e) => e.action === AuditLogEvent.MemberKick && e.targetId === member.id);
   if (possibleLog) {
+    if (settings.logging?.members) return;
     const logChannel = client.channels.cache.get(settings.logging.members);
     const embed = new EmbedBuilder()
       .setAuthor({ name: "Member kicked" })

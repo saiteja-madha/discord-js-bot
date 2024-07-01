@@ -8,7 +8,7 @@ const { EmbedBuilder, AuditLogEvent } = require("discord.js");
  */
 module.exports = async (client, oldRole, newRole) => {
     const settings = await getSettings(newRole.guild)
-    if (!settings.logging.roles) return;
+    if (!settings.logging?.roles) return;
     const logChannel = client.channels.cache.get(settings.logging.roles);
     if (!logChannel) return;
 

@@ -9,7 +9,7 @@ const { getSettings } = require("@schemas/Guild");
 module.exports = async (client, messages, channel) => {
     const settings = await getSettings(channel.guild);
 
-    if (!settings.logging.messages) return
+    if (!settings.logging?.messages) return
     const logChannel = client.channels.cache.get(settings.logging.messages);
     const auditLog = await channel.guild.fetchAuditLogs({ type: AuditLogEvent.MessageBulkDelete, limit: 1 });
     const entry = auditLog.entries.first();

@@ -14,7 +14,7 @@ module.exports = async (client, invite) => {
     cachedInvites.set(invite.code, cacheInvite(invite, false));
   }
   const settings = await getSettings(invite.guild);
-  if (!settings.logging.invites) return;
+  if (!settings.logging?.invites) return;
   const logChannel = client.channels.cache.get(settings.logging.invites);
   if (!logChannel) return;
   const embed = new EmbedBuilder()

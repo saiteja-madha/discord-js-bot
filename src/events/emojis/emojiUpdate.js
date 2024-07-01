@@ -9,7 +9,7 @@ const { EmbedBuilder, AuditLogEvent } = require("discord.js");
  */
 module.exports = async (client, oldEmoji, newEmoji) => {
     const settings = await getSettings(newEmoji.guild);
-    if (!settings.logging.emojis) return;
+    if (!settings.logging?.emojis) return;
     const logChannel = client.channels.cache.get(settings.logging.emojis)
     if (!logChannel) return;
 

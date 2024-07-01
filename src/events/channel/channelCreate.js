@@ -6,7 +6,7 @@ const { EmbedBuilder, AuditLogEvent } = require("discord.js");
  */
 module.exports = async (client, channel) => {
     const settings = await getSettings(channel.guild);
-    if (!settings.logging.channels) return;
+    if (!settings.logging?.channels) return;
     const logChannel = client.channels.cache.get(settings.logging.channels);
     if (!logChannel) return;
     const auditLog = await channel.guild.fetchAuditLogs({ type: AuditLogEvent.ChannelCreate, limit: 1 });

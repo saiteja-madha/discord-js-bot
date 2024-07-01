@@ -9,7 +9,7 @@ const { EmbedBuilder, AuditLogEvent } = require("discord.js");
 module.exports = async (client, ban) => {
 
     const settings = await getSettings(ban.guild)
-    if (!settings.logging.bans) return;
+    if (!settings.logging?.bans) return;
     const logChannel = client.channels.cache.get(settings.logging.bans);
     if (!logChannel) return;
     const auditLog = await ban.guild.fetchAuditLogs({ type: AuditLogEvent.MemberBanAdd, limit: 1 }).then((en) => en.entries.first())

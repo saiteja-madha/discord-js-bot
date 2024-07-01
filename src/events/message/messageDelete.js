@@ -48,7 +48,7 @@ module.exports = async (client, message) => {
     }
   } else {
     const { content, author } = message;
-    if (!settings.logging.messages) return
+    if (!settings.logging?.messages) return
     const logChannel = client.channels.cache.get(settings.logging.messages);
 
     const entry = await message.guild

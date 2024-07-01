@@ -11,7 +11,7 @@ module.exports = async (client, oldMessage, newMessage) => {
     const { author } = newMessage;
     if (newMessage.author.bot) return;
     const settings = await getSettings(newMessage.guild);
-    if (!settings.logging.messages) return;
+    if (!settings.logging?.messages) return;
     const logChannel = client.channels.cache.get(settings.logging.messages)
     if (!logChannel) return;
     const logEmbed = new EmbedBuilder()

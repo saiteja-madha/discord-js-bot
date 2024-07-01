@@ -8,7 +8,7 @@ const { EmbedBuilder, } = require("discord.js");
  */
 module.exports = async (client, emoji) => {
     const settings = await getSettings(emoji.guild);
-    if (!settings.logging.emojis) return;
+    if (!settings.logging?.emojis) return;
     const logChannel = client.channels.cache.get(settings.logging.emojis)
     if (!logChannel) return;
     const embed = new EmbedBuilder()
