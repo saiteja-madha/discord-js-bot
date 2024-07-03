@@ -1,4 +1,4 @@
-const { EmbedBuilder, AuditLogEvent } = require("discord.js");
+const { EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const { getSettings } = require("@schemas/Guild");
 
 /**
@@ -11,21 +11,24 @@ module.exports = async (client, messages, channel) => {
 
     if (!settings.logging?.messages) return
     const logChannel = client.channels.cache.get(settings.logging.messages);
-    const auditLog = await channel.guild.fetchAuditLogs({ type: AuditLogEvent.MessageBulkDelete, limit: 1 });
-    const entry = auditLog.entries.first();
-    const executor = entry.extra.channel.id === channel.id ? entry.executor : null;
+    let messagesDesc = "Deleted Messages\n\n";
+    for (const m of messages.values()) {
+        if (m.partial) continue;
+        if (!m.content.length) continue
+        messagesDesc += `Author: ${m.author.username}\nContent: ${m.content}\n--------------\n\n`;
+    }
+    const file = new AttachmentBuilder(Buffer.from(messagesDesc), {
+        name: "deletedMessages.txt"
+    });
     const logEmbed = new EmbedBuilder()
         .setAuthor({ name: "Bulk Message Deleted" })
         .setThumbnail()
         .setColor("Red")
-        .setDescription(`${messages.size} Messages deleted in ${channel}`)
-        .setFields({
-            name: "Executor",
-            value: executor ? executor.toString() : "Unknown",
-        })
+        .setDescription(`### ${messages.size} Messages deleted in ${channel}`)
         .setTimestamp();
 
 
-    logChannel.safeSend({ embeds: [logEmbed] })
+    await logChannel.safeSend({ embeds: [logEmbed] })
+    await logChannel.safeSend({ files: [file] });
 
 };
