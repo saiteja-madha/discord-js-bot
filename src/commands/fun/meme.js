@@ -6,8 +6,7 @@ const {
   ButtonStyle,
 } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
-const { getJson } = require("@helpers/HttpUtils");
-const { getRandomInt } = require("@helpers/Utils");
+const fetch = require("node-fetch");
 
 /**
  * @type {import("@structures/Command")}
@@ -17,7 +16,7 @@ module.exports = {
   description: "get a random meme",
   category: "FUN",
   botPermissions: ["EmbedLinks"],
-  cooldown: 20,
+  cooldown: 0,
   command: {
     enabled: true,
     usage: "[category]",
@@ -114,33 +113,27 @@ module.exports = {
 };
 
 async function getRandomEmbed(choice) {
-  const subReddits = ["meme", "Memes_Of_The_Dank", "memes", "dankmemes"];
-  let rand = choice ? choice : subReddits[getRandomInt(subReddits.length)];
+  const templates = await fetch('https://api.memegen.link/templates').then(res => res.json());
+  const templateNames = templates.map(template => template.id);
+  const selectedTemplate = choice && templateNames.includes(choice) ? choice : templateNames[Math.floor(Math.random() * templateNames.length)];
 
-  const response = await getJson(`https://www.reddit.com/r/${rand}/random/.json`);
-  if (!response.success) {
-    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
-  }
-
-  const json = response.data;
-  if (!Array.isArray(json) || json.length === 0) {
-    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription(`No meme found matching ${choice}`);
-  }
+  const url = `https://api.memegen.link/images/${selectedTemplate}`;
 
   try {
-    let permalink = json[0].data.children[0].data.permalink;
-    let memeUrl = `https://reddit.com${permalink}`;
-    let memeImage = json[0].data.children[0].data.url;
-    let memeTitle = json[0].data.children[0].data.title;
-    let memeUpvotes = json[0].data.children[0].data.ups;
-    let memeNumComments = json[0].data.children[0].data.num_comments;
-
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const memeUrl = response.url;
     return new EmbedBuilder()
-      .setAuthor({ name: memeTitle, url: memeUrl })
-      .setImage(memeImage)
+      .setTitle("Here is Your Meme, Now laugh.. hmm")
+      .setImage(memeUrl)
       .setColor("Random")
-      .setFooter({ text: `👍 ${memeUpvotes} | 💬 ${memeNumComments}` });
+      .setFooter({ text: "I know you laughed , from inside.. hehe" });
   } catch (error) {
-    return new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription("Failed to fetch meme. Try again!");
+    console.error(error);
+    return new EmbedBuilder()
+      .setColor(EMBED_COLORS.ERROR)
+      .setDescription("Failed to fetch meme. Try again!");
   }
 }
