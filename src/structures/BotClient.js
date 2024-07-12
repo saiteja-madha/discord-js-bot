@@ -341,6 +341,7 @@ module.exports = class BotClient extends Client {
         "SendMessagesInThreads",
         "Speak",
         "ViewChannel",
+        "ViewAuditLog"
       ],
     });
   }
