@@ -28,7 +28,7 @@
   "dependencies": {
     "@lavaclient/queue": "^2.1.1",
     "@lavaclient/spotify": "^3.1.0",
-    "@octokit/rest": "^20.0.2",
+    "@octokit/rest": "^21.0.1",
     "@vitalets/google-translate-api": "^9.2.0",
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
