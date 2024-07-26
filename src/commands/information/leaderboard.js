@@ -173,10 +173,10 @@ async function getRepLeaderboard(author) {
   let collector = "";
   for (let i = 0; i < lb.length; i++) {
     try {
-      const user = await author.client.users.fetch(lb[i].member_id);
-      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)} [${lb[i].rep}]\n`;
+      const user = await author.client.users.fetch(lb[i]._id);
+      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)} [${lb[i].reputation?.received}]\n`;
     } catch (ex) {
-      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].rep}]\n`;
+      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].reputation?.received}]\n`;
     }
   }
 
