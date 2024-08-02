@@ -78,18 +78,7 @@ module.exports = {
   },
 };
 
-// Create a Map object to store cache entries
-const cache = new Map();
-
 async function getXpLeaderboard({ guild }, author, settings) {
-  // Create a cache key using the guild ID and the type of leaderboard
-  const cacheKey = `${guild.id}:xp`;
-
-  // Check if there is a cached result for this request
-  if (cache.has(cacheKey)) {
-    // Return the cached result if it exists
-    return cache.get(cacheKey);
-  }
 
   if (!settings.stats.enabled) return "The leaderboard is disabled on this server";
 
@@ -112,20 +101,10 @@ async function getXpLeaderboard({ guild }, author, settings) {
     .setDescription(collector)
     .setFooter({ text: `Requested by ${author.tag}` });
 
-  // Store the result in the cache for future requests
-  cache.set(cacheKey, { embeds: [embed] });
   return { embeds: [embed] };
 }
 
 async function getInviteLeaderboard({ guild }, author, settings) {
-  // Create a cache key using the guild ID and the type of leaderboard
-  const cacheKey = `${guild.id}:invite`;
-
-  // Check if there is a cached result for this request
-  if (cache.has(cacheKey)) {
-    // Return the cached result if it exists
-    return cache.get(cacheKey);
-  }
 
   if (!settings.invite.tracking) return "Invite tracking is disabled on this server";
 
@@ -151,21 +130,11 @@ async function getInviteLeaderboard({ guild }, author, settings) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(collector)
     .setFooter({ text: `Requested by ${author.tag}` });
-
-  // Store the result in the cache for future requests
-  cache.set(cacheKey, { embeds: [embed] });
+  
   return { embeds: [embed] };
 }
 
 async function getRepLeaderboard(author) {
-  // Create a cache key using the user ID and the type of leaderboard
-  const cacheKey = `${author.id}:rep`;
-
-  // Check if there is a cached result for this request
-  if (cache.has(cacheKey)) {
-    // Return the cached result if it exists
-    return cache.get(cacheKey);
-  }
 
   const lb = await getReputationLb(10);
   if (lb.length === 0) return "There are no users in the leaderboard";
@@ -186,7 +155,5 @@ async function getRepLeaderboard(author) {
     .setDescription(collector)
     .setFooter({ text: `Requested by ${author.tag}` });
 
-  // Store the result in the cache for future requests
-  cache.set(cacheKey, { embeds: [embed] });
   return { embeds: [embed] };
 }
