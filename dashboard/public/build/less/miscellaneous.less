@@ -161,64 +161,64 @@
 }
 
 .bg-red-active {
-  background-color: darken(@red , 6%) !important;
+  background-color: darken(@red, 6%) !important;
 }
 
 .bg-yellow-active {
-  background-color: darken(@yellow , 6%) !important;
+  background-color: darken(@yellow, 6%) !important;
 }
 
 .bg-aqua-active {
-  background-color: darken(@aqua , 6%) !important;
+  background-color: darken(@aqua, 6%) !important;
 }
 
 .bg-blue-active {
-  background-color: darken(@blue , 10%) !important;
+  background-color: darken(@blue, 10%) !important;
 }
 
 .bg-light-blue-active {
-  background-color: darken(@light-blue , 6%) !important;
+  background-color: darken(@light-blue, 6%) !important;
 }
 
 .bg-green-active {
-  background-color: darken(@green , 5%) !important;
+  background-color: darken(@green, 5%) !important;
 }
 
 .bg-navy-active {
-  background-color: darken(@navy , 2%) !important;
+  background-color: darken(@navy, 2%) !important;
 }
 
 .bg-teal-active {
-  background-color: darken(@teal , 5%) !important;
+  background-color: darken(@teal, 5%) !important;
 }
 
 .bg-olive-active {
-  background-color: darken(@olive , 5%) !important;
+  background-color: darken(@olive, 5%) !important;
 }
 
 .bg-lime-active {
-  background-color: darken(@lime , 5%) !important;
+  background-color: darken(@lime, 5%) !important;
 }
 
 .bg-orange-active {
-  background-color: darken(@orange , 5%) !important;
+  background-color: darken(@orange, 5%) !important;
 }
 
 .bg-fuchsia-active {
-  background-color: darken(@fuchsia , 5%) !important;
+  background-color: darken(@fuchsia, 5%) !important;
 }
 
 .bg-purple-active {
-  background-color: darken(@purple , 5%) !important;
+  background-color: darken(@purple, 5%) !important;
 }
 
 .bg-maroon-active {
-  background-color: darken(@maroon , 3%) !important;
+  background-color: darken(@maroon, 3%) !important;
 }
 
 //Disabled!
 [class^="bg-"].disabled {
-  .opacity(.65);
+  .opacity(0.65);
 }
 
 // Text colors
@@ -350,7 +350,9 @@
 }
 
 .text-bold {
-  &, &.table td, &.table th {
+  &,
+  &.table td,
+  &.table th {
     font-weight: 700;
   }
 }
@@ -588,7 +590,7 @@
 }
 
 .full-opacity-hover {
-  .opacity(.65);
+  .opacity(0.65);
   &:hover {
     .opacity(1);
   }

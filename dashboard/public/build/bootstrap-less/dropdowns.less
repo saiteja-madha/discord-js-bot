@@ -2,7 +2,6 @@
 // Dropdown menus
 // --------------------------------------------------
 
-
 // Dropdown arrow/caret
 .caret {
   display: inline-block;
@@ -10,10 +9,10 @@
   height: 0;
   margin-left: 2px;
   vertical-align: middle;
-  border-top:   @caret-width-base dashed;
-  border-top:   @caret-width-base solid ~"\9"; // IE8
+  border-top: @caret-width-base dashed;
+  border-top: @caret-width-base solid ~"\9"; // IE8
   border-right: @caret-width-base solid transparent;
-  border-left:  @caret-width-base solid transparent;
+  border-left: @caret-width-base solid transparent;
 }
 
 // The dropdown wrapper (div)
@@ -45,7 +44,7 @@
   border: 1px solid @dropdown-fallback-border; // IE8 fallback
   border: 1px solid @dropdown-border;
   border-radius: @border-radius-base;
-  .box-shadow(0 6px 12px rgba(0,0,0,.175));
+  .box-shadow(0 6px 12px rgba(0,0,0,0.175));
   background-clip: padding-box;
 
   // Aligns the dropdown menu to right
@@ -196,7 +195,6 @@
     margin-bottom: 2px;
   }
 }
-
 
 // Component alignment
 //

@@ -21,12 +21,12 @@
   }
   //Navbar search text input
   #navbar-search-input.form-control {
-    background: rgba(255, 255, 255, .2);
+    background: rgba(255, 255, 255, 0.2);
     border-color: transparent;
     &:focus,
     &:active {
-      border-color: rgba(0, 0, 0, .1);
-      background: rgba(255, 255, 255, .9);
+      border-color: rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.9);
     }
     &::-moz-placeholder {
       color: #ccc;
@@ -110,7 +110,7 @@
     text-align: center;
     font-size: 9px;
     padding: 2px 3px;
-    line-height: .9;
+    line-height: 0.9;
   }
 
   //Logo bar
@@ -207,12 +207,14 @@
       color: #444;
       text-decoration: none;
       display: inline-block;
-      > .fa, > .glyphicon, > .ion {
+      > .fa,
+      > .glyphicon,
+      > .ion {
         margin-right: 5px;
       }
     }
     > li + li:before {
-      content: '>\00a0';
+      content: ">\00a0";
     }
   }
 

@@ -9,7 +9,7 @@
 
 .fade {
   opacity: 0;
-  .transition(opacity .15s linear);
+  .transition(opacity 0.15s linear);
   &.in {
     opacity: 1;
   }
@@ -18,9 +18,15 @@
 .collapse {
   display: none;
 
-  &.in      { display: block; }
-  tr&.in    { display: table-row; }
-  tbody&.in { display: table-row-group; }
+  &.in {
+    display: block;
+  }
+  tr&.in {
+    display: table-row;
+  }
+  tbody&.in {
+    display: table-row-group;
+  }
 }
 
 .collapsing {
@@ -28,6 +34,6 @@
   height: 0;
   overflow: hidden;
   .transition-property(~"height, visibility");
-  .transition-duration(.35s);
+  .transition-duration(0.35s);
   .transition-timing-function(ease);
 }

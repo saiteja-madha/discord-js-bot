@@ -1,10 +1,9 @@
 ---
 name: Command Request
 about: Suggest a command for this project
-title: ''
+title: ""
 labels: cmd-request
-assignees: ''
-
+assignees: ""
 ---
 
 **Is your command request related to a problem? Please describe.**

@@ -5,18 +5,18 @@
  * @Usage: $('#my-chat-box').directChat()
  *         or add [data-widget="direct-chat"] to the trigger
  */
-+function ($) {
-  'use strict';
++(function ($) {
+  "use strict";
 
-  var DataKey = 'lte.directchat';
+  var DataKey = "lte.directchat";
 
   var Selector = {
     data: '[data-widget="chat-pane-toggle"]',
-    box : '.direct-chat'
+    box: ".direct-chat",
   };
 
   var ClassName = {
-    open: 'direct-chat-contacts-open'
+    open: "direct-chat-contacts-open",
   };
 
   // DirectChat Class Definition
@@ -34,19 +34,19 @@
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this);
-      var data  = $this.data(DataKey);
+      var data = $this.data(DataKey);
 
       if (!data) {
         $this.data(DataKey, (data = new DirectChat($this)));
       }
 
-      if (typeof option == 'string') data.toggle($this);
+      if (typeof option == "string") data.toggle($this);
     });
   }
 
   var old = $.fn.directChat;
 
-  $.fn.directChat             = Plugin;
+  $.fn.directChat = Plugin;
   $.fn.directChat.Constructor = DirectChat;
 
   // No Conflict Mode
@@ -58,9 +58,8 @@
 
   // DirectChat Data API
   // ===================
-  $(document).on('click', Selector.data, function (event) {
+  $(document).on("click", Selector.data, function (event) {
     if (event) event.preventDefault();
-    Plugin.call($(this), 'toggle');
+    Plugin.call($(this), "toggle");
   });
-
-}(jQuery);
+})(jQuery);
