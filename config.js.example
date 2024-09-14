@@ -35,7 +35,7 @@ module.exports = {
   },
 
   DASHBOARD: {
-    enabled: false, // enable or disable dashboard
+    enabled: false,
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
     port: "8080", // port to run the bot on
@@ -102,7 +102,7 @@ module.exports = {
   },
 
   PRESENCE: {
-    ENABLED: false, // Whether or not the bot should update its status
+    ENABLED: false,
     STATUS: "online", // The bot's status [online, idle, dnd, invisible]
     TYPE: "WATCHING", // Status type for the bot [PLAYING | LISTENING | WATCHING | COMPETING]
     MESSAGE: "{members} members in {servers} servers", // Your bot status message
@@ -115,7 +115,7 @@ module.exports = {
   },
 
   SUGGESTIONS: {
-    ENABLED: false, // Should the suggestion system be enabled
+    ENABLED: false,
     EMOJI: {
       UP_VOTE: "⬆️",
       DOWN_VOTE: "⬇️",
