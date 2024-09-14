@@ -1,6 +1,6 @@
 module.exports = {
   OWNER_IDS: [""], // Bot owner ID's
-  SUPPORT_SERVER: "", // Your bot support server
+  SUPPORT_SERVER: "", // Your bot support server's link
   PREFIX_COMMANDS: {
     ENABLED: true, // Enable/Disable prefix commands
     DEFAULT_PREFIX: "!", // Default prefix for the bot
@@ -28,7 +28,6 @@ module.exports = {
   },
 
   // PLUGINS
-
   AUTOMOD: {
     ENABLED: false,
     LOG_EMBED: "#36393F",
@@ -56,7 +55,7 @@ module.exports = {
     MAX_SEARCH_RESULTS: 5,
     DEFAULT_SOURCE: "SC", // YT = Youtube, YTM = Youtube Music, SC = SoundCloud
     // Add any number of lavalink nodes here
-    // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
+    // Refer to https://github.com/lavalink-devs/Lavalink to host your own lavalink server
     LAVALINK_NODES: [
       {
         host: "localhost",
