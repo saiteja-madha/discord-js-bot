@@ -45,7 +45,7 @@
     "lavaclient": "^4.1.1",
     "module-alias": "^2.2.3",
     "moment": "^2.30.1",
-    "mongoose": "^8.6.2",
+    "mongoose": "^8.6.3",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.7.0",
     "os": "^0.1.2",
@@ -69,7 +69,7 @@
     "eslint": "^9.10.0",
     "eslint-plugin-jsdoc": "^50.2.3",
     "node": "^22.8.0",
-    "nodemon": "^3.1.4",
+    "nodemon": "^3.1.5",
     "prettier": "3.3.3"
   },
   "keywords": [
