@@ -20,7 +20,7 @@
 
     QUnit.done = function(t) {
         var cvgInfo = getCoverageByLine(true);
-        if (!!cvgInfo.key) {
+        if (cvgInfo.key) {
             var testableLines = 0;
             var testedLines = 0;
             var untestableLines = 0;

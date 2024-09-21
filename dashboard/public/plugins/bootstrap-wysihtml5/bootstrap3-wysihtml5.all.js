@@ -5155,7 +5155,7 @@ wysihtml5.lang.object = function (obj) {
           html = html.replace(/(?:\r\n|\r|\n)/g, "<br />");
         }
         if (convertSpaces) {
-          html = html.replace(/  /gi, "&nbsp; ");
+          html = html.replace(/ {2}/gi, "&nbsp; ");
         }
         return html;
       },

@@ -233,7 +233,7 @@
 
 			var format = DPGlobal.parseFormat(o.format);
 			if (o.startDate !== -Infinity){
-				if (!!o.startDate){
+				if (o.startDate){
 					if (o.startDate instanceof Date)
 						o.startDate = this._local_to_utc(this._zero_time(o.startDate));
 					else
@@ -244,7 +244,7 @@
 				}
 			}
 			if (o.endDate !== Infinity){
-				if (!!o.endDate){
+				if (o.endDate){
 					if (o.endDate instanceof Date)
 						o.endDate = this._local_to_utc(this._zero_time(o.endDate));
 					else

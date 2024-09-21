@@ -12,7 +12,7 @@
         } else if ($.fn.sparkline.canvas === undefined) {
             // No function defined yet -- need to see if we support Canvas or VML
             var el = document.createElement('canvas');
-            if (!!(el.getContext && el.getContext('2d'))) {
+            if (el.getContext && el.getContext('2d')) {
                 // Canvas is available
                 $.fn.sparkline.canvas = function(width, height, target, interact) {
                     return new VCanvas_canvas(width, height, target, interact);

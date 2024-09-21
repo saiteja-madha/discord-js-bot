@@ -31,15 +31,9 @@ export default [
     },
 
     rules: {
-      "no-unused-vars": [
-        "error",
-        {
-          args: "none",
-        },
-      ],
-
-      "jsdoc/no-undefined-types": 1,
       "no-cond-assign": 0,
+      "no-unused-vars": 0,
+      "jsdoc/no-undefined-types": 1,
     },
   },
 ];

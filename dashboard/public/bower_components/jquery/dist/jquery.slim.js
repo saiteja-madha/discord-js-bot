@@ -330,7 +330,7 @@ jQuery.extend( {
 
 	isEmptyObject: function( obj ) {
 
-		/* eslint-disable no-unused-vars */
+		 
 		// See https://github.com/eslint/eslint/issues/6125
 		var name;
 
@@ -5590,12 +5590,12 @@ jQuery.fn.extend( {
 
 var
 
-	/* eslint-disable max-len */
+	 
 
 	// See https://github.com/eslint/eslint/issues/3229
 	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi,
 
-	/* eslint-enable */
+	 
 
 	// Support: IE <=10 - 11, Edge 12 - 13 only
 	// In IE/Edge using regex groups here causes severe slowdowns.
@@ -7312,7 +7312,7 @@ jQuery.extend( {
 				while ( i-- ) {
 					option = options[ i ];
 
-					/* eslint-disable no-cond-assign */
+					 
 
 					if ( option.selected =
 						jQuery.inArray( jQuery.valHooks.option.get( option ), values ) > -1
@@ -7320,7 +7320,7 @@ jQuery.extend( {
 						optionSet = true;
 					}
 
-					/* eslint-enable no-cond-assign */
+					 
 				}
 
 				// Force browsers to behave consistently when non-matching value is set
