@@ -7,3 +7,5 @@ node_modules/
 config.js
 package-lock.json
 .gitpod.yml
+.nyc_output/
+coverage/
