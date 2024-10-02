@@ -31,9 +31,6 @@ jobs:
         id: version
         run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: Print version
-        run: echo ${{ env.VERSION }}
-
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v4
@@ -48,4 +45,4 @@ jobs:
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          push-to-registry: false
