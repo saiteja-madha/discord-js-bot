@@ -5,14 +5,8 @@ const {
   ApplicationCommandOptionType,
   ComponentType,
 } = require("discord.js");
-const prettyMs = require("pretty-ms");
+const { formatTime } = require("@helpers/Utils");
 const { EMBED_COLORS, MUSIC } = require("@root/config");
-
-const search_prefix = {
-  YT: "ytsearch",
-  YTM: "ytmsearch",
-  SC: "scsearch",
-};
 
 /**
  * @type {import("@structures/Command")}
@@ -60,10 +54,10 @@ module.exports = {
 async function search({ member, guild, channel }, query) {
   if (!member.voice.channel) return "🚫 You need to join a voice channel first";
 
-  let player = guild.client.musicManager.getPlayer(guild.id);
+  let player = guild.client.musicManager.players.resolve(guild.id);
   if (player && !guild.members.me.voice.channel) {
-    player.disconnect();
-    await guild.client.musicManager.destroyPlayer(guild.id);
+    player.voice.disconnect();
+    await guild.client.musicManager.players.destroy(guild.id);
   }
   if (player && member.voice.channel !== guild.members.me.voice.channel) {
     return "🚫 You must be in the same voice channel as mine";
@@ -71,8 +65,8 @@ async function search({ member, guild, channel }, query) {
 
   let res;
   try {
-    res = await guild.client.musicManager.rest.loadTracks(
-      /^https?:\/\//.test(query) ? query : `${search_prefix[MUSIC.DEFAULT_SOURCE]}:${query}`
+    res = await guild.client.musicManager.api.loadTracks(
+      /^https?:\/\//.test(query) ? query : `${MUSIC.DEFAULT_SOURCE}:${query}`
     );
   } catch (err) {
     return "🚫 There was an error while searching";
@@ -81,17 +75,16 @@ async function search({ member, guild, channel }, query) {
   let embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED);
   let tracks;
 
-  const loadType = res.tracks.length > 0 ? res.loadType : "NO_MATCHES";
-  switch (loadType) {
-    case "LOAD_FAILED":
-      guild.client.logger.error("Search Exception", res.exception);
+  switch (res.loadType) {
+    case "error":
+      guild.client.logger.error("Search Exception", res.data);
       return "🚫 There was an error while searching";
 
-    case "NO_MATCHES":
+    case "empty":
       return `No results found matching ${query}`;
 
-    case "TRACK_LOADED": {
-      const [track] = res.tracks;
+    case "track": {
+      const track = res.data[0];
       tracks = [track];
       if (!player?.playing && !player?.paused && !player?.queue.tracks.length) {
         embed.setAuthor({ name: "Added Song to queue" });
@@ -106,11 +99,10 @@ async function search({ member, guild, channel }, query) {
 
       fields.push({
         name: "Song Duration",
-        value: "`" + prettyMs(track.info.length, { colonNotation: true }) + "`",
+        value: "`" + formatTime(track.info.length) + "`",
         inline: true,
       });
 
-      // if (typeof track.displayThumbnail === "function") embed.setThumbnail(track.displayThumbnail("hqdefault"));
       if (player?.queue?.tracks?.length > 0) {
         fields.push({
           name: "Position in Queue",
@@ -122,24 +114,23 @@ async function search({ member, guild, channel }, query) {
       break;
     }
 
-    case "PLAYLIST_LOADED":
-      tracks = res.tracks;
+    case "playlist":
+      tracks = res.data.tracks;
       embed
         .setAuthor({ name: "Added Playlist to queue" })
-        .setDescription(res.playlistInfo.name)
+        .setDescription(res.data.info.name)
         .addFields(
           {
             name: "Enqueued",
-            value: `${res.tracks.length} songs`,
+            value: `${res.data.tracks.length} songs`,
             inline: true,
           },
           {
             name: "Playlist duration",
             value:
               "`" +
-              prettyMs(
-                res.tracks.map((t) => t.info.length).reduce((a, b) => a + b, 0),
-                { colonNotation: true }
+              formatTime(
+                res.data.tracks.map((t) => t.info.length).reduce((a, b) => a + b, 0),
               ) +
               "`",
             inline: true,
@@ -148,11 +139,11 @@ async function search({ member, guild, channel }, query) {
         .setFooter({ text: `Requested By: ${member.user.username}` });
       break;
 
-    case "SEARCH_RESULT": {
+    case "search": {
       let max = guild.client.config.MUSIC.MAX_SEARCH_RESULTS;
-      if (res.tracks.length < max) max = res.tracks.length;
+      if (res.data.length < max) max = res.data.length;
 
-      const results = res.tracks.slice(0, max);
+      const results = res.data.slice(0, max);
       const options = results.map((result, index) => ({
         label: result.info.title,
         value: index.toString(),
@@ -205,14 +196,15 @@ async function search({ member, guild, channel }, query) {
         await sentMsg.delete();
         return "🚫 Failed to register your response";
       }
+      break;
     }
   }
 
   // create a player and/or join the member's vc
   if (!player?.connected) {
-    player = guild.client.musicManager.createPlayer(guild.id);
+    player = guild.client.musicManager.players.create(guild.id);
     player.queue.data.channel = channel;
-    player.connect(member.voice.channel.id, { deafened: true });
+    player.voice.connect(member.voice.channel.id, { deafened: true });
   }
 
   // do queue things

@@ -6,7 +6,7 @@ const { ApplicationCommandOptionType } = require("discord.js");
  */
 module.exports = {
   name: "volume",
-  description: "set the music player volume",
+  description: "Set the music player volume",
   category: "MUSIC",
   validations: musicValidations,
   command: {
@@ -18,7 +18,7 @@ module.exports = {
     options: [
       {
         name: "amount",
-        description: "Enter a value to set [0 to 100]",
+        description: "Enter a value to set [1 to 100]",
         type: ApplicationCommandOptionType.Integer,
         required: false,
       },
@@ -26,14 +26,14 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const amount = args[0];
-    const response = await volume(message, amount);
+    const amount = parseInt(args[0]);
+    const response = await getVolume(message, amount);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
-    const amount = interaction.options.getInteger("amount");
-    const response = await volume(interaction, amount);
+    const amount = parseInt(interaction.options.getInteger("amount"));
+    const response = await getVolume(interaction, amount);
     await interaction.followUp(response);
   },
 };
@@ -41,12 +41,16 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-async function volume({ client, guildId }, volume) {
-  const player = client.musicManager.getPlayer(guildId);
+async function getVolume({ client, guildId }, amount) {
+  const player = client.musicManager.players.resolve(guildId);
+  
+  if (!amount) return `> The player volume is \`${player.volume}\`.`;
 
-  if (!volume) return `> The player volume is \`${player.volume}\`.`;
-  if (volume < 1 || volume > 100) return "you need to give me a volume between 1 and 100.";
+  if (isNaN(amount) || amount < 0 || amount > 100) {
+    return "You need to give me a volume between 1 and 100.";
+  }
 
-  await player.setVolume(volume);
-  return `🎶 Music player volume is set to \`${volume}\`.`;
+  // Set the player volume
+  await player.setVolume(amount);
+  return `🎶 Music player volume is set to \`${amount}\`.`;
 }

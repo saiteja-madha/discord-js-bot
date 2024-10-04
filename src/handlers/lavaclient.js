@@ -1,64 +1,52 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, GatewayDispatchEvents } = require("discord.js");
 const { Cluster } = require("lavaclient");
-const prettyMs = require("pretty-ms");
-const { load, SpotifyItemType } = require("@lavaclient/spotify");
-require("@lavaclient/queue/register");
+const { formatTime } = require("@helpers/Utils");
+require("@lavaclient/plugin-queue/register")
 
 /**
  * @param {import("@structures/BotClient")} client
  */
 module.exports = (client) => {
-  load({
-    client: {
-      id: process.env.SPOTIFY_CLIENT_ID,
-      secret: process.env.SPOTIFY_CLIENT_SECRET,
-    },
-    autoResolveYoutubeTracks: false,
-    loaders: [SpotifyItemType.Album, SpotifyItemType.Artist, SpotifyItemType.Playlist, SpotifyItemType.Track],
-  });
-
   const lavaclient = new Cluster({
     nodes: client.config.MUSIC.LAVALINK_NODES,
-    sendGatewayPayload: (id, payload) => client.guilds.cache.get(id)?.shard?.send(payload),
+      ws: client.config.MUSIC.LAVALINK_WS,
+    discord: {
+      sendGatewayCommand: (id, payload) => client.guilds.cache.get(id)?.shard?.send(payload),
+    },
+  });
+  
+  client.ws.on(GatewayDispatchEvents.VoiceStateUpdate, (data) => lavaclient.players.handleVoiceUpdate(data));
+  client.ws.on(GatewayDispatchEvents.VoiceServerUpdate, (data) => lavaclient.players.handleVoiceUpdate(data));
+
+  lavaclient.on("nodeConnected", (node, event) => {
+    client.logger.log(`Node "${node.identifier}" connected`);
   });
 
-  client.ws.on("VOICE_SERVER_UPDATE", (data) => lavaclient.handleVoiceUpdate(data));
-  client.ws.on("VOICE_STATE_UPDATE", (data) => lavaclient.handleVoiceUpdate(data));
-
-  lavaclient.on("nodeConnect", (node, event) => {
-    client.logger.log(`Node "${node.id}" connected`);
-  });
-
-  lavaclient.on("nodeDisconnect", (node, event) => {
-    client.logger.log(`Node "${node.id}" disconnected`);
+  lavaclient.on("nodeDisconnected", (node, event) => {
+    client.logger.log(`Node "${node.identifier}" disconnected`);
   });
 
   lavaclient.on("nodeError", (node, error) => {
-    client.logger.error(`Node "${node.id}" encountered an error: ${error.message}.`, error);
+    client.logger.error(`Node "${node.identifier}" encountered an error: ${error.message}.`, error);
   });
 
-  lavaclient.on("nodeDebug", (node, message) => {
-    client.logger.debug(`Node "${node.id}" debug: ${message}`);
+  lavaclient.on("nodeDebug", (node, event) => {
+    client.logger.debug(`Node "${node.identifier}" debug: ${event.message}`);
   });
-
-  lavaclient.on("nodeTrackStart", (_node, queue, song) => {
+        
+  lavaclient.on("nodeTrackStart", async (_node, queue, track) => {
     const fields = [];
-
+    
     const embed = new EmbedBuilder()
       .setAuthor({ name: "Now Playing" })
       .setColor(client.config.EMBED_COLORS.BOT_EMBED)
-      .setDescription(`[${song.title}](${song.uri})`)
-      .setFooter({ text: `Requested By: ${song.requester}` });
-
-    if (song.sourceName === "youtube") {
-      const identifier = song.identifier;
-      const thumbnail = `https://img.youtube.com/vi/${identifier}/hqdefault.jpg`;
-      embed.setThumbnail(thumbnail);
-    }
+      .setDescription(`[${track.info.title}](${track.info.uri})`)
+      .setFooter({ text: `Requested By: ${track.requesterId}` })
+      .setThumbnail(track.info.artworkUrl);
 
     fields.push({
       name: "Song Duration",
-      value: "`" + prettyMs(song.length, { colonNotation: true }) + "`",
+      value: "`" + formatTime(track.info.length) + "`",
       inline: true,
     });
 
@@ -76,7 +64,7 @@ module.exports = (client) => {
 
   lavaclient.on("nodeQueueFinish", async (_node, queue) => {
     queue.data.channel.safeSend("Queue has ended.");
-    await client.musicManager.destroyPlayer(queue.player.guildId).then(queue.player.disconnect());
+     await client.musicManager.players.destroy(queue.player.guildId).then(() => queue.player.voice.disconnect());
   });
 
   return lavaclient;
