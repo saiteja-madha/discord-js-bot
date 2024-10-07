@@ -16,13 +16,13 @@ module.exports = {
     enabled: true,
   },
 
-  async messageRun(message, args) {
-    const response = await stop(message);
+  async messageRun(message, args, data) {
+    const response = await stop(message, data.settings);
     await message.safeReply(response);
   },
 
-  async interactionRun(interaction) {
-    const response = await stop(interaction);
+  async interactionRun(interaction, data) {
+    const response = await stop(interaction, data.settings);
     await interaction.followUp(response);
   },
 };
@@ -30,9 +30,10 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-async function stop({ client, guildId }) {
-  const player = client.musicManager.getPlayer(guildId);
-  player.disconnect();
-  await client.musicManager.destroyPlayer(guildId);
+async function stop({ client, guildId }, settings) {
+  const player = client.manager.getPlayer(guildId);
+
+  player.stopPlaying(true, false) // player.destroy();
+
   return "🎶 The music player is stopped and queue has been cleared";
 }

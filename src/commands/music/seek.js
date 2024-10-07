@@ -1,6 +1,5 @@
 const { musicValidations } = require("@helpers/BotUtils");
-const prettyMs = require("pretty-ms");
-const { durationToMillis } = require("@helpers/Utils");
+const { parseTime, formatTime } = require("@helpers/Utils");
 const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
@@ -28,13 +27,19 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const time = args.join(" ");
+    const time = parseTime(args.join(" "));
+    if (!time) {
+      return await message.safeReply("Invalid time format. Use 1s, 1m, 1h");
+    }
     const response = seekTo(message, time);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
-    const time = interaction.options.getString("time");
+    const time = parseTime(interaction.options.getString("time"));
+    if (!time) {
+      return await interaction.followUp("Invalid time format. Use 1s, 1m, 1h");
+    }
     const response = seekTo(interaction, time);
     await interaction.followUp(response);
   },
@@ -45,13 +50,12 @@ module.exports = {
  * @param {number} time
  */
 function seekTo({ client, guildId }, time) {
-  const player = client.musicManager?.getPlayer(guildId);
-  const seekTo = durationToMillis(time);
+  const player = client.manager.getPlayer(guildId);
 
-  if (seekTo > player.queue.current.length) {
+  if (time > player.queue.current.length) {
     return "The duration you provide exceeds the duration of the current track";
   }
 
-  player.seek(seekTo);
-  return `Seeked to ${prettyMs(seekTo, { colonNotation: true, secondsDecimalDigits: 0 })}`;
+  player.seek(time);
+  return `Seeked song duration to **${formatTime(time)}**`;
 }

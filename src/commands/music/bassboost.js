@@ -1,12 +1,6 @@
 const { musicValidations } = require("@helpers/BotUtils");
 const { ApplicationCommandOptionType } = require("discord.js");
-
-const levels = {
-  none: 0.0,
-  low: 0.1,
-  medium: 0.15,
-  high: 0.25,
-};
+const { EQList } = require("lavalink-client");
 
 /**
  * @type {import("@structures/Command")}
@@ -18,6 +12,7 @@ module.exports = {
   validations: musicValidations,
   command: {
     enabled: true,
+    aliases: ["bb"],
     minArgsCount: 1,
     usage: "<none|low|medium|high>",
   },
@@ -30,48 +25,60 @@ module.exports = {
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: [
-          {
-            name: "none",
-            value: "none",
-          },
-          {
-            name: "low",
-            value: "low",
-          },
-          {
-            name: "medium",
-            value: "medium",
-          },
-          {
-            name: "high",
-            value: "high",
-          },
+          { name: "High", value: "high" },
+          { name: "Medium", value: "medium" },
+          { name: "Low", value: "low" },
+          { name: "Off", value: "off" },
         ],
       },
     ],
   },
 
   async messageRun(message, args) {
-    let level = "none";
-    if (args.length && args[0].toLowerCase() in levels) level = args[0].toLowerCase();
-    const response = setBassBoost(message, level);
+    let level = "off";
+    if (args.length) {
+      const input = args[0].toLowerCase();
+      if (["high", "medium", "low", "off"].includes(input)) {
+        level = input;
+      }
+    }
+    const response = await setBassBoost(message, level);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
     let level = interaction.options.getString("level");
-    const response = setBassBoost(interaction, level);
+    const response = await setBassBoost(interaction, level);
     await interaction.followUp(response);
   },
 };
 
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
- * @param {number} level
+ * @param {string} level
  */
-function setBassBoost({ client, guildId }, level) {
-  const player = client.musicManager.getPlayer(guildId);
-  const bands = new Array(3).fill(null).map((_, i) => ({ band: i, gain: levels[level] }));
-  player.setEqualizer(...bands);
+async function setBassBoost({ client, guildId }, level) {
+  const player = client.manager.getPlayer(guildId);
+
+  // Clear any existing EQ
+  await player.filterManager.clearEQ();
+
+  switch (level) {
+    case "high":
+      await player.filterManager.setEQ(EQList.BassboostHigh);
+      break;
+    case "medium":
+      await player.filterManager.setEQ(EQList.BassboostMedium);
+      break;
+    case "low":
+      await player.filterManager.setEQ(EQList.BassboostLow);
+      break;
+    case "off":
+      await player.filterManager.clearEQ();
+      break;
+    default:
+      return "Invalid bassboost level";
+  }
+
   return `> Set the bassboost level to \`${level}\``;
 }
