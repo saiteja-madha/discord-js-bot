@@ -63,8 +63,8 @@ module.exports = class BotUtils {
   static get musicValidations() {
     return [
       {
-        callback: ({ client, guildId }) => client.manager.getPlayer(guildId),
-        message: "🚫 No music is being played!",
+        callback: ({ client, guildId }) => client.musicManager.getPlayer(guildId),
+        message: "🚫 I'm not in a voice channel.",
       },
       {
         callback: ({ member }) => member.voice?.channelId,
@@ -72,7 +72,7 @@ module.exports = class BotUtils {
       },
       {
         callback: ({ member, client, guildId }) =>
-          member.voice?.channelId === client.manager.getPlayer(guildId)?.voiceChannelId,
+          member.voice?.channelId === client.musicManager.getPlayer(guildId)?.voiceChannelId,
         message: "🚫 You're not in the same voice channel.",
       },
     ];

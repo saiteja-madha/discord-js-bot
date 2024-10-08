@@ -1,4 +1,4 @@
-const { COLORS, MUSIC } = require("@root/config");
+const { EMBED_COLORS, MUSIC } = require("@root/config");
 const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
@@ -28,29 +28,24 @@ module.exports = {
 
       default:
         url = track.info.author;
-        source = MUSIC.DEFAULT_ENGINE;
+        source = MUSIC.DEFAULT_SOURCE;
         break;
     }
 
-    const res = await player.search(
-      {
-        query: url,
-        source: source,
-      },
-      track.requester
-    );
+    const res = await player.search({ query: url, source: source }, track.requester);
 
     if (!res || res.tracks.length === 0) {
-      await channel.safeSend(
-        {
-          embeds: [new EmbedBuilder().setColor(COLORS.YELLOW).setDescription("> Autoplay, No results found")],
-        },
-        10
-      );
+      await channel.safeSend({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(EMBED_COLORS.WARNING)
+            .setDescription("> Autoplay, No results found"),
+        ],
+      }, 10);
       return player.destroy();
     }
 
-    for (let songs = 0; songs < 3; ) {
+    for (let songs = 0; songs < 3;) {
       const chosen = res.tracks[Math.floor(Math.random() * res.tracks.length)];
 
       if (
@@ -59,19 +54,17 @@ module.exports = {
       ) {
         await player.queue.add(chosen);
         songs++;
-
-        if (songs >= 3) break;
       }
     }
 
     if (player.queue.tracks.length === 0) {
-      await channel?.safeSend(
-        {
-          embeds: [new EmbedBuilder().setColor(COLORS.YELLOW).setDescription("> Autoplay, No unique track found")],
-        },
-        10
-      );
-
+      await channel?.safeSend({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(EMBED_COLORS.WARNING)
+            .setDescription("> Autoplay, No unique track found"),
+        ],
+      }, 10);
       return player.destroy();
     }
   },

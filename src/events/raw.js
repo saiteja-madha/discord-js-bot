@@ -1,3 +1,3 @@
 module.exports = async (client, data) => {
-  client.manager.sendRawData(data);
+  client.musicManager.sendRawData(data);
 };

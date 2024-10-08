@@ -1,6 +1,5 @@
 const { EMBED_COLORS } = require("@root/config");
 const { EmbedBuilder } = require("discord.js");
-const prettyMs = require("pretty-ms");
 const { splitBar } = require("string-progressbar");
 
 /**
@@ -8,7 +7,7 @@ const { splitBar } = require("string-progressbar");
  */
 module.exports = {
   name: "np",
-  description: "shows what track is currently being played",
+  description: "Shows what track is currently being played",
   category: "MUSIC",
   botPermissions: ["EmbedLinks"],
   command: {
@@ -34,13 +33,15 @@ module.exports = {
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
 function nowPlaying({ client, guildId }) {
-  const player = client.manager.getPlayer(guildId);
-  if (!player || !player.queue.current) return "🚫 No music is being played!";
+  const player = client.musicManager.getPlayer(guildId);
+  if (!player || !player.queue.current) { 
+    return "🚫 No music is being played!";
+  }
 
   const track = player.queue.current;
   const end = track.info.duration > 6.048e8
     ? "🔴 LIVE"
-    : prettyMs(track.info.duration, { colonNotation: true, secondsDecimalDigits: 0 });
+    : client.utils.formatTime(track.info.duration);
 
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
@@ -60,7 +61,7 @@ function nowPlaying({ client, guildId }) {
       {
         name: "\u200b",
         value:
-          new Date(player.position).toISOString().slice(11, 19) +
+          client.utils.formatTime(player.position) + 
           " [" +
           splitBar(
             track.info.duration > 6.048e8 ? player.position : track.info.duration,

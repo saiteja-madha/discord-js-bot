@@ -10,24 +10,43 @@ module.exports = async (client, player, track) => {
   const channel = guild.channels.cache.get(player.textChannelId);
   if (!channel) return;
 
-  if (player.get("autoplay")) await player.queue.previous.push(track);
+  if (player.get("autoplay") === true) {
+    await player.queue.previous.push(track);
+  }
 
   if (player.voiceChannelId) {
-    await client.utils.vcUpdate(client, player.voiceChannelId, `Now playing: **${track.info.title}**`);
+    await client.utils.vcUpdate(
+      client,
+      player.voiceChannelId,
+      `Now playing: **${track.info.title}**`
+    );
   }
 
   const previous = await player.queue.shiftPrevious();
 
   const row = (player) =>
     new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId("previous").setEmoji("⏪").setStyle(ButtonStyle.Secondary).setDisabled(!previous),
+      new ButtonBuilder()
+        .setCustomId("previous")
+        .setEmoji("⏪")
+        .setStyle(ButtonStyle.Secondary)
+        .setDisabled(!previous),
       new ButtonBuilder()
         .setCustomId("pause")
         .setEmoji(player.paused ? "▶️" : "⏸️")
         .setStyle(player.paused ? ButtonStyle.Success : ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId("stop").setEmoji("⏹️").setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId("skip").setEmoji("⏩").setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId("shuffle").setEmoji("🔀").setStyle(ButtonStyle.Secondary)
+      new ButtonBuilder()
+        .setCustomId("stop")
+        .setEmoji("⏹️")
+        .setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder()
+        .setCustomId("skip")
+        .setEmoji("⏩")
+        .setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder()
+        .setCustomId("shuffle")
+        .setEmoji("🔀")
+        .setStyle(ButtonStyle.Secondary)
     );
 
   const msg = await channel.safeSend({
@@ -41,13 +60,9 @@ module.exports = async (client, player, track) => {
           text: `Requested by: ${track.requester.username}`,
         })
         .addFields(
-          {
-            name: "Duration",
-            value: track.info.isStream ? "Live" : client.utils.formatTime(track.info.duration),
-            inline: true,
-          },
+          { name: "Duration", value: track.info.isStream ? "Live" : client.utils.formatTime(track.info.duration), inline: true },
           { name: "Author", value: track.info.author || "Unknown", inline: true }
-        ),
+        )
     ],
     components: [row(player)],
   });
@@ -55,19 +70,19 @@ module.exports = async (client, player, track) => {
   if (msg) player.set("message", msg);
 
   const collector = msg.createMessageComponentCollector({
-    filter: async (i) => {
-      const svc = i.guild.members.me.voice.channelId === i.member.voice.channelId;
-      return svc;
+    filter: async (int) => {
+      const sameVc = int.guild.members.me.voice.channelId === int.member.voice.channelId;
+      return sameVc;
     },
   });
 
-  collector.on("collect", async (i) => {
-    if (!i.isButton()) return;
-
-    await i.deferReply({ ephemeral: true });
+  collector.on("collect", async (int) => {
+    if (!int.isButton()) return;
+      
+    await int.deferReply({ ephemeral: true });
     let description;
 
-    switch (i.customId) {
+    switch (int.customId) {
       case "previous":
         description = previous ? "Playing the previous track..." : "No previous track available";
         if (previous) player.play({ clientTrack: previous });
@@ -100,7 +115,7 @@ module.exports = async (client, player, track) => {
         break;
     }
 
-    await i.followUp({
+    await int.followUp({
       embeds: [new EmbedBuilder().setDescription(description).setColor(EMBED_COLORS.BOT_EMBED)],
     });
   });

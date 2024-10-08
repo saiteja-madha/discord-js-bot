@@ -7,7 +7,7 @@ module.exports = async (client, player) => {
   }
 
   const msg = player.get("message");
-  if (msg) {
+  if (msg && msg.deletable) {
     await msg.delete().catch(() => {});
   }
 };

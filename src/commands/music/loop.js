@@ -21,21 +21,12 @@ module.exports = {
       {
         name: "type",
         type: ApplicationCommandOptionType.String,
-        description: "The entity you want to loop or disable loop",
+        description: "Select loop type",
         required: false,
         choices: [
-          {
-            name: "Track",
-            value: "track",
-          },
-          {
-            name: "Queue",
-            value: "queue",
-          },
-          {
-            name: "Off",
-            value: "off",
-          },
+          { name: "Track", value: "track" },
+          { name: "Queue", value: "queue" },
+          { name: "Off", value: "off" },
         ],
       },
     ],
@@ -44,13 +35,13 @@ module.exports = {
   async messageRun(message, args) {
     const input = args[0].toLowerCase();
     const type = input === "queue" ? "queue" : input === "track" ? "track" : "off";
-    const response = toggleLoop(message, type);
+    const response = await toggleLoop(message, type);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
     const type = interaction.options.getString("type") || "track";
-    const response = toggleLoop(interaction, type);
+    const response = await toggleLoop(interaction, type);
     await interaction.followUp(response);
   },
 };
@@ -59,30 +50,31 @@ module.exports = {
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  * @param {"queue"|"track"|"off"} type
  */
-function toggleLoop({ client, guildId }, type) {
-  const player = client.manager.getPlayer(guildId);
+async function toggleLoop({ client, guildId }, type) {
+  const player = client.musicManager.getPlayer(guildId);
 
-  if (!player) return "🚫 There is no music player for this guild.";
-
-  // track
-  if (type === "track") {
-    player.setRepeatMode("track");
-    return "Loop mode is set to `track`";
+  if (!player || !player.queue.current) {
+    return "🚫 No song is currently playing";
   }
 
-  // queue
-  else if (type === "queue") {
-    if (player.queue.tracks.length > 1) {
-      player.setRepeatMode("queue");
-      return "Loop mode is set to `queue`";
-    } else {
-      return "🚫 Queue is too short to be looped";
-    }
-  }
+  switch (type) {
+    case "track":
+      player.setRepeatMode("track");
+      return "Loop mode is set to `track`";
 
-  // off
-  else if (type === "off") {
-    player.setRepeatMode("off");
-    return "Loop mode is disabled";
+    case "queue":
+      if (player.queue.tracks.length > 1) {
+        player.setRepeatMode("queue");
+        return "Loop mode is set to `queue`";
+      } else {
+        return "🚫 Queue is too short to be looped";
+      }
+
+    case "off":
+      player.setRepeatMode("off");
+      return "Loop mode is disabled";
+
+    default:
+      return "Invalid loop type";
   }
 }

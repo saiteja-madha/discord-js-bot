@@ -7,7 +7,7 @@ const { EQList } = require("lavalink-client");
  */
 module.exports = {
   name: "bassboost",
-  description: "set bassboost level",
+  description: "Set bassboost level",
   category: "MUSIC",
   validations: musicValidations,
   command: {
@@ -58,7 +58,11 @@ module.exports = {
  * @param {string} level
  */
 async function setBassBoost({ client, guildId }, level) {
-  const player = client.manager.getPlayer(guildId);
+  const player = client.musicManager.getPlayer(guildId);
+
+  if (!player || !player.queue.current) {
+    return "🚫 No song is currently playing";
+  }
 
   // Clear any existing EQ
   await player.filterManager.clearEQ();

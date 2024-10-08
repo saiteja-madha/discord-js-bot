@@ -11,7 +11,7 @@ class Manager extends LavalinkManager {
         maxPreviousTracks: 30,
       },
       playerOptions: {
-        defaultSearchPlatform: MUSIC.DEFAULT_ENGINE,
+        defaultSearchPlatform: MUSIC.DEFAULT_SOURCE,
         onDisconnect: {
           autoReconnect: true,
           destroyPlayer: false,

@@ -55,14 +55,14 @@ module.exports = {
 async function search({ member, guild, channel }, query) {
   if (!member.voice.channel) return "ðŸš« You need to join a voice channel first";
 
-  let player = guild.client.manager.getPlayer(guild.id);
+  let player = guild.client.musicManager.getPlayer(guild.id);
 
   if (player && member.voice.channel !== guild.members.me.voice.channel) {
     return "ðŸš« You must be in the same voice channel as me.";
   }
 
   if (!player) {
-    player = await guild.client.manager.createPlayer({
+    player = await guild.client.musicManager.createPlayer({
       guildId: guild.id,
       voiceChannelId: member.voice.channel.id,
       textChannelId: channel.id,

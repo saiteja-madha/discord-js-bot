@@ -1,7 +1,7 @@
 const { autoplayFunction } = require("@handlers/player");
 const { MUSIC } = require("@root/config.js");
 
-module.exports = async (client, player, track, _payload) => {
+module.exports = async (client, player, track) => {
   const guild = client.guilds.cache.get(player.guildId);
   if (!guild) return;
 
@@ -10,12 +10,11 @@ module.exports = async (client, player, track, _payload) => {
   }
 
   const msg = player.get("message");
-
   if (msg && msg.deletable) {
     await msg.delete().catch(() => {});
   }
 
-  if (player.get("autoplay")) {
+  if (player.get("autoplay") === true) {
     await autoplayFunction(client, track, player);
   }
 };

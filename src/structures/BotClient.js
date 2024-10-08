@@ -63,7 +63,7 @@ module.exports = class BotClient extends Client {
       : undefined;
 
     // Music Player
-    if (this.config.MUSIC.ENABLED) this.manager = new Manager(this);
+    if (this.config.MUSIC.ENABLED) this.musicManager = new Manager(this);
 
     // Giveaways
     if (this.config.GIVEAWAYS.ENABLED) this.giveawaysManager = giveawaysHandler(this);
@@ -99,7 +99,7 @@ module.exports = class BotClient extends Client {
         const event = require(filePath);
 
         if (dir === "player") {
-          this.manager.on(eventName, event.bind(null, this));
+          this.musicManager.on(eventName, event.bind(null, this));
         } else {
           this.on(eventName, event.bind(null, this));
         }

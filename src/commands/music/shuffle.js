@@ -30,9 +30,11 @@ module.exports = {
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
 function shuffle({ client, guildId }) {
-  const player = client.manager.getPlayer(guildId);
+  const player = client.musicManager.getPlayer(guildId);
 
-  if (!player) return "🚫 There is no music player for this guild";
+  if (!player || !player.queue.curren) { 
+    return "🚫 There's no music currently playing";
+  }
 
   if (player.queue.tracks.length < 2) {
     return "🚫 Not enough tracks to shuffle";

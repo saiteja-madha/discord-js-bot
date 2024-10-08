@@ -1,5 +1,4 @@
 const { musicValidations } = require("@helpers/BotUtils");
-const { parseTime, formatTime } = require("@helpers/Utils");
 const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
@@ -7,7 +6,7 @@ const { ApplicationCommandOptionType } = require("discord.js");
  */
 module.exports = {
   name: "seek",
-  description: "sets the playing track's position to the specified position",
+  description: "Sets the position of the current track",
   category: "MUSIC",
   validations: musicValidations,
   command: {
@@ -19,7 +18,7 @@ module.exports = {
     options: [
       {
         name: "time",
-        description: "The time you want to seek to.",
+        description: "The time you want to seek to",
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -27,20 +26,28 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const time = parseTime(args.join(" "));
+    const time = message.client.utils.parseTime(
+      args.join(" ")
+    );
     if (!time) {
-      return await message.safeReply("Invalid time format. Use 1s, 1m, 1h");
+      return await message.safeReply(
+        "Invalid time format. Use 10s, 1m 50s, 1h"
+      );
     }
-    const response = seekTo(message, time);
+    const response = await seekTo(message, time);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
-    const time = parseTime(interaction.options.getString("time"));
+    const time = interaction.client.utils.parseTime(
+      interaction.options.getString("time")
+    );
     if (!time) {
-      return await interaction.followUp("Invalid time format. Use 1s, 1m, 1h");
+      return await interaction.followUp(
+        "Invalid time format. Use 10s, 1m 50s, 1h"
+      );
     }
-    const response = seekTo(interaction, time);
+    const response = await seekTo(interaction, time);
     await interaction.followUp(response);
   },
 };
@@ -49,13 +56,17 @@ module.exports = {
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  * @param {number} time
  */
-function seekTo({ client, guildId }, time) {
-  const player = client.manager.getPlayer(guildId);
+async function seekTo({ client, guildId }, time) {
+  const player = client.musicManager.getPlayer(guildId);
+
+  if (!player || !player.queue.current) {
+    return "🚫 There's no music currently playing";
+  }
 
   if (time > player.queue.current.length) {
-    return "The duration you provide exceeds the duration of the current track";
+    return "The duration you provided exceeds the duration of the current track";
   }
 
   player.seek(time);
-  return `Seeked song duration to **${formatTime(time)}**`;
+  return `Seeked song duration to **${client.utils.formatTime(time)}**`;
 }

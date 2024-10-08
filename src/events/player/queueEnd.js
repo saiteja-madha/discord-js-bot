@@ -18,7 +18,7 @@ module.exports = async (client, player) => {
   }
 
   const msg = player.get("message");
-  if (msg) {
+  if (msg && msg.deletable) {
     await msg.delete().catch(() => {});
   }
 
@@ -30,7 +30,7 @@ module.exports = async (client, player) => {
           new EmbedBuilder()
             .setColor(EMBED_COLORS.BOT_EMBED)
             .setTitle("Queue Concluded")
-            .setDescription("Enjoying music with me? Consider [voting](https://example.com) for me!"),
+            .setDescription(`Enjoying music with me? Consider [voting](https://top.gg/bot/${client.user?.id}/vote) for me!`),
         ],
       },
       10

@@ -44,8 +44,10 @@ module.exports = {
  * @param {number} pgNo
  */
 async function getQueue({ client, guild }, pgNo) {
-  const player = client.manager.getPlayer(guild.id);
-  if (!player) return "🚫 There is no music playing in this guild.";
+  const player = client.musicManager.getPlayer(guild.id);
+  if (!player || !player.queue.current) {
+    return "🚫 No song is currently playing";
+  }
 
   const embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED).setAuthor({ name: `Queue for ${guild.name}` });
 
@@ -55,13 +57,13 @@ async function getQueue({ client, guild }, pgNo) {
   const tracks = player.queue.tracks.slice(start, end);
 
   if (player.queue.current) {
-    const currentTrack = player.queue.current;
+    const current = player.queue.current;
     embed
       .addFields({
         name: "Current",
-        value: `[${currentTrack.info.title}](${currentTrack.info.uri}) \`[${client.utils.formatTime(currentTrack.info.duration)}]\``,
+        value: `[${current.info.title}](${current.info.uri}) \`[${client.utils.formatTime(current.info.duration)}]\``,
       })
-      .setThumbnail(currentTrack.info.artworkUrl);
+      .setThumbnail(current.info.artworkUrl);
   }
 
   const queueList = tracks.map(

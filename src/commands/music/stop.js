@@ -5,12 +5,12 @@ const { musicValidations } = require("@helpers/BotUtils");
  */
 module.exports = {
   name: "stop",
-  description: "stop the music player",
+  description: "Stop the music player",
   category: "MUSIC",
   validations: musicValidations,
   command: {
     enabled: true,
-    aliases: ["leave"],
+    aliases: [""],
   },
   slashCommand: {
     enabled: true,
@@ -30,10 +30,18 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-async function stop({ client, guildId }, settings) {
-  const player = client.manager.getPlayer(guildId);
+async function stop({ client, guildId }) {
+  const player = client.musicManager.getPlayer(guildId);
 
-  player.stopPlaying(true, false) // player.destroy();
+  if (!player || !player.queue.current) {
+    return "🚫 There's no music currently playing";
+  }
 
-  return "🎶 The music player is stopped and queue has been cleared";
+  if (player.get("autoplay") === true) {
+    player.set("autoplay", false);
+  }
+
+  player.stopPlaying(true, false);
+  
+  return "🎶 The music player is stopped, and the queue has been cleared";
 }
