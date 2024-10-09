@@ -7,8 +7,7 @@ module.exports = async (client, player) => {
     
   if (player.voiceChannelId) {
     await client.utils.setVoiceStatus(
-      client,
-      player.voiceChannelId,
+      client, player.voiceChannelId,
       "Silence? Use /play to start the beat!"
     );
   }

@@ -16,7 +16,6 @@ class Manager extends LavalinkManager {
           autoReconnect: true,
           destroyPlayer: false,
         },
-        onEmptyQueue: {},
       },
       linksAllowed: true,
       linksBlacklist: ["porn"],
@@ -28,7 +27,7 @@ class Manager extends LavalinkManager {
     });
       
     this.nodeManager.on("disconnect", (node, reason) => {
-      client.logger.warn(`Lavalink node "${node.id}" disconnected. Reason: ${reason}`);
+      client.logger.warn(`Lavalink node "${node.id}" disconnected. Reason: ${JSON.stringify(reason)}`);
     });
 
     this.nodeManager.on("error", (node, error) => {

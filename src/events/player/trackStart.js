@@ -107,11 +107,14 @@ module.exports = async (client, player, track) => {
         break;
 
       case "shuffle":
-        player.queue.shuffle();
-        description = "The queue has been shuffled!";
+        if (player.queue.tracks.length < 2) {
+          description = "The queue is too short to shuffle!";
+        } else {
+          player.queue.shuffle();
+          description = "The queue has been shuffled!";
+        }
         break;
-    }
-
+      }
     await int.followUp({
       embeds: [new EmbedBuilder().setDescription(description).setColor(EMBED_COLORS.BOT_EMBED)],
     });
