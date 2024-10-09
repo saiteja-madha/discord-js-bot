@@ -6,7 +6,7 @@ module.exports = async (client, player) => {
   if (!guild) return;
     
   if (player.voiceChannelId) {
-    await client.utils.vcUpdate(
+    await client.utils.setVoiceStatus(
       client,
       player.voiceChannelId,
       "Silence? Use /play to start the beat!"

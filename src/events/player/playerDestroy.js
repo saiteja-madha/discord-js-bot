@@ -3,7 +3,7 @@ module.exports = async (client, player) => {
   if (!guild) return;
 
   if (player.voiceChannelId) {
-    await client.utils.vcUpdate(client, player.voiceChannelId, "");
+    await client.utils.setVoiceStatus(client, player.voiceChannelId, "");
   }
 
   const msg = player.get("message");

@@ -133,25 +133,20 @@ module.exports = class Utils {
     readCommands(dir);
     return filePaths;
   }
-  
+
   /**
    * Formats milliseconds into days, hours, minutes, and seconds
    * @param {number} ms - Milliseconds
    * @returns {string} - Formatted time string
    */
   static formatTime(ms) {
-    const minuteMs = 60 * 1000;
-    const hourMs = 60 * minuteMs;
-    const dayMs = 24 * hourMs;
-    if (ms < minuteMs) {
-      return `${ms / 1000}s`;
-    } else if (ms < hourMs) {
-      return `${Math.floor(ms / minuteMs)}m ${Math.floor((ms % minuteMs) / 1000)}s`;
-    } else if (ms < dayMs) {
-      return `${Math.floor(ms / hourMs)}h ${Math.floor((ms % hourMs) / minuteMs)}m`;
-    } else {
-      return `${Math.floor(ms / dayMs)}d ${Math.floor((ms % dayMs) / hourMs)}h`;
-    }
+    return ms < 1000 ? `${ms / 1000}s` :
+      ["d", "h", "m", "s"].map((unit, i) => {
+        const value = [864e5, 36e5, 6e4, 1e3][i];
+        const amount = Math.floor(ms / value);
+        ms %= value;
+        return amount ? `${amount}${unit}` : null;
+      }).filter(x => x !== null).join(" ") || "0s";
   }
 
   /**
@@ -159,20 +154,14 @@ module.exports = class Utils {
    * @param {string} string - The time string (e.g., "1d", "2h", "3m", "4s")
    * @returns {number} - The time in milliseconds
    */
-
   static parseTime(string) {
-    const time = string.match(/([0-9]+[d,h,m,s])/g);
+    const time = string.match(/([0-9]+[dhms])/g);
     if (!time) return 0;
-    let ms = 0;
-    for (const t of time) {
+    return time.reduce((ms, t) => {
       const unit = t[t.length - 1];
       const amount = Number(t.slice(0, -1));
-      if (unit === "d") ms += amount * 24 * 60 * 60 * 1000;
-      else if (unit === "h") ms += amount * 60 * 60 * 1000;
-      else if (unit === "m") ms += amount * 60 * 1000;
-      else if (unit === "s") ms += amount * 1000;
-    }
-    return ms;
+      return ms + amount * { d: 864e5, h: 36e5, m: 6e4, s: 1e3 }[unit];
+    }, 0);
   }
 
   /**
@@ -181,11 +170,9 @@ module.exports = class Utils {
    * @param {string} status - The status to update
    * @param {object} client - The bot client
    */
-  static async vcUpdate(client, channelId, status) {
+  static async setVoiceStatus(client, channelId, message) {
     const url = `/channels/${channelId}/voice-status`;
-    const payload = {
-      status: status,
-    };
+    const payload = { status: message };
     await client.rest.put(url, { body: payload }).catch(() => {});
   }
 };

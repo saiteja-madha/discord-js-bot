@@ -15,10 +15,7 @@ module.exports = async (client, player, track) => {
   }
 
   if (player.voiceChannelId) {
-    await client.utils.vcUpdate(
-      client,
-      player.voiceChannelId,
-      `Now playing: **${track.info.title}**`
+    await client.utils.setVoiceStatus(client, player.voiceChannelId, `Paying: **${track.info.title}**`
     );
   }
 
