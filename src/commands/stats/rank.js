@@ -57,7 +57,7 @@ async function getRank({ guild }, member, settings) {
   const lb = await getXpLb(guild.id, 100)
   let pos = -1
   lb.forEach((doc, i) => {
-    if (doc.member_id == user.id) {
+    if (doc.member_id === user.id) {
       pos = i + 1
     }
   })
@@ -65,9 +65,9 @@ async function getRank({ guild }, member, settings) {
   const xpNeeded = memberStats.level * memberStats.level * 100
   const rank = pos !== -1 ? pos : 0
 
-  const url = new URL(`https://api.infinity-bot.live/utils/rank-card`)
+  const url = new URL(`${IMAGE.BASE_API}/utils/rank-card`)
   url.searchParams.append('name', user.username)
-  if (user.discriminator != 0)
+  if (user.discriminator !== 0)
     url.searchParams.append('discriminator', user.discriminator)
   url.searchParams.append(
     'avatar',
@@ -83,7 +83,11 @@ async function getRank({ guild }, member, settings) {
   )
   url.searchParams.append('rank', rank)
 
-  const response = await getBuffer(url.href)
+  const response = await getBuffer(url.href, {
+    headers: {
+      Authorization: `Bearer ${process.env.STRANGE_API_KEY}`,
+    },
+  })
   if (!response.success) return 'Failed to generate rank-card'
 
   const attachment = new AttachmentBuilder(response.buffer, {

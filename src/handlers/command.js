@@ -1,5 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
-const { OWNER_IDS, PREFIX_COMMANDS, EMBED_COLORS } = require('@root/config')
+const { DEV_IDS, PREFIX_COMMANDS, EMBED_COLORS } = require('@root/config')
 const { parsePermissions } = require('@helpers/Utils')
 const { timeformat } = require('@helpers/Utils')
 const { getSettings } = require('@schemas/Guild')
@@ -38,9 +38,11 @@ module.exports = {
       }
     }
 
-    // Owner commands
-    if (cmd.category === 'OWNER' && !OWNER_IDS.includes(message.author.id)) {
-      return message.safeReply('This command is only accessible to bot owners')
+    // Owner/Dev commands
+    if (cmd.category === 'DEV' && !DEV_IDS.includes(message.author.id)) {
+      return message.safeReply(
+        '✋ Oops! Only my lovely developers can use this command, nya~!'
+      )
     }
 
     // check user permissions
@@ -49,7 +51,7 @@ module.exports = {
         !message.channel.permissionsFor(message.member).has(cmd.userPermissions)
       ) {
         return message.safeReply(
-          `You need ${parsePermissions(cmd.userPermissions)} for this command`
+          `❌ You need ${parsePermissions(cmd.userPermissions)} for this command, cutie~!`
         )
       }
     }
@@ -62,7 +64,7 @@ module.exports = {
           .has(cmd.botPermissions)
       ) {
         return message.safeReply(
-          `I need ${parsePermissions(cmd.botPermissions)} for this command`
+          `❗ I need ${parsePermissions(cmd.botPermissions)} for this command, please~!`
         )
       }
     }
@@ -78,7 +80,7 @@ module.exports = {
       const remaining = getRemainingCooldown(message.author.id, cmd)
       if (remaining > 0) {
         return message.safeReply(
-          `You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``
+          `⏳ You're on cooldown, dear! You can use the command again in \`${timeformat(remaining)}\`, nya~!`
         )
       }
     }
@@ -87,7 +89,9 @@ module.exports = {
       await cmd.messageRun(message, args, data)
     } catch (ex) {
       message.client.logger.error('messageRun', ex)
-      message.safeReply('An error occurred while running this command')
+      message.safeReply(
+        '😢 Oh no! An error occurred while running this command, please try again later~!'
+      )
     } finally {
       if (cmd.cooldown > 0) applyCooldown(message.author.id, cmd)
     }
@@ -100,7 +104,10 @@ module.exports = {
     const cmd = interaction.client.slashCommands.get(interaction.commandName)
     if (!cmd)
       return interaction
-        .reply({ content: 'An error has occurred', ephemeral: true })
+        .reply({
+          content: '❌ An error has occurred, please try again later~!',
+          ephemeral: true,
+        })
         .catch(() => {})
 
     // callback validations
@@ -115,10 +122,10 @@ module.exports = {
       }
     }
 
-    // Owner commands
-    if (cmd.category === 'OWNER' && !OWNER_IDS.includes(interaction.user.id)) {
+    // DEV commands
+    if (cmd.category === 'DEV' && !DEV_IDS.includes(interaction.user.id)) {
       return interaction.reply({
-        content: `This command is only accessible to bot owners`,
+        content: `💔 Oh no! Only my sweet developers can use this command~!`,
         ephemeral: true,
       })
     }
@@ -127,7 +134,7 @@ module.exports = {
     if (interaction.member && cmd.userPermissions?.length > 0) {
       if (!interaction.member.permissions.has(cmd.userPermissions)) {
         return interaction.reply({
-          content: `You need ${parsePermissions(cmd.userPermissions)} for this command`,
+          content: `💔 You need ${parsePermissions(cmd.userPermissions)} for this command, darling~!`,
           ephemeral: true,
         })
       }
@@ -137,7 +144,7 @@ module.exports = {
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
       if (!interaction.guild.members.me.permissions.has(cmd.botPermissions)) {
         return interaction.reply({
-          content: `I need ${parsePermissions(cmd.botPermissions)} for this command`,
+          content: `😳 I need ${parsePermissions(cmd.botPermissions)} for this command, please~!`,
           ephemeral: true,
         })
       }
@@ -148,7 +155,7 @@ module.exports = {
       const remaining = getRemainingCooldown(interaction.user.id, cmd)
       if (remaining > 0) {
         return interaction.reply({
-          content: `You are on cooldown. You can again use the command in \`${timeformat(remaining)}\``,
+          content: `⏳ You're on cooldown, dear! You can use the command again in \`${timeformat(remaining)}\`, nya~!`,
           ephemeral: true,
         })
       }
@@ -160,7 +167,7 @@ module.exports = {
       await cmd.interactionRun(interaction, { settings })
     } catch (ex) {
       await interaction.followUp(
-        'Oops! An error occurred while running the command'
+        '😢 Oops! An error occurred while running the command, please try again later~!'
       )
       interaction.client.logger.error('interactionRun', ex)
     } finally {

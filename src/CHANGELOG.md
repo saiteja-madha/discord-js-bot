@@ -2,10 +2,14 @@
 
 ## New
 
+- Added `./src/commands/dev/dev.js` for ALL developer commands.
+- Mochi now responds in a more anime-like way to commands.
+
 ## Fixes & Improvements
 
 - Fixed `require` to a `dynamic import` in `./src/commands/bot/bot.js` to fix
   the `/changelog` command not working.
+- Fixed OWNER/DEV permissions not working.
 
 ## Developer Notes
 

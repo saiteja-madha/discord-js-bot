@@ -1,3 +1,21 @@
+# Mochi V2.0.3
+
+## New
+
+- Added `./src/commands/dev/dev.js` for ALL developer commands.
+- Mochi now responds in a more anime-like way to commands.
+
+## Fixes & Improvements
+
+- Fixed `require` to a `dynamic import` in `./src/commands/bot/bot.js` to fix
+  the `/changelog` command not working.
+- Fixed OWNER/DEV permissions not working.
+
+## Developer Notes
+
+- Deleted codecov workflow
+- added `./static-analysis.datadog.yml` for datadog static analysis
+
 # Mochi v2.0.2
 
 ## New
@@ -18,20 +36,3 @@
 - Default prefix is now `$` instead of `!`
 - Added `reload` prefix command for reloading commands and other bot stuff.
   **DEV only!**
-
-# Mochi v2.0.0
-
-## New
-
-- Add Voice channels support
-
-## Fixes & Improvements
-
-- Fixed Cannot read properties of undefined (reading 'find')
-- Fix "Unknown Interaction" error when start a giveaway
-- Fix help subcommands not loading
-- fix music search bug
-- Fix `move` command
-- fixed rank card
-- fix duplicate ranks
-- fix invite ranks

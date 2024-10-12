@@ -1,7 +1,6 @@
 // mtod.js
 const { ApplicationCommandOptionType } = require('discord.js')
 const { addQuestion, deleteQuestion } = require('@schemas/TruthOrDare')
-const { EmbedBuilder } = require('discord.js')
 
 const categories = [
   {
@@ -87,7 +86,13 @@ module.exports = {
       },
     ],
   },
+
   async interactionRun(interaction) {
+    if (interaction.user.id !== DEV_ID) {
+      return interaction.followUp(
+        "You don't have permission to use this command."
+      )
+    }
     const subcommand = interaction.options.getSubcommand()
 
     switch (subcommand) {
