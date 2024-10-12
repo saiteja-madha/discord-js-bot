@@ -16,7 +16,6 @@ const {
   PATREON_URL,
 } = require('@root/config.js')
 const botstats = require('./sub/botstats')
-const { Octokit } = require('@octokit/rest')
 
 /**
  * @type {import("@structures/Command")}
@@ -173,6 +172,8 @@ module.exports = {
     else if (sub === 'changelog') {
       try {
         const githubToken = process.env.GH_TOKEN
+        const octokitModule = await import('@octokit/rest')
+        const Octokit = octokitModule.Octokit
         const octokitOptions = githubToken ? { auth: githubToken } : {}
 
         const octokit = new Octokit(octokitOptions)

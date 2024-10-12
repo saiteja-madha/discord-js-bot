@@ -1,3 +1,17 @@
+# Mochi V2.0.3
+
+## New
+
+## Fixes & Improvements
+
+- Fixed `require` to a `dynamic import` in `./src/commands/bot/bot.js` to fix
+  the `/changelog` command not working.
+
+## Developer Notes
+
+- Deleted codecov workflow
+- added `./static-analysis.datadog.yml` for datadog static analysis
+
 # Mochi v2.0.2
 
 ## New
