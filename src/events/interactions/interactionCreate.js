@@ -8,6 +8,12 @@ const {
   todHandler,
 } = require('@src/handlers')
 const { InteractionType } = require('discord.js')
+const {
+  handleSetupButton,
+  handleSetupModal,
+  handleRemindButton,
+  handleRemindModal,
+} = require('@handlers/guild')
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -64,6 +70,12 @@ module.exports = async (client, interaction) => {
 
       case 'randomBtn':
         return todHandler.handleTodButtonClick(interaction)
+
+      case 'MOCHI_SETUP':
+        return handleSetupButton(interaction)
+
+      case 'MOCHI_REMIND':
+        return handleRemindButton(interaction)
     }
   }
 
@@ -78,6 +90,12 @@ module.exports = async (client, interaction) => {
 
       case 'SUGGEST_DELETE_MODAL':
         return suggestionHandler.handleDeleteModal(interaction)
+
+      case 'MOCHI_SETUP_MODAL':
+        return handleSetupModal(interaction)
+
+      case 'MOCHI_REMIND_MODAL':
+        return handleRemindModal(interaction)
     }
   }
 

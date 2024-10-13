@@ -1,3 +1,14 @@
+# Mochi V2.0.4
+
+## New
+
+- Better onboarding for new guilds.
+
+## Developer Notes
+
+- Added `/dev onboarding` command for triggering the onboarding for one or all
+  guilds.
+
 # Mochi V2.0.3
 
 ## New

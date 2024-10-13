@@ -17,13 +17,12 @@ const Schema = new mongoose.Schema({
   },
   prefix: { type: String, default: PREFIX_COMMANDS.DEFAULT_PREFIX },
   stats: {
-    enabled: { type: Boolean, default: true }, // Set default value for stats.enabled
+    enabled: { type: Boolean, default: true },
     xp: {
       message: { type: String, default: STATS.DEFAULT_LVL_UP_MSG },
       channel: String,
     },
   },
-
   ticket: {
     log_channel: String,
     limit: { type: Number, default: 10 },
@@ -109,6 +108,11 @@ const Schema = new mongoose.Schema({
     rejected_channel: String,
     staff_roles: [String],
   },
+  updates_channel: { type: String, default: null },
+  staff_role: { type: String, default: null },
+  setup_completed: { type: Boolean, default: false },
+  setup_message_id: { type: String, default: null },
+  owner_id: { type: String, required: true }, // Add this line
 })
 
 const Model = mongoose.model('guild', Schema)
@@ -144,11 +148,17 @@ module.exports = {
           owner: guild.ownerId,
           joinedAt: guild.joinedAt,
         },
+        owner_id: guild.ownerId, // Add this line
       })
 
       await guildData.save()
     }
     cache.add(guild.id, guildData)
     return guildData
+  },
+
+  updateSettings: async (guildId, settings) => {
+    await Model.findByIdAndUpdate(guildId, settings, { new: true })
+    cache.set(guildId, settings)
   },
 }

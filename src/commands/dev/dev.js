@@ -8,6 +8,7 @@ const {
 } = require('discord.js')
 const { EMBED_COLORS } = require('@root/config')
 const { BotClient } = require('@src/structures')
+const { getSettings } = require('@schemas/Guild')
 require('dotenv').config()
 
 const DEV_ID = process.env.DEV_ID
@@ -83,6 +84,21 @@ module.exports = {
           },
         ],
       },
+
+      {
+        name: 'triggeronboarding',
+        description: 'Trigger onboarding for servers',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'serverid',
+            description: 'ID of the server to trigger onboarding (optional)',
+            type: ApplicationCommandOptionType.String,
+            required: false,
+          },
+        ],
+      },
+
       {
         name: 'reload',
         description: "Reloads a command that's been modified",
@@ -267,7 +283,12 @@ module.exports = {
       }
       await interaction.followUp(response)
     }
-
+    // New subcommand: triggeronboarding
+    if (sub === 'triggeronboarding') {
+      const serverId = interaction.options.getString('serverid')
+      const response = await triggerOnboarding(interaction.client, serverId)
+      await interaction.followUp(response)
+    }
     // Subcommand: reload
     if (sub === 'reload') {
       const client = new BotClient()
@@ -373,4 +394,29 @@ const buildErrorResponse = err => {
     .setTimestamp(Date.now())
 
   return { embeds: [embed] }
+}
+
+// New function: triggerOnboarding
+async function triggerOnboarding(client, serverId = null) {
+  const guildCreateEvent = client.emit.bind(client, 'guildCreate')
+
+  if (serverId) {
+    const guild = client.guilds.cache.get(serverId)
+    if (!guild) return '❌ Guild not found'
+    const settings = await getSettings(guild)
+    if (settings.setup_completed) return '❌ Guild already set up'
+    guildCreateEvent(guild)
+    return `✅ Triggered onboarding for ${guild.name}`
+  }
+
+  let count = 0
+  for (const [id, guild] of client.guilds.cache) {
+    const settings = await getSettings(guild)
+    if (!settings.setup_completed) {
+      guildCreateEvent(guild)
+      count++
+    }
+  }
+
+  return `✅ Triggered onboarding for ${count} guilds`
 }

@@ -1,3 +1,14 @@
+# Mochi V2.0.4
+
+## New
+
+- Better onboarding for new guilds.
+
+## Developer Notes
+
+- Added `/dev onboarding` command for triggering the onboarding for one or all
+  guilds.
+
 # Mochi V2.0.3
 
 ## New
@@ -27,12 +38,3 @@
 
 - Fixed `/bot changelog` command not working.
 - Fixed music module not working.
-
-# Mochi v2.0.1
-
-## New
-
-- Reanabled prefix for `help` command
-- Default prefix is now `$` instead of `!`
-- Added `reload` prefix command for reloading commands and other bot stuff.
-  **DEV only!**

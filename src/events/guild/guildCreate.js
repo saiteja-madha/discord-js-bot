@@ -4,8 +4,11 @@ const {
   ActionRowBuilder,
   EmbedBuilder,
   ButtonStyle,
-} = require('discord.js') // Import necessary Discord.js v14 components
+  PermissionFlagsBits,
+  ChannelType,
+} = require('discord.js')
 const { SUPPORT_SERVER, BOTS_URL, DONATE_URL } = require('@root/config.js')
+const { sendOnboardingMenu } = require('@handlers/guild')
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -17,79 +20,165 @@ module.exports = async (client, guild) => {
     await guild.fetchOwner({ cache: true }).catch(() => {})
   }
   client.logger.log(`Guild Joined: ${guild.name} Members: ${guild.memberCount}`)
-  await registerGuild(guild)
+  const guildSettings = await registerGuild(guild)
 
-  if (!client.joinLeaveWebhook) return
+  // Ensure owner_id is set
+  if (!guildSettings.owner_id) {
+    guildSettings.owner_id = guild.ownerId
+    await guildSettings.save()
+  }
 
-  const embed = new EmbedBuilder()
-    .setTitle(`Joined the folks at ${guild.name}`)
-    .setThumbnail(guild.iconURL())
-    .setColor(client.config.EMBED_COLORS.SUCCESS)
-    .addFields(
-      {
-        name: 'Server Name',
-        value: guild.name,
-        inline: false,
-      },
-      {
-        name: 'Server ID',
-        value: guild.id,
-        inline: false,
-      },
-      {
-        name: 'Owner',
-        value: `${client.users.cache.get(guild.ownerId).tag} [\`${guild.ownerId}\`]`,
-        inline: false,
-      },
-      {
-        name: 'Members',
-        value: `\`\`\`yaml\n${guild.memberCount}\`\`\``,
-        inline: false,
-      }
+  // Only proceed if setup is not completed
+  if (!guildSettings.setup_completed) {
+    // Send thank you message to the server
+    const targetChannel = guild.channels.cache.find(
+      channel =>
+        channel.type === ChannelType.GuildText &&
+        channel
+          .permissionsFor(guild.members.me)
+          .has(PermissionFlagsBits.SendMessages)
     )
-    .setFooter({ text: `Guild #${client.guilds.cache.size}` })
 
-  client.joinLeaveWebhook.send({
-    username: 'Join',
-    avatarURL: client.user.displayAvatarURL(),
-    embeds: [embed],
-  })
+    let serverMessageLink = null
+    if (targetChannel) {
+      const serverEmbed = new EmbedBuilder()
+        .setColor('#FFC0CB')
+        .setTitle('Yay! Mochi is here! ヾ(≧▽≦*)o')
+        .setDescription(
+          "Hiii everyone! I'm Mochi, your new cute friend! (≧◡≦) ♡ I'm super excited to join your server!"
+        )
+        .addFields(
+          {
+            name: 'Quick Setup',
+            value:
+              'Server owner, please run `/owner setup` to finish setting me up!',
+          },
+          {
+            name: 'Need help?',
+            value: `Join our [support server](${SUPPORT_SERVER}) for any questions!`,
+          }
+        )
+        .setFooter({ text: 'Spreading cuteness and joy~ ♡' })
 
-  try {
-    // Send a thank you DM to the guild owner
-    const owner = await guild.members.fetch(guild.ownerId)
-    if (owner) {
-      let components = [
-        new ButtonBuilder()
-          .setLabel('Our Bots')
-          .setStyle(ButtonStyle.Link)
-          .setURL(BOTS_URL),
-        new ButtonBuilder()
-          .setLabel('Donate')
-          .setStyle(ButtonStyle.Link)
-          .setURL(DONATE_URL),
-        new ButtonBuilder()
-          .setLabel('Support Server')
-          .setStyle(ButtonStyle.Link)
-          .setURL(SUPPORT_SERVER),
-      ]
+      const sentMessage = await targetChannel.send({ embeds: [serverEmbed] })
+      serverMessageLink = sentMessage.url
+      await sendOnboardingMenu(targetChannel)
 
-      let row = new ActionRowBuilder().addComponents(components)
+      // Default the update channel if not set
+      if (!guildSettings.updates_channel) {
+        guildSettings.updates_channel = targetChannel.id
+        await guildSettings.save()
+      }
+    }
 
-      owner
-        .send({
-          content: `Hey there, <@${owner.id}>! 🌸 Just wanted to say you're super cute, and I hope you're great! I just joined your server XD, if you ever need anything, feel free to reach out.\n\nAnd oh my silly mind, almost forgot, I have a sister! That's right, her name is **Amina** and I think you should meet her! She is a sweet AI and can talk in DMs and servers!\nLet's spread positivity and cute vibes together! And oh watchout for Pickle Rick\n\n I love you silly 😊💖`,
-          embeds: [embed], // You can add an embed here
+    // Send DM to server owner
+    try {
+      const owner = await guild.members.fetch(guild.ownerId)
+      if (owner) {
+        const dmEmbed = new EmbedBuilder()
+          .setColor('#FFC0CB')
+          .setTitle('Thank you for adding me! ♡(>ᴗ•)')
+          .setDescription(
+            "I'm so excited to be part of your server! Let's make it super cute together~"
+          )
+          .addFields(
+            {
+              name: 'Quick Setup',
+              value:
+                'Please run `/owner setup` in your server to finish setting me up!',
+            },
+            {
+              name: 'Need help?',
+              value: `Join our [support server](${SUPPORT_SERVER}) for any questions!`,
+            }
+          )
+          .setFooter({ text: 'Sending virtual hugs! (づ｡◕‿‿◕｡)づ' })
+
+        if (serverMessageLink) {
+          dmEmbed.addFields({
+            name: 'Server Message',
+            value: `[Click here to see my first message!](${serverMessageLink})`,
+          })
+        }
+
+        const components = [
+          new ButtonBuilder()
+            .setLabel('Our Bots')
+            .setStyle(ButtonStyle.Link)
+            .setURL(BOTS_URL),
+          new ButtonBuilder()
+            .setLabel('Donate')
+            .setStyle(ButtonStyle.Link)
+            .setURL(DONATE_URL),
+          new ButtonBuilder()
+            .setLabel('Support Server')
+            .setStyle(ButtonStyle.Link)
+            .setURL(SUPPORT_SERVER),
+        ]
+
+        const row = new ActionRowBuilder().addComponents(components)
+
+        await owner.send({
+          content: `Hiya, <@${owner.id}>! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Thanks for inviting me to your server! I can't wait to spread cuteness and joy with everyone~`,
+          embeds: [dmEmbed],
           components: [row],
         })
-        .then(() => {
-          console.log('Sent thank you DM to the server owner.')
-        })
-        .catch(error => {
-          console.error(`Error sending thank you DM: ${error}`)
-        })
+      }
+    } catch (err) {
+      console.error('Error sending DM to server owner:', err)
     }
-  } catch (err) {
-    console.error(err)
+
+    // Schedule a reminder if setup is not completed
+    setTimeout(
+      async () => {
+        const updatedSettings = await registerGuild(guild)
+        if (!updatedSettings.setup_completed) {
+          const owner = await guild.members.fetch(guild.ownerId)
+          if (owner) {
+            const reminderEmbed = new EmbedBuilder()
+              .setColor('#FFC0CB')
+              .setTitle('Mochi Setup Reminder ♡')
+              .setDescription(
+                'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/owner setup` to get started!'
+              )
+              .setFooter({
+                text: "I can't wait to be fully operational and super cute in your server! (◠‿◠✿)",
+              })
+
+            await owner.send({ embeds: [reminderEmbed] }).catch(() => {})
+          }
+        }
+      },
+      24 * 60 * 60 * 1000
+    ) // 24 hours delay
+  }
+
+  // Log join to webhook if available
+  if (client.joinLeaveWebhook) {
+    const embed = new EmbedBuilder()
+      .setTitle(`Joined the folks at ${guild.name}`)
+      .setThumbnail(guild.iconURL())
+      .setColor(client.config.EMBED_COLORS.SUCCESS)
+      .addFields(
+        { name: 'Server Name', value: guild.name, inline: false },
+        { name: 'Server ID', value: guild.id, inline: false },
+        {
+          name: 'Owner',
+          value: `${client.users.cache.get(guild.ownerId).tag} [\`${guild.ownerId}\`]`,
+          inline: false,
+        },
+        {
+          name: 'Members',
+          value: `\`\`\`yaml\n${guild.memberCount}\`\`\``,
+          inline: false,
+        }
+      )
+      .setFooter({ text: `Guild #${client.guilds.cache.size}` })
+
+    client.joinLeaveWebhook.send({
+      username: 'Join',
+      avatarURL: client.user.displayAvatarURL(),
+      embeds: [embed],
+    })
   }
 }
