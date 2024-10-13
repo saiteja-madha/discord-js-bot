@@ -11,7 +11,7 @@ The setup for Mochi is pretty simple.
 3. Authorize Mochi to know what servers you are on.
 4. On the upper-right-corner, you can select your server by clicking on **Select a server** and selecting the server you want to add the bot to and manage.
 
-You should start out by visiting the commands tab, making sure the prefix does not have any conflict as well as turn on and off any command(s) you may not want to be used.If you're interested in setting notifications like _Join/Leave, YouTube, Reddit, Streaming notifications._ You should look under the **Notifications & Feeds** tab.For _moderation tools, auto-moderation tools, auto roles, self assigning roles_ visit the **Tools & Utilities** tab.
+You should start out by visiting the commands tab, making sure to turn on and off any command(s) you may not want to be used.If you're interested in setting notifications like _Join/Leave, YouTube, Reddit, Streaming notifications._ You should look under the **Notifications & Feeds** tab.For _moderation tools, auto-moderation tools, auto roles, self assigning roles_ visit the **Tools & Utilities** tab.
 
 * **Moderation** can help you keep track of offences with warnings, and a moderation log.
 * **Auto-moderation** can help you keep track of bad words, bad websites, spam, mention spam, invite posting, bad nickname/names etc.

@@ -19,7 +19,6 @@ const Schema = new mongoose.Schema(
       time: { type: Number, default: 0 },
     },
     commands: {
-      prefix: { type: Number, default: 0 },
       slash: { type: Number, default: 0 },
     },
     contexts: {

@@ -4,13 +4,12 @@ const {
   EmbedBuilder,
   ActionRowBuilder,
   StringSelectMenuBuilder,
-  Message,
   ButtonBuilder,
   CommandInteraction,
   ApplicationCommandOptionType,
   ButtonStyle,
 } = require('discord.js')
-const { getCommandUsage, getSlashUsage } = require('@handlers/command')
+const { getSlashUsage } = require('@handlers/command')
 
 const CMDS_PER_PAGE = 5
 const IDLE_TIMEOUT = 30
@@ -33,27 +32,6 @@ module.exports = {
         type: ApplicationCommandOptionType.String,
       },
     ],
-  },
-
-  async messageRun(message, args, data) {
-    let trigger = args[0]
-
-    // !help
-    if (!trigger) {
-      const response = await getHelpMenu(message)
-      const sentMsg = await message.safeReply(response)
-      return waiter(sentMsg, message.member, data.prefix)
-    }
-
-    // check if command help (!help cat)
-    const cmd = message.client.getCommand(trigger)
-    if (cmd) {
-      const embed = getCommandUsage(cmd, data.prefix, trigger)
-      return message.safeReply({ embeds: [embed] })
-    }
-
-    // No matching command/category found
-    await message.safeReply('No matching command found')
   },
 
   async interactionRun(interaction) {
@@ -146,11 +124,10 @@ async function getHelpMenu({ client, guild, member }) {
 }
 
 /**
- * @param {Message} msg
+ * @param {import('discord.js').Message} msg
  * @param {import('discord.js').GuildMember} member
- * @param {string} prefix
  */
-const waiter = (msg, member, prefix) => {
+const waiter = (msg, member) => {
   const collector = msg.channel.createMessageComponentCollector({
     filter: reactor =>
       reactor.user.id === member.id && msg.id === reactor.message.id,
@@ -172,9 +149,7 @@ const waiter = (msg, member, prefix) => {
     switch (response.customId) {
       case 'help-menu': {
         const cat = response.values[0].toUpperCase()
-        arrEmbeds = prefix
-          ? getMsgCategoryEmbeds(msg.client, cat, prefix, member)
-          : getSlashCategoryEmbeds(msg.client, cat)
+        arrEmbeds = getSlashCategoryEmbeds(msg.client, cat)
         currentPage = 0
 
         // Buttons Row
@@ -314,85 +289,6 @@ function getSlashCategoryEmbeds(client, category) {
       .setAuthor({ name: `${category} Commands` })
       .setDescription(item.join('\n'))
       .setFooter({ text: `page ${index + 1} of ${arrSplitted.length}` })
-    arrEmbeds.push(embed)
-  })
-
-  return arrEmbeds
-}
-
-/**
- * Returns an array of message embeds for a particular command category [MESSAGE COMMANDS]
- * @param {BotClient} client
- * @param {string} category
- * @param {string} prefix
- */
-function getMsgCategoryEmbeds(client, category, prefix, member) {
-  let collector = ''
-
-  // For IMAGE Category
-  if (category === 'IMAGE') {
-    client.commands
-      .filter(cmd => cmd.category === category)
-      .forEach(cmd =>
-        cmd.command.aliases.forEach(alias => {
-          collector += `\`${alias}\`, `
-        })
-      )
-
-    collector +=
-      '\n\nYou can use these image commands in following formats\n' +
-      `**${prefix}cmd:** Picks message authors avatar as image\n` +
-      `**${prefix}cmd <@member>:** Picks mentioned members avatar as image\n` +
-      `**${prefix}cmd <url>:** Picks image from provided URL\n` +
-      `**${prefix}cmd [attachment]:** Picks attachment image`
-
-    const embed = new EmbedBuilder()
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor({ name: `${category} Commands` })
-      .setDescription(collector)
-
-    return [embed]
-  }
-
-  // For REMAINING Categories
-  const commands = client.commands.filter(cmd => cmd.category === category)
-
-  if (commands.length === 0) {
-    const embed = new EmbedBuilder()
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor({ name: `${category} Commands` })
-      .setDescription('No commands in this category')
-
-    return [embed]
-  }
-
-  const arrSplitted = []
-  const arrEmbeds = []
-
-  while (commands.length) {
-    let toAdd = commands.splice(
-      0,
-      commands.length > CMDS_PER_PAGE ? CMDS_PER_PAGE : commands.length
-    )
-    toAdd = toAdd
-      .filter(cmd =>
-        cmd.userPermissions ? member.permissions.has(cmd.userPermissions) : true
-      )
-      .map(cmd => `\`${prefix}${cmd.name}\`\n ❯ ${cmd.description}\n`)
-    arrSplitted.push(toAdd)
-  }
-
-  arrSplitted.forEach((item, index) => {
-    const embed = new EmbedBuilder()
-      .setColor(EMBED_COLORS.BOT_EMBED)
-      .setThumbnail(CommandCategory[category]?.image)
-      .setAuthor({ name: `${category} Commands` })
-      .setDescription(item.join('\n'))
-      .setFooter({
-        text: `page ${index + 1} of ${arrSplitted.length} | Type ${prefix}help <command> for more command information`,
-      })
     arrEmbeds.push(embed)
   })
 

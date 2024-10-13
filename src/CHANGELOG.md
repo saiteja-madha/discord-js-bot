@@ -47,12 +47,7 @@
 
 # Mochi v2.0.1
 
-## New
-
-- Reanabled prefix for `help` command
-- Default prefix is now `$` instead of `!`
-- Added `reload` prefix command for reloading commands and other bot stuff.
-  **DEV only!**
+**DEV only!**
 
 ## Developer Notes
 

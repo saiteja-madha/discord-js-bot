@@ -4,11 +4,6 @@
 These commands can only be used by members who have \*\*MANAGE\_SERVER\*\* permission
 {% endhint %}
 
-### Set Prefix
-
-* **Description**: Set bot prefix
-* **Usage**: `!setprefix <newPrefix>`
-
 ### Embed
 
 * **Description**: Send an embed message

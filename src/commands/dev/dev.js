@@ -122,19 +122,7 @@ module.exports = {
           },
         ],
       },
-      {
-        name: 'setprefix',
-        description: 'Sets a new prefix for this server',
-        type: ApplicationCommandOptionType.Subcommand,
-        options: [
-          {
-            name: 'newprefix',
-            description: 'The new prefix to set',
-            type: ApplicationCommandOptionType.String,
-            required: true,
-          },
-        ],
-      },
+
       {
         name: 'eval',
         description: 'Evaluates something',
@@ -343,13 +331,6 @@ module.exports = {
       interaction.followUp({ embeds: result })
     }
 
-    // Subcommand: setprefix
-    if (sub === 'setprefix') {
-      const newPrefix = interaction.options.getString('newprefix')
-      const response = await setNewPrefix(newPrefix, interaction.data.settings)
-      await interaction.followUp(response)
-    }
-
     // Subcommand: eval
     if (sub === 'eval') {
       const input = interaction.options.getString('expression')
@@ -443,7 +424,7 @@ module.exports = {
   },
 }
 
-// Functions: execute, setNewPrefix, buildSuccessResponse, buildErrorResponse
+// Functions: execute, buildSuccessResponse, buildErrorResponse
 async function execute(script) {
   try {
     const { stdout } = await util.promisify(exec)(script)
@@ -463,13 +444,6 @@ async function execute(script) {
       .setColor(EMBED_COLORS.ERROR)
     return errorEmbed
   }
-}
-
-async function setNewPrefix(newPrefix, settings) {
-  if (newPrefix.length > 2) return 'Prefix length cannot exceed `2` characters'
-  settings.prefix = newPrefix
-  await settings.save()
-  return `New prefix is set to \`${newPrefix}\``
 }
 
 const buildSuccessResponse = (output, client) => {

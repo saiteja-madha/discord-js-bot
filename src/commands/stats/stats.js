@@ -61,7 +61,6 @@ async function stats(member, settings) {
         name: '💬 Messages sent',
         value: stripIndents`
       ❯ Messages Sent: ${memberStats.messages}
-      ❯ Prefix Commands: ${memberStats.commands.prefix}
       ❯ Slash Commands: ${memberStats.commands.slash}
       ❯ XP Earned: ${memberStats.xp}
       ❯ Current Level: ${memberStats.level}

@@ -32,7 +32,6 @@ module.exports = {
    */
   async trackMessageStats(message, isCommand, settings) {
     const statsDb = await getMemberStats(message.guildId, message.member.id)
-    if (isCommand) statsDb.commands.prefix++
     statsDb.messages++
 
     // TODO: Ignore possible bot commands

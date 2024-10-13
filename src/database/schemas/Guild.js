@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { CACHE_SIZE, PREFIX_COMMANDS, STATS } = require('@root/config.js')
+const { CACHE_SIZE, STATS } = require('@root/config.js')
 const FixedSizeMap = require('fixedsize-map')
 const { getUser } = require('./User')
 
@@ -20,7 +20,6 @@ const Schema = new mongoose.Schema({
     setup_message_id: { type: String, default: null },
     last_update_message_id: { type: String, default: null },
   },
-  prefix: { type: String, default: PREFIX_COMMANDS.DEFAULT_PREFIX },
   stats: {
     enabled: { type: Boolean, default: true },
     xp: {

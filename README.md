@@ -99,7 +99,7 @@ of Mochi
 
 - **Let a bot be the server's assistant!** <br /> _Commands:_ `autorole`,
   `farewell`, `welcome`, `counters`, `flag translation`, `reaction roles`, ...
-- **Make custom settings for your own server.** <br /> _Commands:_ `setprefix`,
+- **Make custom settings for your own server.** <br /> _Commands:_ ,
   `maxwarns`, `modlog`...
 
 ### 💁 **Information Gathering:**
