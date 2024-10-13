@@ -6,7 +6,7 @@ const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
  */
 module.exports = {
   name: 'welcome',
-  description: 'setup welcome message',
+  description: 'Set up a cheerful welcome message for your server! 🎉',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {
@@ -15,12 +15,12 @@ module.exports = {
     options: [
       {
         name: 'status',
-        description: 'enable or disable welcome message',
+        description: 'Enable or disable the welcome message',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'status',
-            description: 'enabled or disabled',
+            description: 'Choose ON or OFF',
             required: true,
             type: ApplicationCommandOptionType.String,
             choices: [
@@ -38,17 +38,17 @@ module.exports = {
       },
       {
         name: 'preview',
-        description: 'preview the configured welcome message',
+        description: 'Preview the configured welcome message! 🌟',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'channel',
-        description: 'set welcome channel',
+        description: 'Set the channel for welcome messages 📬',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'channel',
-            description: 'channel name',
+            description: 'Select a channel',
             type: ApplicationCommandOptionType.Channel,
             channelTypes: [ChannelType.GuildText],
             required: true,
@@ -57,12 +57,12 @@ module.exports = {
       },
       {
         name: 'desc',
-        description: 'set embed description',
+        description: 'Set the embed description for the welcome message ✨',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'content',
-            description: 'description content',
+            description: 'What would you like the description to say?',
             type: ApplicationCommandOptionType.String,
             required: true,
           },
@@ -70,12 +70,12 @@ module.exports = {
       },
       {
         name: 'thumbnail',
-        description: 'configure embed thumbnail',
+        description: 'Configure the embed thumbnail 🌸',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'status',
-            description: 'thumbnail status',
+            description: 'Thumbnail status (ON/OFF)',
             type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
@@ -93,12 +93,12 @@ module.exports = {
       },
       {
         name: 'color',
-        description: 'set embed color',
+        description: 'Set the embed color for your welcome message 🎨',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'hex-code',
-            description: 'hex color code',
+            description: 'Enter the hex color code (e.g., #FF5733)',
             type: ApplicationCommandOptionType.String,
             required: true,
           },
@@ -106,12 +106,12 @@ module.exports = {
       },
       {
         name: 'footer',
-        description: 'set embed footer',
+        description: 'Set the footer for the welcome embed 👣',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'content',
-            description: 'footer content',
+            description: 'What should the footer say?',
             type: ApplicationCommandOptionType.String,
             required: true,
           },
@@ -119,12 +119,12 @@ module.exports = {
       },
       {
         name: 'image',
-        description: 'set embed image',
+        description: 'Set an image for the welcome embed 🖼️',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'url',
-            description: 'image url',
+            description: 'Enter the image URL',
             type: ApplicationCommandOptionType.String,
             required: true,
           },
@@ -193,7 +193,7 @@ module.exports = {
         break
 
       default:
-        response = 'Invalid subcommand'
+        response = "Oopsie! That's an invalid subcommand. Please try again! 🥺"
     }
 
     return interaction.followUp(response)
@@ -202,65 +202,62 @@ module.exports = {
 
 async function sendPreview(settings, member) {
   if (!settings.welcome?.enabled)
-    return 'Welcome message not enabled in this server'
+    return 'Oh no! The welcome message is not enabled in this server. 💔'
 
   const targetChannel = member.guild.channels.cache.get(
     settings.welcome.channel
   )
-  if (!targetChannel) return 'No channel is configured to send welcome message'
+  if (!targetChannel)
+    return 'Hmm... No channel is configured to send the welcome message. 😢'
 
   const response = await buildGreeting(member, 'WELCOME', settings.welcome)
   await targetChannel.safeSend(response)
 
-  return `Sent welcome preview to ${targetChannel.toString()}`
+  return `✨ Sent a preview of the welcome message to ${targetChannel.toString()}!`
 }
 
 async function setStatus(settings, status) {
-  const enabled = status.toUpperCase() === 'ON' ? true : false
+  const enabled = status.toUpperCase() === 'ON'
   settings.welcome.enabled = enabled
   await settings.save()
-  return `Configuration saved! Welcome message ${enabled ? 'enabled' : 'disabled'}`
+  return `🎉 Configuration saved! Welcome message has been ${status === 'ON' ? 'enabled' : 'disabled'}.`
 }
 
 async function setChannel(settings, channel) {
   if (!channel.canSendEmbeds()) {
-    return (
-      'Ugh! I cannot send greeting to that channel? I need the `Write Messages` and `Embed Links` permissions in ' +
-      channel.toString()
-    )
+    return `Oh no! I can't send greetings to that channel. I need the \`Write Messages\` and \`Embed Links\` permissions in ${channel.toString()}! 💦`
   }
   settings.welcome.channel = channel.id
   await settings.save()
-  return `Configuration saved! Welcome message will be sent to ${channel ? channel.toString() : 'Not found'}`
+  return `📢 Configuration saved! Welcome messages will now be sent to ${channel.toString()}!`
 }
 
 async function setDescription(settings, desc) {
   settings.welcome.embed.description = desc
   await settings.save()
-  return 'Configuration saved! Welcome message updated'
+  return '💖 Configuration saved! The welcome message description has been updated. 🌈'
 }
 
 async function setThumbnail(settings, status) {
-  settings.welcome.embed.thumbnail =
-    status.toUpperCase() === 'ON' ? true : false
+  settings.welcome.embed.thumbnail = status.toUpperCase() === 'ON'
   await settings.save()
-  return 'Configuration saved! Welcome message updated'
+  return '🌸 Configuration saved! The thumbnail for the welcome message has been updated. 🎀'
 }
 
 async function setColor(settings, color) {
   settings.welcome.embed.color = color
   await settings.save()
-  return 'Configuration saved! Welcome message updated'
+  return '🎨 Configuration saved! The color for the welcome message has been updated. 🌟'
 }
 
 async function setFooter(settings, content) {
   settings.welcome.embed.footer = content
   await settings.save()
-  return 'Configuration saved! Welcome message updated'
+  return '📝 Configuration saved! The footer for the welcome message has been updated. ✨'
 }
 
 async function setImage(settings, url) {
   settings.welcome.embed.image = url
   await settings.save()
-  return 'Configuration saved! Welcome message updated'
+  return '🖼️ Configuration saved! The image for the welcome message has been updated. 🎉'
 }

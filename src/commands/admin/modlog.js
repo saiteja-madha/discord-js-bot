@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
  */
 module.exports = {
   name: 'modlog',
-  description: 'enable or disable moderation logs',
+  description: 'Enable or disable moderation logs! 📝✨',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {
@@ -14,7 +14,7 @@ module.exports = {
     options: [
       {
         name: 'channel',
-        description: 'channels to send mod logs',
+        description: 'Select the channel to send mod logs! 📬',
         required: false,
         type: ApplicationCommandOptionType.Channel,
         channelTypes: [ChannelType.GuildText],
@@ -31,14 +31,14 @@ module.exports = {
 
 async function setChannel(targetChannel, settings) {
   if (!targetChannel && !settings.modlog_channel) {
-    return 'It is already disabled'
+    return 'Oh no! 😢 It seems like moderation logs are already disabled! 📭'
   }
 
   if (targetChannel && !targetChannel.canSendEmbeds()) {
-    return 'Ugh! I cannot send logs to that channel? I need the `Write Messages` and `Embed Links` permissions in that channel'
+    return 'Ugh! 😫 I can’t send logs to that channel! I need the `Send Messages` and `Embed Links` permissions there! 💬🔗'
   }
 
   settings.modlog_channel = targetChannel?.id
   await settings.save()
-  return `Configuration saved! Modlog channel ${targetChannel ? 'updated' : 'removed'}`
+  return `Yay! 🎉 Configuration saved! Modlog channel ${targetChannel ? 'updated' : 'removed'} successfully! 💖`
 }

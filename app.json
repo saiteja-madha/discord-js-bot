@@ -56,11 +56,6 @@
       "required": false,
       "value": ""
     },
-    "WAIFU_IT_KEY": {
-      "description": "Required for Waifu Commands (https://docs.waifu.it)",
-      "required": false,
-      "value": ""
-    },
     "GH_TOKEN": {
       "description": "Required for GitHub commands (https://github.com/settings/tokens)",
       "required": false,

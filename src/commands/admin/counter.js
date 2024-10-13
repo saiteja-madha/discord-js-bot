@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
  */
 module.exports = {
   name: 'counter',
-  description: 'setup counter channel in the guild',
+  description: 'Set up a counter channel in the guild! 🎉',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   botPermissions: ['ManageChannels'],
@@ -15,27 +15,27 @@ module.exports = {
     options: [
       {
         name: 'type',
-        description: 'type of counter channel',
+        description: 'Type of counter channel 🌟',
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: [
           {
-            name: 'users',
+            name: 'Users',
             value: 'USERS',
           },
           {
-            name: 'members',
+            name: 'Members',
             value: 'MEMBERS',
           },
           {
-            name: 'bots',
+            name: 'Bots',
             value: 'BOTS',
           },
         ],
       },
       {
         name: 'name',
-        description: 'name of the counter channel',
+        description: 'Name of the counter channel 📢',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
@@ -66,9 +66,9 @@ async function setupCounter(guild, type, name, settings) {
   let channelName = name
 
   const stats = await guild.fetchMemberStats()
-  if (type === 'USERS') channelName += ` : ${stats[0]}`
-  else if (type === 'MEMBERS') channelName += ` : ${stats[2]}`
-  else if (type === 'BOTS') channelName += ` : ${stats[1]}`
+  if (type === 'USERS') channelName += ` : ${stats[0]} 👥`
+  else if (type === 'MEMBERS') channelName += ` : ${stats[2]} 👨‍👩‍👧‍👦`
+  else if (type === 'BOTS') channelName += ` : ${stats[1]} 🤖`
 
   const vc = await guild.channels.create({
     name: channelName,
@@ -102,5 +102,5 @@ async function setupCounter(guild, type, name, settings) {
   settings.server.bots = stats[1]
   await settings.save()
 
-  return 'Configuration saved! Counter channel created'
+  return `Yay! 🎉 Configuration saved! Counter channel \`${channelName}\` created successfully! ✨`
 }

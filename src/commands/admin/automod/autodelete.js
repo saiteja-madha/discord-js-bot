@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
  */
 module.exports = {
   name: 'autodelete',
-  description: 'manage the autodelete settings for the server',
+  description: 'Manage the autodelete settings for the server 🗑️✨',
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
   slashCommand: {
@@ -14,12 +14,12 @@ module.exports = {
     options: [
       {
         name: 'attachments',
-        description: 'allow or disallow attachments in messages',
+        description: 'Allow or disallow attachments in messages 📎',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'status',
-            description: 'configuration status',
+            description: 'Configuration status',
             required: true,
             type: ApplicationCommandOptionType.String,
             choices: [
@@ -37,12 +37,12 @@ module.exports = {
       },
       {
         name: 'invites',
-        description: 'allow or disallow discord invites in messages',
+        description: 'Allow or disallow Discord invites in messages 🔗',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'status',
-            description: 'configuration status',
+            description: 'Configuration status',
             required: true,
             type: ApplicationCommandOptionType.String,
             choices: [
@@ -60,12 +60,12 @@ module.exports = {
       },
       {
         name: 'links',
-        description: 'allow or disallow links in messages',
+        description: 'Allow or disallow links in messages 🌐',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'status',
-            description: 'configuration status',
+            description: 'Configuration status',
             required: true,
             type: ApplicationCommandOptionType.String,
             choices: [
@@ -83,12 +83,12 @@ module.exports = {
       },
       {
         name: 'maxlines',
-        description: 'sets maximum lines allowed per message',
+        description: 'Sets maximum lines allowed per message 📜',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'amount',
-            description: 'configuration amount (0 to disable)',
+            description: 'Configuration amount (0 to disable)',
             required: true,
             type: ApplicationCommandOptionType.Integer,
           },
@@ -102,70 +102,60 @@ module.exports = {
     const settings = data.settings
     let response
 
-    if (sub == 'attachments') {
+    if (sub === 'attachments') {
       response = await antiAttachments(
         settings,
         interaction.options.getString('status')
       )
-    } else if (sub === 'invites')
+    } else if (sub === 'invites') {
       response = await antiInvites(
         settings,
         interaction.options.getString('status')
       )
-    else if (sub == 'links')
-      response = await antilinks(
+    } else if (sub === 'links') {
+      response = await antiLinks(
         settings,
         interaction.options.getString('status')
       )
-    else if (sub === 'maxlines')
+    } else if (sub === 'maxlines') {
       response = await maxLines(
         settings,
         interaction.options.getInteger('amount')
       )
-    else response = 'Invalid command usage!'
+    } else {
+      response = 'Oops! Invalid command usage! Please check and try again! 💕'
+    }
 
     await interaction.followUp(response)
   },
 }
 
 async function antiAttachments(settings, input) {
-  const status = input.toUpperCase() === 'ON' ? true : false
+  const status = input.toUpperCase() === 'ON'
   settings.automod.anti_attachments = status
   await settings.save()
-  return `Messages ${
-    status
-      ? 'with attachments will now be automatically deleted'
-      : 'will not be filtered for attachments now'
-  }`
+  return `📎✨ Messages ${status ? 'with attachments will now be automatically deleted! 🎉' : 'will not be filtered for attachments anymore! 💖'}`
 }
 
 async function antiInvites(settings, input) {
-  const status = input.toUpperCase() === 'ON' ? true : false
+  const status = input.toUpperCase() === 'ON'
   settings.automod.anti_invites = status
   await settings.save()
-  return `Messages ${
-    status
-      ? 'with discord invites will now be automatically deleted'
-      : 'will not be filtered for discord invites now'
-  }`
+  return `🔗✨ Messages ${status ? 'with Discord invites will now be automatically deleted! 🎊' : 'will not be filtered for Discord invites anymore! 💔'}`
 }
 
-async function antilinks(settings, input) {
-  const status = input.toUpperCase() === 'ON' ? true : false
+async function antiLinks(settings, input) {
+  const status = input.toUpperCase() === 'ON'
   settings.automod.anti_links = status
   await settings.save()
-  return `Messages ${status ? 'with links will now be automatically deleted' : 'will not be filtered for links now'}`
+  return `🌐✨ Messages ${status ? 'with links will now be automatically deleted! 🎉' : 'will not be filtered for links anymore! 💕'}`
 }
 
 async function maxLines(settings, input) {
   const lines = Number.parseInt(input)
-  if (isNaN(lines)) return 'Please enter a valid number input'
+  if (isNaN(lines)) return '😢 Please enter a valid number!'
 
   settings.automod.max_lines = lines
   await settings.save()
-  return `${
-    input === 0
-      ? 'Maximum line limit is disabled'
-      : `Messages longer than \`${input}\` lines will now be automatically deleted`
-  }`
+  return `${input === 0 ? '📜✨ Maximum line limit is now disabled! 💔' : `📜✨ Messages longer than \`${input}\` lines will now be automatically deleted! 🎉`}`
 }

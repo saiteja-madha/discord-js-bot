@@ -17,7 +17,7 @@ const { isValidColor, isHex } = require('@helpers/Utils')
  */
 module.exports = {
   name: 'embed',
-  description: 'send embed message',
+  description: 'Send a beautiful embed message! ✨',
   category: 'ADMIN',
   userPermissions: ['ManageMessages'],
   slashCommand: {
@@ -26,7 +26,7 @@ module.exports = {
     options: [
       {
         name: 'channel',
-        description: 'channel to send embed',
+        description: 'Choose a channel to send the embed 🌈',
         type: ApplicationCommandOptionType.Channel,
         channelTypes: [ChannelType.GuildText],
         required: true,
@@ -38,10 +38,12 @@ module.exports = {
     const channel = interaction.options.getChannel('channel')
     if (!channel.canSendEmbeds()) {
       return interaction.followUp(
-        "I don't have permission to send embeds in that channel"
+        "Oh no! 😢 I can't send embeds in that channel! Please choose another one."
       )
     }
-    interaction.followUp(`Embed setup started in ${channel}`)
+    interaction.followUp(
+      `✨ Embed setup started in ${channel}! Let's create something pretty!`
+    )
     await embedSetup(channel, interaction.member)
   },
 }
@@ -52,12 +54,12 @@ module.exports = {
  */
 async function embedSetup(channel, member) {
   const sentMsg = await channel.send({
-    content: 'Click the button below to get started',
+    content: 'Click the button below to get started! 🚀',
     components: [
       new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId('EMBED_ADD')
-          .setLabel('Create Embed')
+          .setLabel('Create Embed 💖')
           .setStyle(ButtonStyle.Primary)
       ),
     ],
@@ -74,46 +76,50 @@ async function embedSetup(channel, member) {
     })
     .catch(ex => {})
 
-  if (!btnInteraction)
-    return sentMsg.edit({ content: 'No response received', components: [] })
+  if (!btnInteraction) {
+    return sentMsg.edit({
+      content: 'No response received 😔. Embed setup cancelled.',
+      components: [],
+    })
+  }
 
   await btnInteraction.showModal(
     new ModalBuilder({
       customId: 'EMBED_MODAL',
-      title: 'Embed Generator',
+      title: '✨ Embed Generator ✨',
       components: [
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId('title')
-            .setLabel('Embed Title')
+            .setLabel('Embed Title 🎉')
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId('author')
-            .setLabel('Embed Author')
+            .setLabel('Embed Author 👩‍🎨')
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId('description')
-            .setLabel('Embed Description')
+            .setLabel('Embed Description 📝')
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId('color')
-            .setLabel('Embed Color')
+            .setLabel('Embed Color 🎨 (Hex code)')
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId('footer')
-            .setLabel('Embed Footer')
+            .setLabel('Embed Footer ✍️')
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
@@ -121,7 +127,7 @@ async function embedSetup(channel, member) {
     })
   )
 
-  // receive modal input
+  // Receive modal input
   const modal = await btnInteraction
     .awaitModalSubmit({
       time: 1 * 60 * 1000,
@@ -132,13 +138,14 @@ async function embedSetup(channel, member) {
     })
     .catch(ex => {})
 
-  if (!modal)
+  if (!modal) {
     return sentMsg.edit({
-      content: 'No response received, cancelling setup',
+      content: 'No response received, cancelling setup 🥺',
       components: [],
     })
+  }
 
-  modal.reply({ content: 'Embed sent', ephemeral: true }).catch(ex => {})
+  modal.reply({ content: '🌟 Embed sent!', ephemeral: true }).catch(ex => {})
 
   const title = modal.fields.getTextInputValue('title')
   const author = modal.fields.getTextInputValue('author')
@@ -146,39 +153,42 @@ async function embedSetup(channel, member) {
   const footer = modal.fields.getTextInputValue('footer')
   const color = modal.fields.getTextInputValue('color')
 
-  if (!title && !author && !description && !footer)
+  if (!title && !author && !description && !footer) {
     return sentMsg.edit({
-      content: "You can't send an empty embed!",
+      content:
+        "Oops! 🙈 You can't send an empty embed! Please add some content.",
       components: [],
     })
+  }
 
   const embed = new EmbedBuilder()
   if (title) embed.setTitle(title)
   if (author) embed.setAuthor({ name: author })
   if (description) embed.setDescription(description)
   if (footer) embed.setFooter({ text: footer })
-  if ((color && isValidColor(color)) || (color && isHex(color)))
+  if ((color && isValidColor(color)) || (color && isHex(color))) {
     embed.setColor(color)
+  }
 
-  // add/remove field button
+  // Add/remove field button
   const buttonRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId('EMBED_FIELD_ADD')
-      .setLabel('Add Field')
+      .setLabel('Add Field 🌟')
       .setStyle(ButtonStyle.Success),
     new ButtonBuilder()
       .setCustomId('EMBED_FIELD_REM')
-      .setLabel('Remove Field')
+      .setLabel('Remove Field ❌')
       .setStyle(ButtonStyle.Danger),
     new ButtonBuilder()
       .setCustomId('EMBED_FIELD_DONE')
-      .setLabel('Done')
+      .setLabel('Done ✅')
       .setStyle(ButtonStyle.Primary)
   )
 
   await sentMsg.edit({
     content:
-      'Please add fields using the buttons below. Click done when you are done.',
+      '✨ Please add fields using the buttons below. Click "Done" when you are ready! ✨',
     embeds: [embed],
     components: [buttonRow],
   })
@@ -195,26 +205,26 @@ async function embedSetup(channel, member) {
       await interaction.showModal(
         new ModalBuilder({
           customId: 'EMBED_ADD_FIELD_MODAL',
-          title: 'Add Field',
+          title: '🌟 Add Field 🌟',
           components: [
             new ActionRowBuilder().addComponents(
               new TextInputBuilder()
                 .setCustomId('name')
-                .setLabel('Field Name')
+                .setLabel('Field Name 🏷️')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(true)
             ),
             new ActionRowBuilder().addComponents(
               new TextInputBuilder()
                 .setCustomId('value')
-                .setLabel('Field Value')
+                .setLabel('Field Value 📖')
                 .setStyle(TextInputStyle.Paragraph)
                 .setRequired(true)
             ),
             new ActionRowBuilder().addComponents(
               new TextInputBuilder()
                 .setCustomId('inline')
-                .setLabel('Inline? (true/false)')
+                .setLabel('Inline? (true/false) 🌈')
                 .setStyle(TextInputStyle.Short)
                 .setValue('true')
                 .setRequired(true)
@@ -223,7 +233,7 @@ async function embedSetup(channel, member) {
         })
       )
 
-      // receive modal input
+      // Receive modal input
       const modal = await interaction
         .awaitModalSubmit({
           time: 5 * 60 * 1000,
@@ -234,7 +244,9 @@ async function embedSetup(channel, member) {
 
       if (!modal) return sentMsg.edit({ components: [] })
 
-      modal.reply({ content: 'Field added', ephemeral: true }).catch(ex => {})
+      modal
+        .reply({ content: '🎉 Field added!', ephemeral: true })
+        .catch(ex => {})
 
       const name = modal.fields.getTextInputValue('name')
       const value = modal.fields.getTextInputValue('value')
@@ -249,22 +261,22 @@ async function embedSetup(channel, member) {
       embed.setFields(fields)
     }
 
-    // remove field
+    // Remove field
     else if (interaction.customId === 'EMBED_FIELD_REM') {
       const fields = embed.data.fields
       if (fields) {
         fields.pop()
         embed.setFields(fields)
-        interaction.reply({ content: 'Field removed', ephemeral: true })
+        interaction.reply({ content: '🔴 Field removed!', ephemeral: true })
       } else {
         interaction.reply({
-          content: 'There are no fields to remove',
+          content: 'Oops! 😅 There are no fields to remove!',
           ephemeral: true,
         })
       }
     }
 
-    // done
+    // Done
     else if (interaction.customId === 'EMBED_FIELD_DONE') {
       return collector.stop()
     }
@@ -274,5 +286,6 @@ async function embedSetup(channel, member) {
 
   collector.on('end', async (_collected, _reason) => {
     await sentMsg.edit({ content: '', components: [] })
+    interaction.followUp('✨ Embed setup finished! Hope you like it! 💖')
   })
 }

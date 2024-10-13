@@ -103,8 +103,6 @@ SPOTIFY_CLIENT_SECRET=
 # Required for OpenAI (https://beta.openai.com/)
 OPENAI=
 
-# Required for few anime commands (https://docs.waifu.it)
-WAIFU_IT_KEY=
 
 ```
 
@@ -130,7 +128,6 @@ Extras:
 * SPOTIFY\_CLIENT\_ID: (Optional) The client ID for Spotify
 * SPOTIFY\_CLIENT\_SECRET: (Optional) The client secret for Spotify
 * OPENAI: (Optional) The API key for OpenAI
-* WAIFU\_IT\_KEY: (Optional) The API key for [waifu.it](https://docs.waifu.it)
 
 </details>
 

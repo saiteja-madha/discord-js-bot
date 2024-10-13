@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
  */
 module.exports = {
   name: 'maxwarn',
-  description: 'set max warnings configuration',
+  description: 'Set max warnings configuration! 🎉',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {
@@ -15,12 +15,12 @@ module.exports = {
       {
         name: 'limit',
         description:
-          'set max warnings a member can receive before taking an action',
+          'Set max warnings a member can receive before taking action! ⚠️',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'amount',
-            description: 'max number of strikes',
+            description: 'Max number of strikes! 🎯',
             type: ApplicationCommandOptionType.Integer,
             required: true,
           },
@@ -28,12 +28,13 @@ module.exports = {
       },
       {
         name: 'action',
-        description: 'set action to perform after receiving maximum warnings',
+        description:
+          'Set action to perform after receiving maximum warnings! 🚨',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'action',
-            description: 'action to perform',
+            description: 'Action to perform',
             type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
@@ -82,29 +83,29 @@ module.exports = {
 async function setLimit(limit, settings) {
   settings.max_warn.limit = limit
   await settings.save()
-  return `Configuration saved! Maximum warnings is set to ${limit}`
+  return `Yay! 🎊 Configuration saved! Maximum warnings are set to ${limit}! 🌈`
 }
 
 async function setAction(guild, action, settings) {
   if (action === 'TIMEOUT') {
     if (!guild.members.me.permissions.has('ModerateMembers')) {
-      return 'I do not permission to timeout members'
+      return 'Oh no! 😱 I don’t have permission to timeout members! Please grant me that permission! 🙏'
     }
   }
 
   if (action === 'KICK') {
     if (!guild.members.me.permissions.has('KickMembers')) {
-      return 'I do not have permission to kick members'
+      return 'Eep! 😬 I don’t have permission to kick members! Please grant me that permission! 🙏'
     }
   }
 
   if (action === 'BAN') {
     if (!guild.members.me.permissions.has('BanMembers')) {
-      return 'I do not have permission to ban members'
+      return 'Yikes! 😰 I don’t have permission to ban members! Please grant me that permission! 🙏'
     }
   }
 
   settings.max_warn.action = action
   await settings.save()
-  return `Configuration saved! Automod action is set to ${action}`
+  return `Yay! 🎉 Configuration saved! Automod action is set to ${action}! 💖`
 }

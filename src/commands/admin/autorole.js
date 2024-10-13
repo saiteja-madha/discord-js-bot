@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
  */
 module.exports = {
   name: 'autorole',
-  description: 'setup role to be given when a member joins the server',
+  description: 'Set up a role to be given when a member joins the server! 🎉',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {
@@ -14,18 +14,18 @@ module.exports = {
     options: [
       {
         name: 'add',
-        description: 'setup the autorole',
+        description: 'Setup the autorole ✨',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'role',
-            description: 'the role to be given',
+            description: 'The role to be given 🎭',
             type: ApplicationCommandOptionType.Role,
             required: false,
           },
           {
             name: 'role_id',
-            description: 'the role id to be given',
+            description: 'The role ID to be given 📜',
             type: ApplicationCommandOptionType.String,
             required: false,
           },
@@ -33,7 +33,7 @@ module.exports = {
       },
       {
         name: 'remove',
-        description: 'disable the autorole',
+        description: 'Disable the autorole 🚫',
         type: ApplicationCommandOptionType.Subcommand,
       },
     ],
@@ -43,32 +43,35 @@ module.exports = {
     const sub = interaction.options.getSubcommand()
     let response
 
-    // add
+    // Add autorole
     if (sub === 'add') {
       let role = interaction.options.getRole('role')
       if (!role) {
         const role_id = interaction.options.getString('role_id')
         if (!role_id)
-          return interaction.followUp('Please provide a role or role id')
+          return interaction.followUp(
+            'Please provide a role or role ID, okay? 🥺✨'
+          )
 
         const roles = interaction.guild.findMatchingRoles(role_id)
         if (roles.length === 0)
           return interaction.followUp(
-            'No matching roles found matching your query'
+            'Oh no! No matching roles found. Please try again! 😢'
           )
+
         role = roles[0]
       }
 
       response = await setAutoRole(interaction, role, data.settings)
     }
 
-    // remove
+    // Remove autorole
     else if (sub === 'remove') {
       response = await setAutoRole(interaction, null, data.settings)
     }
 
-    // default
-    else response = 'Invalid subcommand'
+    // Default case
+    else response = 'Oops! Invalid subcommand. Please try again! 🤔'
 
     await interaction.followUp(response)
   },
@@ -84,17 +87,19 @@ async function setAutoRole(interaction, role, settings) {
 
   if (role) {
     if (role.id === guild.roles.everyone.id)
-      return 'You cannot set `@everyone` as the autorole'
+      return "Oh no! You cannot set `@everyone` as the autorole! That wouldn't be fair! 🙅‍♀️✨"
     if (!guild.members.me.permissions.has('ManageRoles'))
-      return "I don't have the `ManageRoles` permission"
+      return "Oops! I don't have the `ManageRoles` permission. Please check my permissions! 🥺"
     if (guild.members.me.roles.highest.position < role.position)
-      return "I don't have the permissions to assign this role"
-    if (role.managed) return 'Oops! This role is managed by an integration'
+      return "Yikes! I don't have the permissions to assign this role. Is it higher than mine? 😟"
+    if (role.managed)
+      return "Oops! This role is managed by an integration, so I can't assign it! 😭"
   }
 
+  // Setting or disabling the autorole
   if (!role) settings.autorole = null
   else settings.autorole = role.id
 
   await settings.save()
-  return `Configuration saved! Autorole is ${!role ? 'disabled' : 'setup'}`
+  return `Yay! 🎉 Configuration saved! Autorole is now ${!role ? 'disabled' : 'set up!'} ✨`
 }

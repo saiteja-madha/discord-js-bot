@@ -11,7 +11,7 @@ const { stripIndent } = require('common-tags')
  */
 module.exports = {
   name: 'automod',
-  description: 'various automod configuration',
+  description: '✨ Various automod configuration! 🌟',
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
   slashCommand: {
@@ -20,17 +20,17 @@ module.exports = {
     options: [
       {
         name: 'status',
-        description: 'check automod configuration',
+        description: '🔍 Check automod configuration',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'strikes',
-        description: 'set maximum number of strikes before taking an action',
+        description: '⚠️ Set maximum number of strikes before taking an action',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'amount',
-            description: 'number of strikes (default 5)',
+            description: '💖 Number of strikes (default 5)',
             required: true,
             type: ApplicationCommandOptionType.Integer,
           },
@@ -39,12 +39,12 @@ module.exports = {
       {
         name: 'action',
         description:
-          'set action to be performed after receiving maximum strikes',
+          '⚔️ Set action to be performed after receiving maximum strikes',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'action',
-            description: 'action to perform',
+            description: '💔 Action to perform',
             type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
@@ -67,12 +67,12 @@ module.exports = {
       {
         name: 'debug',
         description:
-          'enable/disable automod for messages sent by admins & moderators',
+          '🛠️ Enable/disable automod for messages sent by admins & moderators',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'status',
-            description: 'configuration status',
+            description: '🌈 Configuration status',
             required: true,
             type: ApplicationCommandOptionType.String,
             choices: [
@@ -90,17 +90,17 @@ module.exports = {
       },
       {
         name: 'whitelist',
-        description: 'view whitelisted channels',
+        description: '🔒 View whitelisted channels',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'whitelistadd',
-        description: 'add a channel to the whitelist',
+        description: '✨ Add a channel to the whitelist',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'channel',
-            description: 'channel to add',
+            description: '🌸 Channel to add',
             required: true,
             type: ApplicationCommandOptionType.Channel,
             channelTypes: [ChannelType.GuildText],
@@ -109,12 +109,12 @@ module.exports = {
       },
       {
         name: 'whitelistremove',
-        description: 'remove a channel from the whitelist',
+        description: '❌ Remove a channel from the whitelist',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'channel',
-            description: 'channel to remove',
+            description: '💔 Channel to remove',
             required: true,
             type: ApplicationCommandOptionType.Channel,
             channelTypes: [ChannelType.GuildText],
@@ -167,7 +167,7 @@ async function getStatus(settings, guild) {
 
   const logChannel = settings.modlog_channel
     ? guild.channels.cache.get(settings.modlog_channel).toString()
-    : 'Not Configured'
+    : 'Not Configured 💔'
 
   // String Builder
   let desc = stripIndent`
@@ -181,27 +181,30 @@ async function getStatus(settings, guild) {
   `
 
   const embed = new EmbedBuilder()
-    .setAuthor({ name: 'Automod Configuration', iconURL: guild.iconURL() })
+    .setAuthor({
+      name: '✨ Automod Configuration ✨',
+      iconURL: guild.iconURL(),
+    })
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(desc)
     .addFields(
       {
-        name: 'Log Channel',
+        name: '🔍 Log Channel',
         value: logChannel,
         inline: true,
       },
       {
-        name: 'Max Strikes',
+        name: '⚠️ Max Strikes',
         value: automod.strikes.toString(),
         inline: true,
       },
       {
-        name: 'Action',
+        name: '💔 Action',
         value: automod.action,
         inline: true,
       },
       {
-        name: 'Debug',
+        name: '🔧 Debug',
         value: automod.debug ? '✓' : '✕',
         inline: true,
       }
@@ -213,43 +216,43 @@ async function getStatus(settings, guild) {
 async function setStrikes(settings, strikes) {
   settings.automod.strikes = strikes
   await settings.save()
-  return `Configuration saved! Maximum strikes is set to ${strikes}`
+  return `🎉 Configuration saved! Maximum strikes is set to **${strikes}**!`
 }
 
 async function setAction(settings, guild, action) {
   if (action === 'TIMEOUT') {
     if (!guild.members.me.permissions.has('ModerateMembers')) {
-      return 'I do not permission to timeout members'
+      return '💔 Oops! I need permission to timeout members!'
     }
   }
 
   if (action === 'KICK') {
     if (!guild.members.me.permissions.has('KickMembers')) {
-      return 'I do not have permission to kick members'
+      return '💔 Oops! I need permission to kick members!'
     }
   }
 
   if (action === 'BAN') {
     if (!guild.members.me.permissions.has('BanMembers')) {
-      return 'I do not have permission to ban members'
+      return '💔 Oops! I need permission to ban members!'
     }
   }
 
   settings.automod.action = action
   await settings.save()
-  return `Configuration saved! Automod action is set to ${action}`
+  return `🎉 Configuration saved! Automod action is set to **${action}**!`
 }
 
 async function setDebug(settings, input) {
   const status = input.toLowerCase() === 'on' ? true : false
   settings.automod.debug = status
   await settings.save()
-  return `Configuration saved! Automod debug is now ${status ? 'enabled' : 'disabled'}`
+  return `🎉 Configuration saved! Automod debug is now **${status ? 'enabled' : 'disabled'}**!`
 }
 
 function getWhitelist(guild, settings) {
   const whitelist = settings.automod.wh_channels
-  if (!whitelist || !whitelist.length) return 'No channels are whitelisted'
+  if (!whitelist || !whitelist.length) return '🔒 No channels are whitelisted~'
 
   const channels = []
   for (const channelId of whitelist) {
@@ -258,24 +261,24 @@ function getWhitelist(guild, settings) {
     if (channel) channels.push(channel.toString())
   }
 
-  return `Whitelisted channels: ${channels.join(', ')}`
+  return `✨ Whitelisted channels: ${channels.join(', ')}`
 }
 
 async function whiteListAdd(settings, channelId) {
   if (settings.automod.wh_channels.includes(channelId))
-    return 'Channel is already whitelisted'
+    return '❌ Channel is already whitelisted~'
   settings.automod.wh_channels.push(channelId)
   await settings.save()
-  return `Channel whitelisted!`
+  return `✨ Channel whitelisted!`
 }
 
 async function whiteListRemove(settings, channelId) {
   if (!settings.automod.wh_channels.includes(channelId))
-    return 'Channel is not whitelisted'
+    return '❌ Channel is not whitelisted~'
   settings.automod.wh_channels.splice(
     settings.automod.wh_channels.indexOf(channelId),
     1
   )
   await settings.save()
-  return `Channel removed from whitelist!`
+  return `❌ Channel removed from whitelist!`
 }

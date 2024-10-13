@@ -1,20 +1,18 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
-const { getJson } = require('@helpers/HttpUtils')
+const axios = require('axios')
 const { EMBED_COLORS } = require('@root/config')
-const NekosLife = require('nekos.life')
-const neko = new NekosLife()
 
 const choices = [
-  'hug',
-  'kiss',
+  'bite',
+  'blush',
+  'cringe',
   'cuddle',
-  'feed',
+  'kiss',
   'pat',
-  'poke',
   'slap',
-  'smug',
-  'tickle',
   'wink',
+  'wave',
+  'kill',
 ]
 
 /**
@@ -30,7 +28,7 @@ module.exports = {
     description: 'Send an anime reaction.',
     options: [
       {
-        name: 'category',
+        name: 'reaction',
         description: 'Reaction type',
         type: ApplicationCommandOptionType.String,
         required: true,
@@ -40,33 +38,24 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const choice = interaction.options.getString('category')
+    const choice = interaction.options.getString('reaction')
     const embed = await genReaction(choice, interaction.user)
     await interaction.followUp({ embeds: [embed] })
   },
 }
 
-const genReaction = async (category, user) => {
+const genReaction = async (reaction, user) => {
   try {
-    let imageUrl
-
-    // some-random api
-    if (category === 'wink') {
-      const response = await getJson('https://some-random-api.com/animu/wink')
-      if (!response.success) throw new Error('API error')
-      imageUrl = response.data.link
-    }
-
-    // neko api
-    else {
-      imageUrl = (await neko[category]()).url
-    }
+    // Fetch reaction image from Waifu.pics API
+    const response = await axios.get(`https://api.waifu.pics/sfw/${reaction}`)
+    const imageUrl = response.data.url
 
     return new EmbedBuilder()
       .setImage(imageUrl)
-      .setColor('Random')
+      .setColor(EMBED_COLORS.BOT_EMBED)
       .setFooter({ text: `Requested By ${user.username}` })
   } catch (ex) {
+    console.error('Error fetching reaction:', ex)
     return new EmbedBuilder()
       .setColor(EMBED_COLORS.ERROR)
       .setDescription('Failed to fetch reaction. Try again!')

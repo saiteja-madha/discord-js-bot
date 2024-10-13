@@ -2,49 +2,50 @@ const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
   name: 'say',
-  description: 'Says a message as the bot to a channel you choose',
+  description: 'Says a message as the bot to a channel you choose! 🗣️✨',
   category: 'ADMIN',
   botPermissions: ['SendMessages'],
   userPermissions: ['ManageMessages'],
   slashCommand: {
     enabled: true,
     ephemeral: true,
-    description: 'Says a message as the bot to a channel you choose',
+    description: 'Says a message as the bot to a channel you choose! 🗣️✨',
     options: [
       {
         name: 'message',
-        description: 'The message to be sent.',
+        description: 'The message to be sent. 💬',
         type: 3,
         required: true,
       },
       {
         name: 'channel',
-        description: 'The channel where the message will be sent.',
+        description: 'The channel where the message will be sent. 📬',
         type: 7,
         required: false,
       },
       {
         name: 'message_id',
-        description: 'The ID of the message to edit or reply to.',
+        description: 'The ID of the message to edit or reply to. 📝',
         type: 3,
         required: false,
       },
       {
         name: 'edit',
         description:
-          'Whether to edit the message specified by message_id instead of sending a new message.',
+          'Whether to edit the message specified by message_id instead of sending a new message. ✏️',
         type: 5,
         required: false,
       },
       {
         name: 'ping',
         description:
-          'Whether to ping everyone in the channel after sending the message.',
+          'Whether to ping everyone in the channel after sending the message. 📢',
         type: 5,
         required: false,
       },
     ],
   },
+
   async execute(interaction) {
     const { options } = interaction
 
@@ -72,64 +73,56 @@ module.exports = {
 
         if (!replyMessage) {
           await interaction.followUp({
-            content: 'Invalid message ID.',
+            content:
+              'Oopsie! 😅 That message ID seems invalid. Please try again! 💔',
             ephemeral: true,
           })
+          return
         }
 
         if (edit) {
           await replyMessage.edit(message)
+          await interaction.followUp({
+            content: '✨ Message edited successfully! ✨',
+            ephemeral: true,
+          })
         } else {
           await replyMessage.reply({
             content: `${message}\n${ping ? '@everyone' : ''}`,
             allowedMentions: { parse: ['everyone', 'roles', 'users'] },
           })
+          await interaction.followUp({
+            content: '🎉 Message replied successfully! 🎉',
+            ephemeral: true,
+          })
+        }
+      } else {
+        // If no message ID is provided, send a new message
+        await channel.send({
+          content: message,
+          allowedMentions: { parse: ['everyone', 'roles', 'users'] },
+        })
+
+        if (ping) {
+          setTimeout(async () => {
+            await channel.send({
+              content: '@everyone',
+              allowedMentions: { parse: ['everyone', 'roles', 'users'] },
+            })
+          }, 2000) // wait 2 seconds before sending the second message
         }
 
         // Send the final reply
         await interaction.followUp({
-          content: edit ? 'Message edited' : 'Message sent',
+          content: '✨ Your message has been sent! ✨',
           ephemeral: true,
         })
-      } else {
-        // If no message ID is provided, send a new message
-        const taggedChannel = options.getChannel('channel')
-
-        if (taggedChannel) {
-          await taggedChannel.send({
-            content: message,
-            allowedMentions: { parse: ['everyone', 'roles', 'users'] },
-          })
-          if (ping) {
-            setTimeout(async () => {
-              await taggedChannel.send({
-                content: '@everyone',
-                allowedMentions: { parse: ['everyone', 'roles', 'users'] },
-              })
-            }, 2000) // wait 2 seconds before sending the second message
-          }
-        } else {
-          await interaction.channel.send({
-            content: message,
-            allowedMentions: { parse: ['everyone', 'roles', 'users'] },
-          })
-          if (ping) {
-            setTimeout(async () => {
-              await interaction.channel.send({
-                content: '@everyone',
-                allowedMentions: { parse: ['everyone', 'roles', 'users'] },
-              })
-            }, 2000) // wait 2 seconds before sending the second message
-          }
-        }
-
-        // Send the final reply
-        await interaction.followUp({ content: 'Message sent', ephemeral: true })
       }
     } catch (error) {
       console.error(error)
       await interaction.followUp({
-        content: 'An error occurred while processing this command.',
+        content:
+          'Oh no! 😱 An error occurred while processing this command. Please try again later! 💖',
         ephemeral: true,
       })
     }
