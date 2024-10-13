@@ -99,7 +99,7 @@ async function setupCounter(guild, type, name, settings) {
     })
   }
 
-  settings.data.bots = stats[1]
+  settings.server.bots = stats[1]
   await settings.save()
 
   return 'Configuration saved! Counter channel created'

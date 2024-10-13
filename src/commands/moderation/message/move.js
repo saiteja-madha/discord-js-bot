@@ -1,37 +1,22 @@
-const { ChannelType } = require('discord.js')
-const move = require('../message/move')
+const { moveTarget } = require('@helpers/ModUtils')
 
-/**
- * @type {import("@structures/Command")}
- */
-module.exports = {
-  name: 'move',
-  description: 'move specified member to voice channel',
-  category: 'MODERATION',
-  userPermissions: ['MoveMembers'],
-  botPermissions: ['MoveMembers'],
-  command: {
-    enabled: true,
-    usage: '<ID|@member> <channel> [reason]',
-    minArgsCount: 1,
-  },
+module.exports = async ({ member }, target, reason, channel) => {
+  const response = await moveTarget(member, target, reason, channel)
 
-  async messageRun(message, args) {
-    const target = await message.guild.resolveMember(args[0], true)
-    if (!target) return message.safeReply(`No user found matching ${args[0]}`)
-
-    const channels = message.guild.findMatchingVoiceChannels(args[1])
-    if (!channels.length) return message.safeReply('No matching channels found')
-    const targetChannel = channels.pop()
-    if (
-      !targetChannel.type === ChannelType.GuildVoice &&
-      !targetChannel.type === ChannelType.GuildStageVoice
-    ) {
-      return message.safeReply('Target channel is not a voice channel')
-    }
-
-    const reason = args.slice(2).join(' ')
-    const response = await move(message, target, reason, targetChannel)
-    await message.safeReply(response)
-  },
+  if (typeof response === 'boolean') {
+    return `${target.user.tag} has been moved to ${channel.name}!`
+  }
+  if (response === 'MEMBER_PERM') {
+    return `You do not have permission to move ${target.user.tag}!`
+  }
+  if (response === 'BOT_PERM') {
+    return `I do not have permission to move ${target.user.tag}!`
+  }
+  if (response === 'NO_VOICE') {
+    return `${target.user.tag} is not in a voice channel!`
+  }
+  if (response === 'SAME_CHANNEL') {
+    return `${target.user.tag} is already in that channel!`
+  }
+  return `Failed to move ${target.user.tag}!`
 }

@@ -23,13 +23,13 @@ module.exports = async (client, guild) => {
   const guildSettings = await registerGuild(guild)
 
   // Ensure owner_id is set
-  if (!guildSettings.owner_id) {
-    guildSettings.owner_id = guild.ownerId
+  if (!guildSettings.server.owner_id) {
+    guildSettings.server.owner_id = guild.ownerId
     await guildSettings.save()
   }
 
   // Only proceed if setup is not completed
-  if (!guildSettings.setup_completed) {
+  if (!guildSettings.server.setup_completed) {
     // Send thank you message to the server
     const targetChannel = guild.channels.cache.find(
       channel =>
@@ -51,7 +51,7 @@ module.exports = async (client, guild) => {
           {
             name: 'Quick Setup',
             value:
-              'Server owner, please run `/owner setup` to finish setting me up!',
+              'Server owner, please run `/settings setup` to finish setting me up!',
           },
           {
             name: 'Need help?',
@@ -65,8 +65,8 @@ module.exports = async (client, guild) => {
       await sendOnboardingMenu(targetChannel)
 
       // Default the update channel if not set
-      if (!guildSettings.updates_channel) {
-        guildSettings.updates_channel = targetChannel.id
+      if (!guildSettings.server.updates_channel) {
+        guildSettings.server.updates_channel = targetChannel.id
         await guildSettings.save()
       }
     }
@@ -85,7 +85,7 @@ module.exports = async (client, guild) => {
             {
               name: 'Quick Setup',
               value:
-                'Please run `/owner setup` in your server to finish setting me up!',
+                'Please run `/settings setup` in your server to finish setting me up!',
             },
             {
               name: 'Need help?',
@@ -132,14 +132,14 @@ module.exports = async (client, guild) => {
     setTimeout(
       async () => {
         const updatedSettings = await registerGuild(guild)
-        if (!updatedSettings.setup_completed) {
+        if (!updatedSettings.server.setup_completed) {
           const owner = await guild.members.fetch(guild.ownerId)
           if (owner) {
             const reminderEmbed = new EmbedBuilder()
               .setColor('#FFC0CB')
               .setTitle('Mochi Setup Reminder ♡')
               .setDescription(
-                'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/owner setup` to get started!'
+                'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings setup` to get started!'
               )
               .setFooter({
                 text: "I can't wait to be fully operational and super cute in your server! (◠‿◠✿)",

@@ -38,7 +38,7 @@ async function sendOnboardingMenu(channel) {
 
   // Store the setup message ID
   const guildSettings = await getSettings(channel.guild)
-  guildSettings.setup_message_id = sentMessage.id
+  guildSettings.server.setup_message_id = sentMessage.id
   await guildSettings.save()
 }
 
@@ -118,9 +118,9 @@ async function handleSetupModal(interaction) {
   }
 
   // Update settings
-  settings.updates_channel = updatesChannel.id
-  settings.staff_role = staffRole.id
-  settings.setup_completed = true
+  settings.server.updates_channel = updatesChannel.id
+  settings.server.staff_role = staffRole.id
+  settings.server.setup_completed = true
   await settings.save()
 
   // Send success message
@@ -209,7 +209,7 @@ async function handleRemindModal(interaction) {
           .setColor('#FFC0CB')
           .setTitle('Mochi Setup Reminder ♡')
           .setDescription(
-            'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/owner setup` to get started!'
+            'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings setup` to get started!'
           )
           .setFooter({
             text: "I can't wait to be fully operational and super cute in your server! (◠‿◠✿)",

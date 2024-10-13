@@ -7,13 +7,18 @@ const cache = new FixedSizeMap(CACHE_SIZE.GUILDS)
 
 const Schema = new mongoose.Schema({
   _id: String,
-  data: {
+  server: {
     name: String,
     region: String,
     owner: { type: String, ref: 'users' },
     joinedAt: Date,
     leftAt: Date,
     bots: { type: Number, default: 0 },
+    updates_channel: { type: String, default: null },
+    staff_role: { type: String, default: null },
+    setup_completed: { type: Boolean, default: false },
+    setup_message_id: { type: String, default: null },
+    last_update_message_id: { type: String, default: null },
   },
   prefix: { type: String, default: PREFIX_COMMANDS.DEFAULT_PREFIX },
   stats: {
@@ -108,11 +113,6 @@ const Schema = new mongoose.Schema({
     rejected_channel: String,
     staff_roles: [String],
   },
-  updates_channel: { type: String, default: null },
-  staff_role: { type: String, default: null },
-  setup_completed: { type: Boolean, default: false },
-  setup_message_id: { type: String, default: null },
-  owner_id: { type: String, required: true }, // Add this line
 })
 
 const Model = mongoose.model('guild', Schema)
@@ -142,7 +142,7 @@ module.exports = {
       // create a new guild model
       guildData = new Model({
         _id: guild.id,
-        data: {
+        server: {
           name: guild.name,
           region: guild.preferredLocale,
           owner: guild.ownerId,

@@ -7,7 +7,6 @@ description: 10 commands
 | Command                        | Slash          | Description                                   |
 | ------------------------------ | -------------- | --------------------------------------------- |
 | **!bigemoji \<emoji>**         | **/bigemoji**  | enlarge an emoji                              |
-| **!covid \<country>**          | **/covid**     | get covid statistics for a country            |
 | **!github \<username>**        | **/github**    | shows github statistics of a user             |
 | **!help \[cmd]**               | **/help**      | help menu                                     |
 | **!paste \<title> \<content>** | **/paste**     | paste something in sourceb.in                 |

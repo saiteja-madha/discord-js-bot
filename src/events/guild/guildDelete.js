@@ -21,13 +21,13 @@ module.exports = async (client, guild) => {
   client.logger.log(`Guild Left: ${guild.name} Members: ${guild.memberCount}`)
 
   const settings = await getSettings(guild)
-  settings.data.leftAt = new Date()
+  settings.server.leftAt = new Date()
   await settings.save()
 
   if (!client.joinLeaveWebhook) return
 
   let ownerTag = 'Deleted User'
-  const ownerId = guild.ownerId || settings.data.owner
+  const ownerId = guild.ownerId || settings.server.owner
   try {
     const owner = await client.users.fetch(ownerId)
     ownerTag = owner.tag

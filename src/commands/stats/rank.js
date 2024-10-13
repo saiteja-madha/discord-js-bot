@@ -15,10 +15,6 @@ module.exports = {
   cooldown: 5,
   category: 'STATS',
   botPermissions: ['AttachFiles'],
-  command: {
-    enabled: true,
-    usage: '[@member|id]',
-  },
   slashCommand: {
     enabled: true,
     options: [

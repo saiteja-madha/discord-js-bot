@@ -19,7 +19,7 @@ module.exports = async (client, member) => {
     )
   ) {
     if (member.user.bot) {
-      settings.data.bots -= 1
+      settings.server.bots -= 1
       await settings.save()
     }
     if (!client.counterUpdateQueue.includes(guild.id))

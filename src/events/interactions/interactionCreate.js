@@ -1,3 +1,4 @@
+const { InteractionType } = require('discord.js')
 const { getSettings } = require('@schemas/Guild')
 const {
   commandHandler,
@@ -7,7 +8,6 @@ const {
   ticketHandler,
   todHandler,
 } = require('@src/handlers')
-const { InteractionType } = require('discord.js')
 const {
   handleSetupButton,
   handleSetupModal,
@@ -96,6 +96,12 @@ module.exports = async (client, interaction) => {
 
       case 'MOCHI_REMIND_MODAL':
         return handleRemindModal(interaction)
+
+      case 'MOCHI_UPDATE_MODAL':
+        const command = client.slashCommands.get('dev')
+        if (command && typeof command.modalRun === 'function') {
+          return command.modalRun(interaction)
+        }
     }
   }
 

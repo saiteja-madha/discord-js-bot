@@ -6,7 +6,7 @@
 
 ## Developer Notes
 
-- Added `/dev onboarding` command for triggering the onboarding for one or all
+- Added `/dev onboarding` command for triggering the settingsing for one or all
   guilds.
 
 # Mochi V2.0.3

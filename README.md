@@ -153,7 +153,7 @@ of Mochi
 ### ⚒️ **Utility Commands:**
 
 - **Need Some Help With Something? Use The Utility Commands To Find Out The
-  Answer To It** <br /> _Commands:_ `bigemoji`, `covid`, `pokedex`, `urban`,
+  Answer To It** <br /> _Commands:_ `bigemoji`, `pokedex`, `urban`,
   `weather`, ...
 - **Need Help With Some More Stuff?** <br /> _Commands:_ `help`, `proxies`,
   `translate`, `paste`, ...

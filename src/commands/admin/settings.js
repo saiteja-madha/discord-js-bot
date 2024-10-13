@@ -9,8 +9,8 @@ const { getSettings, updateSettings } = require('@schemas/Guild')
  * @type {import("@structures/Command")}
  */
 module.exports = {
-  name: 'onboard',
-  description: "Manage Mochi's onboarding settings for this server",
+  name: 'settings',
+  description: "Manage Mochi's settings for this server",
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   botPermissions: ['EmbedLinks'],
@@ -21,12 +21,12 @@ module.exports = {
     options: [
       {
         name: 'status',
-        description: 'View current Mochi onboarding status',
+        description: 'View current Mochi settings status',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'update',
-        description: "Update Mochi's onboarding settings",
+        description: "Update Mochi's settings",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -85,19 +85,21 @@ async function viewCommand(interaction, settings) {
     .addFields(
       {
         name: 'Updates Channel',
-        value: settings.updates_channel
-          ? `<#${settings.updates_channel}>`
+        value: settings.server.updates_channel
+          ? `<#${settings.server.updates_channel}>`
           : 'Not set',
         inline: true,
       },
       {
         name: 'Staff Role',
-        value: settings.staff_role ? `<@&${settings.staff_role}>` : 'Not set',
+        value: settings.server.staff_role
+          ? `<@&${settings.server.staff_role}>`
+          : 'Not set',
         inline: true,
       },
       {
         name: 'Setup Completed',
-        value: settings.setup_completed ? 'Yes' : 'No',
+        value: settings.server.setup_completed ? 'Yes' : 'No',
         inline: true,
       }
     )
@@ -119,7 +121,7 @@ async function updateCommand(interaction, settings) {
         return interaction.followUp(
           "Oopsie! I couldn't find that channel. (◞‸◟；) Can you double-check the name?"
         )
-      settings.updates_channel = channel.id
+      settings.server.updates_channel = channel.id
       break
     case 'staff_role':
       const role = interaction.guild.roles.cache.find(
@@ -129,7 +131,7 @@ async function updateCommand(interaction, settings) {
         return interaction.followUp(
           "Uh-oh! I couldn't find that role. (╥﹏╥) Can you make sure it exists?"
         )
-      settings.staff_role = role.id
+      settings.server.staff_role = role.id
       break
   }
 

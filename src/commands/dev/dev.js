@@ -9,11 +9,11 @@ const {
 const { EMBED_COLORS } = require('@root/config')
 const { BotClient } = require('@src/structures')
 const { getSettings } = require('@schemas/Guild')
+const { showUpdateModal, handleUpdateModal } = require('@handlers/updates')
+const { addQuestion, deleteQuestion } = require('@schemas/TruthOrDare') // Import from mtod.js
 require('dotenv').config()
 
 const DEV_ID = process.env.DEV_ID
-
-// This dummy token will be replaced by the actual token
 const DUMMY_TOKEN = 'MY_TOKEN_IS_SECRET'
 
 /**
@@ -28,12 +28,12 @@ module.exports = {
     enabled: true,
     options: [
       {
-        name: 'list',
+        name: 'listservers',
         description: 'Get a list of servers the bot is in',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
-        name: 'leave',
+        name: 'leaveserver',
         description: 'Leave a server',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
@@ -44,6 +44,70 @@ module.exports = {
             required: true,
           },
         ],
+      },
+      // mtod.js: Add question subcommand
+      {
+        name: 'add-tod',
+        description: 'Add a Truth or Dare question',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'category',
+            description: 'Category of the question',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+            choices: [
+              { name: 'Truth', value: 'truth' },
+              { name: 'Dare', value: 'dare' },
+              { name: 'Paranoia', value: 'paranoia' },
+              { name: 'Never Have I Ever', value: 'nhie' },
+              { name: 'Would You Rather', value: 'wyr' },
+              { name: 'Have You Ever', value: 'hye' },
+              { name: 'What Would You Do', value: 'wwyd' },
+            ],
+          },
+          {
+            name: 'question',
+            description: 'The question to add',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+
+      // mtod.js: Delete question subcommand
+      {
+        name: 'del-tod',
+        description: 'Delete a Truth or Dare question',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'category',
+            description: 'Category of the question',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+            choices: [
+              { name: 'Truth', value: 'truth' },
+              { name: 'Dare', value: 'dare' },
+              { name: 'Paranoia', value: 'paranoia' },
+              { name: 'Never Have I Ever', value: 'nhie' },
+              { name: 'Would You Rather', value: 'wyr' },
+              { name: 'Have You Ever', value: 'hye' },
+              { name: 'What Would You Do', value: 'wwyd' },
+            ],
+          },
+          {
+            name: 'q_id',
+            description: 'ID of the question to delete',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'update',
+        description: 'Send an update to all servers',
+        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'exec',
@@ -86,13 +150,13 @@ module.exports = {
       },
 
       {
-        name: 'triggeronboarding',
-        description: 'Trigger onboarding for servers',
+        name: 'settings',
+        description: 'Trigger settings for servers',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'serverid',
-            description: 'ID of the server to trigger onboarding (optional)',
+            description: 'ID of the server to trigger settings (optional)',
             type: ApplicationCommandOptionType.String,
             required: false,
           },
@@ -124,13 +188,14 @@ module.exports = {
   async interactionRun(interaction) {
     if (interaction.user.id !== DEV_ID) {
       return interaction.followUp(
-        "You don't have permission to use this command."
+        "Aww, sorry cutie! You're not authorized to use this command! 💖"
       )
     }
+
     const sub = interaction.options.getSubcommand()
 
     // Subcommand: list
-    if (sub === 'list') {
+    if (sub === 'listservers') {
       const { client, channel, member } = interaction
       const matched = []
       const match = interaction.options.getString('match') || null
@@ -226,7 +291,7 @@ module.exports = {
     }
 
     // Subcommand: leave
-    if (sub === 'leave') {
+    if (sub === 'leaveserver') {
       const input = interaction.options.getString('serverid')
       const guild = interaction.client.guilds.cache.get(input)
       if (!guild) {
@@ -243,6 +308,20 @@ module.exports = {
         interaction.client.logger.error('GuildLeave', err)
         return interaction.followUp(`Failed to leave \`${name}\``)
       }
+    }
+
+    // Subcommand: update
+    if (sub === 'update') {
+      await interaction.deferReply({ ephemeral: true })
+      try {
+        await showUpdateModal(interaction)
+      } catch (error) {
+        console.error('Error showing update modal:', error)
+        await interaction.editReply(
+          'There was an error showing the update modal. Please try again.'
+        )
+      }
+      return
     }
 
     // Subcommand: exec
@@ -283,8 +362,31 @@ module.exports = {
       }
       await interaction.followUp(response)
     }
-    // New subcommand: triggeronboarding
-    if (sub === 'triggeronboarding') {
+
+    // Subcommand: add-tod
+    if (sub === 'add-tod') {
+      const category = interaction.options.getString('category')
+      const question = interaction.options.getString('question')
+      const response = await addQuestion(category, question)
+      await interaction.followUp({
+        content: `Yay! 🎉 Your new *${category}* question has been added: "${question}"! So fun, right? 😄`,
+        embeds: [response],
+      })
+    }
+
+    // Subcommand: del-tod
+    if (sub === 'del-tod') {
+      const category = interaction.options.getString('category')
+      const questionId = interaction.options.getString('q_id')
+      const response = await deleteQuestion(category, questionId)
+      await interaction.followUp({
+        content: `Oh nooo~ 😢 Question from *${category}* has been deleted... But it's okay, we'll add more fun ones soon! ✨`,
+        embeds: [response],
+      })
+    }
+
+    // New subcommand: triggersettings
+    if (sub === 'settings') {
       const serverId = interaction.options.getString('serverid')
       const response = await triggerOnboarding(interaction.client, serverId)
       await interaction.followUp(response)
@@ -331,6 +433,12 @@ module.exports = {
             .setColor('Green'),
         ],
       })
+    }
+  },
+
+  async modalRun(interaction) {
+    if (interaction.customId === 'MOCHI_UPDATE_MODAL') {
+      await handleUpdateModal(interaction, interaction.client)
     }
   },
 }
@@ -404,19 +512,19 @@ async function triggerOnboarding(client, serverId = null) {
     const guild = client.guilds.cache.get(serverId)
     if (!guild) return '❌ Guild not found'
     const settings = await getSettings(guild)
-    if (settings.setup_completed) return '❌ Guild already set up'
+    if (settings.server.setup_completed) return '❌ Guild already set up'
     guildCreateEvent(guild)
-    return `✅ Triggered onboarding for ${guild.name}`
+    return `✅ Triggered settings for ${guild.name}`
   }
 
   let count = 0
   for (const [id, guild] of client.guilds.cache) {
     const settings = await getSettings(guild)
-    if (!settings.setup_completed) {
+    if (!settings.server.setup_completed) {
       guildCreateEvent(guild)
       count++
     }
   }
 
-  return `✅ Triggered onboarding for ${count} guilds`
+  return `✅ Triggered settings for ${count} guilds`
 }

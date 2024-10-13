@@ -13,7 +13,7 @@ async function updateCounterChannels(client) {
       const settings = await getSettings(guild)
 
       const all = guild.memberCount
-      const bots = settings.data.bots
+      const bots = settings.server.bots
       const members = all - bots
 
       for (const config of settings.counters) {
@@ -59,7 +59,7 @@ async function init(guild, settings) {
     )
   ) {
     const stats = await guild.fetchMemberStats()
-    settings.data.bots = stats[1] // update bot count in database
+    settings.server.bots = stats[1] // update bot count in database
     await settings.save()
   }
 

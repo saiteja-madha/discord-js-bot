@@ -67,7 +67,7 @@ const migrateGuilds = async collections => {
     const toUpdate = await guildsC
       .find({
         $or: [
-          { 'data.owner': { $type: 'object' } },
+          { 'server.owner': { $type: 'object' } },
           { 'automod.strikes': 5 },
           { 'automod.action': 'MUTE' },
           { 'automod.anti_scam': { $exists: true } },
@@ -79,8 +79,8 @@ const migrateGuilds = async collections => {
 
     if (toUpdate.length > 0) {
       for (const doc of toUpdate) {
-        if (typeof doc.data.owner === 'object')
-          doc.data.owner = doc.data.owner.id
+        if (typeof doc.server.owner === 'object')
+          doc.server.owner = doc.server.owner.id
         if (typeof doc.automod === 'object') {
           if (doc.automod.strikes === 5) doc.automod.strikes = 10
           if (doc.automod.action === 'MUTE') doc.automod.action = 'TIMEOUT'
@@ -434,3 +434,4 @@ const migrateMessages = async collections => {
     console.log(ex)
   }
 }
+
