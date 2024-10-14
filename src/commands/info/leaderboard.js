@@ -16,7 +16,7 @@ const leaderboardTypes = ['xp', 'invite', 'rep']
 module.exports = {
   name: 'leaderboard',
   description: 'display the XP, invite, and rep leaderboard',
-  category: 'INFORMATION',
+  category: 'INFO',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,

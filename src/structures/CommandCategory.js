@@ -52,7 +52,7 @@ module.exports = {
       'https://cdn4.iconfinder.com/data/icons/general-business/150/Invite-512.png',
     emoji: '📨',
   },
-  INFORMATION: {
+  INFO: {
     name: 'Information',
     image:
       'https://icons.iconarchive.com/icons/graphicloads/100-flat/128/information-icon.png',

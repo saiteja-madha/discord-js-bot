@@ -12,7 +12,7 @@ const {
 const { getSlashUsage } = require('@handlers/command')
 
 const CMDS_PER_PAGE = 5
-const IDLE_TIMEOUT = 30
+const IDLE_TIMEOUT = 900 // 15 minutes
 
 /**
  * @type {import("@structures/Command")}

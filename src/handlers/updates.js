@@ -1,99 +1,102 @@
 const {
-  EmbedBuilder,
   ModalBuilder,
   TextInputBuilder,
-  TextInputStyle,
   ActionRowBuilder,
+  TextInputStyle,
+  EmbedBuilder,
 } = require('discord.js')
 const { getSettings } = require('@schemas/Guild')
 
 async function showUpdateModal(interaction) {
   const modal = new ModalBuilder()
     .setCustomId('MOCHI_UPDATE_MODAL')
-    .setTitle('Send Mochi Update ♡')
+    .setTitle('Send Update to All Servers')
 
-  const titleInput = new TextInputBuilder()
-    .setCustomId('UPDATE_TITLE')
-    .setLabel('Update Title')
-    .setStyle(TextInputStyle.Short)
-    .setPlaceholder('e.g., New Features!')
-    .setRequired(true)
-
-  const contentInput = new TextInputBuilder()
-    .setCustomId('UPDATE_CONTENT')
-    .setLabel('Update Content')
+  const messageInput = new TextInputBuilder()
+    .setCustomId('MESSAGE')
+    .setLabel('Message (optional)')
     .setStyle(TextInputStyle.Paragraph)
-    .setPlaceholder('Describe the update...')
+    .setRequired(false)
+
+  const embedTitleInput = new TextInputBuilder()
+    .setCustomId('EMBED_TITLE')
+    .setLabel('Embed Title')
+    .setStyle(TextInputStyle.Short)
     .setRequired(true)
 
-  const firstActionRow = new ActionRowBuilder().addComponents(titleInput)
-  const secondActionRow = new ActionRowBuilder().addComponents(contentInput)
+  const embedDescriptionInput = new TextInputBuilder()
+    .setCustomId('EMBED_DESCRIPTION')
+    .setLabel('Embed Description')
+    .setStyle(TextInputStyle.Paragraph)
+    .setRequired(true)
 
-  modal.addComponents(firstActionRow, secondActionRow)
+  const embedColorInput = new TextInputBuilder()
+    .setCustomId('EMBED_COLOR')
+    .setLabel('Embed Color (hex code)')
+    .setStyle(TextInputStyle.Short)
+    .setRequired(false)
 
-  await interaction.showModal(modal)
+  const rows = [
+    messageInput,
+    embedTitleInput,
+    embedDescriptionInput,
+    embedColorInput,
+  ].map(input => new ActionRowBuilder().addComponents(input))
+
+  modal.addComponents(...rows)
+
+  try {
+    await interaction.showModal(modal)
+  } catch (error) {
+    console.error('Error showing update modal:', error)
+    await interaction.reply({
+      content: 'There was an error showing the update modal. Please try again.',
+      ephemeral: true,
+    })
+  }
 }
 
-async function handleUpdateModal(interaction, client) {
-  const title = interaction.fields.getTextInputValue('UPDATE_TITLE')
-  const content = interaction.fields.getTextInputValue('UPDATE_CONTENT')
+async function handleUpdateModal(interaction) {
+  const message = interaction.fields.getTextInputValue('MESSAGE')
+  const embedTitle = interaction.fields.getTextInputValue('EMBED_TITLE')
+  const embedDescription =
+    interaction.fields.getTextInputValue('EMBED_DESCRIPTION')
+  const embedColor =
+    interaction.fields.getTextInputValue('EMBED_COLOR') || '#FFC0CB'
 
-  const updateEmbed = new EmbedBuilder()
-    .setColor('#FFC0CB')
-    .setTitle(`✨ ${title} ✨`)
-    .setDescription(content)
+  const embed = new EmbedBuilder()
+    .setTitle(embedTitle)
+    .setDescription(embedDescription)
+    .setColor(embedColor)
     .setTimestamp()
-    .setFooter({
-      text: 'Mochi Update ♡',
-      iconURL: client.user.displayAvatarURL(),
-    })
 
   let successCount = 0
   let failCount = 0
 
-  for (const [guildId, guild] of client.guilds.cache) {
+  await interaction.deferReply({ ephemeral: true })
+
+  for (const [guildId, guild] of interaction.client.guilds.cache) {
     const settings = await getSettings(guild)
+    const channelId = settings.server.updates_channel
+    if (!channelId) continue
 
-    if (settings.server.updates_channel) {
-      const channel = guild.channels.cache.get(settings.server.updates_channel)
-      if (channel) {
-        try {
-          const message = await channel.send({ embeds: [updateEmbed] })
-          settings.server.last_update_message_id = message.id
-          await settings.save()
-          successCount++
-        } catch (error) {
-          console.error(`Failed to send update to guild ${guildId}:`, error)
-          failCount++
-        }
-      }
-    }
+    const channel = await interaction.client.channels
+      .fetch(channelId)
+      .catch(() => null)
+    if (!channel) continue
 
-    if (!settings.server.setup_completed) {
-      const owner = await guild.members.fetch(guild.ownerId)
-      if (owner) {
-        const reminderEmbed = new EmbedBuilder()
-          .setColor('#FFC0CB')
-          .setTitle('Mochi Setup Reminder ♡')
-          .setDescription(
-            "Hey there! I noticed you haven't completed my setup yet. To get the most out of me and receive important updates, please run `/settings setup` in your server!"
-          )
-          .setFooter({
-            text: "I can't wait to be fully operational in your server! (◠‿◠✿)",
-          })
-
-        await owner.send({ embeds: [reminderEmbed] }).catch(() => {})
-      }
+    try {
+      await channel.send({ content: message, embeds: [embed] })
+      successCount++
+    } catch (error) {
+      console.error(`Failed to send update to guild ${guildId}:`, error)
+      failCount++
     }
   }
 
-  await interaction.editReply({
-    content: `Update sent to ${successCount} servers! (Failed: ${failCount})`,
-    ephemeral: true,
-  })
+  await interaction.editReply(
+    `Update sent to ${successCount} servers. Failed for ${failCount} servers.`
+  )
 }
 
-module.exports = {
-  showUpdateModal,
-  handleUpdateModal,
-}
+module.exports = { showUpdateModal, handleUpdateModal }

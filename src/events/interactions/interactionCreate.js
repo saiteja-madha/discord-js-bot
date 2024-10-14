@@ -7,14 +7,12 @@ const {
   suggestionHandler,
   ticketHandler,
   todHandler,
-} = require('@src/handlers')
-const {
   handleSetupButton,
   handleSetupModal,
   handleRemindButton,
   handleRemindModal,
-} = require('@handlers/guild')
-
+} = require('@src/handlers')
+const { handleUpdateModal } = require('@handlers/updates')
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').BaseInteraction} interaction
@@ -98,10 +96,7 @@ module.exports = async (client, interaction) => {
         return handleRemindModal(interaction)
 
       case 'MOCHI_UPDATE_MODAL':
-        const command = client.slashCommands.get('dev')
-        if (command && typeof command.modalRun === 'function') {
-          return command.modalRun(interaction)
-        }
+        return handleUpdateModal(interaction, client)
     }
   }
 

@@ -11,7 +11,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
 module.exports = {
   name: 'info',
   description: 'show various information',
-  category: 'INFORMATION',
+  category: 'INFO',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,

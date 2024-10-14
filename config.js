@@ -117,9 +117,9 @@ MODERATION: {
 
 PRESENCE: {
   ENABLED: true, // Whether or not the bot should update its status
-  STATUS: 'dnd', // The bot's status [online, idle, dnd, invisible]
+  STATUS: 'idle', // The bot's status [online, idle, dnd, invisible]
   TYPE: 'WATCHING', // Status type for the bot
-  MESSAGE: '🌈 Just spreading joy in {servers} servers! 💖', // Your bot status message
+  MESSAGE: '{servers} servers! 💖', // Your bot status message
 },
 
 STATS: {

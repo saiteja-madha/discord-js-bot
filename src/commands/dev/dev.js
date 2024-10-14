@@ -10,7 +10,9 @@ const { EMBED_COLORS } = require('@root/config')
 const { BotClient } = require('@src/structures')
 const { getSettings } = require('@schemas/Guild')
 const { showUpdateModal, handleUpdateModal } = require('@handlers/updates')
-const { addQuestion, deleteQuestion } = require('@schemas/TruthOrDare') // Import from mtod.js
+const { addQuestion, deleteQuestion } = require('@schemas/TruthOrDare')
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
 require('dotenv').config()
 
 const DEV_ID = process.env.DEV_ID
@@ -45,7 +47,6 @@ module.exports = {
           },
         ],
       },
-      // mtod.js: Add question subcommand
       {
         name: 'add-tod',
         description: 'Add a Truth or Dare question',
@@ -74,8 +75,6 @@ module.exports = {
           },
         ],
       },
-
-      // mtod.js: Delete question subcommand
       {
         name: 'del-tod',
         description: 'Delete a Truth or Dare question',
@@ -122,7 +121,6 @@ module.exports = {
           },
         ],
       },
-
       {
         name: 'eval',
         description: 'Evaluates something',
@@ -136,7 +134,6 @@ module.exports = {
           },
         ],
       },
-
       {
         name: 'settings',
         description: 'Trigger settings for servers',
@@ -150,7 +147,6 @@ module.exports = {
           },
         ],
       },
-
       {
         name: 'reload',
         description: "Reloads a command that's been modified",
@@ -175,9 +171,11 @@ module.exports = {
 
   async interactionRun(interaction) {
     if (interaction.user.id !== DEV_ID) {
-      return interaction.followUp(
-        "Aww, sorry cutie! You're not authorized to use this command! 💖"
-      )
+      return interaction.reply({
+        content:
+          "Aww, sorry cutie! You're not authorized to use this command! 💖",
+        ephemeral: true,
+      })
     }
 
     const sub = interaction.options.getSubcommand()
@@ -298,20 +296,6 @@ module.exports = {
       }
     }
 
-    // Subcommand: update
-    if (sub === 'update') {
-      await interaction.deferReply({ ephemeral: true })
-      try {
-        await showUpdateModal(interaction)
-      } catch (error) {
-        console.error('Error showing update modal:', error)
-        await interaction.editReply(
-          'There was an error showing the update modal. Please try again.'
-        )
-      }
-      return
-    }
-
     // Subcommand: exec
     if (sub === 'exec') {
       const script = interaction.options.getString('script')
@@ -414,6 +398,11 @@ module.exports = {
             .setColor('Green'),
         ],
       })
+    }
+
+    // Subcommand: update
+    if (sub === 'update') {
+      return showUpdateModal(interaction)
     }
   },
 

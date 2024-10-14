@@ -1,13 +1,9 @@
 const {
   ApplicationCommandOptionType,
-  EmbedBuilder,
+  ChannelType,
   PermissionFlagsBits,
 } = require('discord.js')
-const { getSettings, updateSettings } = require('@schemas/Guild')
 
-/**
- * @type {import("@structures/Command")}
- */
 module.exports = {
   name: 'settings',
   description: "Manage Mochi's settings for this server",
@@ -20,132 +16,133 @@ module.exports = {
     enabled: true,
     options: [
       {
-        name: 'status',
-        description: 'View current Mochi settings status',
-        type: ApplicationCommandOptionType.Subcommand,
-      },
-      {
-        name: 'update',
-        description: "Update Mochi's settings",
+        name: 'updateschannel',
+        description: 'Set the updates channel for Mochi',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
-            name: 'setting',
-            description: 'Setting to update',
-            type: ApplicationCommandOptionType.String,
-            required: true,
-            choices: [
-              { name: 'Updates Channel', value: 'updates_channel' },
-              { name: 'Staff Role', value: 'staff_role' },
+            name: 'channel',
+            description: 'Select a channel for updates',
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [
+              ChannelType.GuildText,
+              ChannelType.GuildAnnouncement,
             ],
-          },
-          {
-            name: 'value',
-            description: 'New value for the setting',
-            type: ApplicationCommandOptionType.String,
             required: true,
           },
         ],
       },
       {
-        name: 'setup',
-        description: 'Run the initial setup for Mochi',
+        name: 'staffadd',
+        description: 'Add a staff role for Mochi',
         type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'role',
+            description: 'Select a role to add as staff',
+            type: ApplicationCommandOptionType.Role,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: 'staffremove',
+        description: 'Remove a staff role from Mochi',
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: 'role',
+            description: 'Select a role to remove from staff',
+            type: ApplicationCommandOptionType.Role,
+            required: true,
+          },
+        ],
       },
     ],
   },
 
-  async interactionRun(interaction) {
-    const subCommand = interaction.options.getSubcommand()
+  async interactionRun(interaction, data) {
+    const sub = interaction.options.getSubcommand()
 
-    // Check if the user has the Manage Guild permission
-    if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
-      return interaction.followUp(
-        "Oopsie! You need the 'Manage Server' permission to use this command. (◞‸◟；) Ask a server admin for help~"
-      )
+    if (sub === 'updateschannel') {
+      const channel = interaction.options.getChannel('channel')
+      return await updateChannel(interaction, channel, data.settings)
     }
 
-    const settings = await getSettings(interaction.guild)
+    if (sub === 'staffadd') {
+      const role = interaction.options.getRole('role')
+      return await addStaffRole(interaction, role, data.settings)
+    }
 
-    switch (subCommand) {
-      case 'view':
-        return await viewCommand(interaction, settings)
-      case 'update':
-        return await updateCommand(interaction, settings)
-      case 'setup':
-        return await setupCommand(interaction)
+    if (sub === 'staffremove') {
+      const role = interaction.options.getRole('role')
+      return await removeStaffRole(interaction, role, data.settings)
     }
   },
 }
 
-async function viewCommand(interaction, settings) {
-  const embed = new EmbedBuilder()
-    .setColor('#FFC0CB')
-    .setTitle('Mochi Settings ♡(>ᴗ•)')
-    .addFields(
-      {
-        name: 'Updates Channel',
-        value: settings.server.updates_channel
-          ? `<#${settings.server.updates_channel}>`
-          : 'Not set',
-        inline: true,
-      },
-      {
-        name: 'Staff Role',
-        value: settings.server.staff_role
-          ? `<@&${settings.server.staff_role}>`
-          : 'Not set',
-        inline: true,
-      },
-      {
-        name: 'Setup Completed',
-        value: settings.server.setup_completed ? 'Yes' : 'No',
-        inline: true,
-      }
+async function updateChannel(interaction, channel, settings) {
+  if (
+    !channel
+      .permissionsFor(interaction.guild.members.me)
+      .has(PermissionFlagsBits.SendMessages)
+  ) {
+    return interaction.followUp(
+      "Oops! 😅 I don't have permission to send messages in that channel."
     )
-    .setFooter({ text: 'Mochi is happy to serve you~ ♡' })
-
-  await interaction.followUp({ embeds: [embed] })
-}
-
-async function updateCommand(interaction, settings) {
-  const setting = interaction.options.getString('setting')
-  const value = interaction.options.getString('value')
-
-  switch (setting) {
-    case 'updates_channel':
-      const channel = interaction.guild.channels.cache.find(
-        c => c.name.toLowerCase() === value.toLowerCase()
-      )
-      if (!channel)
-        return interaction.followUp(
-          "Oopsie! I couldn't find that channel. (◞‸◟；) Can you double-check the name?"
-        )
-      settings.server.updates_channel = channel.id
-      break
-    case 'staff_role':
-      const role = interaction.guild.roles.cache.find(
-        r => r.name.toLowerCase() === value.toLowerCase()
-      )
-      if (!role)
-        return interaction.followUp(
-          "Uh-oh! I couldn't find that role. (╥﹏╥) Can you make sure it exists?"
-        )
-      settings.server.staff_role = role.id
-      break
   }
 
-  await updateSettings(interaction.guild.id, settings)
-
-  await interaction.followUp(
-    `Yay! I've updated the ${setting.replace('_', ' ')} to ${value}~ (≧◡≦)`
+  settings.server.updates_channel = channel.id
+  await settings.save()
+  return interaction.followUp(
+    `Awesome! 🎉 The updates channel has been set to ${channel}`
   )
 }
 
-async function setupCommand(interaction) {
-  const { sendOnboardingMenu } = require('@handlers/guild')
-  await sendOnboardingMenu(interaction.channel)
-  await interaction.followUp(
-    "I've started the setup process in this channel! Let's make everything super cute together~ ♡"
+async function addStaffRole(interaction, role, settings) {
+  if (!settings.server.staff_roles) {
+    settings.server.staff_roles = []
+  }
+
+  if (settings.server.staff_roles.includes(role.id)) {
+    return interaction.followUp(`The role ${role} is already a staff role! 😊`)
+  }
+
+  if (settings.server.staff_roles.length >= 5) {
+    return interaction.followUp(
+      `Oops! You already have 5 staff roles. Please remove at least one role before adding a new one. Current staff roles: ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
+    )
+  }
+
+  settings.server.staff_roles.push(role.id)
+  await settings.save()
+
+  return interaction.followUp(
+    `Great job! 🌟 The role ${role} has been added as a staff role. Current staff roles: ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
+  )
+}
+
+async function removeStaffRole(interaction, role, settings) {
+  if (
+    !settings.server.staff_roles ||
+    !settings.server.staff_roles.includes(role.id)
+  ) {
+    return interaction.followUp(
+      `The role ${role} is not currently a staff role. 🤔`
+    )
+  }
+
+  settings.server.staff_roles = settings.server.staff_roles.filter(
+    id => id !== role.id
+  )
+  await settings.save()
+
+  const staffRolesMessage =
+    settings.server.staff_roles.length > 0
+      ? `Current staff roles: ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
+      : 'There are no staff roles set.'
+
+  return interaction.followUp(
+    `The role ${role} has been removed from staff roles. ${staffRolesMessage}`
   )
 }

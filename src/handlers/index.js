@@ -10,6 +10,9 @@ module.exports = {
   statsHandler: require('./stats'),
   suggestionHandler: require('./suggestion'),
   ticketHandler: require('./ticket'),
-  translationHandler: require('./translation'),
   todHandler: require('./todhandler'),
+  handleSetupButton: require('./guild'),
+  handleSetupModal: require('./guild'),
+  handleRemindButton: require('./guild'),
+  handleRemindModal: require('./guild'),
 }

@@ -65,7 +65,8 @@
     "string-progressbar": "^1.0.4",
     "table": "^6.8.1",
     "timestamp-to-date": "^1.1.0",
-    "twemoji-parser": "^14.0.0"
+    "twemoji-parser": "^14.0.0",
+    "util": "^0.12.5"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8",

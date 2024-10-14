@@ -23,7 +23,7 @@ const botstats = require('./sub/botstats')
 module.exports = {
   name: 'bot',
   description: 'bot related commands',
-  category: 'INFORMATION',
+  category: 'INFO',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,

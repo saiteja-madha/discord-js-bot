@@ -90,13 +90,6 @@ router.post('/:serverID/basic', CheckAuth, async (req, res) => {
       settings.prefix = data.prefix
     }
 
-    data.flag_translation = data.flag_translation === 'on' ? true : false
-    if (
-      data.flag_translation !== (settings.flag_translation.enabled || false)
-    ) {
-      settings.flag_translation.enabled = data.flag_translation
-    }
-
     data.invite_tracking = data.invite_tracking === 'on' ? true : false
     if (data.invite_tracking !== (settings.invite.tracking || false)) {
       settings.invite.tracking = data.invite_tracking

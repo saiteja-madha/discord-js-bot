@@ -58,7 +58,7 @@ async function handleSetupButton(interaction) {
     .setRequired(true)
 
   const staffRoleInput = new TextInputBuilder()
-    .setCustomId('STAFF_ROLE')
+    .setCustomId('STAFF_ROLES')
     .setLabel('Staff Role Name')
     .setStyle(TextInputStyle.Short)
     .setPlaceholder('e.g., Mochi Staff')
@@ -80,7 +80,7 @@ async function handleSetupButton(interaction) {
 async function handleSetupModal(interaction) {
   const updatesChannelName =
     interaction.fields.getTextInputValue('UPDATES_CHANNEL')
-  const staffRoleName = interaction.fields.getTextInputValue('STAFF_ROLE')
+  const staffRoleName = interaction.fields.getTextInputValue('STAFF_ROLES')
 
   const guild = interaction.guild
   const settings = await getSettings(guild)
@@ -119,7 +119,7 @@ async function handleSetupModal(interaction) {
 
   // Update settings
   settings.server.updates_channel = updatesChannel.id
-  settings.server.staff_role = staffRole.id
+  settings.server.staff_roles = staffRole.id
   settings.server.setup_completed = true
   await settings.save()
 

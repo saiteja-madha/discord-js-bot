@@ -38,7 +38,6 @@ module.exports = {
     ],
   },
 
-  // This function runs when a user interacts with the slash command
   async interactionRun(interaction) {
     const sub = interaction.options.getSubcommand('type')
 

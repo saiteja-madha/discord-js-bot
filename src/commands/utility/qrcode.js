@@ -7,7 +7,7 @@ const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js')
 module.exports = {
   name: 'qrcode',
   description: 'Generate a QR code with the url that is provided',
-  category: 'ADMIN',
+  category: 'UTILITY',
   botPermissions: ['ManageGuild'],
   slashCommand: {
     enabled: true,

@@ -15,10 +15,9 @@ const Schema = new mongoose.Schema({
     leftAt: Date,
     bots: { type: Number, default: 0 },
     updates_channel: { type: String, default: null },
-    staff_role: { type: String, default: null },
+    staff_roles: [String],
     setup_completed: { type: Boolean, default: false },
     setup_message_id: { type: String, default: null },
-    last_update_message_id: { type: String, default: null },
   },
   stats: {
     enabled: { type: Boolean, default: true },
@@ -59,9 +58,6 @@ const Schema = new mongoose.Schema({
         _id: { type: String, required: true },
       },
     ],
-  },
-  flag_translation: {
-    enabled: Boolean,
   },
   modlog_channel: String,
   max_warn: {
@@ -117,9 +113,6 @@ const Schema = new mongoose.Schema({
 const Model = mongoose.model('guild', Schema)
 
 module.exports = {
-  /**
-   * @param {import('discord.js').Guild} guild
-   */
   getSettings: async guild => {
     if (!guild) throw new Error('Guild is undefined')
     if (!guild.id) throw new Error('Guild Id is undefined')
@@ -147,7 +140,6 @@ module.exports = {
           owner: guild.ownerId,
           joinedAt: guild.joinedAt,
         },
-        owner_id: guild.ownerId, // Add this line
       })
 
       await guildData.save()
@@ -157,7 +149,17 @@ module.exports = {
   },
 
   updateSettings: async (guildId, settings) => {
-    await Model.findByIdAndUpdate(guildId, settings, { new: true })
-    cache.set(guildId, settings)
+    // Ensure staff_roles is always an array
+    if (settings.server && settings.server.staff_roles) {
+      settings.server.staff_roles = Array.isArray(settings.server.staff_roles)
+        ? settings.server.staff_roles
+        : [settings.server.staff_roles]
+    }
+
+    const updatedSettings = await Model.findByIdAndUpdate(guildId, settings, {
+      new: true,
+    })
+    cache.add(guildId, updatedSettings) // Use add instead of set
+    return updatedSettings
   },
 }
