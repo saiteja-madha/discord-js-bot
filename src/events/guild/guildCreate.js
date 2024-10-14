@@ -45,13 +45,13 @@ module.exports = async (client, guild) => {
         .setColor('#FFC0CB')
         .setTitle('Yay! Mochi is here! ヾ(≧▽≦*)o')
         .setDescription(
-          "Hiii everyone! I'm Mochi, your new cute friend! (≧◡≦) ♡ I'm super excited to join your server!"
+          "Hiii everyone! I'm Mochi, your new awesome friend! (≧◡≦) ♡ I'm super excited to join your server!"
         )
         .addFields(
           {
             name: 'Quick Setup',
             value:
-              'Server owner, please run `/settings setup` to finish setting me up!',
+              'Server owner, please run `/settings` to finish setting me up!',
           },
           {
             name: 'Need help?',
@@ -79,13 +79,13 @@ module.exports = async (client, guild) => {
           .setColor('#FFC0CB')
           .setTitle('Thank you for adding me! ♡(>ᴗ•)')
           .setDescription(
-            "I'm so excited to be part of your server! Let's make it super cute together~"
+            "I'm so excited to be part of your server! Let's make it super awesome together~"
           )
           .addFields(
             {
               name: 'Quick Setup',
               value:
-                'Please run `/settings setup` in your server to finish setting me up!',
+                'Please run `/settings` in your server to finish setting me up!',
             },
             {
               name: 'Need help?',
@@ -97,7 +97,7 @@ module.exports = async (client, guild) => {
         if (serverMessageLink) {
           dmEmbed.addFields({
             name: 'Server Message',
-            value: `[Click here to see my first message!](${serverMessageLink})`,
+            value: `Oops! I might have send a message in the server! \n [Click here](${serverMessageLink}) to see what my silly self said!`,
           })
         }
 
@@ -139,10 +139,10 @@ module.exports = async (client, guild) => {
               .setColor('#FFC0CB')
               .setTitle('Mochi Setup Reminder ♡')
               .setDescription(
-                'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings setup` to get started!'
+                'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'
               )
               .setFooter({
-                text: "I can't wait to be fully operational and super cute in your server! (◠‿◠✿)",
+                text: "I can't wait to be fully operational and super awesome in your server! (◠‿◠✿)",
               })
 
             await owner.send({ embeds: [reminderEmbed] }).catch(() => {})

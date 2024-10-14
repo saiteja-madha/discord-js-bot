@@ -33,7 +33,6 @@ const Schema = new mongoose.Schema({
       {
         _id: false,
         name: String,
-        staff_roles: [String],
       },
     ],
   },
@@ -106,7 +105,6 @@ const Schema = new mongoose.Schema({
     channel_id: String,
     approved_channel: String,
     rejected_channel: String,
-    staff_roles: [String],
   },
 })
 
@@ -149,7 +147,6 @@ module.exports = {
   },
 
   updateSettings: async (guildId, settings) => {
-    // Ensure staff_roles is always an array
     if (settings.server && settings.server.staff_roles) {
       settings.server.staff_roles = Array.isArray(settings.server.staff_roles)
         ? settings.server.staff_roles

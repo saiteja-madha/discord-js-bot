@@ -28,6 +28,7 @@ module.exports = {
   botPermissions: ['EmbedLinks'],
   slashCommand: {
     enabled: true,
+    ephemeral: true,
     options: [
       {
         name: 'listservers',
@@ -135,7 +136,7 @@ module.exports = {
         ],
       },
       {
-        name: 'settings',
+        name: 'trig-settings',
         description: 'Trigger settings for servers',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
@@ -265,7 +266,7 @@ module.exports = {
           await sentMsg.edit({ embeds: [embed] })
         }
         if (response.customId === 'nxtBtn' && currentPage < totalPages) {
-          currentPage++
+          currentPage++ 
           const embed = buildEmbed()
           await sentMsg.edit({ embeds: [embed] })
         }
@@ -350,8 +351,8 @@ module.exports = {
       })
     }
 
-    // New subcommand: triggersettings
-    if (sub === 'settings') {
+    // New subcommand: trig-settings
+    if (sub === 'trig-settings') {
       const serverId = interaction.options.getString('serverid')
       const response = await triggerOnboarding(interaction.client, serverId)
       await interaction.followUp(response)

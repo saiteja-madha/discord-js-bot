@@ -18,7 +18,7 @@ async function sendOnboardingMenu(channel) {
     .setColor('#FFC0CB')
     .setTitle('Mochi Setup ♡(>ᴗ•)')
     .setDescription(
-      "Let's make your server super cute! Click the button below to set up important stuff~"
+      "Let's make your server super awesome! Click the button below to set up important stuff~"
     )
 
   const row = new ActionRowBuilder().addComponents(
@@ -127,7 +127,7 @@ async function handleSetupModal(interaction) {
   const successEmbed = new EmbedBuilder()
     .setColor('#FFC0CB')
     .setTitle('Yay! Setup Complete! ヾ(≧▽≦*)o')
-    .setDescription('We did it! Your server is now super cute and ready to go~')
+    .setDescription('We did it! Your server is now super awesome and ready to go~')
     .addFields(
       { name: 'Updates Channel', value: `${updatesChannel}`, inline: true },
       { name: 'Staff Role', value: `${staffRole}`, inline: true }
@@ -141,7 +141,7 @@ async function handleSetupModal(interaction) {
     .setColor('#FFC0CB')
     .setTitle('Mochi Updates Channel ♡')
     .setDescription(
-      "Hi everyone! This channel is now set up for Mochi's updates. Stay tuned for cute announcements! (≧◡≦)"
+      "Hi everyone! This channel is now set up for Mochi's updates. Stay tuned for awesome announcements! (≧◡≦)"
     )
 
   await updatesChannel.send({ embeds: [testEmbed] })
@@ -209,10 +209,10 @@ async function handleRemindModal(interaction) {
           .setColor('#FFC0CB')
           .setTitle('Mochi Setup Reminder ♡')
           .setDescription(
-            'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings setup` to get started!'
+            'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'
           )
           .setFooter({
-            text: "I can't wait to be fully operational and super cute in your server! (◠‿◠✿)",
+            text: "I can't wait to be fully operational and super awesome in your server! (◠‿◠✿)",
           })
 
         await owner.send({ embeds: [reminderEmbed] }).catch(() => {})

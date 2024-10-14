@@ -7,11 +7,11 @@ const {
   suggestionHandler,
   ticketHandler,
   todHandler,
-  handleSetupButton,
+} = require('@src/handlers')
+const { handleSetupButton,
   handleSetupModal,
   handleRemindButton,
-  handleRemindModal,
-} = require('@src/handlers')
+  handleRemindModal,} = require('@handlers/guild')
 const { handleUpdateModal } = require('@handlers/updates')
 /**
  * @param {import('@src/structures').BotClient} client

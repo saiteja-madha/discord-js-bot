@@ -1,8 +1,10 @@
 const {
+  EmbedBuilder,
   ApplicationCommandOptionType,
   ChannelType,
   PermissionFlagsBits,
 } = require('discord.js')
+const { EMBED_COLORS } = require('@root/config.js')
 
 module.exports = {
   name: 'settings',
@@ -87,16 +89,27 @@ async function updateChannel(interaction, channel, settings) {
       .permissionsFor(interaction.guild.members.me)
       .has(PermissionFlagsBits.SendMessages)
   ) {
-    return interaction.followUp(
-      "Oops! 😅 I don't have permission to send messages in that channel."
-    )
+    const embed = new EmbedBuilder()
+      .setColor(EMBED_COLORS.ERROR)
+      .setDescription(
+        "Oopsie! 😅 I don't have permission to send messages in that channel. Can you please give me the right permissions? Pretty please? 🙏"
+      )
+    return interaction.followUp({ embeds: [embed] })
   }
 
   settings.server.updates_channel = channel.id
+  await updateSetupStatus(settings)
   await settings.save()
-  return interaction.followUp(
-    `Awesome! 🎉 The updates channel has been set to ${channel}`
-  )
+
+  const setupEmbed = createSetupEmbed(settings)
+  await interaction.followUp({ embeds: [setupEmbed] })
+
+  const notificationEmbed = new EmbedBuilder()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription(
+      `Yay! 🎉 This channel has been set as the updates channel for Mochi! All my future updates will be sent here. Get ready for some awesome notifications! 💖`
+    )
+  await channel.send({ embeds: [notificationEmbed] })
 }
 
 async function addStaffRole(interaction, role, settings) {
@@ -105,21 +118,29 @@ async function addStaffRole(interaction, role, settings) {
   }
 
   if (settings.server.staff_roles.includes(role.id)) {
-    return interaction.followUp(`The role ${role} is already a staff role! 😊`)
+    const embed = new EmbedBuilder()
+      .setColor(EMBED_COLORS.WARNING)
+      .setDescription(
+        `Silly you! 😋 The role ${role} is already a staff role! Did you forget? It's okay, I still think you're awesome! ✨`
+      )
+    return interaction.followUp({ embeds: [embed] })
   }
 
   if (settings.server.staff_roles.length >= 5) {
-    return interaction.followUp(
-      `Oops! You already have 5 staff roles. Please remove at least one role before adding a new one. Current staff roles: ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
-    )
+    const embed = new EmbedBuilder()
+      .setColor(EMBED_COLORS.WARNING)
+      .setDescription(
+        `Oops! You already have 5 staff roles. That's a lot! 😮 Maybe we can have a role party and remove one before adding a new one? Current staff roles: ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
+      )
+    return interaction.followUp({ embeds: [embed] })
   }
 
   settings.server.staff_roles.push(role.id)
+  await updateSetupStatus(settings)
   await settings.save()
 
-  return interaction.followUp(
-    `Great job! 🌟 The role ${role} has been added as a staff role. Current staff roles: ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
-  )
+  const setupEmbed = createSetupEmbed(settings)
+  await interaction.followUp({ embeds: [setupEmbed] })
 }
 
 async function removeStaffRole(interaction, role, settings) {
@@ -127,22 +148,59 @@ async function removeStaffRole(interaction, role, settings) {
     !settings.server.staff_roles ||
     !settings.server.staff_roles.includes(role.id)
   ) {
-    return interaction.followUp(
-      `The role ${role} is not currently a staff role. 🤔`
-    )
+    const embed = new EmbedBuilder()
+      .setColor(EMBED_COLORS.WARNING)
+      .setDescription(
+        `Hmm... 🤔 The role ${role} isn't a staff role right now. Are you sure you picked the right one? Don't worry, we all make mistakes sometimes! 💖`
+      )
+    return interaction.followUp({ embeds: [embed] })
   }
 
   settings.server.staff_roles = settings.server.staff_roles.filter(
     id => id !== role.id
   )
+  await updateSetupStatus(settings)
   await settings.save()
 
-  const staffRolesMessage =
-    settings.server.staff_roles.length > 0
-      ? `Current staff roles: ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
-      : 'There are no staff roles set.'
+  const setupEmbed = createSetupEmbed(settings)
+  await interaction.followUp({ embeds: [setupEmbed] })
+}
 
-  return interaction.followUp(
-    `The role ${role} has been removed from staff roles. ${staffRolesMessage}`
-  )
+async function updateSetupStatus(settings) {
+  settings.server.setup_completed =
+    settings.server.updates_channel &&
+    settings.server.staff_roles &&
+    settings.server.staff_roles.length > 0
+}
+
+function createSetupEmbed(settings) {
+  const embed = new EmbedBuilder()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setTitle("Mochi's Setup Status 📊")
+    .setDescription("Heya! Let's check out your setup progress! 💖")
+    .addFields(
+      {
+        name: 'Updates Channel',
+        value: settings.server.updates_channel
+          ? `✅ Set to <#${settings.server.updates_channel}>`
+          : '❌ Not set yet\nUse `/settings updateschannel` to set it up!',
+      },
+      {
+        name: 'Staff Roles',
+        value:
+          settings.server.staff_roles && settings.server.staff_roles.length > 0
+            ? `✅ ${settings.server.staff_roles.map(id => `<@&${id}>`).join(', ')}`
+            : '❌ No staff roles set\nUse `/settings staffadd` to add a staff role!',
+      }
+    )
+
+  if (settings.server.setup_completed) {
+    embed.setFooter({ text: "Yay! Your setup is complete! You're amazing! 🎉" })
+  } else {
+    embed.setFooter({
+      text: "Almost there! Complete the setup to unlock all of Mochi's awesome features! 💕",
+    })
+  }
+
+  return embed
 }

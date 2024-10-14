@@ -234,7 +234,7 @@ async function handleTicketOpen(interaction) {
       })
     await interaction.editReply({ content: 'Processing', components: [] })
     catName = res.values[0]
-    catPerms = categories.find(cat => cat.name === catName)?.staff_roles || []
+    catPerms = settings.server.staff_roles || []
   }
 
   try {

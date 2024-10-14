@@ -1,5 +1,9 @@
-const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js')
-
+const {
+  ApplicationCommandOptionType,
+  EmbedBuilder,
+  ChannelType,
+} = require('discord.js')
+const { EMBED_COLORS } = require('@root/config.js')
 /**
  * @type {import("@structures/Command")}
  */
@@ -25,14 +29,9 @@ module.exports = {
           {
             name: 'category',
             description: 'the category name',
-            type: ApplicationCommandOptionType.String,
+            type: ApplicationCommandOptionType.Channel,
+            channelTypes: [ChannelType.GuildCategory],
             required: true,
-          },
-          {
-            name: 'staff_roles',
-            description: 'the staff roles',
-            type: ApplicationCommandOptionType.String,
-            required: false,
           },
         ],
       },
@@ -64,46 +63,19 @@ module.exports = {
     // add
     else if (sub === 'add') {
       const category = interaction.options.getString('category')
-      const staff_roles = interaction.options.getString('staff_roles')
-      response = await addCategory(
-        interaction.guild,
-        data,
-        category,
-        staff_roles
-      )
+      response = await addCategory(interaction.guild, data, category)
     }
 
     // remove
     else if (sub === 'remove') {
       const category = interaction.options.getString('category')
       response = await removeCategory(data, category)
-    }
-
-    //
-    else response = 'Invalid subcommand'
+    } else response = 'Invalid subcommand'
     await interaction.followUp(response)
   },
 }
 
-function listCategories(data) {
-  const categories = data.settings.ticket.categories
-  if (categories?.length === 0) return 'No ticket categories found.'
-
-  const fields = []
-  for (const category of categories) {
-    const roleNames = category.staff_roles.map(r => `<@&${r}>`).join(', ')
-    fields.push({
-      name: category.name,
-      value: `**Staff:** ${roleNames || 'None'}`,
-    })
-  }
-  const embed = new EmbedBuilder()
-    .setAuthor({ name: 'Ticket Categories' })
-    .addFields(fields)
-  return { embeds: [embed] }
-}
-
-async function addCategory(guild, data, category, staff_roles) {
+async function addCategory(guild, data, category) {
   if (!category) return 'Invalid usage! Missing category name.'
 
   // check if category already exists
@@ -111,13 +83,8 @@ async function addCategory(guild, data, category, staff_roles) {
     return `Category \`${category}\` already exists.`
   }
 
-  const staffRoles = (staff_roles?.split(',')?.map(r => r.trim()) || []).filter(
-    r => guild.roles.cache.has(r)
-  )
-
   data.settings.ticket.categories.push({
     name: category,
-    staff_roles: staffRoles,
   })
   await data.settings.save()
 
@@ -135,4 +102,38 @@ async function removeCategory(data, category) {
   await data.settings.save()
 
   return `Category \`${category}\` removed.`
+}
+
+function listCategories(data) {
+  const categories = data.settings.ticket.categories
+  if (categories?.length === 0) return 'No ticket categories found.'
+
+  const fields = []
+  const serverStaffRoles = data.settings.server.staff_roles
+
+  for (const category of categories) {
+    const roleNames =
+      serverStaffRoles.length > 0
+        ? serverStaffRoles
+            .map((r, index) => `${index + 1}. <@&${r}>`)
+            .join('\n')
+        : 'None'
+
+    fields.push({
+      name: `📂 **Category:**`,
+      value: `${category.name}`,
+    })
+    fields.push({ name: '**Staff Roles:**', value: `${roleNames}` })
+    fields.push({
+      name: '\u200B', // This is a zero-width space to create an empty field
+      value:
+        'Want to edit staff roles? Use the `/settings staffadd/staffremove` command!',
+    })
+  }
+
+  const embed = new EmbedBuilder()
+    .setAuthor({ name: '🌟 Ticket Categories' })
+    .setColor(EMBED_COLORS.BOT_EMBED) // Use Mochi's bot embed color
+    .addFields(fields)
+  return { embeds: [embed] }
 }

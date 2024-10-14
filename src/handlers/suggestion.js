@@ -47,9 +47,7 @@ const getVotesMessage = (upVotes, downVotes) => {
 const hasPerms = (member, settings) => {
   return (
     member.permissions.has('ManageGuild') ||
-    member.roles.cache.find(r =>
-      settings.suggestions.staff_roles.includes(r.id)
-    )
+    member.roles.cache.find(r => settings.server.staff_roles.includes(r.id))
   )
 }
 
