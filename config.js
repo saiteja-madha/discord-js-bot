@@ -3,7 +3,6 @@ module.exports = {
   SUPPORT_SERVER: process.env.SUPPORT_SERVER || 'https://discord.gg/uMgS9evnmv', // Your bot support server
   DOCS_URL: process.env.DOCS_URL || 'https://docs.vikshan.tech/mochi/', // Your bot documentation website
   DONATE_URL: process.env.DONATE_URL || 'https://ko-fi.com/vikshan', // Your donation link
-  GITHUB_URL: process.env.GITHUB_URL || 'https://github.com/vixshan/mochi', // Your bot github repository
   GITHUB_SPONSORS_URL:
     process.env.GITHUB_SPONSORS_URL || 'https://github.com/sponsors/vixshan', // Your bot github sponsors link
   PATREON_URL: process.env.PATREON_URL || 'https://www.patreon.com/vikshan', // Your bot patreon link

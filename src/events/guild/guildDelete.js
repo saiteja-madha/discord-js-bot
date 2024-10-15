@@ -4,12 +4,7 @@ const {
   ActionRowBuilder,
   ButtonStyle,
 } = require('discord.js')
-const {
-  SUPPORT_SERVER,
-  DOCS_URL,
-  DONATE_URL,
-  GITHUB_URL,
-} = require('@root/config.js')
+const { SUPPORT_SERVER, DOCS_URL, DONATE_URL } = require('@root/config.js')
 const { getSettings } = require('@schemas/Guild')
 
 /**
@@ -35,43 +30,49 @@ module.exports = async (client, guild) => {
     // Handle the error here, if needed.
   }
 
+  // Mochi's playful, caring message with pastel color palette
   const embed = new EmbedBuilder()
-    .setTitle(`Left the folks at ${guild.name}`)
+    .setTitle(`Aww, I just left ${guild.name} 💔`)
     .setThumbnail(guild.iconURL())
     .setColor(client.config.EMBED_COLORS.ERROR)
     .addFields(
       {
         name: 'Server Name',
-        value: guild.name || 'NA',
-        inline: false,
+        value: guild.name || 'N/A',
+        inline: true,
       },
       {
         name: 'Server ID',
         value: guild.id,
-        inline: false,
+        inline: true,
       },
       {
         name: 'Owner',
         value: `${ownerTag} [\`${ownerId}\`]`,
-        inline: false,
+        inline: true,
       },
       {
         name: 'Members',
         value: `\`\`\`yaml\n${guild.memberCount}\`\`\``,
-        inline: false,
+        inline: true,
       }
     )
-    .setFooter({ text: `Guild #${client.guilds.cache.size}` })
+    .setFooter({
+      text: `I'll miss you! 💕 | Guild #${client.guilds.cache.size}`,
+    })
 
   client.joinLeaveWebhook.send({
-    username: 'Leave',
+    username: 'Mochi (Left)',
     avatarURL: client.user.displayAvatarURL(),
     embeds: [embed],
   })
 
+  // Constructing the GitHub issue creation URL from .env
+  const githubIssueURL = `https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new`
+
   try {
-    // Send a thank you DM to the guild owner
-    let components = [
+    // Create buttons with dynamic GitHub URL
+    const components = [
       new ButtonBuilder()
         .setLabel('Donate')
         .setStyle(ButtonStyle.Link)
@@ -85,27 +86,22 @@ module.exports = async (client, guild) => {
         .setStyle(ButtonStyle.Link)
         .setURL(SUPPORT_SERVER),
       new ButtonBuilder()
-        .setLabel('Github')
+        .setLabel('Create an Issue')
         .setStyle(ButtonStyle.Link)
-        .setURL(GITHUB_URL),
+        .setURL(githubIssueURL),
     ]
 
-    let row = new ActionRowBuilder().addComponents(components)
+    const row = new ActionRowBuilder().addComponents(components)
 
-    // Send the DM to the guild owner
-    owner
-      .send({
-        content: `Goodbye, <@${ownerId}>! 😢 I've left your server.\n I sure won't miss you! **JK, I will miss you silly, you are amazing!**\n On your way out, please lmk how I can improve by creating an issue on my Github repo.\n\n> PS I am Open Source!`,
-        embeds: [embed], // You can add an embed here
-        components: [row],
-      })
-      .then(() => {
-        console.log('Sent thank you DM to the server owner.')
-      })
-      .catch(error => {
-        console.error(`Error sending DM: ${error}`)
-      })
+    // Send a friendly and playful goodbye message
+    await owner.send({
+      content: `Hey <@${ownerId}>! 🌸 I just left your server and already miss you! 😢\nIf you have any ideas on how I can improve, you can let me know by creating an issue on my [GitHub repo](${githubIssueURL})! ✨\nP.S. I'm open-source!`,
+      embeds: [embed],
+      components: [row],
+    })
+
+    console.log('Sent a thank-you DM to the server owner.')
   } catch (err) {
-    console.error(err)
+    console.error(`Error sending DM: ${err}`)
   }
 }
