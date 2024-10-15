@@ -85,6 +85,7 @@ MONGO_CONNECTION=
 # Webhooks [Optional]
 ERROR_LOGS=
 JOIN_LEAVE_LOGS=
+REPORT_LOGS=
 
 # Dashboard [Required for dashboard]
 BOT_SECRET=

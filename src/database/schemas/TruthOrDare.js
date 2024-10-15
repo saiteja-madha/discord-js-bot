@@ -76,4 +76,12 @@ module.exports = {
     await Model.deleteOne({ category, questionId })
     return 'Question deleted successfully!'
   },
+
+  getQuestionById: async questionId => {
+    const question = await Model.findOne({ questionId })
+    if (!question) {
+      throw new Error(`Question with ID ${questionId} not found`)
+    }
+    return question
+  },
 }

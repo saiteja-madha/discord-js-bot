@@ -3,7 +3,10 @@ const { EmbedBuilder, WebhookClient } = require('discord.js')
 const pino = require('pino')
 
 const webhookLogger = process.env.ERROR_LOGS
-  ? new WebhookClient({ url: process.env.ERROR_LOGS })
+  ? new WebhookClient({
+      url: process.env.ERROR_LOGS,
+      avatarURL: process.env.WEBHOOK_AVATAR,
+    })
   : undefined
 
 const today = new Date()

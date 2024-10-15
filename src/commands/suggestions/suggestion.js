@@ -1,7 +1,6 @@
 const { approveSuggestion, rejectSuggestion } = require('@handlers/suggestion')
 const { parsePermissions } = require('@helpers/Utils')
 const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config.js')
 
 const CHANNEL_PERMS = [
   'ViewChannel',

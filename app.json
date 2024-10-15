@@ -23,6 +23,13 @@
       "required": false,
       "value": ""
     },
+
+    "REPORT_LOGS": {
+      "description": "webhook url for feedback logs",
+      "required": false,
+      "value": ""
+    },
+
     "BOT_SECRET": {
       "description": "required for bot dashboard",
       "required": true,

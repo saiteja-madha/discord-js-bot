@@ -6,7 +6,7 @@ const {
 } = require('discord.js')
 const { getQuestions } = require('@schemas/TruthOrDare')
 const { EmbedBuilder } = require('discord.js')
-const { handleTodButtonClick } = require('@root/src/handlers/tod')
+const { handleTodButtonClick } = require('@handlers/tod')
 
 /**
  * @type {import("@structures/Command")}
