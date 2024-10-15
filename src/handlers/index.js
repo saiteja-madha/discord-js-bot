@@ -10,5 +10,5 @@ module.exports = {
   statsHandler: require('./stats'),
   suggestionHandler: require('./suggestion'),
   ticketHandler: require('./ticket'),
-  todHandler: require('./todhandler'),
+  todHandler: require('./tod'),
 }

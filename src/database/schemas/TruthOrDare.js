@@ -11,7 +11,7 @@ const Schema = new mongoose.Schema({
   question: reqString,
 })
 
-const Model = mongoose.model('truth-or-dare-questions', Schema)
+const Model = mongoose.model('tod', Schema)
 
 module.exports = {
   model: Model,
