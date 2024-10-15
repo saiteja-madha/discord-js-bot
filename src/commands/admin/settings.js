@@ -9,7 +9,6 @@ const {
   PermissionFlagsBits,
 } = require('discord.js')
 const { EMBED_COLORS } = require('@root/config.js')
-const { getGiveaways } = require('@schemas/Giveaways')
 const { model: ReactionRoleModel } = require('@schemas/ReactionRoles')
 
 module.exports = {
@@ -284,21 +283,37 @@ async function statusSettings(interaction, settings) {
     },
   ]
 
-  // Add Giveaways information if there are active giveaways
-  const activeGiveaways = await getGiveaways(interaction.guild.id)
-  const giveaways = activeGiveaways.filter(giveaway => giveaway.messageId)
+  // Add Giveaways information if there are any active giveaways
+  const giveawaysManager = interaction.client.giveawaysManager
+  const allGiveaways = await giveawaysManager.getAllGiveaways()
+  const activeGiveaways = allGiveaways.filter(
+    giveaway => !giveaway.ended && giveaway.guildId === interaction.guild.id
+  )
 
-  if (giveaways.length > 0) {
-    const giveawayInfo = giveaways
-      .map(
-        giveaway =>
-          `🎉 Prize: ${giveaway.prize}\n   Ends: <t:${Math.floor(giveaway.endAt / 1000)}:R>\n   [Jump to Giveaway](https://discord.com/channels/${giveaway.guildId}/${giveaway.channelId}/${giveaway.messageId})`
-      )
-      .join('\n\n')
+  if (activeGiveaways.length > 0) {
+    const giveawayInfo = await Promise.all(
+      activeGiveaways.map(async giveaway => {
+        const channel = await interaction.guild.channels
+          .fetch(giveaway.channelId)
+          .catch(() => null)
+        const timeLeft = giveaway.endAt - Date.now()
+
+        let status = '🏁 Running'
+        if (giveaway.pauseOptions && giveaway.pauseOptions.isPaused) {
+          status = '⏸️ Paused'
+        } else if (timeLeft <= 0) {
+          status = '🎊 Ended'
+        }
+
+        return `🎉 Prize: ${giveaway.prize}, [📨 Message](https://discord.com/channels/${giveaway.guildId}/${giveaway.channelId}/${giveaway.messageId}), 📍 Channel: ${channel ? `<#${channel.id}>` : 'IDK'}
+        🕒 Ends: ${timeLeft > 0 ? `<t:${Math.floor(giveaway.endAt / 1000)}:R>` : 'Ended'}, 👥 Winners: ${giveaway.winnerCount}
+        🏆 Hosted by: ${giveaway.hostedBy ? `${giveaway.hostedBy}` : 'IDK'}, 📊 Status: ${status}`
+      })
+    )
 
     allFields.push({
       name: '12. Active Giveaways 🎁',
-      value: `${giveaways.length} active giveaway(s):\n\n${giveawayInfo}\n\n> Use \`/giveaway\` to manage giveaways!`,
+      value: `${activeGiveaways.length} active giveaway(s):\n\n${giveawayInfo.join('\n\n')}\n\n> Use \`/giveaway\` to manage giveaways!`,
     })
   }
 
@@ -308,16 +323,22 @@ async function statusSettings(interaction, settings) {
   }).lean()
 
   if (reactionRoles.length > 0) {
-    const rrInfo = reactionRoles
-      .map(
-        rr =>
-          `📌 Message: [Jump](https://discord.com/channels/${rr.guild_id}/${rr.channel_id}/${rr.message_id})\n   Roles: ${rr.roles.length}`
-      )
-      .join('\n\n')
+    const rrInfo = await Promise.all(
+      reactionRoles.map(async rr => {
+        const channel = await interaction.guild.channels
+          .fetch(rr.channel_id)
+          .catch(() => null)
+        const rolesMentions = rr.roles
+          .map(role => `${role.emote} <@&${role.role_id}>`)
+          .join(', ')
+
+        return `📌 [Message](https://discord.com/channels/${rr.guild_id}/${rr.channel_id}/${rr.message_id}) in ${channel ? `<#${channel.id}>` : 'Unknown Channel'}\n   Roles: ${rolesMentions}`
+      })
+    )
 
     allFields.push({
       name: '13. Reaction Roles 🎭',
-      value: `${reactionRoles.length} reaction role message(s) set up:\n\n${rrInfo}\n\n> Use \`/reactionrole\` to manage reaction roles!`,
+      value: `${reactionRoles.length} reaction role message(s) set up:\n\n${rrInfo.join('\n\n')}\n\n> Use \`/reactionrole\` to manage reaction roles!`,
     })
   }
 

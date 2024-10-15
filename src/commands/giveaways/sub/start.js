@@ -44,8 +44,13 @@ module.exports = async (
     // Mention the allowed roles
     const mentionedRoles = allowedRoles.map(roleId => `<@&${roleId}>`).join(' ')
 
-    // Send the message with the mentioned roles
-    await giveawayChannel.send(`${mentionedRoles}`)
+    // Send the message with the mentioned roles or a default message
+    const messageContent =
+      mentionedRoles.length > 0
+        ? `${mentionedRoles}`
+        : 'A new giveaway is starting! Everyone can participate!'
+
+    await giveawayChannel.send(messageContent)
 
     /**
      * @type {import("discord-giveaways").GiveawayStartOptions}

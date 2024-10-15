@@ -1,5 +1,5 @@
 const { GiveawaysManager } = require('discord-giveaways')
-const Model = require('@schemas/Giveaways')
+const { model: Model } = require('@schemas/Giveaways')
 
 class MongooseGiveaways extends GiveawaysManager {
   /**

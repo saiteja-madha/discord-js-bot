@@ -1,6 +1,4 @@
-const { translationHandler, reactionRoleHandler } = require('@src/handlers')
-const { getSettings } = require('@schemas/Guild')
-const { isValidEmoji } = require('country-emoji-languages')
+const { reactionRoleHandler } = require('@src/handlers')
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -16,22 +14,10 @@ module.exports = async (client, reaction, user) => {
     }
   }
   if (user.partial) await user.fetch()
-  const { message, emoji } = reaction
+  const { message } = reaction
   if (user.bot) return
 
   // Reaction Roles
   reactionRoleHandler.handleReactionAdd(reaction, user)
 
-  // Handle Reaction Emojis
-  if (!emoji.id) {
-    // Translation By Flags
-    if (
-      message.content &&
-      (await getSettings(message.guild)).flag_translation.enabled
-    ) {
-      if (isValidEmoji(emoji.name)) {
-        translationHandler.handleFlagReaction(emoji.name, message, user)
-      }
-    }
-  }
 }

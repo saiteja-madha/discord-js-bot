@@ -97,7 +97,7 @@ module.exports = async (client, interaction) => {
 
       case 'MOCHI_REMIND_MODAL':
         return handleRemindModal(interaction)
-        
+
       default:
         if (interaction.customId.startsWith('report_modal_')) {
           return reportHandler.handleReportModal(interaction)

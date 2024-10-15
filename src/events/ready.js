@@ -41,7 +41,6 @@ module.exports = async client => {
       await client.registerInteractions(
         client.config.INTERACTIONS.TEST_GUILD_ID
       )
-    client.logger.log('Registered all the interactions.')
   }
 
   // Load reaction roles to cache

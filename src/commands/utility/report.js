@@ -116,4 +116,3 @@ async function showReportModal(interaction, type) {
 
   await interaction.showModal(modal)
 }
-
