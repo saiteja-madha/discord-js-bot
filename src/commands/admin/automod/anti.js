@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
  */
 module.exports = {
   name: 'anti',
-  description: 'Manage various automod settings for the server 💖',
+  description: 'Manage various automod settings for the server',
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
   slashCommand: {

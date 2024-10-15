@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
  */
 module.exports = {
   name: 'counter',
-  description: 'Set up a counter channel in the guild! 🎉',
+  description: 'Set up a counter channel in the guild!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   botPermissions: ['ManageChannels'],

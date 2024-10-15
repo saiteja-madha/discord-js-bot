@@ -11,20 +11,19 @@
   "scripts": {
     "dev": "nodemon .",
     "start": "node .",
-    "test": "nyc --reporter=lcov --reporter=text mocha",
     "f": "prettier --write src",
     "u": "git pull && npm update && npm run f",
     "start-replit": "node bot.js",
     "docker:package": "tar -cf discord-js-bot.tar dashboard logs src bot.js config.js dockerfile package.json package-lock.json",
     "docker:build": "docker build -t saitejamadha/discord-js-bot:5.5.0 ."
   },
-  "homepage": "https://github.com/saiteja-madha/discord-js-bot#readme",
+  "homepage": "https://github.com/vixshan/mochi#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saiteja-madha/discord-js-bot.git"
+    "url": "git+https://github.com/vixshan/mochi.git"
   },
   "bugs": {
-    "url": "https://github.com/saiteja-madha/discord-js-bot/issues"
+    "url": "https://github.com/vixshan/mochi/issues"
   },
   "dependencies": {
     "@lavaclient/queue": "^2.1.1",

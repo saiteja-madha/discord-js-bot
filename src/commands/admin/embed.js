@@ -17,7 +17,7 @@ const { isValidColor, isHex } = require('@helpers/Utils')
  */
 module.exports = {
   name: 'embed',
-  description: 'Send a beautiful embed message! ✨',
+  description: 'Send a beautiful embed message!',
   category: 'ADMIN',
   userPermissions: ['ManageMessages'],
   slashCommand: {

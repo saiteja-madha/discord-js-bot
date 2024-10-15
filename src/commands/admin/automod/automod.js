@@ -11,7 +11,7 @@ const { stripIndent } = require('common-tags')
  */
 module.exports = {
   name: 'automod',
-  description: '✨ Various automod configuration! 🌟',
+  description: 'Various automod configuration!',
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
   slashCommand: {

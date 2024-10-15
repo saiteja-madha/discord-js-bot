@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
  */
 module.exports = {
   name: 'autodelete',
-  description: 'Manage the autodelete settings for the server 🗑️✨',
+  description: 'Manage the autodelete settings for the server',
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
   slashCommand: {

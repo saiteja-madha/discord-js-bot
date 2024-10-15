@@ -23,7 +23,7 @@ const channelPerms = [
  */
 module.exports = {
   name: 'reactionrole',
-  description: 'Manage reaction roles for the specified message! 🎉',
+  description: 'Manage reaction roles for the specified message!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {

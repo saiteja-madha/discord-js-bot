@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
  */
 module.exports = {
   name: 'autorole',
-  description: 'Set up a role to be given when a member joins the server! 🎉',
+  description: 'Set up a role to be given when a member joins the server!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {

@@ -138,7 +138,7 @@ async function closeTicket(channel, closedBy, reason) {
     if (ticketDetails.user) {
       const dmEmbed = embed
         .setDescription(
-          `**Server:** ${channel.guild.name}\n**Category:** ${ticketDetails.catName}`
+          `**Server:** ${channel.guild.name}\n**Topic:** ${ticketDetails.catName}`
         )
         .setThumbnail(channel.guild.iconURL())
       ticketDetails.user.send({ embeds: [dmEmbed], components }).catch(ex => {})
@@ -198,24 +198,24 @@ async function handleTicketOpen(interaction) {
       'There are too many open tickets. Try again later'
     )
 
-  // check categories
+  // check topics
   let catName = null
   let catPerms = []
-  const categories = settings.ticket.categories
-  if (categories.length > 0) {
+  const topics = settings.ticket.topics
+  if (topics.length > 0) {
     const options = []
-    settings.ticket.categories.forEach(cat =>
+    settings.ticket.topics.forEach(cat =>
       options.push({ label: cat.name, value: cat.name })
     )
     const menuRow = new ActionRowBuilder().addComponents(
       new StringSelectMenuBuilder()
         .setCustomId('ticket-menu')
-        .setPlaceholder('Choose the ticket category')
+        .setPlaceholder('topic category')
         .addOptions(options)
     )
 
     await interaction.followUp({
-      content: 'Please choose a ticket category',
+      content: 'Please choose a topic for the ticket',
       components: [menuRow],
     })
     const res = await interaction.channel
@@ -265,14 +265,34 @@ async function handleTicketOpen(interaction) {
       })
     }
 
-    // get channel parent ("Tickets" category)
-    const parent = guild.channels.cache.find(
-      ch => ch.name === 'Tickets' && ch.type === ChannelType.GuildCategory
-    )
+    const settings = await getSettings(interaction.guild)
+    const categoryId = settings.ticket.category
 
-    const tktChannel = await guild.channels.create({
+    // get channel parent (use the set category or create a new "Tickets" category)
+    let parent
+    if (categoryId) {
+      parent = interaction.guild.channels.cache.get(categoryId)
+    }
+
+    if (!parent) {
+      parent = await interaction.guild.channels.create({
+        name: 'Tickets',
+        type: ChannelType.GuildCategory,
+        permissionOverwrites: [
+          {
+            id: interaction.guild.roles.everyone,
+            deny: ['ViewChannel'],
+          },
+        ],
+      })
+      settings.ticket.category = parent.id
+      settings.ticket.enabled = true
+      await updateSettings(interaction.guild.id, settings)
+    }
+
+    const tktChannel = await interaction.guild.channels.create({
       name: `tіcket-${ticketNumber}`,
-      parent: parent?.id,
+      parent: parent.id,
       type: ChannelType.GuildText,
       topic: `tіcket|${user.id}|${catName || 'Default'}`,
       permissionOverwrites,
@@ -283,7 +303,7 @@ async function handleTicketOpen(interaction) {
       .setDescription(
         `Hello ${user.toString()}
         Support will be with you shortly
-        ${catName ? `\n**Category:** ${catName}` : ''}
+        ${catName ? `\n**Topic:** ${catName}` : ''}
         `
       )
       .setFooter({
@@ -310,7 +330,7 @@ async function handleTicketOpen(interaction) {
       .setThumbnail(guild.iconURL())
       .setDescription(
         `**Server:** ${guild.name}
-        ${catName ? `**Category:** ${catName}` : ''}
+        ${catName ? `**Topic:** ${catName}` : ''}
         `
       )
 

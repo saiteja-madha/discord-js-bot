@@ -8,10 +8,12 @@ const {
   ticketHandler,
   todHandler,
 } = require('@src/handlers')
-const { handleSetupButton,
+const {
+  handleSetupButton,
   handleSetupModal,
   handleRemindButton,
-  handleRemindModal,} = require('@handlers/guild')
+  handleRemindModal,
+} = require('@handlers/guild')
 const { handleUpdateModal } = require('@handlers/updates')
 /**
  * @param {import('@src/structures').BotClient} client
@@ -94,9 +96,6 @@ module.exports = async (client, interaction) => {
 
       case 'MOCHI_REMIND_MODAL':
         return handleRemindModal(interaction)
-
-      case 'MOCHI_UPDATE_MODAL':
-        return handleUpdateModal(interaction, client)
     }
   }
 

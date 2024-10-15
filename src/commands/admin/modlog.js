@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
  */
 module.exports = {
   name: 'modlog',
-  description: 'Enable or disable moderation logs! 📝✨',
+  description: 'Enable or disable moderation logs!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {

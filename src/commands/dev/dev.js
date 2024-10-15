@@ -266,7 +266,7 @@ module.exports = {
           await sentMsg.edit({ embeds: [embed] })
         }
         if (response.customId === 'nxtBtn' && currentPage < totalPages) {
-          currentPage++ 
+          currentPage++
           const embed = buildEmbed()
           await sentMsg.edit({ embeds: [embed] })
         }

@@ -127,7 +127,9 @@ async function handleSetupModal(interaction) {
   const successEmbed = new EmbedBuilder()
     .setColor('#FFC0CB')
     .setTitle('Yay! Setup Complete! ヾ(≧▽≦*)o')
-    .setDescription('We did it! Your server is now super awesome and ready to go~')
+    .setDescription(
+      'We did it! Your server is now super awesome and ready to go~'
+    )
     .addFields(
       { name: 'Updates Channel', value: `${updatesChannel}`, inline: true },
       { name: 'Staff Role', value: `${staffRole}`, inline: true }

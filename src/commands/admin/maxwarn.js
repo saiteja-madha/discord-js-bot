@@ -5,7 +5,7 @@ const { ApplicationCommandOptionType } = require('discord.js')
  */
 module.exports = {
   name: 'maxwarn',
-  description: 'Set max warnings configuration! 🎉',
+  description: 'Set max warnings configuration!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   slashCommand: {

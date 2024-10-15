@@ -29,7 +29,9 @@ const Schema = new mongoose.Schema({
   ticket: {
     log_channel: String,
     limit: { type: Number, default: 10 },
-    categories: [
+    category: { type: String, default: null },
+    enabled: { type: Boolean, default: false },
+    topics: [
       {
         _id: false,
         name: String,
@@ -153,10 +155,15 @@ module.exports = {
         : [settings.server.staff_roles]
     }
 
+    // Check if a ticket message is set and update the enabled status
+    if (settings.ticket && settings.ticket.message_id) {
+      settings.ticket.enabled = true
+    }
+
     const updatedSettings = await Model.findByIdAndUpdate(guildId, settings, {
       new: true,
     })
-    cache.add(guildId, updatedSettings) // Use add instead of set
+    cache.add(guildId, updatedSettings)
     return updatedSettings
   },
 }
