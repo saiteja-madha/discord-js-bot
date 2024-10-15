@@ -61,4 +61,9 @@ const Schema = new mongoose.Schema(
 )
 
 const Model = mongoose.model('giveaways', Schema)
-module.exports = Model
+module.exports = {
+  model: Model,
+  getGiveaways: async guildId => {
+    return await Model.find({ guildId }).lean()
+  },
+}

@@ -14,8 +14,8 @@ module.exports = {
   description:
     'Help Mochi make the community better! Report issues or share your thoughts~',
   category: 'UTILITY',
-  ephemeral: true,
   slashCommand: {
+    ephemeral: true,
     enabled: true,
   },
 
@@ -116,3 +116,4 @@ async function showReportModal(interaction, type) {
 
   await interaction.showModal(modal)
 }
+
