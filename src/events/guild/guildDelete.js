@@ -32,8 +32,8 @@ module.exports = async (client, guild) => {
     // Continue execution even if owner fetch fails
   }
 
-  // Create the embed for both webhook and DM
-  const embed = new EmbedBuilder()
+  // Create the embed for webhook
+  const webhookEmbed = new EmbedBuilder()
     .setTitle(`Aww, I just left ${guild.name} 💔`)
     .setThumbnail(guild.iconURL())
     .setColor(client.config.EMBED_COLORS.ERROR)
@@ -69,7 +69,7 @@ module.exports = async (client, guild) => {
       await client.joinLeaveWebhook.send({
         username: 'Mochi (Left)',
         avatarURL: client.user.displayAvatarURL(),
-        embeds: [embed],
+        embeds: [webhookEmbed],
       })
       console.log('Successfully sent webhook message for guild leave event.')
     } catch (err) {
@@ -105,14 +105,24 @@ module.exports = async (client, guild) => {
 
       const row = new ActionRowBuilder().addComponents(components)
 
+      // Create a new embed for the DM
+      const dmEmbed = new EmbedBuilder()
+        .setTitle('Mochi misses you already! 🌸')
+        .setDescription(
+          `I just left your server and already miss you! 😢\nIf you have any ideas on how I can improve, you can let me know by creating an issue on my [GitHub repo](${githubIssueURL})!\n\nP.S. I'm open-source!`
+        )
+        .setColor(client.config.EMBED_COLORS.ERROR) // You might want to use a different color for DMs
+        .setThumbnail(client.user.displayAvatarURL())
+        .setFooter({ text: 'Thank you for having me in your server!' })
+
       // Wait before sending DM to avoid rate limiting
       await wait(1000)
 
       console.log(`Attempting to send DM to owner: ${ownerId}`)
 
       await owner.send({
-        content: `Hey <@${ownerId}>! 🌸 I just left your server and already miss you! 😢\nIf you have any ideas on how I can improve, you can let me know by creating an issue on my [GitHub repo](${githubIssueURL})! ✨\nP.S. I'm open-source!`,
-        embeds: [embed],
+        content: `Hey <@${ownerId}>!`, // This will be the plain text for the ping
+        embeds: [dmEmbed],
         components: [row],
       })
 
