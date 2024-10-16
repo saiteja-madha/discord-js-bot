@@ -280,6 +280,7 @@ module.exports = class BotClient extends Client {
       scopes: ['bot', 'applications.commands'],
       permissions: [
         'AddReactions',
+        'CreateInstantInvite',
         'AttachFiles',
         'BanMembers',
         'ChangeNickname',
