@@ -1,6 +1,6 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const { getJson } = require('@helpers/HttpUtils')
-const { MESSAGES, EMBED_COLORS } = require('@root/config')
+const { MESSAGES, EMBED_COLORS, MUSIC } = require('@root/config')
 
 const BASE_URL = 'https://some-random-api.com/lyrics'
 
@@ -13,7 +13,7 @@ module.exports = {
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: MUSIC.ENABLED,
     options: [
       {
         name: 'query',

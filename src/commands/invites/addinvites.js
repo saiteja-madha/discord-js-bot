@@ -1,5 +1,5 @@
 const { getEffectiveInvites, checkInviteRewards } = require('@handlers/invite')
-const { EMBED_COLORS } = require('@root/config.js')
+const { EMBED_COLORS, INVITE } = require('@root/config.js')
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const { getMember } = require('@schemas/Member')
 
@@ -13,7 +13,7 @@ module.exports = {
   userPermissions: ['ManageGuild'],
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: INVITE.ENABLED,
     options: [
       {
         name: 'user',

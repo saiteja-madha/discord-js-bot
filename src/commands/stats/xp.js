@@ -1,3 +1,4 @@
+const { STATS } = require('@root/config')
 const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
 
 /**
@@ -9,7 +10,7 @@ module.exports = {
   category: 'STATS',
   userPermissions: ['ManageGuild'],
   slashCommand: {
-    enabled: true,
+    enabled: STATS.ENABLED,
     options: [
       {
         name: 'message',

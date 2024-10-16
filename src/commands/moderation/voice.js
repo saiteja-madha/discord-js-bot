@@ -5,6 +5,7 @@ const undeafen = require('./message/undeafen')
 const disconnect = require('./message/disconnect') // Renamed for consistency
 const move = require('./message/move')
 const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
+const { MODERATION } = require('@root/config')
 
 /**
  * @type {import("@structures/Command")}
@@ -16,7 +17,7 @@ module.exports = {
   userPermissions: ['MuteMembers', 'MoveMembers', 'DeafenMembers'],
   botPermissions: ['MuteMembers', 'MoveMembers', 'DeafenMembers'],
   slashCommand: {
-    enabled: true,
+    enabled: MODERATION.ENABLED,
     options: [
       {
         name: 'mute',

@@ -1,5 +1,6 @@
 const { musicValidations } = require('@helpers/BotUtils')
 const { ApplicationCommandOptionType } = require('discord.js')
+const { MUSIC } = require('@root/config.js')
 
 const levels = {
   none: 0.0,
@@ -17,7 +18,7 @@ module.exports = {
   category: 'MUSIC',
   validations: musicValidations,
   slashCommand: {
-    enabled: true,
+    enabled: MUSIC.ENABLED,
     options: [
       {
         name: 'level',

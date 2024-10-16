@@ -1,4 +1,5 @@
 const { ApplicationCommandOptionType } = require('discord.js')
+const { AUTOMOD } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -9,7 +10,7 @@ module.exports = {
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
   slashCommand: {
-    enabled: true,
+    enabled: AUTOMOD.ENABLED,
     ephemeral: true,
     options: [
       {

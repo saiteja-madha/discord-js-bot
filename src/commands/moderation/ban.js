@@ -1,5 +1,6 @@
 const { banTarget } = require('@helpers/ModUtils')
 const { ApplicationCommandOptionType } = require('discord.js')
+const { MODERATION } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -11,7 +12,7 @@ module.exports = {
   botPermissions: ['BanMembers'],
   userPermissions: ['BanMembers'],
   slashCommand: {
-    enabled: true,
+    enabled: MODERATION.ENABLED,
     options: [
       {
         name: 'user',

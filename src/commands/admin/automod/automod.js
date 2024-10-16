@@ -3,7 +3,7 @@ const {
   ApplicationCommandOptionType,
   ChannelType,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config.js')
+const { EMBED_COLORS, AUTOMOD } = require('@root/config.js')
 const { stripIndent } = require('common-tags')
 
 /**
@@ -15,7 +15,7 @@ module.exports = {
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
   slashCommand: {
-    enabled: true,
+    enabled: AUTOMOD.ENABLED,
     ephemeral: true,
     options: [
       {

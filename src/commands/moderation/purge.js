@@ -1,5 +1,6 @@
 const { purgeMessages } = require('@helpers/ModUtils')
 const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
+const { MODERATION } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -10,7 +11,7 @@ module.exports = {
   category: 'MODERATION',
   userPermissions: ['ManageMessages'],
   slashCommand: {
-    enabled: true,
+    enabled: MODERATION.ENABLED,
     ephemeral: true,
     options: [
       {

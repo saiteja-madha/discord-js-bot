@@ -1,5 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config.js')
+const { EMBED_COLORS, INVITE } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -10,7 +10,7 @@ module.exports = {
   category: 'INVITE',
   botPermissions: ['EmbedLinks', 'ManageGuild'],
   slashCommand: {
-    enabled: true,
+    enabled: INVITE.ENABLED,
     options: [
       {
         name: 'user',

@@ -1,6 +1,6 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const { getMemberStats } = require('@schemas/MemberStats')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS, STATS } = require('@root/config')
 const { stripIndents } = require('common-tags')
 
 /**
@@ -11,7 +11,7 @@ module.exports = {
   description: 'displays members stats in this server',
   category: 'STATS',
   slashCommand: {
-    enabled: true,
+    enabled: STATS.ENABLED,
     options: [
       {
         name: 'user',

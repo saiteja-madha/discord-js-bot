@@ -40,6 +40,14 @@ module.exports = class Validator {
       }
     }
 
+    // Validate Feedback Config
+    if (config.FEEDBACK.ENABLED) {
+      if (!process.env.FEEDBACK_URL) {
+        error('env: FEEDBACK_URL cannot be empty when FEEDBACK is enabled')
+        process.exit(1)
+      }
+    }
+
     // Cache Size
     if (
       isNaN(config.CACHE_SIZE.GUILDS) ||

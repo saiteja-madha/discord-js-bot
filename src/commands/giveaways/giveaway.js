@@ -11,6 +11,7 @@ const {
 } = require('discord.js')
 const { parsePermissions } = require('@helpers/Utils')
 const ems = require('enhanced-ms')
+const { GIVEAWAYS } = require('@root/config.js')
 
 // Sub Commands
 const start = require('./sub/start')
@@ -29,7 +30,7 @@ module.exports = {
   description: 'giveaway commands',
   category: 'GIVEAWAY',
   slashCommand: {
-    enabled: true,
+    enabled: GIVEAWAYS.ENABLED,
     ephemeral: true,
     options: [
       {

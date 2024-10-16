@@ -12,7 +12,7 @@ module.exports = {
   category: 'ECONOMY',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: ECONOMY.ENABLED,
   },
 
   async interactionRun(interaction) {

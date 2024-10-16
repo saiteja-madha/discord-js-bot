@@ -24,7 +24,7 @@
       "value": ""
     },
 
-    "REPORT_LOGS": {
+    "FEEDBACK_URL": {
       "description": "webhook url for feedback logs",
       "required": false,
       "value": ""

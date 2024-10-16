@@ -65,6 +65,7 @@ module.exports = class BotClient extends Client {
     this.discordTogether = new DiscordTogether(this)
   }
 
+
   // Load and register events from a directory
   loadEvents(directory) {
     this.logger.log('Loading events...')
@@ -280,11 +281,11 @@ module.exports = class BotClient extends Client {
       scopes: ['bot', 'applications.commands'],
       permissions: [
         'AddReactions',
-        'CreateInstantInvite',
         'AttachFiles',
         'BanMembers',
         'ChangeNickname',
         'Connect',
+        'CreateInstantInvite',
         'DeafenMembers',
         'EmbedLinks',
         'KickMembers',

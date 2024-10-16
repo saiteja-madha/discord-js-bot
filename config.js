@@ -26,6 +26,11 @@ module.exports = {
   },
 
   // PLUGINS
+  // whether or not to enable feedback/report system
+  FEEDBACK: {
+    ENABLED: true,
+    URL: process.env.FEEDBACK_URL,
+  },
 
   AUTOMOD: {
     ENABLED: true,
@@ -49,6 +54,7 @@ module.exports = {
   },
 
   AICHAT: {
+    ENABLED: false,
     MODEL: 'gpt-3.5-turbo', //Model Of AI to use
     TOKENS: 300, //The maximum number of tokens to generate in the completion.
     PRESENCE_PENALTY: 1.5, // Positive values penalize new tokens

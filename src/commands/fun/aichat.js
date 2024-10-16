@@ -16,7 +16,7 @@ module.exports = {
   category: 'FUN',
   cooldown: 5,
   slashCommand: {
-    enabled: true,
+    enabled: AICHAT.ENABLED,
     options: [
       {
         name: 'prompt',

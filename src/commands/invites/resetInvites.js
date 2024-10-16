@@ -1,6 +1,7 @@
 const { getMember } = require('@schemas/Member')
 const { ApplicationCommandOptionType } = require('discord.js')
 const { checkInviteRewards } = require('@handlers/invite')
+const { INVITE } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -12,7 +13,7 @@ module.exports = {
   userPermissions: ['ManageGuild'],
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: INVITE.ENABLED,
     options: [
       {
         name: 'user',

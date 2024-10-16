@@ -6,8 +6,7 @@ const {
   TextInputBuilder,
   TextInputStyle,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config.js')
-const { ephemeral } = require('@root/src/structures/BaseContext')
+const { EMBED_COLORS, FEEDBACK } = require('@root/config.js')
 
 module.exports = {
   name: 'report',
@@ -16,7 +15,7 @@ module.exports = {
   category: 'UTILITY',
   slashCommand: {
     ephemeral: true,
-    enabled: true,
+    enabled: FEEDBACK.ENABLED,
   },
 
   async interactionRun(interaction) {
@@ -111,6 +110,17 @@ async function showReportModal(interaction, type) {
       .setPlaceholder('Type the question ID here!')
       .setRequired(true)
     const thirdActionRow = new ActionRowBuilder().addComponents(questionIdInput)
+    modal.addComponents(thirdActionRow)
+  } else if (type === 'feedback') {
+    const additionalInfoInput = new TextInputBuilder()
+      .setCustomId('additionalInfo')
+      .setLabel('Any extra thoughts? (Optional)')
+      .setStyle(TextInputStyle.Paragraph)
+      .setPlaceholder('Share any additional ideas or suggestions here!')
+      .setRequired(false)
+    const thirdActionRow = new ActionRowBuilder().addComponents(
+      additionalInfoInput
+    )
     modal.addComponents(thirdActionRow)
   }
 

@@ -1,4 +1,5 @@
 const { musicValidations } = require('@helpers/BotUtils')
+const { MUSIC } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -9,7 +10,7 @@ module.exports = {
   category: 'MUSIC',
   validations: musicValidations,
   slashCommand: {
-    enabled: true,
+    enabled: MUSIC.ENABLED,
   },
 
   async interactionRun(interaction) {

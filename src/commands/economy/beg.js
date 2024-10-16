@@ -12,7 +12,7 @@ module.exports = {
   cooldown: 3600,
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: ECONOMY.ENABLED,
   },
 
   async interactionRun(interaction) {

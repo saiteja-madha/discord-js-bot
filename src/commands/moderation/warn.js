@@ -1,5 +1,6 @@
 const { warnTarget } = require('@helpers/ModUtils')
 const { ApplicationCommandOptionType } = require('discord.js')
+const { MODERATION } = require('@root/config')
 
 /**
  * @type {import("@structures/Command")}
@@ -10,7 +11,7 @@ module.exports = {
   category: 'MODERATION',
   userPermissions: ['KickMembers'],
   slashCommand: {
-    enabled: true,
+    enabled: MODERATION.ENABLED,
     options: [
       {
         name: 'user',

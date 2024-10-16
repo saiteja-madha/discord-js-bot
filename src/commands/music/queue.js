@@ -1,4 +1,4 @@
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS, MUSIC } = require('@root/config')
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 
 /**
@@ -10,7 +10,7 @@ module.exports = {
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: MUSIC.ENABLED,
     options: [
       {
         name: 'page',

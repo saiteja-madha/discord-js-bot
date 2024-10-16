@@ -2,7 +2,7 @@ const {
   AttachmentBuilder,
   ApplicationCommandOptionType,
 } = require('discord.js')
-const { EMBED_COLORS, IMAGE } = require('@root/config')
+const { EMBED_COLORS, IMAGE, STATS } = require('@root/config')
 const { getBuffer } = require('@helpers/HttpUtils')
 const { getMemberStats, getXpLb } = require('@schemas/MemberStats')
 
@@ -16,7 +16,7 @@ module.exports = {
   category: 'STATS',
   botPermissions: ['AttachFiles'],
   slashCommand: {
-    enabled: true,
+    enabled: STATS.ENABLED,
     options: [
       {
         name: 'user',

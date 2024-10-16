@@ -3,7 +3,7 @@ const balance = require('./sub/balance')
 const deposit = require('./sub/deposit')
 const transfer = require('./sub/transfer')
 const withdraw = require('./sub/withdraw')
-
+const { ECONOMY } = require('@root/config.js')
 /**
  * @type {import("@structures/Command")}
  */
@@ -13,7 +13,7 @@ module.exports = {
   category: 'ECONOMY',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: ECONOMY.ENABLED,
     options: [
       {
         name: 'balance',

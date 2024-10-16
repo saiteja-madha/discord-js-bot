@@ -18,7 +18,7 @@ module.exports = {
   category: 'SUGGESTION',
   cooldown: 20,
   slashCommand: {
-    enabled: true,
+    enabled: SUGGESTIONS.ENABLED,
     options: [
       {
         name: 'suggestion',

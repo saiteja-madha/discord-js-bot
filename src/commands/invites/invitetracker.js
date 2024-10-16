@@ -1,5 +1,6 @@
 const { cacheGuildInvites, resetInviteCache } = require('@handlers/invite')
 const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
+const { INVITE } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -10,7 +11,7 @@ module.exports = {
   category: 'INVITE',
   userPermissions: ['ManageGuild'],
   slashCommand: {
-    enabled: true,
+    enabled: INVITE.ENABLED,
     options: [
       {
         name: 'status',

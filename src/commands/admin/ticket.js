@@ -10,12 +10,11 @@ const {
   TextInputStyle,
   ComponentType,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config.js')
+const { EMBED_COLORS, TICKET } = require('@root/config.js')
 const {
   isTicketChannel,
   closeTicket,
   closeAllTickets,
-  getTicketChannels,
 } = require('@handlers/ticket')
 const { getSettings, updateSettings } = require('@schemas/Guild')
 
@@ -28,7 +27,7 @@ module.exports = {
   category: 'TICKET',
   userPermissions: ['ManageGuild'],
   slashCommand: {
-    enabled: true,
+    enabled: TICKET.ENABLED,
     options: [
       {
         name: 'setup',

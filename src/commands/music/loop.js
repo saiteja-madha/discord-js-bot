@@ -1,6 +1,7 @@
 const { musicValidations } = require('@helpers/BotUtils')
 const { LoopType } = require('@lavaclient/queue')
 const { ApplicationCommandOptionType } = require('discord.js')
+const { MUSIC } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -11,7 +12,7 @@ module.exports = {
   category: 'MUSIC',
   validations: musicValidations,
   slashCommand: {
-    enabled: true,
+    enabled: MUSIC.ENABLED,
     options: [
       {
         name: 'type',

@@ -23,7 +23,7 @@ module.exports = {
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: MUSIC.ENABLED,
     options: [
       {
         name: 'query',

@@ -1,4 +1,4 @@
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS, MUSIC } = require('@root/config')
 const { EmbedBuilder } = require('discord.js')
 const prettyMs = require('pretty-ms')
 const { splitBar } = require('string-progressbar')
@@ -12,7 +12,7 @@ module.exports = {
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: MUSIC.ENABLED,
   },
 
   async interactionRun(interaction) {

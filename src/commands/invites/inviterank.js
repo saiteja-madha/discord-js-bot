@@ -1,4 +1,5 @@
 const { ApplicationCommandOptionType } = require('discord.js')
+const { INVITE } = require('@root/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -9,7 +10,7 @@ module.exports = {
   category: 'INVITE',
   userPermissions: ['ManageGuild'],
   slashCommand: {
-    enabled: true,
+    enabled: INVITE.ENABLED,
     ephemeral: true,
     options: [
       {
