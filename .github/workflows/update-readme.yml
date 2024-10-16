@@ -1,0 +1,44 @@
+name: Update README
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  fork:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo "SUPPORT_SERVER=${{ secrets.SUPPORT_SERVER }}" >> .env
+          echo "GH_USERNAME=${{ github.repository_owner }}" >> .env
+          echo "GH_REPO=${{ github.event.repository.name }}" >> .env
+          
+      - name: Update README
+        run: node scripts/update-readme.js
+        
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "docs: update README with repository information"
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: ${{ github.ref }}

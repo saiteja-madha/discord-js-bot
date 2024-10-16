@@ -1,7 +1,6 @@
 
 <center><img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Mochi&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=gradient" /></center>
 
-<!-- PROJECT LOGO -->
 <h1 align="center">
   <br>
   <a href="https://github.com/vixshan"><img src="./docs/.gitbook/assets/tmpng.png" height="200" alt="MOCHI"></a>
@@ -18,217 +17,122 @@
 
 </h1>
 
-  <p align="center">
-    <br />
-    <br />
-    <a href="https://github.com/vixshan/mochi/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/vixshan/Mochi/issues">Request Feature</a>
-  </p>
-</p>
+  hey there! i’m mochi, a playful and slightly chaotic discord bot that’s here to add a little fun (and maybe a bit of chaos) to your server! 🌀 whether you’re looking for moderation, music, or just some good old fun commands, i’ve got your back. oh, and if you ever find any bugs or have ideas for new features, let me know right [here](https://github.com/vixshan/mochi/issues/new)! 💖
 
 <p align="center">Admin, AutoMod, Anime, Economy, Fun, Giveaway, Image, Invite, Information, Moderation, Music, Owner, Social, Statistics, Suggestion, Ticket, Utility and More...</p>
 
-<br>
-
 <p align="center">
-  <a href="ko-fi.com/vikshan">Donate</a>
+  <a href="ko-fi.com/vikshan">donate</a>
   •
-  <a href="docs.vikshan.tech">Docs</a>
+  <a href="docs.vikshan.tech">docs</a>
   •
-  <a href="https://discord.com/api/oauth2/authorize?client_id=1009149789914546287&scope=bot+applications.commands&permissions=1374891928950">Invite Mochi</a>
+  <a href="https://discord.com/api/oauth2/authorize?client_id=1009149789914546287&scope=bot+applications.commands&permissions=1374891928950">invite me!</a>
   •
-  <a href="#-features-">Mochi's Features</a>
+  <a href="#-features-">my features</a>
   •
-  <a href="#--contributing--">Contributing</a>
+  <a href="#--contributing--">contribute</a>
 </p>
 
-<br>
+---
 
 ## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
 
-[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+if you need help with anything, just hit me up in my [support server](https://discord.gg/uMgS9evnmv)! join me and let’s fix things up together!
 
-[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
+also, i run on digital ocean, so if you want to try it yourself, grab some free credits [here](https://m.do.co/c/c5587212fe39)! 💻
 
-Mochi is Powered by Dgital Ocean,
-[Get free $200](https://m.do.co/c/c5587212fe39) credits to deploy your own copy
-of Mochi
+## 🔗 resource links
 
-[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+- want to use me? [invite here](https://discord.com/oauth2/authorize?client_id=1009149789914546287&permissions=397602323830&scope=bot%20applications.commands)
+- love what i do? buy me a [ko-fi](https://ko-fi.com/vikshan)!
+- need to dive into my docs? check them out [here](https://docs.vikshan.tech)
+- want to self-host? i’ve got you covered with a [guide](https://docs.vikshan.tech/installation/installation)
 
-## 🔗 Resource Links
+---
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fvixshan%2Fmochi)
-[![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi)
-[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
+## ✨ features ✨
 
-- 🤖 Mochi:
-  [Invite Here](https://discord.com/oauth2/authorize?client_id=1009149789914546287&permissions=397602323830&scope=bot%20applications.commands)
-- ❤️ Buy me a coffee: [Ko-Fi](ko-fi.com/vikshan)
-- 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
-- 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
-- 📑 Documentation : [docs.vikshan.tech](https://docs.vikshan.tech)
-- 📝 Changelog: [Changelog](src/CHANGELOG.md)
-- 📦 Self Host: [Guide](https://docs.vikshan.tech/installation/installation)
+### 📡 **advanced dashboard**
 
-## ✨ Features ✨
+- manage everything easily! tweak your server settings and make everything fit just right.
 
-### 📡 **Advanced Dashboard**
+### 🛑 **powerful moderation**
 
-- Manage your servers and make your server-specific settings!
-- Make custom adjustments easy!
+- i've got all the moderation tools you need to keep things in check, from banning to setting nicknames to voice moderation. also, i’ve got a killer multi-function purge command!
 
-### 🛑 **Powerful Moderation:**
+### 🤖 **auto moderation**
 
-- **Moderation Commands.** <br /> _Commands:_ `ban`, `unban`, `timeout`,
-  `voice moderation`, `deafen`, `move`, `warn`, `setnick`, ...
-- **Multi-Function Purge Commands.** <br /> _Commands:_ `purge`, `purge attach`,
-  `purge bots`, `purge links`, `purge token`, `purge user`, ...
+- stop ghostpings, spam, and mass mentions automatically. plus, you can autodelete all sorts of things—attachments, invites, and more!
 
-### 🤖 **Auto Moderation:**
+### ⚙️ **admin config**
 
-- **Anti system** <br /> _Commands:_ `anti ghostping`, `anti spam`,
-  `anti massmention`, ...
-- **Auto Delete system** <br /> _Commands:_ `autodelete attachments`,
-  `autodelete invites`, `autodelete links`, `autodelete maxlines`, ...
-- **AutoMod system** <br /> _Commands:_ `automod status`, `automod strikes`,
-  `automod action`, `automod debug`, `automod whitelist`, ...
+- automate everything! autoroles, reaction roles, and more—let me handle all the admin duties so you don’t have to.
 
-### ⚙️ **Admin Configuration:**
+### 🎵 **music**
 
-- **Let a bot be the server's assistant!** <br /> _Commands:_ `autorole`,
-  `farewell`, `welcome`, `counters`, `flag translation`, `reaction roles`, ...
-- **Make custom settings for your own server.** <br /> _Commands:_ ,
-  `maxwarns`, `modlog`...
+- lossless music? check! i can play tracks from youtube, spotify, soundcloud, and even apply cool filters.
 
-### 💁 **Information Gathering:**
+### 🎉 **giveaways**
 
-- **User Context Interactions**
-- **Advanced Information** Get deep information about a user, channel, role,
-  etc.
+- giveaways made easy! they’re role-specific, customizable, and limitless!
 
-### 🎵 **Music:**
+### 🫂 **social content**
 
-- **LossLess Music!** Enjoy high quality lossless music
-- **Multi-Platform** Play music from YouTube, SoundCloud, Spotify, and more
-- **Filters** Apply filters to your music and spice it up
+- flex your rep, track your love, and let everyone know how much you adore them.
 
-### 🎉 **Giveaways:**
+### 🎟 **ticket system**
 
-- **Easy to use** Create giveaways with ease
-- **Role specific** giveaways
-- **Customizable** Customize the giveaway to your liking
-- **Limitless** Create unlimited giveaways
+- keep support organized with custom ticket systems and categories!
 
-### 🫂 **Social Content:**
+### 📉 **stats tracking**
 
-- **You Have A CV In Each Server-Specific Bot!** <br /> _Commands:_ `rep`,
-  `rep view`...
-- **Do You Love Someone?** <br /> _Commands:_ `rep give`...
+- level up your server with an activity leaderboard and fully customizable rank cards!
 
-### 🎟 **Ticket System:**
+### 🙋‍♂️ **suggestions**
 
-- **Make Supporting Members A Breeze With Tickets!** <br/> Highly customizable
-  ticket system with staff roles
-- **Multiple Categories** <br/> Don't Want The Tickets To Be Everywhere?
-  Categorize them using select menus
+- get feedback from your server members and manage suggestions like a pro.
 
-### 📉 **Stats Tracking:**
+### ⚒️ **utility commands**
 
-- **Levelling** Track your server's activity with a level system
-- **Leaderboards** See who is the most active user in your server
-- **Customizable System** Configure the levelup message, rank cards to your
-  liking
+- i’ve got all sorts of handy tools: from finding big emojis to checking the weather or even translating stuff.
 
-### 🙋‍♂️ **Suggestions:**
+### ⭐ **anime content**
 
-- **Get Suggestions From Server Members To Help Your Server Become The Best!**
-  <br /> _Commands:_ `suggest`, `suggestion`...
-- **Accept Or Decline The Suggestions And Customize Them To The Max!** <br />
-  _Commands:_ `suggestion status`, `suggestion channel`, `suggestion appch`,
-  `suggestion rejch`, `suggestion approve`, `suggestion staffadd`,
-  `suggestion staffremove`...
+- love anime? i’ve got hug, kiss, and other cute anime react commands ready for you.
 
-### ⚒️ **Utility Commands:**
+### 🪙 **economy system**
 
-- **Need Some Help With Something? Use The Utility Commands To Find Out The
-  Answer To It** <br /> _Commands:_ `bigemoji`, `pokedex`, `urban`,
-  `weather`, ...
-- **Need Help With Some More Stuff?** <br /> _Commands:_ `help`, `proxies`,
-  `translate`, `paste`, ...
+- become the richest! bank commands, gambling, and more—your server’s own economy!
 
-### ⭐ **Anime Content:**
+### 😁 **fun commands**
 
-- **Love Anime? Express You Love To Someone Using The React Commands** <br />
-  _Commands:_ `react`, `hug`, `kiss`, `cuddle`, `pat`, `poke`, `slap`, `smug`,
-  ...
+- have some fun! from memes to games, i’ll make sure the vibes stay up.
 
-### 🪙 **Economy System:**
+### 📨 **invite tracking**
 
-- **Want To Become Richest? Use The Economy Commands!** <br /> _Commands:_
-  `bank`, `daily`, `beg`, `gamble`...
-- **Give People Money, Check Your Balance, Or Just Flex!** <br /> _Commands:_
-  `bank balance`, `bank deposit`, `bank withdraw`, `bank transfer`, ...
+- track who’s inviting new members and reward them with invite ranks!
 
-### 😁 **Fun Commands:**
+### 📷 **image manipulation**
 
-- **Have Some Fun In Your Server!** <br /> _Commands:_ `animal`, `facts`,
-  `meme`, `flip`, ...
-- **Play Games And Enjoy Yourself** <br /> _Commands:_ `snake`, `together`,
-  `flip coin`, `flip text`, ...
+- blur, pixelate, invert avatars—i’ve got the coolest image tricks ready to go.
 
-### 📨 **Invite Tracking:**
+---
 
-- **Track who has been inviting people to your server!**
-- **Invite Ranks!** Inviter can get awesome rewards and be recognised
-- **Configure these settings and customize them to your liking!** <br />
-  _Commands:_ `resetinvites`, `addinvites`, `invitesimport`, `inviterank`...
+## 🤝 contributing
 
-### 📷 **Image Manipulation:**
+special thanks to [@androzz](https://github.com/Androz2091/AtlantaBot) for the awesome dashboard! want to help make me even better? fork my code, submit a pull request, and let’s build this together! check out planned features [here](https://github.com/vixshan/mochi/projects).
 
-- **Customize other peoples avatars** <br /> _Commands:_ `blur`, `greyscale`,
-  `invert`, `pixelate`, `blur`, `sepia`, `sharpen`, `ad`, `affect`, `beautiful`,
-  `color`...
-- **Make some images by yourself or make some art** <br /> _Commands:_
-  `bobross`, `confusedstonk`, `delete`, `facepalm`, ` hitler`, `jail`,
-  `jokeoverhead`, `karaba`, `mms`, `notstonk`, `poutine`, `rainbow`, `rip`,
-  ` shit`, `stonk`, `tatoo`, `thomas`, `trash`, `wanted`, `wasted`, ...
+---
 
-<br>
+and remember: i’m a multi-purpose discord bot built with [discord.js](https://github.com/discordjs/discordjs). if you like what you see, leave a ⭐ and help me grow!
 
-<h1 align="center"> 🤝 Contributing 🤝 </h1>
+### <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="30px" height="30px"> 》 sponsor the project
 
-- Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the
-  [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool
-  discord bot projects.
-- Feel free to [Fork](https://github.com/vixshan/mochi/fork) this repository,
-  create a feature branch and submit a pull request
-- You can keep track of all the planned features
-  [here](https://github.com/vixshan/mochi/projects) or make a request for one at
-  our discord
-
-### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" width="20px" height="20px"> 》Notice
-
-> You may not claim this as your own! The original source was created by
-> [saiteja-madha](https://github.com/saiteja-madha). The source is modified and
-> being updated by Vikshan.
-
-> Mochi is a multipurpose Discord bot build in
-> [Discord.js](https://github.com/Discordjs/discordjs) If you like this
-> repository, feel free to leave a star ⭐ to motivate me!
-
-
-### <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="30px" height="30px"> 》 Sponsor the project
-
-If you like this project, consider sponsoring it. It will help me to keep it alive, and updated.
-- [Github Sponsors](https://github.com/sponsors/vixshan)
-- [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C1PUABU)
+want to support me and keep me alive? sponsor me on [github](https://github.com/sponsors/vixshan) or buy me a coffee!
 
 <!-- sponsors --><!-- sponsors -->
 
-
-## Powered by;
+## powered by:
 
 [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 <a href="https://www.vultr.com/?ref=9556008-8H"><img src="https://www.vultr.com/media/logo_ondark.svg" width="200" height="80"></a>
