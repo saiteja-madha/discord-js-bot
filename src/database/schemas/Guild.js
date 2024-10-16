@@ -18,6 +18,7 @@ const Schema = new mongoose.Schema({
     staff_roles: [String],
     setup_completed: { type: Boolean, default: false },
     setup_message_id: { type: String, default: null },
+    invite_link: { type: String, default: null },
   },
   stats: {
     enabled: { type: Boolean, default: true },
@@ -163,6 +164,17 @@ module.exports = {
     const updatedSettings = await Model.findByIdAndUpdate(guildId, settings, {
       new: true,
     })
+    cache.add(guildId, updatedSettings)
+    return updatedSettings
+  },
+
+  // add an invite link to the guild settings
+  setInviteLink: async (guildId, inviteLink) => {
+    const updatedSettings = await Model.findByIdAndUpdate(
+      guildId,
+      { 'server.invite_link': inviteLink },
+      { new: true }
+    )
     cache.add(guildId, updatedSettings)
     return updatedSettings
   },

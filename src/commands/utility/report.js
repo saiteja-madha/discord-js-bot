@@ -111,6 +111,15 @@ async function showReportModal(interaction, type) {
       .setRequired(true)
     const thirdActionRow = new ActionRowBuilder().addComponents(questionIdInput)
     modal.addComponents(thirdActionRow)
+  } else if (type === 'bug') {
+    const reproStepsInput = new TextInputBuilder()
+      .setCustomId('reproSteps')
+      .setLabel('How to reproduce the bug? (Optional)')
+      .setStyle(TextInputStyle.Paragraph)
+      .setPlaceholder('Share the steps to recreate the bug, if you know them!')
+      .setRequired(false)
+    const thirdActionRow = new ActionRowBuilder().addComponents(reproStepsInput)
+    modal.addComponents(thirdActionRow)
   } else if (type === 'feedback') {
     const additionalInfoInput = new TextInputBuilder()
       .setCustomId('additionalInfo')

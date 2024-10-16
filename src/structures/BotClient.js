@@ -65,7 +65,6 @@ module.exports = class BotClient extends Client {
     this.discordTogether = new DiscordTogether(this)
   }
 
-
   // Load and register events from a directory
   loadEvents(directory) {
     this.logger.log('Loading events...')

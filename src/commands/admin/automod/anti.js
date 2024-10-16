@@ -1,7 +1,6 @@
 const { ApplicationCommandOptionType } = require('discord.js')
 const { AUTOMOD } = require('@root/config.js')
 
-
 /**
  * @type {import("@structures/Command")}
  */

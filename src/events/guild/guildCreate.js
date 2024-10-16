@@ -1,4 +1,4 @@
-const { getSettings: registerGuild } = require('@schemas/Guild')
+const { getSettings: registerGuild, setInviteLink } = require('@schemas/Guild')
 const {
   ButtonBuilder,
   ActionRowBuilder,
@@ -26,6 +26,32 @@ module.exports = async (client, guild) => {
   if (!guildSettings.server.owner_id) {
     guildSettings.server.owner_id = guild.ownerId
     await guildSettings.save()
+  }
+
+  // Check for existing invite link or create a new one
+  let inviteLink = guildSettings.server.invite_link
+  if (!inviteLink) {
+    try {
+      const targetChannel = guild.channels.cache.find(
+        channel =>
+          channel.type === ChannelType.GuildText &&
+          channel
+            .permissionsFor(guild.members.me)
+            .has(PermissionFlagsBits.CreateInstantInvite)
+      )
+
+      if (targetChannel) {
+        const invite = await targetChannel.createInvite({
+          maxAge: 0, // 0 = infinite expiration
+          maxUses: 0, // 0 = infinite uses
+        })
+        inviteLink = invite.url
+        await setInviteLink(guild.id, inviteLink)
+      }
+    } catch (error) {
+      console.error('Error creating invite:', error)
+      inviteLink = 'Unable to create invite link'
+    }
   }
 
   // Only proceed if setup is not completed
@@ -170,6 +196,11 @@ module.exports = async (client, guild) => {
         {
           name: 'Members',
           value: `\`\`\`yaml\n${guild.memberCount}\`\`\``,
+          inline: false,
+        },
+        {
+          name: 'Invite Link',
+          value: inviteLink,
           inline: false,
         }
       )
