@@ -19,5 +19,4 @@ module.exports = async (client, reaction, user) => {
 
   // Reaction Roles
   reactionRoleHandler.handleReactionAdd(reaction, user)
-
 }

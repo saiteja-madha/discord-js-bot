@@ -30,7 +30,7 @@ module.exports = async client => {
   if (client.config.PRESENCE.ENABLED) {
     presenceHandler(client)
     client.logger.log(
-      `Presence STATUS: ${client.config.PRESENCE.STATUS}: MMESSAGE: ${client.config.PRESENCE.MESSAGE}!`
+      `Presence STATUS: ${client.config.PRESENCE.STATUS}: MESSAGE: ${client.config.PRESENCE.MESSAGE}!`
     )
   }
 
