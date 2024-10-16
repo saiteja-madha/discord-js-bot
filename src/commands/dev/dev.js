@@ -6,7 +6,7 @@ const {
   ComponentType,
   ApplicationCommandOptionType,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS, DEV } = require('@root/config')
 const { BotClient } = require('@src/structures')
 const { getSettings } = require('@schemas/Guild')
 const { showUpdateModal, handleUpdateModal } = require('@handlers/updates')
@@ -27,7 +27,7 @@ module.exports = {
   category: 'DEV',
   botPermissions: ['EmbedLinks'],
   slashCommand: {
-    enabled: true,
+    enabled: DEV.ENABLED,
     ephemeral: true,
     options: [
       {

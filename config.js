@@ -1,18 +1,16 @@
 module.exports = {
-  DEV_IDS: process.env.DEV_ID || ['929835843479302204'], // Bot owner ID's
-  SUPPORT_SERVER: process.env.SUPPORT_SERVER || 'https://discord.gg/uMgS9evnmv', // Your bot support server
-  DOCS_URL: process.env.DOCS_URL || 'https://docs.vikshan.tech/mochi/', // Your bot documentation website
-  DONATE_URL: process.env.DONATE_URL || 'https://ko-fi.com/vikshan', // Your donation link
-  GITHUB_SPONSORS_URL:
-    process.env.GITHUB_SPONSORS_URL || 'https://github.com/sponsors/vixshan', // Your bot github sponsors link
-  PATREON_URL: process.env.PATREON_URL || 'https://www.patreon.com/vikshan', // Your bot patreon link
-  BOTS_URL: process.env.BOTS_URL || 'https://go.vikshan.tech/bots', // Other bot's Invite Link
+  DEV_IDS: process.env.DEV_ID, // Bot owner ID's
+  SUPPORT_SERVER: process.env.SUPPORT_SERVER, // Your bot support server
+  DOCS_URL: process.env.DOCS_URL, // Your bot documentation website
+  DONATE_URL: process.env.DONATE_URL, // Your donation link
+  PATREON_URL: process.env.PATREON_URL, // Your bot patreon link
+  BOTS_URL: process.env.BOTS_URL, // Other bot's Invite Link
 
   INTERACTIONS: {
     SLASH: 'true', // Should the interactions be enabled
     CONTEXT: 'true', // Should contexts be enabled
     GLOBAL: 'true', // Should the interactions be registered globally
-    TEST_GUILD_ID: process.env.TEST_GUILD_ID || '1072214895598248030', // Guild ID where the interactions should be registered. [** Test you commands here first **]
+    TEST_GUILD_ID: process.env.TEST_GUILD_ID, // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
 
   CACHE_SIZE: {
@@ -26,6 +24,9 @@ module.exports = {
   },
 
   // PLUGINS
+  DEV: {
+    ENABLED: true,
+  },
   // whether or not to enable feedback/report system
   FEEDBACK: {
     ENABLED: true,
@@ -98,11 +99,11 @@ module.exports = {
     ENABLED: true,
   },
   EMBED_COLORS: {
-    BOT_EMBED: '#FFB3D9', // Soft pastel pink for a cute and friendly vibe
+    BOT_EMBED: '#00C0FF', // (electric cyan, like Jinx’s glowing eyes, adding an edgy, intense vibe)
     TRANSPARENT: '#00000000',
-    SUCCESS: '#B2FF6C', // Light green for positivity
-    ERROR: '#FF6B6B', // Soft red for error messages, yet warm
-    WARNING: '#FFF68F', // Light yellow for caution messages
+    SUCCESS: '#FFD700', // (vibrant gold for striking moments of triumph or positivity)
+    ERROR: '#FF4500', // (fiery orange-red, reflecting danger or chaos with a bold, sharp feel)
+    WARNING: '#FF69B4', // (hot pink, edgy and wild for warning messages that stand out)
   },
   MODERATION: {
     ENABLED: true,

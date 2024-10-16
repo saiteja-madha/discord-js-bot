@@ -12,7 +12,7 @@ const {
   DASHBOARD,
   DONATE_URL,
   DOCS_URL,
-  GITHUB_SPONSORS_URL,
+  GH_USERNAME,
   PATREON_URL,
 } = require('@root/config.js')
 const botstats = require('./sub/botstats')
@@ -108,7 +108,7 @@ module.exports = {
       components.push(
         new ButtonBuilder()
           .setLabel('Github Sponsors')
-          .setURL(GITHUB_SPONSORS_URL)
+          .setURL(`https://github.com/sponsors/${GH_USERNAME}`)
           .setStyle(ButtonStyle.Link)
       )
 
@@ -167,8 +167,7 @@ module.exports = {
         `🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``
       )
     }
-
-    // Changelog
+// Changelog
     else if (sub === 'changelog') {
       try {
         const githubToken = process.env.GH_TOKEN
@@ -180,7 +179,7 @@ module.exports = {
         const response = await octokit.repos.getContent({
           owner: process.env.GH_USERNAME,
           repo: process.env.GH_REPO,
-          path: process.env.MINILOG_PATH,
+          path: process.env.CHANGELOG_PATH
         })
 
         const changelogContent = Buffer.from(
@@ -188,27 +187,40 @@ module.exports = {
           'base64'
         ).toString('utf-8')
 
-        // Reduce heading sizes in the changelog content
-        const adjustedChangelogContent = changelogContent.replace(
-          /#{1,6}/g,
-          match => {
-            // Adjust the heading size based on your preference, e.g., reduce by 1 level
-            return '#' + match
-          }
-        )
+        // Split the changelog into version blocks and get only the first two versions
+        const versions = changelogContent
+          .split(/(?=# Mochi v[0-9]+\.[0-9]+\.[0-9]+)/i)
+          .filter(block => block.trim())
+          .slice(0, 2)
+          .map(version => {
+            // Clean up the version block
+            return version
+              .trim()
+              // Remove multiple blank lines
+              .replace(/\n\s*\n\s*\n/g, '\n\n')
+              // Ensure proper spacing after headers
+              .replace(/^(#{1,3} .+)\n(?!\n)/gm, '$1\n\n')
+              // Add proper bullet points
+              .replace(/^- /gm, '• ')
+          })
+
+        const latestUpdates = versions.join('\n\n')
 
         const embed = new EmbedBuilder()
-          .setAuthor({ name: 'Behold, my Changelog!' })
+          .setAuthor({ name: 'Latest Updates' })
           .setColor(EMBED_COLORS.BOT_EMBED)
           .setDescription(
-            `${adjustedChangelogContent}\n\n[View full changelog](${process.env.CHANGELOG_URL})`
+            `${latestUpdates}\n\n[**View full changelog**](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/blob/main/${process.env.CHANGELOG_PATH})`
           )
+          .setFooter({ 
+            text: 'Only showing the 2 most recent updates'
+          })
 
         return interaction.followUp({ embeds: [embed] })
       } catch (error) {
         console.error('Error fetching changelog:', error)
         return interaction.followUp(
-          `Error fetching the changelog. Please try again later or view full changelog [here](${process.env.CHANGELOG_URL}).`
+          `Error fetching the changelog. Please try again later or view full changelog [here](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/blob/main/${process.env.CHANGELOG_PATH}).`
         )
       }
     }

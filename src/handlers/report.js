@@ -46,7 +46,6 @@ async function handleReportModal(interaction) {
             } catch (error) {
               console.error('Error creating invite:', error)
             }
-            
           }
         }
       }
