@@ -1,5 +1,5 @@
 const { CommandCategory, BotClient } = require('@src/structures')
-const { EMBED_COLORS, SUPPORT_SERVER, DEV_IDS } = require('@root/config.js')
+const { EMBED_COLORS } = require('@root/config.js')
 const {
   EmbedBuilder,
   ActionRowBuilder,
@@ -73,7 +73,7 @@ async function getHelpMenu({ client, guild, member }) {
     ) {
       continue
     }
-    if (v.name === 'DEV' && !DEV_IDS.includes(member.user.id)) continue
+    if (v.name === 'DEV' && !process.env.DEV_ID.includes(member.user.id)) continue
     options.push({
       label: v.name,
       value: k,
@@ -114,7 +114,7 @@ async function getHelpMenu({ client, guild, member }) {
         `Hello I am ${guild.members.me.displayName}!\n` +
         'A cool multipurpose discord bot which can serve all your needs\n\n' +
         `**Invite Me:** [Here](${client.getInvite()})\n` +
-        `**Support Server:** [Join](${SUPPORT_SERVER})`
+        `**Support Server:** [Join](${process.env.SUPPORT_SERVER})`
     )
 
   return {

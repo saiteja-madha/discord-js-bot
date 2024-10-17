@@ -1,11 +1,4 @@
 module.exports = {
-  DEV_IDS: process.env.DEV_ID, // Bot owner ID's
-  SUPPORT_SERVER: process.env.SUPPORT_SERVER, // Your bot support server
-  DOCS_URL: process.env.DOCS_URL, // Your bot documentation website
-  DONATE_URL: process.env.DONATE_URL, // Your donation link
-  PATREON_URL: process.env.PATREON_URL, // Your bot patreon link
-  BOTS_URL: process.env.BOTS_URL, // Other bot's Invite Link
-
   INTERACTIONS: {
     SLASH: 'true', // Should the interactions be enabled
     CONTEXT: 'true', // Should contexts be enabled
@@ -153,5 +146,4 @@ module.exports = {
     CREATE_EMBED: '#FFB3D9', // Soft pastel pink for ticket creation
     CLOSE_EMBED: '#B2FF6C', // Light green for ticket closure
   },
-
 }

@@ -8,12 +8,7 @@ const {
 const { timeformat } = require('@helpers/Utils')
 const {
   EMBED_COLORS,
-  SUPPORT_SERVER,
   DASHBOARD,
-  DONATE_URL,
-  DOCS_URL,
-  GH_USERNAME,
-  PATREON_URL,
 } = require('@root/config.js')
 const botstats = require('./sub/botstats')
 
@@ -101,21 +96,23 @@ module.exports = {
       components.push(
         new ButtonBuilder()
           .setLabel('Ko-fi')
-          .setURL(DONATE_URL)
+          .setURL(process.env.DONATE_URL)
           .setStyle(ButtonStyle.Link)
       )
 
       components.push(
         new ButtonBuilder()
           .setLabel('Github Sponsors')
-          .setURL(`https://github.com/sponsors/${GH_USERNAME}`)
+          .setURL(
+            `https://github.com/sponsors/${process.env.GH_USERNAME}`
+          )
           .setStyle(ButtonStyle.Link)
       )
 
       components.push(
         new ButtonBuilder()
           .setLabel('Patreon')
-          .setURL(PATREON_URL)
+          .setURL(process.env.PATREON_URL)
           .setStyle(ButtonStyle.Link)
       )
 
@@ -152,7 +149,7 @@ module.exports = {
       components.push(
         new ButtonBuilder()
           .setLabel('Documentation')
-          .setURL(DOCS_URL)
+          .setURL(process.env.DOCS_URL)
           .setStyle(ButtonStyle.Link)
       )
 
@@ -249,7 +246,7 @@ function botInvite(client) {
     components.push(
       new ButtonBuilder()
         .setLabel('Support Server')
-        .setURL(SUPPORT_SERVER)
+        .setURL(process.env.SUPPORT_SERVER)
         .setStyle(ButtonStyle.Link)
     )
   }

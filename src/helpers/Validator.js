@@ -77,8 +77,8 @@ module.exports = class Validator {
     }
 
     // Warnings
-    if (config.DEV_IDS.length === 0) warn('config.js: DEV_IDS are empty')
-    if (!config.SUPPORT_SERVER)
+    if (process.env.DEV_ID.length === 0) warn('config.js: DEV_ID are empty')
+    if (!process.env.SUPPORT_SERVER)
       warn('config.js: SUPPORT_SERVER is not provided')
     if (!process.env.WEATHERSTACK_KEY)
       warn("env: WEATHERSTACK_KEY is missing. Weather command won't work")

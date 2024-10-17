@@ -7,7 +7,6 @@ const {
   PermissionFlagsBits,
   ChannelType,
 } = require('discord.js')
-const { SUPPORT_SERVER, BOTS_URL, DONATE_URL } = require('@root/config.js')
 const { sendOnboardingMenu } = require('@handlers/guild')
 
 /**
@@ -81,7 +80,7 @@ module.exports = async (client, guild) => {
           },
           {
             name: 'Need help?',
-            value: `Join our [support server](${SUPPORT_SERVER}) for any questions!`,
+            value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
           }
         )
         .setFooter({ text: 'Spreading cuteness and joy~ ♡' })
@@ -115,7 +114,7 @@ module.exports = async (client, guild) => {
             },
             {
               name: 'Need help?',
-              value: `Join our [support server](${SUPPORT_SERVER}) for any questions!`,
+              value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
             }
           )
           .setFooter({ text: 'Sending virtual hugs! (づ｡◕‿‿◕｡)づ' })
@@ -131,15 +130,15 @@ module.exports = async (client, guild) => {
           new ButtonBuilder()
             .setLabel('Our Bots')
             .setStyle(ButtonStyle.Link)
-            .setURL(BOTS_URL),
+            .setURL(process.env.BOTS_URL),
           new ButtonBuilder()
             .setLabel('Donate')
             .setStyle(ButtonStyle.Link)
-            .setURL(DONATE_URL),
+            .setURL(process.env.DONATE_URL),
           new ButtonBuilder()
             .setLabel('Support Server')
             .setStyle(ButtonStyle.Link)
-            .setURL(SUPPORT_SERVER),
+            .setURL(process.env.SUPPORT_SERVER),
         ]
 
         const row = new ActionRowBuilder().addComponents(components)

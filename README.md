@@ -37,7 +37,7 @@
 
 ## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
 
-if you need help with anything, just hit me up in my [support server](https://uMgS9evnmv)! join me and let’s fix things up together!
+if you need help with anything, just hit me up in my [support server](https://discord.gg/uMgS9evnmv)! join me and let’s fix things up together!
 
 also, i run on digital ocean, so if you want to try it yourself, grab some free credits [here](https://m.do.co/c/c5587212fe39)! 💻
 

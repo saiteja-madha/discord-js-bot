@@ -20,8 +20,8 @@ const updateReadme = () => {
 
     // Update Support Server link
     readme = readme.replace(
-      /discord\.gg\/[a-zA-Z0-9]+/g,
-      supportServer.replace('https://discord.gg/', '')
+      /https:\/\/discord\.gg\/[a-zA-Z0-9]+/g,
+      supportServer
     )
 
     // Update badge URLs

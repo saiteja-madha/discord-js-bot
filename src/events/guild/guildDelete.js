@@ -4,7 +4,6 @@ const {
   ActionRowBuilder,
   ButtonStyle,
 } = require('discord.js')
-const { SUPPORT_SERVER, DOCS_URL, DONATE_URL } = require('@root/config.js')
 const { getSettings } = require('@schemas/Guild')
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -88,15 +87,15 @@ module.exports = async (client, guild) => {
         new ButtonBuilder()
           .setLabel('Donate')
           .setStyle(ButtonStyle.Link)
-          .setURL(DONATE_URL),
+          .setURL(process.env.DONATE_URL),
         new ButtonBuilder()
           .setLabel('Docs')
           .setStyle(ButtonStyle.Link)
-          .setURL(DOCS_URL),
+          .setURL(process.env.DOCS_URL),
         new ButtonBuilder()
           .setLabel('Support Server')
           .setStyle(ButtonStyle.Link)
-          .setURL(SUPPORT_SERVER),
+          .setURL(process.env.SUPPORT_SERVER),
         new ButtonBuilder()
           .setLabel('Create an Issue')
           .setStyle(ButtonStyle.Link)

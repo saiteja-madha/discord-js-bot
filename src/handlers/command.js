@@ -1,5 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
-const { DEV_IDS, EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@root/config')
 const { parsePermissions } = require('@helpers/Utils')
 const { timeformat } = require('@helpers/Utils')
 const { getSettings } = require('@schemas/Guild')
@@ -33,7 +33,10 @@ module.exports = {
     }
 
     // DEV commands
-    if (cmd.category === 'DEV' && !DEV_IDS.includes(interaction.user.id)) {
+    if (
+      cmd.category === 'DEV' &&
+      !process.env.DEV_ID.includes(interaction.user.id)
+    ) {
       return interaction.reply({
         content: `💔 Oh no! Only my sweet developers can use this command~!`,
         ephemeral: true,

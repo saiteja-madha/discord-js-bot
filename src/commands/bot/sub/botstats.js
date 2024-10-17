@@ -4,7 +4,7 @@ const {
   ButtonBuilder,
   ButtonStyle,
 } = require('discord.js')
-const { EMBED_COLORS, SUPPORT_SERVER, DASHBOARD } = require('@root/config')
+const { EMBED_COLORS, DASHBOARD } = require('@root/config')
 const { timeformat } = require('@helpers/Utils')
 const os = require('os')
 const { stripIndent } = require('common-tags')
@@ -98,7 +98,7 @@ module.exports = client => {
     components.push(
       new ButtonBuilder()
         .setLabel('Support Server')
-        .setURL(SUPPORT_SERVER)
+        .setURL(process.env.SUPPORT_SERVER)
         .setStyle(ButtonStyle.Link)
     )
   }
