@@ -5,7 +5,7 @@ require('dotenv').config()
 const updateLinks = (content, username, repo, supportServer) => {
   // Update GitHub-related URLs
   content = content.replace(
-    /https:\/\/github\.com\/[^/]+\/[^/\s)]+(?:\.git)?/g,
+    /https:\/\/github\.com\/[^/]+\/[^/\s)]+(?:\.git|\/fork)?/g,
     match => {
       // Don't replace URLs in the badge definitions at the bottom
       if (match.includes('shield')) return match
@@ -13,13 +13,19 @@ const updateLinks = (content, username, repo, supportServer) => {
       // Leave https://github.com/Discordjs/discordjs unchanged
       if (match === 'https://github.com/Discordjs/discordjs') return match
 
+      if (match === 'https://github.com/Androz2091/AtlantaBot') return match
+
       // Handle https://github.com/sponsors/username
       if (match.startsWith('https://github.com/sponsors/')) {
         return `https://github.com/sponsors/${username}`
       }
 
       // Handle other GitHub URLs
-      const gitExtension = match.endsWith('.git') ? '.git' : ''
+      const gitExtension = match.endsWith('.git')
+        ? '.git'
+        : match.endsWith('/fork')
+          ? '/fork'
+          : ''
       return `https://github.com/${username}/${repo}${gitExtension}`
     }
   )

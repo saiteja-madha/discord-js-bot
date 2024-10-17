@@ -120,15 +120,15 @@ also, i run on digital ocean, so if you want to try it yourself, grab some free 
 
 ## 🤝 contributing
 
-special thanks to [@androzz](https://github.com/vixshan/mochi) for the awesome dashboard! want to help make me even better? fork my code, submit a pull request, and let’s build this together! check out planned features [here](https://github.com/vixshan/mochi/projects).
+special thanks to [@androzz](https://github.com/Androz2091/AtlantaBot) for the awesome dashboard! want to help make me even better? [fork](https://github.com/vixshan/mochi/fork) my code, submit a pull request, and let’s build this together! check out planned features [here](https://github.com/vixshan/mochi/projects).
 
 ---
 
-and remember: i’m a multi-purpose discord bot built with [discord.js](https://github.com/vixshan/mochi). if you like what you see, leave a ⭐ and help me grow!
+and remember: i’m a multi-purpose discord bot built with [discord.js](https://github.com/Discordjs/discordjs). if you like what you see, leave a ⭐ and help me grow!
 
 ### <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="30px" height="30px"> 》 sponsor the project
 
-want to support me and keep me alive? sponsor me on [github](https://github.com/vixshan/mochi) or buy me a coffee!
+want to support me and keep me alive? sponsor me on [github](https://github.com/sponsors/vixshan) or buy me a coffee!
 
 <!-- sponsors --><!-- sponsors -->
 

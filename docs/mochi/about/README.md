@@ -136,7 +136,7 @@ Mochi is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe3
 
 ## 🤝 Contributing 🤝
 
-* Special thanks to [@Androzz](https://github.com/vixshan/mochi) for the [dashboard](https://github.com/vixshan/mochi) and his other cool discord bot projects.
+* Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool discord bot projects.
 * Feel free to [Fork](https://github.com/vixshan/mochi/fork) this repository, create a feature branch and submit a pull request
 * You can keep track of all the planned features [here](https://github.com/vixshan/mochi/projects) or make a request for one at our discord
 
@@ -144,9 +144,9 @@ Mochi is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe3
 
 > You may not claim this as your own! The original source was created by [saiteja-madha](https://github.com/saiteja-madha). The source is modified and being updated by Vikshan.
 
-> Mochi is a multipurpose Discord bot build in [Discord.js](https://github.com/vixshan/mochi) If you like this repository, feel free to leave a star ⭐ to motivate me!
+> Mochi is a multipurpose Discord bot build in [Discord.js](https://github.com/Discordjs/discordjs) If you like this repository, feel free to leave a star ⭐ to motivate me!
 
-<img src="https://cdn.discordapp.com/emojis/809085860632985630.png" alt="" data-size="line"> 》 Sponsor the project on [GitHub](https://github.com/vixshan/mochi)
+<img src="https://cdn.discordapp.com/emojis/809085860632985630.png" alt="" data-size="line"> 》 Sponsor the project on [GitHub](https://github.com/sponsors/vixshan)
 
 ### Powered by;
 
