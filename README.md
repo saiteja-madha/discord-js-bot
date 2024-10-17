@@ -3,7 +3,7 @@
 
 <h1 align="center">
   <br>
-  <a href="https://github.com/vixshan"><img src="./docs/.gitbook/assets/tmpng.png" height="200" alt="MOCHI"></a>
+  <a href="https://github.com/vixshan/mochi/.gitbook/assets/tmpng.png" height="200" alt="MOCHI"></a>
   <br>
   MOCHI
   <br>
@@ -37,7 +37,7 @@
 
 ## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
 
-if you need help with anything, just hit me up in my [support server](https://discord.gg/uMgS9evnmv)! join me and let’s fix things up together!
+if you need help with anything, just hit me up in my [support server](https://uMgS9evnmv)! join me and let’s fix things up together!
 
 also, i run on digital ocean, so if you want to try it yourself, grab some free credits [here](https://m.do.co/c/c5587212fe39)! 💻
 
@@ -120,15 +120,15 @@ also, i run on digital ocean, so if you want to try it yourself, grab some free 
 
 ## 🤝 contributing
 
-special thanks to [@androzz](https://github.com/Androz2091/AtlantaBot) for the awesome dashboard! want to help make me even better? fork my code, submit a pull request, and let’s build this together! check out planned features [here](https://github.com/vixshan/mochi/projects).
+special thanks to [@androzz](https://github.com/vixshan/mochi) for the awesome dashboard! want to help make me even better? fork my code, submit a pull request, and let’s build this together! check out planned features [here](https://github.com/vixshan/mochi/projects).
 
 ---
 
-and remember: i’m a multi-purpose discord bot built with [discord.js](https://github.com/discordjs/discordjs). if you like what you see, leave a ⭐ and help me grow!
+and remember: i’m a multi-purpose discord bot built with [discord.js](https://github.com/vixshan/mochi). if you like what you see, leave a ⭐ and help me grow!
 
 ### <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" width="30px" height="30px"> 》 sponsor the project
 
-want to support me and keep me alive? sponsor me on [github](https://github.com/sponsors/vixshan) or buy me a coffee!
+want to support me and keep me alive? sponsor me on [github](https://github.com/vixshan/mochi) or buy me a coffee!
 
 <!-- sponsors --><!-- sponsors -->
 
