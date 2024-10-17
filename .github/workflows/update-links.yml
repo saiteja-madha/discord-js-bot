@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
           
       - name: Install dependencies
         run: npm install dotenv
@@ -30,15 +30,27 @@ jobs:
       - name: Update links in README and docs
         run: node scripts/update-links.js
         
+      - name: Check for changes
+        id: git-check
+        run: |
+          git add README.md
+          git add $(find docs -name '*.md')
+          git diff --staged --quiet && echo "changes=false" >> $GITHUB_OUTPUT || echo "changes=true" >> $GITHUB_OUTPUT
+
       - name: Commit changes
+        if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add README.md docs/*.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "Links: update README and docs with repository information"
+          git commit -m "links: update README and docs with repository information"
           
       - name: Push changes
+        if: steps.git-check.outputs.changes == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           branch: ${{ github.ref }}
+
+      - name: No changes detected
+        if: steps.git-check.outputs.changes == 'false'
+        run: echo "No changes detected. Repository is up to date."

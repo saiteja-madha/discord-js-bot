@@ -48,6 +48,20 @@ const updateFile = (filePath, username, repo, supportServer) => {
   }
 }
 
+const updateFilesRecursively = (dir, username, repo, supportServer) => {
+  const files = fs.readdirSync(dir, { withFileTypes: true })
+
+  for (const file of files) {
+    const filePath = path.join(dir, file.name)
+
+    if (file.isDirectory()) {
+      updateFilesRecursively(filePath, username, repo, supportServer)
+    } else if (file.isFile() && file.name.endsWith('.md')) {
+      updateFile(filePath, username, repo, supportServer)
+    }
+  }
+}
+
 const updateFiles = () => {
   try {
     const username = process.env.GH_USERNAME
@@ -57,13 +71,8 @@ const updateFiles = () => {
     // Update README.md
     updateFile('README.md', username, repo, supportServer)
 
-    // Update files in ./docs folder
-    const docsDir = './docs'
-    fs.readdirSync(docsDir).forEach(file => {
-      if (file.endsWith('.md')) {
-        updateFile(path.join(docsDir, file), username, repo, supportServer)
-      }
-    })
+    // Update files in ./docs folder and its subfolders
+    updateFilesRecursively('./docs', username, repo, supportServer)
   } catch (error) {
     console.error('Error updating files:', error)
     process.exit(1)
