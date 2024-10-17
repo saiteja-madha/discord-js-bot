@@ -1,4 +1,4 @@
-name: Update README
+name: Update README and Docs
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   fork:
 
 jobs:
-  update-readme:
+  update-files:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,11 +15,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
           
       - name: Install dependencies
-        run: npm install
-
+        run: npm ci dotenv
+        
       - name: Create env file
         run: |
           touch .env
@@ -27,15 +27,15 @@ jobs:
           echo "GH_USERNAME=${{ github.repository_owner }}" >> .env
           echo "GH_REPO=${{ github.event.repository.name }}" >> .env
           
-      - name: Update README
+      - name: Update links in README and docs
         run: node scripts/update-readme.js
         
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add README.md
-          git diff --quiet && git diff --staged --quiet || git commit -m "docs: update README with repository information"
+          git add README.md docs/*.md
+          git diff --quiet && git diff --staged --quiet || git commit -m "Links: update README and docs with repository information"
           
       - name: Push changes
         uses: ad-m/github-push-action@master
