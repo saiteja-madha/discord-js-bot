@@ -1,5 +1,4 @@
 const {
-  commandHandler,
   automodHandler,
   statsHandler,
 } = require('@src/handlers')
@@ -13,7 +12,14 @@ module.exports = async (client, message) => {
   if (!message.guild || message.author.bot) return
   const settings = await getSettings(message.guild)
 
+  // check for bot mentions
+  if (message.content.includes(`${client.user.id}`)) {
+    message.channel.safeSend(
+      `I no longer use slash commands. Use \`/help\` instead.`
+    )
+  }
   // command handler
+  
   let isCommand = false
 
   // stats handler

@@ -5,7 +5,7 @@ const { getSettings } = require('@schemas/Guild')
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').Message|import('discord.js').PartialMessage} message
  */
-module.exports = async message => {
+module.exports = async (client, message) => {
   if (message.partial) return
   if (message.author.bot || !message.guild) return
 
