@@ -33,8 +33,8 @@ const logModeration = async (issuer, target, reason, type, data = {}) => {
   const settings = await getSettings(guild)
 
   let logChannel
-  if (settings.modlog_channel)
-    logChannel = guild.channels.cache.get(settings.modlog_channel)
+  if (settings.logs_channel)
+    logChannel = guild.channels.cache.get(settings.logs_channel)
 
   const embed = new EmbedBuilder().setFooter({
     text: `By ${issuer.displayName} • ${issuer.id}`,

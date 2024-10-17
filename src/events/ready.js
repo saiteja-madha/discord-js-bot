@@ -5,6 +5,7 @@ const {
 } = require('@src/handlers')
 const { cacheReactionRoles } = require('@schemas/ReactionRoles')
 const { getSettings } = require('@schemas/Guild')
+const { getPresenceConfig } = require('@schemas/Dev')
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -26,12 +27,33 @@ module.exports = async client => {
       .then(() => client.logger.success('Giveaway Manager is up and running!'))
   }
 
-  // Update Bot Presence
-  if (client.config.PRESENCE.ENABLED) {
-    presenceHandler(client)
-    client.logger.log(
-      `Presence STATUS: ${client.config.PRESENCE.STATUS}: MESSAGE: ${client.config.PRESENCE.MESSAGE}!`
-    )
+  // Initialize Presence Handler
+  const presenceConfig = await getPresenceConfig()
+  if (presenceConfig.PRESENCE.ENABLED) {
+    await presenceHandler(client)
+
+    const logPresence = () => {
+      let message = presenceConfig.PRESENCE.MESSAGE
+
+      // Process {servers} and {members} placeholders
+      if (message.includes('{servers}')) {
+        message = message.replaceAll('{servers}', client.guilds.cache.size)
+      }
+
+      if (message.includes('{members}')) {
+        const members = client.guilds.cache
+          .map(g => g.memberCount)
+          .reduce((partial_sum, a) => partial_sum + a, 0)
+        message = message.replaceAll('{members}', members)
+      }
+
+      client.logger.log(
+        `Presence: STATUS:${presenceConfig.PRESENCE.STATUS}, TYPE:${presenceConfig.PRESENCE.TYPE}`
+      )
+    }
+
+    // Log the initial presence update when the bot starts
+    logPresence()
   }
 
   // Register Interactions

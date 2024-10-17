@@ -116,13 +116,6 @@ module.exports = {
     },
   },
 
-  PRESENCE: {
-    ENABLED: true, // Whether or not the bot should update its status
-    STATUS: 'idle', // The bot's status [online, idle, dnd, invisible]
-    TYPE: 'WATCHING', // Status type for the bot
-    MESSAGE: '{servers} servers! 💖', // Your bot status message
-  },
-
   STATS: {
     ENABLED: true,
     XP_COOLDOWN: 5, // Cooldown in seconds between messages

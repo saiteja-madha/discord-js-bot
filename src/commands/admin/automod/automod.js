@@ -165,8 +165,8 @@ module.exports = {
 async function getStatus(settings, guild) {
   const { automod } = settings
 
-  const logChannel = settings.modlog_channel
-    ? guild.channels.cache.get(settings.modlog_channel).toString()
+  const logChannel = settings.logs_channel
+    ? guild.channels.cache.get(settings.logs_channel).toString()
     : 'Not Configured 💔'
 
   // String Builder

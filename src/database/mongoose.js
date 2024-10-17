@@ -28,5 +28,6 @@ module.exports = {
     User: require('./schemas/User'),
     Suggestions: require('./schemas/Suggestions').model,
     TruthOrDare: require('./schemas/TruthOrDare').model,
+    Dev: require('./schemas/Dev'),
   },
 }

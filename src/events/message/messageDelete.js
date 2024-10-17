@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
 const { getSettings } = require('@schemas/Guild')
+const { EMBED_COLORS } = require('@root/config')
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -7,43 +8,60 @@ const { getSettings } = require('@schemas/Guild')
  */
 module.exports = async (client, message) => {
   if (message.partial) return
-  if (message.author.bot || !message.guild) return
+  if (!message.guild) return
 
   const settings = await getSettings(message.guild)
-  if (!settings.automod.anti_ghostping || !settings.modlog_channel) return
-  const { members, roles, everyone } = message.mentions
+  if (!settings.logs.enabled || !settings.logs_channel) return
 
-  // Check message if it contains mentions
-  if (members.size > 0 || roles.size > 0 || everyone) {
-    const logChannel = message.guild.channels.cache.get(settings.modlog_channel)
-    if (!logChannel) return
+  const logChannel = message.guild.channels.cache.get(settings.logs_channel)
+  if (!logChannel) return
 
-    const embed = new EmbedBuilder()
-      .setAuthor({ name: 'Ghost ping detected' })
-      .setDescription(
-        `**Message:**\n${message.content}\n\n` +
-          `**Author:** ${message.author.tag} \`${message.author.id}\`\n` +
-          `**Channel:** ${message.channel.toString()}`
-      )
+  // Log message deletions only if message_delete is true
+  if (settings.logs.member.message_delete) {
+    const deleteEmbed = new EmbedBuilder()
+      .setTitle('Message Deleted')
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setDescription(`A message was deleted in ${message.channel.toString()}`)
       .addFields(
         {
-          name: 'Members',
-          value: members.size.toString(),
+          name: 'Author',
+          value: message.author
+            ? `${message.author.tag} (${message.author.id})`
+            : 'Unknown',
           inline: true,
         },
+        { name: 'Channel', value: message.channel.toString(), inline: true },
         {
-          name: 'Roles',
-          value: roles.size.toString(),
-          inline: true,
-        },
-        {
-          name: 'Everyone?',
-          value: everyone ? 'Yes' : 'No',
-          inline: true,
+          name: 'Content',
+          value: message.content || 'None (possibly an embed or attachment)',
         }
       )
-      .setFooter({ text: `Sent at: ${message.createdAt}` })
+      .setTimestamp()
 
-    logChannel.safeSend({ embeds: [embed] })
+    logChannel.safeSend({ embeds: [deleteEmbed] })
+  }
+
+  // Check for ghost pings if the setting is enabled
+  if (settings.automod.anti_ghostping && !message.author.bot) {
+    const { members, roles, everyone } = message.mentions
+
+    if (members.size > 0 || roles.size > 0 || everyone) {
+      const ghostPingEmbed = new EmbedBuilder()
+        .setTitle('Ghost Ping Detected')
+        .setColor(EMBED_COLORS.BOT_EMBED)
+        .setDescription(
+          `**Message:**\n${message.content}\n\n` +
+            `**Author:** ${message.author.tag} \`${message.author.id}\`\n` +
+            `**Channel:** ${message.channel.toString()}`
+        )
+        .addFields(
+          { name: 'Members', value: members.size.toString(), inline: true },
+          { name: 'Roles', value: roles.size.toString(), inline: true },
+          { name: 'Everyone?', value: everyone ? 'Yes' : 'No', inline: true }
+        )
+        .setFooter({ text: `Sent at: ${message.createdAt}` })
+
+      logChannel.safeSend({ embeds: [ghostPingEmbed] })
+    }
   }
 }

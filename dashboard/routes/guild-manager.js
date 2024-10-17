@@ -142,11 +142,11 @@ router.post('/:serverID/basic', CheckAuth, async (req, res) => {
       settings.max_warn.action = data.max_warn_action
     }
 
-    data.modlog_channel =
-      guild.channels.cache.find(ch => '#' + ch.name === data.modlog_channel)
+    data.logs_channel =
+      guild.channels.cache.find(ch => '#' + ch.name === data.logs_channel)
         ?.id || null
-    if (data.modlog_channel !== settings.modlog_channel) {
-      settings.modlog_channel = data.modlog_channel
+    if (data.logs_channel !== settings.logs_channel) {
+      settings.logs_channel = data.logs_channel
     }
   }
 

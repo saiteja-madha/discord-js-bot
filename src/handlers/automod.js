@@ -53,8 +53,8 @@ async function performAutomod(message, settings) {
   if (!shouldModerate(message)) return
 
   const { channel, member, guild, content, author, mentions } = message
-  const logChannel = settings.modlog_channel
-    ? channel.guild.channels.cache.get(settings.modlog_channel)
+  const logChannel = settings.logs_channel
+    ? channel.guild.channels.cache.get(settings.logs_channel)
     : null
 
   let shouldDelete = false

@@ -33,7 +33,7 @@ By default, Auto moderation events are ignored for members who have the followin
 
 | Name                                          | Description                                                                 |
 | --------------------------------------------- | --------------------------------------------------------------------------- |
-| **!anti ghostping \<on\|off>**                | logs ghost mentions in your server (Requires `/modlog` channel to be setup) |
+| **!anti ghostping \<on\|off>**                | logs ghost mentions in your server (Requires `/logs` channel to be setup) |
 | **!anti spam \<on\|off>**                     | enable or disable antispam detection                                        |
 | **!anti massmention \<on\|off> \[threshold]** | enable or disable massmention detection (default threshold is 3 mentions]   |
 
@@ -41,7 +41,7 @@ By default, Auto moderation events are ignored for members who have the followin
 
 | Name                                   | Description                                                                 |
 | -------------------------------------- | --------------------------------------------------------------------------- |
-| **!autodelete attachments \<on\|off>** | logs ghost mentions in your server (Requires `/modlog` channel to be setup) |
+| **!autodelete attachments \<on\|off>** | logs ghost mentions in your server (Requires `/logs` channel to be setup) |
 | **!autodelete invites \<on\|off>**     | allow or disallow sending discord invites in message                        |
 | **!automod links \<on\|off>**          | allow or disallow sending links in message                                  |
 | **!automod maxlines \<amount>**        | sets maximum lines allowed per message                                      |
@@ -67,7 +67,7 @@ Each time a member tries to break the automated rule, he/she **receives a strike
 ### Moderation Logging
 
 * **Description**: enable or disable moderation logs
-* **Usage**: `!modlog <channel|off>`
+* **Usage**: `!logs <channel|off>`
 
 {% hint style="info" %}
 Moderation logging enable logging of all \*\*moderation actions\*\* and \*\*automod events\*\*

@@ -239,10 +239,10 @@ async function statusSettings(interaction, settings) {
       value: `1. XP/Leveling: ${settings.stats.enabled ? "✅ Let's level up! 🎮" : "❌ Aww, XP/Leveling's off. We're missing out! 😢"}\n2. Invite Tracking: ${settings.invite.tracking ? "✅ We're keeping track!" : "❌ Oh no, we're not tracking invites. 😕"}\n> Want to change these? Use \`/levelup\` for XP stuff and \`/invites\` for invite tracking!`,
     },
     {
-      name: '4. Modlog 📝',
-      value: settings.modlog_channel
-        ? `- Modlog is all set up in <#${settings.modlog_channel}>!\n> Use \`/modlog\` to change it`
-        : "- Oops! 🙊 We don't have a modlog channel yet.\n> Let's set one up with `/modlog`!",
+      name: '4. Logs📝',
+      value: settings.logs_channel
+        ? `- Logging is all set up in <#${settings.logs_channel}>!\n> Use \`/logs\` to change it`
+        : "- Oops! 🙊 We don't have a logs channel yet.\n> Let's set one up with `/logs`!",
     },
     {
       name: '5. Welcome & Farewell 👋',

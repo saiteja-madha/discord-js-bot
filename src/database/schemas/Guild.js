@@ -61,7 +61,27 @@ const Schema = new mongoose.Schema({
       },
     ],
   },
-  modlog_channel: String,
+
+  logs_channel: String,
+  logs: {
+    enabled: { type: Boolean, default: false },
+    member: {
+      message_edit: { type: Boolean, default: false },
+      message_delete: { type: Boolean, default: false },
+      role_changes: { type: Boolean, default: false },
+    },
+    channel: {
+      create: { type: Boolean, default: false },
+      edit: { type: Boolean, default: false },
+      delete: { type: Boolean, default: false },
+    },
+    role: {
+      create: { type: Boolean, default: false },
+      edit: { type: Boolean, default: false },
+      delete: { type: Boolean, default: false },
+    },
+  },
+
   max_warn: {
     action: {
       type: String,

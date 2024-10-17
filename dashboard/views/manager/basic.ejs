@@ -185,10 +185,10 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Moderation Logs</label>
-                                            <select class="form-control" name="modlog_channel">
-                                                <% if(guild.modlog_channel && bot.channels.cache.has(guild.modlog_channel)){ %>
-                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.modlog_channel).name %></option>
-                                                    <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !== guild.modlog_channel).forEach((ch) => { %>
+                                            <select class="form-control" name="logs_channel">
+                                                <% if(guild.logs_channel && bot.channels.cache.has(guild.logs_channel)){ %>
+                                                    <option selected="selected">#<%= bot.channels.cache.get(guild.logs_channel).name %></option>
+                                                    <% guild.channels.cache.filter((ch) => ch.type === 0 && ch.id !== guild.logs_channel).forEach((ch) => { %>
                                                         <option>#<%= ch.name %></option>
                                                     <% }); %>
                                                         <option>No channel</option>

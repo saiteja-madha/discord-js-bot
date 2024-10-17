@@ -8,6 +8,7 @@ const {
   ChannelType,
 } = require('discord.js')
 const { sendOnboardingMenu } = require('@handlers/guild')
+const { EMBED_COLORS } = require('@root/config')
 
 /**
  * @param {import('@src/structures').BotClient} client
@@ -67,7 +68,7 @@ module.exports = async (client, guild) => {
     let serverMessageLink = null
     if (targetChannel) {
       const serverEmbed = new EmbedBuilder()
-        .setColor('#FFC0CB')
+        .setColor(EMBED_COLORS.SUCCESS)
         .setTitle('Yay! Mochi is here! ヾ(≧▽≦*)o')
         .setDescription(
           "Hiii everyone! I'm Mochi, your new awesome friend! (≧◡≦) ♡ I'm super excited to join your server!"
@@ -101,7 +102,7 @@ module.exports = async (client, guild) => {
       const owner = await guild.members.fetch(guild.ownerId)
       if (owner) {
         const dmEmbed = new EmbedBuilder()
-          .setColor('#FFC0CB')
+          .setColor(EMBED_COLORS.SUCCESS)
           .setTitle('Thank you for adding me! ♡(>ᴗ•)')
           .setDescription(
             "I'm so excited to be part of your server! Let's make it super awesome together~"
@@ -161,7 +162,7 @@ module.exports = async (client, guild) => {
           const owner = await guild.members.fetch(guild.ownerId)
           if (owner) {
             const reminderEmbed = new EmbedBuilder()
-              .setColor('#FFC0CB')
+              .setColor(EMBED_COLORS.BOT_EMBED)
               .setTitle('Mochi Setup Reminder ♡')
               .setDescription(
                 'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'

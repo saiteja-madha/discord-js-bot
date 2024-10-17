@@ -9,13 +9,14 @@ const {
   ChannelType,
 } = require('discord.js')
 const { getSettings } = require('@schemas/Guild')
+const { EMBED_COLORS } = require('@root/config')
 
 /**
  * @param {import('discord.js').TextChannel} channel
  */
 async function sendOnboardingMenu(channel) {
   const embed = new EmbedBuilder()
-    .setColor('#FFC0CB')
+    .setColor(EMBED_COLORS.BOT_EMBED)
     .setTitle('Mochi Setup ♡(>ᴗ•)')
     .setDescription(
       "Let's make your server super awesome! Click the button below to set up important stuff~"
@@ -125,7 +126,7 @@ async function handleSetupModal(interaction) {
 
   // Send success message
   const successEmbed = new EmbedBuilder()
-    .setColor('#FFC0CB')
+    .setColor(EMBED_COLORS.SUCCESS)
     .setTitle('Yay! Setup Complete! ヾ(≧▽≦*)o')
     .setDescription(
       'We did it! Your server is now super awesome and ready to go~'
@@ -140,7 +141,7 @@ async function handleSetupModal(interaction) {
 
   // Send a test message to the updates channel
   const testEmbed = new EmbedBuilder()
-    .setColor('#FFC0CB')
+    .setColor(EMBED_COLORS.SUCCESS)
     .setTitle('Mochi Updates Channel ♡')
     .setDescription(
       "Hi everyone! This channel is now set up for Mochi's updates. Stay tuned for awesome announcements! (≧◡≦)"
@@ -208,7 +209,7 @@ async function handleRemindModal(interaction) {
       const owner = await guild.members.fetch(guild.ownerId)
       if (owner) {
         const reminderEmbed = new EmbedBuilder()
-          .setColor('#FFC0CB')
+          .setColor(EMBED_COLORS.BOT_EMBED)
           .setTitle('Mochi Setup Reminder ♡')
           .setDescription(
             'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'

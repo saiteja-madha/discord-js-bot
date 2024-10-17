@@ -1,7 +1,4 @@
-const {
-  automodHandler,
-  statsHandler,
-} = require('@src/handlers')
+const { automodHandler, statsHandler } = require('@src/handlers')
 const { getSettings } = require('@schemas/Guild')
 
 /**
@@ -19,7 +16,7 @@ module.exports = async (client, message) => {
     )
   }
   // command handler
-  
+
   let isCommand = false
 
   // stats handler
