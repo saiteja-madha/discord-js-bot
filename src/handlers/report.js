@@ -5,7 +5,7 @@ const {
   ChannelType,
 } = require('discord.js')
 const { EMBED_COLORS, FEEDBACK } = require('@root/config.js')
-const { getSettings, setInviteLink } = require('@schemas/Guild')
+const { getSettings, setInviteLink, inviteLink } = require('@schemas/Guild')
 const { getQuestionById } = require('@schemas/TruthOrDare')
 
 async function handleReportModal(interaction) {
@@ -217,14 +217,19 @@ async function handleReportModal(interaction) {
         type === 'feedback'
           ? "Yay! Mochi received your feedback! You're the best for helping make our community super awesome~ 💖✨"
           : type === 'bug'
-            ? "Bzzt! Mochi's bug detectors are tingling! Thanks for helping squash those pesky bugs! 🕷️💪"
+            ? `Bzzt! Mochi's bug detectors are tingling! Thanks for helping squash those pesky bugs! 🕷️💪\nYou can also add/check this to mochi's [GitHub issues](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new) page.`
             : "Yay! Mochi received your report! You're the best for helping make our community super awesome~ 💖✨"
       )
       .addFields(
         { name: 'Title', value: title },
         { name: 'Description', value: description }
       )
-      .setFooter({ text: 'Thank you for your contribution!' })
+      .setFooter({
+        text:
+          type === 'bug' || type === 'feedback'
+            ? 'Thank you for helping make Mochi better!'
+            : 'Thank you for your contribution!',
+      })
       .setTimestamp()
 
     if (additionalInfo) {
@@ -247,7 +252,29 @@ async function handleReportModal(interaction) {
       ephemeral: true,
     })
   } else {
-    // ... (error handling remains the same)
+    const errorEmbed = new EmbedBuilder()
+      .setColor(EMBED_COLORS.ERROR)
+      .setTitle('Oh no! Something Went Wrong 😟')
+      .setDescription(
+        "Mochi couldn't send your report/feedback. But don't worry, it's not your fault!"
+      )
+      .addFields(
+        {
+          name: 'What to Do',
+          value:
+            'Please try again later. Mochi believes in you! If the problem continues, it would be super helpful if you could let the support team know.',
+        },
+        {
+          name: 'Error Details',
+          value:
+            "There was an issue sending the report/feedback to Mochi's team. This is likely a temporary problem.",
+        }
+      )
+      .setFooter({ text: 'Mochi appreciates your patience and effort! 🌟' })
+    await interaction.reply({
+      embeds: [errorEmbed],
+      ephemeral: true,
+    })
   }
 }
 

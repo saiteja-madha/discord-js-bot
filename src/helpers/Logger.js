@@ -5,7 +5,6 @@ const pino = require('pino')
 const webhookLogger = process.env.ERROR_LOGS
   ? new WebhookClient({
       url: process.env.ERROR_LOGS,
-      avatarURL: process.env.WEBHOOK_AVATAR,
     })
   : undefined
 
@@ -61,7 +60,12 @@ function sendWebhook(content, err) {
     name: 'Description',
     value: content || err?.message || 'NA',
   })
-  webhookLogger.send({ username: 'Logs', embeds: [embed] }).catch(ex => {})
+  webhookLogger
+    .send({
+      username: 'Logs',
+      embeds: [embed],
+    })
+    .catch(ex => {})
 }
 
 module.exports = class Logger {
