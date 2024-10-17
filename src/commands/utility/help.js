@@ -73,7 +73,8 @@ async function getHelpMenu({ client, guild, member }) {
     ) {
       continue
     }
-    if (v.name === 'DEV' && !process.env.DEV_ID.includes(member.user.id)) continue
+    if (v.name === 'DEV' && !process.env.DEV_ID.includes(member.user.id))
+      continue
     options.push({
       label: v.name,
       value: k,

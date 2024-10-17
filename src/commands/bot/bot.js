@@ -6,10 +6,7 @@ const {
   ButtonStyle,
 } = require('discord.js')
 const { timeformat } = require('@helpers/Utils')
-const {
-  EMBED_COLORS,
-  DASHBOARD,
-} = require('@root/config.js')
+const { EMBED_COLORS, DASHBOARD } = require('@root/config.js')
 const botstats = require('./sub/botstats')
 
 /**
@@ -103,9 +100,7 @@ module.exports = {
       components.push(
         new ButtonBuilder()
           .setLabel('Github Sponsors')
-          .setURL(
-            `https://github.com/sponsors/${process.env.GH_USERNAME}`
-          )
+          .setURL(`https://github.com/sponsors/${process.env.GH_USERNAME}`)
           .setStyle(ButtonStyle.Link)
       )
 
@@ -164,7 +159,7 @@ module.exports = {
         `🏓 Pong : \`${Math.floor(interaction.client.ws.ping)}ms\``
       )
     }
-// Changelog
+    // Changelog
     else if (sub === 'changelog') {
       try {
         const githubToken = process.env.GH_TOKEN
@@ -176,7 +171,7 @@ module.exports = {
         const response = await octokit.repos.getContent({
           owner: process.env.GH_USERNAME,
           repo: process.env.GH_REPO,
-          path: process.env.CHANGELOG_PATH
+          path: process.env.CHANGELOG_PATH,
         })
 
         const changelogContent = Buffer.from(
@@ -191,14 +186,16 @@ module.exports = {
           .slice(0, 2)
           .map(version => {
             // Clean up the version block
-            return version
-              .trim()
-              // Remove multiple blank lines
-              .replace(/\n\s*\n\s*\n/g, '\n\n')
-              // Ensure proper spacing after headers
-              .replace(/^(#{1,3} .+)\n(?!\n)/gm, '$1\n\n')
-              // Add proper bullet points
-              .replace(/^- /gm, '• ')
+            return (
+              version
+                .trim()
+                // Remove multiple blank lines
+                .replace(/\n\s*\n\s*\n/g, '\n\n')
+                // Ensure proper spacing after headers
+                .replace(/^(#{1,3} .+)\n(?!\n)/gm, '$1\n\n')
+                // Add proper bullet points
+                .replace(/^- /gm, '• ')
+            )
           })
 
         const latestUpdates = versions.join('\n\n')
@@ -209,8 +206,8 @@ module.exports = {
           .setDescription(
             `${latestUpdates}\n\n[**View full changelog**](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/blob/main/${process.env.CHANGELOG_PATH})`
           )
-          .setFooter({ 
-            text: 'Only showing the 2 most recent updates'
+          .setFooter({
+            text: 'Only showing the 2 most recent updates',
           })
 
         return interaction.followUp({ embeds: [embed] })
