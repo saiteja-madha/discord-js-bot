@@ -8,7 +8,7 @@
 ```js
   DASHBOARD: {
     enabled: true, // enable or disable dashboard
-    baseURL: "http://localhost:8080", // base url for your dash, eg mochi.vikshan.me
+    baseURL: "http://localhost:8080", // base url for your dash, eg amina.vikshan.me
     failureURL: "https://docs.vikshan.tech", // failure redirect URL eg docs.vikshan.tech
     port: "8080", // port to run the bot on
   },

@@ -13,7 +13,7 @@ const { model: ReactionRoleModel } = require('@schemas/ReactionRoles')
 
 module.exports = {
   name: 'settings',
-  description: "Manage Mochi's settings for this server",
+  description: "Manage Mina's settings for this server",
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   botPermissions: ['EmbedLinks'],
@@ -24,7 +24,7 @@ module.exports = {
     options: [
       {
         name: 'updateschannel',
-        description: 'Set the updates channel for Mochi',
+        description: 'Set the updates channel for Mina',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -41,7 +41,7 @@ module.exports = {
       },
       {
         name: 'staffadd',
-        description: 'Add a staff role for Mochi',
+        description: 'Add a staff role for Mina',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -54,7 +54,7 @@ module.exports = {
       },
       {
         name: 'staffremove',
-        description: 'Remove a staff role from Mochi',
+        description: 'Remove a staff role from Mina',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -121,7 +121,7 @@ async function updateChannel(interaction, channel, settings) {
   const notificationEmbed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(
-      `Yay! 🎉 This channel has been set as the updates channel for Mochi! All my future updates will be sent here. Get ready for some awesome notifications! 💖`
+      `Yay! 🎉 This channel has been set as the updates channel for Mina! All my future updates will be sent here. Get ready for some awesome notifications! 💖`
     )
   await channel.send({ embeds: [notificationEmbed] })
 }
@@ -190,7 +190,7 @@ async function updateSetupStatus(settings) {
 function createSetupEmbed(settings) {
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setTitle("Mochi's Setup Status 📊")
+    .setTitle("Mina's Setup Status 📊")
     .setDescription("Heya! Let's check out your setup progress! 💖")
     .addFields(
       {
@@ -212,7 +212,7 @@ function createSetupEmbed(settings) {
     embed.setFooter({ text: "Yay! Your setup is complete! You're amazing! 🎉" })
   } else {
     embed.setFooter({
-      text: "Almost there! Complete the setup to unlock all of Mochi's awesome features! 💕",
+      text: "Almost there! Complete the setup to unlock all of Mina's awesome features! 💕",
     })
   }
 
@@ -352,7 +352,7 @@ async function statusSettings(interaction, settings) {
 
     return new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setTitle("Mochi's current Settings")
+      .setTitle("Mina's current Settings")
       .setDescription(
         "Hey there! Let's take a peek at your current settings! I'm so excited to show you what we've got set up! 🎉"
       )

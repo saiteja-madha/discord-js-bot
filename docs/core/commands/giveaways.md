@@ -18,4 +18,4 @@ description: 7 commands
 
 [![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
 
-[Support Server](https://discord.gg/uMgS9evnmv) - Mochi's Support Server Invite
+[Support Server](https://discord.gg/uMgS9evnmv) - Amina's Support Server Invite

@@ -2,9 +2,9 @@
   <!-- Logo -->
   <a href="/" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><b>Mochi</b></span>
+    <span class="logo-mini"><b>Mina</b></span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>Mochi Dashboard</b></span>
+    <span class="logo-lg"><b>Mina Dashboard</b></span>
   </a>
 
   <!-- Header Navbar: style can be found in header.less -->
@@ -19,14 +19,20 @@
         <!-- User Account: style can be found in dropdown.less -->
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <img src="<%= user.displayAvatar %>" class="user-image" alt="User Image" />
+            <img
+              src="<%= user.displayAvatar %>"
+              class="user-image"
+              alt="User Image"
+            />
             <span class="hidden-xs"><%= user.tag %></span>
           </a>
           <ul class="dropdown-menu">
             <!-- Menu Footer-->
             <li class="user-footer" style="min-width: auto !important">
               <div>
-                <a href="/logout" class="btn btn-default btn-flat btn-block">Sign out</a>
+                <a href="/logout" class="btn btn-default btn-flat btn-block"
+                  >Sign out</a
+                >
               </div>
             </li>
           </ul>
@@ -35,3 +41,4 @@
     </div>
   </nav>
 </header>
+

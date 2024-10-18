@@ -55,7 +55,7 @@ async function handleReportModal(interaction) {
         .setColor(EMBED_COLORS.ERROR)
         .setTitle('Oopsie! Server Not Found 🕵️‍♀️')
         .setDescription(
-          "Mochi couldn't find this server. Here's what might be happening:"
+          "Mina couldn't find this server. Here's what might be happening:"
         )
         .addFields(
           {
@@ -74,17 +74,17 @@ async function handleReportModal(interaction) {
               'Right-click on the server icon and select "Copy ID" at the bottom of the menu.',
           },
           {
-            name: 'Mochi Not in Server',
+            name: 'Mina Not in Server',
             value:
-              "If the ID is correct, it's possible that Mochi isn't a member of that server. Unfortunately, Mochi can only report on servers she's a part of.",
+              "If the ID is correct, it's possible that Mina isn't a member of that server. Unfortunately, Mina can only report on servers she's a part of.",
           },
           {
             name: 'Need Help?',
             value:
-              "If you're sure the ID is correct and Mochi should be in the server, please try again later or contact support.",
+              "If you're sure the ID is correct and Mina should be in the server, please try again later or contact support.",
           }
         )
-        .setFooter({ text: 'Mochi is always here to help! 💖' })
+        .setFooter({ text: 'Mina is always here to help! 💖' })
 
       await interaction.reply({
         embeds: [errorEmbed],
@@ -102,7 +102,7 @@ async function handleReportModal(interaction) {
         .setColor(EMBED_COLORS.ERROR)
         .setTitle('Uh-oh! User Not Found 👻')
         .setDescription(
-          "Mochi couldn't find this user. Here's what might be happening:"
+          "Mina couldn't find this user. Here's what might be happening:"
         )
         .addFields(
           {
@@ -123,15 +123,15 @@ async function handleReportModal(interaction) {
           {
             name: 'User Not Visible',
             value:
-              "If the ID is correct, it's possible that the user is not in any servers that Mochi is in, or their privacy settings prevent Mochi from seeing them.",
+              "If the ID is correct, it's possible that the user is not in any servers that Mina is in, or their privacy settings prevent Mina from seeing them.",
           },
           {
             name: 'Need Help?',
             value:
-              "If you're sure the ID is correct and Mochi should be able to see the user, please try again later or contact support.",
+              "If you're sure the ID is correct and Mina should be able to see the user, please try again later or contact support.",
           }
         )
-        .setFooter({ text: 'Mochi is always here to help! 💖' })
+        .setFooter({ text: 'Mina is always here to help! 💖' })
 
       await interaction.reply({
         embeds: [errorEmbed],
@@ -152,7 +152,7 @@ async function handleReportModal(interaction) {
         .setColor(EMBED_COLORS.ERROR)
         .setTitle('Hmm, Question Not Found 🙈')
         .setDescription(
-          "Mochi couldn't find a question with that ID. Here's what you can do:"
+          "Mina couldn't find a question with that ID. Here's what you can do:"
         )
         .addFields(
           {
@@ -177,7 +177,7 @@ async function handleReportModal(interaction) {
           }
         )
         .setFooter({
-          text: 'Mochi appreciates your help in making our ToD games awesome! 💖',
+          text: 'Mina appreciates your help in making our ToD games awesome! 💖',
         })
 
       await interaction.reply({
@@ -215,10 +215,10 @@ async function handleReportModal(interaction) {
       )
       .setDescription(
         type === 'feedback'
-          ? "Yay! Mochi received your feedback! You're the best for helping make our community super awesome~ 💖✨"
+          ? "Yay! Mina received your feedback! You're the best for helping make our community super awesome~ 💖✨"
           : type === 'bug'
-            ? `Bzzt! Mochi's bug detectors are tingling! Thanks for helping squash those pesky bugs! 🕷️💪\nYou can also add/check this to mochi's [GitHub issues](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new) page.`
-            : "Yay! Mochi received your report! You're the best for helping make our community super awesome~ 💖✨"
+            ? `Bzzt! Mina's bug detectors are tingling! Thanks for helping squash those pesky bugs! 🕷️💪\nYou can also add/check this to amina's [GitHub issues](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new) page.`
+            : "Yay! Mina received your report! You're the best for helping make our community super awesome~ 💖✨"
       )
       .addFields(
         { name: 'Title', value: title },
@@ -227,7 +227,7 @@ async function handleReportModal(interaction) {
       .setFooter({
         text:
           type === 'bug' || type === 'feedback'
-            ? 'Thank you for helping make Mochi better!'
+            ? 'Thank you for helping make Mina better!'
             : 'Thank you for your contribution!',
       })
       .setTimestamp()
@@ -256,21 +256,21 @@ async function handleReportModal(interaction) {
       .setColor(EMBED_COLORS.ERROR)
       .setTitle('Oh no! Something Went Wrong 😟')
       .setDescription(
-        "Mochi couldn't send your report/feedback. But don't worry, it's not your fault!"
+        "Mina couldn't send your report/feedback. But don't worry, it's not your fault!"
       )
       .addFields(
         {
           name: 'What to Do',
           value:
-            'Please try again later. Mochi believes in you! If the problem continues, it would be super helpful if you could let the support team know.',
+            'Please try again later. Mina believes in you! If the problem continues, it would be super helpful if you could let the support team know.',
         },
         {
           name: 'Error Details',
           value:
-            "There was an issue sending the report/feedback to Mochi's team. This is likely a temporary problem.",
+            "There was an issue sending the report/feedback to Mina's team. This is likely a temporary problem.",
         }
       )
-      .setFooter({ text: 'Mochi appreciates your patience and effort! 🌟' })
+      .setFooter({ text: 'Mina appreciates your patience and effort! 🌟' })
     await interaction.reply({
       embeds: [errorEmbed],
       ephemeral: true,
@@ -325,7 +325,7 @@ async function sendWebhook(
 
   try {
     await webhookClient.send({
-      username: "Mochi's Report System",
+      username: "Mina's Report System",
       avatarURL: client.user.displayAvatarURL(),
       embeds: [embed],
     })

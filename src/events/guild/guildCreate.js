@@ -69,9 +69,9 @@ module.exports = async (client, guild) => {
     if (targetChannel) {
       const serverEmbed = new EmbedBuilder()
         .setColor(EMBED_COLORS.SUCCESS)
-        .setTitle('Yay! Mochi is here! ヾ(≧▽≦*)o')
+        .setTitle('Yay! Mina is here! ヾ(≧▽≦*)o')
         .setDescription(
-          "Hiii everyone! I'm Mochi, your new awesome friend! (≧◡≦) ♡ I'm super excited to join your server!"
+          "Hiii everyone! I'm Mina, your new awesome friend! (≧◡≦) ♡ I'm super excited to join your server!"
         )
         .addFields(
           {
@@ -163,7 +163,7 @@ module.exports = async (client, guild) => {
           if (owner) {
             const reminderEmbed = new EmbedBuilder()
               .setColor(EMBED_COLORS.BOT_EMBED)
-              .setTitle('Mochi Setup Reminder ♡')
+              .setTitle('Mina Setup Reminder ♡')
               .setDescription(
                 'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'
               )

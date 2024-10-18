@@ -6,7 +6,7 @@ This guide will show you how to run the bot on replit.
 
 First, you need to fork the repository. To do this, you can either:
 
-* You can try to fork the [replit here](https://replit.com/@vikshan/mochi)
+* You can try to fork the [replit here](https://replit.com/@vikshan/amina)
 * Or you can fork the repository on GitHub and then import it to replit.
 * Click on the `Import from GitHub` button and paste the URL of the repository.
 
@@ -31,7 +31,7 @@ npm run start-replit
 Otherwise the bot will default to the `start` script in the `package.json` file if you press the start button, which is:
 
 ```json
-"start": "pm2 start ./lib/index.js --name mochi && pm2 save && pm2 logs",
+"start": "pm2 start ./lib/index.js --name amina && pm2 save && pm2 logs",
 ```
 
 ### Option 2: Using the start Button

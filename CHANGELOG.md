@@ -1,4 +1,4 @@
-# Mochi V2.0.4
+# Amina V2.0.4
 
 ## New
 
@@ -9,12 +9,12 @@
 - Added `/dev onboarding` command for triggering the settingsing for one or all
   guilds.
 
-# Mochi V2.0.3
+# Amina V2.0.3
 
 ## New
 
 - Added `./src/commands/dev/dev.js` for ALL developer commands.
-- Mochi now responds in a more anime-like way to commands.
+- Amina now responds in a more anime-like way to commands.
 
 ## Fixes & Improvements
 
@@ -27,7 +27,7 @@
 - Deleted codecov workflow
 - added `./static-analysis.datadog.yml` for datadog static analysis
 
-# Mochi v2.0.2
+# Amina v2.0.2
 
 ## New
 
@@ -45,7 +45,7 @@
 - Updated dependencies.
 - Lavalink configs are now in the env for security and easy updates.
 
-# Mochi v2.0.1
+# Amina v2.0.1
 
 **DEV only!**
 
@@ -56,7 +56,7 @@
 - Added sponsors workflow for GitHub sponsors
 - Updated dependencies
 
-# Mochi v2.0.0
+# Amina v2.0.0
 
 ## New
 
@@ -80,24 +80,24 @@
 - Renamed `./src/commands/moderation/shared` to
   `./src/commands/moderation/message`
 
-  # Mochi v1.1.3
+  # Amina v1.1.3
 
 ## Developer Notes
 
-- Mochi now runs on Heroku
+- Amina now runs on Heroku
 
 ## What's Changed
 
 - Bump prettier from 3.1.0 to 3.1.1 by @dependabot in
-  https://github.com/vixshan/mochi/pull/206
+  https://github.com/vixshan/amina/pull/206
 - Bump eslint-plugin-jsdoc from 46.10.1 to 48.0.2 by @dependabot in
-  https://github.com/vixshan/mochi/pull/210
+  https://github.com/vixshan/amina/pull/210
 - Bump canvacord from 5.4.10 to 6.0.1 by @dependabot in
-  https://github.com/vixshan/mochi/pull/211
+  https://github.com/vixshan/amina/pull/211
 - Bump prettier from 3.1.1 to 3.2.4 by @dependabot in
-  https://github.com/vixshan/mochi/pull/214
+  https://github.com/vixshan/amina/pull/214
 
-## Mochi v1.1.2
+## Amina v1.1.2
 
 ### New
 
@@ -116,14 +116,14 @@
 - [ ] ⚙️ excluded `docs` folder from `npm run format` script to prevent
       formatting the documentation files, which breaks links in gitbook.
 
-## Mochi v1.1.1
+## Amina v1.1.1
 
 ### New
 
-- [x] 🤖 Bot is now Mochi
-- [x] 📜 Mochi now has ToD
-- [x] 📜 Mochi now has a changelog command
-- [x] 📜 Mochi now can purge up to 500 messages
+- [x] 🤖 Bot is now Amina
+- [x] 📜 Amina now has ToD
+- [x] 📜 Amina now has a changelog command
+- [x] 📜 Amina now can purge up to 500 messages
 
 ### Fixes
 

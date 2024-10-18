@@ -58,8 +58,8 @@ You also need to enable the Message Content Intent:
 * Clone the repo and install dependencies by running
 
 ```bash
-git clone https://github.com/vixshan/mochi.git
-cd mochi
+git clone https://github.com/vixshan/amina.git
+cd amina
 npm install
 ```
 
@@ -67,7 +67,7 @@ npm install
 
 ### Setting up Environment Variables
 
-The following environment variables are required for mochi to work correctly.
+The following environment variables are required for amina to work correctly.
 
 You can set the environment variables in any way you like or place a .env file at the root of your project (rename `.env.example` to `.env`), Ensure that your `.env` looks like this:
 
@@ -150,10 +150,10 @@ npm start
 
 > You can also run `npm run start` to start the bot.
 
-* NOTE: running `npm start` or `npm run start` will start the bot without, so eventually it will stop once the terminal is killed. You can add the followingline of code in its start script to make it start with PM2 and give it the name "mochi." You can replace "mochi" with a name of your choice in [package.json](../package.json). It will also show logs for the bot and save the pm2 processes.
+* NOTE: running `npm start` or `npm run start` will start the bot without, so eventually it will stop once the terminal is killed. You can add the followingline of code in its start script to make it start with PM2 and give it the name "amina." You can replace "amina" with a name of your choice in [package.json](../package.json). It will also show logs for the bot and save the pm2 processes.
 
 ```json
-"start": "pm2 start bot.js --name mochi && pm2 save && pm2 logs",
+"start": "pm2 start bot.js --name amina && pm2 save && pm2 logs",
 ```
 
 <details>
@@ -167,7 +167,7 @@ npm start
 It means that the bot is already running. You can restart it by running:
 
 ```
-pm2 restart mochi
+pm2 restart amina
 ```
 
 </details>
@@ -181,7 +181,7 @@ node .
 Once you are satisfied with the changes, run the following:
 
 ```bash
-pm2 restart mochi && pm2 logs
+pm2 restart amina && pm2 logs
 ```
 
 You can also restart it from the [pm2.io dashboard](https://pm2.io/) as shown bellow:

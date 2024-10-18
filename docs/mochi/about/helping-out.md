@@ -1,8 +1,8 @@
 # 🤲 Helping Out
 
-There are several ways you can help in making Mochi better!
+There are several ways you can help in making Amina better!
 
-* Supporting Mochi through [Ko-Fi](https://ko-fi.com/vikshan)
+* Supporting Amina through [Ko-Fi](https://ko-fi.com/vikshan)
 * Supporting us through [Patreon](https://patreon.com/vikshan)
 * Writing documentation. The bot needs documentation - More details below
 * Help out other people on [Discord](https://discord.gg/uMgS9evnmv)
@@ -10,13 +10,13 @@ There are several ways you can help in making Mochi better!
 
 ## Writing the documentation
 
-Mochi is one of the more complicated bots out there. Therefore, a lot of documentation is needed for people to fully utilize and understand the features the bot provides.
+Amina is one of the more complicated bots out there. Therefore, a lot of documentation is needed for people to fully utilize and understand the features the bot provides.
 
-If you're interested in adding things to the documentation, contact us on our [support server](https://discord.gg/uMgS9evnmv) or create an issue on [GitHub](https://github.com/vixshan/mochi).
+If you're interested in adding things to the documentation, contact us on our [support server](https://discord.gg/uMgS9evnmv) or create an issue on [GitHub](https://github.com/vixshan/amina).
 
 ## Writing code for the bot
 
-You can also write code for the bot - it's open source. The bot is written in discord.js and you can view its code on [GitHub](https://github.com/vixshan/mochi). Please only add features if you really know how to write code in JavaScript. If you don't know how to change files on GitHub, watch [this tutorial](https://www.youtube.com/watch?v=yr6IzOGoMsQ).
+You can also write code for the bot - it's open source. The bot is written in discord.js and you can view its code on [GitHub](https://github.com/vixshan/amina). Please only add features if you really know how to write code in JavaScript. If you don't know how to change files on GitHub, watch [this tutorial](https://www.youtube.com/watch?v=yr6IzOGoMsQ).
 
 ## Helping out on the support server
 

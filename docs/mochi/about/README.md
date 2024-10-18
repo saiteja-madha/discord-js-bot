@@ -1,22 +1,22 @@
-# 🤖 About Mochi
+# 🤖 About Amina
 
 [![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/C0C1PUABU) \
 
 
-<figure><img src="https://capsule-render.vercel.app/api?type=waving&#x26;color=gradient&#x26;height=200&#x26;section=header&#x26;text=Mochi&#x26;fontSize=80&#x26;fontAlignY=35&#x26;animation=twinkling&#x26;fontColor=gradient" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://capsule-render.vercel.app/api?type=waving&#x26;color=gradient&#x26;height=200&#x26;section=header&#x26;text=Amina&#x26;fontSize=80&#x26;fontAlignY=35&#x26;animation=twinkling&#x26;fontColor=gradient" alt=""><figcaption></figcaption></figure>
 
 ### 🔗 Resource Links
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fvixshan%2Fmochi)
-[![Run on Repl.it](https://repl.it/badge/github/vixshan/Mochi)](https://replit.com/@vikshan/Mochi) [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Mochi)
+[![Run on Repl.it](https://repl.it/badge/github/vixshan/Amina)](https://replit.com/@vikshan/Amina) [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Amina)
 
-* 🤖 Mochi: [Invite Here](https://discord.com/oauth2/authorize?client\_id=1009149789914546287\&permissions=397602323830\&scope=bot%20applications.commands)
+* 🤖 Amina: [Invite Here](https://discord.com/oauth2/authorize?client\_id=1009149789914546287\&permissions=397602323830\&scope=bot%20applications.commands)
 * ❤️ Buy me a coffee: [Ko-Fi](https://ko-fi.com/vikshan/tiers)
 * 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 * 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
 * 📦 Self Host: [Guide](https://docs.vikshan.tech/additional/installation)
 
-Mochi is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe39) credits to deploy your own copy of Mochi.
+Amina is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe39) credits to deploy your own copy of Amina.
 
 ### ✨ Features ✨
 
@@ -137,14 +137,14 @@ Mochi is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe3
 ## 🤝 Contributing 🤝
 
 * Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool discord bot projects.
-* Feel free to [Fork](https://github.com/vixshan/mochi/fork) this repository, create a feature branch and submit a pull request
-* You can keep track of all the planned features [here](https://github.com/vixshan/mochi/projects) or make a request for one at our discord
+* Feel free to [Fork](https://github.com/vixshan/amina/fork) this repository, create a feature branch and submit a pull request
+* You can keep track of all the planned features [here](https://github.com/vixshan/amina/projects) or make a request for one at our discord
 
 #### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" alt="" data-size="line"> 》Notice
 
 > You may not claim this as your own! The original source was created by [saiteja-madha](https://github.com/saiteja-madha). The source is modified and being updated by Vikshan.
 
-> Mochi is a multipurpose Discord bot build in [Discord.js](https://github.com/Discordjs/discordjs) If you like this repository, feel free to leave a star ⭐ to motivate me!
+> Amina is a multipurpose Discord bot build in [Discord.js](https://github.com/Discordjs/discordjs) If you like this repository, feel free to leave a star ⭐ to motivate me!
 
 <img src="https://cdn.discordapp.com/emojis/809085860632985630.png" alt="" data-size="line"> 》 Sponsor the project on [GitHub](https://github.com/sponsors/vixshan)
 

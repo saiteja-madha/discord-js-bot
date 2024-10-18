@@ -181,7 +181,7 @@ module.exports = {
 
         // Split the changelog into version blocks and get only the first two versions
         const versions = changelogContent
-          .split(/(?=# Mochi v[0-9]+\.[0-9]+\.[0-9]+)/i)
+          .split(/(?=# Amina v[0-9]+\.[0-9]+\.[0-9]+)/i)
           .filter(block => block.trim())
           .slice(0, 2)
           .map(version => {

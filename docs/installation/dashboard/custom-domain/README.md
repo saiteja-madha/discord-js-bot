@@ -100,7 +100,7 @@ sudo nano dashboard.conf
         # However, you must set it for any further virtual host explicitly.
         #ServerName www.example.com
 
-        ServerName mochi.vikshan.me
+        ServerName amina.vikshan.me
         ProxyRequests On
         ProxyPreserveHost On
 

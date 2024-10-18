@@ -211,6 +211,6 @@ _Enabling this feature will allow members to simply react to any message with a 
 
 
 
-Join [Mochi's support Server](https://discord.gg/uMgS9evnmv)
+Join [Amina's support Server](https://discord.gg/uMgS9evnmv)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton\_sm.svg)](https://ko-fi.com/vikshan)

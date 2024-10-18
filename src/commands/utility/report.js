@@ -11,7 +11,7 @@ const { EMBED_COLORS, FEEDBACK } = require('@root/config.js')
 module.exports = {
   name: 'report',
   description:
-    'Help Mochi make the community better! Report issues or share your thoughts~',
+    'Help Mina make the community better! Report issues or share your thoughts~',
   category: 'UTILITY',
   slashCommand: {
     ephemeral: true,
@@ -21,7 +21,7 @@ module.exports = {
   async interactionRun(interaction) {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
-      .setTitle("Mochi's Report System! 🕵️‍♀️")
+      .setTitle("Mina's Report System! 🕵️‍♀️")
       .setDescription(
         'Heya! 💖 Wanna help make me even more awesome? Pick what you want to tell the devs about!'
       )
@@ -72,7 +72,7 @@ async function showReportModal(interaction, type) {
   const modal = new ModalBuilder()
     .setCustomId(`report_modal_${type}`)
     .setTitle(
-      `${type === 'feedback' ? 'Share Your Thoughts with Mochi!' : `Tell Mochi About This ${type.charAt(0).toUpperCase() + type.slice(1)}!`}`
+      `${type === 'feedback' ? 'Share Your Thoughts with Mina!' : `Tell Mina About This ${type.charAt(0).toUpperCase() + type.slice(1)}!`}`
     )
 
   const titleInput = new TextInputBuilder()
@@ -86,7 +86,7 @@ async function showReportModal(interaction, type) {
     .setCustomId('description')
     .setLabel('Spill the tea! ☕')
     .setStyle(TextInputStyle.Paragraph)
-    .setPlaceholder('Tell Mochi all about it~')
+    .setPlaceholder('Tell Mina all about it~')
     .setRequired(true)
 
   const firstActionRow = new ActionRowBuilder().addComponents(titleInput)

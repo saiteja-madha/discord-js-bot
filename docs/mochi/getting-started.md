@@ -4,11 +4,11 @@ You can add and manage the bot if you have the **Manage Server** permission.
 
 ### Setup <a href="#setup" id="setup"></a>
 
-The setup for Mochi is pretty simple.
+The setup for Amina is pretty simple.
 
-1. Go to [mochi.vikshan.me​](https://mochi.vikshan.me)
+1. Go to [amina.vikshan.me​](https://amina.vikshan.me)
 2. Click on **Login**
-3. Authorize Mochi to know what servers you are on.
+3. Authorize Amina to know what servers you are on.
 4. On the upper-right-corner, you can select your server by clicking on **Select a server** and selecting the server you want to add the bot to and manage.
 
 You should start out by visiting the commands tab, making sure to turn on and off any command(s) you may not want to be used.If you're interested in setting notifications like _Join/Leave, YouTube, Reddit, Streaming notifications._ You should look under the **Notifications & Feeds** tab.For _moderation tools, auto-moderation tools, auto roles, self assigning roles_ visit the **Tools & Utilities** tab.

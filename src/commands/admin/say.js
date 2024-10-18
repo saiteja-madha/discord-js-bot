@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
   name: 'say',
-  description: 'Says a message as Mochi to a channel you choose!',
+  description: 'Says a message as Mina to a channel you choose!',
   category: 'ADMIN',
   botPermissions: ['SendMessages'],
   userPermissions: ['ManageMessages'],

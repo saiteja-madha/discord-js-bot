@@ -17,7 +17,7 @@ const { EMBED_COLORS } = require('@root/config')
 async function sendOnboardingMenu(channel) {
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setTitle('Mochi Setup ♡(>ᴗ•)')
+    .setTitle('Mina Setup ♡(>ᴗ•)')
     .setDescription(
       "Let's make your server super awesome! Click the button below to set up important stuff~"
     )
@@ -25,7 +25,7 @@ async function sendOnboardingMenu(channel) {
   const row = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId('MOCHI_SETUP')
-      .setLabel('Setup Mochi')
+      .setLabel('Setup Mina')
       .setStyle(ButtonStyle.Primary)
       .setEmoji('🌸'),
     new ButtonBuilder()
@@ -49,20 +49,20 @@ async function sendOnboardingMenu(channel) {
 async function handleSetupButton(interaction) {
   const modal = new ModalBuilder()
     .setCustomId('MOCHI_SETUP_MODAL')
-    .setTitle('Mochi Setup ♡')
+    .setTitle('Mina Setup ♡')
 
   const updatesChannelInput = new TextInputBuilder()
     .setCustomId('UPDATES_CHANNEL')
     .setLabel('Updates Channel Name')
     .setStyle(TextInputStyle.Short)
-    .setPlaceholder('e.g., mochi-updates')
+    .setPlaceholder('e.g., amina-updates')
     .setRequired(true)
 
   const staffRoleInput = new TextInputBuilder()
     .setCustomId('STAFF_ROLES')
     .setLabel('Staff Role Name')
     .setStyle(TextInputStyle.Short)
-    .setPlaceholder('e.g., Mochi Staff')
+    .setPlaceholder('e.g., Mina Staff')
     .setRequired(true)
 
   const firstActionRow = new ActionRowBuilder().addComponents(
@@ -142,9 +142,9 @@ async function handleSetupModal(interaction) {
   // Send a test message to the updates channel
   const testEmbed = new EmbedBuilder()
     .setColor(EMBED_COLORS.SUCCESS)
-    .setTitle('Mochi Updates Channel ♡')
+    .setTitle('Mina Updates Channel ♡')
     .setDescription(
-      "Hi everyone! This channel is now set up for Mochi's updates. Stay tuned for awesome announcements! (≧◡≦)"
+      "Hi everyone! This channel is now set up for Mina's updates. Stay tuned for awesome announcements! (≧◡≦)"
     )
 
   await updatesChannel.send({ embeds: [testEmbed] })
@@ -210,7 +210,7 @@ async function handleRemindModal(interaction) {
       if (owner) {
         const reminderEmbed = new EmbedBuilder()
           .setColor(EMBED_COLORS.BOT_EMBED)
-          .setTitle('Mochi Setup Reminder ♡')
+          .setTitle('Mina Setup Reminder ♡')
           .setDescription(
             'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'
           )

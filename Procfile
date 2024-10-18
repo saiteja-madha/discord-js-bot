@@ -1,1 +1,1 @@
-web: pm2 start bot.js --name "mochi" --no-daemon
+web: pm2 start bot.js --name "amina" --no-daemon

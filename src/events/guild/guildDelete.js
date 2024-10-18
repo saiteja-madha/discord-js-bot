@@ -66,7 +66,7 @@ module.exports = async (client, guild) => {
   if (client.joinLeaveWebhook) {
     try {
       await client.joinLeaveWebhook.send({
-        username: 'Mochi (Left)',
+        username: 'Mina (Left)',
         avatarURL: client.user.displayAvatarURL(),
         embeds: [webhookEmbed],
       })
@@ -106,7 +106,7 @@ module.exports = async (client, guild) => {
 
       // Create a new embed for the DM
       const dmEmbed = new EmbedBuilder()
-        .setTitle('Mochi misses you already! 🌸')
+        .setTitle('Mina misses you already! 🌸')
         .setDescription(
           `I just left your server and already miss you! 😢\nIf you have any ideas on how I can improve, you can let me know by creating an issue on my [GitHub repo](${githubIssueURL})!\n\nP.S. I'm open-source!`
         )

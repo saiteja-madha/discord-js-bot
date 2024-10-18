@@ -17,13 +17,13 @@
     "docker:package": "tar -cf discord-js-bot.tar dashboard logs src bot.js config.js dockerfile package.json package-lock.json",
     "docker:build": "docker build -t saitejamadha/discord-js-bot:5.5.0 ."
   },
-  "homepage": "https://github.com/vixshan/mochi#readme",
+  "homepage": "https://github.com/vixshan/amina#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vixshan/mochi.git"
+    "url": "git+https://github.com/vixshan/amina.git"
   },
   "bugs": {
-    "url": "https://github.com/vixshan/mochi/issues"
+    "url": "https://github.com/vixshan/amina/issues"
   },
   "dependencies": {
     "@lavaclient/queue": "^2.1.1",

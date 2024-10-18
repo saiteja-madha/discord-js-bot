@@ -24,7 +24,7 @@ module.exports = {
 async function beg(user) {
   let users = [
     'Vikshan',
-    'Mochi',
+    'Mina',
     'Mimo',
     'Maria',
     'Elpida',

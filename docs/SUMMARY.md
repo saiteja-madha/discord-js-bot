@@ -3,10 +3,10 @@
 ## MOCHI
 
 * [👋 Hello there!](README.md)
-* [🤖 About Mochi](mochi/about/README.md)
-  * [🤲 Helping Out](mochi/about/helping-out.md)
-  * [♥ Donating](mochi/about/donating.md)
-* [🚀 Getting Started](mochi/getting-started.md)
+* [🤖 About Amina](amina/about/README.md)
+  * [🤲 Helping Out](amina/about/helping-out.md)
+  * [♥ Donating](amina/about/donating.md)
+* [🚀 Getting Started](amina/getting-started.md)
 
 ## CORE
 
