@@ -58,7 +58,7 @@ You also need to enable the Message Content Intent:
 * Clone the repo and install dependencies by running
 
 ```bash
-git clone https://github.com/vixshan/amina.git
+git clone https://github.com/vixshan/mochi.git
 cd amina
 npm install
 ```

@@ -137,8 +137,8 @@ Amina is Powered by Digital Ocean, [get free $200](https://m.do.co/c/c5587212fe3
 ## 🤝 Contributing 🤝
 
 * Special thanks to [@Androzz](https://github.com/Androz2091/AtlantaBot) for the [dashboard](https://github.com/Androz2091/AtlantaBot) and his other cool discord bot projects.
-* Feel free to [Fork](https://github.com/vixshan/amina/fork) this repository, create a feature branch and submit a pull request
-* You can keep track of all the planned features [here](https://github.com/vixshan/amina/projects) or make a request for one at our discord
+* Feel free to [Fork](https://github.com/vixshan/mochi/fork) this repository, create a feature branch and submit a pull request
+* You can keep track of all the planned features [here](https://github.com/vixshan/mochi/projects) or make a request for one at our discord
 
 #### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" alt="" data-size="line"> 》Notice
 

@@ -14,7 +14,7 @@ This is the documentation for Amina (that's me\~!), as a Discord Bot. A live ver
 Join our [support server](https://discord.gg/uMgS9evnmv) to stay up to date on the latest announcements and to get help with Amina!
 {% endhint %}
 
-As Amina is always considered a work in progress, these documents will be updated alongside new versions. Should there be a discrepancy between the two, feel free to let us know with an issue request on [GitHub](https://github.com/vixshan/amina)!
+As Amina is always considered a work in progress, these documents will be updated alongside new versions. Should there be a discrepancy between the two, feel free to let us know with an issue request on [GitHub](https://github.com/vixshan/mochi)!
 
 ### Supporting Amina
 
@@ -37,7 +37,7 @@ If you're having issues with the bot, check out the [Frequent](broken-reference/
 
 ## Making suggestions
 
-If you have a suggestion for a new feature or improvements, you can either send a message in the [support server](https://discord.gg/uMgS9evnmv) or open an issue in the [GitHub](https://github.com/vixshan/amina/issues) for the bot.
+If you have a suggestion for a new feature or improvements, you can either send a message in the [support server](https://discord.gg/uMgS9evnmv) or open an issue in the [GitHub](https://github.com/vixshan/mochi/issues) for the bot.
 
 ### <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" alt="" data-size="line">》Support Server
 
