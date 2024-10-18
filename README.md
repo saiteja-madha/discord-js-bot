@@ -2,7 +2,7 @@
 
 <h1 align="center">
   <br>
-  <a href="https://github.com/vixshan/mochi/.gitbook/assets/tmpng.png" height="200" alt="MOCHI"></a>
+  <a href="https://github.com/vixshan/amina/.gitbook/assets/tmpng.png" height="200" alt="MOCHI"></a>
   <br>
   MOCHI
   <br>
@@ -20,7 +20,7 @@ hey there! i’m amina, a playful and slightly chaotic discord bot that’s here
 add a little fun (and maybe a bit of chaos) to your server! 🌀 whether you’re
 looking for moderation, music, or just some good old fun commands, i’ve got your
 back. oh, and if you ever find any bugs or have ideas for new features, let me
-know right [here](https://github.com/vixshan/mochi/issues/new)! 💖
+know right [here](https://github.com/vixshan/amina/issues/new)! 💖
 
 <p align="center">Admin, AutoMod, Anime, Economy, Fun, Giveaway, Image, Invite, Information, Moderation, Music, Owner, Social, Statistics, Suggestion, Ticket, Utility and More...</p>
 
@@ -140,9 +140,9 @@ credits [here](https://m.do.co/c/c5587212fe39)! 💻
 
 special thanks to [@androzz](https://github.com/Androz2091/AtlantaBot) for the
 awesome dashboard! want to help make me even better?
-[fork](https://github.com/vixshan/mochi/fork) my code, submit a pull request,
+[fork](https://github.com/vixshan/amina/fork) my code, submit a pull request,
 and let’s build this together! check out planned features
-[here](https://github.com/vixshan/mochi/projects).
+[here](https://github.com/vixshan/amina/projects).
 
 ---
 
@@ -164,22 +164,22 @@ want to support me and keep me alive? sponsor me on
 
 [version-shield]:
   https://img.shields.io/github/package-json/v/vixshan/amina?style=for-the-badge
-[version-url]: https://github.com/vixshan/mochi
+[version-url]: https://github.com/vixshan/amina
 [pr-shield]:
   https://img.shields.io/github/issues-pr/vixshan/amina?style=for-the-badge
-[pr-url]: https://github.com/vixshan/mochi/pulls
+[pr-url]: https://github.com/vixshan/amina/pulls
 [contributors-shield]:
   https://img.shields.io/github/contributors/vixshan/amina.svg?style=for-the-badge
-[contributors-url]: https://github.com/vixshan/mochi/graphs/contributors
+[contributors-url]: https://github.com/vixshan/amina/graphs/contributors
 [forks-shield]:
   https://img.shields.io/github/forks/vixshan/amina.svg?style=for-the-badge
-[forks-url]: https://github.com/vixshan/mochi/network/members
+[forks-url]: https://github.com/vixshan/amina/network/members
 [stars-shield]:
   https://img.shields.io/github/stars/vixshan/amina.svg?style=for-the-badge
-[stars-url]: https://github.com/vixshan/mochi/stargazers
+[stars-url]: https://github.com/vixshan/amina/stargazers
 [issues-shield]:
   https://img.shields.io/github/issues/vixshan/amina.svg?style=for-the-badge
-[issues-url]: https://github.com/vixshan/mochi/issues
+[issues-url]: https://github.com/vixshan/amina/issues
 [license-shield]:
   https://img.shields.io/github/license/vixshan/amina.svg?style=for-the-badge
-[license-url]: https://github.com/vixshan/mochi/blob/master/LICENSE
+[license-url]: https://github.com/vixshan/amina/blob/master/LICENSE

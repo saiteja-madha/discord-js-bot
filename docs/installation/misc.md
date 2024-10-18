@@ -6,7 +6,7 @@
 
 ```bash
 git init
-git remote add origin https://github.com/vixshan/mochi.git
+git remote add origin https://github.com/vixshan/amina.git
 ```
 
 * Create a new file in the hooks directory of your Git repository:
