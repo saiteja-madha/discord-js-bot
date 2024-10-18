@@ -27,13 +27,6 @@ module.exports = {
     ],
   },
 
-  async messageRun(message, args, data) {
-    const member =
-      (await message.guild.resolveMember(args[0])) || message.member
-    const response = await getRank(message, member, data.settings)
-    await message.safeReply(response)
-  },
-
   async interactionRun(interaction, data) {
     const user = interaction.options.getUser('user') || interaction.user
     const member = await interaction.guild.members.fetch(user)

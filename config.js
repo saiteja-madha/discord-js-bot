@@ -15,11 +15,7 @@ module.exports = {
     API_ERROR:
       'Oopsie! 🌟 Something went wrong on our end. Please try again later or reach out to our support server! 💖',
   },
-
-  // PLUGINS
-  DEV: {
-    ENABLED: true,
-  },
+  
   // whether or not to enable feedback/report system
   FEEDBACK: {
     ENABLED: true,

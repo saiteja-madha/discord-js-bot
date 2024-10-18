@@ -5,8 +5,8 @@ const {
 } = require('@src/handlers')
 const { cacheReactionRoles } = require('@schemas/ReactionRoles')
 const { getSettings } = require('@schemas/Guild')
-const { getPresenceConfig } = require('@schemas/Dev')
-
+const { getPresenceConfig, getDevCommandsConfig } = require('@schemas/Dev')
+const { ApplicationCommandType } = require('discord.js')
 /**
  * @param {import('@src/structures').BotClient} client
  */
@@ -58,11 +58,61 @@ module.exports = async client => {
 
   // Register Interactions
   if (client.config.INTERACTIONS.SLASH || client.config.INTERACTIONS.CONTEXT) {
-    if (client.config.INTERACTIONS.GLOBAL) await client.registerInteractions()
-    else
-      await client.registerInteractions(
-        client.config.INTERACTIONS.TEST_GUILD_ID
+    const devConfig = await getDevCommandsConfig()
+
+    // Register test guild commands if enabled
+    if (devConfig.ENABLED) {
+      const testGuildCommands = client.slashCommands
+        .filter(cmd => cmd.testGuildOnly)
+        .map(cmd => ({
+          name: cmd.name,
+          description: cmd.description,
+          type: ApplicationCommandType.ChatInput,
+          options: cmd.slashCommand.options,
+        }))
+
+      if (testGuildCommands.length > 0) {
+        const testGuild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
+        if (testGuild) {
+          await testGuild.commands.set([
+            ...testGuild.commands.cache
+              .filter(
+                cmd =>
+                  !client.slashCommands.find(
+                    c => c.testGuildOnly && c.name === cmd.name
+                  )
+              )
+              .map(cmd => ({
+                name: cmd.name,
+                description: cmd.description,
+                options: cmd.options,
+                type: cmd.type,
+              })),
+            ...testGuildCommands,
+          ])
+          client.logger.success(
+            `Registered ${testGuildCommands.length} test guild commands`
+          )
+        }
+      }
+    }
+
+    // Register global commands
+    const globalCommands = client.slashCommands
+      .filter(cmd => !cmd.testGuildOnly)
+      .map(cmd => ({
+        name: cmd.name,
+        description: cmd.description,
+        type: ApplicationCommandType.ChatInput,
+        options: cmd.slashCommand.options,
+      }))
+
+    if (globalCommands.length > 0 && client.config.INTERACTIONS.GLOBAL) {
+      await client.application.commands.set(globalCommands)
+      client.logger.success(
+        `Registered ${globalCommands.length} global commands`
       )
+    }
   }
 
   // Load reaction roles to cache

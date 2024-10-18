@@ -33,6 +33,12 @@ const Schema = new mongoose.Schema(
         default: 'https://twitch.tv/iamvikshan',
       },
     },
+    DEV_COMMANDS: {
+      ENABLED: {
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   {
     timestamps: true,
@@ -59,5 +65,22 @@ module.exports = {
     }
 
     return await document.save()
+  },
+
+  async getDevCommandsConfig() {
+    const document = await Model.findOne()
+    if (!document) return (await Model.create({})).DEV_COMMANDS
+    return document.DEV_COMMANDS
+  },
+
+  async setDevCommands(enabled) {
+    const document = await Model.findOne()
+    if (!document)
+      return (await Model.create({ DEV_COMMANDS: { ENABLED: enabled } }))
+        .DEV_COMMANDS
+
+    document.DEV_COMMANDS.ENABLED = enabled
+    await document.save()
+    return document.DEV_COMMANDS
   },
 }

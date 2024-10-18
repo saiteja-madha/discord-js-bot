@@ -16,12 +16,10 @@ const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 require('dotenv').config()
 const {
-  Model,
   getPresenceConfig,
   updatePresenceConfig,
 } = require('@schemas/Dev')
 
-const DEV_ID = process.env.DEV_ID
 const DUMMY_TOKEN = 'MY_TOKEN_IS_SECRET'
 
 /**
@@ -32,8 +30,9 @@ module.exports = {
   description: 'Developer-only commands',
   category: 'DEV',
   botPermissions: ['EmbedLinks'],
+  testGuildOnly: true,
   slashCommand: {
-    enabled: DEV.ENABLED,
+    enabled: true,
     ephemeral: true,
     options: [
       {
@@ -228,13 +227,6 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    if (interaction.user.id !== DEV_ID) {
-      return interaction.reply({
-        content:
-          "Aww, sorry cutie! You're not authorized to use this command! 💖",
-        ephemeral: true,
-      })
-    }
 
     const sub = interaction.options.getSubcommand()
 

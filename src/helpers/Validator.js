@@ -150,63 +150,6 @@ module.exports = class Validator {
       }
     }
 
-    // Validate Command Details
-    if (cmd.command) {
-      if (typeof cmd.command !== 'object') {
-        throw new TypeError('Command.command must be an object')
-      }
-      if (
-        Object.prototype.hasOwnProperty.call(cmd.command, 'enabled') &&
-        typeof cmd.command.enabled !== 'boolean'
-      ) {
-        throw new TypeError('Command.command enabled must be a boolean value')
-      }
-      if (
-        cmd.command.aliases &&
-        (!Array.isArray(cmd.command.aliases) ||
-          cmd.command.aliases.some(
-            ali => typeof ali !== 'string' || ali !== ali.toLowerCase()
-          ))
-      ) {
-        throw new TypeError(
-          'Command.command aliases must be an Array of lowercase strings.'
-        )
-      }
-      if (cmd.command.usage && typeof cmd.command.usage !== 'string') {
-        throw new TypeError('Command.command usage must be a string')
-      }
-      if (
-        cmd.command.minArgsCount &&
-        typeof cmd.command.minArgsCount !== 'number'
-      ) {
-        throw new TypeError('Command.command minArgsCount must be a number')
-      }
-      if (cmd.command.subcommands && !Array.isArray(cmd.command.subcommands)) {
-        throw new TypeError('Command.command subcommands must be an array')
-      }
-      if (cmd.command.subcommands) {
-        for (const sub of cmd.command.subcommands) {
-          if (typeof sub !== 'object') {
-            throw new TypeError(
-              'Command.command subcommands must be an array of objects'
-            )
-          }
-          if (typeof sub.trigger !== 'string') {
-            throw new TypeError(
-              'Command.command subcommand trigger must be a string'
-            )
-          }
-          if (typeof sub.description !== 'string') {
-            throw new TypeError(
-              'Command.command subcommand description must be a string'
-            )
-          }
-        }
-      }
-      if (cmd.command.enabled && typeof cmd.messageRun !== 'function') {
-        throw new TypeError("Missing 'messageRun' function")
-      }
-    }
 
     // Validate Slash Command Details
     if (cmd.slashCommand) {

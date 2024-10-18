@@ -41,7 +41,6 @@
  * @property {Validation[]} [validations] - List of validations to be run before the command is executed
  * @property {CommandInfo} command - A short description of the command
  * @property {InteractionInfo} slashCommand - A short description of the command
- * @property {function(import('discord.js').Message, string[], object)} messageRun - The callback to be executed when the command is invoked
  * @property {function(import('discord.js').ChatInputCommandInteraction, object)} interactionRun - The callback to be executed when the interaction is invoked
  */
 
@@ -63,6 +62,5 @@ module.exports = {
     ephemeral: false,
     options: [],
   },
-  messageRun: (message, args, data) => {},
   interactionRun: (interaction, data) => {},
 }
