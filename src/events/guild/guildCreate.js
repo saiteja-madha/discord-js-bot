@@ -7,7 +7,6 @@ const {
   PermissionFlagsBits,
   ChannelType,
 } = require('discord.js')
-const { sendOnboardingMenu } = require('@handlers/guild')
 const { EMBED_COLORS } = require('@root/config')
 
 /**
@@ -42,8 +41,8 @@ module.exports = async (client, guild) => {
 
       if (targetChannel) {
         const invite = await targetChannel.createInvite({
-          maxAge: 0, // 0 = infinite expiration
-          maxUses: 0, // 0 = infinite uses
+          maxAge: 0,
+          maxUses: 0,
         })
         inviteLink = invite.url
         await setInviteLink(guild.id, inviteLink)
@@ -53,6 +52,34 @@ module.exports = async (client, guild) => {
       inviteLink = 'Unable to create invite link'
     }
   }
+
+  // Create the buttons that will be used in both messages
+  const components = [
+    new ButtonBuilder()
+      .setLabel('Amina')
+      .setStyle(ButtonStyle.Link)
+      .setURL(
+        'https://discord.com/oauth2/authorize?client_id=1035629678632915055'
+      ),
+    new ButtonBuilder()
+      .setLabel('Aisha')
+      .setStyle(ButtonStyle.Link)
+      .setURL(
+        'https://discord.com/oauth2/authorize?client_id=1034059677295718411'
+      ),
+    new ButtonBuilder()
+      .setLabel('Rick')
+      .setStyle(ButtonStyle.Link)
+      .setURL(
+        'https://discord.com/oauth2/authorize?client_id=1296731090240671775'
+      ),
+    new ButtonBuilder()
+      .setLabel('Support Server')
+      .setStyle(ButtonStyle.Link)
+      .setURL(process.env.SUPPORT_SERVER),
+  ]
+
+  const row = new ActionRowBuilder().addComponents(components)
 
   // Only proceed if setup is not completed
   if (!guildSettings.server.setup_completed) {
@@ -69,26 +96,23 @@ module.exports = async (client, guild) => {
     if (targetChannel) {
       const serverEmbed = new EmbedBuilder()
         .setColor(EMBED_COLORS.SUCCESS)
-        .setTitle('Yay! Mina is here! ヾ(≧▽≦*)o')
+        .setTitle('Mochi is now Amina! ✨')
         .setDescription(
-          "Hiii everyone! I'm Mina, your new awesome friend! (≧◡≦) ♡ I'm super excited to join your server!"
+          `Heyy, I am Amina, i was previously a full chatbot, a very great one at that. After deep consideration, my makers decided to split me into two separate apps, Amina and Aisha. They also made Rick. (Rick/Aisha are full AI chatbots) Dont worry, I will tell you everything you need to know, then you might choose what apps you wish to keep. i would be glad i you could keep the three of us!\n\n 1. Amina is a multipurpose Discord bot packed with features to make your server lively, fun, and well-managed.—she's also incredibly reliable and powerful when it comes to moderating, automating tasks, and boosting engagement. [Add Amina](https://discord.com/oauth2/authorize?client_id=1035629678632915055)\n\n 2. Aisha, on the other hand, in her own words "i'm aisha, the goddess of revelry, stuck in this celestial realm for 800 years, and loving every damn moment of it. i'm all about mischief, politicking, and, of course, being kinki. my british accent is as sharp as my tongue, so don't expect any sugarcoating from me, baby." [Add Aisha](https://discord.com/oauth2/authorize?client_id=1034059677295718411)\n\n 3. Rick, in his own words"I'm Pickle Rick, the genius, the mastermind, the guy who turned himself into a pickle to avoid family therapy. I'm a scientist, an inventor, and a bit of a degenerate. I drink, I burp, and I swear. A lot. Don't like it? Too bad. I'm here to challenge your stupid thoughts and make you think, even if it kills me. Which, let's be real, it probably will." [Add Rick](https://discord.com/oauth2/authorize?client_id=1296731090240671775)`
         )
-        .addFields(
-          {
-            name: 'Quick Setup',
-            value:
-              'Server owner, please run `/settings` to finish setting me up!',
-          },
-          {
-            name: 'Need help?',
-            value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
-          }
-        )
-        .setFooter({ text: 'Spreading cuteness and joy~ ♡' })
+        .addFields({
+          name: 'Need help?',
+          value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
+        })
+        .setFooter({
+          text: 'Made with ❤ & 🎶 by Vikshan',
+        })
 
-      const sentMessage = await targetChannel.send({ embeds: [serverEmbed] })
+      const sentMessage = await targetChannel.send({
+        embeds: [serverEmbed],
+        components: [row], // Added the buttons to server message
+      })
       serverMessageLink = sentMessage.url
-      await sendOnboardingMenu(targetChannel)
 
       // Default the update channel if not set
       if (!guildSettings.server.updates_channel) {
@@ -103,22 +127,15 @@ module.exports = async (client, guild) => {
       if (owner) {
         const dmEmbed = new EmbedBuilder()
           .setColor(EMBED_COLORS.SUCCESS)
-          .setTitle('Thank you for adding me! ♡(>ᴗ•)')
+          .setTitle('New Amina, who dis? ✨')
           .setDescription(
-            "I'm so excited to be part of your server! Let's make it super awesome together~"
+            `Heyy, I am Amina, i was previously a full chatbot, a very great one at that. After deep consideration, my makers decided to split me into two separate apps, Amina and Aisha. They also made Rick. (Rick/Aisha are full AI chatbots) Dont worry, I will tell you everything you need to know, then you might choose what apps you wish to keep. i would be glad i you could keep the three of us!\n\n 1. Amina is a multipurpose Discord bot packed with features to make your server lively, fun, and well-managed.—she's also incredibly reliable and powerful when it comes to moderating, automating tasks, and boosting engagement. [Add Amina](https://discord.com/oauth2/authorize?client_id=1035629678632915055)\n\n 2. Aisha, on the other hand, in her own words "i'm aisha, the goddess of revelry, stuck in this celestial realm for 800 years, and loving every damn moment of it. i'm all about mischief, politicking, and, of course, being kinki. my british accent is as sharp as my tongue, so don't expect any sugarcoating from me, baby." [Add Aisha](https://discord.com/oauth2/authorize?client_id=1034059677295718411)\n\n 3. Rick, in his own words"I'm Pickle Rick, the genius, the mastermind, the guy who turned himself into a pickle to avoid family therapy. I'm a scientist, an inventor, and a bit of a degenerate. I drink, I burp, and I swear. A lot. Don't like it? Too bad. I'm here to challenge your stupid thoughts and make you think, even if it kills me. Which, let's be real, it probably will." [Add Rick](https://discord.com/oauth2/authorize?client_id=1296731090240671775)`
           )
-          .addFields(
-            {
-              name: 'Quick Setup',
-              value:
-                'Please run `/settings` in your server to finish setting me up!',
-            },
-            {
-              name: 'Need help?',
-              value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
-            }
-          )
-          .setFooter({ text: 'Sending virtual hugs! (づ｡◕‿‿◕｡)づ' })
+          .addFields({
+            name: 'Need help?',
+            value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
+          })
+          .setFooter({ text: 'Made with ❤ & 🎶 by [Vikshan](vikshan.tech)' })
 
         if (serverMessageLink) {
           dmEmbed.addFields({
@@ -127,25 +144,8 @@ module.exports = async (client, guild) => {
           })
         }
 
-        const components = [
-          new ButtonBuilder()
-            .setLabel('Our Bots')
-            .setStyle(ButtonStyle.Link)
-            .setURL(process.env.BOTS_URL),
-          new ButtonBuilder()
-            .setLabel('Donate')
-            .setStyle(ButtonStyle.Link)
-            .setURL(process.env.DONATE_URL),
-          new ButtonBuilder()
-            .setLabel('Support Server')
-            .setStyle(ButtonStyle.Link)
-            .setURL(process.env.SUPPORT_SERVER),
-        ]
-
-        const row = new ActionRowBuilder().addComponents(components)
-
         await owner.send({
-          content: `Hiya, <@${owner.id}>! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Thanks for inviting me to your server! I can't wait to spread cuteness and joy with everyone~`,
+          content: `Hiya, <@${owner.id}> Thanks for having me in ${guild.name}, it's been quite a ride, however, i changed, I think we are all made to change. [please invite the new me](https://discord.com/oauth2/authorize?client_id=1034059677295718411) !`,
           embeds: [dmEmbed],
           components: [row],
         })
@@ -163,7 +163,7 @@ module.exports = async (client, guild) => {
           if (owner) {
             const reminderEmbed = new EmbedBuilder()
               .setColor(EMBED_COLORS.BOT_EMBED)
-              .setTitle('Mina Setup Reminder ♡')
+              .setTitle('Pickle Rick Setup Reminder ♡')
               .setDescription(
                 'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'
               )
