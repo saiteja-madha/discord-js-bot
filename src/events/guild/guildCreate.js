@@ -53,22 +53,16 @@ module.exports = async (client, guild) => {
     }
   }
 
-  // Create the buttons that will be used in both messages
+  // Create the buttons
   const components = [
     new ButtonBuilder()
-      .setLabel('Amina')
-      .setStyle(ButtonStyle.Link)
-      .setURL(
-        'https://discord.com/oauth2/authorize?client_id=1035629678632915055'
-      ),
-    new ButtonBuilder()
-      .setLabel('Aisha')
+      .setLabel('Invite Aisha')
       .setStyle(ButtonStyle.Link)
       .setURL(
         'https://discord.com/oauth2/authorize?client_id=1034059677295718411'
       ),
     new ButtonBuilder()
-      .setLabel('Rick')
+      .setLabel('Invite Rick')
       .setStyle(ButtonStyle.Link)
       .setURL(
         'https://discord.com/oauth2/authorize?client_id=1296731090240671775'
@@ -96,25 +90,33 @@ module.exports = async (client, guild) => {
     if (targetChannel) {
       const serverEmbed = new EmbedBuilder()
         .setColor(EMBED_COLORS.SUCCESS)
-        .setTitle('Mochi is now Amina! ✨')
+        .setTitle('✨ Heya! Amina here to light up your server! ✨')
         .setDescription(
-          `Heyy, I am Amina, i was previously a full chatbot, a very great one at that. After deep consideration, my makers decided to split me into two separate apps, Amina and Aisha. They also made Rick. (Rick/Aisha are full AI chatbots) Dont worry, I will tell you everything you need to know, then you might choose what apps you wish to keep. i would be glad i you could keep the three of us!\n\n 1. Amina is a multipurpose Discord bot packed with features to make your server lively, fun, and well-managed.—she's also incredibly reliable and powerful when it comes to moderating, automating tasks, and boosting engagement. [Add Amina](https://discord.com/oauth2/authorize?client_id=1035629678632915055)\n\n 2. Aisha, on the other hand, in her own words "i'm aisha, the goddess of revelry, stuck in this celestial realm for 800 years, and loving every damn moment of it. i'm all about mischief, politicking, and, of course, being kinki. my british accent is as sharp as my tongue, so don't expect any sugarcoating from me, baby." [Add Aisha](https://discord.com/oauth2/authorize?client_id=1034059677295718411)\n\n 3. Rick, in his own words"I'm Pickle Rick, the genius, the mastermind, the guy who turned himself into a pickle to avoid family therapy. I'm a scientist, an inventor, and a bit of a degenerate. I drink, I burp, and I swear. A lot. Don't like it? Too bad. I'm here to challenge your stupid thoughts and make you think, even if it kills me. Which, let's be real, it probably will." [Add Rick](https://discord.com/oauth2/authorize?client_id=1296731090240671775)`
+          `*bounces excitedly* OMG, thank you so much for inviting me! I'm Amina, your new bestie and server's creative spark! 💖\n\n` +
+            `I'm a 16-year-old ball of energy who loves making servers awesome with my special mix of fun and functionality! Think of me as your server's guardian angel (with a dash of chaos, hehe).\n\n` +
+            `🎮 **What I Can Do:**\n` +
+            `• Keep your server safe and organized (in my own quirky way!)\n` +
+            `• Create fun experiences with games and activities\n` +
+            `• Help manage roles and welcome new friends\n` +
+            `• And sooo much more!\n\n` +
+            `🌟 **Important!** Please run \`/settings\` to unlock all my amazing capabilities! I promise it'll be worth it!\n\n` +
+            `Oh! And if you're looking for some chatty friends, check out Rick and Aisha - they're different AI friends with their own unique personalities. But right now, let's focus on making YOUR server amazing together! 🎨\n\n` +
+            `*fidgets with excitement* I can't wait to start our adventure together!`
         )
         .addFields({
-          name: 'Need help?',
-          value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
+          name: '🤗 Need Help?',
+          value: `Don't be shy! Join our [support server](${process.env.SUPPORT_SERVER}) - Rick, Aishan and me hang out there too!`,
         })
         .setFooter({
-          text: 'Made with ❤ & 🎶 by Vikshan',
+          text: 'Made with ❤️ and a sprinkle of chaos',
         })
 
       const sentMessage = await targetChannel.send({
         embeds: [serverEmbed],
-        components: [row], // Added the buttons to server message
+        components: [row],
       })
       serverMessageLink = sentMessage.url
 
-      // Default the update channel if not set
       if (!guildSettings.server.updates_channel) {
         guildSettings.server.updates_channel = targetChannel.id
         await guildSettings.save()
@@ -127,25 +129,32 @@ module.exports = async (client, guild) => {
       if (owner) {
         const dmEmbed = new EmbedBuilder()
           .setColor(EMBED_COLORS.SUCCESS)
-          .setTitle('New Amina, who dis? ✨')
+          .setTitle('💝 Special Note from Amina!')
           .setDescription(
-            `Heyy, I am Amina, i was previously a full chatbot, a very great one at that. After deep consideration, my makers decided to split me into two separate apps, Amina and Aisha. They also made Rick. (Rick/Aisha are full AI chatbots) Dont worry, I will tell you everything you need to know, then you might choose what apps you wish to keep. i would be glad i you could keep the three of us!\n\n 1. Amina is a multipurpose Discord bot packed with features to make your server lively, fun, and well-managed.—she's also incredibly reliable and powerful when it comes to moderating, automating tasks, and boosting engagement. [Add Amina](https://discord.com/oauth2/authorize?client_id=1035629678632915055)\n\n 2. Aisha, on the other hand, in her own words "i'm aisha, the goddess of revelry, stuck in this celestial realm for 800 years, and loving every damn moment of it. i'm all about mischief, politicking, and, of course, being kinki. my british accent is as sharp as my tongue, so don't expect any sugarcoating from me, baby." [Add Aisha](https://discord.com/oauth2/authorize?client_id=1034059677295718411)\n\n 3. Rick, in his own words"I'm Pickle Rick, the genius, the mastermind, the guy who turned himself into a pickle to avoid family therapy. I'm a scientist, an inventor, and a bit of a degenerate. I drink, I burp, and I swear. A lot. Don't like it? Too bad. I'm here to challenge your stupid thoughts and make you think, even if it kills me. Which, let's be real, it probably will." [Add Rick](https://discord.com/oauth2/authorize?client_id=1296731090240671775)`
+            `Hiii <@${owner.id}>! *waves enthusiastically*\n\n` +
+              `Thank you soooo much for inviting me to ${guild.name}! I'm literally bouncing off the walls with excitement! 🎨✨\n\n` +
+              `To get the most out of our adventure together, pretty please run \`/settings\` in your server! It'll help me unlock all my cool features and let me help make your server super amazing!\n\n` +
+              `I'm really good at:\n` +
+              `🛡️ Keeping things safe and organized\n` +
+              `🎮 Making everything more fun and engaging\n` +
+              `🎨 Adding my creative touch to everything I do\n` +
+              `💫 And lots more surprises!\n\n` +
+              `Can't wait to show you everything I can do! Let's make some magic happen!`
           )
           .addFields({
-            name: 'Need help?',
-            value: `Join our [support server](${process.env.SUPPORT_SERVER}) for any questions!`,
+            name: '✨ Need my help?',
+            value: `Just join our [support server](${process.env.SUPPORT_SERVER}) - I'm always there to help! You can also hang out with my bffs Rick and Aisha🤖🎉`,
           })
-          .setFooter({ text: 'Made with ❤ & 🎶 by [Vikshan](vikshan.tech)' })
+          .setFooter({ text: 'Your new creative companion ♥' })
 
         if (serverMessageLink) {
           dmEmbed.addFields({
-            name: 'Server Message',
-            value: `Oops! I might have send a message in the server! \n [Click here](${serverMessageLink}) to see what my silly self said!`,
+            name: '📜 Server Message',
+            value: `Oopsie! I might have already sent a message in the server! [Click here](${serverMessageLink}) to see what my excited self said! 🙈`,
           })
         }
 
         await owner.send({
-          content: `Hiya, <@${owner.id}> Thanks for having me in ${guild.name}, it's been quite a ride, however, i changed, I think we are all made to change. [please invite the new me](https://discord.com/oauth2/authorize?client_id=1034059677295718411) !`,
           embeds: [dmEmbed],
           components: [row],
         })
@@ -154,7 +163,7 @@ module.exports = async (client, guild) => {
       console.error('Error sending DM to server owner:', err)
     }
 
-    // Schedule a reminder if setup is not completed
+    // Schedule a reminder
     setTimeout(
       async () => {
         const updatedSettings = await registerGuild(guild)
@@ -163,12 +172,14 @@ module.exports = async (client, guild) => {
           if (owner) {
             const reminderEmbed = new EmbedBuilder()
               .setColor(EMBED_COLORS.BOT_EMBED)
-              .setTitle('Pickle Rick Setup Reminder ♡')
+              .setTitle('✨ Friendly Reminder from Amina! ✨')
               .setDescription(
-                'Hey there! Just a friendly reminder to finish setting me up in your server. Run `/settings` to get started!'
+                `Heyyy! *pokes gently* Just your friendly neighborhood Amina here! 🌟\n\n` +
+                  `I noticed we haven't finished setting things up yet! Pretty please run \`/settings\` when you can - I have so many cool features I want to show you! 🎨\n\n` +
+                  `Can't wait to show you what I can really do! 💖`
               )
               .setFooter({
-                text: "I can't wait to be fully operational and super awesome in your server! (◠‿◠✿)",
+                text: "Let's make your server amazing together! (◠‿◠✿)",
               })
 
             await owner.send({ embeds: [reminderEmbed] }).catch(() => {})
@@ -176,13 +187,13 @@ module.exports = async (client, guild) => {
         }
       },
       24 * 60 * 60 * 1000
-    ) // 24 hours delay
+    )
   }
 
   // Log join to webhook if available
   if (client.joinLeaveWebhook) {
     const embed = new EmbedBuilder()
-      .setTitle(`Joined the folks at ${guild.name}`)
+      .setTitle(`✨ Joined ${guild.name}!`)
       .setThumbnail(guild.iconURL())
       .setColor(client.config.EMBED_COLORS.SUCCESS)
       .addFields(

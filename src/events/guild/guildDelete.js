@@ -28,45 +28,44 @@ module.exports = async (client, guild) => {
     console.log(`Fetched owner: ${ownerTag}`)
   } catch (err) {
     console.error(`Failed to fetch owner: ${err.message}`)
-    // Continue execution even if owner fetch fails
   }
 
   // Create the embed for webhook
   const webhookEmbed = new EmbedBuilder()
-    .setTitle(`Aww, I just left ${guild.name} 💔`)
+    .setTitle(`*sniff* Just left ${guild.name} 💔`)
     .setThumbnail(guild.iconURL())
     .setColor(client.config.EMBED_COLORS.ERROR)
     .addFields(
       {
-        name: 'Server Name',
+        name: '📝 Server Name',
         value: guild.name || 'N/A',
         inline: true,
       },
       {
-        name: 'Server ID',
+        name: '🔍 Server ID',
         value: guild.id,
         inline: true,
       },
       {
-        name: 'Owner',
+        name: '👑 Owner',
         value: `${ownerTag} [\`${ownerId}\`]`,
         inline: true,
       },
       {
-        name: 'Members',
+        name: '👥 Members',
         value: `\`\`\`yaml\n${guild.memberCount}\`\`\``,
         inline: true,
       }
     )
     .setFooter({
-      text: `Guild #${client.guilds.cache.size}`,
+      text: `Server #${client.guilds.cache.size} | *draws a sad doodle*`,
     })
 
   // Send webhook message
   if (client.joinLeaveWebhook) {
     try {
       await client.joinLeaveWebhook.send({
-        username: 'Mina (Left)',
+        username: 'Amina (Left)',
         avatarURL: client.user.displayAvatarURL(),
         embeds: [webhookEmbed],
       })
@@ -80,52 +79,54 @@ module.exports = async (client, guild) => {
 
   // Attempt to send DM to owner
   if (owner) {
-    const githubIssueURL = `https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new`
+    const components = [
+      new ButtonBuilder()
+        .setLabel('Invite Me Back? 🥺')
+        .setStyle(ButtonStyle.Link)
+        .setURL(`${client.getInvite()}`),
+      new ButtonBuilder()
+        .setLabel('Support Server')
+        .setStyle(ButtonStyle.Link)
+        .setURL(process.env.SUPPORT_SERVER),
+      new ButtonBuilder()
+        .setLabel('Leave Feedback')
+        .setStyle(ButtonStyle.Link)
+        .setURL(
+          `https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new`
+        ),
+    ]
+
+    const row = new ActionRowBuilder().addComponents(components)
+
+    // Create a new embed for the DM
+    const dmEmbed = new EmbedBuilder()
+      .setTitle('💔 *quietly doodles sad faces*')
+      .setDescription(
+        `Hey <@${ownerId}>, it's Amina... *fidgets nervously*\n\n` +
+          `I just wanted to say goodbye and thank you for having me in your server. Even though things didn't work out, I had a lot of fun! 🎨\n\n` +
+          `If I did something wrong, or if there's any way I could've been better, I'd really love to know. Your feedback helps me grow! And maybe... *looks hopeful* maybe we can be friends again someday?\n\n` +
+          `*starts drawing a friendship bracelet, just in case*\n\n` +
+          `Stay creative and awesome! ✨`
+      )
+      .setColor(client.config.EMBED_COLORS.ERROR)
+      .setThumbnail(client.user.displayAvatarURL())
+      .addFields({
+        name: '✨ Want to try again?',
+        value: 'I promise to do my very best to make your server amazing!',
+        inline: false,
+      })
+      .setFooter({ text: '*tucks away art supplies with a small smile*' })
 
     try {
-      const components = [
-        new ButtonBuilder()
-          .setLabel('Donate')
-          .setStyle(ButtonStyle.Link)
-          .setURL(process.env.DONATE_URL),
-        new ButtonBuilder()
-          .setLabel('Docs')
-          .setStyle(ButtonStyle.Link)
-          .setURL(process.env.DOCS_URL),
-        new ButtonBuilder()
-          .setLabel('Support Server')
-          .setStyle(ButtonStyle.Link)
-          .setURL(process.env.SUPPORT_SERVER),
-        new ButtonBuilder()
-          .setLabel('Create an Issue')
-          .setStyle(ButtonStyle.Link)
-          .setURL(githubIssueURL),
-      ]
-
-      const row = new ActionRowBuilder().addComponents(components)
-
-      // Create a new embed for the DM
-      const dmEmbed = new EmbedBuilder()
-        .setTitle('Mina misses you already! 🌸')
-        .setDescription(
-          `I just left your server and already miss you! 😢\nIf you have any ideas on how I can improve, you can let me know by creating an issue on my [GitHub repo](${githubIssueURL})!\n\nP.S. I'm open-source!`
-        )
-        .setColor(client.config.EMBED_COLORS.ERROR) // You might want to use a different color for DMs
-        .setThumbnail(client.user.displayAvatarURL())
-        .setFooter({ text: 'Thank you for having me in your server!' })
-
-      // Wait before sending DM to avoid rate limiting
       await wait(1000)
-
       console.log(`Attempting to send DM to owner: ${ownerId}`)
 
       await owner.send({
-        content: `Hey <@${ownerId}>!`, // This will be the plain text for the ping
         embeds: [dmEmbed],
         components: [row],
       })
 
-      console.log('Successfully sent a thank-you DM to the server owner.')
+      console.log('Successfully sent goodbye DM to the server owner.')
     } catch (err) {
       console.error(`Error sending DM: ${err.message}`)
       if (err.code === 50007) {

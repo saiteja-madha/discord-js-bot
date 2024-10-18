@@ -10,7 +10,7 @@ const Schema = new mongoose.Schema(
       STATUS: {
         type: String,
         enum: ['online', 'idle', 'dnd', 'invisible'],
-        default: 'online',
+        default: 'idle',
       },
       TYPE: {
         type: String,
