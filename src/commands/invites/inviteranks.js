@@ -9,6 +9,7 @@ module.exports = {
   description: 'Shows the invite ranks configured on this guild',
   category: 'INVITE',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: true,
   },

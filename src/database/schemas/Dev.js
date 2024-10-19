@@ -39,6 +39,12 @@ const Schema = new mongoose.Schema(
         default: false,
       },
     },
+    GLOBAL_COMMANDS: {
+      ENABLED: {
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   {
     timestamps: true,
@@ -73,6 +79,12 @@ module.exports = {
     return document.DEV_COMMANDS
   },
 
+  async getGlobalCommandsConfig() {
+    const document = await Model.findOne()
+    if (!document) return (await Model.create({})).GLOBAL_COMMANDS
+    return document.GLOBAL_COMMANDS
+  },
+
   async setDevCommands(enabled) {
     const document = await Model.findOne()
     if (!document)
@@ -82,5 +94,16 @@ module.exports = {
     document.DEV_COMMANDS.ENABLED = enabled
     await document.save()
     return document.DEV_COMMANDS
+  },
+
+  async setGlobalCommands(enabled) {
+    const document = await Model.findOne()
+    if (!document)
+      return (await Model.create({ GLOBAL_COMMANDS: { ENABLED: enabled } }))
+        .GLOBAL_COMMANDS
+
+    document.GLOBAL_COMMANDS.ENABLED = enabled
+    await document.save()
+    return document.GLOBAL_COMMANDS
   },
 }

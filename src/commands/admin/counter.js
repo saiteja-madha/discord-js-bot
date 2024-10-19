@@ -9,6 +9,7 @@ module.exports = {
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
   botPermissions: ['ManageChannels'],
+  global: true,
   slashCommand: {
     enabled: true,
     ephemeral: true,

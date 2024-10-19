@@ -10,6 +10,7 @@ module.exports = {
   description: 'Enable or disable invite tracking in the server',
   category: 'INVITE',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: INVITE.ENABLED,
     options: [

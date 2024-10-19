@@ -9,6 +9,7 @@ module.exports = {
   description: 'Paste something in sourceb.in',
   category: 'UTILITY',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: true,
     options: [

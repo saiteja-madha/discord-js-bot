@@ -9,6 +9,7 @@ module.exports = {
   description: 'Configure invite ranks',
   category: 'INVITE',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: INVITE.ENABLED,
     ephemeral: true,

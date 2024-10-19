@@ -11,6 +11,7 @@ module.exports = {
   category: 'ECONOMY',
   cooldown: 3600,
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: ECONOMY.ENABLED,
   },

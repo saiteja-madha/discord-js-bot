@@ -9,6 +9,7 @@ module.exports = {
   description: 'skip the current song',
   category: 'MUSIC',
   validations: musicValidations,
+  global: true,
   slashCommand: {
     enabled: MUSIC.ENABLED,
   },

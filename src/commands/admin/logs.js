@@ -8,6 +8,7 @@ module.exports = {
   description: 'Configure moderation logs',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: true,
     ephemeral: true,

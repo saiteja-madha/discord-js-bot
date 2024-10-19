@@ -34,6 +34,7 @@ module.exports = {
   cooldown: 20,
   category: 'UTILITY',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: true,
     options: [

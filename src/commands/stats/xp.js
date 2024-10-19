@@ -9,6 +9,7 @@ module.exports = {
   description: 'configure the levelling system',
   category: 'STATS',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: STATS.ENABLED,
     options: [

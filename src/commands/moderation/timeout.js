@@ -12,6 +12,7 @@ module.exports = {
   category: 'MODERATION',
   botPermissions: ['ModerateMembers'],
   userPermissions: ['ModerateMembers'],
+  global: true,
   slashCommand: {
     enabled: MODERATION.ENABLED,
     options: [

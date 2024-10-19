@@ -9,6 +9,7 @@ module.exports = {
   description: 'enable or disable tracking stats in the server',
   category: 'STATS',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: STATS.ENABLED,
     ephemeral: true,

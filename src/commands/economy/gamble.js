@@ -11,6 +11,7 @@ module.exports = {
   description: 'try your luck by gambling',
   category: 'ECONOMY',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: ECONOMY.ENABLED,
     options: [

@@ -12,6 +12,7 @@ module.exports = {
   description: 'Shows inviter information',
   category: 'INVITE',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: INVITE.ENABLED,
     options: [

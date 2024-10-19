@@ -10,6 +10,7 @@ module.exports = {
   description: 'warns the specified member',
   category: 'MODERATION',
   userPermissions: ['KickMembers'],
+  global: true,
   slashCommand: {
     enabled: MODERATION.ENABLED,
     options: [

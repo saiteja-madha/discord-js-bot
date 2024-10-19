@@ -22,6 +22,7 @@ module.exports = {
   description: 'command help menu',
   category: 'UTILITY',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: true,
     options: [

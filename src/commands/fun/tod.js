@@ -15,6 +15,7 @@ module.exports = {
   name: 'tod',
   description: 'Play Truth or Dare!',
   category: 'FUN',
+  global: true,
   slashCommand: {
     enabled: true,
     options: [

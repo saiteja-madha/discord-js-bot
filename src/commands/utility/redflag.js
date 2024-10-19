@@ -28,6 +28,7 @@ module.exports = {
   cooldown: 5,
   category: 'UTILITY',
 
+  global: true,
   slashCommand: {
     enabled: true,
     options: [

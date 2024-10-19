@@ -16,6 +16,7 @@ module.exports = {
     'ReadMessageHistory',
     'ManageMessages',
   ],
+  global: true,
   slashCommand: {
     enabled: true,
     ephermal: false,

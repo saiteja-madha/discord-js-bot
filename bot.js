@@ -13,36 +13,54 @@ const { validateConfiguration } = require('@helpers/Validator')
 
 validateConfiguration()
 
-// initialize client
-const client = new BotClient()
-client.loadCommands('src/commands')
-client.loadContexts('src/contexts')
-client.loadEvents('src/events')
+async function initializeBot() {
+  try {
+    // initialize client
+    const client = new BotClient()
+
+    // check for updates
+    await checkForUpdates()
+
+    // Initialize database first
+    if (client.config.DASHBOARD.enabled) {
+      client.logger.log('Launching dashboard')
+      try {
+        const { launch } = require('@root/dashboard/app')
+        await launch(client)
+      } catch (ex) {
+        client.logger.error('Failed to launch dashboard', ex)
+        process.exit(1)
+      }
+    } else {
+      await initializeMongoose()
+    }
+
+    // Now load commands after database is initialized
+    await client.loadCommands('src/commands')
+    client.loadContexts('src/contexts')
+    client.loadEvents('src/events')
+
+    // start the client
+    await client.login(process.env.BOT_TOKEN)
+
+    return client
+  } catch (error) {
+    console.error('Failed to initialize bot:', error)
+    process.exit(1)
+  }
+}
 
 // find unhandled promise rejections
-process.on('unhandledRejection', err =>
-  client.logger.error(`Unhandled exception`, err)
-)
-;(async () => {
-  // check for updates
-  await checkForUpdates()
+process.on('unhandledRejection', err => {
+  console.error('Unhandled Rejection:', err)
+})
 
-  // start the dashboard
-  if (client.config.DASHBOARD.enabled) {
-    client.logger.log('Launching dashboard')
-    try {
-      const { launch } = require('@root/dashboard/app')
+process.on('uncaughtException', err => {
+  console.error('Uncaught Exception:', err)
+})
 
-      // let the dashboard initialize the database
-      await launch(client)
-    } catch (ex) {
-      client.logger.error('Failed to launch dashboard', ex)
-    }
-  } else {
-    // initialize the database
-    await initializeMongoose()
-  }
-
-  // start the client
-  await client.login(process.env.BOT_TOKEN)
-})()
+// Initialize the bot
+initializeBot().catch(error => {
+  console.error('Failed to start bot:', error)
+  process.exit(1)
+})

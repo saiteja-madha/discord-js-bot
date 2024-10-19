@@ -18,6 +18,7 @@ module.exports = {
   description: 'display the XP, invite, and rep leaderboard',
   category: 'INFO',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: true,
     options: [

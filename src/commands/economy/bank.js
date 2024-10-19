@@ -12,6 +12,7 @@ module.exports = {
   description: 'access to bank operations',
   category: 'ECONOMY',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: ECONOMY.ENABLED,
     options: [

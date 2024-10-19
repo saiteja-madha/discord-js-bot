@@ -18,6 +18,7 @@ module.exports = {
   userPermissions: ['ManageGuild'],
   botPermissions: ['EmbedLinks'],
 
+  global: true,
   slashCommand: {
     ephemeral: true,
     enabled: true,

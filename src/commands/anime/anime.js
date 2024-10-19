@@ -11,6 +11,7 @@ module.exports = {
   enabled: true,
   category: 'ANIME',
   cooldown: 1,
+  global: true,
   slashCommand: {
     enabled: true,
     description: 'Get a random image!',

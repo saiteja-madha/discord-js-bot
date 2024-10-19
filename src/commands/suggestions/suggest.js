@@ -17,6 +17,7 @@ module.exports = {
   description: 'submit a suggestion',
   category: 'SUGGESTION',
   cooldown: 20,
+  global: true,
   slashCommand: {
     enabled: SUGGESTIONS.ENABLED,
     options: [

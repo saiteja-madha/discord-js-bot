@@ -9,6 +9,7 @@ module.exports = {
   description: 'stop the music player',
   category: 'MUSIC',
   validations: musicValidations,
+  global: true,
   slashCommand: {
     enabled: MUSIC.ENABLED,
   },

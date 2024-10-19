@@ -11,6 +11,7 @@ module.exports = {
   description: 'Shows the number of invites in this server',
   category: 'INVITE',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: INVITE.ENABLED,
     options: [

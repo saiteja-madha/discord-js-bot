@@ -24,12 +24,12 @@ async function sendOnboardingMenu(channel) {
 
   const row = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
-      .setCustomId('MOCHI_SETUP')
+      .setCustomId('AMINA_SETUP')
       .setLabel('Setup Mina')
       .setStyle(ButtonStyle.Primary)
       .setEmoji('🌸'),
     new ButtonBuilder()
-      .setCustomId('MOCHI_REMIND')
+      .setCustomId('AMINA_REMIND')
       .setLabel('Laterz!')
       .setStyle(ButtonStyle.Secondary)
       .setEmoji('⏰')
@@ -48,7 +48,7 @@ async function sendOnboardingMenu(channel) {
  */
 async function handleSetupButton(interaction) {
   const modal = new ModalBuilder()
-    .setCustomId('MOCHI_SETUP_MODAL')
+    .setCustomId('AMINA_SETUP_MODAL')
     .setTitle('Mina Setup ♡')
 
   const updatesChannelInput = new TextInputBuilder()
@@ -169,7 +169,7 @@ async function handleSetupModal(interaction) {
  */
 async function handleRemindButton(interaction) {
   const modal = new ModalBuilder()
-    .setCustomId('MOCHI_REMIND_MODAL')
+    .setCustomId('AMINA_REMIND_MODAL')
     .setTitle('Set a Reminder ⏰')
 
   const reminderTimeInput = new TextInputBuilder()

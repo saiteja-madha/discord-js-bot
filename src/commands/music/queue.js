@@ -9,6 +9,7 @@ module.exports = {
   description: 'displays the current music queue',
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [

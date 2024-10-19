@@ -4,24 +4,40 @@ const {
 } = require('discord.js')
 const { EmbedBuilder } = require('discord.js')
 const { EMBED_COLORS } = require('@root/config')
-const { setDevCommands } = require('@schemas/Dev')
+const { setDevCommands, setGlobalCommands } = require('@schemas/Dev')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: 'zzz',
-  description: 'Toggle dev commands on/off',
+  description: 'Toggle dev and global commands',
   category: 'DEV',
   botPermissions: ['EmbedLinks'],
-  testGuildOnly: true, // This ensures the command is always loaded in the test guild
+  testGuildOnly: true,
   slashCommand: {
     enabled: true,
     ephemeral: true,
     options: [
       {
+        name: 'type',
+        description: 'Type of commands to toggle',
+        type: ApplicationCommandOptionType.String,
+        required: true,
+        choices: [
+          {
+            name: 'Dev Commands',
+            value: 'dev',
+          },
+          {
+            name: 'Global Commands',
+            value: 'global',
+          },
+        ],
+      },
+      {
         name: 'enabled',
-        description: 'Enable or disable dev commands',
+        description: 'Enable or disable commands',
         type: ApplicationCommandOptionType.Boolean,
         required: true,
       },
@@ -31,17 +47,29 @@ module.exports = {
   async interactionRun(interaction) {
     const { client } = interaction
 
+    const type = interaction.options.getString('type')
     const enabled = interaction.options.getBoolean('enabled')
 
-    // Update database state
-    await setDevCommands(enabled)
+    // Update database state based on type
+    if (type === 'dev') {
+      await setDevCommands(enabled)
+    } else {
+      await setGlobalCommands(enabled)
+    }
 
     // Register/Unregister commands in test guild
     const testGuild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
     if (testGuild) {
       try {
         const commandsToSet = client.slashCommands
-          .filter(cmd => cmd.testGuildOnly || (cmd.devOnly && enabled))
+          .filter(cmd => {
+            if (type === 'dev') {
+              return cmd.testGuildOnly || (cmd.devOnly && enabled)
+            } else {
+              // For global commands, only include non-dev, non-test commands when enabled
+              return !cmd.testGuildOnly && !cmd.devOnly && enabled
+            }
+          })
           .map(cmd => ({
             name: cmd.name,
             description: cmd.description,
@@ -49,23 +77,26 @@ module.exports = {
             options: cmd.slashCommand.options,
           }))
 
-        await testGuild.commands.set(commandsToSet)
+        if (type === 'dev') {
+          await testGuild.commands.set(commandsToSet)
+        } else {
+          // For global commands, update application commands
+          await client.application.commands.set(enabled ? commandsToSet : [])
+        }
 
         client.logger.success(
-          `Updated test guild commands. ${
-            enabled ? 'Enabled' : 'Disabled'
-          } dev commands.`
+          `Updated ${type} commands. ${enabled ? 'Enabled' : 'Disabled'} ${type} commands.`
         )
       } catch (error) {
         client.logger.error(
-          `Failed to update test guild commands: ${error.message}`
+          `Failed to update ${type} commands: ${error.message}`
         )
         return interaction.followUp({
           embeds: [
             new EmbedBuilder()
               .setColor(EMBED_COLORS.ERROR)
               .setDescription(
-                'Failed to update test guild commands. Check bot logs for details.'
+                `Failed to update ${type} commands. Check bot logs for details.`
               ),
           ],
         })
@@ -75,8 +106,9 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.SUCCESS)
       .setDescription(
-        `✅ Dev commands are now ${enabled ? 'enabled' : 'disabled'}!\n` +
-          `Current state: \`${enabled ? 'ENABLED' : 'DISABLED'}\``
+        `✅ ${type === 'dev' ? 'Dev' : 'Global'} commands are now ${
+          enabled ? 'enabled' : 'disabled'
+        }!\n` + `Current state: \`${enabled ? 'ENABLED' : 'DISABLED'}\``
       )
 
     return interaction.followUp({ embeds: [embed] })

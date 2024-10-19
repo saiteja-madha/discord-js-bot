@@ -99,6 +99,7 @@
     "@helpers": "src/helpers/",
     "@schemas": "src/database/schemas/",
     "@src": "src/",
-    "@structures": "src/structures/"
+    "@structures": "src/structures/",
+    "@commands": "src/commands/"
   }
 }

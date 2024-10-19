@@ -15,6 +15,7 @@ module.exports = {
   category: 'DEV',
   botPermissions: ['EmbedLinks'],
   testGuildOnly: true,
+  global: true,
   slashCommand: {
     enabled: true,
     ephemeral: true,

@@ -9,6 +9,7 @@ module.exports = {
   description: 'Set up a farewell message for your server!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: true,
     ephemeral: true,

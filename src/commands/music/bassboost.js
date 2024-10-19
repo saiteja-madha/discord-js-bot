@@ -17,6 +17,7 @@ module.exports = {
   description: 'set bassboost level',
   category: 'MUSIC',
   validations: musicValidations,
+  global: true,
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [

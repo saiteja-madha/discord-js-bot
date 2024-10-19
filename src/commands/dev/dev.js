@@ -9,7 +9,6 @@ const {
 const { EMBED_COLORS, DEV } = require('@root/config')
 const { BotClient } = require('@src/structures')
 const { getSettings } = require('@schemas/Guild')
-const { showUpdateModal, handleUpdateModal } = require('@handlers/updates')
 const { addQuestion, deleteQuestion } = require('@schemas/TruthOrDare')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
@@ -103,11 +102,6 @@ module.exports = {
             required: true,
           },
         ],
-      },
-      {
-        name: 'update',
-        description: 'Send an update to all servers',
-        type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'exec',
@@ -391,17 +385,6 @@ module.exports = {
             .setColor('Green'),
         ],
       })
-    }
-
-    // Subcommand: update
-    if (sub === 'update') {
-      return showUpdateModal(interaction)
-    }
-  },
-
-  async modalRun(interaction) {
-    if (interaction.customId === 'MOCHI_UPDATE_MODAL') {
-      await handleUpdateModal(interaction, interaction.client)
     }
   },
 }

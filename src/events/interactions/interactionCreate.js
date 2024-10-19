@@ -50,19 +50,14 @@ module.exports = async (client, interaction) => {
     switch (interaction.customId) {
       case 'TICKET_CREATE':
         return ticketHandler.handleTicketOpen(interaction)
-
       case 'TICKET_CLOSE':
         return ticketHandler.handleTicketClose(interaction)
-
       case 'SUGGEST_APPROVE':
         return suggestionHandler.handleApproveBtn(interaction)
-
       case 'SUGGEST_REJECT':
         return suggestionHandler.handleRejectBtn(interaction)
-
       case 'SUGGEST_DELETE':
         return suggestionHandler.handleDeleteBtn(interaction)
-
       case 'truthBtn':
         return todHandler.handleTodButtonClick(interaction)
 
@@ -71,11 +66,9 @@ module.exports = async (client, interaction) => {
 
       case 'randomBtn':
         return todHandler.handleTodButtonClick(interaction)
-
-      case 'MOCHI_SETUP':
+      case 'AMINA_SETUP':
         return handleSetupButton(interaction)
-
-      case 'MOCHI_REMIND':
+      case 'AMINA_REMIND':
         return handleRemindButton(interaction)
     }
   }
@@ -85,22 +78,20 @@ module.exports = async (client, interaction) => {
     switch (interaction.customId) {
       case 'SUGGEST_APPROVE_MODAL':
         return suggestionHandler.handleApproveModal(interaction)
-
       case 'SUGGEST_REJECT_MODAL':
         return suggestionHandler.handleRejectModal(interaction)
-
       case 'SUGGEST_DELETE_MODAL':
         return suggestionHandler.handleDeleteModal(interaction)
-
-      case 'MOCHI_SETUP_MODAL':
+      case 'AMINA_SETUP_MODAL':
         return handleSetupModal(interaction)
-
-      case 'MOCHI_REMIND_MODAL':
+      case 'AMINA_REMIND_MODAL':
         return handleRemindModal(interaction)
-
       default:
         if (interaction.customId.startsWith('report_modal_')) {
           return reportHandler.handleReportModal(interaction)
+        }
+        if (interaction.customId.startsWith('update_modal')) {
+          return handleUpdateModal(interaction)
         }
     }
   }

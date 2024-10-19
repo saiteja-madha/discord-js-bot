@@ -19,6 +19,7 @@ module.exports = {
   description: 'configure suggestion system',
   category: 'SUGGESTION',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: SUGGESTIONS.ENABLED,
     ephemeral: true,

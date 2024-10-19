@@ -23,6 +23,7 @@ module.exports = {
   description: 'Anime reactions.',
   enabled: true,
   category: 'ANIME',
+  global: true,
   slashCommand: {
     enabled: true,
     description: 'Send an anime reaction.',

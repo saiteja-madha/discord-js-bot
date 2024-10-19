@@ -15,6 +15,7 @@ module.exports = {
   description: 'prompt for ChatGPT',
   category: 'FUN',
   cooldown: 5,
+  global: true,
   slashCommand: {
     enabled: AICHAT.ENABLED,
     options: [

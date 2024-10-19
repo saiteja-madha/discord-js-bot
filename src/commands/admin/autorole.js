@@ -8,6 +8,7 @@ module.exports = {
   description: 'Set up a role to be given when a member joins the server!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: true,
     ephemeral: true,

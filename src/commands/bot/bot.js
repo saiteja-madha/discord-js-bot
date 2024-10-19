@@ -17,6 +17,7 @@ module.exports = {
   description: 'bot related commands',
   category: 'INFO',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: true,
     options: [

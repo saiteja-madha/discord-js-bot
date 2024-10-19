@@ -11,6 +11,7 @@ module.exports = {
   category: 'INVITE',
   botPermissions: ['ManageGuild'],
   userPermissions: ['ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: INVITE.ENABLED,
     options: [

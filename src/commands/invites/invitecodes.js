@@ -9,6 +9,7 @@ module.exports = {
   description: 'List all your invite codes in this guild',
   category: 'INVITE',
   botPermissions: ['EmbedLinks', 'ManageGuild'],
+  global: true,
   slashCommand: {
     enabled: INVITE.ENABLED,
     options: [

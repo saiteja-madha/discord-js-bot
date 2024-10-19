@@ -22,6 +22,7 @@ module.exports = {
   description: 'search for matching songs on youtube',
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
+  global: true,
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [
