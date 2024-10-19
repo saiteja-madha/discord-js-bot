@@ -4,12 +4,20 @@ const FixedSizeMap = require('fixedsize-map')
 
 const cache = new FixedSizeMap(CACHE_SIZE.USERS)
 
+const FlagSchema = new mongoose.Schema({
+  reason: { type: String, required: true },
+  flaggedBy: { type: String, required: true },
+  flaggedAt: { type: Date, default: Date.now },
+  serverId: { type: String, required: true },
+  serverName: { type: String, required: true },
+})
+
 const Schema = new mongoose.Schema(
   {
     _id: String,
     username: String,
     discriminator: String,
-    logged: Boolean,
+    logged: { type: Boolean, default: false },
     coins: { type: Number, default: 0 },
     bank: { type: Number, default: 0 },
     reputation: {
@@ -21,6 +29,7 @@ const Schema = new mongoose.Schema(
       streak: { type: Number, default: 0 },
       timestamp: Date,
     },
+    flags: { type: [FlagSchema], default: [] },
   },
   {
     timestamps: {
@@ -33,9 +42,6 @@ const Schema = new mongoose.Schema(
 const Model = mongoose.model('user', Schema)
 
 module.exports = {
-  /**
-   * @param {import('discord.js').User} user
-   */
   getUser: async user => {
     if (!user) throw new Error('User is required.')
     if (!user.id) throw new Error('User Id is required.')
@@ -45,28 +51,57 @@ module.exports = {
 
     let userDb = await Model.findById(user.id)
     if (!userDb) {
-      userDb = new Model({
+      // Create new user in database if they don't exist
+      userDb = await Model.create({
         _id: user.id,
         username: user.username,
         discriminator: user.discriminator,
+        flags: [],
       })
-    }
-
-    // Temporary fix for users who where added to DB before v5.0.0
-    // Update username and discriminator in previous DB
-    else if (!userDb.username || !userDb.discriminator) {
-      userDb.username = user.username
-      userDb.discriminator = user.discriminator
     }
 
     cache.add(user.id, userDb)
     return userDb
   },
 
-  getReputationLb: async (limit = 10) => {
-    return Model.find({ 'reputation.received': { $gt: 0 } })
-      .sort({ 'reputation.received': -1, 'reputation.given': 1 })
-      .limit(limit)
-      .lean()
+  addFlag: async (userId, reason, flaggedBy, serverId, serverName) => {
+    const newFlag = {
+      reason,
+      flaggedBy,
+      flaggedAt: new Date(),
+      serverId,
+      serverName,
+    }
+
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      { $push: { flags: newFlag } },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
+
+  removeFlag: async (userId, flaggedBy) => {
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      { $pull: { flags: { flaggedBy } } },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
+
+  removeAllFlags: async userId => {
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      { $set: { flags: [] } },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
   },
 }
