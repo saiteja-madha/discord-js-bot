@@ -8,14 +8,9 @@ const {
   ticketHandler,
   todHandler,
   reportHandler,
+  openAIHandler,
+  guildHandler,
 } = require('@src/handlers')
-const {
-  handleSetupButton,
-  handleSetupModal,
-  handleRemindButton,
-  handleRemindModal,
-} = require('@handlers/guild')
-
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').BaseInteraction} interaction
@@ -67,9 +62,9 @@ module.exports = async (client, interaction) => {
       case 'randomBtn':
         return todHandler.handleTodButtonClick(interaction)
       case 'AMINA_SETUP':
-        return handleSetupButton(interaction)
+        return guildHandler.handleSetupButton(interaction)
       case 'AMINA_REMIND':
-        return handleRemindButton(interaction)
+        return guildHandler.handleRemindButton(interaction)
     }
   }
 
@@ -83,9 +78,11 @@ module.exports = async (client, interaction) => {
       case 'SUGGEST_DELETE_MODAL':
         return suggestionHandler.handleDeleteModal(interaction)
       case 'AMINA_SETUP_MODAL':
-        return handleSetupModal(interaction)
+        return guildHandler.handleSetupModal(interaction)
       case 'AMINA_REMIND_MODAL':
-        return handleRemindModal(interaction)
+        return guildHandler.handleRemindModal(interaction)
+      case 'openai_setup_modal':
+        return openAIHandler.handleOpenAISetupModal(interaction)
       default:
         if (interaction.customId.startsWith('report_modal_')) {
           return reportHandler.handleReportModal(interaction)

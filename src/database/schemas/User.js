@@ -34,6 +34,12 @@ const Schema = new mongoose.Schema(
       enabled: { type: Boolean, default: false },
       expiresAt: { type: Date, default: null },
     },
+    openai: {
+      apiKey: { type: String, default: null },
+      temperature: { type: Number, default: 0.7 },
+      imagine: { type: String, default: 'You are a helpful assistant.' },
+      maxTokens: { type: Number, default: 150 },
+    },
   },
   {
     timestamps: {
@@ -118,6 +124,17 @@ module.exports = {
           'premium.expiresAt': expiresAt,
         },
       },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
+
+  updateOpenAISettings: async (userId, settings) => {
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      { $set: { openai: settings } },
       { new: true }
     )
 
