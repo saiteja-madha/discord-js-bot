@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+	<%- include('../includes/head') %>
+	
+	<body class="hold-transition skin-blue sidebar-mini">
+
+		<div class="wrapper">
+
+			<!-- The header is the topbar -->
+			<%- include('../includes/header') %>
+
+			<!-- The sidebar includes the menu -->
+			<%- include('../includes/sidebar') %>
+
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h3> Automod </h3>
+					<ol class="breadcrumb">
+                        <li><a href="/"><i class="fa fa-home"></i>Selector</a></li>
+                        <li><a href="<%=`/manage/${guild.id}/`%>"><%=guild.name%></a></li>
+                        <li class="active">Automod</li>
+					</ol>
+				</section>
+
+                <!-- Content -->
+				<section class="content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- AUTOMOD CONFIGURATION -->
+                            <div class="box box-warning">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Automod Settings</h3>
+                                </div>
+                                <form role="form" action="/manage/<%= guild.id %>/automod" method="POST">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Max Strikes</label>
+                                            <input type="number" name="max_strikes" class="form-control" value="<%= guild.automod.strikes %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Action</label>
+                                            <select class="form-control" name="automod_action">
+                                                <option value="TIMEOUT" <%= guild.automod.action === 'TIMEOUT' ? 'selected' : '' %>>Timeout</option>
+                                                <option value="KICK" <%= guild.automod.action === 'KICK' ? 'selected' : '' %>>Kick</option>
+                                                <option value="BAN" <%= guild.automod.action === 'BAN' ? 'selected' : '' %>>Ban</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max Lines</label>
+                                            <input type="number" name="max_lines" class="form-control" value="<%= guild.automod.max_lines %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Whitelisted Channels</label>
+                                            <select multiple class="form-control" name="wh_channels">
+                                                <% guild.channels.cache.filter(ch => ch.type === 0).forEach((ch) => { %>
+                                                    <option value="<%= ch.id %>" <%= guild.automod.wh_channels.includes(ch.id) ? 'selected' : '' %>>#<%= ch.name %></option>
+                                                <% }); %>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="anti_attachments" <%= guild.automod.anti_attachments ? 'checked' : '' %>> Anti Attachments
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="anti_invites" <%= guild.automod.anti_invites ? 'checked' : '' %>> Anti Invites
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="anti_links" <%= guild.automod.anti_links ? 'checked' : '' %>> Anti Links
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="anti_spam" <%= guild.automod.anti_spam ? 'checked' : '' %>> Anti Spam
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="anti_ghostping" <%= guild.automod.anti_ghostping ? 'checked' : '' %>> Anti Ghostping
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Anti Massmention (max mentions)</label>
+                                            <input type="number" name="anti_massmention" class="form-control" value="<%= guild.automod.anti_massmention %>">
+                                        </div>
+                                    </div>
+                                    <div class="box-footer">
+                                        <button type="submit" name="automodUpdate" class="btn btn-primary">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- AUTOMOD DEBUG CONFIGURATION -->
+                            <div class="box box-info">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Automod Debug</h3>
+                                </div>
+                                <form role="form" action="/manage/<%= guild.id %>/automod" method="POST">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="debug" <%= guild.automod.debug ? 'checked' : '' %>> Enable Debug Mode
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-footer">
+                                        <button type="submit" name="automodDebugUpdate" class="btn btn-primary">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+				</section>
+				
+			</div>
+            <!-- /.content-wrapper -->
+
+            <%- include('../includes/footer') %>
+		</div>
+		<!-- ./wrapper -->
+        
+	</body>
+</html>

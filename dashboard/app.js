@@ -16,7 +16,7 @@ module.exports.launch = async client => {
   const mainRouter = require('./routes/index'),
     discordAPIRouter = require('./routes/discord'),
     logoutRouter = require('./routes/logout'),
-    guildManagerRouter = require('./routes/guild-manager')
+    guildManagerRouter = require('./routes/guild')
 
   client.states = {}
   client.config = config
