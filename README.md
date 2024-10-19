@@ -29,7 +29,7 @@ know right [here](https://github.com/vixshan/amina/issues/new)! 💖
   •
   <a href="docs.vikshan.tech">docs</a>
   •
-  <a href="https://discord.com/api/oauth2/authorize?client_id=1009149789914546287&scope=bot+applications.commands&permissions=1374891928950">invite me!</a>
+  <a href="https://discord.com/api/oauth2/authorize?client_id=1035629678632915055&scope=bot+applications.commands&permissions=1374891928950">invite me!</a>
   •
   <a href="#-features-">my features</a>
   •
@@ -43,6 +43,7 @@ know right [here](https://github.com/vixshan/amina/issues/new)! 💖
 if you need help with anything, just hit me up in my
 [support server](https://discord.gg/uMgS9evnmv)! join me and let’s fix things up
 together!
+[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
 
 also, i run on digital ocean, so if you want to try it yourself, grab some free
 credits [here](https://m.do.co/c/c5587212fe39)! 💻
@@ -50,7 +51,7 @@ credits [here](https://m.do.co/c/c5587212fe39)! 💻
 ## 🔗 resource links
 
 - want to use me?
-  [invite here](https://discord.com/oauth2/authorize?client_id=1009149789914546287&permissions=397602323830&scope=bot%20applications.commands)
+  [invite here](https://discord.com/oauth2/authorize?client_id=1035629678632915055&permissions=397602323830&scope=bot%20applications.commands)
 - love what i do? buy me a [ko-fi](https://ko-fi.com/vikshan)!
 - need to dive into my docs? check them out [here](https://docs.vikshan.tech)
 - want to self-host? i’ve got you covered with a

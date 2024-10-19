@@ -10,7 +10,7 @@
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fvixshan%2Fmochi)
 [![Run on Repl.it](https://repl.it/badge/github/vixshan/Amina)](https://replit.com/@vikshan/Amina) [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/vixshan/Amina)
 
-* 🤖 Amina: [Invite Here](https://discord.com/oauth2/authorize?client\_id=1009149789914546287\&permissions=397602323830\&scope=bot%20applications.commands)
+* 🤖 Amina: [Invite Here](https://discord.com/oauth2/authorize?client\_id=1035629678632915055\&permissions=397602323830\&scope=bot%20applications.commands)
 * ❤️ Buy me a coffee: [Ko-Fi](https://ko-fi.com/vikshan/tiers)
 * 🤝 Support Server: [Join Here](https://discord.gg/uMgS9evnmv)
 * 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
