@@ -30,6 +30,10 @@ const Schema = new mongoose.Schema(
       timestamp: Date,
     },
     flags: { type: [FlagSchema], default: [] },
+    premium: {
+      enabled: { type: Boolean, default: false },
+      expiresAt: { type: Date, default: null },
+    },
   },
   {
     timestamps: {
@@ -98,6 +102,22 @@ module.exports = {
     const user = await Model.findByIdAndUpdate(
       userId,
       { $set: { flags: [] } },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
+
+  updatePremium: async (userId, enabled, expiresAt) => {
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'premium.enabled': enabled,
+          'premium.expiresAt': expiresAt,
+        },
+      },
       { new: true }
     )
 

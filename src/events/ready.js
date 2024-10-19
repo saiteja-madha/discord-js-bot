@@ -7,6 +7,7 @@ const { cacheReactionRoles } = require('@schemas/ReactionRoles')
 const { getSettings } = require('@schemas/Guild')
 const { getPresenceConfig, getDevCommandsConfig } = require('@schemas/Dev')
 const { ApplicationCommandType } = require('discord.js')
+
 /**
  * @param {import('@src/structures').BotClient} client
  */
@@ -60,10 +61,11 @@ module.exports = async client => {
   if (client.config.INTERACTIONS.SLASH || client.config.INTERACTIONS.CONTEXT) {
     const devConfig = await getDevCommandsConfig()
 
-    // Register test guild commands if enabled
-    if (devConfig.ENABLED) {
+    // Register test guild commands
+    const testGuild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
+    if (testGuild) {
       const testGuildCommands = client.slashCommands
-        .filter(cmd => cmd.testGuildOnly)
+        .filter(cmd => cmd.testGuildOnly || (cmd.devOnly && devConfig.ENABLED))
         .map(cmd => ({
           name: cmd.name,
           description: cmd.description,
@@ -72,46 +74,30 @@ module.exports = async client => {
         }))
 
       if (testGuildCommands.length > 0) {
-        const testGuild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
-        if (testGuild) {
-          await testGuild.commands.set([
-            ...testGuild.commands.cache
-              .filter(
-                cmd =>
-                  !client.slashCommands.find(
-                    c => c.testGuildOnly && c.name === cmd.name
-                  )
-              )
-              .map(cmd => ({
-                name: cmd.name,
-                description: cmd.description,
-                options: cmd.options,
-                type: cmd.type,
-              })),
-            ...testGuildCommands,
-          ])
-          client.logger.success(
-            `Registered ${testGuildCommands.length} test guild commands`
-          )
-        }
+        await testGuild.commands.set(testGuildCommands)
+        client.logger.success(
+          `Registered ${testGuildCommands.length} test guild commands`
+        )
       }
     }
 
     // Register global commands
-    const globalCommands = client.slashCommands
-      .filter(cmd => !cmd.testGuildOnly)
-      .map(cmd => ({
-        name: cmd.name,
-        description: cmd.description,
-        type: ApplicationCommandType.ChatInput,
-        options: cmd.slashCommand.options,
-      }))
+    if (client.config.INTERACTIONS.GLOBAL) {
+      const globalCommands = client.slashCommands
+        .filter(cmd => !cmd.testGuildOnly && !cmd.devOnly)
+        .map(cmd => ({
+          name: cmd.name,
+          description: cmd.description,
+          type: ApplicationCommandType.ChatInput,
+          options: cmd.slashCommand.options,
+        }))
 
-    if (globalCommands.length > 0 && client.config.INTERACTIONS.GLOBAL) {
-      await client.application.commands.set(globalCommands)
-      client.logger.success(
-        `Registered ${globalCommands.length} global commands`
-      )
+      if (globalCommands.length > 0) {
+        await client.application.commands.set(globalCommands)
+        client.logger.success(
+          `Registered ${globalCommands.length} global commands`
+        )
+      }
     }
   }
 

@@ -105,7 +105,7 @@ module.exports = async (client, guild) => {
         )
         .addFields({
           name: '🤗 Need Help?',
-          value: `Don't be shy! Join our [support server](${process.env.SUPPORT_SERVER}) - Rick, Aishan and me hang out there too!`,
+          value: `Don't be shy! Join our [support server](${process.env.SUPPORT_SERVER}) - Rick, Aisha and me hang out there too!`,
         })
         .setFooter({
           text: 'Made with ❤️ and a sprinkle of chaos',

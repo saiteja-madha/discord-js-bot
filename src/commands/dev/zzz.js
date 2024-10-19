@@ -1,7 +1,10 @@
-const { ApplicationCommandOptionType } = require('discord.js')
+const {
+  ApplicationCommandOptionType,
+  ApplicationCommandType,
+} = require('discord.js')
 const { EmbedBuilder } = require('discord.js')
 const { EMBED_COLORS } = require('@root/config')
-const { Model } = require('@schemas/Dev')
+const { setDevCommands } = require('@schemas/Dev')
 
 /**
  * @type {import("@structures/Command")}
@@ -11,13 +14,14 @@ module.exports = {
   description: 'Toggle dev commands on/off',
   category: 'DEV',
   botPermissions: ['EmbedLinks'],
+  testGuildOnly: true, // This ensures the command is always loaded in the test guild
   slashCommand: {
     enabled: true,
     ephemeral: true,
     options: [
       {
         name: 'enabled',
-        description: 'Enable or disable test guild commands',
+        description: 'Enable or disable dev commands',
         type: ApplicationCommandOptionType.Boolean,
         required: true,
       },
@@ -30,62 +34,28 @@ module.exports = {
     const enabled = interaction.options.getBoolean('enabled')
 
     // Update database state
-    const document = await Model.findOne()
-    if (!document) await Model.create({ DEV_COMMANDS: { ENABLED: enabled } })
-    else {
-      document.DEV_COMMANDS.ENABLED = enabled
-      await document.save()
-    }
+    await setDevCommands(enabled)
 
     // Register/Unregister commands in test guild
     const testGuild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
     if (testGuild) {
       try {
-        if (enabled) {
-          // Register test guild commands
-          const testGuildCommands = client.slashCommands
-            .filter(cmd => cmd.testGuildOnly)
-            .map(cmd => ({
-              name: cmd.name,
-              description: cmd.description,
-              type: ApplicationCommandOptionType.ChatInput,
-              options: cmd.slashCommand.options,
-            }))
+        const commandsToSet = client.slashCommands
+          .filter(cmd => cmd.testGuildOnly || (cmd.devOnly && enabled))
+          .map(cmd => ({
+            name: cmd.name,
+            description: cmd.description,
+            type: ApplicationCommandType.ChatInput,
+            options: cmd.slashCommand.options,
+          }))
 
-          await testGuild.commands.set([
-            ...testGuild.commands.cache
-              .filter(
-                cmd =>
-                  !client.slashCommands.find(
-                    c => c.testGuildOnly && c.name === cmd.name
-                  )
-              )
-              .map(cmd => ({
-                name: cmd.name,
-                description: cmd.description,
-                options: cmd.options,
-                type: cmd.type,
-              })),
-            ...testGuildCommands,
-          ])
-        } else {
-          // Remove test guild commands
-          const commandsToKeep = testGuild.commands.cache
-            .filter(
-              cmd =>
-                !client.slashCommands.find(
-                  c => c.testGuildOnly && c.name === cmd.name
-                )
-            )
-            .map(cmd => ({
-              name: cmd.name,
-              description: cmd.description,
-              options: cmd.options,
-              type: cmd.type,
-            }))
+        await testGuild.commands.set(commandsToSet)
 
-          await testGuild.commands.set(commandsToKeep)
-        }
+        client.logger.success(
+          `Updated test guild commands. ${
+            enabled ? 'Enabled' : 'Disabled'
+          } dev commands.`
+        )
       } catch (error) {
         client.logger.error(
           `Failed to update test guild commands: ${error.message}`
@@ -105,11 +75,10 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.SUCCESS)
       .setDescription(
-        `✅ Test guild commands are now ${enabled ? 'enabled' : 'disabled'}!\n` +
+        `✅ Dev commands are now ${enabled ? 'enabled' : 'disabled'}!\n` +
           `Current state: \`${enabled ? 'ENABLED' : 'DISABLED'}\``
       )
 
     return interaction.followUp({ embeds: [embed] })
   },
 }
-

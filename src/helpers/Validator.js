@@ -150,7 +150,6 @@ module.exports = class Validator {
       }
     }
 
-
     // Validate Slash Command Details
     if (cmd.slashCommand) {
       if (typeof cmd.slashCommand !== 'object') {
