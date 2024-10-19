@@ -90,9 +90,6 @@ module.exports = async (client, interaction) => {
         if (interaction.customId.startsWith('report_modal_')) {
           return reportHandler.handleReportModal(interaction)
         }
-        if (interaction.customId.startsWith('update_modal')) {
-          return handleUpdateModal(interaction)
-        }
     }
   }
 

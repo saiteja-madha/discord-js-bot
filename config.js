@@ -43,15 +43,7 @@ module.exports = {
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
 
-  AICHAT: {
-    ENABLED: false,
-    MODEL: 'gpt-3.5-turbo', //Model Of AI to use
-    TOKENS: 300, //The maximum number of tokens to generate in the completion.
-    PRESENCE_PENALTY: 1.5, // Positive values penalize new tokens
-    TEMPERATURE: 0.4, // What sampling temperature to use
-    IMAGINEMESSAGE:
-      'Imagine you are Mochi, a playful and energetic kawaii girl. 💖✨',
-  },
+
 
   MUSIC: {
     ENABLED: true,
