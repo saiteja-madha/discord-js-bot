@@ -21,27 +21,29 @@ async function initializeBot() {
     // check for updates
     await checkForUpdates()
 
-    // Initialize database first
-    if (client.config.DASHBOARD.enabled) {
-      client.logger.log('Launching dashboard')
-      try {
-        const { launch } = require('@root/dashboard/app')
-        await launch(client)
-      } catch (ex) {
-        client.logger.error('Failed to launch dashboard', ex)
-        process.exit(1)
-      }
-    } else {
-      await initializeMongoose()
-    }
+    // Initialize mongoose first
+    await initializeMongoose()
 
-    // Now load commands after database is initialized
+    // Load commands and events
     await client.loadCommands('src/commands')
     client.loadContexts('src/contexts')
     client.loadEvents('src/events')
 
     // start the client
     await client.login(process.env.BOT_TOKEN)
+
+    // Initialize dashboard last, after bot is ready
+    if (client.config.DASHBOARD.enabled) {
+      client.logger.log('Launching dashboard...')
+      try {
+        const { startServer } = await import('./dashboard/server.mjs')
+        await startServer(client, client.config)
+      } catch (ex) {
+        client.logger.error('Failed to launch dashboard:', ex)
+        // Don't exit process on dashboard failure
+        client.logger.warn('Continuing bot operation without dashboard')
+      }
+    }
 
     return client
   } catch (error) {
@@ -50,13 +52,20 @@ async function initializeBot() {
   }
 }
 
-// find unhandled promise rejections
+// Error handling
 process.on('unhandledRejection', err => {
   console.error('Unhandled Rejection:', err)
 })
 
 process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err)
+})
+
+// Heroku specific handlers
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received. Performing graceful shutdown...')
+  // Implement any cleanup needed
+  process.exit(0)
 })
 
 // Initialize the bot

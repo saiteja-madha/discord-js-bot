@@ -132,7 +132,7 @@ sudo systemctl reload apache2
 
 ## 3. **Setting up our Discord application redirect** <a href="#heading-7" id="heading-7"></a>
 
-Go to [Discord Dev](https://discord.com/developers/applications) and go to your application **-**> Oauth2 -> General.
+Go to [Discord Dev](https://facebook.com/developers/applications) and go to your application **-**> Oauth2 -> General.
 
 Add 2 Redirects to your dashboard.
 

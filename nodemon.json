@@ -1,0 +1,5 @@
+{
+  "ignore": ["dashboard/*"],
+  "watch": ["src", "bot.js"],
+  "ext": "js,json"
+}

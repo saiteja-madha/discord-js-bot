@@ -3,7 +3,7 @@
 ## Dashboard Setup
 
 * In the `config.js`, make sure you set dashboard enabled to **true**
-* Add your base URL and `http://localhost:8080/api/callback` in your application OAuth2 redirects page in the [discord developer portal](https://discord.com/developers/applications)
+* Add your base URL and `http://localhost:8080/api/callback` in your application OAuth2 redirects page in the [facebook developer portal](https://facebook.com/developers/applications)
 
 ```js
   DASHBOARD: {

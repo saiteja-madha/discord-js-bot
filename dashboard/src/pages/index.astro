@@ -1,0 +1,140 @@
+---
+// Import the necessary components
+import MainLayout from "@/layouts/MainLayout.astro";
+import HeroSection from "@components/sections/landing/HeroSection.astro";
+import HeroSectionAlt from "@components/sections/landing/HeroSectionAlt.astro";
+import ClientsSection from "@components/sections/landing/ClientsSection.astro";
+import FeaturesGeneral from "@components/sections/features/FeaturesGeneral.astro";
+import FeaturesNavs from "@components/sections/features/FeaturesNavs.astro";
+import TestimonialsSection from "@components/sections/testimonials/TestimonialsSection.astro";
+import PricingSection from "@components/sections/pricing/PricingSection.astro";
+import FAQ from "@components/sections/misc/FAQ.astro";
+import AnnouncementBanner from "@components/ui/banners/AnnouncementBanner.astro";
+import heroImage from "@images/hero-image.avif";
+import faqs from "@data/faqs.json";
+import features from "@data/features.json";
+import featureImage from "@images/features-image.avif";
+import construction from "@images/construction-image.avif";
+import tools from "@images/automated-tools.avif";
+import dashboard from "@images/dashboard-image.avif";
+
+const avatarSrcs: Array<string> = [
+  "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80",
+  "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80",
+  "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&&auto=format&fit=facearea&facepad=3&w=300&h=300&q=80",
+  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80",
+];
+---
+
+<MainLayout>
+  <AnnouncementBanner
+    btnId="facebook-invite"
+    btnTitle="Add Amina to Your Server"
+    url="https://discord.com/oauth2/authorize?client_id=1035629678632915055"
+  />
+
+  <HeroSection
+    title=`Energize Your Discord with <span
+        class="text-pink-500 dark:text-pink-400">Amina</span>`
+    subTitle="A vibrant, multifaceted Discord bot bringing creativity, fun, and powerful moderation to your server."
+    primaryBtn="Get Started"
+    primaryBtnURL="/setup"
+    secondaryBtn="View Commands"
+    secondaryBtnURL="/commands"
+    withReview={true}
+    avatars={avatarSrcs}
+    rating=`<span class="font-bold">4.9</span> / 5`
+    starCount={5}
+    reviews=`From Over <span class="font-bold">10k</span> Servers`
+    src={heroImage}
+    alt="Animated representation of Amina bot interacting with Discord users"
+  />
+
+  <ClientsSection
+    title="Powering Communities Everywhere"
+    subTitle="Join the diverse range of servers that trust Amina."
+  />
+
+  <FeaturesGeneral
+    title="Bringing Your Server to Life"
+    subTitle="Amina tackles the unique challenges of community management with a blend of enthusiasm and powerful features. From creative engagement to robust moderation, we're dedicated to making your Discord server thrive."
+    src={featureImage}
+    alt="Amina's feature set displayed in a colorful, dynamic interface"
+    features={features}
+  />
+
+  <FeaturesNavs
+    title=`Customize <span class="text-pink-500 dark:text-pink-400">Amina</span>'s capabilities to perfectly suit your community's needs.`
+    tabs={[
+      {
+        heading: "Vigilant Moderation",
+        content:
+          "Keep your server safe and welcoming with Amina's intelligent moderation tools. Our bot combines automated vigilance with customizable rules to create a positive environment for all members.",
+        svg: "shield",
+        src: construction,
+        alt: "Visual representation of Amina's moderation features",
+        first: true,
+      },
+      {
+        heading: "Creative Spark",
+        content:
+          "Ignite engagement with Amina's creative features. From generating art prompts to hosting impromptu music sessions, Amina brings a touch of whimsy and inspiration to every interaction.",
+        svg: "sparkles",
+        src: tools,
+        alt: "Colorful display of Amina's creative outputs",
+        second: true,
+      },
+      {
+        heading: "Community Engagement",
+        content:
+          "Foster a vibrant community with Amina's engagement tools. Interactive games, polls, and custom events keep your members connected and your server buzzing with activity.",
+        svg: "users",
+        src: dashboard,
+        alt: "Illustration of Amina facilitating community interactions",
+      },
+    ]}
+  />
+
+  <TestimonialsSection
+    title="Transforming Discord Communities"
+    subTitle="Experience the Amina difference with instant setup and round-the-clock support. See how we're redefining community management."
+    testimonials={[
+      {
+        content:
+          "Amina has revolutionized our server! The creative events and robust moderation tools have helped us build a thriving community. It's like having an enthusiastic, super-powered team member!",
+        author: "Alex Chen",
+        role: "Admin | GamersUnite Discord",
+        avatarSrc:
+          "https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?q=80&w=1453&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
+      },
+    ]}
+    statistics={[
+      {
+        count: "50k+",
+        description:
+          "active servers — from small friend groups to large communities",
+      },
+      {
+        count: "40%",
+        description:
+          "increase in member engagement reported by Amina-powered servers",
+      },
+      {
+        count: "24/7",
+        description: "round-the-clock moderation and support",
+      },
+      {
+        count: "3x",
+        description: "faster response to moderation issues with Amina's help",
+      },
+    ]}
+  />
+
+  <FAQ title="Frequently<br />asked questions" faqs={faqs} />
+
+  <HeroSectionAlt
+    title="Join the Amina Community"
+    subTitle="Amina is an open-source Discord bot, lovingly crafted with facebook.js. Contribute, customize, and help us grow!"
+    url="https://github.com/vixshan/Amina"
+  />
+</MainLayout>
