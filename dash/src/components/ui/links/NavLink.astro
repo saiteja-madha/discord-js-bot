@@ -27,7 +27,7 @@ If URL is '/' (home page), assign ID as 'home'
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     let url = window.location.pathname;
-    let urlSegments = url.split("/");
+    // Removed unused variable 'urlSegments'
     let navId;
 
     if (url === "/") {

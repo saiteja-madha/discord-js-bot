@@ -15,7 +15,10 @@ export default defineConfig({
   integrations: [
     tailwind(),
     sitemap(),
-    starlight({ title: 'Bot Documentation' }),
+    starlight({
+      title: 'Bot Documentation',
+      // Add any other Starlight configuration here
+    }),
     compressor({ gzip: true, brotli: true }),
   ],
   vite: {
@@ -23,7 +26,7 @@ export default defineConfig({
       cssMinify: true,
       minify: true,
     },
-    optimizeDeps: { include: ['react', 'react-dom'] },
+    // Remove optimizeDeps section as it's causing warnings
   },
 })
 

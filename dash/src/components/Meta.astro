@@ -24,7 +24,6 @@ const {
 const URL = `${Astro.site}`; // Set the website URL in astro.config.mjs
 const author = SITE.author;
 const canonical = Astro.url.href;
-const basePath = Astro.url.pathname;
 const ogTitle = OG.title;
 const ogDescription = OG.description;
 const socialImageRes = await getImage({
@@ -53,7 +52,7 @@ const appleTouchIcon = await getImage({
   structuredData && (
     <script
       type="application/ld+json"
-      set:html={JSON.stringify(structuredData)}
+      type="application/ld+json" is:inline
     />
   )
 }
