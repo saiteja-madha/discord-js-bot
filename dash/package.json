@@ -14,6 +14,12 @@
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/starlight": "^0.28.3",
     "@astrojs/tailwind": "^5.1.2",
+    "@preline/accordion": "^2.5.0",
+    "@preline/collapse": "^2.5.0",
+    "@preline/dropdown": "^2.5.0",
+    "@preline/overlay": "^2.5.0",
+    "@preline/tabs": "^2.5.0",
+    "@tailwindcss/forms": "^0.5.9",
     "astro": "^4.16.3",
     "astro-compressor": "^0.4.1",
     "astro-vtbot": "^1.10.4",
@@ -26,10 +32,7 @@
     "preline": "^2.5.1",
     "sharp": "^0.33.5",
     "sharp-ico": "^0.1.5",
-    "tailwindcss": "^3.4.13",
+    "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
-  },
-  "devDependencies": {
-    "@tailwindcss/forms": "^0.5.9"
   }
 }
