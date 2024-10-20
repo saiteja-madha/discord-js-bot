@@ -1,3 +1,4 @@
+// bot.js
 require('dotenv').config()
 require('module-alias/register')
 
@@ -10,6 +11,8 @@ const { checkForUpdates } = require('@helpers/BotUtils')
 const { initializeMongoose } = require('@src/database/mongoose')
 const { BotClient } = require('@src/structures')
 const { validateConfiguration } = require('@helpers/Validator')
+const express = require('express')
+const path = require('path')
 
 validateConfiguration()
 
@@ -36,8 +39,22 @@ async function initializeBot() {
     if (client.config.DASHBOARD.enabled) {
       client.logger.log('Launching dashboard...')
       try {
-        const { startServer } = await import('./dashboard/server.mjs')
-        await startServer(client, client.config)
+        const app = express()
+        const port = process.env.PORT || client.config.DASHBOARD.port || 8080
+
+        // Serve static files from the Astro build output
+        app.use(express.static(path.join(__dirname, 'dash', 'dist')))
+
+        // For any other routes, serve the index.html
+        app.get('*', (req, res) => {
+          res.sendFile(path.join(__dirname, 'dash', 'dist', 'index.html'))
+        })
+
+        app.listen(port, () => {
+          const baseURL = process.env.BASE_URL || `http://localhost:${port}`
+          client.logger.success(`Dashboard is running on port ${port}`)
+          client.logger.log(`Dashboard URL: ${baseURL}`)
+        })
       } catch (ex) {
         client.logger.error('Failed to launch dashboard:', ex)
         // Don't exit process on dashboard failure
@@ -50,8 +67,8 @@ async function initializeBot() {
     console.error('Failed to initialize bot:', error)
     process.exit(1)
   }
-}
-
+  }
+  
 // Error handling
 process.on('unhandledRejection', err => {
   console.error('Unhandled Rejection:', err)
@@ -73,3 +90,4 @@ initializeBot().catch(error => {
   console.error('Failed to start bot:', error)
   process.exit(1)
 })
+

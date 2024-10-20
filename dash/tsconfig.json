@@ -12,6 +12,8 @@
       "@styles/*": ["src/assets/styles/*"],
       "@utils/*": ["src/utils/*"],
       "@layouts/*": ["src/layouts/*"],
+      "@root/*": ["../*"]
     },
   }
+
 }

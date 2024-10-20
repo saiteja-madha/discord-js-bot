@@ -107,7 +107,7 @@ module.exports = client => {
     components.push(
       new ButtonBuilder()
         .setLabel('Dashboard Link')
-        .setURL(DASHBOARD.baseURL)
+        .setURL(DASHBOARD.BASE_URL)
         .setStyle(ButtonStyle.Link)
     )
   }

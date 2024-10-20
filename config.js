@@ -15,7 +15,7 @@ module.exports = {
     API_ERROR:
       'Oopsie! 🌟 Something went wrong on our end. Please try again later or reach out to our support server! 💖',
   },
-  
+
   // whether or not to enable feedback/report system
   FEEDBACK: {
     ENABLED: true,
@@ -29,10 +29,10 @@ module.exports = {
   },
 
   DASHBOARD: {
-    enabled: true, // enable or disable dashboard
-    baseURL: 'https://mochi.vikshan.tech', // base url
-    failureURL: 'https://docs.vikshan.tech/mochi/', // failure redirect url
-    port: process.env.PORT || '8080', // use Heroku's port or 8080 if run locally
+    enabled: true,
+    baseURL: process.env.BASE_URL || 'http://localhost:8080', // Base URL of the dashboard
+    failureURL: process.env.FAILURE_URL || 'http://localhost:8080', // URL to redirect to on dashboard failure
+    port: process.env.PORT || '8080', // Port to run the dashboard on
   },
 
   ECONOMY: {
@@ -42,8 +42,6 @@ module.exports = {
     MIN_BEG_AMOUNT: 100, // minimum coins to be received when beg command is used
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
   },
-
-
 
   MUSIC: {
     ENABLED: true,
@@ -127,4 +125,5 @@ module.exports = {
     CREATE_EMBED: '#FFB3D9', // Soft pastel pink for ticket creation
     CLOSE_EMBED: '#B2FF6C', // Light green for ticket closure
   },
+
 }
