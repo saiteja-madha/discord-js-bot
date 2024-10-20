@@ -58,6 +58,7 @@
     "openai": "^4.11.1",
     "pino": "^9.0.0",
     "pino-pretty": "^11.3.0",
+    "pm2": "^5.4.2",
     "pretty-ms": "^7.0.1",
     "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
