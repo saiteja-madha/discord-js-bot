@@ -30,5 +30,3 @@ dash/.env.production
 
 # macOS-specific files
 .DS_Store
-dash-legacy/
-dash-legacy/app.js
