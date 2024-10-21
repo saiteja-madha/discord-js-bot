@@ -16,13 +16,13 @@ interface Props {
     aria-label="Informational Banner"
   >
     <div
-      class="rounded-xl bg-neutral-800 bg-[url('/banner-pattern.svg')] bg-cover bg-center bg-no-repeat p-4 text-center shadow-sm dark:bg-neutral-200"
+      class="rounded-xl bg-neutral-800 bg-[url('/banner-pattern.svg')] bg-cover bg-center bg-no-repeat p-4 text-center shadow-lg dark:bg-neutral-200 transform transition-all duration-300 hover:scale-[1.02] hover:rotate-1"
     >
       <div class="flex items-center justify-center">
         <div class="ml-auto">
           {title &&
           <p
-            class="me-2 inline-block font-medium text-neutral-50 dark:text-neutral-700"
+            class="me-2 inline-block font-medium text-neutral-50 dark:text-neutral-700 animate-bounce"
           >
             {title}
           </p>
@@ -48,7 +48,7 @@ interface Props {
         </div>
         <button
           type="button"
-          class="ml-auto inline-flex items-center gap-x-2 rounded-full border border-transparent bg-gray-100 p-2 text-sm font-semibold text-gray-800 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-50 dark:bg-neutral-700 dark:text-neutral-50 dark:hover:bg-neutral-700/80 dark:hover:text-neutral-50 dark:focus:outline-none"
+          class="ml-auto inline-flex items-center gap-x-2 rounded-full border border-transparent bg-gray-100 p-2 text-sm font-semibold text-gray-800 hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-50 dark:bg-neutral-700 dark:text-neutral-50 dark:hover:bg-neutral-700/80 dark:hover:text-neutral-50 dark:focus:outline-none transition-all duration-300 hover:rotate-180"
           id={btnId}
         >
           <span class="sr-only">Dismiss</span>

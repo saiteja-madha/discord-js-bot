@@ -1,0 +1,112 @@
+---
+title: Replit Installation
+description: Learn how to set up and run your Discord bot on Replit, including forking the repository, setting up run commands, and configuring environment variables.
+sidebar:
+  label: Replit Installation
+  order: 3
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Steps,
+  Aside,
+  Tabs,
+  TabItem,
+} from "@astrojs/starlight/components";
+
+Welcome to the Replit Installation guide for your Discord bot. This guide will walk you through the process of setting up and running your bot on Replit.
+
+## Overview
+
+<CardGrid>
+  <Card title="Fork Repository" icon="seti:github">
+    Set up your Replit project.
+    <LinkCard title="Jump to Section" href="#fork-repository" />
+  </Card>
+  <Card title="Run Commands" icon="seti:console">
+    Configure how to start your bot.
+    <LinkCard title="Jump to Section" href="#run-commands" />
+  </Card>
+  <Card title="Environment Variables" icon="seti:config">
+    Set up necessary environment variables.
+    <LinkCard title="Jump to Section" href="#environment-variables" />
+  </Card>
+</CardGrid>
+
+## Fork Repository
+
+<Steps>
+
+1. Fork the repository:
+   - Option A: Fork directly on [Replit](https://replit.com/@vikshan/amina)
+   - Option B: Fork on GitHub, then import to Replit
+     1. Click on the `Import from GitHub` button in Replit
+     2. Paste the URL of your forked repository
+
+</Steps>
+
+## Run Commands
+
+There are two ways to run the bot on Replit:
+
+<Tabs>
+  <TabItem label="Terminal Command">
+    Run the bot by typing one of these commands in the terminal:
+    ```bash
+    node .
+    ```
+    Or
+    ```bash
+    npm run start-replit
+    ```
+  </TabItem>
+  <TabItem label="Start Button">
+    To use the start button:
+    1. While forking the repl, paste one of the above commands in the start command box.
+    2. Or modify the `package.json` file:
+    ```json
+    "start": "node bot.js",
+    ```
+    <Aside type="caution">
+      If you modify `package.json`, use `git update-index --assume-unchanged package.json` to avoid committing this change to GitHub. Always adjust the start script based on your environment if you do commit changes.
+    </Aside>
+  </TabItem>
+</Tabs>
+
+## Environment Variables
+
+<Steps>
+
+1. Go to the `Secrets` tab in your Replit project.
+
+2. Add the environment variables discussed in the [general installation guide](/guides/installation#setting-up-environment-variables).
+
+</Steps>
+
+## Running the Bot 24/7
+
+<Aside type="note">
+  Documentation for running the bot 24/7 on Replit is coming soon.
+</Aside>
+
+## Troubleshooting
+
+If you encounter any issues, please:
+- Open an [issue](https://github.com/vixshan/amina/issue/new/choose) on the GitHub repository
+- Join our [Discord support server](https://discord.gg/uMgS9evnmv) for assistance
+
+## Support
+
+<LinkCard
+  title="Join Our Discord"
+  description="Get help, share your experiences, and connect with other bot users."
+  href="https://discord.gg/uMgS9evnmv"
+/>
+
+<LinkCard
+  title="Support on Ko-fi"
+  description="If you find this bot helpful, consider supporting the developer."
+  href="https://ko-fi.com/vikshan"
+/>

@@ -1,0 +1,66 @@
+---
+title: "🎉 Giveaway Galore"
+description: "Spread joy and excitement with Amina's giveaway extravaganza! 🎁"
+sidebar:
+  label: Giveaway Commands
+  order: 3
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Tabs,
+  TabItem,
+  Aside,
+} from "@astrojs/starlight/components";
+
+Woohoo! Who's ready to spread some joy? Let's create some excitement with these super-fun giveaway commands! (ﾉ≧∀≦)ﾉ
+
+<Aside type="tip">
+  🎁 All commands use the magical "/giveaway" prefix. Let the festivities begin!
+</Aside>
+
+## Giveaway Command Central
+
+<CardGrid>
+  <Card title="🚀 Launch Party" icon="seti:rocket">
+    - `/giveaway start <#channel>` - Kick off the celebration!
+  </Card>
+
+  <Card title="⏯️ Party Control" icon="seti:play">
+    - `/giveaway pause <messageId>` - Need a quick intermission?
+    - `/giveaway resume <messageId>` - The party must go on!
+    - `/giveaway end <messageId>` - All good things must come to an end
+  </Card>
+
+  <Card title="🎭 Plot Twist" icon="seti:tree">
+    - `/giveaway reroll <messageId>` - Oops! Let's pick another winner!
+  </Card>
+
+  <Card title="📋 Party Planner" icon="seti:clipboard">
+    - `/giveaway list` - Check out all the ongoing fun!
+    - `/giveaway edit <messageId>` - Tweak the party plans on the fly
+  </Card>
+</CardGrid>
+
+## How to Party 101
+
+<Tabs>
+  <TabItem label="Start the Fun">
+    ```
+    /giveaway start #giveaway-channel
+    ```
+    Follow the prompts to set up your awesome giveaway!
+  </TabItem>
+  <TabItem label="Keep it Fresh">
+    ```
+    /giveaway reroll 123456789
+    ```
+    Give someone else a chance to win! (Message ID: 123456789)
+  </TabItem>
+</Tabs>
+
+<Aside type="note">
+  🎈 Pro Tip: Keep your giveaway message IDs handy for quick party management!
+</Aside>

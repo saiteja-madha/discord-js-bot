@@ -1,0 +1,69 @@
+---
+title: "📊 Stat Attack"
+description: "Level up your server with Amina's stat-tastic features! 📈"
+sidebar:
+  label: Stats Commands
+  order: 4
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Tabs,
+  TabItem,
+  Aside,
+} from "@astrojs/starlight/components";
+
+
+Hey there, data dynamos! Ready to turn your server into a leveling playground? Let's dive into the world of stats and ranks! (づ｡◕‿‿◕｡)づ
+
+<Aside type="tip">
+  🎉 Most commands now use slash commands for extra statistical significance! Just type "/" and let the numbers crunch!
+</Aside>
+
+## Stat Command Central
+
+<CardGrid>
+  <Card title="🛠️ Admin Setup" icon="seti:tools">
+    - `!statstracking <on|off>` - Flip the switch on stat tracking
+    - `!levelup message <new-message>` - Customize those level-up cheers!
+    - `!levelup channel <#channel>` - Choose where to shout about achievements
+  </Card>
+
+  <Card title="📊 User Insights" icon="seti:graph">
+    - `/stats` - How awesome are you? Let's find out!
+    - `/rank` - Where do you stand in the server hierarchy?
+  </Card>
+</CardGrid>
+
+## Stat Mastery 101
+
+<Tabs>
+  <TabItem label="Admin: Level-Up Magic">
+    ```
+    !levelup message Woohoo! {user} just reached level {level}! 🎉
+    !levelup channel #achievements
+    ```
+    Create a fun, custom experience for your leveling superstars!
+  </TabItem>
+  <TabItem label="Users: Stat Check">
+    ```
+    /stats
+    /rank
+    ```
+    Keep track of your progress and compete with your server-mates!
+  </TabItem>
+</Tabs>
+
+<Aside type="note">
+  🌟 Pro Tip: Regular stat competitions can boost engagement and create a fun, competitive atmosphere!
+</Aside>
+
+## Need Some Help?
+
+<Aside type="note">
+  💫 Need help with these commands? Join our [support server](https://discord.gg/uMgS9evnmv)!
+</Aside>
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/vikshan)

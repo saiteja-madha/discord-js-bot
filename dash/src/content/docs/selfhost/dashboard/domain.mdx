@@ -1,0 +1,165 @@
+---
+title: Custom Domain Setup
+description: Learn how to set up a custom domain for your Discord bot's dashboard, including DNS configuration, Apache setup, and Discord application redirect.
+sidebar:
+  label: Custom Domain
+  order: 1
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Steps,
+  Aside,
+  Tabs,
+  TabItem,
+} from "@astrojs/starlight/components";
+
+Welcome to the Custom Domain Setup guide for your Discord bot's dashboard. This comprehensive guide will walk you through the process of configuring a custom domain, setting up Apache, and updating your Discord application settings.
+
+## Overview
+
+<CardGrid>
+  <Card title="DNS Configuration" icon="seti:config">
+    Set up your domain's DNS records.
+    <LinkCard title="Jump to Section" href="#domain-config" />
+  </Card>
+  <Card title="Apache Setup" icon="seti:server">
+    Configure Apache web server.
+    <LinkCard title="Jump to Section" href="#apache-config" />
+  </Card>
+  <Card title="Discord Redirect" icon="seti:discord">
+    Update Discord application settings.
+    <LinkCard title="Jump to Section" href="#discord-redirect" />
+  </Card>
+</CardGrid>
+
+## Domain Config
+
+<Steps>
+
+1. Go to your DNS Registrar (e.g., Namecheap, Google Domains, Cloudflare).
+
+2. Locate your DNS Records section.
+
+3. Add an "A Record" with the following information:
+   - Name: Use @ for the whole domain or enter a subdomain
+   - IPV4 Address: Your server's IPV4 Address
+
+</Steps>
+
+<Aside type="note">
+  This guide uses Cloudflare as an example, but the process is similar for other DNS providers.
+</Aside>
+
+## Apache Config
+
+<Steps>
+
+1. SSH into your server with sudo privileges.
+
+2. Update and upgrade your system:
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   ```
+
+3. Install Apache:
+   ```bash
+   sudo apt install apache2
+   ```
+
+4. Enable necessary Apache modules:
+   ```bash
+   sudo a2enmod proxy
+   sudo a2enmod proxy_http
+   sudo a2enmod proxy_balancer
+   sudo a2enmod lbmethod_byrequests
+   ```
+
+5. Restart Apache:
+   ```bash
+   sudo systemctl restart apache2
+   ```
+
+6. Configure the webserver:
+   ```bash
+   cd /etc/apache2/sites-available
+   sudo cp 000-default.conf dashboard.conf
+   sudo nano dashboard.conf
+   ```
+
+7. Edit the `dashboard.conf` file with the following configuration:
+   ```apache
+   <VirtualHost *:80>
+           ServerName your-domain.com
+           ProxyRequests On
+           ProxyPreserveHost On
+
+           ProxyPass / http://localhost:8080/
+           ProxyPassReverse / http://localhost:8080/
+
+           ErrorLog ${APACHE_LOG_DIR}/error.log
+           CustomLog ${APACHE_LOG_DIR}/access.log combined
+   </VirtualHost>
+   ```
+
+8. Enable the new site configuration:
+   ```bash
+   sudo a2ensite dashboard.conf
+   sudo systemctl reload apache2
+   ```
+
+</Steps>
+
+<Aside type="tip">
+  Remember to replace `your-domain.com` with your actual domain and adjust the port number if your bot is running on a different port.
+</Aside>
+
+## Discord Application Redirect
+
+<Steps>
+
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications).
+
+2. Select your application and navigate to OAuth2 -> General.
+
+3. Add two redirects to your dashboard:
+   - `http://your-domain.com/callback`
+   - `https://your-domain.com/callback`
+
+</Steps>
+
+<Aside type="caution">
+  Use `http` or `https` depending on whether you have SSL configured for your domain.
+</Aside>
+
+## Conclusion
+
+You should now be able to access and log in to your bot's dashboard using your custom domain. If you encounter any issues, double-check your configurations and ensure all services are running correctly.
+
+## Troubleshooting
+
+If you encounter any issues during the deployment process, please:
+
+1. Check the Heroku logs for any error messages.
+2. Ensure all environment variables are correctly set.
+3. Verify that your GitHub repository is properly connected for auto-deploys.
+
+If problems persist, don't hesitate to:
+
+- Open an [issue](https://github.com/vixshan/amina/issue/new/choose) on the GitHub repository
+- Join the [Discord support server](https://discord.gg/uMgS9evnmv) for assistance
+
+## Additional Resources
+
+<CardGrid>
+  <Card title="Support Server" icon="discord">
+    Join our community for help and updates:
+    <LinkCard title="Join Discord Server" href="https://discord.gg/uMgS9evnmv" />
+  </Card>
+  <Card title="Support Development" icon="heart">
+    If you find this project helpful, consider supporting its development:
+    <LinkCard title="Support on Ko-fi" href="https://ko-fi.com/vikshan" />
+  </Card>
+</CardGrid>

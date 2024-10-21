@@ -1,0 +1,96 @@
+---
+title: Local Installation
+description: Steps to install and set up Amina on your local machine.
+sidebar:
+  label: Local Installation
+  order: 1
+---
+
+import {
+  Steps,
+  Aside,
+  LinkCard,
+} from "@astrojs/starlight/components";
+
+## Installation Steps
+
+<Steps>
+
+1. Clone the Repository
+   ```bash
+   git clone https://github.com/vixshan/amina.git
+   cd amina
+   ```
+
+2. Install Dependencies
+   ```bash
+   npm install
+   ```
+
+3. Set Up Environment Variables
+   Rename .env.example to .env and fill in the required information.
+
+4. Start the Bot
+   ```bash
+   npm start
+   ```
+
+</Steps>
+
+## Environment Variables
+
+<Aside type="caution">
+  Make sure to keep your `.env` file secure and never share sensitive information.
+</Aside>
+
+Here's an example of what your .env file should look like:
+
+```bash
+# Bot Token [Required]
+BOT_TOKEN=
+
+# Mongo Database Connection String [Required]
+MONGO_CONNECTION=
+
+# Webhooks [Optional]
+ERROR_LOGS=
+JOIN_LEAVE_LOGS=
+FEEDBACK_URL=
+
+# Dashboard [Required for dashboard]
+BOT_SECRET=
+SESSION_PASSWORD=
+
+# Required for Weather Command (https://weatherstack.com)
+WEATHERSTACK_KEY=
+
+# Required for image commands (https://strangeapi.fun/docs)
+STRANGE_API_KEY=
+
+# SPOTFIY [Required for Spotify Support]
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+
+# Required for OpenAI (https://beta.openai.com/)
+OPENAI=
+```
+
+## Additional Resources
+
+<LinkCard
+  title="Discord Bot Setup"
+  description="Learn how to create and set up your Discord bot"
+  href="https://discord.com/developers/docs/intro"
+/>
+
+<LinkCard
+  title="Troubleshooting"
+  description="Common errors and how to resolve them"
+  href="../../../extras/helping-out/#writing-code"
+/>
+
+<LinkCard
+  title="Support Server"
+  description="Join our Discord server for additional help"
+  href="https://discord.gg/uMgS9evnmv"
+/>

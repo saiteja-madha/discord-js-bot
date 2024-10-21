@@ -1,0 +1,48 @@
+---
+title: Self-Hosting Amina
+description: Learn how to set up and run Amina on your own machine or server.
+sidebar:
+  label: Self-Hosting
+  order: 1
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Steps,
+  Aside,
+  Tabs,
+  TabItem,
+} from "@astrojs/starlight/components";
+
+Welcome to the self-hosting guide for Amina! This document will walk you through the process of setting up and running Amina on your own machine or server. Let's get started with the installation and configuration.
+
+## Setup Options
+
+<CardGrid>
+  <Card title="Heroku Deployment" icon="seti:heroku">
+    Deploy Amina to Heroku for easy cloud hosting.
+    <LinkCard title="Heroku Guide" href="./installation/heroku" />
+  </Card>
+  <Card title="Replit Setup" icon="seti:replit">
+    Set up Amina on Replit for quick online development.
+    <LinkCard title="Replit Guide" href="./installation/replit" />
+  </Card>
+  <Card title="Local Machine" icon="seti:config">
+    Install and run Amina on your own computer or server.
+    <LinkCard title="Local Setup" href="./installation/local" />
+  </Card>
+</CardGrid>
+
+## Requirements
+
+<Aside type="note">
+  Ensure you have the following installed before proceeding:
+</Aside>
+
+- [Git](https://git-scm.com/downloads)
+- [MongoDB](https://www.mongodb.com)
+- [Nodejs](https://nodejs.org/en/) (version 18 or above)
+- Java v13 for Lavalink server
+- [pm2](https://pm2.io/docs/runtime/guide/installation/) (to keep your bot alive 24/7)

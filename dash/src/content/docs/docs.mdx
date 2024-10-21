@@ -1,0 +1,47 @@
+---
+title: Amina Docs
+head:
+  - tag: title
+    content: Amina Docs
+description: Explore Amina's comprehensive documentation for an in-depth look at our premium tools and construction services. 
+template: splash
+editUrl: false
+lastUpdated: false
+next: false
+hero:
+  title: Documentation Hub
+  tagline: Your central hub for streamlined tool guidance, detailed service docs, and project support.
+  image:
+      alt: An Amina's Logo
+      dark: ../../images/starlight/screwfast_hero.svg
+      light: ../../images/starlight/screwfast_hero_dark.svg
+  actions:
+    - text: Get started
+      icon: right-arrow
+      variant: primary
+      link: /guides/start/
+    - text: Invite Amina
+      icon: external
+      link: https://discord.com/api/oauth2/authorize?client_id=1035629678632915055
+
+---
+import "@styles/starlight_main.css";
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid stagger>
+  <Card title="🛑 Powerful Moderation" icon="seti:circleci">
+    From banning to voice moderation, I've got all the tools you need to keep things in check. Plus, my multi-function purge command is killer!
+  </Card>
+
+  <Card title="🎵 Lossless Music" icon="seti:svg">
+    Play tracks from YouTube, Spotify, SoundCloud, and even apply cool filters. It's a party in here!
+  </Card>
+
+  <Card title="🪙 Economy System" icon="seti:gulp">
+    Become the richest! Bank commands, gambling, and more—your server's own economy!
+  </Card>
+
+  <Card title="📡 Advanced Dashboard" icon="seti:smarty">
+    Manage everything easily! Tweak your server settings and make everything fit just right.
+  </Card>
+</CardGrid>

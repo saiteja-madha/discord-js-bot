@@ -1,0 +1,88 @@
+---
+title: "🛡️ Moderation Magic"
+description: "Keep your server shiny and troll-free with Amina's super-powered moderation tools! ✨"
+sidebar:
+  label: Moderation Commands
+  order: 2
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Tabs,
+  TabItem,
+  Aside,
+} from "@astrojs/starlight/components";
+
+Hey there, awesome server guardians! Ready to keep your digital kingdom safe and sound? Let's dive into the magical world of moderation commands! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+
+<Aside type="tip">
+  🎉 Psst! All commands now use slash commands for extra pizzazz! Just type "/" and let the moderation begin!
+</Aside>
+
+## Moderation Toolkit
+
+<CardGrid>
+  <Card title="📜 Warnings" icon="seti:book">
+    - `/warnings list [member]` - Peek at someone's naughty list
+    - `/warnings clear <member>` - Give someone a clean slate
+    - `/warn <member> [reason]` - Give a gentle (or not so gentle) reminder to behave
+  </Card>
+
+  <Card title="⏳ Timeouts" icon="seti:clock">
+    - `/timeout <member> [reason]` - Put someone in a time-out corner
+    - `/untimeout <member> [reason]` - Let them out of the corner
+  </Card>
+
+  <Card title="👢 Kicks & Bans" icon="seti:error">
+    - `/kick <member> [reason]` - Show someone the door (they can come back)
+    - `/softban <member> [reason]` - Kick + delete messages combo move!
+    - `/ban <member> [reason]` - The ultimate "goodbye" button
+    - `/unban <member> [reason]` - Everyone deserves a second chance, right?
+  </Card>
+
+  <Card title="🧹 Clean-Up Crew" icon="seti:broom">
+    - `/purge all [amount]` - Whoosh! Messages be gone!
+    - `/purge attachments [amount]` - Bye-bye, pesky pictures!
+    - `/purge bots [amount]` - Sorry, fellow bots!
+    - `/purge links [amount]` - No more sneaky links!
+    - `/purge token <token> [amount]` - Zap specific words or phrases
+    - `/purge user <user> [amount]` - Clean up after specific troublemakers
+  </Card>
+
+  <Card title="🎤 Voice Channel Control" icon="seti:audio">
+    - `/voice mute <member> [reason]` - Shush! 
+    - `/voice unmute <member> [reason]` - Speak freely!
+    - `/voice deafen <member> [reason]` - Hear no evil
+    - `/voice undeafen <member> [reason]` - Welcome back to the world of sound
+    - `/voice move <member> [reason]` - Musical chairs, anyone?
+    - `/voice kick <member> [reason]` - Show them the virtual door
+  </Card>
+</CardGrid>
+
+## Handy Dandy Examples
+
+<Tabs>
+  <TabItem label="Warnings">
+    ```
+    /warnings list @TroubleMaker
+    /warn @TroubleMaker Posting too many cat memes
+    ```
+  </TabItem>
+  <TabItem label="Timeout">
+    ```
+    /timeout @ChatterBox 10m Needs a break from typing
+    ```
+  </TabItem>
+  <TabItem label="Clean-Up">
+    ```
+    /purge all 50
+    /purge user @MessyUser 20
+    ```
+  </TabItem>
+</Tabs>
+
+<Aside type="caution">
+  💖 Remember, with great power comes great responsibility! Use these commands wisely and fairly. We're here to create a fun, safe space for everyone!
+</Aside>

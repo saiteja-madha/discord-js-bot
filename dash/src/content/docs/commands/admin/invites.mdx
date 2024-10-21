@@ -1,0 +1,70 @@
+---
+title: "🎟️ Invite Infinity"
+description: "Grow your community with Amina's invite tracking superpowers! 🚀"
+sidebar:
+  label: Invite Commands
+  order: 5
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Tabs,
+  TabItem,
+  Aside,
+} from "@astrojs/starlight/components";
+
+Hey there, community builders! Ready to see your server grow faster than a meme goes viral? Let's dive into the world of invite tracking! ヾ(⌐■_■)ノ♪
+
+<Aside type="tip">
+  🎉 All commands now use slash commands for extra pizzazz! Just type "/" and let the invites roll in!
+</Aside>
+
+## Invite Command Toolbox
+
+<CardGrid>
+  <Card title="📊 Tracker Supreme" icon="seti:graph">
+    - `/invitetracker <on|off>` - Flip the switch on invite tracking
+    - `/invitesimport` - Bring in the old gang (import existing invites)
+  </Card>
+
+  <Card title="🕵️ Invite Detective" icon="seti:search">
+    - `/invitecodes [member]` - Uncover all the secret passages to your server
+    - `/inviter [member]` - Who brought the party? Find out!
+    - `/invites [member]` - Count those golden tickets
+  </Card>
+
+  <Card title="🏆 Invite Champions" icon="seti:trophy">
+    - `/inviteranks` - Check out the invite leaderboard setup
+    - `/inviterank add <role> <invites>` - Create a new champion tier
+    - `/inviterank remove <role>` - Retire a champion tier
+  </Card>
+
+  <Card title="🔧 Invite Tweaks" icon="seti:tools">
+    - `/addinvites <member> <amount>` - Sprinkle some extra invites
+    - `/resetinvites <member>` - Oops! Let's start fresh
+  </Card>
+</CardGrid>
+
+## Invite Mastery 101
+
+<Tabs>
+  <TabItem label="Track Those Invites">
+    ```
+    /invitetracker on
+    /invitesimport
+    ```
+    Get that invite tracking party started!
+  </TabItem>
+  <TabItem label="Reward Your Champs">
+    ```
+    /inviterank add @InviteHero 50
+    ```
+    Create a shiny new role for members with 50+ invites!
+  </TabItem>
+</Tabs>
+
+<Aside type="note">
+  🌟 Pro Tip: Regular shoutouts to your top inviters can really boost community spirit!
+</Aside>

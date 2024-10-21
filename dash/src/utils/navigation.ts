@@ -10,12 +10,11 @@ const navBarLinks = [
 const footerLinks = [
   {
     section: 'Ecosystem',
-    links: [{ name: 'Documentation', url: 'docs.vikshan.tech' }],
+    links: [{ name: 'Documentation', url: '/docs' }],
   },
   {
     section: 'Company',
     links: [
-      { name: 'About me', url: '#' },
       { name: 'Blog', url: '/blog' },
     ],
   },

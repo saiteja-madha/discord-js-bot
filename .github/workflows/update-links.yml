@@ -1,4 +1,4 @@
-name: Update README and Docs
+name: Update README and dash
 
 on:
   push:
@@ -27,14 +27,14 @@ jobs:
           echo "GH_USERNAME=${{ github.repository_owner }}" >> .env
           echo "GH_REPO=${{ github.event.repository.name }}" >> .env
           
-      - name: Update links in README and docs
+      - name: Update links in README and dash
         run: node scripts/update-links.js
         
       - name: Check for changes
         id: git-check
         run: |
           git add README.md
-          git add $(find docs -name '*.md')
+          git add $(find dash/src -name '*.md')
           git diff --staged --quiet && echo "changes=false" >> $GITHUB_OUTPUT || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit changes
@@ -42,7 +42,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "links: update README and docs with repository information"
+          git commit -m "links: update README and dash with repository information"
           
       - name: Push changes
         if: steps.git-check.outputs.changes == 'true'

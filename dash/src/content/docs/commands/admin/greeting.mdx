@@ -1,0 +1,75 @@
+---
+title: "🛡️ Admin Commands: Greeting"
+description: "Set up greeting messages"
+sidebar:
+  label: Greetings & Misc
+  order: 4
+---
+
+import { Aside, Tabs, TabItem } from "@astrojs/starlight/components";
+
+# 🎭 Ticketing
+
+## 🎫 Ticketing System
+
+<Tabs>
+  <TabItem label="Setup">
+    ```
+    /ticket setup channel:#channel
+    /ticket log channel:#channel
+    /ticket limit amount:[number]
+    ```
+  </TabItem>
+  
+  <TabItem label="Management">
+    ```
+    /ticket close
+    /ticket add user:@user
+    /ticket remove user:@user
+    /ticket closeall
+    ```
+  </TabItem>
+  
+  <TabItem label="Categories">
+    ```
+    /ticketcat list
+    /ticketcat add category:"Support" name:"Technical Help"
+    /ticketcat remove category:"Support"
+    ```
+  </TabItem>
+</Tabs>
+
+# ✨ Greeting Messages
+
+## Greeting Messages
+
+<Aside type="tip">
+  Available Variables:
+  - {'{server}'} - Server name
+  - {'{count}'} - Member count
+  - {'{member:name}'} - Member's name
+  - {'{member:mention}'} - Member mention
+  ... and more!
+</Aside>
+
+<Tabs>
+  <TabItem label="Welcome">
+    Configure welcome messages:
+    ```
+    /welcome channel:#welcome
+    /welcome status [on|off]
+    /welcome desc content:"Welcome {'{member:mention}'} to {'{server}'}!"
+    /welcome preview
+    ```
+  </TabItem>
+  
+  <TabItem label="Farewell">
+    Configure goodbye messages:
+    ```
+    /farewell channel:#goodbye
+    /farewell status [on|off]
+    /farewell desc content:"Goodbye {'{member:name}'}!"
+    /farewell preview
+    ```
+  </TabItem>
+</Tabs>

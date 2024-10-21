@@ -1,0 +1,149 @@
+---
+title: SSL Certificate Setup
+description: Learn how to set up an SSL certificate for your Discord bot's dashboard using Certbot and Let's Encrypt.
+sidebar:
+  label: SSL Certificate
+  order: 2
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Steps,
+  Aside,
+  Tabs,
+  TabItem,
+} from "@astrojs/starlight/components";
+
+Welcome to the SSL Certificate Setup guide for your Discord bot's dashboard. This guide will walk you through the process of obtaining and installing an SSL certificate using Certbot and Let's Encrypt.
+
+## Overview
+
+<CardGrid>
+  <Card title="Preparation" icon="seti:config">
+    SSH access and initial setup.
+    <LinkCard title="Jump to Section" href="#preparation" />
+  </Card>
+  <Card title="Certbot Installation" icon="seti:package">
+    Install and configure Certbot.
+    <LinkCard title="Jump to Section" href="#certbot-installation" />
+  </Card>
+  <Card title="Certificate Setup" icon="seti:certificate">
+    Obtain and install SSL certificate.
+    <LinkCard title="Jump to Section" href="#certificate-setup" />
+  </Card>
+</CardGrid>
+
+## Preparation
+
+<Steps>
+
+1. SSH into your server with sudo privileges.
+
+2. Install snapd:
+   Follow the instructions on [snapcraft's site to install snapd](https://snapcraft.io/docs/installing-snapd/).
+
+3. Remove any existing Certbot packages:
+   ```bash
+   sudo apt-get remove certbot
+   # or
+   sudo dnf remove certbot
+   # or
+   sudo yum remove certbot
+   ```
+
+</Steps>
+
+<Aside type="note">
+  The exact command to remove Certbot depends on your operating system.
+</Aside>
+
+## Certbot Installation
+
+<Steps>
+
+1. Install Certbot:
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   sudo snap install --classic certbot
+   ```
+
+2. Prepare the Certbot command:
+   ```bash
+   sudo ln -s /snap/bin/certbot /usr/bin/certbot
+   ```
+
+</Steps>
+
+## Certificate Setup
+
+<Steps>
+
+1. Choose how you'd like to run Certbot:
+
+   <Tabs>
+     <TabItem label="Automatic">
+       Run this command to get a certificate and have Certbot edit your Apache configuration automatically:
+       ```bash
+       sudo certbot --apache
+       ```
+     </TabItem>
+     <TabItem label="Manual">
+       If you prefer to make changes to your Apache configuration by hand, run:
+       ```bash
+       sudo certbot certonly --apache
+       ```
+     </TabItem>
+   </Tabs>
+
+2. Test automatic renewal:
+   ```bash
+   sudo certbot renew --dry-run
+   ```
+
+3. Confirm that Certbot worked:
+   Visit `https://yourwebsite.com/` in your browser and look for the lock icon in the URL bar.
+
+</Steps>
+
+<Aside type="tip">
+  The command to renew Certbot is installed in one of the following locations:
+  - `/etc/crontab/`
+  - `/etc/cron.*/*`
+  - `systemctl list-timers`
+</Aside>
+
+<Aside type="caution">
+  Remember to change to **https** in your redirects you set up earlier and in the config.js file.
+</Aside>
+
+## Conclusion
+
+You have now successfully set up an SSL certificate for your Discord bot's dashboard. Your site should be accessible via HTTPS, providing a secure connection for your users.
+
+## Troubleshooting
+
+If you encounter any issues during the deployment process, please:
+
+1. Check the Heroku logs for any error messages.
+2. Ensure all environment variables are correctly set.
+3. Verify that your GitHub repository is properly connected for auto-deploys.
+
+If problems persist, don't hesitate to:
+
+- Open an [issue](https://github.com/vixshan/amina/issue/new/choose) on the GitHub repository
+- Join the [Discord support server](https://discord.gg/uMgS9evnmv) for assistance
+
+## Additional Resources
+
+<CardGrid>
+  <Card title="Support Server" icon="discord">
+    Join our community for help and updates:
+    <LinkCard title="Join Discord Server" href="https://discord.gg/uMgS9evnmv" />
+  </Card>
+  <Card title="Support Development" icon="heart">
+    If you find this project helpful, consider supporting its development:
+    <LinkCard title="Support on Ko-fi" href="https://ko-fi.com/vikshan" />
+  </Card>
+</CardGrid>

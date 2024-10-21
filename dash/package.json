@@ -29,6 +29,7 @@
     "gsap": "^3.12.5",
     "html-minifier-terser": "^7.2.0",
     "lenis": "^1.1.13",
+    "lucide-react": "^0.453.0",
     "preline": "^2.5.1",
     "sharp": "^0.33.5",
     "sharp-ico": "^0.1.5",

@@ -2,9 +2,9 @@
 
 <h1 align="center">
   <br>
-  <a href="https://github.com/vixshan/amina/.gitbook/assets/tmpng.png" height="200" alt="MOCHI"></a>
+  <a href="https://github.com/vixshan/amina/.dash/src/images/tmpng.png" height="200" alt="AMINA"></a>
   <br>
-  MOCHI
+  AMINA
   <br>
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C1PUABU)
@@ -43,7 +43,10 @@ know right [here](https://github.com/vixshan/amina/issues/new)! 💖
 if you need help with anything, just hit me up in my
 [support server](https://discord.gg/uMgS9evnmv)! join me and let’s fix things up
 together!
-[![DiscordBanner](https://invidget.switchblade.xyz/uMgS9evnmv)](https://discord.gg/uMgS9evnmv)
+
+<div class="discord-widget" style={{ textAlign: 'center' }}>
+  <img src="https://invidget.switchblade.xyz/uMgS9evnmv" alt="Discord Server Invite" style={{ borderRadius: '8px' }} />
+</div>
 
 also, i run on digital ocean, so if you want to try it yourself, grab some free
 credits [here](https://m.do.co/c/c5587212fe39)! 💻

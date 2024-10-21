@@ -1,5 +1,4 @@
 ---
-import LanguageSelect from "@astrojs/starlight/components/LanguageSelect.astro";
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "src/components/ui/starlight/ThemeSelectMobile.astro";
 import type { Props } from "@astrojs/starlight/props";
@@ -10,7 +9,6 @@ import type { Props } from "@astrojs/starlight/props";
     <SocialIcons {...Astro.props}><slot /></SocialIcons>
   </div>
   <ThemeSelect />
-  <LanguageSelect {...Astro.props}><slot /></LanguageSelect>
 </div>
 
 <style>

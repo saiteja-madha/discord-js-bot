@@ -1,0 +1,74 @@
+---
+title: "Deploy to Heroku"
+description: "Step-by-step guide to deploy the bot to Heroku"
+sidebar:
+  label: Heroku Deployment
+  order: 2
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Tabs,
+  TabItem,
+  Aside,
+} from "@astrojs/starlight/components";
+
+import { Image } from 'astro:assets';
+import herokuDomain from '@images/starlight/heroku-dom.jpeg';
+
+# Deploy to Heroku
+
+This guide will walk you through the process of deploying the bot to Heroku.
+
+## Deployment Steps
+
+1. Star and fork the repository to your GitHub account [here](https://github.com/vixshan/amina/fork).
+2. If you don't have a Heroku account, create one [here](https://signup.heroku.com/).
+3. Click [here to deploy](https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fvixshan%2Famina) the app to Heroku.
+4. Fill out the required fields in the form and click on the "Deploy app" button.
+
+<Aside type="caution">
+  By default, the dashboard is enabled. Dashboard values are required unless you disable it in the [config.js](https://github.com/vixshan/amina/blob/49ef81f775242793514905a8b05dd57eea7f99e1/config.js#L42) file.
+</Aside>
+
+## Setting up a Custom Domain for the Dashboard
+
+5. Navigate to Settings -> Domains in your Heroku dashboard and add your custom domain.
+
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+  <Image src={herokuDomain} alt="Heroku custom domain setup" style={{ borderRadius: '8px' }} />
+</div>
+
+6. Go to Deploy -> Deployment method and connect your app to the forked repository to enable auto-deploys.
+
+<Aside type="tip">
+  You can also deploy the app to Heroku using the Heroku CLI if you prefer.
+</Aside>
+
+## Troubleshooting
+
+If you encounter any issues during the deployment process, please:
+
+1. Check the Heroku logs for any error messages.
+2. Ensure all environment variables are correctly set.
+3. Verify that your GitHub repository is properly connected for auto-deploys.
+
+If problems persist, don't hesitate to:
+
+- Open an [issue](https://github.com/vixshan/amina/issue/new/choose) on the GitHub repository
+- Join the [Discord support server](https://discord.gg/uMgS9evnmv) for assistance
+
+## Additional Resources
+
+<CardGrid>
+  <Card title="Support Server" icon="discord">
+    Join our community for help and updates:
+    <LinkCard title="Join Discord Server" href="https://discord.gg/uMgS9evnmv" />
+  </Card>
+  <Card title="Support Development" icon="heart">
+    If you find this project helpful, consider supporting its development:
+    <LinkCard title="Support on Ko-fi" href="https://ko-fi.com/vikshan" />
+  </Card>
+</CardGrid>

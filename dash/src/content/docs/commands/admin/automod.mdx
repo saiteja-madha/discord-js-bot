@@ -1,0 +1,61 @@
+---
+title: "🛡️ Auto-Moderation"
+description: "Configure and manage auto-moderation features"
+sidebar:
+  label: Auto-Moderation
+  order: 1
+---
+
+import { Aside, Card, CardGrid } from "@astrojs/starlight/components";
+
+## 🛡️ Introduction
+
+Hello awesome server managers! These are my super-powered admin commands that help you keep everything running smoothly! ✨
+
+<Aside type="caution">
+  🔑 These commands require the **Manage Server** permission. Make sure you've got the right permissions before trying them out!
+</Aside>
+
+
+# 🛡️ Auto-Moderation
+
+<Aside type="tip">
+  By default, I don't apply auto-mod to members with **Kick Members**, **Ban Members**, **Manage Server**, or **Manage Messages** permissions. 
+  Use `/automodconfig debug:on` if you want to change this!
+</Aside>
+
+## Configuration Commands
+<CardGrid>
+  <Card title="Basic Setup" icon="seti:settings">
+    - `/automodconfig status` - Check current settings
+    - `/automodconfig strikes amount:[number]` - Set max strikes
+    - `/automodconfig action [timeout|mute|ban]` - Choose punishment
+    - `/automodconfig debug [on|off]` - Toggle mod checking
+  </Card>
+  
+  <Card title="Channel Management" icon="seti:shield">
+    - `/automodconfig whitelist` - View safe channels
+    - `/automodconfig whitelistadd #channel` - Add safe channel
+    - `/automodconfig whitelistremove #channel` - Remove safe channel
+  </Card>
+</CardGrid>
+
+## Protection Features
+<CardGrid>
+  <Card title="Anti-Spam" icon="seti:error">
+    - `/anti ghostping [on|off]` - Catch sneaky ghost pings
+    - `/anti spam [on|off]` - Stop spam attacks
+    - `/anti massmention [on|off] threshold:[number]` - Prevent mass mentions
+  </Card>
+  
+  <Card title="Auto-Delete" icon="seti:trash">
+    - `/autodelete attachments [on|off]` - Control file sharing
+    - `/autodelete invites [on|off]` - Manage invite links
+    - `/autodelete links [on|off]` - Control URL sharing
+    - `/autodelete maxlines amount:[number]` - Limit message length
+  </Card>
+</CardGrid>
+
+<Aside type="caution">
+  ⚡ Strike System: Members get a strike for each rule break. After reaching the max strikes (default: 10), they'll face the configured punishment (default: timeout)!
+</Aside>

@@ -9,10 +9,10 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon .",
+    "dev": "nodemon .",
     "start": "node .",
     "build": "cd dash && npm run build",
-    "dev:dash": "cd dash && cross-env NODE_ENV=development npm run dev",
+    "dev:dash": "cd dash && npm run dev",
     "i:dash": "cd dash && npm install",
     "heroku-postbuild": "cd dash && npm install && npm run build",
     "predeploy": "npm run build",
@@ -73,7 +73,6 @@
     "zlib-sync": "^0.1.9"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
     "eslint": "^9.12.0",
     "eslint-plugin-jsdoc": "^50.2.2",
     "node": "^22.0.0",

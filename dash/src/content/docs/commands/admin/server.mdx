@@ -1,0 +1,80 @@
+---
+title: "🛡️ Server Stats & Management"
+description: "Manage server statistics and warning system"
+sidebar:
+  label: Stats & Warnings
+  order: 6
+---
+import {
+  Tabs,
+  TabItem,
+  Aside,
+} from "@astrojs/starlight/components";
+
+## 1. Channel Counters
+Make dynamic channels that show your server stats!
+
+```
+/counter type:[USERS|MEMBERS|BOTS] name:"Server Members: {count}"
+```
+
+Available counter types:
+- `USERS` - Total server count (members + bots)
+- `MEMBERS` - Human members count
+- `BOTS` - Bot count
+
+## 2. ⚠️ Warning System
+
+Set up automated punishments for repeated warnings:
+```
+/maxwarn limit amount:[number]
+/maxwarn action [timeout|kick|ban]
+```
+
+## 3. 📝 Logging
+
+Keep track of all moderation actions:
+```
+/logs channel:#channel
+/logs off
+```
+
+
+## 4. 📝 Message Management
+
+### Embeds
+Create beautiful custom messages for your announcements and information!
+
+<Tabs>
+  <TabItem label="Usage">
+    ```
+    /embed channel:#channel
+    ```
+  </TabItem>
+  <TabItem label="Example">
+    Create a fancy welcome message in your #announcements channel!
+  </TabItem>
+</Tabs>
+
+## 5. Role Management
+
+### Auto Role
+Automatically give roles to new members:
+```
+/autorole role:@Role
+/autorole off
+```
+
+### Reaction Roles
+Let members self-assign roles:
+```
+/addrr channel:#channel messageId:123456 role:@Role emoji:👍
+/removerr channel:#channel messageId:123456
+```
+## Need Some Help?
+
+<Aside type="note">
+  💫 Need help with these commands? Join our [support server](https://discord.gg/uMgS9evnmv)!
+</Aside>
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/vikshan)

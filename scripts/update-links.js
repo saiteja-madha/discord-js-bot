@@ -14,6 +14,7 @@ const updateLinks = (content, username, repo, supportServer) => {
       if (match === 'https://github.com/Discordjs/discordjs') return match
 
       if (match === 'https://github.com/Androz2091/AtlantaBot') return match
+      if (match === 'https://github.com/saiteja-madha/discord-js-bot') return match
 
       // Handle https://github.com/sponsors/username
       if (match.startsWith('https://github.com/sponsors/')) {
@@ -91,8 +92,8 @@ const updateFiles = () => {
     // Update README.md
     updateFile('README.md', username, repo, supportServer)
 
-    // Update files in ./docs folder and its subfolders
-    updateFilesRecursively('./docs', username, repo, supportServer)
+    // Update files in ./dash folder and its subfolders
+    updateFilesRecursively('./dash/src', username, repo, supportServer)
   } catch (error) {
     console.error('Error updating files:', error)
     process.exit(1)
