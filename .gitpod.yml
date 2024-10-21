@@ -5,7 +5,7 @@
 # Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
 
 tasks:
-  - init: npm install && && npm run i:dash && npm run build
+  - init: npm install && npm run i:dash && npm run build
     command: npm run start
 
 
