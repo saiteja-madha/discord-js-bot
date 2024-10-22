@@ -27,7 +27,7 @@ module.exports = {
     options: [
       {
         name: 'channel',
-        description: 'Choose a channel to send the embed 🌈',
+        description: 'Choose a channel to send the embed',
         type: ApplicationCommandOptionType.Channel,
         channelTypes: [ChannelType.GuildText],
         required: true,

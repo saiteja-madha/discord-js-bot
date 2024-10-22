@@ -40,6 +40,12 @@ const Schema = new mongoose.Schema(
       imagine: { type: String, default: 'You are a helpful assistant.' },
       maxTokens: { type: Number, default: 150 },
     },
+    afk: {
+      enabled: { type: Boolean, default: false },
+      reason: { type: String, default: null },
+      since: { type: Date, default: null },
+      endTime: { type: Date, default: null },
+    },
   },
   {
     timestamps: {
@@ -141,4 +147,45 @@ module.exports = {
     if (user) cache.add(userId, user)
     return user
   },
+  setAfk: async (userId, reason = null, duration = null) => {
+    const since = new Date()
+    const endTime = duration
+      ? new Date(since.getTime() + duration * 60000)
+      : null
+
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'afk.enabled': true,
+          'afk.reason': reason,
+          'afk.since': since,
+          'afk.endTime': endTime,
+        },
+      },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
+
+  removeAfk: async userId => {
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'afk.enabled': false,
+          'afk.reason': null,
+          'afk.since': null,
+          'afk.endTime': null,
+        },
+      },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
 }
+
