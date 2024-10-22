@@ -29,7 +29,7 @@ module.exports = {
   },
 
   DASHBOARD: {
-    enabled: true,
+    enabled: process.env.DASH || true,
     baseURL: process.env.BASE_URL || 'http://localhost:8080', // Base URL of the dashboard
     failureURL: process.env.FAILURE_URL || 'http://localhost:8080', // URL to redirect to on dashboard failure
     port: process.env.PORT || '8080', // Port to run the dashboard on
@@ -78,52 +78,52 @@ module.exports = {
     ENABLED: true,
   },
   EMBED_COLORS: {
-    BOT_EMBED: '#00C0FF', // (electric cyan, like Jinx’s glowing eyes, adding an edgy, intense vibe)
+    BOT_EMBED: '#FF1493', // (Deep pink - represents her core energy and vibrant spirit)
     TRANSPARENT: '#00000000',
-    SUCCESS: '#FFD700', // (vibrant gold for striking moments of triumph or positivity)
-    ERROR: '#FF4500', // (fiery orange-red, reflecting danger or chaos with a bold, sharp feel)
-    WARNING: '#FF69B4', // (hot pink, edgy and wild for warning messages that stand out)
+    SUCCESS: '#00FFB3', // (Bright aqua - her creative, unique way of seeing success)
+    ERROR: '#FF6978', // (Coral pink - softer than traditional red, showing her sensitivity even in errors)
+    WARNING: '#FFD93D', // (Bright yellow - her playful way of warning others)
   },
   MODERATION: {
     ENABLED: true,
     EMBED_COLORS: {
-      TIMEOUT: '#FFC0CB', // Light pink for timeout
-      UNTIMEOUT: '#B2FF6C', // Light green for untimeout
-      KICK: '#FF6B6B', // Soft red for kick
-      SOFTBAN: '#FFB3D9', // Soft pastel pink for softban
-      BAN: '#D32F2F', // Strong red for ban
-      UNBAN: '#00C853', // Green for unban
-      VMUTE: '#FFC0CB', // Light pink for voice mute
-      VUNMUTE: '#B2FF6C', // Light green for voice unmute
-      DEAFEN: '#FFC0CB', // Light pink for deafen
-      UNDEAFEN: '#B2FF6C', // Light green for undeafen
-      DISCONNECT: 'RANDOM',
-      MOVE: 'RANDOM',
+      TIMEOUT: '#9B6DFF', // (Soft purple - gentle but firm)
+      UNTIMEOUT: '#4DEEEA', // (Bright turquoise - freedom and relief)
+      KICK: '#FF9A8C', // (Salmon pink - serious but not harsh)
+      SOFTBAN: '#FF75C3', // (Medium pink - firm but temporary)
+      BAN: '#FF3864', // (Strong pink-red - serious but still on-brand)
+      UNBAN: '#00F5D4', // (Mint green - fresh starts)
+      VMUTE: '#D4B3FF', // (Lavender - gentle silence)
+      VUNMUTE: '#98FB98', // (Pale green - gentle freedom)
+      DEAFEN: '#C8A2C8', // (Lilac - peaceful quiet)
+      UNDEAFEN: '#7FFFD4', // (Aquamarine - return to sound)
+      DISCONNECT: 'RANDOM', // (Keeps her chaotic energy)
+      MOVE: 'RANDOM', // (Keeps her spontaneity)
     },
   },
 
   STATS: {
     ENABLED: true,
-    XP_COOLDOWN: 5, // Cooldown in seconds between messages
+    XP_COOLDOWN: 5,
     DEFAULT_LVL_UP_MSG:
       '{member:tag}, Yay! 🎉 You just leveled up to **Level {level}**! 🌟',
   },
 
   SUGGESTIONS: {
-    ENABLED: true, // Should the suggestion system be enabled
+    ENABLED: true,
     EMOJI: {
       UP_VOTE: '⬆️',
       DOWN_VOTE: '⬇️',
     },
-    DEFAULT_EMBED: '#FFB3D9', // Soft pastel pink for default embeds
-    APPROVED_EMBED: '#B2FF6C', // Light green for approved suggestions
-    DENIED_EMBED: '#FF6B6B', // Soft red for denied suggestions
+    DEFAULT_EMBED: '#FFB8DE', // (Light pink - welcoming new ideas)
+    APPROVED_EMBED: '#47E0A0', // (Seafoam green - creative acceptance)
+    DENIED_EMBED: '#FF8BA7', // (Soft rose - gentle rejection)
   },
 
   TICKET: {
     ENABLED: true,
-    CREATE_EMBED: '#FFB3D9', // Soft pastel pink for ticket creation
-    CLOSE_EMBED: '#B2FF6C', // Light green for ticket closure
+    CREATE_EMBED: '#E0AAFF', // (Soft violet - welcoming support)
+    CLOSE_EMBED: '#48D1CC', // (Turquoise - positive closure)
   },
 
 }

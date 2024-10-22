@@ -15,8 +15,6 @@
     "dev:dash": "cd dash && npm run dev",
     "i:dash": "cd dash && npm install",
     "heroku-postbuild": "cd dash && npm install && npm run build",
-    "predeploy": "npm run build",
-    "predev": "npm run build",
     "f": "prettier --write src",
     "u": "git pull && npm update && npm run f",
     "start-replit": "node bot.js"
