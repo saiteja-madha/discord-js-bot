@@ -18,79 +18,162 @@ async function handleReportModal(interaction) {
     const serverId = interaction.fields.getTextInputValue('serverId')
     try {
       const guildSettings = await getSettings({ id: serverId })
-      if (guildSettings) {
-        additionalInfo = `Server Name: ${guildSettings.server.name}\nServer Owner: ${guildSettings.server.owner}\nServer ID: ${serverId}`
-
-        // Check for existing invite link or create a new one
-        inviteLink = guildSettings.server.invite_link
-        if (!inviteLink) {
-          const guild = await interaction.client.guilds.fetch(serverId)
-          if (guild) {
-            try {
-              const targetChannel = guild.channels.cache.find(
-                channel =>
-                  channel.type === ChannelType.GuildText &&
-                  channel
-                    .permissionsFor(guild.members.me)
-                    .has(PermissionFlagsBits.CreateInstantInvite)
-              )
-
-              if (targetChannel) {
-                const invite = await targetChannel.createInvite({
-                  maxAge: 0, // 0 = infinite expiration
-                  maxUses: 0, // 0 = infinite uses
-                })
-                inviteLink = invite.url
-                await setInviteLink(guild.id, inviteLink)
-              }
-            } catch (error) {
-              console.error('Error creating invite:', error)
+      if (!guildSettings) {
+        const errorEmbed = new EmbedBuilder()
+          .setColor(EMBED_COLORS.ERROR)
+          .setTitle('Oopsie! Server Not Found 🕵️‍♀️')
+          .setDescription(
+            "Mina couldn't find this server. Here's what might be happening:"
+          )
+          .addFields(
+            {
+              name: 'Double-check the Server ID',
+              value:
+                "Make sure you've entered the correct server ID. Here's how to find it:",
+            },
+            {
+              name: '1. Enable Developer Mode',
+              value:
+                'Go to User Settings > Appearance > Advanced and turn on Developer Mode.',
+            },
+            {
+              name: '2. Get the Server ID',
+              value:
+                'Right-click on the server icon and select "Copy ID" at the bottom of the menu.',
+            },
+            {
+              name: 'Mina Not in Server',
+              value:
+                "If the ID is correct, it's possible that Mina isn't a member of that server. Unfortunately, Mina can only report on servers she's a part of.",
+            },
+            {
+              name: 'Need Help?',
+              value:
+                "If you're sure the ID is correct and Mina should be in the server, please try again later or contact support.",
             }
+          )
+          .setFooter({ text: 'Mina is always here to help! 💖' })
+          .catch(ex => {})
+
+        await interaction.reply({
+          embeds: [errorEmbed],
+          ephemeral: true,
+        })
+        return
+      }
+
+      additionalInfo = `Server Name: ${guildSettings.server.name}\nServer Owner: ${guildSettings.server.owner}\nServer ID: ${serverId}`
+
+      // Only try to create invite if one doesn't exist
+      let inviteLink = guildSettings.server.invite_link
+      if (!inviteLink) {
+        const guild = await interaction.client.guilds.fetch(serverId)
+        if (guild) {
+          try {
+            const targetChannel = guild.channels.cache.find(
+              channel =>
+                channel.type === ChannelType.GuildText &&
+                channel
+                  .permissionsFor(guild.members.me)
+                  .has(PermissionFlagsBits.CreateInstantInvite)
+            )
+
+            if (targetChannel) {
+              const invite = await targetChannel.createInvite({
+                maxAge: 0, // 0 = infinite expiration
+                maxUses: 0, // 0 = infinite uses
+              })
+              inviteLink = invite.url
+              await setInviteLink(guild.id, inviteLink)
+            }
+          } catch (error) {
+            console.error('Error creating invite:', error)
           }
         }
+      }
+
+      // Send report regardless of invite link status
+      const success = await sendWebhook(
+        interaction.client,
+        type,
+        title,
+        description,
+        additionalInfo,
+        interaction.user,
+        inviteLink
+      )
+
+      if (success) {
+        const confirmationEmbed = new EmbedBuilder()
+          .setColor(EMBED_COLORS.SUCCESS)
+          .setTitle('Report Submitted! 📣')
+          .setDescription(
+            "Yay! Mina received your report! You're the best for helping make our community super awesome~ 💖✨"
+          )
+          .addFields(
+            { name: 'Title', value: title },
+            { name: 'Description', value: description }
+          )
+          .setFooter({ text: 'Thank you for your contribution!' })
+          .setTimestamp()
+
+        if (additionalInfo) {
+          confirmationEmbed.addFields({
+            name: 'Additional Information',
+            value: additionalInfo
+              .split('\n')
+              .filter(line => !line.startsWith('Server Invite:'))
+              .join('\n'),
+          })
+        }
+
+        await interaction.reply({
+          embeds: [confirmationEmbed],
+          ephemeral: true,
+        })
+      } else {
+        const errorEmbed = new EmbedBuilder()
+          .setColor(EMBED_COLORS.ERROR)
+          .setTitle('Oh no! Something Went Wrong 😟')
+          .setDescription(
+            "Mina couldn't send your report/feedback. But don't worry, it's not your fault!"
+          )
+          .addFields(
+            {
+              name: 'What to Do',
+              value:
+                'Please try again later. Mina believes in you! If the problem continues, it would be super helpful if you could let the support team know.',
+            },
+            {
+              name: 'Error Details',
+              value:
+                "There was an issue sending the report/feedback to Mina's team. This is likely a temporary problem.",
+            }
+          )
+          .setFooter({ text: 'Mina appreciates your patience and effort! 🌟' })
+        await interaction.reply({
+          embeds: [errorEmbed],
+          ephemeral: true,
+        })
       }
     } catch (error) {
       console.error('Error fetching guild settings:', error)
       const errorEmbed = new EmbedBuilder()
         .setColor(EMBED_COLORS.ERROR)
-        .setTitle('Oopsie! Server Not Found 🕵️‍♀️')
+        .setTitle('Oh no! Something Went Wrong 😟')
         .setDescription(
-          "Mina couldn't find this server. Here's what might be happening:"
+          "Mina couldn't process your report. But don't worry, it's not your fault!"
         )
-        .addFields(
-          {
-            name: 'Double-check the Server ID',
-            value:
-              "Make sure you've entered the correct server ID. Here's how to find it:",
-          },
-          {
-            name: '1. Enable Developer Mode',
-            value:
-              'Go to User Settings > Appearance > Advanced and turn on Developer Mode.',
-          },
-          {
-            name: '2. Get the Server ID',
-            value:
-              'Right-click on the server icon and select "Copy ID" at the bottom of the menu.',
-          },
-          {
-            name: 'Mina Not in Server',
-            value:
-              "If the ID is correct, it's possible that Mina isn't a member of that server. Unfortunately, Mina can only report on servers she's a part of.",
-          },
-          {
-            name: 'Need Help?',
-            value:
-              "If you're sure the ID is correct and Mina should be in the server, please try again later or contact support.",
-          }
-        )
-        .setFooter({ text: 'Mina is always here to help! 💖' })
-
+        .addFields({
+          name: 'What to Do',
+          value:
+            'Please try again later. If the problem continues, it would be super helpful if you could let the support team know.',
+        })
+        .setFooter({ text: 'Mina appreciates your patience! 🌟' })
       await interaction.reply({
         embeds: [errorEmbed],
         ephemeral: true,
       })
-      return
     }
   } else if (type === 'user') {
     const userId = interaction.fields.getTextInputValue('userId')
@@ -193,88 +276,90 @@ async function handleReportModal(interaction) {
       interaction.fields.getTextInputValue('additionalInfo') || ''
   }
 
-  const success = await sendWebhook(
-    interaction.client,
-    type,
-    title,
-    description,
-    additionalInfo,
-    interaction.user,
-    inviteLink
-  )
+  if (type !== 'server') {
+    const success = await sendWebhook(
+      interaction.client,
+      type,
+      title,
+      description,
+      additionalInfo,
+      interaction.user
+    )
 
-  if (success) {
-    const confirmationEmbed = new EmbedBuilder()
-      .setColor(EMBED_COLORS.SUCCESS)
-      .setTitle(
-        type === 'feedback'
-          ? 'Feedback Received! 💖'
-          : type === 'bug'
-            ? 'Bug Report Logged! 🐞'
-            : 'Report Submitted! 📣'
-      )
-      .setDescription(
-        type === 'feedback'
-          ? "Yay! Mina received your feedback! You're the best for helping make our community super awesome~ 💖✨"
-          : type === 'bug'
-            ? `Bzzt! Mina's bug detectors are tingling! Thanks for helping squash those pesky bugs! 🕷️💪\nYou can also add/check this to amina's [GitHub issues](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new) page.`
-            : "Yay! Mina received your report! You're the best for helping make our community super awesome~ 💖✨"
-      )
-      .addFields(
-        { name: 'Title', value: title },
-        { name: 'Description', value: description }
-      )
-      .setFooter({
-        text:
-          type === 'bug' || type === 'feedback'
-            ? 'Thank you for helping make Mina better!'
-            : 'Thank you for your contribution!',
+    if (success) {
+      const confirmationEmbed = new EmbedBuilder()
+        .setColor(EMBED_COLORS.SUCCESS)
+        .setTitle(
+          type === 'feedback'
+            ? 'Feedback Received! 💖'
+            : type === 'bug'
+              ? 'Bug Report Logged! 🐞'
+              : 'Report Submitted! 📣'
+        )
+        .setDescription(
+          type === 'feedback'
+            ? "Yay! Mina received your feedback! You're the best for helping make our community super awesome~ 💖✨"
+            : type === 'bug'
+              ? `Bzzt! Mina's bug detectors are tingling! Thanks for helping squash those pesky bugs! 🕷️💪\nYou can also add/check this to amina's [GitHub issues](https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new) page.`
+              : "Yay! Mina received your report! You're the best for helping make our community super awesome~ 💖✨"
+        )
+        .addFields(
+          { name: 'Title', value: title },
+          { name: 'Description', value: description }
+        )
+        .setFooter({
+          text:
+            type === 'bug' || type === 'feedback'
+              ? 'Thank you for helping make Mina better!'
+              : 'Thank you for your contribution!',
+        })
+        .setTimestamp()
+
+      if (additionalInfo) {
+        confirmationEmbed.addFields({
+          name:
+            type === 'bug'
+              ? 'Reproduction Steps'
+              : type === 'feedback'
+                ? 'Additional Thoughts'
+                : 'Additional Information',
+          value: additionalInfo,
+        })
+      }
+
+      await interaction.reply({
+        embeds: [confirmationEmbed],
+        ephemeral: true,
       })
-      .setTimestamp()
-
-    if (additionalInfo) {
-      confirmationEmbed.addFields({
-        name:
-          type === 'bug'
-            ? 'Reproduction Steps'
-            : type === 'feedback'
-              ? 'Additional Thoughts'
-              : 'Additional Information',
-        value: additionalInfo
-          .split('\n')
-          .filter(line => !line.startsWith('Server Invite:'))
-          .join('\n'),
+    } else {
+      const errorEmbed = new EmbedBuilder()
+        .setColor(EMBED_COLORS.ERROR)
+        .setTitle('Oh no! Something Went Wrong 😟')
+        .setDescription(
+          type === 'feedback'
+            ? "Mina couldn't send your feedback. But don't worry, it's not your fault! 💖"
+            : type === 'bug'
+              ? "Mina couldn't log your bug report. But don't worry, it's not your fault! 🐞"
+              : "Mina couldn't send your report. But don't worry, it's not your fault!"
+        )
+        .addFields(
+          {
+            name: 'What to Do',
+            value:
+              'Please try again later. Mina believes in you! If the problem continues, it would be super helpful if you could let the support team know.',
+          },
+          {
+            name: 'Error Details',
+            value:
+              "There was an issue sending the report/feedback to Mina's team. This is likely a temporary problem.",
+          }
+        )
+        .setFooter({ text: 'Mina appreciates your patience and effort! 🌟' })
+      await interaction.reply({
+        embeds: [errorEmbed],
+        ephemeral: true,
       })
     }
-
-    await interaction.reply({
-      embeds: [confirmationEmbed],
-      ephemeral: true,
-    })
-  } else {
-    const errorEmbed = new EmbedBuilder()
-      .setColor(EMBED_COLORS.ERROR)
-      .setTitle('Oh no! Something Went Wrong 😟')
-      .setDescription(
-        "Mina couldn't send your report/feedback. But don't worry, it's not your fault!"
-      )
-      .addFields(
-        {
-          name: 'What to Do',
-          value:
-            'Please try again later. Mina believes in you! If the problem continues, it would be super helpful if you could let the support team know.',
-        },
-        {
-          name: 'Error Details',
-          value:
-            "There was an issue sending the report/feedback to Mina's team. This is likely a temporary problem.",
-        }
-      )
-      .setFooter({ text: 'Mina appreciates your patience and effort! 🌟' })
-    await interaction.reply({
-      embeds: [errorEmbed],
-      ephemeral: true,
-    })
   }
 }
 

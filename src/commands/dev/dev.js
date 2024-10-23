@@ -9,7 +9,11 @@ const {
 const { EMBED_COLORS, DEV } = require('@root/config')
 const { BotClient } = require('@src/structures')
 const { getSettings } = require('@schemas/Guild')
-const { addQuestion, deleteQuestion } = require('@schemas/TruthOrDare')
+const {
+  addQuestion,
+  deleteQuestion,
+  getQuestionById,
+} = require('@schemas/TruthOrDare')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 require('dotenv').config()
@@ -73,31 +77,28 @@ module.exports = {
             type: ApplicationCommandOptionType.String,
             required: true,
           },
+          {
+            name: 'rating',
+            description: 'Parental rating of the question',
+            type: ApplicationCommandOptionType.String,
+            required: true,
+            choices: [
+              { name: 'PG - General Audience', value: 'PG' },
+              { name: 'PG-13 - Teen', value: 'PG-13' },
+              { name: 'PG-16 - Mature Teen', value: 'PG-16' },
+              { name: 'R - Mature', value: 'R' },
+            ],
+          },
         ],
       },
       {
         name: 'del-tod',
-        description: 'Delete a Truth or Dare question',
+        description: 'Delete a Truth or Dare question by ID',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
-            name: 'category',
-            description: 'Category of the question',
-            type: ApplicationCommandOptionType.String,
-            required: true,
-            choices: [
-              { name: 'Truth', value: 'truth' },
-              { name: 'Dare', value: 'dare' },
-              { name: 'Paranoia', value: 'paranoia' },
-              { name: 'Never Have I Ever', value: 'nhie' },
-              { name: 'Would You Rather', value: 'wyr' },
-              { name: 'Have You Ever', value: 'hye' },
-              { name: 'What Would You Do', value: 'wwyd' },
-            ],
-          },
-          {
-            name: 'q_id',
-            description: 'ID of the question to delete',
+            name: 'question_id',
+            description: 'ID of the question to delete (e.g., T1, D2, NHIE3)',
             type: ApplicationCommandOptionType.String,
             required: true,
           },
@@ -319,22 +320,31 @@ module.exports = {
     if (sub === 'add-tod') {
       const category = interaction.options.getString('category')
       const question = interaction.options.getString('question')
-      const response = await addQuestion(category, question)
+      const rating = interaction.options.getString('rating')
+      const response = await addQuestion(category, question, rating)
       await interaction.followUp({
-        content: `Yay! 🎉 Your new *${category}* question has been added: "${question}"! So fun, right? 😄`,
+        content: `Yay! 🎉 Your new *${category}* question has been added: "${question}" [${rating}]! So fun, right? 😄`,
         embeds: [response],
       })
     }
 
     // Subcommand: del-tod
     if (sub === 'del-tod') {
-      const category = interaction.options.getString('category')
-      const questionId = interaction.options.getString('q_id')
-      const response = await deleteQuestion(category, questionId)
-      await interaction.followUp({
-        content: `Oh nooo~ 😢 Question from *${category}* has been deleted... But it's okay, we'll add more fun ones soon! ✨`,
-        embeds: [response],
-      })
+      const questionId = interaction.options
+        .getString('question_id')
+        .toUpperCase()
+      try {
+        const deletedQuestion = await deleteQuestion(questionId)
+        await interaction.followUp({
+          content: `Question deleted successfully! 🗑️\n**ID**: \`${deletedQuestion.questionId}\`\n**Category**: ${deletedQuestion.category}\n**Question**: "${deletedQuestion.question}"\n**Rating**: ${deletedQuestion.rating}`,
+          ephemeral: true,
+        })
+      } catch (error) {
+        await interaction.followUp({
+          content: `❌ ${error.message}`,
+          ephemeral: true,
+        })
+      }
     }
 
     // New subcommand: trig-settings

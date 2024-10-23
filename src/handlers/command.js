@@ -75,13 +75,19 @@ module.exports = {
     }
 
     try {
-      await interaction.deferReply({ ephemeral: cmd.slashCommand.ephemeral })
+      // Add a property to commands that show modals
+      if (!cmd.showsModal) {
+        await interaction.deferReply({ ephemeral: cmd.slashCommand.ephemeral })
+      }
       const settings = await getSettings(interaction.guild)
       await cmd.interactionRun(interaction, { settings })
     } catch (ex) {
-      await interaction.followUp(
-        '😢 Oops! An error occurred while running the command, please try again later~!'
-      )
+      // Only follow up if we deferred
+      if (!cmd.showsModal) {
+        await interaction.followUp(
+          '😢 Oops! An error occurred while running the command, please try again later~!'
+        )
+      }
       interaction.client.logger.error('interactionRun', ex)
     } finally {
       if (cmd.cooldown > 0) applyCooldown(interaction.user.id, cmd)

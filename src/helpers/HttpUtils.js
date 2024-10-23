@@ -2,7 +2,6 @@ const ISO6391 = require('iso-639-1')
 const sourcebin = require('sourcebin_js')
 const { error, debug } = require('@helpers/Logger')
 const fetch = require('node-fetch')
-const { translate: gTranslate } = require('@vitalets/google-translate-api')
 
 module.exports = class HttpUtils {
   /**
@@ -50,28 +49,6 @@ module.exports = class HttpUtils {
       return {
         success: false,
       }
-    }
-  }
-
-  /**
-   * Translates the provided content to the provided language code
-   * @param {string} content
-   * @param {string} outputCode
-   */
-  static async translate(content, outputCode) {
-    try {
-      const { text, raw } = await gTranslate(content, { to: outputCode })
-      return {
-        input: raw.src,
-        output: text,
-        inputCode: raw.src,
-        outputCode,
-        inputLang: ISO6391.getName(raw.src),
-        outputLang: ISO6391.getName(outputCode),
-      }
-    } catch (ex) {
-      error('translate', ex)
-      debug(`Content - ${content} OutputCode: ${outputCode}`)
     }
   }
 

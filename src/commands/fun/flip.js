@@ -63,7 +63,7 @@ module.exports = {
 
 const firstEmbed = user =>
   new EmbedBuilder()
-    .setColor(EMBED_COLORS.TRANSPARENT)
+    .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(`${user.username}, started a coin toss`)
 
 const secondEmbed = () =>

@@ -6,9 +6,14 @@ const reqString = {
 }
 
 const Schema = new mongoose.Schema({
-  category: reqString, // e.g., "truth," "dare," "paranoia," "nhie," "wyr," "hye," "wwyd"
-  questionId: reqString, // e.g., "T123," "D456," "P789," "NHIE101," "WYR202," "HYE303," "WWYD404
+  category: reqString,
+  questionId: reqString,
   question: reqString,
+  rating: {
+    type: String,
+    required: true,
+    enum: ['PG', 'PG-13', 'PG-16', 'R'],
+  },
 })
 
 const Model = mongoose.model('tod', Schema)
@@ -16,29 +21,26 @@ const Model = mongoose.model('tod', Schema)
 module.exports = {
   model: Model,
 
-  addQuestion: async (category, question) => {
-    // Find the latest question in the specified category to determine the next question ID
+  addQuestion: async (category, question, rating) => {
     const latestQuestion = await Model.findOne({ category }).sort({
       questionId: -1,
     })
 
-    let questionId = 'T1' // Default question ID format for "truth" category
-    if (category === 'dare') {
-      questionId = 'D1' // Default question ID format for "dare" category
-    } else if (category === 'paranoia') {
-      questionId = 'P1' // Default question ID format for "paranoia" category
-    } else if (category === 'nhie') {
-      questionId = 'NHIE1' // Default question ID format for "nhie" category
-    } else if (category === 'wyr') {
-      questionId = 'WYR1' // Default question ID format for "wyr" category
-    } else if (category === 'hye') {
-      questionId = 'HYE1' // Default question ID format for "hye" category
-    } else if (category === 'wwyd') {
-      questionId = 'WWYD1' // Default question ID format for "wwyd" category
+    let questionId = 'T1'
+    const prefixMap = {
+      dare: 'D',
+      paranoia: 'P',
+      nhie: 'NHIE',
+      wyr: 'WYR',
+      hye: 'HYE',
+      wwyd: 'WWYD',
+    }
+
+    if (prefixMap[category]) {
+      questionId = `${prefixMap[category]}1`
     }
 
     if (latestQuestion) {
-      // If there is a latest question, increment the question ID
       const latestQuestionId = latestQuestion.questionId
       const idParts = latestQuestionId.split(/(\d+)/)
       const currentNumber = parseInt(idParts[1])
@@ -49,6 +51,7 @@ module.exports = {
       category,
       questionId,
       question,
+      rating,
     })
 
     await data.save()
@@ -72,9 +75,24 @@ module.exports = {
     return questions
   },
 
-  deleteQuestion: async (category, questionId) => {
-    await Model.deleteOne({ category, questionId })
-    return 'Question deleted successfully!'
+  deleteQuestion: async questionId => {
+    const normalizedId = questionId.toUpperCase()
+
+    const question = await Model.findOne({
+      questionId: { $regex: new RegExp(`^${normalizedId}$`, 'i') },
+    })
+
+    if (!question) {
+      throw new Error(`Question with ID ${normalizedId} not found`)
+    }
+
+    await Model.deleteOne({ _id: question._id })
+    return {
+      category: question.category,
+      questionId: question.questionId,
+      question: question.question,
+      rating: question.rating,
+    }
   },
 
   getQuestionById: async questionId => {
@@ -84,4 +102,11 @@ module.exports = {
     }
     return question
   },
+}
+
+function getAllowedRatings(age) {
+  if (age >= 18) return ['PG', 'PG-13', 'PG-16', 'R']
+  if (age >= 16) return ['PG', 'PG-13', 'PG-16']
+  if (age >= 13) return ['PG', 'PG-13']
+  return ['PG']
 }

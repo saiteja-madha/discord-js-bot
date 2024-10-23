@@ -12,6 +12,6 @@ module.exports = {
   ticketHandler: require('./ticket'),
   todHandler: require('./tod'),
   reportHandler: require('./report'),
-  openAIHandler: require('./openai'),
   guildHandler: require('./guild'),
+  profileHandler: require('./profile'),
 }

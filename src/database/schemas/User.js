@@ -12,6 +12,26 @@ const FlagSchema = new mongoose.Schema({
   serverName: { type: String, required: true },
 })
 
+const ProfileSchema = new mongoose.Schema({
+  pronouns: { type: String, default: null },
+  age: { type: Number, default: null },
+  region: { type: String, default: null },
+  bio: { type: String, default: null, maxLength: 1000 },
+  birthdate: { type: Date, default: null },
+  interests: [{ type: String }],
+  customFields: [
+    {
+      label: { type: String, required: true },
+      value: { type: String, required: true },
+    },
+  ],
+  privacy: {
+    showAge: { type: Boolean, default: true },
+    showRegion: { type: Boolean, default: true },
+    showBirthdate: { type: Boolean, default: false },
+  },
+})
+
 const Schema = new mongoose.Schema(
   {
     _id: String,
@@ -34,18 +54,13 @@ const Schema = new mongoose.Schema(
       enabled: { type: Boolean, default: false },
       expiresAt: { type: Date, default: null },
     },
-    openai: {
-      apiKey: { type: String, default: null },
-      temperature: { type: Number, default: 0.7 },
-      imagine: { type: String, default: 'You are a helpful assistant.' },
-      maxTokens: { type: Number, default: 150 },
-    },
     afk: {
       enabled: { type: Boolean, default: false },
       reason: { type: String, default: null },
       since: { type: Date, default: null },
       endTime: { type: Date, default: null },
     },
+    profile: { type: ProfileSchema, default: () => ({}) },
   },
   {
     timestamps: {
@@ -136,17 +151,6 @@ module.exports = {
     if (user) cache.add(userId, user)
     return user
   },
-
-  updateOpenAISettings: async (userId, settings) => {
-    const user = await Model.findByIdAndUpdate(
-      userId,
-      { $set: { openai: settings } },
-      { new: true }
-    )
-
-    if (user) cache.add(userId, user)
-    return user
-  },
   setAfk: async (userId, reason = null, duration = null) => {
     const since = new Date()
     const endTime = duration
@@ -187,5 +191,44 @@ module.exports = {
     if (user) cache.add(userId, user)
     return user
   },
-}
 
+  updateProfile: async (userId, profileData) => {
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      { $set: { profile: profileData } },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
+
+  clearProfile: async userId => {
+    const user = await Model.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          profile: {
+            pronouns: null,
+            age: null,
+            region: null,
+            timezone: null,
+            bio: null,
+            birthdate: null,
+            interests: [],
+            customFields: [],
+            privacy: {
+              showAge: true,
+              showRegion: true,
+              showBirthdate: false,
+            },
+          },
+        },
+      },
+      { new: true }
+    )
+
+    if (user) cache.add(userId, user)
+    return user
+  },
+}

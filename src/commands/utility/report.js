@@ -48,7 +48,7 @@ module.exports = {
         ])
     )
 
-    await interaction.editReply({
+    await interaction.followUp({
       embeds: [embed],
       components: [row],
       ephemeral: true,
