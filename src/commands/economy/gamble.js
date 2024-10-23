@@ -99,7 +99,7 @@ async function gamble(user, betAmount) {
 
   const embed = new EmbedBuilder()
     .setAuthor({ name: user.username, iconURL: user.displayAvatarURL() })
-    .setColor(EMBED_COLORS.TRANSPARENT)
+    .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(
       'https://i.pinimg.com/originals/9a/f1/4e/9af14e0ae92487516894faa9ea2c35dd.gif'
     )

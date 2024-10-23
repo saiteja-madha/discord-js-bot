@@ -113,8 +113,6 @@ module.exports = {
         interaction.options.getString('status'),
         interaction.options.getInteger('threshold')
       )
-    } else {
-      response = 'Oops! Invalid command usage! Please check and try again! 💕'
     }
 
     await interaction.followUp(response)

@@ -53,7 +53,7 @@ async function getFact(user, choice) {
   const fact = response.data?.fact
   const imageUrl = response.data?.image
   const embed = new EmbedBuilder()
-    .setColor(EMBED_COLORS.TRANSPARENT)
+    .setColor(EMBED_COLORS.BOT_EMBED)
     .setThumbnail(imageUrl)
     .setDescription(fact)
     .setFooter({ text: `Requested by ${user.tag}` })

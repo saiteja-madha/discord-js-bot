@@ -8,8 +8,8 @@ const {
   ticketHandler,
   todHandler,
   reportHandler,
-  openAIHandler,
   guildHandler,
+  profileHandler,
 } = require('@src/handlers')
 /**
  * @param {import('@src/structures').BotClient} client
@@ -81,12 +81,19 @@ module.exports = async (client, interaction) => {
         return guildHandler.handleSetupModal(interaction)
       case 'AMINA_REMIND_MODAL':
         return guildHandler.handleRemindModal(interaction)
-      case 'openai_setup_modal':
-        return openAIHandler.handleOpenAISetupModal(interaction)
+      case 'profile_set_modal':
+        return profileHandler.handleProfileModal(interaction)
       default:
         if (interaction.customId.startsWith('report_modal_')) {
           return reportHandler.handleReportModal(interaction)
         }
+    }
+
+    // select menus
+  } else if (interaction.isStringSelectMenu()) {
+    switch (interaction.customId) {
+      case 'profile_clear_confirm':
+        return profileHandler.handleProfileClear(interaction)
     }
   }
 

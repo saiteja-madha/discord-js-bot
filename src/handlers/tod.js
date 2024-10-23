@@ -4,130 +4,135 @@ const {
   ButtonBuilder,
   ButtonStyle,
 } = require('discord.js')
+const { getQuestions } = require('@schemas/TruthOrDare')
+const { getUser } = require('@schemas/User')
+const { EMBED_COLORS } = require('@root/config')
 
-const { getQuestions } = require('@schemas/TruthOrDare') // Import the getQuestions function
-
-/**
- * @param {import("discord.js").ButtonInteraction} interaction
- */
 async function handleTodButtonClick(interaction) {
+  const user = await getUser(interaction.member.user)
+
+  if (!user.profile?.age) {
+    return interaction.reply({
+      content:
+        'Please set your age using `/user set` command first to play Truth or Dare!',
+      ephemeral: true,
+    })
+  }
+
+  // Get the current rating from the footer of the previous embed
+  const currentEmbed = interaction.message.embeds[0]
+  const footerText = currentEmbed.footer.text
+  const currentRating = footerText.match(/Rating: ([^|]+)/)[1].trim()
+
+  // Check R-rating requirements for button clicks
+  if (currentRating === 'R') {
+    if (user.profile.age < 18) {
+      return interaction.reply({
+        content: 'You must be 18 or older to view R-rated content.',
+        ephemeral: true,
+      })
+    }
+
+    if (!interaction.channel.nsfw) {
+      return interaction.reply({
+        content: 'R-rated content can only be viewed in NSFW channels.',
+        ephemeral: true,
+      })
+    }
+  }
+
   const customId = interaction.customId
 
   switch (customId) {
     case 'truthBtn':
-      await sendQuestion(interaction, 'truth')
+      await sendQuestion(interaction, 'truth', user.profile.age, currentRating)
       break
     case 'dareBtn':
-      await sendQuestion(interaction, 'dare')
+      await sendQuestion(interaction, 'dare', user.profile.age, currentRating)
       break
     case 'randomBtn':
-      await sendRandomQuestion(interaction)
+      await sendRandomQuestion(interaction, user.profile.age, currentRating)
       break
   }
 }
 
-/**
- * @param {ButtonInteraction} interaction
- * @param {string} category
- */
-async function sendQuestion(interaction, category) {
-  await interaction.reply({
-    content: 'Inaminit! Someone tell Maria I love her SFM...',
-    ephemeral: true,
-  })
-
-  const questions = await getQuestions(1, category)
+async function sendQuestion(interaction, category, userAge, requestedRating) {
+  const questions = await getQuestions(1, category, userAge, requestedRating)
   if (questions.length === 0) {
-    await interaction.followUp(
-      'No questions available in the specified category.'
-    )
+    await interaction.reply({
+      content: 'No questions available matching your criteria.',
+      ephemeral: true,
+    })
     return
   }
 
   const question = questions[0]
   const embed = new EmbedBuilder()
-    .setColor('Blue')
+    .setColor(EMBED_COLORS.BOT_EMBED)
     .setTitle(`TOD: ${category}`)
     .setDescription(
       `Alright ${interaction.user.tag};\n**${question.question}**\n \n \n \n \n`
     )
     .setFooter({
-      text: `Type: ${category} | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
+      text: `Type: ${category} | Rating: ${question.rating} | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId('truthBtn')
       .setStyle(ButtonStyle.Primary)
-      .setLabel('Truth')
-  )
-
-  buttons.addComponents(
+      .setLabel('Truth'),
     new ButtonBuilder()
       .setCustomId('dareBtn')
       .setStyle(ButtonStyle.Success)
-      .setLabel('Dare')
-  )
-
-  buttons.addComponents(
+      .setLabel('Dare'),
     new ButtonBuilder()
       .setCustomId('randomBtn')
       .setStyle(ButtonStyle.Danger)
       .setLabel('Random')
   )
 
-  await interaction.followUp({
+  await interaction.reply({
     embeds: [embed],
     components: [buttons],
   })
 }
 
-/**
- * @param {ButtonInteraction} interaction
- */
-async function sendRandomQuestion(interaction) {
-  await interaction.reply({
-    content: 'Inaminit! Someone tell Maria I love her SFM...',
-    ephemeral: true,
-  })
-
-  const questions = await getQuestions(1)
+async function sendRandomQuestion(interaction, userAge, requestedRating) {
+  const questions = await getQuestions(1, 'random', userAge, requestedRating)
   if (questions.length === 0) {
-    await interaction.followUp('No questions available.')
+    await interaction.reply({
+      content: 'No questions available matching your criteria.',
+      ephemeral: true,
+    })
     return
   }
 
   const question = questions[0]
   const embed = new EmbedBuilder()
-    .setColor('Blue')
+    .setColor('Random')
     .setTitle('Random Truth or Dare')
     .setDescription(` \n**${question.question}**\n \n \n \n \n`)
     .setFooter({
-      text: `Type: RANDOM | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
+      text: `Type: ${question.category} | Rating: ${question.rating} | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId('truthBtn')
       .setStyle(ButtonStyle.Primary)
-      .setLabel('Truth')
-  )
-
-  buttons.addComponents(
+      .setLabel('Truth'),
     new ButtonBuilder()
       .setCustomId('dareBtn')
       .setStyle(ButtonStyle.Success)
-      .setLabel('Dare')
-  )
-
-  buttons.addComponents(
+      .setLabel('Dare'),
     new ButtonBuilder()
       .setCustomId('randomBtn')
       .setStyle(ButtonStyle.Danger)
       .setLabel('Random')
   )
 
-  await interaction.followUp({ embeds: [embed], components: [buttons] })
+  await interaction.reply({ embeds: [embed], components: [buttons] })
 }
 
 module.exports = {

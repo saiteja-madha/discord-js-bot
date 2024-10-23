@@ -79,7 +79,6 @@ module.exports = {
   },
   EMBED_COLORS: {
     BOT_EMBED: '#FF1493', // (Deep pink - represents her core energy and vibrant spirit)
-    TRANSPARENT: '#00000000',
     SUCCESS: '#00FFB3', // (Bright aqua - her creative, unique way of seeing success)
     ERROR: '#FF6978', // (Coral pink - softer than traditional red, showing her sensitivity even in errors)
     WARNING: '#FFD93D', // (Bright yellow - her playful way of warning others)

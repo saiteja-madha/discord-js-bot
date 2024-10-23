@@ -80,7 +80,7 @@ module.exports = {
       name: 'attachment.png',
     })
     const embed = new EmbedBuilder()
-      .setColor(EMBED_COLORS.TRANSPARENT)
+      .setColor(EMBED_COLORS.BOT_EMBED)
       .setImage('attachment://attachment.png')
       .setFooter({ text: `Requested by: ${author.username}` })
 
