@@ -43,7 +43,7 @@ module.exports = {
   cooldown: 1,
   category: 'IMAGE',
   botPermissions: ['EmbedLinks', 'AttachFiles'],
-  global: true,
+
   slashCommand: {
     enabled: IMAGE.ENABLED,
     options: [

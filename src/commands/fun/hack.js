@@ -10,7 +10,7 @@ module.exports = {
     "Let Amina 'hack' into someone's life with her chaotic energy~! ✨",
   cooldown: 10,
   category: 'FUN',
-  global: true,
+
   botPermissions: ['SendMessages', 'EmbedLinks'],
   slashCommand: {
     enabled: true,

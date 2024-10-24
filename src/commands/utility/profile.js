@@ -12,7 +12,7 @@ module.exports = {
   name: 'profile',
   description: 'Set up and manage your personal profile!',
   category: 'UTILITY',
-  global: true,
+
   showsModal: true,
   slashCommand: {
     enabled: true,

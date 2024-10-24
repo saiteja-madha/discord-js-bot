@@ -11,7 +11,7 @@ module.exports = {
   description: "show's what track is currently being played",
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: MUSIC.ENABLED,
   },

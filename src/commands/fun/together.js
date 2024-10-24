@@ -33,7 +33,7 @@ module.exports = {
   description: 'Start a Discord Together activity',
   category: 'FUN',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

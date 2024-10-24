@@ -10,7 +10,7 @@ module.exports = {
   description: 'Set your AFK status',
   category: 'UTILITY',
   botPermissions: ['SendMessages', 'EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

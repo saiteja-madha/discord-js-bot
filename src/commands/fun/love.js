@@ -7,7 +7,7 @@ module.exports = {
   name: 'love',
   description: 'Get the love percentage of two users.',
   category: 'FUN',
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

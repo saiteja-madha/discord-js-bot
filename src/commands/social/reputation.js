@@ -11,7 +11,7 @@ module.exports = {
   description: 'give reputation to a user',
   category: 'SOCIAL',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

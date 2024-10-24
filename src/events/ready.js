@@ -5,11 +5,7 @@ const {
 } = require('@src/handlers')
 const { cacheReactionRoles } = require('@schemas/ReactionRoles')
 const { getSettings } = require('@schemas/Guild')
-const {
-  getPresenceConfig,
-  getDevCommandsConfig,
-  getGlobalCommandsConfig,
-} = require('@schemas/Dev')
+const { getPresenceConfig, getDevCommandsConfig } = require('@schemas/Dev')
 const { ApplicationCommandType } = require('discord.js')
 
 /**
@@ -64,7 +60,6 @@ module.exports = async client => {
   // Register Interactions
   if (client.config.INTERACTIONS.SLASH || client.config.INTERACTIONS.CONTEXT) {
     const devConfig = await getDevCommandsConfig()
-    const globalConfig = await getGlobalCommandsConfig()
 
     // Register test guild commands
     const testGuild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
@@ -87,7 +82,7 @@ module.exports = async client => {
     }
 
     // Register global commands
-    if (client.config.INTERACTIONS.GLOBAL && globalConfig.ENABLED) {
+    if (client.config.INTERACTIONS.GLOBAL) {
       const globalCommands = client.slashCommands
         .filter(cmd => !cmd.testGuildOnly && !cmd.devOnly)
         .map(cmd => ({

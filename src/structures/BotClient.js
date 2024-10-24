@@ -16,7 +16,6 @@ const CommandCategory = require('./CommandCategory')
 const lavaclient = require('../handlers/lavaclient')
 const giveawaysHandler = require('../handlers/giveaway')
 const { DiscordTogether } = require('discord-together')
-const { Model: DevModel } = require('@schemas/Dev') // Import the Dev schema
 
 const MAX_SLASH_COMMANDS = 100
 const MAX_USER_CONTEXTS = 3
@@ -34,11 +33,6 @@ module.exports = class BotClient extends Client {
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildVoiceStates,
-        GatewayIntentBits.GuildModeration,
-        GatewayIntentBits.GuildMessageTyping,
-        GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.DirectMessageReactions,
-        GatewayIntentBits.DirectMessageTyping,
       ],
       partials: [Partials.User, Partials.Message, Partials.Reaction],
       allowedMentions: { repliedUser: false },
@@ -112,8 +106,8 @@ module.exports = class BotClient extends Client {
     )
   }
 
-  async loadCommand(cmd) {
-    // Skip disabled categories
+  // Load and register a single command
+  loadCommand(cmd) {
     if (cmd.category && CommandCategory[cmd.category]?.enabled === false) {
       this.logger.debug(
         `Skipping Command ${cmd.name}. Category ${cmd.category} is disabled`
@@ -121,60 +115,26 @@ module.exports = class BotClient extends Client {
       return
     }
 
-    // Skip commands that don't have slash command enabled
-    if (!cmd.slashCommand?.enabled) {
-      this.logger.debug(`Skipping slash command ${cmd.name}. Disabled!`)
-      return
-    }
-
-    try {
-      // Get dev and global command configs directly from the model
-      const devDocument = await DevModel.findOne()
-      const devConfig = devDocument?.DEV_COMMANDS || { ENABLED: false }
-      const globalConfig = devDocument?.GLOBAL_COMMANDS || { ENABLED: true }
-
-      // Skip dev commands if they're disabled
-      if (cmd.devOnly && !devConfig.ENABLED) {
-        this.logger.debug(
-          `Skipping dev command ${cmd.name}. Dev commands are disabled`
-        )
-        return
-      }
-
-      // Skip global commands if they're disabled (except for testGuildOnly commands)
-      if (!cmd.testGuildOnly && !cmd.devOnly && !globalConfig.ENABLED) {
-        this.logger.debug(
-          `Skipping global command ${cmd.name}. Global commands are disabled`
-        )
-        return
-      }
-
-      // Check for duplicate commands
+    if (cmd.slashCommand?.enabled) {
       if (this.slashCommands.has(cmd.name)) {
         throw new Error(`Slash Command ${cmd.name} already registered`)
       }
-
-      // Add the command to the collection
       this.slashCommands.set(cmd.name, cmd)
-    } catch (err) {
-      this.logger.error(
-        `Failed to load command ${cmd.name}. Reason: ${err.message}`
-      )
+    } else {
+      this.logger.debug(`Skipping slash command ${cmd.name}. Disabled!`)
     }
   }
 
-  // Update loadCommands to handle async loadCommand
-  async loadCommands(directory) {
+  // Load and register all commands from a directory
+  loadCommands(directory) {
     this.logger.log('Loading commands...')
     const files = recursiveReadDirSync(directory)
-
-    // Load commands sequentially to maintain order and prevent race conditions
     for (const file of files) {
       try {
         const cmd = require(file)
         if (typeof cmd !== 'object') continue
         validateCommand(cmd)
-        await this.loadCommand(cmd)
+        this.loadCommand(cmd)
       } catch (ex) {
         this.logger.error(`Failed to load ${file} Reason: ${ex.message}`)
       }

@@ -10,7 +10,7 @@ module.exports = {
   name: 'stats',
   description: 'displays members stats in this server',
   category: 'STATS',
-  global: true,
+
   slashCommand: {
     enabled: STATS.ENABLED,
     options: [

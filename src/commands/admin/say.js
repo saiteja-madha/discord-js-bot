@@ -6,7 +6,7 @@ module.exports = {
   category: 'ADMIN',
   botPermissions: ['SendMessages'],
   userPermissions: ['ManageMessages'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     ephemeral: true,

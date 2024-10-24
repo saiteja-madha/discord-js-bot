@@ -29,7 +29,7 @@ module.exports = {
   name: 'giveaway',
   description: 'giveaway commands',
   category: 'GIVEAWAY',
-  global: true,
+
   slashCommand: {
     enabled: GIVEAWAYS.ENABLED,
     ephemeral: true,

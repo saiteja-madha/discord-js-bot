@@ -2,7 +2,7 @@
   "name": "discord-js-bot",
   "version": "5.5.0",
   "description": "An open-source, multipurpose discord bot built using discord-js",
-  "main": "bot.js",
+  "main": "src/index.js",
   "author": "Vikshan",
   "license": "ISC",
   "engines": {
@@ -17,7 +17,7 @@
     "heroku-postbuild": "cd dash && npm install && npm run build",
     "f": "prettier --write src",
     "u": "git pull && npm update && npm run f",
-    "start-replit": "node bot.js"
+    "start-replit": "node src/index.js"
   },
   "homepage": "https://github.com/vixshan/amina#readme",
   "repository": {

@@ -20,7 +20,6 @@ module.exports = {
   description: 'Send a beautiful embed message!',
   category: 'ADMIN',
   userPermissions: ['ManageMessages'],
-  global: true,
   slashCommand: {
     enabled: true,
     ephemeral: true,

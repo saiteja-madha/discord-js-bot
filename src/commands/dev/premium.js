@@ -9,7 +9,6 @@ module.exports = {
   cooldown: 5,
   category: 'DEV',
   devOnly: true,
-  global: true,
   slashCommand: {
     enabled: false,
     ephemeral: true,

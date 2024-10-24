@@ -14,7 +14,7 @@ module.exports = {
   description: 'fetch proxies. Available types: http, socks4, socks5',
   category: 'UTILITY',
   botPermissions: ['EmbedLinks', 'AttachFiles'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [
