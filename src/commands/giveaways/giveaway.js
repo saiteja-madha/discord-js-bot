@@ -11,7 +11,7 @@ const {
 } = require('discord.js')
 const { parsePermissions } = require('@helpers/Utils')
 const ems = require('enhanced-ms')
-const { GIVEAWAYS } = require('@root/config.js')
+const { GIVEAWAYS } = require('@src/config.js')
 
 // Sub Commands
 const start = require('./sub/start')

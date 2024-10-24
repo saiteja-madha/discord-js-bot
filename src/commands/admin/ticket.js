@@ -10,7 +10,7 @@ const {
   TextInputStyle,
   ComponentType,
 } = require('discord.js')
-const { EMBED_COLORS, TICKET } = require('@root/config.js')
+const { EMBED_COLORS, TICKET } = require('@src/config.js')
 const {
   isTicketChannel,
   closeTicket,

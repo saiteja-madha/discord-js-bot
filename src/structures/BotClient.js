@@ -42,7 +42,7 @@ module.exports = class BotClient extends Client {
     // Promisify setTimeout for use with async/await
     this.wait = require('util').promisify(setTimeout)
     // Load configuration
-    this.config = require('@root/config')
+    this.config = require('@src/config')
 
     // Initialize collections for slash commands and context menus
     this.slashCommands = new Collection()

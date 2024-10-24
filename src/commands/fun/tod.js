@@ -8,7 +8,7 @@ const { getQuestions } = require('@schemas/TruthOrDare')
 const { getUser } = require('@schemas/User')
 const { EmbedBuilder } = require('discord.js')
 const { handleTodButtonClick } = require('@handlers/tod')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 
 // Helper function to create rating choices
 const getRatingChoices = () => [

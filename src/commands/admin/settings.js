@@ -8,7 +8,7 @@ const {
   ChannelType,
   PermissionFlagsBits,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config.js')
+const { EMBED_COLORS } = require('@src/config.js')
 const { model: ReactionRoleModel } = require('@schemas/ReactionRoles')
 
 module.exports = {

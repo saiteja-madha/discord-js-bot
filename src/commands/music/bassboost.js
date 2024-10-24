@@ -1,6 +1,6 @@
 const { musicValidations } = require('@helpers/BotUtils')
 const { ApplicationCommandOptionType } = require('discord.js')
-const { MUSIC } = require('@root/config.js')
+const { MUSIC } = require('@src/config.js')
 
 const levels = {
   none: 0.0,

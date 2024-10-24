@@ -1,7 +1,7 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const { getWarningLogs, clearWarningLogs } = require('@schemas/ModLog')
 const { getMember } = require('@schemas/Member')
-const { MODERATION } = require('@root/config')
+const { MODERATION } = require('@src/config')
 
 /**
  * @type {import("@structures/Command")}

@@ -5,7 +5,7 @@ const {
   ApplicationCommandOptionType,
   ButtonStyle,
 } = require('discord.js')
-const { SUGGESTIONS } = require('@root/config')
+const { SUGGESTIONS } = require('@src/config')
 const { addSuggestion } = require('@schemas/Suggestions')
 const { stripIndent } = require('common-tags')
 

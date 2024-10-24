@@ -1,6 +1,6 @@
 const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js')
 const { getUser, setAfk } = require('@schemas/User')
-const { EMBED_COLORS } = require('@root/config.js')
+const { EMBED_COLORS } = require('@src/config.js')
 
 /**
  * @type {import("@structures/Command")}

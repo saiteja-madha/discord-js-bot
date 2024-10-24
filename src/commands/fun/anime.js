@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
 const axios = require('axios')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 
 /**
  * @type {import("@structures/Command")}

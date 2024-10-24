@@ -6,7 +6,7 @@ const {
   ComponentType,
   ApplicationCommandOptionType,
 } = require('discord.js')
-const { EMBED_COLORS, DEV } = require('@root/config')
+const { EMBED_COLORS, DEV } = require('@src/config')
 const { BotClient } = require('@src/structures')
 const { getSettings } = require('@schemas/Guild')
 const {

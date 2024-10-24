@@ -1,6 +1,6 @@
 const { warnTarget } = require('@helpers/ModUtils')
 const { ApplicationCommandOptionType } = require('discord.js')
-const { MODERATION } = require('@root/config')
+const { MODERATION } = require('@src/config')
 
 /**
  * @type {import("@structures/Command")}

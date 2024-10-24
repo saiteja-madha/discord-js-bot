@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { CACHE_SIZE } = require('@root/config.js')
+const { CACHE_SIZE } = require('@src/config.js')
 const FixedSizeMap = require('fixedsize-map')
 
 const cache = new FixedSizeMap(CACHE_SIZE.USERS)

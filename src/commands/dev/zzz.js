@@ -3,7 +3,7 @@ const {
   ApplicationCommandType,
 } = require('discord.js')
 const { EmbedBuilder } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 const { setDevCommands } = require('@schemas/Dev')
 
 /**

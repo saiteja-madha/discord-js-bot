@@ -1,5 +1,5 @@
 const { Collection, EmbedBuilder, GuildMember } = require('discord.js')
-const { MODERATION } = require('@root/config')
+const { MODERATION } = require('@src/config')
 
 // Utils
 const { containsLink } = require('@helpers/Utils')

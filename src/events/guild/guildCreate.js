@@ -7,7 +7,7 @@ const {
   PermissionFlagsBits,
   ChannelType,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 
 /**
  * @param {import('@src/structures').BotClient} client

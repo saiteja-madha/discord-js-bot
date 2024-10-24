@@ -1,4 +1,4 @@
-const { EMBED_COLORS, MUSIC } = require('@root/config')
+const { EMBED_COLORS, MUSIC } = require('@src/config')
 const { EmbedBuilder } = require('discord.js')
 const prettyMs = require('pretty-ms')
 const { splitBar } = require('string-progressbar')

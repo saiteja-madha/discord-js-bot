@@ -4,10 +4,8 @@ node_modules/
 *.log
 *.tar.gz
 .env
-config.js
 package-lock.json
-.nyc_output/
-coverage/
+
 # build output
 dash/dist/
 # generated types

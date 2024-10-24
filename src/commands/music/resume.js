@@ -1,5 +1,5 @@
 const { musicValidations } = require('@helpers/BotUtils')
-const { MUSIC } = require('@root/config.js')
+const { MUSIC } = require('@src/config.js')
 
 /**
  * @type {import("@structures/Command")}
