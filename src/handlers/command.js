@@ -1,5 +1,5 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 const { parsePermissions } = require('@helpers/Utils')
 const { timeformat } = require('@helpers/Utils')
 const { getSettings } = require('@schemas/Guild')

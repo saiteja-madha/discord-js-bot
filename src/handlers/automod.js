@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js')
 const { containsLink, containsDiscordInvite } = require('@helpers/Utils')
 const { getMember } = require('@schemas/Member')
 const { addModAction } = require('@helpers/ModUtils')
-const { AUTOMOD } = require('@root/config')
+const { AUTOMOD } = require('@src/config')
 const { addAutoModLogToDb } = require('@schemas/AutomodLogs')
 
 const antispamCache = new Map()

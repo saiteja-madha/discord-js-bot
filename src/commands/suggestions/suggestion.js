@@ -1,6 +1,6 @@
 const { approveSuggestion, rejectSuggestion } = require('@handlers/suggestion')
 const { parsePermissions } = require('@helpers/Utils')
-const { SUGGESTIONS } = require('@root/config')
+const { SUGGESTIONS } = require('@src/config')
 const { ApplicationCommandOptionType, ChannelType } = require('discord.js')
 
 const CHANNEL_PERMS = [

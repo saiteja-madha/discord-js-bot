@@ -1,6 +1,6 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const { getUser } = require('@schemas/User')
-const { EMBED_COLORS, ECONOMY } = require('@root/config.js')
+const { EMBED_COLORS, ECONOMY } = require('@src/config.js')
 const { getRandomInt } = require('@helpers/Utils')
 
 /**

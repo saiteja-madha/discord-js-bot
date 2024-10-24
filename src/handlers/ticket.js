@@ -7,7 +7,7 @@ const {
   StringSelectMenuBuilder,
   ComponentType,
 } = require('discord.js')
-const { TICKET } = require('@root/config.js')
+const { TICKET } = require('@src/config.js')
 
 // schemas
 const { getSettings } = require('@schemas/Guild')

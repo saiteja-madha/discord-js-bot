@@ -1,29 +1,29 @@
 {
-  "subTitle": "Ask us anything about our brand and products, and get factual responses.",
+  "subTitle": "Curious about Amina? Here are some answers to your questions! (Warning: May contain unexpected bursts of creativity)",
   "faqs": [
     {
-      "question": "What types of tools are included in the Starter Kit?",
-      "answer": "The Starter Kit features essential hand and power tools for diverse DIY projects, including hammers, drills, screwdrivers, and a variety of fasteners. It's a curated selection to help beginners and experienced DIYers alike tackle most home improvement tasks."
+      "question": "What exactly is Amina?",
+      "answer": "Amina is a playful and creative Discord bot currently in development! She's designed to bring fun, creativity, and a dash of chaos to your server. Think of her as that enthusiastic friend who always has a wild idea up their sleeve!"
     },
     {
-      "question": "Can I upgrade from the Starter Kit to the Professional Toolbox?",
-      "answer": "Absolutely! You can upgrade to the Professional Toolbox at any time to access a wider range of high-quality tools, enjoy priority customer support, and receive exclusive content. Contact our support team for a seamless transition."
+      "question": "What features does Amina currently have?",
+      "answer": "Amina is still a work in progress, with new features being added regularly. Our dashboard and website are also under development. We'd love help from creative minds and developers to make her even more amazing! Join our community to contribute or watch her grow."
     },
     {
-      "question": "What discounts are available for bulk orders through the Professional Toolbox plan?",
-      "answer": "Professional Toolbox members are entitled to exclusive discounts on bulk orders, the percentage of which may vary depending on the order volume. Get in touch with us to discuss your needs, and we'll provide a tailored discount structure."
+      "question": "How can I contribute to Amina's development?",
+      "answer": "We welcome all kinds of contributions! Whether you're a developer, artist, or just have cool ideas, you can help shape Amina's future. Check out our GitHub repository or join our Discord server to get involved. Don't be shy - Amina loves meeting new friends!"
     },
     {
-      "question": "What kind of customer support can I expect?",
-      "answer": "All our customers receive dedicated email support. With the Starter Kit, you'll receive our standard support, while the Professional Toolbox plan upgrades you to priority support, meaning faster response times and specialized assistance."
+      "question": "Is Amina ready for my Discord server?",
+      "answer": "While Amina is still growing and learning, she's eager to make new friends! Keep in mind that she's in active development, so you might encounter some quirks - but that's part of her charm! Join our testing program to help us improve."
     },
     {
-      "question": "How current are the online resources and tutorials?",
-      "answer": "We regularly update our online resources and tutorials to reflect the latest trends in DIY and construction, as well as introductions to new tools and techniques. Our material aims to be comprehensive and user-friendly for all skill levels."
+      "question": "How often does Amina get updates?",
+      "answer": "Like any creative soul, Amina is constantly evolving! We're actively working on new features and improvements. Join our Discord server to stay updated on her latest adventures and development progress."
     },
     {
-      "question": "Does Amina offer services for large-scale construction projects?",
-      "answer": "Yes, our Enterprise Solutions are designed for larger companies requiring comprehensive services. We provide consultation, planning, and supply of high-grade tools and materials, as well as staffing solutions for substantial construction needs. Contact us for a customized quote."
+      "question": "How can I get support or report issues?",
+      "answer": "Found a bug or need help? Don't worry! Join our Discord community where our team and other users can help you out. Amina might be quirky, but we take your feedback seriously and are always working to make her better!"
     }
   ]
 }

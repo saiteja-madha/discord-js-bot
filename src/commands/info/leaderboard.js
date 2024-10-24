@@ -3,7 +3,7 @@ const {
   escapeInlineCode,
   ApplicationCommandOptionType,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 const { getInvitesLb } = require('@schemas/Member')
 const { getXpLb } = require('@schemas/MemberStats')
 const { getReputationLb } = require('@schemas/User')

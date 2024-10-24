@@ -4,7 +4,7 @@ const {
   cacheGuildInvites,
   resetInviteCache,
 } = require('@handlers/invite')
-const { EMBED_COLORS, INVITE } = require('@root/config.js')
+const { EMBED_COLORS, INVITE } = require('@src/config.js')
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const { getMember } = require('@schemas/Member')
 const { stripIndent } = require('common-tags')

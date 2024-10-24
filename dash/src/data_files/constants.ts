@@ -2,13 +2,13 @@ import ogImageSrc from '@images/social.png'
 
 export const SITE = {
   title: 'Amina',
-  tagline: 'Top-quality Hardware Tools',
+  tagline: 'Your Creative & Energetic Discord Companion!',
   description:
-    'Amina offers top-tier hardware tools and expert construction services to meet all your project needs. Start exploring and contact our sales team for superior quality and reliability.',
+    'Meet Amina, a vibrant Discord bot bringing creativity, fun, and a dash of chaos to your server! Currently in development, Amina offers unique features wrapped in a playful personality. Join us in shaping her future!',
   description_short:
-    'Amina offers top-tier hardware tools and expert construction services to meet all your project needs.',
-  url: 'https://screwfast.uk',
-  author: 'Emil Gulamov',
+    'A quirky, artistic Discord bot that brings life to your server with creative features and infectious enthusiasm.',
+  url: 'https://amina.vikshan.tech',
+  author: 'Vikshan', 
 }
 
 export const SEO = {
@@ -35,9 +35,8 @@ export const OG = {
   locale: 'en_US',
   type: 'website',
   url: SITE.url,
-  title: `${SITE.title}: : Hardware Tools & Construction Services`,
+  title: `${SITE.title}: Your Creative Discord Companion`,
   description:
-    "Equip your projects with Amina's top-quality hardware tools and expert construction services. Trusted by industry leaders, Amina offers simplicity, affordability, and reliability. Experience the difference with user-centric design and cutting-edge tools. Start exploring now!",
+    "Introducing Amina, a uniquely personable Discord bot with a flair for creativity and fun! Currently in development, she's looking for fellow creators and developers to help shape her features and personality. Join our community and be part of something special!",
   image: ogImageSrc,
 }
-

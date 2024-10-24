@@ -1,6 +1,6 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
 const { getJson } = require('@helpers/HttpUtils')
-const { MESSAGES, EMBED_COLORS, MUSIC } = require('@root/config')
+const { MESSAGES, EMBED_COLORS, MUSIC } = require('@src/config')
 
 const BASE_URL = 'https://some-random-api.com/lyrics'
 

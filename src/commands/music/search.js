@@ -6,7 +6,7 @@ const {
   ComponentType,
 } = require('discord.js')
 const prettyMs = require('pretty-ms')
-const { EMBED_COLORS, MUSIC } = require('@root/config')
+const { EMBED_COLORS, MUSIC } = require('@src/config')
 
 const search_prefix = {
   YT: 'ytsearch',

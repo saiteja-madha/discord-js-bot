@@ -6,7 +6,7 @@ const {
 } = require('discord.js')
 const { getQuestions } = require('@schemas/TruthOrDare')
 const { getUser } = require('@schemas/User')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 
 async function handleTodButtonClick(interaction) {
   const user = await getUser(interaction.member.user)

@@ -2,7 +2,7 @@ const { musicValidations } = require('@helpers/BotUtils')
 const prettyMs = require('pretty-ms')
 const { durationToMillis } = require('@helpers/Utils')
 const { ApplicationCommandOptionType } = require('discord.js')
-const { MUSIC } = require('@root/config.js')
+const { MUSIC } = require('@src/config.js')
 
 /**
  * @type {import("@structures/Command")}

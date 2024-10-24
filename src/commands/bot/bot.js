@@ -6,7 +6,7 @@ const {
   ButtonStyle,
 } = require('discord.js')
 const { timeformat } = require('@helpers/Utils')
-const { EMBED_COLORS, DASHBOARD } = require('@root/config.js')
+const { EMBED_COLORS, DASHBOARD } = require('@src/config.js')
 const botstats = require('./sub/botstats')
 
 /**

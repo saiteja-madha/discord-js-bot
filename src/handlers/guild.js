@@ -9,7 +9,7 @@ const {
   ChannelType,
 } = require('discord.js')
 const { getSettings } = require('@schemas/Guild')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 
 /**
  * @param {import('discord.js').TextChannel} channel

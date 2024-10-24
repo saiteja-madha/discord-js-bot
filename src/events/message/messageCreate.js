@@ -1,5 +1,5 @@
 const { automodHandler, statsHandler } = require('@src/handlers')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 const { getSettings } = require('@schemas/Guild')
 const { getUser, removeAfk } = require('@schemas/User')
 const { EmbedBuilder } = require('discord.js')

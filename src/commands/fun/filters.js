@@ -4,7 +4,7 @@ const {
   ApplicationCommandOptionType,
 } = require('discord.js')
 const { getBuffer } = require('@helpers/HttpUtils')
-const { EMBED_COLORS, IMAGE } = require('@root/config.js')
+const { EMBED_COLORS, IMAGE } = require('@src/config.js')
 
 const availableFilters = [
   'blur',

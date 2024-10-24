@@ -3,7 +3,7 @@ const {
   ApplicationCommandOptionType,
   ActivityType,
 } = require('discord.js')
-const { EMBED_COLORS } = require('@root/config')
+const { EMBED_COLORS } = require('@src/config')
 const { getPresenceConfig, updatePresenceConfig } = require('@schemas/Dev')
 
 /**

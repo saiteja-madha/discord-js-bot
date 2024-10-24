@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
 const { getUser } = require('@schemas/User')
-const { EMBED_COLORS, ECONOMY } = require('@root/config')
+const { EMBED_COLORS, ECONOMY } = require('@src/config')
 
 module.exports = async user => {
   const economy = await getUser(user)
