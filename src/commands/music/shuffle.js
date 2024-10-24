@@ -9,7 +9,7 @@ module.exports = {
   description: 'shuffle the queue',
   category: 'MUSIC',
   validations: musicValidations,
-  global: true,
+
   slashCommand: {
     enabled: MUSIC.ENABLED,
   },

@@ -13,7 +13,7 @@ module.exports = {
   description: 'show various information',
   category: 'INFO',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

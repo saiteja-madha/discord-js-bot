@@ -1,4 +1,3 @@
-// bot.js
 require('dotenv').config()
 require('module-alias/register')
 
@@ -23,14 +22,14 @@ async function initializeBot() {
 
     // check for updates
     await checkForUpdates()
-
+    
     // Initialize mongoose first
     await initializeMongoose()
 
     // Load commands and events
-    await client.loadCommands('src/commands')
-    client.loadContexts('src/contexts')
-    client.loadEvents('src/events')
+    await client.loadCommands('./src/commands')
+    client.loadContexts('./src/contexts')
+    client.loadEvents('./src/events')
 
     // start the client
     await client.login(process.env.BOT_TOKEN)
@@ -90,4 +89,6 @@ initializeBot().catch(error => {
   console.error('Failed to start bot:', error)
   process.exit(1)
 })
+
+
 

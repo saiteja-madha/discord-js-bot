@@ -9,7 +9,7 @@ module.exports = {
   description: 'Manage various automod settings for the server',
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
-  global: true,
+
   slashCommand: {
     enabled: AUTOMOD.ENABLED,
     ephemeral: true,

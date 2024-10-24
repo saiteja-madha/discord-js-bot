@@ -17,7 +17,7 @@ module.exports = {
   description: 'play a song from youtube',
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [

@@ -14,7 +14,7 @@ module.exports = {
   description: 'flips a coin or message',
   category: 'FUN',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

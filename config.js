@@ -2,7 +2,7 @@ module.exports = {
   INTERACTIONS: {
     SLASH: 'true', // Should the interactions be enabled
     CONTEXT: 'true', // Should contexts be enabled
-    GLOBAL: 'true', // Should the interactions be registered globally
+    GLOBAL: process.env.DASH || true, // Should the interactions be registered globally
     TEST_GUILD_ID: process.env.TEST_GUILD_ID, // Guild ID where the interactions should be registered. [** Test you commands here first **]
   },
 

@@ -8,7 +8,7 @@ module.exports = {
   description: 'Set max warnings configuration!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     ephemeral: true,

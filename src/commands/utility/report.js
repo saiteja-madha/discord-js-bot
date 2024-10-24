@@ -13,7 +13,7 @@ module.exports = {
   description:
     'Help Mina make the community better! Report issues or share your thoughts~',
   category: 'UTILITY',
-  global: true,
+
   slashCommand: {
     ephemeral: true,
     enabled: FEEDBACK.ENABLED,

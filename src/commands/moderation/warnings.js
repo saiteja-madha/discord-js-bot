@@ -11,7 +11,7 @@ module.exports = {
   description: 'list or clear user warnings',
   category: 'MODERATION',
   userPermissions: ['KickMembers'],
-  global: true,
+
   slashCommand: {
     enabled: MODERATION.ENABLED,
     options: [

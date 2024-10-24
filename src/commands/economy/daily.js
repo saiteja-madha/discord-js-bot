@@ -11,7 +11,7 @@ module.exports = {
   description: 'receive a daily bonus',
   category: 'ECONOMY',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: ECONOMY.ENABLED,
   },

@@ -12,7 +12,7 @@ module.exports = {
   description: 'find lyric of the song',
   category: 'MUSIC',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [

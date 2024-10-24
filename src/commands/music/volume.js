@@ -10,7 +10,7 @@ module.exports = {
   description: 'set the music player volume',
   category: 'MUSIC',
   validations: musicValidations,
-  global: true,
+
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [

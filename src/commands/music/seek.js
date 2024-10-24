@@ -12,7 +12,7 @@ module.exports = {
   description: "sets the playing track's position to the specified position",
   category: 'MUSIC',
   validations: musicValidations,
-  global: true,
+
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [

@@ -17,7 +17,7 @@ module.exports = {
   description: 'Invite management system',
   category: 'INVITE',
   botPermissions: ['EmbedLinks', 'ManageGuild'],
-  global: true,
+
   slashCommand: {
     enabled: INVITE.ENABLED,
     options: [

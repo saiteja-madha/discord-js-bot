@@ -11,7 +11,7 @@ module.exports = {
   description: 'searches the urban dictionary',
   category: 'UTILITY',
   botPermissions: ['EmbedLinks'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

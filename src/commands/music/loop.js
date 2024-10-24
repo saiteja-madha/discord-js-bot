@@ -11,7 +11,7 @@ module.exports = {
   description: 'loops the song or queue',
   category: 'MUSIC',
   validations: musicValidations,
-  global: true,
+
   slashCommand: {
     enabled: MUSIC.ENABLED,
     options: [

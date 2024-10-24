@@ -15,7 +15,7 @@ const choices = [
 module.exports = {
   name: 'hangman',
   description: 'Play hangman in Discord',
-  global: true,
+
   slashCommand: {
     enabled: true,
     options: [

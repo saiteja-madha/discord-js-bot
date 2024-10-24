@@ -26,7 +26,7 @@ module.exports = {
   description: 'various ticketing commands',
   category: 'TICKET',
   userPermissions: ['ManageGuild'],
-  global: true,
+
   slashCommand: {
     enabled: TICKET.ENABLED,
     options: [

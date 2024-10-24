@@ -26,7 +26,7 @@ module.exports = {
   description: 'Manage reaction roles for the specified message!',
   category: 'ADMIN',
   userPermissions: ['ManageGuild'],
-  global: true,
+
   slashCommand: {
     enabled: true,
     ephemeral: true,
