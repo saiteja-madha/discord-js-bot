@@ -6,36 +6,57 @@ const {
 } = require('discord.js')
 const { getQuestions } = require('@schemas/TruthOrDare')
 const { getUser } = require('@schemas/User')
-const { EMBED_COLORS } = require('@src/config')
+const { EMBED_COLORS } = require('../config')
 
 async function handleTodButtonClick(interaction) {
   const user = await getUser(interaction.member.user)
 
   if (!user.profile?.age) {
     return interaction.reply({
-      content:
-        'Please set your age using `/user set` command first to play Truth or Dare!',
+      embeds: [
+        new EmbedBuilder()
+          .setColor(EMBED_COLORS.ERROR)
+          .setTitle('✦ hold up friend!')
+          .setDescription(
+            'i need to know your age first! use `/profile set` so we can play safely!'
+          ),
+      ],
       ephemeral: true,
     })
   }
 
   // Get the current rating from the footer of the previous embed
   const currentEmbed = interaction.message.embeds[0]
-  const footerText = currentEmbed.footer.text
-  const currentRating = footerText.match(/Rating: ([^|]+)/)[1].trim()
+  const footerText = currentEmbed.data.footer.text
+  const ratingMatch = footerText.match(/rating: ([^|]+)/i)
+  const currentRating = ratingMatch ? ratingMatch[1].trim() : 'PG' // default to PG if no match
 
   // Check R-rating requirements for button clicks
   if (currentRating === 'R') {
     if (user.profile.age < 18) {
       return interaction.reply({
-        content: 'You must be 18 or older to view R-rated content.',
+        embeds: [
+          new EmbedBuilder()
+            .setColor(EMBED_COLORS.ERROR)
+            .setTitle('✦ oops, age check failed!')
+            .setDescription(
+              'sorry friend, that content is for the grown-ups only!'
+            ),
+        ],
         ephemeral: true,
       })
     }
 
     if (!interaction.channel.nsfw) {
       return interaction.reply({
-        content: 'R-rated content can only be viewed in NSFW channels.',
+        embeds: [
+          new EmbedBuilder()
+            .setColor(EMBED_COLORS.ERROR)
+            .setTitle('✦ wrong place!')
+            .setDescription(
+              'psst! we need to be in an nsfw channel for that kind of fun!'
+            ),
+        ],
         ephemeral: true,
       })
     }
@@ -59,37 +80,47 @@ async function handleTodButtonClick(interaction) {
 async function sendQuestion(interaction, category, userAge, requestedRating) {
   const questions = await getQuestions(1, category, userAge, requestedRating)
   if (questions.length === 0) {
-    await interaction.reply({
-      content: 'No questions available matching your criteria.',
+    return interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(EMBED_COLORS.ERROR)
+          .setTitle('✦ oh no!')
+          .setDescription(
+            "i searched everywhere but couldn't find any questions matching what you wanted!"
+          ),
+      ],
       ephemeral: true,
     })
-    return
   }
 
   const question = questions[0]
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setTitle(`TOD: ${category}`)
+    .setTitle(`✦ ${category.toUpperCase()} TIME!`)
     .setDescription(
-      `Alright ${interaction.user.tag};\n**${question.question}**\n \n \n \n \n`
+      category === 'truth'
+        ? `${interaction.user.username}, don't you lie!\n\n**${question.question}**\n`
+        : category === 'dare'
+          ? `${interaction.user.username}, don't chicken out!\n\n**${question.question}**\n`
+          : `${interaction.user.username}, don't be scared!\n\n**${question.question}**\n`
     )
     .setFooter({
-      text: `Type: ${category} | Rating: ${question.rating} | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
+      text: `type: ${category} | rating: ${question.rating} | qid: ${question.questionId} | player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId('truthBtn')
       .setStyle(ButtonStyle.Primary)
-      .setLabel('Truth'),
+      .setLabel('truth!'),
     new ButtonBuilder()
       .setCustomId('dareBtn')
       .setStyle(ButtonStyle.Success)
-      .setLabel('Dare'),
+      .setLabel('dare!'),
     new ButtonBuilder()
       .setCustomId('randomBtn')
       .setStyle(ButtonStyle.Danger)
-      .setLabel('Random')
+      .setLabel('surprise me!')
   )
 
   await interaction.reply({
@@ -101,35 +132,43 @@ async function sendQuestion(interaction, category, userAge, requestedRating) {
 async function sendRandomQuestion(interaction, userAge, requestedRating) {
   const questions = await getQuestions(1, 'random', userAge, requestedRating)
   if (questions.length === 0) {
-    await interaction.reply({
-      content: 'No questions available matching your criteria.',
+    return interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(EMBED_COLORS.ERROR)
+          .setTitle('✦ oh no!')
+          .setDescription(
+            "i searched everywhere but couldn't find any questions matching what you wanted!"
+          ),
+      ],
       ephemeral: true,
     })
-    return
   }
 
   const question = questions[0]
   const embed = new EmbedBuilder()
     .setColor('Random')
-    .setTitle('Random Truth or Dare')
-    .setDescription(` \n**${question.question}**\n \n \n \n \n`)
+    .setTitle('✦ RANDOM SURPRISE!')
+    .setDescription(
+      `ooh, this is gonna be fun! ready?\n\n**${question.question}**\n\nwhat's your next move?`
+    )
     .setFooter({
-      text: `Type: ${question.category} | Rating: ${question.rating} | QID: ${question.questionId} | Player: ${interaction.user.tag}`,
+      text: `type: ${question.category} | rating: ${question.rating} | qid: ${question.questionId} | player: ${interaction.user.tag}`,
     })
 
   const buttons = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
       .setCustomId('truthBtn')
       .setStyle(ButtonStyle.Primary)
-      .setLabel('Truth'),
+      .setLabel('truth!'),
     new ButtonBuilder()
       .setCustomId('dareBtn')
       .setStyle(ButtonStyle.Success)
-      .setLabel('Dare'),
+      .setLabel('dare!'),
     new ButtonBuilder()
       .setCustomId('randomBtn')
       .setStyle(ButtonStyle.Danger)
-      .setLabel('Random')
+      .setLabel('surprise me!')
   )
 
   await interaction.reply({ embeds: [embed], components: [buttons] })

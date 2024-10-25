@@ -69,7 +69,7 @@ const creativeIntros = [
 module.exports = {
   name: 'filter',
   description:
-    "Turn your images into amazing artwork! Time for some creative chaos!",
+    'Turn your images into amazing artwork! Time for some creative chaos!',
   category: 'IMAGE',
   botPermissions: ['EmbedLinks', 'AttachFiles'],
   cooldown: 1,

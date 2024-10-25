@@ -8,23 +8,23 @@ const {
 } = require('discord.js')
 const { EMBED_COLORS } = require('@src/config.js')
 const { getUser } = require('@schemas/User')
+
 module.exports = {
   name: 'profile',
-  description: 'Set up and manage your personal profile!',
+  description: 'express yourself and share your story with the world!',
   category: 'UTILITY',
-
   showsModal: true,
   slashCommand: {
     enabled: true,
     options: [
       {
         name: 'view',
-        description: "View your profile or someone else's profile",
+        description: "peek at your profile or discover someone else's story",
         type: 1,
         options: [
           {
             name: 'user',
-            description: 'The user whose profile you want to view (optional)',
+            description: 'whose story do you want to explore?',
             type: 6,
             required: false,
           },
@@ -32,12 +32,55 @@ module.exports = {
       },
       {
         name: 'set',
-        description: 'Set up or update your profile',
+        description: 'time to paint your digital portrait!',
         type: 1,
+        options: [
+          {
+            name: 'category',
+            description: 'what part of your story are we crafting?',
+            type: 3,
+            required: true,
+            choices: [
+              {
+                name: 'basic',
+                value: 'basic',
+              },
+              {
+                name: 'misc',
+                value: 'misc',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'privacy',
+        description: 'customize what parts of your story you want to share',
+        type: 1,
+        options: [
+          {
+            name: 'setting',
+            description: 'choose what to show or hide',
+            type: 3,
+            required: true,
+            choices: [
+              { name: 'age', value: 'showAge' },
+              { name: 'region', value: 'showRegion' },
+              { name: 'birthdate', value: 'showBirthdate' },
+              { name: 'pronouns', value: 'showPronouns' },
+            ],
+          },
+          {
+            name: 'visible',
+            description: 'should this be visible to others?',
+            type: 5,
+            required: true,
+          },
+        ],
       },
       {
         name: 'clear',
-        description: 'Clear your entire profile',
+        description: 'start fresh with a blank canvas',
         type: 1,
       },
     ],
@@ -49,74 +92,158 @@ module.exports = {
       case 'view':
         return handleView(interaction)
       case 'set':
-        return handleSet(interaction) // Added return
+        return handleSet(interaction)
+      case 'privacy':
+        return handlePrivacy(interaction)
       case 'clear':
         return handleClear(interaction)
     }
   },
 }
 
-async function handleView(interaction) {
-  const target = interaction.options.getUser('user') || interaction.user
-  const userDb = await getUser(target)
+async function createBasicModal() {
+  const modal = new ModalBuilder()
+    .setCustomId('profile_set_basic_modal')
+    .setTitle("let's start with the basics!")
 
-  if (
-    !userDb.profile ||
-    !Object.keys(userDb.profile).some(key => userDb.profile[key])
-  ) {
-    const embed = new EmbedBuilder()
-      .setColor(EMBED_COLORS.ERROR)
-      .setDescription(
-        `${target.id === interaction.user.id ? "You haven't" : "This user hasn't"} set up a profile yet!`
-      )
-      .setFooter({ text: 'Use /profile set to create your profile!' })
+  const birthdateInput = new TextInputBuilder()
+    .setCustomId('birthdate')
+    .setLabel("when's your special day?")
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('DD/MM/YYYY or MM/YYYY')
+    .setRequired(true)
+    .setMaxLength(10)
 
-    return interaction.reply({ embeds: [embed], ephemeral: true })
+  const pronounsInput = new TextInputBuilder()
+    .setCustomId('pronouns')
+    .setLabel('how should we refer to you?')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('they/them, she/her, he/him, or anything else!')
+    .setRequired(false)
+    .setMaxLength(50)
+
+  const regionInput = new TextInputBuilder()
+    .setCustomId('region')
+    .setLabel('where do you call home?')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('your corner of the world')
+    .setRequired(false)
+    .setMaxLength(100)
+
+  const languagesInput = new TextInputBuilder()
+    .setCustomId('languages')
+    .setLabel('what languages do you speak?')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('english, español, 日本語...')
+    .setRequired(false)
+    .setMaxLength(100)
+
+  const timezoneInput = new TextInputBuilder()
+    .setCustomId('timezone')
+    .setLabel("what's your timezone?")
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('UTC+1, EST, GMT...')
+    .setRequired(false)
+    .setMaxLength(30)
+
+  return modal.addComponents(
+    new ActionRowBuilder().addComponents(birthdateInput),
+    new ActionRowBuilder().addComponents(pronounsInput),
+    new ActionRowBuilder().addComponents(regionInput),
+    new ActionRowBuilder().addComponents(languagesInput),
+    new ActionRowBuilder().addComponents(timezoneInput)
+  )
+}
+
+async function createMiscModal() {
+  const modal = new ModalBuilder()
+    .setCustomId('profile_set_misc_modal')
+    .setTitle('tell us your story!')
+
+  const bioInput = new TextInputBuilder()
+    .setCustomId('bio')
+    .setLabel('paint us a picture of who you are!')
+    .setStyle(TextInputStyle.Paragraph)
+    .setPlaceholder('your story, your way...')
+    .setRequired(false)
+    .setMaxLength(1000)
+
+  const interestsInput = new TextInputBuilder()
+    .setCustomId('interests')
+    .setLabel('what makes your heart skip a beat?')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('gaming, art, music...')
+    .setRequired(false)
+    .setMaxLength(200)
+
+  const socialsInput = new TextInputBuilder()
+    .setCustomId('socials')
+    .setLabel('where else can we find you?')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('twitter: @handle, instagram: @user...')
+    .setRequired(false)
+    .setMaxLength(200)
+
+  const favoritesInput = new TextInputBuilder()
+    .setCustomId('favorites')
+    .setLabel('what are your absolute favorites?')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('color: blue, food: pizza...')
+    .setRequired(false)
+    .setMaxLength(200)
+
+  const goalsInput = new TextInputBuilder()
+    .setCustomId('goals')
+    .setLabel('what dreams are you chasing?')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('learning guitar, visiting japan...')
+    .setRequired(false)
+    .setMaxLength(200)
+
+  return modal.addComponents(
+    new ActionRowBuilder().addComponents(bioInput),
+    new ActionRowBuilder().addComponents(interestsInput),
+    new ActionRowBuilder().addComponents(socialsInput),
+    new ActionRowBuilder().addComponents(favoritesInput),
+    new ActionRowBuilder().addComponents(goalsInput)
+  )
+}
+
+async function handleSet(interaction) {
+  const category = interaction.options.getString('category') || 'basic'
+  const modal =
+    category === 'basic' ? await createBasicModal() : await createMiscModal()
+
+  try {
+    await interaction.showModal(modal)
+  } catch (error) {
+    console.error('Error showing modal:', error)
+    if (!interaction.replied && !interaction.deferred) {
+      await interaction.reply({
+        content:
+          'oops! something went wrong with the profile setup. try again?',
+        ephemeral: true,
+      })
+    }
   }
+}
+
+async function handlePrivacy(interaction) {
+  const setting = interaction.options.getString('setting')
+  const visible = interaction.options.getBoolean('visible')
+
+  const user = await getUser(interaction.user)
+  if (!user.profile) user.profile = {}
+  if (!user.profile.privacy) user.profile.privacy = {}
+
+  user.profile.privacy[setting] = visible
+  await user.save()
 
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setAuthor({
-      name: `${target.username}'s Profile`,
-      iconURL: target.displayAvatarURL(),
-    })
-    .setThumbnail(target.displayAvatarURL())
-
-  const { profile } = userDb
-  const fields = []
-
-  if (profile.pronouns)
-    fields.push({ name: 'Pronouns', value: profile.pronouns, inline: true })
-  if (profile.age && profile.privacy?.showAge)
-    fields.push({ name: 'Age', value: profile.age.toString(), inline: true })
-  if (profile.region && profile.privacy?.showRegion)
-    fields.push({ name: 'Region', value: profile.region, inline: true })
-  if (profile.timezone)
-    fields.push({ name: 'Timezone', value: profile.timezone, inline: true })
-  if (profile.bio)
-    fields.push({ name: 'Bio', value: profile.bio, inline: false })
-  if (profile.interests?.length > 0)
-    fields.push({
-      name: 'Interests',
-      value: profile.interests.join(', '),
-      inline: false,
-    })
-
-  if (profile.age && Object.values(profile.age).some(v => v)) {
-    const socialLinks = Object.entries(profile.age)
-      .filter(([, value]) => value)
-      .map(([platform, value]) => `${platform}: ${value}`)
-      .join('\n')
-    fields.push({ name: 'Age', value: profile.age, inline: false })
-  }
-
-  if (profile.customFields?.length > 0) {
-    profile.customFields.forEach(field => {
-      fields.push({ name: field.label, value: field.value, inline: true })
-    })
-  }
-
-  if (fields.length > 0) embed.addFields(fields)
+    .setDescription(
+      `updated your privacy settings! ${setting.replace('show', '')} is now ${visible ? 'visible' : 'hidden'}`
+    )
 
   return interaction.reply({
     embeds: [embed],
@@ -124,74 +251,265 @@ async function handleView(interaction) {
   })
 }
 
-async function handleSet(interaction) {
-  if (interaction.replied || interaction.deferred) {
-    console.log('Interaction was already replied to or deferred')
-    return
-  }
-  const modal = new ModalBuilder()
-    .setCustomId('profile_set_modal')
-    .setTitle('Set Up Your Profile!')
+// Helper Functions
+const formatValue = value => {
+  if (!value) return 'Not set'
+  if (Array.isArray(value)) return value.join(', ') || 'None'
+  if (value instanceof Map)
+    return Array.from(value.values()).join(', ') || 'None'
+  return String(value)
+}
 
-  const pronounsInput = new TextInputBuilder()
-    .setCustomId('pronouns')
-    .setLabel('Your Pronouns')
-    .setStyle(TextInputStyle.Short)
-    .setPlaceholder('e.g., they/them, she/her, he/him')
-    .setRequired(false)
-    .setMaxLength(50)
+const SOCIAL_PLATFORMS = {
+  youtube: username => `https://youtube.com/@${username}`,
+  twitter: username => `https://x.com/${username}`,
+  x: username => `https://x.com/${username}`,
+  github: username => `https://github.com/${username}`,
+  instagram: username => `https://instagram.com/${username}`,
+  twitch: username => `https://twitch.tv/${username}`,
+  linkedin: username => `https://linkedin.com/in/${username}`,
+  default: (username, platform) => `https://${platform}.com/${username}`,
+}
 
-  const bioInput = new TextInputBuilder()
-    .setCustomId('bio')
-    .setLabel('Tell us about yourself!')
-    .setStyle(TextInputStyle.Paragraph)
-    .setPlaceholder('Share a bit about who you are...')
-    .setRequired(false)
-    .setMaxLength(1000)
+const formatSocialLinks = socials => {
+  if (!socials || socials.size === 0) return ''
 
-  const regionInput = new TextInputBuilder()
-    .setCustomId('region')
-    .setLabel('Your Region/Country')
-    .setStyle(TextInputStyle.Short)
-    .setPlaceholder('Where are you from?')
-    .setRequired(false)
-    .setMaxLength(100)
+  return (
+    Array.from(socials.entries())
+      .map(([platform, username]) => {
+        const cleanPlatform = platform.toLowerCase().trim()
+        const linkGenerator =
+          SOCIAL_PLATFORMS[cleanPlatform] || SOCIAL_PLATFORMS.default
+        const link = linkGenerator(username, cleanPlatform)
+        return `${platform}: [${username}](${link})`
+      })
+      .join(' • ') || 'None'
+  )
+}
 
-  const interestsInput = new TextInputBuilder()
-    .setCustomId('interests')
-    .setLabel('Your Interests (comma-separated)')
-    .setStyle(TextInputStyle.Short)
-    .setPlaceholder('gaming, art, music, etc.')
-    .setRequired(false)
-    .setMaxLength(200)
+const formatFavorites = favorites => {
+  if (!favorites || favorites.size === 0) return ''
 
-  const ageInput = new TextInputBuilder()
-    .setCustomId('age')
-    .setLabel('Your Age')
-    .setStyle(TextInputStyle.Short)
-    .setPlaceholder("How old are you? (Don't worry, it's optional!)")
-    .setRequired(true)
-    .setMaxLength(2)
+  return (
+    Array.from(favorites.entries())
+      .map(([category, item]) => `${category}: ${item}`)
+      .join('\n') || 'None'
+  )
+}
 
-  const rows = [
-    new ActionRowBuilder().addComponents(ageInput),
-    new ActionRowBuilder().addComponents(pronounsInput),
-    new ActionRowBuilder().addComponents(bioInput),
-    new ActionRowBuilder().addComponents(regionInput),
-    new ActionRowBuilder().addComponents(interestsInput),
+const hasContent = profile => {
+  if (!profile) return false
+
+  const fields = [
+    'pronouns',
+    'age',
+    'region',
+    'timezone',
+    'bio',
+    'languages',
+    'interests',
+    'goals',
   ]
 
-  modal.addComponents(rows)
+  return (
+    fields.some(field => {
+      const value = profile[field]
+      return Array.isArray(value) ? value.length > 0 : Boolean(value)
+    }) ||
+    profile.socials?.size > 0 ||
+    profile.favorites?.size > 0
+  )
+}
+
+async function handleView(interaction) {
   try {
-    await interaction.showModal(modal)
-  } catch (error) {
-    console.error('Error showing modal:', error)
-    if (!interaction.replied && !interaction.deferred) {
-      await interaction.reply({
-        content: 'There was an error showing the profile setup modal.',
-        ephemeral: true,
+    const target = interaction.options.getUser('user') || interaction.user
+    const userDb = await getUser(target)
+    const isOwnProfile = target.id === interaction.user.id
+    const { profile } = userDb
+
+    // Check if profile exists and has content
+    if (!hasContent(profile)) {
+      const embed = new EmbedBuilder()
+        .setColor(EMBED_COLORS.ERROR)
+        .setDescription(
+          `${isOwnProfile ? "You haven't" : "This user hasn't"} set up a profile yet!`
+        )
+        .setFooter({ text: 'Use /profile set to create your profile!' })
+
+      return interaction.reply({ embeds: [embed], ephemeral: true })
+    }
+
+    const embed = new EmbedBuilder()
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setAuthor({
+        name: `${target.username}'s Profile`,
+        iconURL: target.displayAvatarURL(),
+      })
+      .setThumbnail(target.displayAvatarURL())
+
+    // Track visible content for privacy checks
+    let hasVisibleContent = false
+
+    // Basic Information Fields
+    const basicFields = [
+      {
+        name: 'pronouns',
+        label: 'Pronouns',
+        privacyKey: 'showPronouns',
+        inline: true,
+      },
+      {
+        name: 'age',
+        label: 'Age',
+        privacyKey: 'showAge',
+        inline: true,
+      },
+      {
+        name: 'region',
+        label: 'Region',
+        privacyKey: 'showRegion',
+        inline: true,
+      },
+      {
+        name: 'timezone',
+        label: 'Timezone',
+        inline: true,
+      },
+    ]
+
+    // Add basic fields
+    basicFields.forEach(field => {
+      const value = profile[field.name]
+      if (!value) return
+
+      const isVisible =
+        !field.privacyKey || isOwnProfile || profile.privacy?.[field.privacyKey]
+      if (!isVisible) return
+
+      hasVisibleContent = true
+      embed.addFields({
+        name: `${field.label}${isOwnProfile && field.privacyKey && !profile.privacy?.[field.privacyKey] ? ' 🔒' : ''}`,
+        value: formatValue(value),
+        inline: field.inline,
+      })
+    })
+
+    // Languages (with null check and empty array handling)
+    if (Array.isArray(profile.languages) && profile.languages.length > 0) {
+      hasVisibleContent = true
+      embed.addFields({
+        name: 'Languages',
+        value: formatValue(profile.languages),
+        inline: true,
       })
     }
+
+    // Add spacer if we have basic fields
+    if (hasVisibleContent) {
+      embed.addFields({ name: '\u200B', value: '\u200B', inline: false })
+    }
+
+    // Bio
+    if (profile.bio) {
+      hasVisibleContent = true
+      embed.addFields({
+        name: 'Bio',
+        value: profile.bio,
+        inline: false,
+      })
+    }
+
+    // Interests
+    if (Array.isArray(profile.interests) && profile.interests.length > 0) {
+      hasVisibleContent = true
+      embed.addFields({
+        name: 'Interests',
+        value: formatValue(profile.interests),
+        inline: false,
+      })
+    }
+
+    // Goals
+    if (Array.isArray(profile.goals) && profile.goals.length > 0) {
+      hasVisibleContent = true
+      embed.addFields({
+        name: 'Goals',
+        value: formatValue(profile.goals),
+        inline: false,
+      })
+    }
+
+    // Social Links
+    if (profile.socials?.size > 0) {
+      const socialLinks = formatSocialLinks(profile.socials)
+      if (socialLinks) {
+        hasVisibleContent = true
+        embed.addFields({
+          name: 'Social Links',
+          value: socialLinks,
+          inline: false,
+        })
+      }
+    }
+
+    // Favorites
+    if (profile.favorites?.size > 0) {
+      const favoritesList = formatFavorites(profile.favorites)
+      if (favoritesList) {
+        hasVisibleContent = true
+        embed.addFields({
+          name: 'Favorites',
+          value: favoritesList,
+          inline: false,
+        })
+      }
+    }
+
+    // Check if there's any visible content for other users
+    if (!isOwnProfile && !hasVisibleContent) {
+      const embed = new EmbedBuilder()
+        .setColor(EMBED_COLORS.ERROR)
+        .setDescription(`${target.username}'s profile is private.`)
+
+      return interaction.reply({ embeds: [embed], ephemeral: true })
+    }
+
+    // Add Last Updated timestamp
+    if (profile.lastUpdated) {
+      embed.setFooter({
+        text: `Last Updated: ${profile.lastUpdated.toLocaleDateString()} ${profile.lastUpdated.toLocaleTimeString()} UTC`,
+      })
+    }
+
+    // Generate privacy summary for own profile
+    if (isOwnProfile) {
+      const privateFields = basicFields
+        .filter(
+          ({ name, privacyKey }) =>
+            privacyKey && !profile.privacy?.[privacyKey] && profile[name]
+        )
+        .map(({ label }) => label)
+
+      if (privateFields.length > 0) {
+        embed.setDescription(
+          `**Note:** Fields marked with 🔒 are private and only visible to you.\nPrivate fields: ${privateFields.join(', ')}`
+        )
+      }
+    }
+
+    // Send the profile embed
+    return interaction.reply({
+      embeds: [embed],
+      ephemeral: isOwnProfile,
+    })
+  } catch (error) {
+    console.error('Error in handleView:', error)
+    return interaction.reply({
+      content:
+        'There was an error while viewing the profile. Please try again later.',
+      ephemeral: true,
+    })
   }
 }
 

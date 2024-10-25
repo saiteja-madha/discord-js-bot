@@ -72,7 +72,7 @@ module.exports = {
     const subcommand = interaction.options.getSubcommand()
     const requestedRating = interaction.options.getString('rating')
     const user = await getUser(interaction.member.user)
-
+    // Check if age is set
     if (!user.profile?.age) {
       return interaction.followUp({
         embeds: [
@@ -86,7 +86,7 @@ module.exports = {
         ephemeral: true,
       })
     }
-
+    // Check for R-rated content requirements
     if (requestedRating === 'R') {
       if (user.profile.age < 18) {
         return interaction.followUp({
@@ -167,7 +167,11 @@ async function sendQuestion(interaction, category, userAge, requestedRating) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setTitle(`✦ ${category.toUpperCase()} TIME!`)
     .setDescription(
-      `hey ${interaction.user.username}! here's a fun one:\n\n**${question.question}**\n\nwhat's it gonna be? truth? dare? or something totally random?`
+      category === 'truth'
+        ? `${interaction.user.username}, don't you lie!\n\n**${question.question}**\n`
+        : category === 'dare'
+          ? `${interaction.user.username}, don't chicken out!\n\n**${question.question}**\n`
+          : `${interaction.user.username}, don't be scared!\n\n**${question.question}**\n`
     )
     .setFooter({
       text: `type: ${category} | rating: ${question.rating} | qid: ${question.questionId} | player: ${interaction.user.tag}`,
@@ -177,11 +181,11 @@ async function sendQuestion(interaction, category, userAge, requestedRating) {
     new ButtonBuilder()
       .setCustomId('truthBtn')
       .setStyle(ButtonStyle.Primary)
-      .setLabel('spill the truth!'),
+      .setLabel('truth!'),
     new ButtonBuilder()
       .setCustomId('dareBtn')
       .setStyle(ButtonStyle.Success)
-      .setLabel('take the dare!'),
+      .setLabel('dare!'),
     new ButtonBuilder()
       .setCustomId('randomBtn')
       .setStyle(ButtonStyle.Danger)
@@ -206,6 +210,7 @@ async function sendRandomQuestion(interaction, userAge, requestedRating) {
             "i searched everywhere but couldn't find any questions matching what you wanted!"
           ),
       ],
+      ephemeral: true,
     })
     return
   }
@@ -225,11 +230,11 @@ async function sendRandomQuestion(interaction, userAge, requestedRating) {
     new ButtonBuilder()
       .setCustomId('truthBtn')
       .setStyle(ButtonStyle.Primary)
-      .setLabel('spill the truth!'),
+      .setLabel('truth!'),
     new ButtonBuilder()
       .setCustomId('dareBtn')
       .setStyle(ButtonStyle.Success)
-      .setLabel('take the dare!'),
+      .setLabel('dare!'),
     new ButtonBuilder()
       .setCustomId('randomBtn')
       .setStyle(ButtonStyle.Danger)

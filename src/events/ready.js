@@ -60,12 +60,12 @@ module.exports = async client => {
   // Register Interactions
   if (client.config.INTERACTIONS.SLASH || client.config.INTERACTIONS.CONTEXT) {
     const devConfig = await getDevCommandsConfig()
-  
+
     if (!client.config.INTERACTIONS.GLOBAL) {
-    // Clear all global commands when GLOBAL is false
-    await client.application.commands.set([])
-    client.logger.success('Cleared all global commands (GLOBAL=false)')
-  }
+      // Clear all global commands when GLOBAL is false
+      await client.application.commands.set([])
+      client.logger.success('Cleared all global commands (GLOBAL=false)')
+    }
     // Register test guild commands
     const testGuild = client.guilds.cache.get(process.env.TEST_GUILD_ID)
     if (testGuild) {

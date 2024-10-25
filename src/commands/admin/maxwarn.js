@@ -29,8 +29,7 @@ module.exports = {
       },
       {
         name: 'action',
-        description:
-          'Set action to perform after receiving maximum warnings!',
+        description: 'Set action to perform after receiving maximum warnings!',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {

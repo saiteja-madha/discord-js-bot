@@ -58,18 +58,38 @@ module.exports = {
     return 'Question added successfully!'
   },
 
-  getQuestions: async (limit = 10, category = 'random') => {
+  getQuestions: async (
+    limit = 10,
+    category = 'random',
+    age = 13,
+    requestedRating = null
+  ) => {
+    // Get allowed ratings based on age
+    const allowedRatings = getAllowedRatings(age)
+
+    // If a specific rating is requested, check if it's allowed
+    if (requestedRating && !allowedRatings.includes(requestedRating)) {
+      return [] // Return empty if requested rating isn't allowed for user's age
+    }
+
     const aggregate = [
       {
-        $sample: { size: limit },
+        $match: {
+          // If specific rating requested, use it; otherwise use all allowed ratings
+          rating: requestedRating ? requestedRating : { $in: allowedRatings },
+        },
       },
     ]
 
+    // Add category filter if not random
     if (category !== 'random') {
-      aggregate.unshift({
-        $match: { category },
-      })
+      aggregate[0].$match.category = category
     }
+
+    // Add random sampling
+    aggregate.push({
+      $sample: { size: limit },
+    })
 
     const questions = await Model.aggregate(aggregate)
     return questions

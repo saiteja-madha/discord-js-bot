@@ -81,7 +81,8 @@ module.exports = async (client, interaction) => {
         return guildHandler.handleSetupModal(interaction)
       case 'AMINA_REMIND_MODAL':
         return guildHandler.handleRemindModal(interaction)
-      case 'profile_set_modal':
+      case 'profile_set_basic_modal':
+      case 'profile_set_misc_modal':
         return profileHandler.handleProfileModal(interaction)
       default:
         if (interaction.customId.startsWith('report_modal_')) {
