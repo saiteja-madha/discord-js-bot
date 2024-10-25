@@ -39,12 +39,12 @@ module.exports = {
       },
       {
         name: 'preview',
-        description: 'Preview the configured farewell message! 🌟',
+        description: 'Preview the configured farewell message!',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'channel',
-        description: 'Set the channel for farewell messages 📬',
+        description: 'Set the channel for farewell messages',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -58,7 +58,7 @@ module.exports = {
       },
       {
         name: 'desc',
-        description: 'Set the embed description for the farewell message ✨',
+        description: 'Set the embed description for the farewell message',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -71,7 +71,7 @@ module.exports = {
       },
       {
         name: 'thumbnail',
-        description: 'Configure the embed thumbnail 🌸',
+        description: 'Configure the embed thumbnail',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -94,7 +94,7 @@ module.exports = {
       },
       {
         name: 'color',
-        description: 'Set the embed color for your farewell message 🎨',
+        description: 'Set the embed color for your farewell message',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -107,7 +107,7 @@ module.exports = {
       },
       {
         name: 'footer',
-        description: 'Set the footer for the farewell embed 👣',
+        description: 'Set the footer for the farewell embed',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -120,7 +120,7 @@ module.exports = {
       },
       {
         name: 'image',
-        description: 'Set an image for the farewell embed 🖼️',
+        description: 'Set an image for the farewell embed',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {

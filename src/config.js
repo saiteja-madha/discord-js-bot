@@ -2,8 +2,7 @@ module.exports = {
   INTERACTIONS: {
     SLASH: 'true', // Should the interactions be enabled
     CONTEXT: 'true', // Should contexts be enabled
-    GLOBAL: process.env.DASH || true, // Should the interactions be registered globally
-    TEST_GUILD_ID: process.env.TEST_GUILD_ID, // Guild ID where the interactions should be registered. [** Test you commands here first **]
+    GLOBAL: process.env.GLOBAL !== undefined ? process.env.GLOBAL === 'true' : true, // Should the interactions be registered globally
   },
 
   CACHE_SIZE: {
@@ -29,7 +28,7 @@ module.exports = {
   },
 
   DASHBOARD: {
-    enabled: process.env.DASH || true,
+    enabled: process.env.DASH !== undefined ? process.env.DASH === 'true' : true,
     baseURL: process.env.BASE_URL || 'http://localhost:8080', // Base URL of the dashboard
     failureURL: process.env.FAILURE_URL || 'http://localhost:8080', // URL to redirect to on dashboard failure
     port: process.env.PORT || '8080', // Port to run the dashboard on

@@ -108,6 +108,7 @@ module.exports = class BotClient extends Client {
 
   // Load and register a single command
   loadCommand(cmd) {
+    // First check category
     if (cmd.category && CommandCategory[cmd.category]?.enabled === false) {
       this.logger.debug(
         `Skipping Command ${cmd.name}. Category ${cmd.category} is disabled`
@@ -115,10 +116,27 @@ module.exports = class BotClient extends Client {
       return
     }
 
+    // Check if slash command is enabled
     if (cmd.slashCommand?.enabled) {
       if (this.slashCommands.has(cmd.name)) {
         throw new Error(`Slash Command ${cmd.name} already registered`)
       }
+
+      // Load test/dev commands regardless of GLOBAL setting
+      if (cmd.testGuildOnly || cmd.devOnly) {
+        this.slashCommands.set(cmd.name, cmd)
+        return
+      }
+
+      // Only load regular commands if GLOBAL is true
+      if (!this.config.INTERACTIONS.GLOBAL) {
+        this.logger.debug(
+          `Skipping command ${cmd.name}. Command is global but GLOBAL=false`
+        )
+        return
+      }
+
+      // If we get here, either GLOBAL=true or it's a special command
       this.slashCommands.set(cmd.name, cmd)
     } else {
       this.logger.debug(`Skipping slash command ${cmd.name}. Disabled!`)

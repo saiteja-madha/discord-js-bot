@@ -240,7 +240,7 @@ function botInvite(client) {
       .setStyle(ButtonStyle.Link)
   )
 
-  if (SUPPORT_SERVER) {
+  if (process.env.SUPPORT_SERVER) {
     components.push(
       new ButtonBuilder()
         .setLabel('Support Server')

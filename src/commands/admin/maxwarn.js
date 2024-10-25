@@ -21,7 +21,7 @@ module.exports = {
         options: [
           {
             name: 'amount',
-            description: 'Max number of strikes! 🎯',
+            description: 'Max number of strikes!',
             type: ApplicationCommandOptionType.Integer,
             required: true,
           },
@@ -30,7 +30,7 @@ module.exports = {
       {
         name: 'action',
         description:
-          'Set action to perform after receiving maximum warnings! 🚨',
+          'Set action to perform after receiving maximum warnings!',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {

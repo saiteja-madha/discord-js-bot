@@ -13,33 +13,33 @@ module.exports = {
     options: [
       {
         name: 'message',
-        description: 'The message to be sent. 💬',
+        description: 'The message to be sent.',
         type: 3,
         required: true,
       },
       {
         name: 'channel',
-        description: 'The channel where the message will be sent. 📬',
+        description: 'The channel where the message will be sent.',
         type: 7,
         required: false,
       },
       {
         name: 'message_id',
-        description: 'The ID of the message to edit or reply to. 📝',
+        description: 'The ID of the message to edit or reply to.',
         type: 3,
         required: false,
       },
       {
         name: 'edit',
         description:
-          'Whether to edit the message specified by message_id instead of sending a new message. ✏️',
+          'Whether to edit the message specified by message_id instead of sending a new message.',
         type: 5,
         required: false,
       },
       {
         name: 'ping',
         description:
-          'Whether to ping everyone in the channel after sending the message. 📢',
+          'Whether to ping everyone in the channel after sending the message.',
         type: 5,
         required: false,
       },

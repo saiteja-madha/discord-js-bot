@@ -6,6 +6,20 @@ const {
 const { getBuffer } = require('@helpers/HttpUtils')
 const { EMBED_COLORS, IMAGE } = require('@src/config.js')
 
+const filterDescriptions = {
+  blur: "Let's add some dreamy mystique! ✨",
+  brighten: 'Time to make this shine\nlike my mood! ☀️',
+  burn: 'Adding some intense dramatic flair! 🔥',
+  darken: 'Making it moody and mysterious~ 🌙',
+  distort: 'Time for some crazy abstract vibes! 🎨',
+  greyscale: 'Going classic black and white! 🖤',
+  invert: 'Flipping the world upside down! 🙃',
+  pixelate: 'Making it retro-cool! 👾',
+  sepia: 'Adding some vintage magic! 📷',
+  sharpen: 'Making every detail pop! 💫',
+  threshold: 'Going totally experimental! 🎯',
+}
+
 const availableFilters = [
   'blur',
   'brighten',
@@ -41,22 +55,31 @@ const additionalParams = {
   },
 }
 
+const creativeIntros = [
+  '*bouncing with artistic energy*\nTime to transform this image! ',
+  "*pulls out virtual paintbrush*\nLet's create something amazing! ",
+  '*spins excitedly*\nReady for some artistic magic? ',
+  "*eyes sparkling*\nOoh, let's make this extra special! ",
+  '*giggling with creative inspiration*\nWatch this transformation! ',
+]
+
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: 'filter',
-  description: 'add filter to the provided image',
+  description:
+    "Turn your images into amazing artwork! Time for some creative chaos!",
   category: 'IMAGE',
   botPermissions: ['EmbedLinks', 'AttachFiles'],
   cooldown: 1,
-
   slashCommand: {
     enabled: IMAGE.ENABLED,
     options: [
       {
         name: 'name',
-        description: 'the type of filter',
+        description:
+          'Pick your artistic transformation! Each one is uniquely amazing!',
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: availableFilters.map(filter => ({
@@ -66,13 +89,13 @@ module.exports = {
       },
       {
         name: 'user',
-        description: 'the user to whose avatar the filter needs to be applied',
+        description: "Want to transform someone's avatar? Tag them here!",
         type: ApplicationCommandOptionType.User,
         required: false,
       },
       {
         name: 'link',
-        description: 'the image link to which the filter needs to be applied',
+        description: 'Got a special image to transform? Drop the link here!',
         type: ApplicationCommandOptionType.String,
         required: false,
       },
@@ -97,16 +120,27 @@ module.exports = {
       },
     })
 
-    if (!response.success)
-      return interaction.followUp('Failed to generate image')
+    if (!response.success) {
+      return interaction.followUp(
+        "*drops paintbrush sadly* Oh no! My artistic powers aren't working right now! Maybe we can try again in a bit? 🎨💔"
+      )
+    }
+
+    const randomIntro =
+      creativeIntros[Math.floor(Math.random() * creativeIntros.length)]
+    const filterDesc =
+      filterDescriptions[filter] || "Let's make some art magic! ✨"
 
     const attachment = new AttachmentBuilder(response.buffer, {
       name: 'attachment.png',
     })
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
+      .setTitle(`${randomIntro}${filterDesc}`)
       .setImage('attachment://attachment.png')
-      .setFooter({ text: `Requested by: ${author.username}` })
+      .setFooter({
+        text: `Art piece inspired by ${author.username}'s request! 🎨✨`,
+      })
 
     await interaction.followUp({ embeds: [embed], files: [attachment] })
   },

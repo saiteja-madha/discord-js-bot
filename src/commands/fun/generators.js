@@ -6,6 +6,34 @@ const {
 const { getBuffer } = require('@helpers/HttpUtils')
 const { EMBED_COLORS, IMAGE } = require('@src/config.js')
 
+// Amina's favorite meme reactions
+const memeReactions = {
+  ad: '✨ Making you famous! ',
+  affect: 'Oops, what happened here? 😅',
+  beautiful: "Now that's art! 🎨",
+  bobross: 'Happy little accidents~ 🎨',
+  challenger: 'Game on! 🎮',
+  confusedstonk: 'Wait, what? 📈',
+  delete: 'Poof! 🗑️',
+  dexter: 'Time for science! 🧪',
+  facepalm: '*giggles* Oh no... 🤦',
+  jail: 'Busted! 🚔',
+  jokeoverhead: 'Whoosh~ ✨',
+  karaba: 'Magic time! ✨',
+  'kyon-gun': 'Pew pew! 🔫',
+  mms: 'Sweet! 🍫',
+  notstonk: 'Oof, down we go! 📉',
+  poutine: 'Yummy! 🍜',
+  rip: 'Press F to pay respects 💐',
+  shit: 'Yikes! 💩',
+  stonk: 'To the moon! 📈',
+  tattoo: 'Forever art! 🎨',
+  thomas: 'Choo choo! 🚂',
+  trash: "One person's trash... 🗑️",
+  wanted: 'Catch them! 🏃‍♂️',
+  worthless: '*gasp* No way! ✨',
+}
+
 const availableGenerators = [
   'ad',
   'affect',
@@ -39,32 +67,29 @@ const availableGenerators = [
  */
 module.exports = {
   name: 'generator',
-  description: 'generates a meme for the provided image',
+  description: 'Transform images into memes! ✨',
   cooldown: 1,
   category: 'IMAGE',
   botPermissions: ['EmbedLinks', 'AttachFiles'],
-
   slashCommand: {
     enabled: IMAGE.ENABLED,
     options: [
       {
         name: 'name',
-        description: 'the type of generator',
+        description: 'Pick your meme style!',
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: availableGenerators.map(gen => ({ name: gen, value: gen })),
       },
       {
         name: 'user',
-        description:
-          'the user to whose avatar the generator needs to be applied',
+        description: 'Whose picture should we transform?',
         type: ApplicationCommandOptionType.User,
         required: false,
       },
       {
         name: 'link',
-        description:
-          'the image link to which the generator needs to be applied',
+        description: 'Or use an image link!',
         type: ApplicationCommandOptionType.String,
         required: false,
       },
@@ -89,16 +114,20 @@ module.exports = {
       },
     })
 
-    if (!response.success)
-      return interaction.followUp('Failed to generate image')
+    if (!response.success) {
+      return interaction.followUp(
+        '*drops art supplies* Oops! Something went wrong with the meme magic! 🎨💔'
+      )
+    }
 
     const attachment = new AttachmentBuilder(response.buffer, {
       name: 'attachment.png',
     })
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
+      .setTitle(memeReactions[generator] || 'Meme magic incoming! ✨')
       .setImage('attachment://attachment.png')
-      .setFooter({ text: `Requested by: ${author.username}` })
+      .setFooter({ text: `${author.username}'s meme creation! 🎨` })
 
     await interaction.followUp({ embeds: [embed], files: [attachment] })
   },

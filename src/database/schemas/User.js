@@ -12,6 +12,7 @@ const FlagSchema = new mongoose.Schema({
   serverName: { type: String, required: true },
 })
 
+
 const ProfileSchema = new mongoose.Schema({
   pronouns: { type: String, default: null },
   age: { type: Number, default: null },
@@ -28,7 +29,8 @@ const ProfileSchema = new mongoose.Schema({
   privacy: {
     showAge: { type: Boolean, default: true },
     showRegion: { type: Boolean, default: true },
-    showBirthdate: { type: Boolean, default: false },
+    showBirthdate: { type: Boolean, default: true },
+    showPronouns: { type: Boolean, default: true },
   },
 })
 
@@ -221,6 +223,7 @@ module.exports = {
               showAge: true,
               showRegion: true,
               showBirthdate: false,
+              showPronouns: true,
             },
           },
         },

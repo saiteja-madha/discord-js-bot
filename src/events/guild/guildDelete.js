@@ -92,7 +92,7 @@ module.exports = async (client, guild) => {
         .setLabel('Leave Feedback')
         .setStyle(ButtonStyle.Link)
         .setURL(
-          `https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new`
+          `https://github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}/issues/new/choose`
         ),
     ]
 

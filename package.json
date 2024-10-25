@@ -57,11 +57,9 @@
     "pino-pretty": "^11.3.0",
     "pm2": "^5.4.2",
     "pretty-ms": "^7.0.1",
-    "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
     "string-progressbar": "^1.0.4",
-    "table": "^6.8.1",
-    "twemoji-parser": "^14.0.0"
+    "table": "^6.8.1"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8",

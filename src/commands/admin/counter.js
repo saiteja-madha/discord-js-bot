@@ -15,7 +15,7 @@ module.exports = {
     options: [
       {
         name: 'type',
-        description: 'Type of counter channel 🌟',
+        description: 'Type of counter channel ',
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: [
@@ -35,7 +35,7 @@ module.exports = {
       },
       {
         name: 'name',
-        description: 'Name of the counter channel 📢',
+        description: 'Name of the counter channel',
         type: ApplicationCommandOptionType.String,
         required: true,
       },

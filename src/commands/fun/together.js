@@ -1,4 +1,5 @@
-const { ApplicationCommandOptionType } = require('discord.js')
+const { EMBED_COLORS } = require('@root/src/config')
+const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js')
 
 const discordTogether = [
   'askaway',
@@ -30,16 +31,15 @@ const discordTogether = [
  */
 module.exports = {
   name: 'together',
-  description: 'Start a Discord Together activity',
+  description: "let's start an adventure together in a voice channel!",
   category: 'FUN',
   botPermissions: ['EmbedLinks'],
-
   slashCommand: {
     enabled: true,
     options: [
       {
         name: 'type',
-        description: 'Select a Discord Together activity',
+        description: 'pick your flavor of fun - what shall we play?',
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: discordTogether.map(game => ({ name: game, value: game })),
@@ -57,16 +57,45 @@ module.exports = {
 async function getTogetherInvite(member, choice) {
   choice = choice.toLowerCase()
 
-  const vc = member.voice.channel?.id
-  if (!vc) return 'You must be in a voice channel to use this command.'
+  if (!member.voice.channel?.id) {
+    return {
+      embeds: [
+        new EmbedBuilder()
+          .setColor(EMBED_COLORS.ERROR)
+          .setTitle('✦ oops, slight problem!')
+          .setDescription(
+            "hey friend! looks like you need to hop into a voice channel first - i can't start the fun without knowing where to set it up!"
+          ),
+      ],
+    }
+  }
 
   if (!discordTogether.includes(choice)) {
-    return `Invalid game.\nValid games: ${discordTogether.join(', ')}`
+    return {
+      embeds: [
+        new EmbedBuilder()
+          .setColor(EMBED_COLORS.ERROR)
+          .setTitle("✦ hmm, that's not quite right")
+          .setDescription(
+            `oh! that game isn\'t in my collection yet. here\'s what we can play:\n\n${discordTogether.join(', ')}`
+          ),
+      ],
+    }
   }
 
   const invite = await member.client.discordTogether.createTogetherCode(
-    vc,
+    member.voice.channel.id,
     choice
   )
-  return `Click [here](https://discord.com/invite/${invite.code}) to join the ${choice} activity!`
+
+  return {
+    embeds: [
+      new EmbedBuilder()
+        .setColor(EMBED_COLORS.SUCCESS)
+        .setTitle(`✦ time for ${choice}!`)
+        .setDescription(
+          `quick, quick! [click here](${invite.code}) to jump into the fun! i've got everything set up and ready to go!`
+        ),
+    ],
+  }
 }

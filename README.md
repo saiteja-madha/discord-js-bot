@@ -20,7 +20,7 @@ hey there! i’m amina, a playful and slightly chaotic discord bot that’s here
 add a little fun (and maybe a bit of chaos) to your server! 🌀 whether you’re
 looking for moderation, music, or just some good old fun commands, i’ve got your
 back. oh, and if you ever find any bugs or have ideas for new features, let me
-know right [here](https://github.com/vixshan/amina/issues/new)! 💖
+know right [here](https://github.com/vixshan/amina/issues/new/choose)! 💖
 
 <p align="center">Admin, AutoMod, Anime, Economy, Fun, Giveaway, Image, Invite, Information, Moderation, Music, Owner, Social, Statistics, Suggestion, Ticket, Utility and More...</p>
 

@@ -16,7 +16,7 @@ module.exports = {
     options: [
       {
         name: 'ghostping',
-        description: 'Detects and logs ghost mentions in your server 👻',
+        description: 'Detects and logs ghost mentions in your server',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -39,7 +39,7 @@ module.exports = {
       },
       {
         name: 'spam',
-        description: 'Enable or disable antispam detection 🚫📢',
+        description: 'Enable or disable antispam detection',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -62,7 +62,7 @@ module.exports = {
       },
       {
         name: 'massmention',
-        description: 'Enable or disable massmention detection 📢⚠️',
+        description: 'Enable or disable massmention detection',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {

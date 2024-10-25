@@ -22,17 +22,16 @@ const availableOverlays = [
  */
 module.exports = {
   name: 'overlay',
-  description: 'add overlay over the provided image',
+  description: 'transform your image with some creative chaos!',
   category: 'IMAGE',
   botPermissions: ['EmbedLinks', 'AttachFiles'],
   cooldown: 1,
-
   slashCommand: {
     enabled: IMAGE.ENABLED,
     options: [
       {
         name: 'name',
-        description: 'the type of overlay',
+        description: 'pick your flavor of artistic mayhem',
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: availableOverlays.map(overlay => ({
@@ -42,13 +41,13 @@ module.exports = {
       },
       {
         name: 'user',
-        description: 'the user to whose avatar the overlay needs to be applied',
+        description: 'whose picture should we mess with?',
         type: ApplicationCommandOptionType.User,
         required: false,
       },
       {
         name: 'link',
-        description: 'the image link to which the overlay needs to be applied',
+        description: 'got a specific image you want to transform?',
         type: ApplicationCommandOptionType.String,
         required: false,
       },
@@ -74,7 +73,9 @@ module.exports = {
     })
 
     if (!response.success)
-      return interaction.followUp('Failed to generate image overlay')
+      return interaction.followUp(
+        'oops! something went wrong with the image magic'
+      )
 
     const attachment = new AttachmentBuilder(response.buffer, {
       name: 'attachment.png',
@@ -82,7 +83,7 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(EMBED_COLORS.BOT_EMBED)
       .setImage('attachment://attachment.png')
-      .setFooter({ text: `Requested by: ${author.username}` })
+      .setFooter({ text: `sparkled up by ${author.username}` })
 
     await interaction.followUp({ embeds: [embed], files: [attachment] })
   },

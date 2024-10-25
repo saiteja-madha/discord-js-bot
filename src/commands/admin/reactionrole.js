@@ -43,26 +43,26 @@ module.exports = {
       },
       {
         name: 'channel',
-        description: 'Channel where the message exists 📬',
+        description: 'Channel where the message exists',
         type: ApplicationCommandOptionType.Channel,
         channelTypes: [ChannelType.GuildText],
         required: true,
       },
       {
         name: 'message_id',
-        description: 'Message ID to manage reaction roles 📝',
+        description: 'Message ID to manage reaction roles',
         type: ApplicationCommandOptionType.String,
         required: true,
       },
       {
         name: 'emoji',
-        description: 'Emoji to use for adding reaction role 😊',
+        description: 'Emoji to use for adding reaction role',
         type: ApplicationCommandOptionType.String,
         required: false, // Only required for adding
       },
       {
         name: 'role',
-        description: 'Role to be given for the selected emoji 🎭',
+        description: 'Role to be given for the selected emoji',
         type: ApplicationCommandOptionType.Role,
         required: false, // Only required for adding
       },

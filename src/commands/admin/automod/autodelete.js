@@ -16,7 +16,7 @@ module.exports = {
     options: [
       {
         name: 'attachments',
-        description: 'Allow or disallow attachments in messages 📎',
+        description: 'Allow or disallow attachments in messages',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -39,7 +39,7 @@ module.exports = {
       },
       {
         name: 'invites',
-        description: 'Allow or disallow Discord invites in messages 🔗',
+        description: 'Allow or disallow Discord invites in messages',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -62,7 +62,7 @@ module.exports = {
       },
       {
         name: 'links',
-        description: 'Allow or disallow links in messages 🌐',
+        description: 'Allow or disallow links in messages',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -85,7 +85,7 @@ module.exports = {
       },
       {
         name: 'maxlines',
-        description: 'Sets maximum lines allowed per message 📜',
+        description: 'Sets maximum lines allowed per message',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {

@@ -15,7 +15,7 @@ module.exports = {
     if (!cmd)
       return interaction
         .reply({
-          content: '❌ An error has occurred, please try again later~!',
+          content: 'IDK how this got here, but this command is currently disabled.',
           ephemeral: true,
         })
         .catch(() => {})

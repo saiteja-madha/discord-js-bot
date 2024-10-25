@@ -19,13 +19,13 @@ module.exports = {
         options: [
           {
             name: 'role',
-            description: 'The role to be given 🎭',
+            description: 'The role to be given',
             type: ApplicationCommandOptionType.Role,
             required: false,
           },
           {
             name: 'role_id',
-            description: 'The role ID to be given 📜',
+            description: 'The role ID to be given',
             type: ApplicationCommandOptionType.String,
             required: false,
           },
@@ -33,7 +33,7 @@ module.exports = {
       },
       {
         name: 'remove',
-        description: 'Disable the autorole 🚫',
+        description: 'Disable the autorole',
         type: ApplicationCommandOptionType.Subcommand,
       },
     ],

@@ -6,31 +6,46 @@ const NORMAL =
 const FLIPPED =
   "∀qϽᗡƎℲƃHIſʞ˥WNOԀὉᴚS⊥∩ΛMXʎZɐqɔpǝɟbɥıظʞןɯuodbɹsʇnʌʍxʎz‾'؛˙¿¡/\\,0ƖᄅƐㄣϛ9ㄥ86"
 
+const coinTossIntros = [
+  '*bouncing excitedly* \nTime for a game of chance! 🎲',
+  "*channels Player 001 energy* \nLet's play a little game~ 🦑",
+  '*spins around* \nReady for some coin-flipping fun? ✨',
+  '*giggles* \nYour fate is in my hands! Well, in this coin actually! 🎮',
+  "*eyes sparkling* \nWill luck be on your side? Let's find out! 🍀",
+]
+
+const waitingMessages = [
+  '*watching intensely like in Squid Game* \nThe suspense! 😱',
+  '*holds breath dramatically* \nUp it goes! ✨',
+  '*bouncing nervously* \nOh oh oh, where will it land?! 🎯',
+  "*channel's Player 001's patience* \nJust a moment... 🦑",
+  '*can barely contain excitement* \nAlmost there! 💫',
+]
+
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: 'flip',
-  description: 'flips a coin or message',
+  description: "Want to flip a coin or text? Let's play a fun game!",
   category: 'FUN',
   botPermissions: ['EmbedLinks'],
-
   slashCommand: {
     enabled: true,
     options: [
       {
         name: 'coin',
-        description: 'flip a coin',
+        description: "Ready to test your luck? Let's flip a coin!",
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'text',
-        description: 'reverses the given message',
+        description: "Let's turn your words upside down! ✨",
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
             name: 'input',
-            description: 'text to flip',
+            description: 'What message should I flip for you? Make it fun! 🎨',
             type: ApplicationCommandOptionType.String,
             required: true,
           },
@@ -56,27 +71,54 @@ module.exports = {
     } else if (sub === 'text') {
       const input = interaction.options.getString('input')
       const response = await flipText(input)
-      await interaction.followUp(response)
+      await interaction.followUp({
+        content: `*giggles* Here's your text, but make it ✨chaos✨:\n${response}`,
+      })
     }
   },
 }
 
-const firstEmbed = user =>
-  new EmbedBuilder()
+const firstEmbed = user => {
+  const randomIntro =
+    coinTossIntros[Math.floor(Math.random() * coinTossIntros.length)]
+  return new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
-    .setDescription(`${user.username}, started a coin toss`)
+    .setTitle(randomIntro)
+    .setDescription(
+      `${user.username} started a coin toss! Let's see what fate has in store! 🎲`
+    )
+    .setImage(
+      'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZW4ydjNmdWprcmJmbXEyZnhrN3piZHRscGNtaXVhaGlpMTFyeGwxMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZR8teuiCs3AkSkzjnG/giphy.gif'
+    )
+}
 
-const secondEmbed = () =>
-  new EmbedBuilder().setDescription('The coin is in the air')
+const secondEmbed = () => {
+  const randomWait =
+    waitingMessages[Math.floor(Math.random() * waitingMessages.length)]
+  return new EmbedBuilder()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setDescription(randomWait)
+    .setImage(
+      'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZW4ydjNmdWprcmJmbXEyZnhrN3piZHRscGNtaXVhaGlpMTFyeGwxMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZR8teuiCs3AkSkzjnG/giphy.gif'
+    )
+}
 
-const resultEmbed = toss =>
-  new EmbedBuilder()
+const resultEmbed = toss => {
+  const winMessages = {
+    HEAD: '*jumps with joy* The coin shows its face! ✨',
+    TAIL: '*spins excitedly* The coin shows its tail! ✨',
+  }
+
+  return new EmbedBuilder()
+    .setColor(EMBED_COLORS.BOT_EMBED)
+    .setTitle(winMessages[toss])
     .setDescription(`>> **${toss} Wins** <<`)
     .setImage(
       toss === 'HEAD'
-        ? 'https://i.imgur.com/HavOS7J.png'
-        : 'https://i.imgur.com/u1pmQMV.png'
+        ? 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTh5ZXg3d3h1dWVnY2RsdXRjamp1ZnYwZHdmejQxcXFvZ213NXBvMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9uorwgUW3jFsY/giphy.gif'
+        : 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhpaXljMnFhcnRtOGVjZXM0OG9xZG10bWdudGl2OWk0MDdwdXFlZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9dg/ixeyDqK6aao6WSdvpL/giphy.gif'
     )
+}
 
 async function flipText(text) {
   let builder = ''
