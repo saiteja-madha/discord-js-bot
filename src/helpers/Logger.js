@@ -2,9 +2,9 @@ const config = require('@src/config')
 const { EmbedBuilder, WebhookClient } = require('discord.js')
 const pino = require('pino')
 
-const webhookLogger = process.env.ERROR_LOGS
+const webhookLogger = process.env.LOGS_WEBHOOK
   ? new WebhookClient({
-      url: process.env.ERROR_LOGS,
+      url: process.env.LOGS_WEBHOOK,
     })
   : undefined
 

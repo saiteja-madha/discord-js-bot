@@ -42,8 +42,8 @@ module.exports = class Validator {
 
     // Validate Feedback Config
     if (config.FEEDBACK.ENABLED) {
-      if (!process.env.FEEDBACK_URL) {
-        error('env: FEEDBACK_URL cannot be empty when FEEDBACK is enabled')
+      if (!process.env.LOGS_WEBHOOK) {
+        error('env: LOGS_WEBHOOK cannot be empty when FEEDBACK is enabled')
         process.exit(1)
       }
     }

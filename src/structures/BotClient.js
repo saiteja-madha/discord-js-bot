@@ -50,8 +50,8 @@ module.exports = class BotClient extends Client {
     this.counterUpdateQueue = []
 
     // Initialize webhook for join/leave logs if provided
-    this.joinLeaveWebhook = process.env.JOIN_LEAVE_LOGS
-      ? new WebhookClient({ url: process.env.JOIN_LEAVE_LOGS })
+    this.joinLeaveWebhook = process.env.LOGS_WEBHOOK
+      ? new WebhookClient({ url: process.env.LOGS_WEBHOOK })
       : undefined
 
     // Initialize music and giveaways managers if enabled in config

@@ -19,7 +19,7 @@ module.exports = {
   // whether or not to enable feedback/report system
   FEEDBACK: {
     ENABLED: true,
-    URL: process.env.FEEDBACK_URL,
+    URL: process.env.LOGS_WEBHOOK,
   },
 
   AUTOMOD: {

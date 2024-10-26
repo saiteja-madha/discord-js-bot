@@ -13,18 +13,18 @@
       "required": true,
       "value": ""
     },
-    "ERROR_LOGS": {
+    "LOGS_WEBHOOK": {
       "description": "webhook url for error logs",
       "required": true,
       "value": ""
     },
-    "JOIN_LEAVE_LOGS": {
+    "LOGS_WEBHOOK": {
       "description": "webhook url for join/leave logs",
       "required": false,
       "value": ""
     },
 
-    "FEEDBACK_URL": {
+    "LOGS_WEBHOOK": {
       "description": "webhook url for feedback logs",
       "required": false,
       "value": ""
