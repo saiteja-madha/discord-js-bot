@@ -1,5 +1,6 @@
 ---
-import { discordAuth } from '../../../lib/discord-auth';
+// @/pages/dash/auth/callback.astro
+import { discordAuth } from '@/lib/discord-auth';
 
 export const prerender = false;
 
@@ -20,8 +21,8 @@ if (Astro.request.method === 'GET') {
     const tokenData = await discordAuth.exchangeCode(code);
     const userData = await discordAuth.getUserInfo(tokenData.access_token);
 
-    // Set secure httpOnly cookies
-    Astro.cookies.set('discord_token', tokenData.access_token, {
+    // Set access token cookie with shorter expiry
+    Astro.cookies.set('discord_access_token', tokenData.access_token, {
       path: '/',
       secure: true,
       httpOnly: true,
@@ -29,6 +30,16 @@ if (Astro.request.method === 'GET') {
       maxAge: tokenData.expires_in
     });
 
+    // Set refresh token cookie with longer expiry (30 days)
+    Astro.cookies.set('discord_refresh_token', tokenData.refresh_token, {
+      path: '/',
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 // 30 days
+    });
+
+    // Set user data cookie
     Astro.cookies.set('discord_user', JSON.stringify(userData), {
       path: '/',
       secure: true,
@@ -37,7 +48,7 @@ if (Astro.request.method === 'GET') {
       maxAge: tokenData.expires_in
     });
 
-    return Astro.redirect('/web', 302);
+    return Astro.redirect('/dash', 302);
   } catch (err) {
     console.error('Auth error:', err);
     return Astro.redirect('/', 302);

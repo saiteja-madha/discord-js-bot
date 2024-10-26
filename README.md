@@ -2,7 +2,7 @@
 
 <h1 align="center">
   <br>
-  <a href="https://github.com/vixshan/amina/.web/src/images/tmpng.png" height="200" alt="AMINA"></a>
+  <a href="https://github.com/vixshan/amina/.astro/src/images/tmpng.png" height="200" alt="AMINA"></a>
   <br>
   AMINA
   <br>
@@ -163,7 +163,7 @@ want to support me and keep me alive? sponsor me on
 
 ## powered by:
 
-[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+[![DigitalOcean Referral Badge](https://astro-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=c5587212fe39&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 <a href="https://www.vultr.com/?ref=9556008-8H"><img src="https://www.vultr.com/media/logo_ondark.svg" width="200" height="80"></a>
 
 [version-shield]:

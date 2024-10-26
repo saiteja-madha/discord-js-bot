@@ -31,7 +31,7 @@ module.exports = {
   DASHBOARD: {
     enabled:
       process.env.DASH !== undefined ? process.env.DASH === 'true' : true,
-    port: process.env.PORT || '8080', // Port to run the dashboard on
+    port: process.env.PORT || '4321', // Port to run the dashboard on
   },
 
   ECONOMY: {

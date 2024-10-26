@@ -47,28 +47,28 @@ async function initializeBot() {
 
         // Serve static files from the Astro build output
         app.use(
-          express.static(path.join(__dirname, '..', 'web', 'dist', 'client'))
+          express.static(path.join(__dirname, '..', 'astro', 'dist', 'client'))
         )
 
         // Handle dashboard routes (SSR)
-        app.use('/web', async (req, res, next) => {
+        app.use('/astro', async (req, res, next) => {
           if (
-            req.url.startsWith('/web/_astro/') ||
-            req.url.startsWith('/web/static/')
+            req.url.startsWith('/astro/_astro/') ||
+            req.url.startsWith('/astro/static/')
           ) {
             // Serve static assets directly
             return express.static(
-              path.join(__dirname, '..', 'web', 'dist', 'client')
+              path.join(__dirname, '..', 'astro', 'dist', 'client')
             )(req, res, next)
           }
 
           try {
             // Dynamically import the ESM handler
-            const { handler } = await import('../web/dist/server/entry.mjs')
+            const { handler } = await import('../astro/dist/server/entry.mjs')
             const response = await handler(req, res)
             if (response.status === 404) {
               return res.sendFile(
-                path.join(__dirname, '..', 'web', 'dist', 'client', '404.html')
+                path.join(__dirname, '..', 'astro', 'dist', 'client', '404.html')
               )
             }
           } catch (error) {
@@ -80,7 +80,7 @@ async function initializeBot() {
         // For any other routes, serve the static build
         app.get('*', (req, res) => {
           res.sendFile(
-            path.join(__dirname, '..', 'web', 'dist', 'client', 'index.html')
+            path.join(__dirname, '..', 'astro', 'dist', 'client', 'index.html')
           )
         })
 

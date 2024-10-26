@@ -1,4 +1,4 @@
-// @root/web/astro.config.mjs
+// @root/astro/astro.config.mjs
 
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
@@ -135,3 +135,4 @@ export default defineConfig({
     },
   },
 })
+

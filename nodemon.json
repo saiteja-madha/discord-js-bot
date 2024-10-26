@@ -1,6 +1,6 @@
 {
-  "ignore": ["web/*"],
-  "watch": ["src", "bot.js"],
+  "ignore": ["astro/*"],
+  "watch": ["src"],
   "ext": "js,json"
 }
 

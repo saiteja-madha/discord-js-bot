@@ -30,7 +30,7 @@
       "value": ""
     },
 
-    "BOT_SECRET": {
+    "CLIENT_SECRET": {
       "description": "required for bot dashboard",
       "required": true,
       "value": ""

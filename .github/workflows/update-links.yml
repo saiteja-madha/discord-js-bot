@@ -1,8 +1,8 @@
-name: Update README and web
+name: Update README and astro
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
   fork:
 
@@ -11,30 +11,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Install dependencies
         run: npm install dotenv
-        
+
       - name: Create env file
         run: |
           touch .env
           echo "SUPPORT_SERVER=${{ secrets.SUPPORT_SERVER }}" >> .env
           echo "GH_USERNAME=${{ github.repository_owner }}" >> .env
           echo "GH_REPO=${{ github.event.repository.name }}" >> .env
-          
-      - name: Update links in README and web
+
+      - name: Update links in README and astro
         run: node scripts/update-links.js
-        
+
       - name: Check for changes
         id: git-check
         run: |
           git add README.md
-          git add $(find web/src -name '*.md')
+          git add $(find astro/src -name '*.md')
           git diff --staged --quiet && echo "changes=false" >> $GITHUB_OUTPUT || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit changes
@@ -42,8 +42,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "links: update README and web with repository information"
-          
+          git commit -m "links: update README and astro with repository information"
+
       - name: Push changes
         if: steps.git-check.outputs.changes == 'true'
         uses: ad-m/github-push-action@master

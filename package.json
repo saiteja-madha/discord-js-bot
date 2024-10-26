@@ -11,10 +11,10 @@
   "scripts": {
     "dev": "nodemon .",
     "start": "node .",
-    "build": "cd web && npm run build",
-    "dev:web": "cd web && npm run dev",
-    "i:web": "cd web && npm install",
-    "heroku-postbuild": "cd web && npm install && npm run build",
+    "build": "cd astro && npm run build",
+    "dev:astro": "cd astro && npm run dev",
+    "i:astro": "cd astro && npm install",
+    "heroku-postbuild": "cd astro && npm install && npm run build",
     "f": "prettier --write src",
     "u": "git pull && npm update && npm run f",
     "start-replit": "node src/index.js"

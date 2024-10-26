@@ -22,8 +22,8 @@ module.exports = class Validator {
 
     // Validate Dashboard Config
     if (config.DASHBOARD.enabled) {
-      if (!process.env.BOT_SECRET) {
-        error('env: BOT_SECRET cannot be empty')
+      if (!process.env.CLIENT_SECRET) {
+        error('env: CLIENT_SECRET cannot be empty')
         process.exit(1)
       }
       if (!process.env.SESSION_PASSWORD) {
