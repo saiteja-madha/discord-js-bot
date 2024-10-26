@@ -1,0 +1,46 @@
+---
+import { discordAuth } from '../../../lib/discord-auth';
+
+export const prerender = false;
+
+if (Astro.request.method === 'GET') {
+  const url = new URL(Astro.request.url);
+  const code = url.searchParams.get('code');
+  const error = url.searchParams.get('error');
+
+  if (error) {
+    return Astro.redirect('/', 302);
+  }
+
+  if (!code) {
+    return Astro.redirect('/', 302);
+  }
+
+  try {
+    const tokenData = await discordAuth.exchangeCode(code);
+    const userData = await discordAuth.getUserInfo(tokenData.access_token);
+
+    // Set secure httpOnly cookies
+    Astro.cookies.set('discord_token', tokenData.access_token, {
+      path: '/',
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: tokenData.expires_in
+    });
+
+    Astro.cookies.set('discord_user', JSON.stringify(userData), {
+      path: '/',
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: tokenData.expires_in
+    });
+
+    return Astro.redirect('/web', 302);
+  } catch (err) {
+    console.error('Auth error:', err);
+    return Astro.redirect('/', 302);
+  }
+}
+---

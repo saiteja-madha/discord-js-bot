@@ -253,7 +253,7 @@ function botInvite(client) {
     components.push(
       new ButtonBuilder()
         .setLabel('Dashboard Link')
-        .setURL(DASHBOARD.BASE_URL)
+        .setURL(process.env.BASE_URL)
         .setStyle(ButtonStyle.Link)
     )
   }

@@ -31,8 +31,6 @@ module.exports = {
   DASHBOARD: {
     enabled:
       process.env.DASH !== undefined ? process.env.DASH === 'true' : true,
-    baseURL: process.env.BASE_URL || 'http://localhost:8080', // Base URL of the dashboard
-    failureURL: process.env.FAILURE_URL || 'http://localhost:8080', // URL to redirect to on dashboard failure
     port: process.env.PORT || '8080', // Port to run the dashboard on
   },
 

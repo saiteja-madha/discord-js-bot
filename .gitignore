@@ -7,24 +7,24 @@ node_modules/
 package-lock.json
 
 # build output
-dash/dist/
+web/dist/
 # generated types
-dash/.astro/
-dash/.idea/
+web/.astro/
+web/.idea/
 
 # dependencies
-dash/node_modules/
+web/node_modules/
 
 # logs
-dash/npm-debug.log*
-dash/yarn-debug.log*
-dash/yarn-error.log*
-dash/pnpm-debug.log*
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+web/pnpm-debug.log*
 
 
 # environment variables
-dash/.env
-dash/.env.production
+web/.env
+web/.env.production
 
 # macOS-specific files
 .DS_Store

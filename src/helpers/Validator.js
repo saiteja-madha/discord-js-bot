@@ -31,8 +31,8 @@ module.exports = class Validator {
         process.exit(1)
       }
       if (
-        !config.DASHBOARD.baseURL ||
-        !config.DASHBOARD.failureURL ||
+        !process.env.BASE_URL ||
+        !process.env.FAILURE_URL ||
         !config.DASHBOARD.port
       ) {
         error('config.js: DASHBOARD details cannot be empty')

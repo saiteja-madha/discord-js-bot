@@ -92,8 +92,8 @@ const updateFiles = () => {
     // Update README.md
     updateFile('README.md', username, repo, supportServer)
 
-    // Update files in ./dash folder and its subfolders
-    updateFilesRecursively('./dash/src', username, repo, supportServer)
+    // Update files in ./web folder and its subfolders
+    updateFilesRecursively('./web/src', username, repo, supportServer)
   } catch (error) {
     console.error('Error updating files:', error)
     process.exit(1)

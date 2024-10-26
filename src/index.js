@@ -41,12 +41,47 @@ async function initializeBot() {
         const app = express()
         const port = process.env.PORT || client.config.DASHBOARD.port || 8080
 
-        // Serve static files from the Astro build output
-        app.use(express.static(path.join(__dirname, '..', 'dash', 'dist')))
+        // Parse cookies and add security middleware
+        app.use(require('cookie-parser')())
+        app.use(require('helmet')())
 
-        // For any other routes, serve the 404.html
+        // Serve static files from the Astro build output
+        app.use(
+          express.static(path.join(__dirname, '..', 'web', 'dist', 'client'))
+        )
+
+        // Handle dashboard routes (SSR)
+        app.use('/web', async (req, res, next) => {
+          if (
+            req.url.startsWith('/web/_astro/') ||
+            req.url.startsWith('/web/static/')
+          ) {
+            // Serve static assets directly
+            return express.static(
+              path.join(__dirname, '..', 'web', 'dist', 'client')
+            )(req, res, next)
+          }
+
+          try {
+            // Dynamically import the ESM handler
+            const { handler } = await import('../web/dist/server/entry.mjs')
+            const response = await handler(req, res)
+            if (response.status === 404) {
+              return res.sendFile(
+                path.join(__dirname, '..', 'web', 'dist', 'client', '404.html')
+              )
+            }
+          } catch (error) {
+            console.error('SSR Error:', error)
+            next(error)
+          }
+        })
+
+        // For any other routes, serve the static build
         app.get('*', (req, res) => {
-          res.sendFile(path.join(__dirname, '..', 'dash', 'dist', '404.html'))
+          res.sendFile(
+            path.join(__dirname, '..', 'web', 'dist', 'client', 'index.html')
+          )
         })
 
         app.listen(port, () => {
@@ -56,7 +91,6 @@ async function initializeBot() {
         })
       } catch (ex) {
         client.logger.error('Failed to launch dashboard:', ex)
-        // Don't exit process on dashboard failure
         client.logger.warn('Continuing bot operation without dashboard')
       }
     }

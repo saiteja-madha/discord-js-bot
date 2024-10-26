@@ -1,17 +1,31 @@
+// @root/web/astro.config.mjs
+
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import sitemap from '@astrojs/sitemap'
 import compressor from 'astro-compressor'
 import starlight from '@astrojs/starlight'
+import node from '@astrojs/node'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   site: process.env.BASE_URL || 'http://localhost:8080',
-  output: 'static',
+  output: 'hybrid',
   srcDir: './src',
   publicDir: './public',
   outDir: './dist',
   base: '/',
+  adapter: node({
+    mode: 'standalone',
+  }),
   image: { domains: ['images.unsplash.com'] },
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: 'hover',
+  },
   integrations: [
     tailwind(),
     sitemap(),
@@ -66,7 +80,8 @@ export default defineConfig({
       ],
       social: {
         github: 'https://github.com/mearashadowfax/ScrewFast',
-        discord: 'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
+        discord:
+          'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
       },
       disable404Route: true,
       customCss: ['./src/assets/styles/starlight.css'],
@@ -102,8 +117,21 @@ export default defineConfig({
       cssMinify: true,
       minify: true,
     },
+    envDir: path.resolve(__dirname, '..'), // Point to root directory
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+        '@components': path.resolve(__dirname, './src/components'),
+        '@content': path.resolve(__dirname, './src/content'),
+        '@data': path.resolve(__dirname, './src/data_files'),
+        '@images': path.resolve(__dirname, './src/images'),
+        '@scripts': path.resolve(__dirname, './src/assets/scripts'),
+        '@styles': path.resolve(__dirname, './src/assets/styles'),
+        '@utils': path.resolve(__dirname, './src/utils'),
+        '@layouts': path.resolve(__dirname, './src/layouts'),
+        '@root': path.resolve(__dirname, '..'),
+        '@docs': path.resolve(__dirname, './src/content/docs'),
+      },
+    },
   },
 })
-
-
-

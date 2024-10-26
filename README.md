@@ -2,7 +2,7 @@
 
 <h1 align="center">
   <br>
-  <a href="https://github.com/vixshan/amina/.dash/src/images/tmpng.png" height="200" alt="AMINA"></a>
+  <a href="https://github.com/vixshan/amina/.web/src/images/tmpng.png" height="200" alt="AMINA"></a>
   <br>
   AMINA
   <br>

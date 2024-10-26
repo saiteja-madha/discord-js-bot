@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/node": "^8.3.4",
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/starlight": "^0.28.3",
     "@astrojs/tailwind": "^5.1.2",
@@ -25,6 +26,7 @@
     "astro-vtbot": "^1.10.4",
     "clipboard": "^2.0.11",
     "compression": "^1.7.4",
+    "dotenv": "^16.4.5",
     "globby": "^14.0.2",
     "gsap": "^3.12.5",
     "html-minifier-terser": "^7.2.0",
