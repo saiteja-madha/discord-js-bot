@@ -1,11 +1,6 @@
 // @/pages/api/guilds/[id].ts
 import type { APIRoute } from 'astro'
 import { GuildManager } from '@/lib/database/mongoose'
-import {
-  authenticateRequest,
-  AuthError,
-  hasManageGuildPermission,
-} from '@/lib/middleware/auth'
 import { createResponse, createErrorResponse } from '@/lib/api-response'
 
 // Mark this as a server-side endpoint
@@ -35,24 +30,10 @@ interface DiscordGuild {
 
 export const GET: APIRoute = async ({ params, request }) => {
   try {
-    const accessToken = await authenticateRequest(request)
-
     // Validate guildId parameter
     const guildId = params.id
     if (!guildId) {
       return createErrorResponse('Guild ID is required', 400)
-    }
-
-    // Get user's guilds from Discord
-    const userGuilds = (await getDiscordGuilds(accessToken)) as DiscordGuild[]
-
-    // Check if user has access to this guild
-    const targetGuild = userGuilds.find(
-      g => g.id === guildId && hasManageGuildPermission(g.permissions)
-    )
-
-    if (!targetGuild) {
-      return createErrorResponse('No permission to manage this guild', 403)
     }
 
     // Get guild data from database
@@ -65,10 +46,6 @@ export const GET: APIRoute = async ({ params, request }) => {
 
     return createResponse(guild)
   } catch (error) {
-    if (error instanceof AuthError) {
-      return createErrorResponse(error.message, error.statusCode)
-    }
-
     console.error('Error handling guild request:', error)
     return createErrorResponse(
       'Internal server error',
@@ -80,24 +57,10 @@ export const GET: APIRoute = async ({ params, request }) => {
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   try {
-    const accessToken = await authenticateRequest(request)
-
     // Validate guildId parameter
     const guildId = params.id
     if (!guildId) {
       return createErrorResponse('Guild ID is required', 400)
-    }
-
-    // Get user's guilds from Discord
-    const userGuilds = (await getDiscordGuilds(accessToken)) as DiscordGuild[]
-
-    // Check if user has access to this guild
-    const targetGuild = userGuilds.find(
-      g => g.id === guildId && hasManageGuildPermission(g.permissions)
-    )
-
-    if (!targetGuild) {
-      return createErrorResponse('No permission to manage this guild', 403)
     }
 
     // Parse update data
@@ -143,10 +106,6 @@ export const PATCH: APIRoute = async ({ params, request }) => {
 
     return createResponse(updatedGuild)
   } catch (error) {
-    if (error instanceof AuthError) {
-      return createErrorResponse(error.message, error.statusCode)
-    }
-
     console.error('Error updating guild:', error)
     return createErrorResponse(
       'Internal server error',
@@ -159,4 +118,3 @@ export const PATCH: APIRoute = async ({ params, request }) => {
 export function getStaticPaths() {
   return []
 }
-
