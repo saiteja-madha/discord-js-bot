@@ -1,5 +1,7 @@
 ---
 // @/pages/dash/index.astro
+export const prerender = false;
+
 import DashboardLayout from "@/layouts/DashboardLayout.astro";
 import ServerCard from "@/components/ui/dashboard/ServerCard.astro";
 import { GuildManager } from "@/lib/database/mongoose";
