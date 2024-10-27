@@ -1,5 +1,3 @@
-// @root/astro/astro.config.mjs
-
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import sitemap from '@astrojs/sitemap'
@@ -11,8 +9,19 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Helper function to ensure proper URL format
+const getSiteURL = val => {
+  const isProduction = import.meta.env.PROD === true
+  if (isProduction) {
+    if (val && val !== '/') {
+      return val.startsWith('http') ? val : `https://${val}`
+    }
+  }
+  return 'http://localhost:8080'
+}
+
 export default defineConfig({
-  site: process.env.BASE_URL || 'http://localhost:8080',
+  site: getSiteURL(process.env.BASE_URL),
   output: 'hybrid',
   srcDir: './src',
   publicDir: './public',
@@ -79,7 +88,7 @@ export default defineConfig({
         },
       ],
       social: {
-        github: 'https://github.com/mearashadowfax/ScrewFast',
+        github: 'https://github.com/vixshan/amina',
         discord:
           'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
       },
@@ -98,14 +107,14 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             property: 'og:image',
-            content: 'https://screwfast.uk' + '/social.webp',
+            content: 'https://amina.vikshan.tech' + '/social.webp',
           },
         },
         {
           tag: 'meta',
           attrs: {
             property: 'twitter:image',
-            content: 'https://screwfast.uk' + '/social.webp',
+            content: 'https://amina.vikshan.tech' + '/social.webp',
           },
         },
       ],
@@ -135,4 +144,3 @@ export default defineConfig({
     },
   },
 })
-
