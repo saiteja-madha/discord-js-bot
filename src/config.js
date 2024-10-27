@@ -32,6 +32,7 @@ module.exports = {
     enabled:
       process.env.DASH !== undefined ? process.env.DASH === 'true' : true,
     port: process.env.PORT || '8080', // Port to run the dashboard on
+    baseUrl: process.env.BASE_URL || process.env.HEROKU_APP_NAME, // Base URL of the dashboard
   },
 
   ECONOMY: {

@@ -31,7 +31,7 @@ module.exports = class Validator {
         process.exit(1)
       }
       if (
-        !process.env.BASE_URL ||
+        !config.DASHBOARD.baseUrl ||
         !process.env.FAILURE_URL ||
         !config.DASHBOARD.port
       ) {
