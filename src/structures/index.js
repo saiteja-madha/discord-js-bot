@@ -1,3 +1,5 @@
+// src/structures/index.js
+
 const BotClient = require('./BotClient')
 const Command = require('./Command')
 const CommandCategory = require('./CommandCategory')

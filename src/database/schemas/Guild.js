@@ -1,5 +1,7 @@
+// @root/src/database/schemas/Guild.js
+
 const mongoose = require('mongoose')
-const { CACHE_SIZE, STATS } = require('@src/config.js')
+const { CACHE_SIZE, STATS } = require('../../config')
 const FixedSizeMap = require('fixedsize-map')
 const { getUser } = require('./User')
 
@@ -133,69 +135,72 @@ const Schema = new mongoose.Schema({
 
 const Model = mongoose.model('guild', Schema)
 
-module.exports = {
-  getSettings: async guild => {
-    if (!guild) throw new Error('Guild is undefined')
-    if (!guild.id) throw new Error('Guild Id is undefined')
+async function getSettings(guild) {
+  if (!guild) throw new Error('Guild is undefined')
+  if (!guild.id) throw new Error('Guild Id is undefined')
 
-    const cached = cache.get(guild.id)
-    if (cached) return cached
+  const cached = cache.get(guild.id)
+  if (cached) return cached
 
-    let guildData = await Model.findById(guild.id)
-    if (!guildData) {
-      // save owner details
-      guild
-        .fetchOwner()
-        .then(async owner => {
-          const userDb = await getUser(owner)
-          await userDb.save()
-        })
-        .catch(ex => {})
-
-      // create a new guild model
-      guildData = new Model({
-        _id: guild.id,
-        server: {
-          name: guild.name,
-          region: guild.preferredLocale,
-          owner: guild.ownerId,
-          joinedAt: guild.joinedAt,
-        },
+  let guildData = await Model.findById(guild.id)
+  if (!guildData) {
+    // save owner details
+    guild
+      .fetchOwner()
+      .then(async owner => {
+        const userDb = await getUser(owner)
+        await userDb.save()
       })
+      .catch(ex => {})
 
-      await guildData.save()
-    }
-    cache.add(guild.id, guildData)
-    return guildData
-  },
-
-  updateSettings: async (guildId, settings) => {
-    if (settings.server && settings.server.staff_roles) {
-      settings.server.staff_roles = Array.isArray(settings.server.staff_roles)
-        ? settings.server.staff_roles
-        : [settings.server.staff_roles]
-    }
-
-    // Check if a ticket message is set and update the enabled status
-    if (settings.ticket && settings.ticket.message_id) {
-      settings.ticket.enabled = true
-    }
-
-    const updatedSettings = await Model.findByIdAndUpdate(guildId, settings, {
-      new: true,
+    // create a new guild model
+    guildData = new Model({
+      _id: guild.id,
+      server: {
+        name: guild.name,
+        region: guild.preferredLocale,
+        owner: guild.ownerId,
+        joinedAt: guild.joinedAt,
+      },
     })
-    cache.add(guildId, updatedSettings)
-    return updatedSettings
-  },
 
-  // add an invite link to the guild settings
-  setInviteLink: async (guildId, inviteLink) => {
-    const updatedSettings = await Model.findByIdAndUpdate(
-      guildId,
-      { 'server.invite_link': inviteLink },
-      { new: true }
-    )
-    cache.add(guildId, updatedSettings)
-    return updatedSettings
-  },
+    await guildData.save()
+  }
+  cache.add(guild.id, guildData)
+  return guildData
+}
+
+async function updateSettings(guildId, settings) {
+  if (settings.server && settings.server.staff_roles) {
+    settings.server.staff_roles = Array.isArray(settings.server.staff_roles)
+      ? settings.server.staff_roles
+      : [settings.server.staff_roles]
+  }
+
+  // Check if a ticket message is set and update the enabled status
+  if (settings.ticket && settings.ticket.message_id) {
+    settings.ticket.enabled = true
+  }
+
+  const updatedSettings = await Model.findByIdAndUpdate(guildId, settings, {
+    new: true,
+  })
+  cache.add(guildId, updatedSettings)
+  return updatedSettings
+}
+
+async function setInviteLink(guildId, inviteLink) {
+  const updatedSettings = await Model.findByIdAndUpdate(
+    guildId,
+    { 'server.invite_link': inviteLink },
+    { new: true }
+  )
+  cache.add(guildId, updatedSettings)
+  return updatedSettings
+}
+
+module.exports = {
+  getSettings,
+  updateSettings,
+  setInviteLink,
 }

@@ -1,3 +1,4 @@
+// src/structures/BotClient.js
 const {
   Client,
   Collection,

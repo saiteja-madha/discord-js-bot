@@ -1,48 +1,32 @@
 ---
 // @/components/ui/buttons/AuthBtn.astro
-import { discordAuth } from '@/lib/discord-auth';
-import LoginBtn from './LoginBtn.astro';
-import DashboardBtn from './DashboardBtn.astro';
+import { discordAuth } from '@/lib/discord-auth'
+import { setAuthCookies, clearAuthCookies, COOKIE_NAMES } from '@/lib/cookie-utils'
+import LoginBtn from './LoginBtn.astro'
+import DashboardBtn from './DashboardBtn.astro'
 
-const accessToken = Astro.cookies.get('discord_access_token')?.value;
-const refreshToken = Astro.cookies.get('discord_refresh_token')?.value;
+const accessToken = Astro.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value
+const refreshToken = Astro.cookies.get(COOKIE_NAMES.REFRESH_TOKEN)?.value
 
-let isAuthenticated = false;
+let isAuthenticated = false
 
 if (accessToken) {
-  // Check if the access token is still valid
-  isAuthenticated = await discordAuth.validateToken(accessToken);
-  
-  if (!isAuthenticated && refreshToken) {
-    try {
+  try {
+    // Check if the access token is still valid
+    isAuthenticated = await discordAuth.validateToken(accessToken)
+    
+    if (!isAuthenticated && refreshToken) {
       // Try to refresh the token
-      const newTokenData = await discordAuth.refreshToken(refreshToken);
-      const userData = await discordAuth.getUserInfo(newTokenData.access_token);
+      const newTokenData = await discordAuth.refreshToken(refreshToken)
+      const userData = await discordAuth.getUserInfo(newTokenData.access_token)
       
-      // Update cookies with new tokens
-      Astro.cookies.set('discord_access_token', newTokenData.access_token, {
-        path: '/',
-        secure: true,
-        httpOnly: true,
-        sameSite: 'lax',
-        maxAge: newTokenData.expires_in
-      });
-      
-      Astro.cookies.set('discord_user', JSON.stringify(userData), {
-        path: '/',
-        secure: true,
-        httpOnly: true,
-        sameSite: 'lax',
-        maxAge: newTokenData.expires_in
-      });
-      
-      isAuthenticated = true;
-    } catch (error) {
-      // If refresh fails, clear all cookies
-      Astro.cookies.delete('discord_access_token');
-      Astro.cookies.delete('discord_refresh_token');
-      Astro.cookies.delete('discord_user');
+      // Update all cookies at once
+      setAuthCookies(Astro.cookies, newTokenData, userData)
+      isAuthenticated = true
     }
+  } catch (error) {
+    // If any error occurs, clear all cookies
+    clearAuthCookies(Astro.cookies)
   }
 }
 ---

@@ -25,7 +25,7 @@
     "url": "git+https://github.com/vixshan/amina.git"
   },
   "bugs": {
-    "url": "https://github.com/vixshan/amina/issues"
+    "url": "https://github.com/vixshan/amina/issues/new/choose"
   },
   "dependencies": {
     "@lavaclient/queue": "^2.1.1",

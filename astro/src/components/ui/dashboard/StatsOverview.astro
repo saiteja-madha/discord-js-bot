@@ -1,0 +1,31 @@
+---
+interface Statistic {
+  label: string;
+  value: number | string;
+  change: string;
+}
+
+interface Props {
+  statistics: Statistic[];
+}
+
+const { statistics } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {statistics.map(stat => (
+    <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 shadow-sm">
+      <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+        {stat.label}
+      </dt>
+      <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+        <div class="flex items-baseline text-2xl font-semibold text-pink-600 dark:text-pink-400">
+          {stat.value}
+        </div>
+        <div class="inline-flex items-baseline px-2.5 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+          {stat.change}
+        </div>
+      </dd>
+    </div>
+  ))}
+</div>

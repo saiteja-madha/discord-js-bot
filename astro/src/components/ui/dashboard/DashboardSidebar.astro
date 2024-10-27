@@ -1,0 +1,95 @@
+---
+const navigation = [
+  { name: 'Overview', href: '/dash', icon: 'home', current: true },
+  { name: 'Servers', href: '/dash/guilds', icon: 'server', current: false },
+  { name: 'Settings', href: '/dash/settings', icon: 'cog', current: false },
+  { name: 'Premium', href: '/premium', icon: 'crown', current: false },
+];
+
+const currentPath = new URL(Astro.request.url).pathname;
+
+function isCurrentPage(href: string) {
+  if (href === '/dash') {
+    return currentPath === '/dash';
+  }
+  return currentPath.startsWith(href);
+}
+---
+
+<aside
+  id="sidebar"
+  class="fixed inset-y-0 left-0 z-50 w-64 transform border-r border-gray-200 bg-white pb-10 transition duration-300 dark:border-neutral-700 dark:bg-neutral-800 lg:static lg:translate-x-0 -translate-x-full"
+>
+  <div class="flex h-16 items-center justify-between border-b border-gray-200 px-6 dark:border-neutral-700">
+    <a href="/" class="flex items-center gap-2">
+      <img
+        class="h-8 w-auto"
+        src="/logo.png"
+        alt="Amina Logo"
+      />
+      <span class="text-lg font-semibold text-gray-900 dark:text-white">
+        Amina
+      </span>
+    </a>
+  </div>
+
+  <nav class="mt-6 px-4">
+    <div class="space-y-4">
+      {navigation.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'group flex items-center rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+            {
+              'bg-pink-50 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400': isCurrentPage(item.href),
+              'text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700': !isCurrentPage(item.href),
+            },
+          ]}
+        >
+          <i class={`fas fa-${item.icon} mr-3 h-5 w-5`} aria-hidden="true"></i>
+          {item.name}
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-10">
+      <h3 class="px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+        Quick Actions
+      </h3>
+      <div class="mt-2 space-y-1">
+        <a
+          href="/support"
+          class="group flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700"
+        >
+          <i class="fas fa-question-circle mr-3 h-5 w-5" aria-hidden="true"></i>
+          Support
+        </a>
+        <a
+          href="https://discord.gg/uMgS9evnmv-support-server"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700"
+        >
+          <i class="fab fa-discord mr-3 h-5 w-5" aria-hidden="true"></i>
+          Join Community
+        </a>
+      </div>
+    </div>
+
+    <!-- Premium Callout -->
+    <div class="mt-10">
+      <div class="rounded-lg bg-gradient-to-r from-pink-500 to-purple-500 p-4">
+        <h3 class="text-sm font-medium text-white">Upgrade to Premium</h3>
+        <p class="mt-1 text-sm text-white/90">
+          Get access to exclusive features and priority support.
+        </p>
+        <a
+          href="/premium"
+          class="mt-4 block rounded-md bg-white px-3 py-2 text-center text-sm font-medium text-pink-600 hover:bg-gray-50"
+        >
+          Learn More
+        </a>
+      </div>
+    </div>
+  </nav>
+</aside>

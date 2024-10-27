@@ -78,7 +78,7 @@ const updateFilesRecursively = (dir, username, repo, supportServer) => {
 
     if (file.isDirectory()) {
       updateFilesRecursively(filePath, username, repo, supportServer)
-    } else if (file.isFile() && file.name.endsWith('.md')) {
+    } else if (file.isFile() && file.name.endsWith('.ts') || file.name.endsWith('.md') || file.name.endsWith('.js') || file.name.endsWith('.json') || file.name.endsWith('.mdx')) {
       updateFile(filePath, username, repo, supportServer)
     }
   }
@@ -92,7 +92,6 @@ const updateFiles = () => {
 
     // Update README.md
     updateFile('README.md', username, repo, supportServer)
-    astro
     // Update files in ./astro folder and its subfolders
     updateFilesRecursively('./astro/src', username, repo, supportServer)
   } catch (error) {

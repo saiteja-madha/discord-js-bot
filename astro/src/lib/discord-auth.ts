@@ -2,8 +2,8 @@
 import { z } from 'astro:content'
 
 const envSchema = z.object({
-  CLIENT_ID: z.string(),
-  CLIENT_SECRET: z.string(),
+  CLIENT_ID: z.string().min(1),
+  CLIENT_SECRET: z.string().min(1),
   BASE_URL: z.string().transform(val => {
     const isProduction = import.meta.env.PROD === true
     if (isProduction) {
@@ -22,15 +22,17 @@ interface DiscordAuthConfig {
   scopes: string[]
 }
 
-interface TokenData {
+export interface TokenData {
   access_token: string
   refresh_token: string
   expires_in: number
   token_type: string
+  scope?: string
 }
 
 export class DiscordAuth {
   private config: DiscordAuthConfig
+  private rateLimitMap = new Map<string, number>()
 
   constructor() {
     try {
@@ -50,6 +52,43 @@ export class DiscordAuth {
       console.error('Environment validation failed:', error)
       throw new Error('Required environment variables are missing or invalid')
     }
+  }
+
+  private async makeDiscordRequest(
+    endpoint: string,
+    options: RequestInit,
+    skipRateLimit = false
+  ): Promise<Response> {
+    if (!skipRateLimit) {
+      const now = Date.now()
+      const lastRequest = this.rateLimitMap.get(endpoint) || 0
+      const timeGap = now - lastRequest
+
+      if (timeGap < 1000) {
+        await new Promise(resolve => setTimeout(resolve, 1000 - timeGap))
+      }
+
+      this.rateLimitMap.set(endpoint, Date.now())
+    }
+
+    const response = await fetch(`https://discord.com/api/v10/${endpoint}`, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'User-Agent':
+          'DiscordBot (https://github.com/yourusername/yourrepo, v1.0.0)',
+      },
+    })
+
+    if (response.status === 429) {
+      const retryAfter = response.headers.get('Retry-After')
+      await new Promise(resolve =>
+        setTimeout(resolve, parseInt(retryAfter || '1') * 1000)
+      )
+      return this.makeDiscordRequest(endpoint, options, true)
+    }
+
+    return response
   }
 
   public getAuthUrl(): string {
@@ -72,16 +111,23 @@ export class DiscordAuth {
       redirect_uri: this.config.redirectUri,
     })
 
-    const response = await fetch('https://discord.com/api/oauth2/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await this.makeDiscordRequest(
+      'oauth2/token',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params,
       },
-      body: params,
-    })
+      true
+    )
 
     if (!response.ok) {
-      throw new Error('Failed to exchange code for token')
+      const error = await response.json().catch(() => ({}))
+      throw new Error(
+        `Token exchange failed: ${error.error_description || response.statusText}`
+      )
     }
 
     return response.json()
@@ -95,13 +141,17 @@ export class DiscordAuth {
       refresh_token: refreshToken,
     })
 
-    const response = await fetch('https://discord.com/api/oauth2/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await this.makeDiscordRequest(
+      'oauth2/token',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params,
       },
-      body: params,
-    })
+      true
+    )
 
     if (!response.ok) {
       throw new Error('Failed to refresh token')
@@ -111,7 +161,7 @@ export class DiscordAuth {
   }
 
   public async getUserInfo(accessToken: string) {
-    const response = await fetch('https://discord.com/api/users/@me', {
+    const response = await this.makeDiscordRequest('users/@me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -126,7 +176,7 @@ export class DiscordAuth {
 
   public async validateToken(accessToken: string): Promise<boolean> {
     try {
-      const response = await fetch('https://discord.com/api/oauth2/@me', {
+      const response = await this.makeDiscordRequest('oauth2/@me', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -138,6 +188,5 @@ export class DiscordAuth {
   }
 }
 
-export const discordAuth: DiscordAuth = new DiscordAuth()
-
+export const discordAuth = new DiscordAuth()
 

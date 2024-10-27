@@ -1,3 +1,5 @@
+// src/structures/Command.js
+
 /**
  * @typedef {Object} Validation
  * @property {function} callback - The condition to validate

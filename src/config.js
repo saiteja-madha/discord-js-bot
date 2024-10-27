@@ -13,7 +13,7 @@ module.exports = {
   },
   MESSAGES: {
     API_ERROR:
-      'Oopsie! 🌟 Something went wrong on our end. Please try again later or reach out to our support server! 💖',
+      'Oopsie! 🌟 Something went wrong on our end. Please try again later or reach out to our support server or run `/report`! 💖',
   },
 
   // whether or not to enable feedback/report system
@@ -31,7 +31,7 @@ module.exports = {
   DASHBOARD: {
     enabled:
       process.env.DASH !== undefined ? process.env.DASH === 'true' : true,
-    port: process.env.PORT || '4321', // Port to run the dashboard on
+    port: process.env.PORT || '8080', // Port to run the dashboard on
   },
 
   ECONOMY: {

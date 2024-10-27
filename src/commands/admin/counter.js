@@ -67,7 +67,7 @@ async function setupCounter(guild, type, name, settings) {
 
   const stats = await guild.fetchMemberStats()
   if (type === 'USERS') channelName += ` : ${stats[0]} 👥`
-  else if (type === 'MEMBERS') channelName += ` : ${stats[2]} 👨‍👩‍👧‍👦`
+  else if (type === 'MEMBERS') channelName += ` : ${stats[2]}`
   else if (type === 'BOTS') channelName += ` : ${stats[1]} 🤖`
 
   const vc = await guild.channels.create({

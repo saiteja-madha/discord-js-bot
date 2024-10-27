@@ -1,3 +1,5 @@
+// src/structures/CommandCategory.js
+
 const config = require('@src/config')
 
 module.exports = {

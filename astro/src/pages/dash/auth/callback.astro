@@ -1,57 +1,36 @@
 ---
 // @/pages/dash/auth/callback.astro
-import { discordAuth } from '@/lib/discord-auth';
+import { discordAuth } from '@/lib/discord-auth'
+import { setAuthCookies } from '@/lib/cookie-utils'
 
-export const prerender = false;
+export const prerender = false
 
 if (Astro.request.method === 'GET') {
-  const url = new URL(Astro.request.url);
-  const code = url.searchParams.get('code');
-  const error = url.searchParams.get('error');
+  const url = new URL(Astro.request.url)
+  const code = url.searchParams.get('code')
+  const error = url.searchParams.get('error')
 
   if (error) {
-    return Astro.redirect('/', 302);
+    console.error('OAuth error:', error)
+    return Astro.redirect('/', 302)
   }
 
   if (!code) {
-    return Astro.redirect('/', 302);
+    console.error('No code provided')
+    return Astro.redirect('/', 302)
   }
 
   try {
-    const tokenData = await discordAuth.exchangeCode(code);
-    const userData = await discordAuth.getUserInfo(tokenData.access_token);
+    const tokenData = await discordAuth.exchangeCode(code)
+    const userData = await discordAuth.getUserInfo(tokenData.access_token)
+    
+    // Set all auth cookies at once
+    setAuthCookies(Astro.cookies, tokenData, userData)
 
-    // Set access token cookie with shorter expiry
-    Astro.cookies.set('discord_access_token', tokenData.access_token, {
-      path: '/',
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: tokenData.expires_in
-    });
-
-    // Set refresh token cookie with longer expiry (30 days)
-    Astro.cookies.set('discord_refresh_token', tokenData.refresh_token, {
-      path: '/',
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: 30 * 24 * 60 * 60 // 30 days
-    });
-
-    // Set user data cookie
-    Astro.cookies.set('discord_user', JSON.stringify(userData), {
-      path: '/',
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: tokenData.expires_in
-    });
-
-    return Astro.redirect('/dash', 302);
+    return Astro.redirect('/dash', 302)
   } catch (err) {
-    console.error('Auth error:', err);
-    return Astro.redirect('/', 302);
+    console.error('Auth error:', err)
+    return Astro.redirect('/', 302)
   }
 }
 ---

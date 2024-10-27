@@ -12,9 +12,9 @@
       "@styles/*": ["src/assets/styles/*"],
       "@utils/*": ["src/utils/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@root/*": [".."],
-      "@docs/*": ["@content/docs/*"]
+      "@root/*": ["../*"],
+      "@docs/*": ["@content/docs/*"],
+      "@schemas/*": ["../src/database/schemas/*"]
     },
   }
-
 }

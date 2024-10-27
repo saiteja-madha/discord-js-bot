@@ -1,0 +1,56 @@
+---
+// @components/ui/dashboard/ServerCard.astro
+interface Props {
+  guild: {
+    id: string;
+    name: string;
+    icon: string | null;
+    permissions: string;
+  };
+  isConfigured: boolean;
+  baseUrl: string;
+}
+
+const { guild, isConfigured, baseUrl } = Astro.props;
+
+const iconUrl = guild.icon
+  ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
+  : `${baseUrl}/images/default-server-icon.png`;
+---
+
+<div class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
+  <div class="flex items-center gap-4">
+    <img
+      src={iconUrl}
+      alt={`${guild.name} icon`}
+      class="w-16 h-16 rounded-full"
+      loading="lazy"
+    />
+    <div class="flex-1">
+      <h3 class="font-semibold text-gray-900 dark:text-white truncate">
+        {guild.name}
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        {isConfigured ? "Configured" : "Not Configured"}
+      </p>
+    </div>
+  </div>
+  
+  <div class="mt-4 flex gap-2">
+    {isConfigured ? (
+      <a
+        href={`/dash/guilds/${guild.id}`}
+        class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+      >
+        Manage Server
+      </a>
+    ) : (
+      <a
+        href={`https://discord.com/api/oauth2/authorize?client_id=${import.meta.env.CLIENT_ID}&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}`}
+        class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-pink-600 bg-pink-100 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+      >
+        Setup Bot
+      </a>
+    )}
+  </div>
+</div>

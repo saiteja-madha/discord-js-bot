@@ -1,3 +1,4 @@
+// src/structures/BaseContext.js
 /**
  * @typedef {Object} ContextData
  * @property {string} name - The name of the command (must be lowercase)
