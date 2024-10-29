@@ -11,9 +11,7 @@ function updatePresence(client) {
   }
 
   if (message.includes("{members}")) {
-    const members = client.guilds.cache
-      .map((g) => g.memberCount)
-      .reduce((partial_sum, a) => partial_sum + a, 0);
+    const members = client.guilds.cache.map((g) => g.memberCount).reduce((partial_sum, a) => partial_sum + a, 0);
     message = message.replaceAll("{members}", members);
   }
 
@@ -30,13 +28,13 @@ function updatePresence(client) {
 
       case "WATCHING":
         return ActivityType.Watching;
-        
+
       case "CUSTOM":
         return ActivityType.Custom;
     }
   };
 
-  if(client.config.PRESENCE.TYPE === "CUSTOM") {
+  if (client.config.PRESENCE.TYPE === "CUSTOM") {
     client.user.setPresence({
       status: client.config.PRESENCE.STATUS,
       activities: [
