@@ -2,7 +2,7 @@
   "name": "dashboard",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+"dev": "tinacms dev -c \"astro dev\"",
     "start": "astro dev",
     "build": "astro check && astro build && node process-html.mjs",
     "preview": "astro preview",
@@ -35,6 +35,11 @@
     "sharp": "^0.33.5",
     "sharp-ico": "^0.1.5",
     "tailwindcss": "^3.4.14",
+    "tinacms": "^2.3.0",
     "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@tinacms/cli": "^1.6.10",
+    "@types/node": "^22.8.2"
   }
 }

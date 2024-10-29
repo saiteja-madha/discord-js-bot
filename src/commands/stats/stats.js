@@ -9,7 +9,7 @@ const { stripIndents } = require('common-tags')
 module.exports = {
   name: 'stats',
   description: 'displays members stats in this server',
-  category: 'STATS',
+  category: 'UTILITY',
 
   slashCommand: {
     enabled: STATS.ENABLED,

@@ -104,10 +104,14 @@ module.exports = client => {
   }
 
   if (DASHBOARD.enabled) {
+    const dashboardUrl = process.env.BASE_URL.startsWith('http')
+      ? process.env.BASE_URL
+      : `https://${process.env.BASE_URL}`
+
     components.push(
       new ButtonBuilder()
         .setLabel('Dashboard Link')
-        .setURL(process.env.BASE_URL)
+        .setURL(dashboardUrl)
         .setStyle(ButtonStyle.Link)
     )
   }

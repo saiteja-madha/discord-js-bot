@@ -80,7 +80,7 @@ async function initializeBot() {
         // For any other routes, serve the static build
         app.get('*', (req, res) => {
           res.sendFile(
-            path.join(__dirname, '..', 'astro', 'dist', 'client', 'index.html')
+            path.join(__dirname, '..', 'astro', 'dist', 'client', '404.html')
           )
         })
 

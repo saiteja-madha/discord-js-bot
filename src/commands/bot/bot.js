@@ -17,7 +17,7 @@ module.exports = {
   description: 'bot related commands',
   category: 'INFO',
   botPermissions: ['EmbedLinks'],
-
+  testGuildOnly: true,
   slashCommand: {
     enabled: true,
     options: [
@@ -248,12 +248,15 @@ function botInvite(client) {
         .setStyle(ButtonStyle.Link)
     )
   }
-
   if (DASHBOARD.enabled) {
+    const dashboardUrl = process.env.BASE_URL.startsWith('http')
+      ? process.env.BASE_URL
+      : `https://${process.env.BASE_URL}`
+
     components.push(
       new ButtonBuilder()
         .setLabel('Dashboard Link')
-        .setURL(process.env.BASE_URL)
+        .setURL(dashboardUrl)
         .setStyle(ButtonStyle.Link)
     )
   }

@@ -1,7 +1,8 @@
 ---
 // @/pages/dash/auth/callback.astro
+
 import { discordAuth } from '@/lib/discord-auth'
-import { setAuthCookies } from '@/lib/cookie-utils'
+import { setAuthCookies, getAuthCookies } from '@/lib/cookie-utils'
 
 export const prerender = false
 
@@ -11,25 +12,37 @@ if (Astro.request.method === 'GET') {
   const error = url.searchParams.get('error')
 
   if (error) {
-    console.error('OAuth error:', error)
+    console.error('✨ Oops! Discord auth hit a snag:', error)
     return Astro.redirect('/', 302)
   }
 
   if (!code) {
-    console.error('No code provided')
+    console.error('🎭 Hey! We need a secret code to let you in!')
     return Astro.redirect('/', 302)
   }
 
   try {
+    console.log('🎯 Exchanging auth code...')
     const tokenData = await discordAuth.exchangeCode(code)
-    const userData = await discordAuth.getUserInfo(tokenData.access_token)
+    console.log('🎉 Got token data')
     
-    // Set all auth cookies at once
+    const userData = await discordAuth.getUserInfo(tokenData.access_token)
+    console.log('👤 Got user data')
+    
+    // Set auth cookies
     setAuthCookies(Astro.cookies, tokenData, userData)
+    
+    // Verify cookies were set
+    const cookieCheck = getAuthCookies(Astro.cookies)
+    console.log('✅ Cookie verification:', {
+      hasAccessToken: !!cookieCheck.accessToken,
+      hasRefreshToken: !!cookieCheck.refreshToken,
+      hasUserData: !!cookieCheck.userData
+    })
 
     return Astro.redirect('/dash', 302)
   } catch (err) {
-    console.error('Auth error:', err)
+    console.error('🌟 Authentication sparkles fizzled out:', err)
     return Astro.redirect('/', 302)
   }
 }

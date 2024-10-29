@@ -1,34 +1,61 @@
 ---
 // @/components/ui/buttons/AuthBtn.astro
-import { discordAuth } from '@/lib/discord-auth'
-import { setAuthCookies, clearAuthCookies, COOKIE_NAMES } from '@/lib/cookie-utils'
+
 import LoginBtn from './LoginBtn.astro'
 import DashboardBtn from './DashboardBtn.astro'
+import { getAuthCookies, setAuthCookies } from '@/lib/cookie-utils'
+import { discordAuth } from '@/lib/discord-auth'
 
-const accessToken = Astro.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value
-const refreshToken = Astro.cookies.get(COOKIE_NAMES.REFRESH_TOKEN)?.value
+// Get auth cookies
+const { accessToken, refreshToken } = getAuthCookies(Astro.cookies)
 
+// Check authentication status
 let isAuthenticated = false
 
 if (accessToken) {
   try {
-    // Check if the access token is still valid
     isAuthenticated = await discordAuth.validateToken(accessToken)
-    
-    if (!isAuthenticated && refreshToken) {
-      // Try to refresh the token
-      const newTokenData = await discordAuth.refreshToken(refreshToken)
-      const userData = await discordAuth.getUserInfo(newTokenData.access_token)
-      
-      // Update all cookies at once
-      setAuthCookies(Astro.cookies, newTokenData, userData)
-      isAuthenticated = true
-    }
+    console.log('🔐 Token Validation:', { isValid: isAuthenticated })
   } catch (error) {
-    // If any error occurs, clear all cookies
-    clearAuthCookies(Astro.cookies)
+    console.error('🔒 Token validation error:', error)
+    
+    // Try refresh token if available
+    if (refreshToken) {
+      try {
+        const newTokens = await discordAuth.refreshToken(refreshToken)
+        const userData = await discordAuth.getUserInfo(newTokens.access_token)
+        setAuthCookies(Astro.cookies, newTokens, userData)
+        isAuthenticated = true
+      } catch (refreshError) {
+        console.error('🔄 Refresh token error:', refreshError)
+      }
+    }
   }
 }
+
 ---
 
 {isAuthenticated ? <DashboardBtn /> : <LoginBtn />}
+
+<script>
+  // Add some playful animations when the auth state changes
+  document.addEventListener('DOMContentLoaded', () => {
+    const button = document.querySelector('a, button') as HTMLElement
+    if (button) {
+      button.addEventListener('mouseover', () => {
+        button.style.animation = 'bounce 0.5s ease infinite'
+      })
+      
+      button.addEventListener('mouseout', () => {
+        button.style.animation = ''
+      })
+    }
+  })
+</script>
+
+<style>
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+</style>

@@ -22,7 +22,7 @@ module.exports = {
   description: 'command help menu',
   category: 'UTILITY',
   botPermissions: ['EmbedLinks'],
-
+  testGuildOnly: true,
   slashCommand: {
     enabled: true,
     options: [
@@ -69,12 +69,16 @@ async function getHelpMenu({ client, guild, member }) {
       (v.name.includes('Moderation') ||
         v.name.includes('Admin') ||
         v.name.includes('Automod') ||
+        v.name.includes('Ticket') ||
         v.name.includes('Giveaway')) &&
       !member.permissions.has('ManageGuild')
     ) {
       continue
     }
-    if (v.name === 'DEV' && !process.env.DEV_ID.includes(member.user.id))
+    if (
+      v.name === 'Developer' &&
+      !process.env.DEV_ID.split(',').includes(member.user.id)
+    )
       continue
     options.push({
       label: v.name,
@@ -151,7 +155,7 @@ const waiter = (msg, member) => {
     switch (response.customId) {
       case 'help-menu': {
         const cat = response.values[0].toUpperCase()
-        arrEmbeds = getSlashCategoryEmbeds(msg.client, cat)
+        arrEmbeds = getSlashCategoryEmbeds(msg.client, cat, member)
         currentPage = 0
 
         // Buttons Row
@@ -207,8 +211,9 @@ const waiter = (msg, member) => {
  * Returns an array of message embeds for a particular command category [SLASH COMMANDS]
  * @param {BotClient} client
  * @param {string} category
+ * @param {import('discord.js').GuildMember} member
  */
-function getSlashCategoryEmbeds(client, category) {
+function getSlashCategoryEmbeds(client, category, member) {
   let collector = ''
 
   // For IMAGE Category
@@ -268,18 +273,16 @@ function getSlashCategoryEmbeds(client, category) {
       commands.length > CMDS_PER_PAGE ? CMDS_PER_PAGE : commands.length
     )
 
-    toAdd = toAdd.map(cmd => {
-      const subCmds = cmd.slashCommand.options?.filter(
-        opt => opt.type === 'SUB_COMMAND'
-      )
-      const subCmdsString = subCmds?.map(s => s.name).join(', ')
+    toAdd = toAdd
+      .map(cmd => {
+      // Check if the user has the required permissions for the command
+      if (cmd.userPermissions?.some(perm => !member.permissions.has(perm))) {
+        return null
+      }
 
-      return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n ${
-        !subCmds?.length
-          ? ''
-          : `❯ **SubCommands [${subCmds?.length}]**: ${subCmdsString}\n`
-      } `
-    })
+      return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n`
+      })
+      .filter(Boolean) // Filter out any null values (commands the user doesn't have perms for)
 
     arrSplitted.push(toAdd)
   }

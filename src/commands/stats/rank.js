@@ -13,7 +13,7 @@ module.exports = {
   name: 'rank',
   description: 'displays members rank in this server',
   cooldown: 5,
-  category: 'STATS',
+  category: 'UTILITY',
   botPermissions: ['AttachFiles'],
 
   slashCommand: {

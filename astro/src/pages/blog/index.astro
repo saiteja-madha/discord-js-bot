@@ -8,22 +8,14 @@ import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
 
-// Get all blogs post in English and sort them based on publish date
-
-const englishBlogEntries = await getCollection("blog", ({ id }) => {
-  return id.startsWith("en/");
-});
-
-const englishInsightsEntries = await getCollection("insights", ({ id }) => {
-  return id.startsWith("en/");
-});
-
-const blogPosts: CollectionEntry<"blog">[] = englishBlogEntries.sort(
+// Get all blog posts and sort them based on publish date
+const blogPosts: CollectionEntry<"blog">[] = (await getCollection("blog")).sort(
   (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
     b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+
 // Get all insights posts
-const insightPosts: CollectionEntry<"insights">[] = englishInsightsEntries;
+const insightPosts: CollectionEntry<"insights">[] = await getCollection("insights");
 
 // Separate the most recent post from others
 const mostRecentPost: CollectionEntry<"blog"> = blogPosts[0];

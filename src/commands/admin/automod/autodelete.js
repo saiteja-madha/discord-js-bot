@@ -9,7 +9,6 @@ module.exports = {
   description: 'Manage the autodelete settings for the server',
   category: 'AUTOMOD',
   userPermissions: ['ManageGuild'],
-
   slashCommand: {
     enabled: AUTOMOD.ENABLED,
     ephemeral: true,

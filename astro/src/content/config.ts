@@ -1,4 +1,4 @@
-// https://docs.astro.build/en/guides/content-collections/#defining-collections
+// content/config.ts
 
 import { z, defineCollection } from 'astro:content'
 import { docsSchema } from '@astrojs/starlight/schema'

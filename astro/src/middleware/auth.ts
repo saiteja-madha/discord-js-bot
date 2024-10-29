@@ -1,6 +1,11 @@
 // @/middleware/auth.ts
 import { defineMiddleware } from 'astro:middleware'
 import { discordAuth } from '@/lib/discord-auth'
+import {
+  getAuthCookies,
+  setAuthCookies,
+  clearAuthCookies,
+} from '@/lib/cookie-utils'
 
 export const authGuard = defineMiddleware(
   async ({ cookies, redirect, url }, next) => {
@@ -12,56 +17,46 @@ export const authGuard = defineMiddleware(
 
     // Check if this is a dashboard route that needs protection
     if (url.pathname.startsWith('/dash')) {
-      const accessToken = cookies.get('discord_access_token')
-      const refreshToken = cookies.get('discord_refresh_token')
+      console.log('🛡️ Auth guard checking:', url.pathname)
+      const { accessToken, refreshToken } = getAuthCookies(cookies)
 
       // No tokens present - redirect to login
       if (!accessToken || !refreshToken) {
+        console.log('🚫 No tokens found, redirecting to login')
         return redirect('/')
       }
 
       try {
         // First try to validate the current access token
-        const isValid = await discordAuth.validateToken(accessToken.value)
+        console.log('🔄 Validating access token...')
+        const isValid = await discordAuth.validateToken(accessToken)
 
         if (!isValid) {
+          console.log('♻️ Token invalid, attempting refresh...')
           // Token invalid - attempt refresh
           try {
-            const newTokens = await discordAuth.refreshToken(refreshToken.value)
+            const newTokens = await discordAuth.refreshToken(refreshToken)
+            const userData = await discordAuth.getUserInfo(
+              newTokens.access_token
+            )
 
-            // Set new access token
-            cookies.set('discord_access_token', newTokens.access_token, {
-              path: '/',
-              secure: true,
-              httpOnly: true,
-              sameSite: 'lax',
-              maxAge: newTokens.expires_in,
-            })
-
-            // Update refresh token if provided
-            if (newTokens.refresh_token) {
-              cookies.set('discord_refresh_token', newTokens.refresh_token, {
-                path: '/',
-                secure: true,
-                httpOnly: true,
-                sameSite: 'lax',
-                maxAge: 30 * 24 * 60 * 60, // 30 days
-              })
-            }
+            // Update all auth cookies with new token data
+            setAuthCookies(cookies, newTokens, userData)
+            console.log('✨ Tokens refreshed successfully')
           } catch (refreshError) {
             // Refresh failed - clear cookies and redirect to login
-            cookies.delete('discord_access_token', { path: '/' })
-            cookies.delete('discord_refresh_token', { path: '/' })
+            console.error('❌ Token refresh failed:', refreshError)
+            clearAuthCookies(cookies)
             return redirect('/')
           }
         }
 
-        // Token is valid or was successfully refreshed
+        console.log('✅ Auth check passed')
         return next()
       } catch (error) {
         // Any other error - clear cookies and redirect
-        cookies.delete('discord_access_token', { path: '/' })
-        cookies.delete('discord_refresh_token', { path: '/' })
+        console.error('💥 Auth error:', error)
+        clearAuthCookies(cookies)
         return redirect('/')
       }
     }

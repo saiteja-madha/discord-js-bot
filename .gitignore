@@ -12,6 +12,11 @@ astro/dist/
 astro/.astro/
 astro/.idea/
 
+#tina
+astro/tina/__generated__
+astro/public/admin/index.html
+astro/public/admin/assets/
+
 # dependencies
 astro/node_modules/
 
