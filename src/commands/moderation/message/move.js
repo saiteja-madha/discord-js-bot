@@ -20,7 +20,7 @@ module.exports = {
     const target = await message.guild.resolveMember(args[0], true);
     if (!target) return message.safeReply(`No user found matching ${args[0]}`);
 
-    const channels = message.guild.findMatchingChannels(args[1]);
+    const channels = message.guild.findMatchingVoiceChannels(args[1]);
     if (!channels.length) return message.safeReply("No matching channels found");
     const targetChannel = channels.pop();
     if (!targetChannel.type === ChannelType.GuildVoice && !targetChannel.type === ChannelType.GuildStageVoice) {

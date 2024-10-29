@@ -81,7 +81,8 @@ async function search({ member, guild, channel }, query) {
   let embed = new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED);
   let tracks;
 
-  switch (res.loadType) {
+  const loadType = res.tracks.length > 0 ? res.loadType : "NO_MATCHES";
+  switch (loadType) {
     case "LOAD_FAILED":
       guild.client.logger.error("Search Exception", res.exception);
       return "🚫 There was an error while searching";
@@ -153,7 +154,7 @@ async function search({ member, guild, channel }, query) {
 
       const results = res.tracks.slice(0, max);
       const options = results.map((result, index) => ({
-        label: result.info.title,
+        label: result.info.title.length > 100 ? result.info.title.slice(0, 97) + '...' : result.info.title, // Truncate title
         value: index.toString(),
       }));
 
