@@ -20,13 +20,11 @@ function isCurrentPage(href: string) {
   id="sidebar"
   class="fixed inset-y-0 left-0 z-50 w-64 transform border-r border-gray-200 bg-white pb-10 transition duration-300 dark:border-neutral-700 dark:bg-neutral-800 lg:static lg:translate-x-0 -translate-x-full"
 >
-  <div class="flex h-16 items-center justify-between border-b border-gray-200 px-6 dark:border-neutral-700">
+  <div
+    class="flex h-16 items-center justify-between border-b border-gray-200 px-6 dark:border-neutral-700"
+  >
     <a href="/" class="flex items-center gap-2">
-      <img
-        class="h-8 w-auto"
-        src="/logo.png"
-        alt="Amina Logo"
-      />
+      <img class="h-8 w-auto" src="/logo.png" alt="Amina Logo" />
       <span class="text-lg font-semibold text-gray-900 dark:text-white">
         Amina
       </span>
@@ -35,21 +33,25 @@ function isCurrentPage(href: string) {
 
   <nav class="mt-6 px-4">
     <div class="space-y-4">
-      {navigation.map((item) => (
-        <a
-          href={item.href}
-          class:list={[
-            'group flex items-center rounded-lg px-4 py-2 text-sm font-medium transition-colors',
-            {
-              'bg-pink-50 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400': isCurrentPage(item.href),
-              'text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700': !isCurrentPage(item.href),
-            },
-          ]}
-        >
-          <i class={`fas fa-${item.icon} mr-3 h-5 w-5`} aria-hidden="true"></i>
-          {item.name}
-        </a>
-      ))}
+      {
+        navigation.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'group flex items-center rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+              {
+                'bg-pink-50 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400':
+                  isCurrentPage(item.href),
+                'text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700':
+                  !isCurrentPage(item.href),
+              },
+            ]}
+          >
+            <i class={`fas fa-${item.icon} mr-3 h-5 w-5`} aria-hidden="true" />
+            {item.name}
+          </a>
+        ))
+      }
     </div>
 
     <div class="mt-10">

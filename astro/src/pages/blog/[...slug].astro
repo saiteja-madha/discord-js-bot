@@ -1,20 +1,20 @@
 ---
 // Import necessary components and utilities
-import MainLayout from "@/layouts/MainLayout.astro";
-import AvatarBlogLarge from "@components/ui/avatars/AvatarBlogLarge.astro";
-import CardRelated from "@components/ui/cards/CardRelated.astro";
-import Bookmark from "@components/ui/buttons/Bookmark.astro";
-import SocialShare from "@components/ui/buttons/SocialShare.astro";
-import PostFeedback from "@components/ui/feedback/PostFeedback.astro";
-import { Image } from "astro:assets";
-import { capitalize, formatDate } from "@utils/utils";
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-import { SITE } from "@data/constants";
+import MainLayout from '@/layouts/MainLayout.astro';
+import AvatarBlogLarge from '@components/ui/avatars/AvatarBlogLarge.astro';
+import CardRelated from '@components/ui/cards/CardRelated.astro';
+import Bookmark from '@components/ui/buttons/Bookmark.astro';
+import SocialShare from '@components/ui/buttons/SocialShare.astro';
+import PostFeedback from '@components/ui/feedback/PostFeedback.astro';
+import { Image } from 'astro:assets';
+import { capitalize, formatDate } from '@utils/utils';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { SITE } from '@data/constants';
 
 // Get all blog posts
 export async function getStaticPaths() {
-  const blogPosts = await getCollection("blog");
+  const blogPosts = await getCollection('blog');
   return blogPosts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -25,10 +25,10 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 
 // Get all blog posts for related posts functionality
-const blogPosts: CollectionEntry<"blog">[] = await getCollection("blog");
+const blogPosts: CollectionEntry<'blog'>[] = await getCollection('blog');
 
 // Filter out the current post to get related posts
-const relatedPosts: CollectionEntry<"blog">[] = blogPosts.filter(
+const relatedPosts: CollectionEntry<'blog'>[] = blogPosts.filter(
   (blogEntry) => blogEntry.slug !== post.slug
 );
 
@@ -84,8 +84,8 @@ const pageTitle: string = `${post.data.title} | ${SITE.title}`;
                   class="w-full rounded-xl object-cover"
                   src={post.data.cardImage}
                   alt={post.data.cardImageAlt}
-                  draggable={"false"}
-                  format={"avif"}
+                  draggable={'false'}
+                  format={'avif'}
                 />
               </>
             ) : (

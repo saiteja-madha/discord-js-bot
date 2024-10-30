@@ -1,8 +1,8 @@
 ---
 // Import the necessary dependencies
-import { Image } from "astro:assets";
-import IconBlock from "@components/ui/blocks/IconBlock.astro";
-import Icon from "@components/ui/icons/Icon.astro";
+import { Image } from 'astro:assets';
+import IconBlock from '@components/ui/blocks/IconBlock.astro';
+import Icon from '@components/ui/icons/Icon.astro';
 
 interface Feature {
   heading: string;
@@ -32,9 +32,9 @@ const { title, subTitle, src, alt, features } = Astro.props;
           src={src}
           alt={alt}
           class="h-full w-full object-cover object-center"
-          draggable={"false"}
-          format={"avif"}
-          loading={"eager"}
+          draggable={'false'}
+          format={'avif'}
+          loading={'eager'}
         />
       )
     }
@@ -64,12 +64,13 @@ const { title, subTitle, src, alt, features } = Astro.props;
     <div class="lg:col-span-2">
       <div class="grid gap-8 sm:grid-cols-2 md:gap-12">
         <!-- Injecting IconBlock components with different properties -->
-        { features &&
-          features.map((feature) => (
-            <IconBlock heading={feature.heading} content={feature.content}>
-              <Icon name={feature.svg} />
-            </IconBlock>
-          ))
+        {
+          features &&
+            features.map((feature) => (
+              <IconBlock heading={feature.heading} content={feature.content}>
+                <Icon name={feature.svg} />
+              </IconBlock>
+            ))
         }
       </div>
     </div>

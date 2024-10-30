@@ -1,49 +1,49 @@
 ---
 // @/pages/dash/auth/callback.astro
 
-import { discordAuth } from '@/lib/discord-auth'
-import { setAuthCookies, getAuthCookies } from '@/lib/cookie-utils'
+import { discordAuth } from '@/lib/discord-auth';
+import { setAuthCookies, getAuthCookies } from '@/lib/cookie-utils';
 
-export const prerender = false
+export const prerender = false;
 
 if (Astro.request.method === 'GET') {
-  const url = new URL(Astro.request.url)
-  const code = url.searchParams.get('code')
-  const error = url.searchParams.get('error')
+  const url = new URL(Astro.request.url);
+  const code = url.searchParams.get('code');
+  const error = url.searchParams.get('error');
 
   if (error) {
-    console.error('✨ Oops! Discord auth hit a snag:', error)
-    return Astro.redirect('/', 302)
+    console.error('✨ Oops! Discord auth hit a snag:', error);
+    return Astro.redirect('/', 302);
   }
 
   if (!code) {
-    console.error('🎭 Hey! We need a secret code to let you in!')
-    return Astro.redirect('/', 302)
+    console.error('🎭 Hey! We need a secret code to let you in!');
+    return Astro.redirect('/', 302);
   }
 
   try {
-    console.log('🎯 Exchanging auth code...')
-    const tokenData = await discordAuth.exchangeCode(code)
-    console.log('🎉 Got token data')
-    
-    const userData = await discordAuth.getUserInfo(tokenData.access_token)
-    console.log('👤 Got user data')
-    
+    console.log('🎯 Exchanging auth code...');
+    const tokenData = await discordAuth.exchangeCode(code);
+    console.log('🎉 Got token data');
+
+    const userData = await discordAuth.getUserInfo(tokenData.access_token);
+    console.log('👤 Got user data');
+
     // Set auth cookies
-    setAuthCookies(Astro.cookies, tokenData, userData)
-    
+    setAuthCookies(Astro.cookies, tokenData, userData);
+
     // Verify cookies were set
-    const cookieCheck = getAuthCookies(Astro.cookies)
+    const cookieCheck = getAuthCookies(Astro.cookies);
     console.log('✅ Cookie verification:', {
       hasAccessToken: !!cookieCheck.accessToken,
       hasRefreshToken: !!cookieCheck.refreshToken,
-      hasUserData: !!cookieCheck.userData
-    })
+      hasUserData: !!cookieCheck.userData,
+    });
 
-    return Astro.redirect('/dash', 302)
+    return Astro.redirect('/dash', 302);
   } catch (err) {
-    console.error('🌟 Authentication sparkles fizzled out:', err)
-    return Astro.redirect('/', 302)
+    console.error('🌟 Authentication sparkles fizzled out:', err);
+    return Astro.redirect('/', 302);
   }
 }
 ---

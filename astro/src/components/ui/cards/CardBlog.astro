@@ -1,14 +1,14 @@
 ---
 // Import necessary components and utilities
-import AvatarBlog from "@components/ui/avatars/AvatarBlog.astro";
-import { Image } from "astro:assets";
-import { formatDate } from "@utils/utils";
-import type { CollectionEntry } from "astro:content";
+import AvatarBlog from '@components/ui/avatars/AvatarBlog.astro';
+import { Image } from 'astro:assets';
+import { formatDate } from '@utils/utils';
+import type { CollectionEntry } from 'astro:content';
 
-const { blogEntry, blogLocale = "" } = Astro.props;
+const { blogEntry, blogLocale = '' } = Astro.props;
 
 interface Props {
-  blogEntry: CollectionEntry<"blog">;
+  blogEntry: CollectionEntry<'blog'>;
   blogLocale?: string;
 }
 ---
@@ -19,9 +19,9 @@ interface Props {
      which automatically prefetches the linked page to speed up navigation. -->
 <a
   class="group relative block rounded-xl outline-none ring-zinc-500 transition duration-500 focus-visible:ring dark:ring-zinc-200 dark:focus:outline-none"
-  href={blogLocale && blogLocale !== "en"
-    ? `/${blogLocale}/blog/${blogEntry.slug.replace(/^fr\//, "")}/`
-    : `/blog/${blogEntry.slug.replace(/^en\//, "")}/`}
+  href={blogLocale && blogLocale !== 'en'
+    ? `/${blogLocale}/blog/${blogEntry.slug.replace(/^fr\//, '')}/`
+    : `/blog/${blogEntry.slug.replace(/^en\//, '')}/`}
   data-astro-prefetch
 >
   <!-- The container for the blog post's cover image. Uses astro:assets' Image for image source -->
@@ -32,9 +32,9 @@ interface Props {
       class="absolute start-0 top-0 size-full object-cover transition duration-500 group-hover:scale-110"
       src={blogEntry.data.cardImage}
       alt={blogEntry.data.cardImageAlt}
-      draggable={"false"}
-      loading={"eager"}
-      format={"avif"}
+      draggable={'false'}
+      loading={'eager'}
+      format={'avif'}
     />
   </div>
   <!-- The container for the blog author's avatar and associated metadata (author name and publication date) -->

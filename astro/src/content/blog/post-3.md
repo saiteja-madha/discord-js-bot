@@ -10,8 +10,7 @@ cardImage: '@/images/blog/post-3.avif'
 cardImageAlt: 'Side view worker wearing gloves'
 readTime: 3
 tags: ['procurement', 'affordable', 'efficiency']
-contents:
-  [
+contents: [
     "Managing a construction project can be overwhelming, especially when it
     comes to procurement. That's why Amina is committed to simplifying the
     process and keeping your projects within budget.",
@@ -28,4 +27,3 @@ contents:
     see why Amina is the trusted choice for hardware and construction needs.",
   ]
 ---
-

@@ -1,7 +1,7 @@
 // content/config.ts
 
-import { z, defineCollection } from 'astro:content'
-import { docsSchema } from '@astrojs/starlight/schema'
+import { z, defineCollection } from 'astro:content';
+import { docsSchema } from '@astrojs/starlight/schema';
 
 const productsCollection = defineCollection({
   type: 'content',
@@ -62,7 +62,7 @@ const productsCollection = defineCollection({
         second: image().optional(),
       }),
     }),
-})
+});
 
 const blogCollection = defineCollection({
   type: 'content',
@@ -81,7 +81,7 @@ const blogCollection = defineCollection({
       readTime: z.number(),
       tags: z.array(z.string()).optional(),
     }),
-})
+});
 
 const insightsCollection = defineCollection({
   type: 'content',
@@ -93,11 +93,11 @@ const insightsCollection = defineCollection({
       cardImage: image(),
       cardImageAlt: z.string(),
     }),
-})
+});
 
 export const collections = {
   docs: defineCollection({ schema: docsSchema() }),
   products: productsCollection,
   blog: blogCollection,
   insights: insightsCollection,
-}
+};

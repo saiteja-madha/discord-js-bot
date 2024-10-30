@@ -1,9 +1,9 @@
 ---
-import Icon from "@components/ui/icons/Icon.astro";
+import Icon from '@components/ui/icons/Icon.astro';
 // Destructure the properties from Astro.props
 const {
   pageTitle,
-  title = Astro.currentLocale === "fr" ? "Partager" : "Share",
+  title = Astro.currentLocale === 'fr' ? 'Partager' : 'Share',
 } = Astro.props;
 
 // Define TypeScript interface for the properties
@@ -20,19 +20,19 @@ type SocialPlatform = {
 
 const socialPlatforms: SocialPlatform[] = [
   {
-    name: "Facebook",
+    name: 'Facebook',
     url: `https://www.facebook.com/share.php?u=${Astro.url}&title=${pageTitle}`,
-    svg: "facebook",
+    svg: 'facebook',
   },
   {
-    name: "X",
+    name: 'X',
     url: `https://twitter.com/home/?status=${pageTitle}${Astro.url}`,
-    svg: "x",
+    svg: 'x',
   },
   {
-    name: "LinkedIn",
+    name: 'LinkedIn',
     url: `https://www.linkedin.com/shareArticle?mini=true&url=${Astro.url}&title=${pageTitle}`,
-    svg: "linkedIn",
+    svg: 'linkedIn',
   },
 ];
 ---
@@ -113,17 +113,17 @@ const socialPlatforms: SocialPlatform[] = [
 <!--https://preline.co/plugins/html/dropdown.html-->
 <!-- https://clipboardjs.com/ -->
 <script>
-  import "@preline/dropdown/index.js";
+  import '@preline/dropdown/index.js';
 </script>
 
 <script>
-  import ClipboardJS from "clipboard";
+  import ClipboardJS from 'clipboard';
 
   // Initialization of Clipboard
   (function () {
-    window.addEventListener("load", () => {
+    window.addEventListener('load', () => {
       const clipboards =
-        document.querySelectorAll<HTMLElement>(".js-clipboard");
+        document.querySelectorAll<HTMLElement>('.js-clipboard');
 
       clipboards.forEach((el) => {
         const clipboard = new ClipboardJS(el, {
@@ -132,27 +132,27 @@ const socialPlatforms: SocialPlatform[] = [
           },
         });
 
-        clipboard.on("success", () => {
+        clipboard.on('success', () => {
           const defaultElement = el.querySelector<HTMLElement>(
-            ".js-clipboard-default"
+            '.js-clipboard-default'
           );
           const successElement = el.querySelector<HTMLElement>(
-            ".js-clipboard-success"
+            '.js-clipboard-success'
           );
           const successTextElement = el.querySelector<HTMLElement>(
-            ".js-clipboard-success-text"
+            '.js-clipboard-success-text'
           );
-          const successText = el.dataset.clipboardSuccessText || "";
+          const successText = el.dataset.clipboardSuccessText || '';
           let oldSuccessText: string | undefined;
 
           if (successTextElement) {
-            oldSuccessText = successTextElement.textContent || "";
+            oldSuccessText = successTextElement.textContent || '';
             successTextElement.textContent = successText;
           }
 
           if (defaultElement && successElement) {
-            defaultElement.style.display = "none";
-            successElement.style.display = "block";
+            defaultElement.style.display = 'none';
+            successElement.style.display = 'block';
           }
 
           setTimeout(() => {
@@ -161,8 +161,8 @@ const socialPlatforms: SocialPlatform[] = [
             }
 
             if (defaultElement && successElement) {
-              successElement.style.display = "";
-              defaultElement.style.display = "";
+              successElement.style.display = '';
+              defaultElement.style.display = '';
             }
           }, 800);
         });

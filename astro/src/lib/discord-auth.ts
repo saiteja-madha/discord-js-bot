@@ -1,38 +1,38 @@
 // @/lib/discord-auth.ts
-import { z } from 'astro:content'
+import { z } from 'astro:content';
 
 const envSchema = z.object({
   CLIENT_ID: z.string().min(1),
   CLIENT_SECRET: z.string().min(1),
-  BASE_URL: z.string().transform(val => {
-    const isProduction = import.meta.env.PROD === true
+  BASE_URL: z.string().transform((val) => {
+    const isProduction = import.meta.env.PROD === true;
     if (isProduction) {
       if (val && val !== '/') {
-        return val.startsWith('http') ? val : `https://${val}`
+        return val.startsWith('http') ? val : `https://${val}`;
       }
     }
-    return val && val !== '/' ? val : 'http://localhost:4321'
+    return val && val !== '/' ? val : 'http://localhost:4321';
   }),
-})
+});
 
 interface DiscordAuthConfig {
-  clientId: string
-  clientSecret: string
-  redirectUri: string
-  scopes: string[]
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  scopes: string[];
 }
 
 export interface TokenData {
-  access_token: string
-  refresh_token: string
-  expires_in: number
-  token_type: string
-  scope?: string
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  token_type: string;
+  scope?: string;
 }
 
 export class DiscordAuth {
-  private config: DiscordAuthConfig
-  private rateLimitMap = new Map<string, number>()
+  private config: DiscordAuthConfig;
+  private rateLimitMap = new Map<string, number>();
 
   constructor() {
     try {
@@ -40,17 +40,17 @@ export class DiscordAuth {
         CLIENT_ID: import.meta.env.CLIENT_ID,
         CLIENT_SECRET: import.meta.env.CLIENT_SECRET,
         BASE_URL: import.meta.env.BASE_URL,
-      })
+      });
 
       this.config = {
         clientId: env.CLIENT_ID,
         clientSecret: env.CLIENT_SECRET,
         redirectUri: `${env.BASE_URL}/dash/auth/callback`,
         scopes: ['identify', 'guilds'],
-      }
+      };
     } catch (error) {
-      console.error('Environment validation failed:', error)
-      throw new Error('Required environment variables are missing or invalid')
+      console.error('Environment validation failed:', error);
+      throw new Error('Required environment variables are missing or invalid');
     }
   }
 
@@ -60,15 +60,15 @@ export class DiscordAuth {
     skipRateLimit = false
   ): Promise<Response> {
     if (!skipRateLimit) {
-      const now = Date.now()
-      const lastRequest = this.rateLimitMap.get(endpoint) || 0
-      const timeGap = now - lastRequest
+      const now = Date.now();
+      const lastRequest = this.rateLimitMap.get(endpoint) || 0;
+      const timeGap = now - lastRequest;
 
       if (timeGap < 1000) {
-        await new Promise(resolve => setTimeout(resolve, 1000 - timeGap))
+        await new Promise((resolve) => setTimeout(resolve, 1000 - timeGap));
       }
 
-      this.rateLimitMap.set(endpoint, Date.now())
+      this.rateLimitMap.set(endpoint, Date.now());
     }
 
     const response = await fetch(`https://discord.com/api/v10/${endpoint}`, {
@@ -78,17 +78,17 @@ export class DiscordAuth {
         'User-Agent':
           'DiscordBot (https://github.com/yourusername/yourrepo, v1.0.0)',
       },
-    })
+    });
 
     if (response.status === 429) {
-      const retryAfter = response.headers.get('Retry-After')
-      await new Promise(resolve =>
+      const retryAfter = response.headers.get('Retry-After');
+      await new Promise((resolve) =>
         setTimeout(resolve, parseInt(retryAfter || '1') * 1000)
-      )
-      return this.makeDiscordRequest(endpoint, options, true)
+      );
+      return this.makeDiscordRequest(endpoint, options, true);
     }
 
-    return response
+    return response;
   }
 
   public getAuthUrl(): string {
@@ -97,9 +97,9 @@ export class DiscordAuth {
       redirect_uri: this.config.redirectUri,
       response_type: 'code',
       scope: this.config.scopes.join(' '),
-    })
+    });
 
-    return `https://discord.com/api/oauth2/authorize?${params.toString()}`
+    return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
   }
 
   public async exchangeCode(code: string): Promise<TokenData> {
@@ -109,7 +109,7 @@ export class DiscordAuth {
       grant_type: 'authorization_code',
       code,
       redirect_uri: this.config.redirectUri,
-    })
+    });
 
     const response = await this.makeDiscordRequest(
       'oauth2/token',
@@ -121,16 +121,16 @@ export class DiscordAuth {
         body: params,
       },
       true
-    )
+    );
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({}))
+      const error = await response.json().catch(() => ({}));
       throw new Error(
         `Token exchange failed: ${error.error_description || response.statusText}`
-      )
+      );
     }
 
-    return response.json()
+    return response.json();
   }
 
   public async refreshToken(refreshToken: string): Promise<TokenData> {
@@ -139,7 +139,7 @@ export class DiscordAuth {
       client_secret: this.config.clientSecret,
       grant_type: 'refresh_token',
       refresh_token: refreshToken,
-    })
+    });
 
     const response = await this.makeDiscordRequest(
       'oauth2/token',
@@ -151,13 +151,13 @@ export class DiscordAuth {
         body: params,
       },
       true
-    )
+    );
 
     if (!response.ok) {
-      throw new Error('Failed to refresh token')
+      throw new Error('Failed to refresh token');
     }
 
-    return response.json()
+    return response.json();
   }
 
   public async getUserInfo(accessToken: string) {
@@ -165,13 +165,13 @@ export class DiscordAuth {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    })
+    });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch user info')
+      throw new Error('Failed to fetch user info');
     }
 
-    return response.json()
+    return response.json();
   }
 
   public async validateToken(accessToken: string): Promise<boolean> {
@@ -180,16 +180,16 @@ export class DiscordAuth {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      })
+      });
 
-      return response.ok
+      return response.ok;
     } catch (error) {
       if (!import.meta.env.PROD && accessToken) {
-        return true
+        return true;
       }
-      return false
+      return false;
     }
   }
 }
 
-export const discordAuth = new DiscordAuth()
+export const discordAuth = new DiscordAuth();

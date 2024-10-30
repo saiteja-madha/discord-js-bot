@@ -1,38 +1,37 @@
 ---
 // @/components/ui/buttons/AuthBtn.astro
 
-import LoginBtn from './LoginBtn.astro'
-import DashboardBtn from './DashboardBtn.astro'
-import { getAuthCookies, setAuthCookies } from '@/lib/cookie-utils'
-import { discordAuth } from '@/lib/discord-auth'
+import LoginBtn from './LoginBtn.astro';
+import DashboardBtn from './DashboardBtn.astro';
+import { getAuthCookies, setAuthCookies } from '@/lib/cookie-utils';
+import { discordAuth } from '@/lib/discord-auth';
 
 // Get auth cookies
-const { accessToken, refreshToken } = getAuthCookies(Astro.cookies)
+const { accessToken, refreshToken } = getAuthCookies(Astro.cookies);
 
 // Check authentication status
-let isAuthenticated = false
+let isAuthenticated = false;
 
 if (accessToken) {
   try {
-    isAuthenticated = await discordAuth.validateToken(accessToken)
-    console.log('🔐 Token Validation:', { isValid: isAuthenticated })
+    isAuthenticated = await discordAuth.validateToken(accessToken);
+    console.log('🔐 Token Validation:', { isValid: isAuthenticated });
   } catch (error) {
-    console.error('🔒 Token validation error:', error)
-    
+    console.error('🔒 Token validation error:', error);
+
     // Try refresh token if available
     if (refreshToken) {
       try {
-        const newTokens = await discordAuth.refreshToken(refreshToken)
-        const userData = await discordAuth.getUserInfo(newTokens.access_token)
-        setAuthCookies(Astro.cookies, newTokens, userData)
-        isAuthenticated = true
+        const newTokens = await discordAuth.refreshToken(refreshToken);
+        const userData = await discordAuth.getUserInfo(newTokens.access_token);
+        setAuthCookies(Astro.cookies, newTokens, userData);
+        isAuthenticated = true;
       } catch (refreshError) {
-        console.error('🔄 Refresh token error:', refreshError)
+        console.error('🔄 Refresh token error:', refreshError);
       }
     }
   }
 }
-
 ---
 
 {isAuthenticated ? <DashboardBtn /> : <LoginBtn />}
@@ -40,22 +39,27 @@ if (accessToken) {
 <script>
   // Add some playful animations when the auth state changes
   document.addEventListener('DOMContentLoaded', () => {
-    const button = document.querySelector('a, button') as HTMLElement
+    const button = document.querySelector('a, button') as HTMLElement;
     if (button) {
       button.addEventListener('mouseover', () => {
-        button.style.animation = 'bounce 0.5s ease infinite'
-      })
-      
+        button.style.animation = 'bounce 0.5s ease infinite';
+      });
+
       button.addEventListener('mouseout', () => {
-        button.style.animation = ''
-      })
+        button.style.animation = '';
+      });
     }
-  })
+  });
 </script>
 
 <style>
   @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
   }
 </style>

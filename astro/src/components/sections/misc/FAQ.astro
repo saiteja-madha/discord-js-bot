@@ -1,6 +1,6 @@
 ---
 // Import the necessary AccordionItem component and JSON data
-import AccordionItem from "@components/ui/blocks/AccordionItem.astro";
+import AccordionItem from '@components/ui/blocks/AccordionItem.astro';
 
 // Define props from Astro
 const { title, faqs } = Astro.props;
@@ -50,11 +50,11 @@ const makeId = (base: any, index: any) => `${base}${index + 1}`;
           faqs.faqs.map((question, i) => {
             // Generate ids dynamically for each FAQ accordion item.
             let id = makeId(
-              "hs-basic-with-title-and-arrow-stretched-heading-",
+              'hs-basic-with-title-and-arrow-stretched-heading-',
               i
             );
             let collapseId = makeId(
-              "hs-basic-with-title-and-arrow-stretched-collapse",
+              'hs-basic-with-title-and-arrow-stretched-collapse',
               i
             );
 
@@ -75,5 +75,5 @@ const makeId = (base: any, index: any) => `${base}${index + 1}`;
 <!--Import the necessary Accordion plugin-->
 <!--https://preline.co/plugins/html/accordion.html-->
 <script>
-  import "@preline/accordion/index.js";
+  import '@preline/accordion/index.js';
 </script>

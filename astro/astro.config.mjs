@@ -6,6 +6,7 @@ import starlight from '@astrojs/starlight'
 import node from '@astrojs/node'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import react from '@astrojs/react';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -36,6 +37,7 @@ export default defineConfig({
     defaultStrategy: 'hover',
   },
   integrations: [
+    react(),
     tailwind(),
     sitemap(),
     starlight({

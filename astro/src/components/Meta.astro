@@ -1,8 +1,8 @@
 ---
-import { getImage } from "astro:assets";
-import { OG, SEO, SITE } from "@data/constants";
-import faviconSvgSrc from "@images/icon.svg";
-import faviconSrc from "@images/icon.png";
+import { getImage } from 'astro:assets';
+import { OG, SEO, SITE } from '@data/constants';
+import faviconSvgSrc from '@images/icon.svg';
+import faviconSrc from '@images/icon.png';
 
 // Default properties for the Meta component. These values are used if props are not provided.
 // 'meta' sets a default description meta tag to describe the page content.
@@ -36,24 +36,21 @@ const socialImage = Astro.url.origin + socialImageRes.src; // Get the full URL o
 // Generate and optimize the favicon images
 const faviconSvg = await getImage({
   src: faviconSvgSrc,
-  format: "svg",
+  format: 'svg',
 });
 
 const appleTouchIcon = await getImage({
   src: faviconSrc,
   width: 180,
   height: 180,
-  format: "png",
+  format: 'png',
 });
 ---
 
 <!-- Inject structured data into the page if provided. This data is formatted as JSON-LD, a method recommended by Google for structured data pass:
      https://developers.google.com/search/docs/advanced/structured-data/intro-structured-data -->{
   structuredData && (
-    <script
-      type="application/ld+json"
-      type="application/ld+json" is:inline
-    />
+    <script type="application/ld+json" type="application/ld+json" is:inline />
   )
 }
 <!-- Define the character set, description, author, and viewport settings -->

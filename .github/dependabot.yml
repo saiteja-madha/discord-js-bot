@@ -8,6 +8,7 @@ updates:
   # Enable version updates for NPM
   - package-ecosystem: 'npm'
     directory: '/'
+    directory: '/astro/'
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 5
@@ -19,14 +20,6 @@ updates:
       #     - dependency-name: "discord.js"
       - dependency-name: 'pretty-ms'
       - dependency-name: 'node-fetch'
-
-  # Enable version updates for Docker
-  - package-ecosystem: 'docker'
-    # Look for a `Dockerfile` in the `root` directory
-    directory: '/'
-    # Check for updates once a week
-    schedule:
-      interval: 'daily'
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"

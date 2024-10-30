@@ -1,19 +1,20 @@
 ---
 // Import the necessary dependencies
-import FooterSocialLink from "@components/ui/links/FooterSocialLink.astro";
-import EmailFooterInput from "@components/ui/forms/input/EmailFooterInput.astro";
-import enStrings from "@utils/navigation.ts";
-import Icon from "@components/ui/icons/Icon.astro";
-import BrandLogo from "@components/BrandLogo.astro";
-import { SITE } from "@data/constants";
+import FooterSocialLink from '@components/ui/links/FooterSocialLink.astro';
+import EmailFooterInput from '@components/ui/forms/input/EmailFooterInput.astro';
+import enStrings from '@utils/navigation.ts';
+import Icon from '@components/ui/icons/Icon.astro';
+import BrandLogo from '@components/BrandLogo.astro';
+import { SITE } from '@data/constants';
 
 // Use the English strings directly
 const strings = enStrings;
 
 // Define the variables that will be used in this component
-const sectionThreeTitle: string = "Stay connected";
-const sectionThreeContent: string = "Get the latest Amina updates and server management tips.";
-const crafted: string = "Crafted with ❤️ by";
+const sectionThreeTitle: string = 'Stay connected';
+const sectionThreeContent: string =
+  'Get the latest Amina updates and server management tips.';
+const crafted: string = 'Crafted with ❤️ by';
 ---
 
 <footer class="w-full bg-neutral-300 dark:bg-neutral-900">
@@ -41,7 +42,7 @@ const crafted: string = "Crafted with ❤️ by";
                   >
                     {link.name}
                   </a>
-                  {section.section === "Features" && index === 2 ? (
+                  {section.section === 'Features' && index === 2 ? (
                     <span class="ms-1 inline rounded-lg bg-pink-500 px-2 py-1 text-xs font-bold text-neutral-50">
                       New!
                     </span>
@@ -72,7 +73,8 @@ const crafted: string = "Crafted with ❤️ by";
     >
       <div class="flex items-center justify-between">
         <p class="text-sm text-neutral-600 dark:text-neutral-400">
-          © <span id="current-year"></span> {SITE.title}. {crafted}
+          © <span id="current-year"></span>
+          {SITE.title}. {crafted}
           <a
             class="rounded-lg font-medium underline underline-offset-2 outline-none ring-zinc-500 transition duration-300 hover:text-neutral-700 hover:decoration-dashed focus:outline-none focus-visible:ring dark:ring-zinc-200 dark:hover:text-neutral-300"
             href="https://vikshan.tech"
@@ -84,12 +86,12 @@ const crafted: string = "Crafted with ❤️ by";
 
       <!-- Social Brands -->
       <div>
-
         <FooterSocialLink url={strings.socialLinks.x}
           ><Icon name="xFooter" /></FooterSocialLink
         >
-<FooterSocialLink url={strings.socialLinks.youtube}
-          ><Icon name="youtubeFooter" /></FooterSocialLink>
+        <FooterSocialLink url={strings.socialLinks.youtube}
+          ><Icon name="youtubeFooter" /></FooterSocialLink
+        >
         <FooterSocialLink url={strings.socialLinks.github}
           ><Icon name="githubFooter" />
         </FooterSocialLink>
@@ -97,13 +99,12 @@ const crafted: string = "Crafted with ❤️ by";
         <FooterSocialLink url={strings.socialLinks.discord}
           ><Icon name="discordFooter" />
         </FooterSocialLink>
-
       </div>
     </div>
 
     <script>
       const year = new Date().getFullYear();
-      const element = document.getElementById("current-year");
+      const element = document.getElementById('current-year');
       element!.innerText = year.toString();
     </script>
   </div>

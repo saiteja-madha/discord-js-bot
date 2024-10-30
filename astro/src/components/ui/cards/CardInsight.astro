@@ -1,17 +1,17 @@
 ---
 // Import necessary modules and utilities
-import { Image } from "astro:assets";
-import Icon from "@components/ui/icons/Icon.astro";
-import type { CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
+import Icon from '@components/ui/icons/Icon.astro';
+import type { CollectionEntry } from 'astro:content';
 
 const {
   insightEntry,
   insightLocale,
-  label = Astro.currentLocale === "fr" ? "Lire plus" : "Read more",
+  label = Astro.currentLocale === 'fr' ? 'Lire plus' : 'Read more',
 } = Astro.props;
 
 interface Props {
-  insightEntry: CollectionEntry<"insights">;
+  insightEntry: CollectionEntry<'insights'>;
   insightLocale?: string;
   label?: string;
 }
@@ -20,9 +20,9 @@ interface Props {
 <!-- The anchor tag is the root container for the "Insight" card. It links to the insight detail page. -->
 <a
   class="group rounded-xl outline-none ring-zinc-500 transition duration-300 focus-visible:ring dark:ring-zinc-200 dark:focus:outline-none"
-  href={insightLocale && insightLocale !== "en"
-    ? `/${insightLocale}/insights/${insightEntry.slug.replace(/^fr\//, "")}/`
-    : `/insights/${insightEntry.slug.replace(/^en\//, "")}/`}
+  href={insightLocale && insightLocale !== 'en'
+    ? `/${insightLocale}/insights/${insightEntry.slug.replace(/^fr\//, '')}/`
+    : `/insights/${insightEntry.slug.replace(/^en\//, '')}/`}
 >
   <!-- This is the container for the insight's cover image. -->
   <div class="relative overflow-hidden rounded-xl pt-[50%] sm:pt-[70%]">
@@ -30,8 +30,8 @@ interface Props {
       class="absolute start-0 top-0 size-full rounded-xl object-cover transition duration-500 ease-in-out group-hover:scale-105"
       src={insightEntry.data.cardImage}
       alt={insightEntry.data.cardImageAlt}
-      draggable={"false"}
-      format={"avif"}
+      draggable={'false'}
+      format={'avif'}
     />
   </div>
   <!-- This is the container for the insight's title and description. -->

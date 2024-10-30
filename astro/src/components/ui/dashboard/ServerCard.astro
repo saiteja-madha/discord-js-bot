@@ -1,56 +1,99 @@
 ---
-// @components/ui/dashboard/ServerCard.astro
+// ServerCard.astro
+import { Settings, Plus } from 'lucide-react';
+import type { DiscordGuild } from '@/lib/data-utils';
+
 interface Props {
-  guild: {
-    id: string;
-    name: string;
-    icon: string | null;
-    permissions: string;
-  };
+  guild: DiscordGuild;
   isConfigured: boolean;
-  baseUrl: string;
 }
 
-const { guild, isConfigured, baseUrl } = Astro.props;
+const { guild, isConfigured } = Astro.props;
 
-const iconUrl = guild.icon
-  ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
-  : `${baseUrl}/images/default-server-icon.png`;
+// Generate gradient colors based on server name
+const getGradient = (name: string) => {
+  const hash = name.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
+  const hue1 = hash % 360;
+  const hue2 = (hue1 + 40) % 360;
+  return `from-[hsl(${hue1},70%,60%)] to-[hsl(${hue2},70%,60%)]`;
+};
+
+const gradient = getGradient(guild.name);
+
+// Get server icon URL or use first letter as fallback
+const getServerIcon = () => {
+  if (guild.icon) {
+    return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
+  }
+  return null;
+};
+
+const iconUrl = getServerIcon();
 ---
 
-<div class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
-  <div class="flex items-center gap-4">
-    <img
-      src={iconUrl}
-      alt={`${guild.name} icon`}
-      class="w-16 h-16 rounded-full"
-      loading="lazy"
-    />
-    <div class="flex-1">
-      <h3 class="font-semibold text-gray-900 dark:text-white truncate">
-        {guild.name}
-      </h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        {isConfigured ? "Configured" : "Not Configured"}
-      </p>
+<div class="relative group">
+  <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg transform transition-all duration-300 hover:scale-105">
+    <div class={`relative h-32 rounded-lg overflow-hidden mb-4 ${
+      iconUrl ? '' : `bg-gradient-to-br ${gradient}`
+    }`}>
+      {iconUrl ? (
+        <img 
+          src={iconUrl} 
+          alt={`${guild.name} icon`}
+          class="w-full h-full object-cover"
+        />
+      ) : (
+        <div class="w-full h-full flex items-center justify-center">
+          <span class="text-4xl font-bold text-white">{guild.name.charAt(0)}</span>
+        </div>
+      )}
     </div>
-  </div>
-  
-  <div class="mt-4 flex gap-2">
-    {isConfigured ? (
-      <a
-        href={`/dash/guilds/${guild.id}`}
-        class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+    
+    <div class="flex items-start gap-3">
+      <div class={`h-12 w-12 rounded-full overflow-hidden flex-shrink-0 ${
+        iconUrl ? '' : `bg-gradient-to-br ${gradient}`
+      }`}>
+        {iconUrl ? (
+          <img 
+            src={iconUrl} 
+            alt={`${guild.name} icon`}
+            class="w-full h-full object-cover"
+          />
+        ) : (
+          <div class="w-full h-full flex items-center justify-center">
+            <span class="text-lg font-bold text-white">{guild.name.charAt(0)}</span>
+          </div>
+        )}
+      </div>
+      
+      <div class="flex-1 min-w-0">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white truncate">{guild.name}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {guild.approximate_member_count?.toLocaleString() ?? 'Unknown'} members
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button
+        class={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 ${
+          isConfigured
+            ? `bg-gradient-to-r ${gradient} hover:shadow-lg hover:brightness-110 text-white`
+            : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
+        }`}
       >
-        Manage Server
-      </a>
-    ) : (
-      <a
-        href={`https://discord.com/api/oauth2/authorize?client_id=${import.meta.env.CLIENT_ID}&permissions=8&scope=bot%20applications.commands&guild_id=${guild.id}`}
-        class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-pink-600 bg-pink-100 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-      >
-        Setup Bot
-      </a>
-    )}
+        {isConfigured ? (
+          <span class="flex items-center justify-center gap-2">
+            <Settings className="h-4 w-4" />
+            Manage
+          </span>
+        ) : (
+          <span class="flex items-center justify-center gap-2">
+            <Plus className="h-4 w-4" />
+            Add Bot
+          </span>
+        )}
+      </button>
+    </div>
   </div>
 </div>

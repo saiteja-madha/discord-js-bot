@@ -1,4 +1,4 @@
-import ogImageSrc from '@images/social.png'
+import ogImageSrc from '@images/social.png';
 
 export const SITE = {
   title: 'Amina',
@@ -8,8 +8,8 @@ export const SITE = {
   description_short:
     'A quirky, artistic Discord bot that brings life to your server with creative features and infectious enthusiasm.',
   url: 'https://amina.vikshan.tech',
-  author: 'Vikshan', 
-}
+  author: 'Vikshan',
+};
 
 export const SEO = {
   title: SITE.title,
@@ -29,7 +29,7 @@ export const SEO = {
       description: SITE.description,
     },
   },
-}
+};
 
 export const OG = {
   locale: 'en_US',
@@ -39,4 +39,4 @@ export const OG = {
   description:
     "Introducing Amina, a uniquely personable Discord bot with a flair for creativity and fun! Currently in development, she's looking for fellow creators and developers to help shape her features and personality. Join our community and be part of something special!",
   image: ogImageSrc,
-}
+};

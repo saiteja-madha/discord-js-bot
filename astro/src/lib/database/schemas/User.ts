@@ -1,6 +1,6 @@
 // @root/astro/lib/database/schemas/User.ts
-import mongoose from 'mongoose'
-import type { IUser, IUserFlag, IUserProfile } from '../types/user'
+import mongoose from 'mongoose';
+import type { IUser, IUserFlag, IUserProfile } from '../types/user';
 
 const FlagSchema = new mongoose.Schema<IUserFlag>({
   reason: { type: String, required: true },
@@ -8,7 +8,7 @@ const FlagSchema = new mongoose.Schema<IUserFlag>({
   flaggedAt: { type: Date, default: Date.now },
   serverId: { type: String, required: true },
   serverName: { type: String, required: true },
-})
+});
 
 const ProfileSchema = new mongoose.Schema<IUserProfile>({
   pronouns: { type: String, default: null },
@@ -38,7 +38,7 @@ const ProfileSchema = new mongoose.Schema<IUserProfile>({
   },
   lastUpdated: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now },
-})
+});
 
 const UserSchema = new mongoose.Schema<IUser>(
   {
@@ -76,9 +76,9 @@ const UserSchema = new mongoose.Schema<IUser>(
       updatedAt: 'updated_at',
     },
   }
-)
+);
 
 export const User =
-  mongoose.models.user || mongoose.model<IUser>('user', UserSchema)
+  mongoose.models.user || mongoose.model<IUser>('user', UserSchema);
 
-export default User
+export default User;

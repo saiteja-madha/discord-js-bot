@@ -1,5 +1,5 @@
 // @root/astro/lib/database/schemas/Guild.ts
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 import type {
   IGuild,
   IGuildServer,
@@ -12,7 +12,7 @@ import type {
   IGuildCounter,
   IGuildWelcomeFarewell,
   IGuildSuggestions,
-} from '../types/guild'
+} from '../types/guild';
 
 const GuildServerSchema = new mongoose.Schema<IGuildServer>({
   name: { type: String, required: true },
@@ -26,7 +26,7 @@ const GuildServerSchema = new mongoose.Schema<IGuildServer>({
   setup_completed: { type: Boolean, default: false },
   setup_message_id: { type: String, default: null },
   invite_link: { type: String, default: null },
-})
+});
 
 const StatsSchema = new mongoose.Schema<IGuildStats>({
   enabled: { type: Boolean, default: false },
@@ -34,7 +34,7 @@ const StatsSchema = new mongoose.Schema<IGuildStats>({
     message: { type: String, required: true },
     channel: String,
   },
-})
+});
 
 const TicketSchema = new mongoose.Schema<IGuildTicket>({
   log_channel: String,
@@ -46,7 +46,7 @@ const TicketSchema = new mongoose.Schema<IGuildTicket>({
       name: { type: String, required: true },
     },
   ],
-})
+});
 
 const AutomodSchema = new mongoose.Schema<IGuildAutomod>({
   debug: { type: Boolean, default: false },
@@ -64,7 +64,7 @@ const AutomodSchema = new mongoose.Schema<IGuildAutomod>({
   anti_ghostping: { type: Boolean, default: false },
   anti_massmention: Number,
   max_lines: Number,
-})
+});
 
 const InviteSchema = new mongoose.Schema<IGuildInvite>({
   tracking: { type: Boolean, default: false },
@@ -74,7 +74,7 @@ const InviteSchema = new mongoose.Schema<IGuildInvite>({
       _id: { type: String, required: true },
     },
   ],
-})
+});
 
 const LogsSchema = new mongoose.Schema<IGuildLogs>({
   enabled: { type: Boolean, default: false },
@@ -93,7 +93,7 @@ const LogsSchema = new mongoose.Schema<IGuildLogs>({
     edit: { type: Boolean, default: false },
     delete: { type: Boolean, default: false },
   },
-})
+});
 
 const MaxWarnSchema = new mongoose.Schema<IGuildMaxWarn>({
   action: {
@@ -102,13 +102,13 @@ const MaxWarnSchema = new mongoose.Schema<IGuildMaxWarn>({
     default: 'TIMEOUT',
   },
   limit: { type: Number, default: 3 },
-})
+});
 
 const CounterSchema = new mongoose.Schema<IGuildCounter>({
   counter_type: { type: String, required: true },
   name: { type: String, required: true },
   channel_id: { type: String, required: true },
-})
+});
 
 const EmbedSchema = new mongoose.Schema({
   description: String,
@@ -116,21 +116,21 @@ const EmbedSchema = new mongoose.Schema({
   thumbnail: Boolean,
   footer: String,
   image: String,
-})
+});
 
 const WelcomeFarewellSchema = new mongoose.Schema<IGuildWelcomeFarewell>({
   enabled: { type: Boolean, default: false },
   channel: String,
   content: String,
   embed: EmbedSchema,
-})
+});
 
 const SuggestionsSchema = new mongoose.Schema<IGuildSuggestions>({
   enabled: { type: Boolean, default: false },
   channel_id: String,
   approved_channel: String,
   rejected_channel: String,
-})
+});
 
 const GuildSchema = new mongoose.Schema<IGuild>({
   _id: { type: String, required: true },
@@ -147,10 +147,10 @@ const GuildSchema = new mongoose.Schema<IGuild>({
   farewell: { type: WelcomeFarewellSchema, default: () => ({}) },
   autorole: String,
   suggestions: { type: SuggestionsSchema, default: () => ({}) },
-})
+});
 
 // Only create the model if it hasn't been created already
 export const Guild =
-  mongoose.models.guild || mongoose.model<IGuild>('guild', GuildSchema)
+  mongoose.models.guild || mongoose.model<IGuild>('guild', GuildSchema);
 
-export default Guild
+export default Guild;

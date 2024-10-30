@@ -1,0 +1,4 @@
+# Ignore compiled files
+node_modules
+dist
+*.mdx

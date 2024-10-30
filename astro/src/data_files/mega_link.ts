@@ -40,7 +40,7 @@ export const servicesData = [
     icon: 'heart',
     url: '${process.env.SUPPORT_SERVER}',
   },
-]
+];
 
 export const successStoriesData = [
   {
@@ -51,6 +51,4 @@ export const successStoriesData = [
       "Check out the amazing ways our community is helping shape Amina's development! From feature suggestions to code contributions, every member makes a difference.",
     learnMoreUrl: '${process.env.SUPPORT_SERVER}',
   },
-]
-
-
+];

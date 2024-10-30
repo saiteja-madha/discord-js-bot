@@ -2,31 +2,11 @@
 // @/pages/dash/index.astro
 export const prerender = false;
 
-import DashboardLayout from "@/layouts/DashboardLayout.astro";
+import DashLayout from "@/layouts/DashLayout.astro";
 import ServerCard from "@/components/ui/dashboard/ServerCard.astro";
-import { GuildManager } from "@/lib/database/mongoose";
+import { getDiscordUserData, getConfiguredGuilds, getDiscordGuilds } from "@/lib/data-utils";
 import type { IGuild } from "@/lib/database/types/guild";
-
-interface DiscordGuild {
-  id: string;
-  name: string;
-  icon: string | null;
-  owner: boolean;
-  permissions: string;
-  features: string[];
-  approximate_member_count?: number;
-}
-
-interface DiscordUser {
-  id: string;
-  username: string;
-  discriminator: string;
-  avatar: string;
-  bot?: boolean;
-  system?: boolean;
-  mfa_enabled?: boolean;
-  verified?: boolean;
-}
+import type { DiscordUser, DiscordGuild } from "@/lib/data-utils";
 
 // The middleware will ensure we have valid tokens
 const accessToken = Astro.cookies.get('discord_access_token')?.value;
@@ -35,64 +15,43 @@ if (!accessToken) {
 }
 
 let userData: DiscordUser | null = null;
-let adminGuilds: DiscordGuild[] = [];
+let discordGuilds: DiscordGuild[] = [];
 let configuredGuilds: IGuild[] = [];
 let error: { message: string; code?: string } | null = null;
 let loading = true;
 
 try {
-  // Get user data from Discord
-  const userResponse = await fetch('https://discord.com/api/users/@me', {
-    headers: { Authorization: `Bearer ${accessToken}` }
-  });
+  // Fetch user data and guilds in parallel for better performance
+  const [userDataResponse, discordGuildsResponse, configuredGuildsResponse] = await Promise.all([
+    getDiscordUserData(Astro.cookies),
+    getDiscordGuilds(Astro.cookies),
+    getConfiguredGuilds(Astro.cookies)
+  ]);
 
-  if (!userResponse.ok) {
-    throw new Error(`Failed to fetch user data: ${userResponse.statusText}`);
-  }
-
-  userData = await userResponse.json();
-
-  // Fetch user's guilds from Discord API with member counts
-  const guildsResponse = await fetch('https://discord.com/api/users/@me/guilds?with_counts=true', {
-    headers: { 
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    }
-  });
-
-  if (!guildsResponse.ok) {
-    throw new Error(`Failed to fetch guilds: ${guildsResponse.statusText}`);
-  }
-
-  const userGuilds: DiscordGuild[] = await guildsResponse.json();
-
-  // Filter guilds where user has admin permissions (0x8)
-  adminGuilds = userGuilds.filter(guild => {
-    const permissions = BigInt(guild.permissions);
-    return (permissions & 0x8n) === 0x8n;
-  });
-
-  // Get configured guilds from database
-  const guildManager = await GuildManager.getInstance();
-  const configuredGuildPromises = adminGuilds.map(guild => 
-    guildManager.getGuild(guild.id)
-  );
-  
-  const configuredGuildResults = await Promise.all(configuredGuildPromises);
-  configuredGuilds = configuredGuildResults.filter((guild): guild is IGuild => guild !== null);
+  userData = userDataResponse;
+  discordGuilds = discordGuildsResponse;
+  configuredGuilds = configuredGuildsResponse;
 
 } catch (err) {
-  const message = err instanceof Error ? err.message : 'An unknown error occurred';
-  error = { message };
-  console.error('Dashboard error:', err);
+  console.error('Error fetching dashboard data:', err);
+  error = {
+    message: err instanceof Error ? err.message : 'An unexpected error occurred',
+    code: err instanceof Error && 'code' in err ? (err as { code?: string }).code : 'UNKNOWN_ERROR',
+  };
 } finally {
   loading = false;
 }
 
+// Create a Set of configured guild IDs for efficient lookup
+const configuredGuildIds = new Set(configuredGuilds.map(guild => guild.id));
+
 const baseUrl = import.meta.env.BASE_URL || '';
 ---
 
-<DashboardLayout>
+<DashLayout 
+  title={userData ? `Welcome, ${userData.username}` : "Dashboard"}
+  description="Manage your Discord servers and bot settings"
+>
   {/* Loading State */}
   {loading && (
     <div class="container mx-auto px-4 py-8 animate-fade-in">
@@ -105,7 +64,7 @@ const baseUrl = import.meta.env.BASE_URL || '';
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map(() => (
+        {[...Array(6)].map((_, i) => (
           <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm p-4">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
@@ -152,72 +111,58 @@ const baseUrl = import.meta.env.BASE_URL || '';
     </div>
   )}
 
-  {/* Content */}
-  {!loading && !error && userData && (
+  {/* Success State - Display Servers */}
+  {!loading && !error && (
     <div class="container mx-auto px-4 py-8 animate-fade-in">
-      <!-- Welcome Section -->
-      <div class="mb-8 flex items-center gap-4">
-        <img 
-          src={`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
-          alt={userData.username}
-          class="w-16 h-16 rounded-full"
-        />
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-            Welcome, {userData.username}!
-          </h1>
-          <p class="text-gray-600 dark:text-gray-400">
-            Manage your Discord servers and bot settings
-          </p>
+      {/* User Welcome Section */}
+      {userData && (
+        <div class="mb-8 flex items-center gap-4">
+          <img
+            src={`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
+            alt={userData.username}
+            class="w-16 h-16 rounded-full"
+          />
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+              Welcome, {userData.username}
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400">
+              Select a server to manage or add the bot to a new server
+            </p>
+          </div>
         </div>
+      )}
+
+      {/* Servers Grid */}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {discordGuilds.map((guild) => (
+          <ServerCard
+            guild={guild}
+            isConfigured={configuredGuildIds.has(guild.id)}
+          />
+        ))}
       </div>
 
-      <!-- Server Grid -->
-      {adminGuilds.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {adminGuilds.map(guild => (
-            <ServerCard
-              guild={guild}
-              isConfigured={configuredGuilds.some(g => g._id === guild.id)}
-              baseUrl={baseUrl}
-            />
-          ))}
-        </div>
-      ) : (
-        <div class="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            No servers found
-          </h3>
+      {/* Empty State */}
+      {discordGuilds.length === 0 && (
+        <div class="text-center py-12">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            No Servers Found
+          </h2>
           <p class="text-gray-600 dark:text-gray-400 mb-4">
-            You need to be a server administrator to manage bot settings.
+            You don't seem to have any servers where you have admin permissions.
           </p>
-          <a 
-            href="https://discord.com/servers" 
+          
+          <a
+            href="https://discord.com/servers"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+            class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            Find Servers
+            Browse Servers
           </a>
         </div>
       )}
     </div>
   )}
-
-  <style>
-    .animate-fade-in {
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
-</DashboardLayout>
+</DashLayout>

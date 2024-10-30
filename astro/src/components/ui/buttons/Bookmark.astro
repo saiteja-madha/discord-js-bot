@@ -1,5 +1,5 @@
 ---
-import Icon from "@components/ui/icons/Icon.astro";
+import Icon from '@components/ui/icons/Icon.astro';
 ---
 
 <button
@@ -12,7 +12,7 @@ import Icon from "@components/ui/icons/Icon.astro";
 
 <script>
   class Bookmark {
-    private static readonly BOOKMARKS_KEY = "bookmarks";
+    private static readonly BOOKMARKS_KEY = 'bookmarks';
     private bookmarkButton: Element | null;
 
     constructor() {
@@ -31,7 +31,7 @@ import Icon from "@components/ui/icons/Icon.astro";
         this.markAsStored();
       }
 
-      this.bookmarkButton?.addEventListener("click", () =>
+      this.bookmarkButton?.addEventListener('click', () =>
         this.toggleBookmark()
       );
     }
@@ -41,35 +41,35 @@ import Icon from "@components/ui/icons/Icon.astro";
     }
     markAsStored(): void {
       if (this.bookmarkButton) {
-        this.bookmarkButton.classList.add("bookmarked");
-        let svgElement = this.bookmarkButton.querySelector("svg");
+        this.bookmarkButton.classList.add('bookmarked');
+        let svgElement = this.bookmarkButton.querySelector('svg');
         if (svgElement) {
           svgElement.setAttribute(
-            "class",
-            "h-6 w-6 fill-red-500 dark:fill-red-500"
+            'class',
+            'h-6 w-6 fill-red-500 dark:fill-red-500'
           );
         }
-        let pathElement = svgElement?.querySelector("path");
+        let pathElement = svgElement?.querySelector('path');
         if (pathElement) {
           pathElement.setAttribute(
-            "class",
-            "fill-current text-red-500 dark:text-red-500"
+            'class',
+            'fill-current text-red-500 dark:text-red-500'
           );
         }
       }
     }
     unmarkAsStored(): void {
       if (this.bookmarkButton) {
-        this.bookmarkButton.classList.remove("bookmarked");
-        let svgElement = this.bookmarkButton.querySelector("svg");
+        this.bookmarkButton.classList.remove('bookmarked');
+        let svgElement = this.bookmarkButton.querySelector('svg');
         if (svgElement) {
-          svgElement.setAttribute("class", "h-6 w-6 fill-none");
+          svgElement.setAttribute('class', 'h-6 w-6 fill-none');
         }
-        let pathElement = svgElement?.querySelector("path");
+        let pathElement = svgElement?.querySelector('path');
         if (pathElement) {
           pathElement.setAttribute(
-            "class",
-            "fill-current text-neutral-500 group-hover:text-red-400 dark:text-neutral-500 group-hover:dark:text-red-400"
+            'class',
+            'fill-current text-neutral-500 group-hover:text-red-400 dark:text-neutral-500 group-hover:dark:text-red-400'
           );
         }
       }

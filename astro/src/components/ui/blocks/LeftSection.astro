@@ -1,7 +1,7 @@
 ---
 // Import the necessary modules
-import { Image } from "astro:assets";
-import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
+import { Image } from 'astro:assets';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 // Destructure the props passed to the Astro component
 const { title, subTitle, btnExists, btnTitle, btnURL, img, imgAlt } =
   Astro.props;
@@ -26,8 +26,8 @@ interface Props {
     class="w-full rounded-xl"
     src={img}
     alt={imgAlt}
-    draggable={"false"}
-    format={"avif"}
+    draggable={'false'}
+    format={'avif'}
   />
   <!-- The container for title, subtitle, and optional CTA button -->
   <div class="mt-4 md:mt-0">

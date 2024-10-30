@@ -1,6 +1,6 @@
 ---
-import { Image } from "astro:assets";
-import Icon from "../../ui/icons/Icon.astro";
+import { Image } from 'astro:assets';
+import Icon from '../../ui/icons/Icon.astro';
 
 const { content, author, role, avatarSrc } = Astro.props;
 
@@ -28,7 +28,7 @@ interface Props {
           class="h-8 w-8 rounded-full"
           src={avatarSrc}
           alt="Avatar Description"
-          loading={"eager"}
+          loading={'eager'}
           inferSize
         />
       </div>

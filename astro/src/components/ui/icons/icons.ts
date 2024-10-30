@@ -523,5 +523,4 @@ export const Icons = {
     strokeLinejoin: 'round',
     stroke: 'currentColor',
   },
-}
-
+};

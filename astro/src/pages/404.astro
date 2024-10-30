@@ -1,14 +1,15 @@
 ---
 // Import section components
-import MainLayout from "@/layouts/MainLayout.astro";
-import Btn404 from "@components/ui/buttons/Btn404.astro";
-import { SITE } from "@data/constants";
+import MainLayout from '@/layouts/MainLayout.astro';
+import Btn404 from '@components/ui/buttons/Btn404.astro';
+import { SITE } from '@data/constants';
 
 // Define variables for page content
 const pageTitle = `Oops! Page Not Found | ${SITE.title}`;
-const subTitle =  "Uh-oh! Looks like we've wandered into uncharted territory!";
-const content=  "Don't worry, even Amina gets lost sometimes! Let's get you back to where the fun's happening.";
-const btnTitle =   "Back to safety";
+const subTitle = "Uh-oh! Looks like we've wandered into uncharted territory!";
+const content =
+  "Don't worry, even Amina gets lost sometimes! Let's get you back to where the fun's happening.";
+const btnTitle = 'Back to safety';
 ---
 
 <MainLayout title={pageTitle}>
@@ -41,9 +42,9 @@ const btnTitle =   "Back to safety";
 
 <!-- JavaScript code to handle going back to the previous page -->
 <script>
-  const goBackButton = document.getElementById("go-back") as HTMLButtonElement;
+  const goBackButton = document.getElementById('go-back') as HTMLButtonElement;
 
-  goBackButton.addEventListener("click", () => {
+  goBackButton.addEventListener('click', () => {
     history.back();
   });
 </script>

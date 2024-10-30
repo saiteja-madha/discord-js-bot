@@ -4,13 +4,12 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-  readonly CLIENT_ID: string
-  readonly CLIENT_SECRET: string
-  readonly BASE_URL: string
-  readonly MONGO_CONNECTION: string
+  readonly CLIENT_ID: string;
+  readonly CLIENT_SECRET: string;
+  readonly BASE_URL: string;
+  readonly MONGO_CONNECTION: string;
 }
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+  readonly env: ImportMetaEnv;
 }
-

@@ -1,15 +1,15 @@
 ---
 //Import relevant dependencies
-import ThemeIcon from "@components/ThemeIcon.astro";
-import NavLink from "@components/ui/links/NavLink.astro";
-import MegaMenuLink from "@components/ui/links/MegaMenuLink.astro";
-import Authentication from "../misc/Authentication.astro";
-import enStrings from "@utils/navigation.ts";
-import BrandLogo from "@components/BrandLogo.astro";
+import ThemeIcon from '@components/ThemeIcon.astro';
+import NavLink from '@components/ui/links/NavLink.astro';
+import MegaMenuLink from '@components/ui/links/MegaMenuLink.astro';
+import Authentication from '../misc/Authentication.astro';
+import enStrings from '@utils/navigation.ts';
+import BrandLogo from '@components/BrandLogo.astro';
 
 // Always use English strings
 const strings = enStrings;
-const homeUrl = "/";
+const homeUrl = '/';
 ---
 
 <!-- Main header component -->
@@ -87,7 +87,7 @@ const homeUrl = "/";
         <!-- Navigation links and Authentication component -->
         {
           strings.navBarLinks.map((link) => {
-            if (link.name === "Services") {
+            if (link.name === 'Services') {
               return <MegaMenuLink />;
             } else {
               return <NavLink url={link.url} name={link.name} />;
@@ -108,16 +108,16 @@ const homeUrl = "/";
 <script is:inline>
   const HSThemeAppearance = {
     init() {
-      const defaultTheme = "default";
-      let theme = localStorage.getItem("hs_theme") || defaultTheme;
+      const defaultTheme = 'default';
+      let theme = localStorage.getItem('hs_theme') || defaultTheme;
 
-      if (document.querySelector("html").classList.contains("dark")) return;
+      if (document.querySelector('html').classList.contains('dark')) return;
       this.setAppearance(theme);
     },
     _resetStylesOnLoad() {
-      const $resetStyles = document.createElement("style");
+      const $resetStyles = document.createElement('style');
       $resetStyles.innerText = `*{transition: unset !important;}`;
-      $resetStyles.setAttribute("data-hs-appearance-onload-styles", "");
+      $resetStyles.setAttribute('data-hs-appearance-onload-styles', '');
       document.head.appendChild($resetStyles);
       return $resetStyles;
     },
@@ -125,21 +125,21 @@ const homeUrl = "/";
       const $resetStylesEl = this._resetStylesOnLoad();
 
       if (saveInStore) {
-        localStorage.setItem("hs_theme", theme);
+        localStorage.setItem('hs_theme', theme);
       }
 
-      if (theme === "auto") {
-        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "default";
+      if (theme === 'auto') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'default';
       }
 
-      document.querySelector("html").classList.remove("dark");
-      document.querySelector("html").classList.remove("default");
-      document.querySelector("html").classList.remove("auto");
+      document.querySelector('html').classList.remove('dark');
+      document.querySelector('html').classList.remove('default');
+      document.querySelector('html').classList.remove('auto');
 
       document
-        .querySelector("html")
+        .querySelector('html')
         .classList.add(this.getOriginalAppearance());
 
       setTimeout(() => {
@@ -148,46 +148,46 @@ const homeUrl = "/";
 
       if (dispatchEvent) {
         window.dispatchEvent(
-          new CustomEvent("on-hs-appearance-change", { detail: theme })
+          new CustomEvent('on-hs-appearance-change', { detail: theme })
         );
       }
     },
     getAppearance() {
       let theme = this.getOriginalAppearance();
-      if (theme === "auto") {
-        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "default";
+      if (theme === 'auto') {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'default';
       }
       return theme;
     },
     getOriginalAppearance() {
-      const defaultTheme = "default";
-      return localStorage.getItem("hs_theme") || defaultTheme;
+      const defaultTheme = 'default';
+      return localStorage.getItem('hs_theme') || defaultTheme;
     },
   };
   HSThemeAppearance.init();
 
   window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", () => {
-      if (HSThemeAppearance.getOriginalAppearance() === "auto") {
-        HSThemeAppearance.setAppearance("auto", false);
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', () => {
+      if (HSThemeAppearance.getOriginalAppearance() === 'auto') {
+        HSThemeAppearance.setAppearance('auto', false);
       }
     });
 
-  window.addEventListener("load", () => {
+  window.addEventListener('load', () => {
     const $clickableThemes = document.querySelectorAll(
-      "[data-hs-theme-click-value]"
+      '[data-hs-theme-click-value]'
     );
     const $switchableThemes = document.querySelectorAll(
-      "[data-hs-theme-switch]"
+      '[data-hs-theme-switch]'
     );
 
     $clickableThemes.forEach(($item) => {
-      $item.addEventListener("click", () =>
+      $item.addEventListener('click', () =>
         HSThemeAppearance.setAppearance(
-          $item.getAttribute("data-hs-theme-click-value"),
+          $item.getAttribute('data-hs-theme-click-value'),
           true,
           $item
         )
@@ -195,16 +195,16 @@ const homeUrl = "/";
     });
 
     $switchableThemes.forEach(($item) => {
-      $item.addEventListener("change", (e) => {
-        HSThemeAppearance.setAppearance(e.target.checked ? "dark" : "default");
+      $item.addEventListener('change', (e) => {
+        HSThemeAppearance.setAppearance(e.target.checked ? 'dark' : 'default');
       });
 
-      $item.checked = HSThemeAppearance.getAppearance() === "dark";
+      $item.checked = HSThemeAppearance.getAppearance() === 'dark';
     });
 
-    window.addEventListener("on-hs-appearance-change", (e) => {
+    window.addEventListener('on-hs-appearance-change', (e) => {
       $switchableThemes.forEach(($item) => {
-        $item.checked = e.detail === "dark";
+        $item.checked = e.detail === 'dark';
       });
     });
   });
@@ -214,7 +214,7 @@ const homeUrl = "/";
 <!--https://preline.co/plugins/html/overlay.html-->
 <!--https://preline.co/plugins/html/dropdown.html-->
 <script>
-  import "@preline/collapse/index.js";
-  import "@preline/overlay/index.js";
-  import "@preline/dropdown/index.js";
+  import '@preline/collapse/index.js';
+  import '@preline/overlay/index.js';
+  import '@preline/dropdown/index.js';
 </script>
