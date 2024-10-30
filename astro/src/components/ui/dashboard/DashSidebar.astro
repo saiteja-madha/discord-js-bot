@@ -18,7 +18,7 @@ function isCurrentPage(href: string) {
 
 <aside
   id="sidebar"
-  class="fixed inset-y-0 left-0 z-50 w-64 transform border-r border-gray-200 bg-white pb-10 transition duration-300 dark:border-neutral-700 dark:bg-neutral-800 lg:static lg:translate-x-0 -translate-x-full"
+  class="fixed inset-y-0 left-0 z-50 w-64 transform border-r border-gray-200 bg-white pb-10 transition duration-300 dark:border-neutral-700 dark:bg-slate-900 lg:static lg:translate-x-0 -translate-x-full"
 >
   <div
     class="flex h-16 items-center justify-between border-b border-gray-200 px-6 dark:border-neutral-700"
@@ -42,7 +42,7 @@ function isCurrentPage(href: string) {
               {
                 'bg-pink-50 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400':
                   isCurrentPage(item.href),
-                'text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700':
+                'text-gray-700 hover:bg-cyan-50 dark:text-gray-200 dark:hover:bg-slate-700':
                   !isCurrentPage(item.href),
               },
             ]}
@@ -61,7 +61,7 @@ function isCurrentPage(href: string) {
       <div class="mt-2 space-y-1">
         <a
           href="/support"
-          class="group flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700"
+          class="group flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-cyan-50 dark:text-gray-200 dark:hover:bg-slate-700"
         >
           <i class="fas fa-question-circle mr-3 h-5 w-5" aria-hidden="true"></i>
           Support
@@ -70,7 +70,7 @@ function isCurrentPage(href: string) {
           href="https://discord.gg/uMgS9evnmv-support-server"
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-700"
+          class="group flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-cyan-50 dark:text-gray-200 dark:hover:bg-slate-700"
         >
           <i class="fab fa-discord mr-3 h-5 w-5" aria-hidden="true"></i>
           Join Community
@@ -87,7 +87,7 @@ function isCurrentPage(href: string) {
         </p>
         <a
           href="/premium"
-          class="mt-4 block rounded-md bg-white px-3 py-2 text-center text-sm font-medium text-pink-600 hover:bg-gray-50"
+          class="mt-4 block rounded-md bg-white px-3 py-2 text-center text-sm font-medium text-pink-600 hover:bg-cyan-50"
         >
           Learn More
         </a>

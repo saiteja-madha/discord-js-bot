@@ -108,9 +108,9 @@ export interface IGuildSuggestions {
 }
 
 export interface IGuild extends Document {
-name: any;
-approximate_member_count: any;
-owner: any;
+  name: any;
+  approximate_member_count: any;
+  owner: any;
   _id: string;
   server: IGuildServer;
   stats: IGuildStats;

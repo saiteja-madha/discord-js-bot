@@ -1,6 +1,7 @@
 ---
 // @/layouts/DashLayout.astro
 import DashNav from '@components/ui/dashboard/DashNav.astro';
+import FooterSection from '@components/sections/navbar&footer/FooterSection.astro';
 
 interface Props {
   title?: string;
@@ -10,96 +11,49 @@ interface Props {
 const { title = 'Dashboard - AMINA', description } = Astro.props;
 ---
 
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scrollbar-hide lenis lenis-smooth scroll-pt-16">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    <script>
-      // Handle dark mode
-      const savedTheme = localStorage.getItem('darkMode');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      if (savedTheme === 'true' || (!savedTheme && prefersDark)) {
+    <script is:inline>
+      // Using the same theme handling as MainLayout but preserving DashLayout's dark mode colors
+      if (
+        localStorage.getItem('hs_theme') === 'dark' ||
+        (!('hs_theme' in localStorage) &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
         document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
+    </script>
+    <script>
+      import '@scripts/lenisSmoothScroll.js';
     </script>
   </head>
   <body>
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div
+      class="min-h-screen bg-sky-50 dark:bg-slate-900 transition-colors duration-200"
+    >
       <DashNav />
       <main>
         <slot />
       </main>
-      
-      <!-- Footer -->
-      <footer class="mt-16 bg-white dark:bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="col-span-1 md:col-span-2">
-              <div class="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent mb-4">
-                AMINA
-              </div>
-              <p class="text-gray-600 dark:text-gray-400 max-w-md">
-                Your intelligent Discord companion, bringing communities together with smart moderation and engaging features.
-              </p>
-            </div>
-            
-            <div>
-              <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Resources</h3>
-              <ul class="space-y-3">
-                <li>
-                  <a href="#docs" class="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400">
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                </li>
-                <li>
-                  <a href="#support" class="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400">
-                    Support
-                  </a>
-                </li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Community</h3>
-              <ul class="space-y-3">
-                <li>
-                  <a href="#discord" class="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400">
-                    Discord Server
-                  </a>
-                </li>
-                <li>
-                  <a href="#github" class="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400">
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
-            <p class="text-gray-400 dark:text-gray-600 text-sm text-center">
-              © {new Date().getFullYear()} AMINA. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
-    
-    <script>
-      // Initialize Preline
-      import '@preline/overlay';
-      import '@preline/dropdown';
-      import '@preline/collapse';
-      import '@preline/accordion';
-      import '@preline/tabs';
-    </script>
+    <FooterSection />
+    <style>
+      /* CSS rules for the scrollbar, matching MainLayout */
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
   </body>
 </html>

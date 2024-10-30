@@ -12,7 +12,9 @@ const { guild, isConfigured } = Astro.props;
 
 // Generate gradient colors based on server name
 const getGradient = (name: string) => {
-  const hash = name.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
+  const hash = name
+    .split('')
+    .reduce((acc, char) => char.charCodeAt(0) + acc, 0);
   const hue1 = hash % 360;
   const hue2 = (hue1 + 40) % 360;
   return `from-[hsl(${hue1},70%,60%)] to-[hsl(${hue2},70%,60%)]`;
@@ -32,42 +34,60 @@ const iconUrl = getServerIcon();
 ---
 
 <div class="relative group">
-  <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg transform transition-all duration-300 hover:scale-105">
-    <div class={`relative h-32 rounded-lg overflow-hidden mb-4 ${
-      iconUrl ? '' : `bg-gradient-to-br ${gradient}`
-    }`}>
-      {iconUrl ? (
-        <img 
-          src={iconUrl} 
-          alt={`${guild.name} icon`}
-          class="w-full h-full object-cover"
-        />
-      ) : (
-        <div class="w-full h-full flex items-center justify-center">
-          <span class="text-4xl font-bold text-white">{guild.name.charAt(0)}</span>
-        </div>
-      )}
-    </div>
-    
-    <div class="flex items-start gap-3">
-      <div class={`h-12 w-12 rounded-full overflow-hidden flex-shrink-0 ${
+  <div
+    class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg transform transition-all duration-300 hover:scale-105"
+  >
+    <div
+      class={`relative h-32 rounded-lg overflow-hidden mb-4 ${
         iconUrl ? '' : `bg-gradient-to-br ${gradient}`
-      }`}>
-        {iconUrl ? (
-          <img 
-            src={iconUrl} 
+      }`}
+    >
+      {
+        iconUrl ? (
+          <img
+            src={iconUrl}
             alt={`${guild.name} icon`}
             class="w-full h-full object-cover"
           />
         ) : (
           <div class="w-full h-full flex items-center justify-center">
-            <span class="text-lg font-bold text-white">{guild.name.charAt(0)}</span>
+            <span class="text-4xl font-bold text-white">
+              {guild.name.charAt(0)}
+            </span>
           </div>
-        )}
+        )
+      }
+    </div>
+
+    <div class="flex items-start gap-3">
+      <div
+        class={`h-12 w-12 rounded-full overflow-hidden flex-shrink-0 ${
+          iconUrl ? '' : `bg-gradient-to-br ${gradient}`
+        }`}
+      >
+        {
+          iconUrl ? (
+            <img
+              src={iconUrl}
+              alt={`${guild.name} icon`}
+              class="w-full h-full object-cover"
+            />
+          ) : (
+            <div class="w-full h-full flex items-center justify-center">
+              <span class="text-lg font-bold text-white">
+                {guild.name.charAt(0)}
+              </span>
+            </div>
+          )
+        }
       </div>
-      
+
       <div class="flex-1 min-w-0">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white truncate">{guild.name}</h3>
+        <h3
+          class="text-lg font-semibold text-gray-900 dark:text-white truncate"
+        >
+          {guild.name}
+        </h3>
         <p class="text-sm text-gray-500 dark:text-gray-400">
           {guild.approximate_member_count?.toLocaleString() ?? 'Unknown'} members
         </p>
@@ -82,17 +102,19 @@ const iconUrl = getServerIcon();
             : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
         }`}
       >
-        {isConfigured ? (
-          <span class="flex items-center justify-center gap-2">
-            <Settings className="h-4 w-4" />
-            Manage
-          </span>
-        ) : (
-          <span class="flex items-center justify-center gap-2">
-            <Plus className="h-4 w-4" />
-            Add Bot
-          </span>
-        )}
+        {
+          isConfigured ? (
+            <span class="flex items-center justify-center gap-2">
+              <Settings className="h-4 w-4" />
+              Manage
+            </span>
+          ) : (
+            <span class="flex items-center justify-center gap-2">
+              <Plus className="h-4 w-4" />
+              Add Bot
+            </span>
+          )
+        }
       </button>
     </div>
   </div>

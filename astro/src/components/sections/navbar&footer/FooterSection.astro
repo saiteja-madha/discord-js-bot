@@ -17,7 +17,7 @@ const sectionThreeContent: string =
 const crafted: string = 'Crafted with ❤️ by';
 ---
 
-<footer class="w-full bg-neutral-300 dark:bg-neutral-900">
+<footer class="w-full bg-cyan-100/40 dark:bg-slate-800/80">
   <div
     class="mx-auto w-full max-w-[85rem] px-4 py-10 sm:px-6 lg:px-16 lg:pt-20 2xl:max-w-screen-2xl"
   >
@@ -25,7 +25,11 @@ const crafted: string = 'Crafted with ❤️ by';
       <div class="col-span-full lg:col-span-1">
         <!-- Brand Logo -->
         <BrandLogo class="h-auto w-32" />
+        <p class="text-gray-600 dark:text-gray-400 max-w-md">
+          Your intelligent Discord companion, bringing communities together.
+        </p>
       </div>
+
       <!-- An array of links for Features and Resources sections -->
       {
         strings.footerLinks.map((section) => (

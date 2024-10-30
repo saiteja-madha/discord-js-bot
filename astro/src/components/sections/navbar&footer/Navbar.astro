@@ -3,11 +3,10 @@
 import ThemeIcon from '@components/ThemeIcon.astro';
 import NavLink from '@components/ui/links/NavLink.astro';
 import Authentication from '../misc/Authentication.astro';
-import enStrings from '@utils/navigation.ts';
+import link from '@utils/navigation.ts';
 import BrandLogo from '@components/BrandLogo.astro';
 
 // Use English strings and home URL directly
-const strings = enStrings;
 const homeUrl = '/';
 ---
 
@@ -17,7 +16,7 @@ const homeUrl = '/';
 >
   <!-- Navigation container -->
   <nav
-    class="relative mx-2 w-full rounded-[36px] border border-yellow-100/40 bg-yellow-50/60 px-4 py-3 backdrop-blur-md dark:border-neutral-700/40 dark:bg-neutral-800/80 dark:backdrop-blur-md md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto"
+    class="relative mx-2 w-full rounded-[36px] border border-cyan-200/40 bg-cyan-100/40 px-4 py-3 backdrop-blur-md dark:border-neutral-700/40 dark:bg-slate-800/80 dark:backdrop-blur-md md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto"
     aria-label="Global"
   >
     <div class="flex items-center justify-between">
@@ -33,7 +32,7 @@ const homeUrl = '/';
       <div class="ml-auto mr-5 md:hidden">
         <button
           type="button"
-          class="hs-collapse-toggle flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-neutral-600 transition duration-300 hover:bg-neutral-200 disabled:pointer-events-none disabled:opacity-50 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:outline-none"
+          class="hs-collapse-toggle flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-neutral-600 transition duration-300 hover:bg-slate-200 disabled:pointer-events-none disabled:opacity-50 dark:text-neutral-400 dark:hover:bg-slate-700 dark:focus:outline-none"
           data-hs-collapse="#navbar-collapse-with-animation"
           aria-controls="navbar-collapse-with-animation"
           aria-label="Toggle navigation"
@@ -85,7 +84,7 @@ const homeUrl = '/';
       >
         <!-- Navigation links and Authentication component -->
         {
-          strings.navBarLinks.map((link) => (
+          link.navBarLinks.map((link) => (
             <NavLink url={link.url} name={link.name} />
           ))
         }

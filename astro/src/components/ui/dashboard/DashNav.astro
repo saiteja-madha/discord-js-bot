@@ -1,13 +1,19 @@
 ---
-import { Search, Settings, LogOut, HelpCircle, Plus, ChevronDown, ExternalLink, Moon, Sun } from 'lucide-react';
+import { LogOut, HelpCircle, ExternalLink, Settings } from 'lucide-react';
 import { getDiscordUserData, type DiscordUser } from '@/lib/data-utils';
+import BrandLogo from '@components/BrandLogo.astro';
+import ThemeIcon from '@components/ThemeIcon.astro';
+import navLinks from '@utils/navigation.ts';
+import DashNavLink from '@components/ui/links/DashNavLink.astro';
+
+const homeUrl = '/';
 
 // Get user data from cookies on the server side
 const userData = await getDiscordUserData(Astro.cookies);
 
 // Helper function to get avatar URL
 function getAvatarUrl(user: DiscordUser): string {
-  return user.avatar 
+  return user.avatar
     ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
     : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
 }
@@ -18,149 +24,287 @@ function getInitials(username?: string): string {
 }
 ---
 
-<script>
-  // Handle dark mode
-  const darkModeBtn = document.getElementById('darkModeToggle');
-  const moonIcon = document.getElementById('moonIcon');
-  const sunIcon = document.getElementById('sunIcon');
-  const usernameDisplay = document.getElementById('usernameDisplay');
-  
-  // Initialize dark mode from localStorage
-  const initializeDarkMode = () => {
-    const isDark = localStorage.getItem('darkMode') === 'true';
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      moonIcon?.classList.add('hidden');
-      sunIcon?.classList.remove('hidden');
-    } else {
-      moonIcon?.classList.remove('hidden');
-      sunIcon?.classList.add('hidden');
-    }
-  };
-
-  // Run on page load
-  initializeDarkMode();
-
-  // Toggle dark mode
-  darkModeBtn?.addEventListener('click', () => {
-    const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('darkMode', isDark.toString());
-    
-    if (isDark) {
-      moonIcon?.classList.add('hidden');
-      sunIcon?.classList.remove('hidden');
-    } else {
-      moonIcon?.classList.remove('hidden');
-      sunIcon?.classList.add('hidden');
-    }
-  });
-
-  // Handle dropdown and username display
-  const dropdownBtn = document.getElementById('userDropdown');
-  const dropdownMenu = document.getElementById('dropdownMenu');
-  const usernameSpan = document.getElementById('usernameSpan');
-  
-  // Close dropdown when clicking outside
-  document.addEventListener('click', (event) => {
-    const isClickInside = dropdownBtn?.contains(event.target as Node) || 
-                         dropdownMenu?.contains(event.target as Node);
-    
-    if (!isClickInside && !dropdownMenu?.classList.contains('hidden')) {
-      dropdownMenu?.classList.add('hidden');
-      usernameSpan?.classList.add('hidden'); // Hide username when closing dropdown
-    }
-  });
-
-  // Toggle dropdown and username
-  dropdownBtn?.addEventListener('click', (event) => {
-    event.stopPropagation();
-    dropdownMenu?.classList.toggle('hidden');
-    usernameSpan?.classList.toggle('hidden'); // Toggle username visibility
-  });
-</script>
-
-<div class="fixed top-0 left-0 right-0 px-4 sm:px-6 lg:px-8 z-50 py-4">
-  <nav class="max-w-6xl mx-auto transition-all duration-300 rounded-lg bg-white dark:bg-gray-900 shadow-lg">
-    <div class="px-4 sm:px-6">
-      <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
-        <div class="flex items-center">
-          <div class="text-2xl font-bold bg-clip-text">
-            <span class="bg-gradient-to-r from-pink-500 to-purple-500 dark:hidden">AMINA</span>
-            <span class="hidden dark:inline bg-gradient-to-r from-blue-500 to-green-500">AMINA</span>
-          </div>
-        </div>
-        
-        <!-- Search -->
-        <div class="flex-1 max-w-lg mx-8">
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              class="block w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-gray-700 rounded-full 
-                     bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 
-                     focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-              placeholder="Search servers..."
-            />
-          </div>
-        </div>
-
-        <!-- User Menu -->
-        <div class="flex items-center gap-4">
-          <button 
-            id="darkModeToggle"
-            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+<header
+  class="sticky inset-x-0 top-4 z-50 flex w-full flex-wrap text-sm md:flex-nowrap md:justify-start"
+>
+  <nav
+    class="relative mx-2 w-[1200px] rounded-[36px] border border-cyan-200/40 bg-cyan-100/40 px-4 py-3 backdrop-blur-md dark:border-neutral-700/40 dark:bg-slate-800/80 dark:backdrop-blur-md md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto"
+    aria-label="Global"
+  >
+    <div class="flex items-center justify-between">
+      <!-- Brand logo -->
+      <a
+        class="flex-none rounded-lg text-xl font-bold outline-none ring-zinc-500 focus-visible:ring dark:ring-zinc-200 dark:focus:outline-none"
+        href="/dash"
+        aria-label="Brand"
+      >
+        <BrandLogo class="h-auto w-24" />
+      </a>
+    </div>
+    <!-- Contains navigation links -->
+    <div
+      id="navbar-collapse-with-animation"
+      class="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 md:block"
+    >
+      <!-- Contains navigation links -->
+      <div
+        id="navbar-collapse-with-animation"
+        class="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 md:block"
+      >
+        <!-- Navigation links container -->
+        <div
+          class="mt-5 flex flex-col gap-x-0 gap-y-4 md:mt-0 md:flex-row md:items-center md:justify-end md:gap-x-4 lg:gap-x-7 md:gap-y-0 md:ps-7"
+        >
+          <!-- Navigation links and Authentication component -->
+          {
+            navLinks.dashNavBarLinks.map((link) => (
+              <DashNavLink url={link.url} name={link.name} />
+            ))
+          }
+          <button
+            id="userDropdown"
+            role="button"
+            aria-expanded={false}
+            class={`
+    flex items-center justify-start gap-x-2 h-auto w-auto
+    ring-zinc-500 focus-visible:ring outline-none
+    dark:border-slate-700 dark:ring-zinc-200 dark:focus:outline-none
+    md:my-6 md:border-s md:border-slate-300 md:ps-6 2xl:text-base
+    hover:text-fuchsia-400 hover:scale-105 dark:hover:text-fuchsia-300
+    bg-discord-blurple text-white px-4 py-2 rounded-lg
+    transform transition-all duration-200
+  `}
           >
-            <Sun id="sunIcon" className="h-5 w-5 text-gray-600 dark:text-gray-300 hidden" />
-            <Moon id="moonIcon" className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-          </button>
-          
-          <div class="relative">
-            <button
-              id="userDropdown"
-              class="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-            >
-              {userData?.avatar ? (
-                <img 
-                  src={getAvatarUrl(userData)}
-                  alt={userData.username}
-                  class="h-8 w-8 rounded-full object-cover"
-                />
-              ) : (
-                <div class="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
-                  {getInitials(userData?.username)}
-                </div>
-              )}
-              <span id="usernameSpan" class="hidden text-sm font-medium text-gray-900 dark:text-white">
+            <div class="flex items-center gap-x-2">
+              {
+                userData?.avatar ? (
+                  <img
+                    src={getAvatarUrl(userData)}
+                    alt={userData.username}
+                    class="h-8 w-8 rounded-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
+                    {getInitials(userData?.username)}
+                  </div>
+                )
+              }
+              <span class="hidden md:inline-block text-sm font-medium">
                 {userData?.username}
               </span>
-              <ChevronDown className="h-4 w-4 text-gray-600 dark:text-gray-300" />
-            </button>
-
-            <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
-              <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                <p class="text-sm font-medium text-gray-900 dark:text-white">{userData?.username}</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">ID: {userData?.id}</p>
-              </div>
-              <a href="#settings" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <Settings className="mr-3 h-4 w-4" /> Settings
-              </a>
-              <a href="#docs" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <ExternalLink className="mr-3 h-4 w-4" /> Documentation
-              </a>
-              <a href="#support" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <HelpCircle className="mr-3 h-4 w-4" /> Support
-              </a>
-              <hr class="my-1 border-gray-200 dark:border-gray-700" />
-              <button class="flex items-center w-full px-4 py-2 text-sm text-pink-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <LogOut className="mr-3 h-4 w-4" /> Logout
-              </button>
             </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-white transform transition-transform duration-300"
+              [class.rotate-180]="isDropdownOpen"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- User Menu and Theme Switcher -->
+    <div class="flex items-center gap-4">
+      <div class="relative">
+        <div
+          id="dropdownMenu"
+          class="hidden absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5"
+        >
+          <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
+              {userData?.username}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              ID: {userData?.id}
+            </p>
           </div>
+          <a
+            class="flex items-center px-2 py-0 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <ThemeIcon className="mr-3 h-4 w-4" /> Theme
+          </a>
+          <a
+            href="dash/settings"
+            class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <Settings className="mr-3 h-4 w-4" /> Settings
+          </a>
+          <a
+            href="/docs"
+            class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <ExternalLink className="mr-3 h-4 w-4" /> Documentation
+          </a>
+          <a
+            href="${process.env.SUPPORT_SERVER}"
+            class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <HelpCircle className="mr-3 h-4 w-4" /> Support
+          </a>
+          <hr class="my-1 border-gray-200 dark:border-gray-700" />
+          <button
+            class="flex items-center w-full px-4 py-2 text-sm text-pink-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <LogOut className="mr-3 h-4 w-4" /> Logout
+          </button>
         </div>
       </div>
     </div>
   </nav>
-</div>
+
+  <style>
+    button:hover {
+      box-shadow: 0 0 15px rgba(88, 101, 242, 0.5);
+    }
+
+    @keyframes bounce {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+  </style>
+
+  <!-- Theme Appearance script to manage light/dark modes -->
+  <script is:inline>
+    const HSThemeAppearance = {
+      init() {
+        const defaultTheme = 'default';
+        let theme = localStorage.getItem('hs_theme') || defaultTheme;
+
+        if (document.querySelector('html').classList.contains('dark')) return;
+        this.setAppearance(theme);
+      },
+      _resetStylesOnLoad() {
+        const $resetStyles = document.createElement('style');
+        $resetStyles.innerText = `*{transition: unset !important;}`;
+        $resetStyles.setAttribute('data-hs-appearance-onload-styles', '');
+        document.head.appendChild($resetStyles);
+        return $resetStyles;
+      },
+      setAppearance(theme, saveInStore = true, dispatchEvent = true) {
+        const $resetStylesEl = this._resetStylesOnLoad();
+
+        if (saveInStore) {
+          localStorage.setItem('hs_theme', theme);
+        }
+
+        if (theme === 'auto') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'default';
+        }
+
+        document.querySelector('html').classList.remove('dark');
+        document.querySelector('html').classList.remove('default');
+        document.querySelector('html').classList.remove('auto');
+
+        document
+          .querySelector('html')
+          .classList.add(this.getOriginalAppearance());
+
+        setTimeout(() => {
+          $resetStylesEl.remove();
+        });
+
+        if (dispatchEvent) {
+          window.dispatchEvent(
+            new CustomEvent('on-hs-appearance-change', { detail: theme })
+          );
+        }
+      },
+      getAppearance() {
+        let theme = this.getOriginalAppearance();
+        if (theme === 'auto') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'default';
+        }
+        return theme;
+      },
+      getOriginalAppearance() {
+        const defaultTheme = 'default';
+        return localStorage.getItem('hs_theme') || defaultTheme;
+      },
+    };
+    HSThemeAppearance.init();
+
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', () => {
+        if (HSThemeAppearance.getOriginalAppearance() === 'auto') {
+          HSThemeAppearance.setAppearance('auto', false);
+        }
+      });
+
+    window.addEventListener('load', () => {
+      const $clickableThemes = document.querySelectorAll(
+        '[data-hs-theme-click-value]'
+      );
+      const $switchableThemes = document.querySelectorAll(
+        '[data-hs-theme-switch]'
+      );
+
+      $clickableThemes.forEach(($item) => {
+        $item.addEventListener('click', () =>
+          HSThemeAppearance.setAppearance(
+            $item.getAttribute('data-hs-theme-click-value'),
+            true,
+            $item
+          )
+        );
+      });
+
+      $switchableThemes.forEach(($item) => {
+        $item.addEventListener('change', (e) => {
+          HSThemeAppearance.setAppearance(
+            e.target.checked ? 'dark' : 'default'
+          );
+        });
+
+        $item.checked = HSThemeAppearance.getAppearance() === 'dark';
+      });
+
+      window.addEventListener('on-hs-appearance-change', (e) => {
+        $switchableThemes.forEach(($item) => {
+          $item.checked = e.detail === 'dark';
+        });
+      });
+    });
+
+    // Handle dropdown
+    const dropdownBtn = document.getElementById('userDropdown');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+      const isClickInside =
+        dropdownBtn?.contains(event.target) ||
+        dropdownMenu?.contains(event.target);
+
+      if (!isClickInside && !dropdownMenu?.classList.contains('hidden')) {
+        dropdownMenu?.classList.add('hidden');
+      }
+    });
+
+    // Toggle dropdown
+    dropdownBtn?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      dropdownMenu?.classList.toggle('hidden');
+    });
+  </script>
+</header>

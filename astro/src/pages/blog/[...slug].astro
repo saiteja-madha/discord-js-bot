@@ -50,12 +50,12 @@ const pageTitle: string = `${post.data.title} | ${SITE.title}`;
                 </span>
                 <ul class="text-xs text-neutral-500">
                   <li
-                    class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600"
+                    class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-cyan-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-slate-600"
                   >
                     {formatDate(post.data.pubDate)}
                   </li>
                   <li
-                    class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-neutral-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-neutral-600"
+                    class="relative inline-block pe-6 before:absolute before:end-2 before:top-1/2 before:size-1 before:-translate-y-1/2 before:rounded-full before:bg-cyan-300 last:pe-0 last-of-type:before:hidden dark:text-neutral-400 dark:before:bg-slate-600"
                   >
                     {post.data.readTime} min read
                   </li>
@@ -105,7 +105,7 @@ const pageTitle: string = `${post.data.title} | ${SITE.title}`;
         >
           {
             post.data.tags?.map((tag: string) => (
-              <span class="inline-flex items-center gap-x-1.5 rounded-lg bg-neutral-400/30 px-3 py-1.5 text-xs font-medium text-neutral-700 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring dark:bg-neutral-700/60 dark:text-neutral-300">
+              <span class="inline-flex items-center gap-x-1.5 rounded-lg bg-slate-400/30 px-3 py-1.5 text-xs font-medium text-neutral-700 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring dark:bg-slate-700/60 dark:text-neutral-300">
                 {capitalize(tag)}
               </span>
             ))

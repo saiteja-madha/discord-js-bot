@@ -15,7 +15,7 @@ import { servicesData, successStoriesData } from '@data/mega_link';
   </button>
 
   <div
-    class="hs-dropdown-menu start-0 top-full z-10 hidden w-full min-w-60 rounded-2xl bg-neutral-50 py-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-top-5 before:start-0 before:h-5 before:w-full hs-dropdown-open:opacity-100 dark:divide-neutral-700 dark:bg-neutral-800 md:p-4 md:shadow-2xl md:duration-[150ms]"
+    class="hs-dropdown-menu start-0 top-full z-10 hidden w-full min-w-60 rounded-2xl bg-slate-50 py-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-top-5 before:start-0 before:h-5 before:w-full hs-dropdown-open:opacity-100 dark:divide-neutral-700 dark:bg-slate-900 md:p-4 md:shadow-2xl md:duration-[150ms]"
   >
     <div class="gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
       <div class="mx-1 flex flex-col md:mx-0">
@@ -23,7 +23,7 @@ import { servicesData, successStoriesData } from '@data/mega_link';
           servicesData &&
             servicesData.slice(0, 3).map((data) => (
               <a
-                class="group flex gap-x-5 rounded-lg p-4 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-500/10"
+                class="group flex gap-x-5 rounded-lg p-4 hover:bg-slate-100 dark:text-neutral-200 dark:hover:bg-slate-500/10"
                 href={data.url}
               >
                 <Icon name={data.icon} class="mt-1 size-5 flex-shrink-0" />
@@ -45,7 +45,7 @@ import { servicesData, successStoriesData } from '@data/mega_link';
           servicesData &&
             servicesData.slice(3, 6).map((data) => (
               <a
-                class="group flex gap-x-5 rounded-lg p-4 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-500/10"
+                class="group flex gap-x-5 rounded-lg p-4 hover:bg-slate-100 dark:text-neutral-200 dark:hover:bg-slate-500/10"
                 href={data.url}
               >
                 <Icon name={data.icon} class="mt-1 size-5 flex-shrink-0" />
@@ -68,7 +68,7 @@ import { servicesData, successStoriesData } from '@data/mega_link';
           >Success Stories</span
         >
         <a
-          class="group mt-2 flex items-center gap-x-5 rounded-xl p-3 hover:bg-neutral-100 dark:hover:bg-neutral-500/10"
+          class="group mt-2 flex items-center gap-x-5 rounded-xl p-3 hover:bg-slate-100 dark:hover:bg-slate-500/10"
           href={successStoriesData[0].learnMoreUrl}
         >
           <Image
@@ -82,7 +82,7 @@ import { servicesData, successStoriesData } from '@data/mega_link';
               {successStoriesData[0].description}
             </p>
             <p
-              class="mt-3 inline-flex items-center gap-x-1 text-sm font-medium text-orange-400 decoration-2 hover:underline dark:text-orange-300"
+              class="mt-3 inline-flex items-center gap-x-1 text-sm font-medium text-fuchsia-400 decoration-2 hover:underline dark:text-fuchsia-300"
             >
               Learn more
               <Icon name="arrowRight" />

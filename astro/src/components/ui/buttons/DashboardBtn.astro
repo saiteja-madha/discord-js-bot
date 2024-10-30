@@ -9,7 +9,7 @@ const { title = 'Dashboard' } = Astro.props;
 const baseClasses =
   'flex items-center gap-x-2 text-base md:text-sm font-medium text-neutral-600 ring-zinc-500 transition duration-300 focus-visible:ring outline-none';
 const hoverClasses =
-  'hover:text-orange-400 hover:scale-105 dark:hover:text-orange-300';
+  'hover:text-fuchsia-400 hover:scale-105 dark:hover:text-fuchsia-300';
 const darkClasses =
   'dark:border-neutral-700 dark:text-neutral-100 dark:ring-zinc-200 dark:focus:outline-none';
 const mdClasses = 'md:my-6 md:border-s md:border-neutral-300 md:ps-6';
@@ -27,7 +27,7 @@ const dashboardSVG = `<svg
 
 <a
   href="/dash"
-  class={`${baseClasses} ${hoverClasses} ${darkClasses} ${mdClasses} ${txtSizeClasses} bg-orange-500 text-white px-4 py-2 rounded-lg transform transition-all duration-200`}
+  class={`${baseClasses} ${hoverClasses} ${darkClasses} ${mdClasses} ${txtSizeClasses} bg-fuchsia-500 text-white px-4 py-2 rounded-lg transform transition-all duration-200`}
 >
   <Fragment set:html={dashboardSVG} />
   {title}

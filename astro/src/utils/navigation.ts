@@ -10,22 +10,29 @@ const navBarLinks = [
 // An array of links for footer
 const footerLinks = [
   {
-    section: 'Amina',
+    section: 'Resources',
     links: [
       { name: 'Documentation', url: '/docs' },
       // { name: 'Blog', url: '/blog' },
-    ],
-  },
-  {
-    section: 'Code',
-    links: [
-      { name: 'GitHub', url: 'https:github.com/vixshan/amina' },
       {
-        name: 'Discord',
+        name: 'Invite Amina',
         url: 'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
       },
     ],
   },
+  {
+    section: 'Community',
+    links: [
+      { name: 'GitHub', url: 'https:github.com/vixshan/amina' },
+      { name: 'Support', url: `${process.env.SUPPORT_SERVER}` },
+    ],
+  },
+];
+
+const dashNavBarLinks = [
+  { name: 'Home', url: '/' },
+  { name: 'Dashboard', url: '/dash' },
+  { name: 'Docs', url: '/docs' },
 ];
 // An object of links for social icons
 const socialLinks = {
@@ -39,4 +46,5 @@ export default {
   navBarLinks,
   footerLinks,
   socialLinks,
+  dashNavBarLinks,
 };

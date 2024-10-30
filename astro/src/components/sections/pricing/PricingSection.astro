@@ -75,13 +75,13 @@ const { pricing } = Astro.props;
           <h3 class="text-2xl font-bold text-neutral-100 sm:text-3xl">
             {pricing.professionalToolbox.name}
           </h3>
-          <p class="text-orange-200">
+          <p class="text-fuchsia-200">
             {pricing.professionalToolbox.description}
           </p>
         </div>
 
         <span
-          class="order-first inline-block rounded-full bg-orange-200 bg-opacity-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-center text-orange-600 lg:order-none"
+          class="order-first inline-block rounded-full bg-fuchsia-200 bg-opacity-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-center text-fuchsia-600 lg:order-none"
           >{pricing.badge}</span
         >
       </div>
@@ -90,15 +90,15 @@ const { pricing } = Astro.props;
         <span class="text-6xl font-bold text-neutral-100"
           >{pricing.professionalToolbox.price}</span
         >
-        <span class="text-lg font-bold text-orange-100"
+        <span class="text-lg font-bold text-fuchsia-100"
           >{pricing.professionalToolbox.cents}</span
         >
-        <span class="ms-3 text-orange-200"
+        <span class="ms-3 text-fuchsia-200"
           >{pricing.professionalToolbox.billingFrequency}</span
         >
       </div>
       <!-- Features list - automatically created by mapping over `features` array -->
-      <ul class="mb-6 space-y-2 text-orange-100">
+      <ul class="mb-6 space-y-2 text-fuchsia-100">
         {
           pricing.professionalToolbox.features.map((feature: string) => (
             <li class="flex items-center gap-1.5">
@@ -112,7 +112,7 @@ const { pricing } = Astro.props;
       <!-- CTA for purchasing the product -->
       <a
         href={pricing.professionalToolbox.purchaseLink}
-        class="block rounded-lg bg-orange-200 bg-opacity-50 px-8 py-3 text-center text-sm font-bold text-neutral-100 outline-none ring-orange-300 transition duration-100 hover:bg-orange-300 hover:bg-opacity-50 focus-visible:ring active:bg-orange-400 md:text-base"
+        class="block rounded-lg bg-fuchsia-200 bg-opacity-50 px-8 py-3 text-center text-sm font-bold text-neutral-100 outline-none ring-fuchsia-300 transition duration-100 hover:bg-cyan-300 hover:bg-opacity-50 focus-visible:ring active:bg-fuchsia-400 md:text-base"
         >{pricing.professionalToolbox.purchaseBtnTitle}</a
       >
     </div>

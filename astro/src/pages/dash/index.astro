@@ -2,16 +2,20 @@
 // @/pages/dash/index.astro
 export const prerender = false;
 
-import DashLayout from "@/layouts/DashLayout.astro";
-import ServerCard from "@/components/ui/dashboard/ServerCard.astro";
-import { getDiscordUserData, getConfiguredGuilds, getDiscordGuilds } from "@/lib/data-utils";
-import type { IGuild } from "@/lib/database/types/guild";
-import type { DiscordUser, DiscordGuild } from "@/lib/data-utils";
+import DashLayout from '@/layouts/DashLayout.astro';
+import ServerCard from '@/components/ui/dashboard/ServerCard.astro';
+import {
+  getDiscordUserData,
+  getConfiguredGuilds,
+  getDiscordGuilds,
+} from '@/lib/data-utils';
+import type { IGuild } from '@/lib/database/types/guild';
+import type { DiscordUser, DiscordGuild } from '@/lib/data-utils';
 
 // The middleware will ensure we have valid tokens
 const accessToken = Astro.cookies.get('discord_access_token')?.value;
 if (!accessToken) {
-  return Astro.redirect('/');  // Fallback safety check
+  return Astro.redirect('/'); // Fallback safety check
 }
 
 let userData: DiscordUser | null = null;
@@ -22,147 +26,158 @@ let loading = true;
 
 try {
   // Fetch user data and guilds in parallel for better performance
-  const [userDataResponse, discordGuildsResponse, configuredGuildsResponse] = await Promise.all([
-    getDiscordUserData(Astro.cookies),
-    getDiscordGuilds(Astro.cookies),
-    getConfiguredGuilds(Astro.cookies)
-  ]);
+  const [userDataResponse, discordGuildsResponse, configuredGuildsResponse] =
+    await Promise.all([
+      getDiscordUserData(Astro.cookies),
+      getDiscordGuilds(Astro.cookies),
+      getConfiguredGuilds(Astro.cookies),
+    ]);
 
   userData = userDataResponse;
   discordGuilds = discordGuildsResponse;
   configuredGuilds = configuredGuildsResponse;
-
 } catch (err) {
   console.error('Error fetching dashboard data:', err);
   error = {
-    message: err instanceof Error ? err.message : 'An unexpected error occurred',
-    code: err instanceof Error && 'code' in err ? (err as { code?: string }).code : 'UNKNOWN_ERROR',
+    message:
+      err instanceof Error ? err.message : 'An unexpected error occurred',
+    code:
+      err instanceof Error && 'code' in err
+        ? (err as { code?: string }).code
+        : 'UNKNOWN_ERROR',
   };
 } finally {
   loading = false;
 }
 
 // Create a Set of configured guild IDs for efficient lookup
-const configuredGuildIds = new Set(configuredGuilds.map(guild => guild.id));
+const configuredGuildIds = new Set(configuredGuilds.map((guild) => guild.id));
 
 const baseUrl = import.meta.env.BASE_URL || '';
 ---
 
-<DashLayout 
-  title={userData ? `Welcome, ${userData.username}` : "Dashboard"}
+<DashLayout
+  title={userData ? `Welcome, ${userData.username}` : 'Dashboard'}
   description="Manage your Discord servers and bot settings"
 >
   {/* Loading State */}
-  {loading && (
-    <div class="container mx-auto px-4 py-8 animate-fade-in">
-      <div class="mb-8 flex items-center gap-4">
-        <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-        <div class="flex-1">
-          <div class="h-6 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
-          <div class="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+  {
+    loading && (
+      <div class="container mx-auto px-4 py-8 animate-fade-in">
+        <div class="mb-8 flex items-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div class="flex-1">
+            <div class="h-6 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+            <div class="h-4 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <div class="bg-white dark:bg-slate-900 rounded-lg shadow-sm p-4">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                <div class="flex-1">
+                  <div class="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
+                  <div class="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                </div>
+              </div>
+              <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            </div>
+          ))}
         </div>
       </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map((_, i) => (
-          <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm p-4">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-              <div class="flex-1">
-                <div class="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
-                <div class="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-              </div>
-            </div>
-            <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )}
+    )
+  }
 
   {/* Error State */}
-  {error && (
-    <div class="min-h-[80vh] flex items-center justify-center px-4 animate-fade-in">
-      <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-lg w-full">
-        <h2 class="text-red-800 dark:text-red-200 text-lg font-semibold mb-2">
-          {error.code === 'AUTH_ERROR' ? 'Authentication Error' : 'Something went wrong'}
-        </h2>
-        <p class="text-red-700 dark:text-red-300">
-          {error.message}
-        </p>
-        <div class="mt-4 flex gap-4">
-          {error.code === 'AUTH_ERROR' ? (
-            <a
-              href="/auth/login"
-              class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              Login Again
-            </a>
-          ) : (
-            <button
-              onclick="window.location.reload()"
-              class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              Try again
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  )}
-
-  {/* Success State - Display Servers */}
-  {!loading && !error && (
-    <div class="container mx-auto px-4 py-8 animate-fade-in">
-      {/* User Welcome Section */}
-      {userData && (
-        <div class="mb-8 flex items-center gap-4">
-          <img
-            src={`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
-            alt={userData.username}
-            class="w-16 h-16 rounded-full"
-          />
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-              Welcome, {userData.username}
-            </h1>
-            <p class="text-gray-600 dark:text-gray-400">
-              Select a server to manage or add the bot to a new server
-            </p>
+  {
+    error && (
+      <div class="min-h-[80vh] flex items-center justify-center px-4 animate-fade-in">
+        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-lg w-full">
+          <h2 class="text-red-800 dark:text-red-200 text-lg font-semibold mb-2">
+            {error.code === 'AUTH_ERROR'
+              ? 'Authentication Error'
+              : 'Something went wrong'}
+          </h2>
+          <p class="text-red-700 dark:text-red-300">{error.message}</p>
+          <div class="mt-4 flex gap-4">
+            {error.code === 'AUTH_ERROR' ? (
+              <a
+                href="/auth/login"
+                class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                Login Again
+              </a>
+            ) : (
+              <button
+                onclick="window.location.reload()"
+                class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                Try again
+              </button>
+            )}
           </div>
         </div>
-      )}
-
-      {/* Servers Grid */}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {discordGuilds.map((guild) => (
-          <ServerCard
-            guild={guild}
-            isConfigured={configuredGuildIds.has(guild.id)}
-          />
-        ))}
       </div>
+    )
+  }
 
-      {/* Empty State */}
-      {discordGuilds.length === 0 && (
-        <div class="text-center py-12">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            No Servers Found
-          </h2>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">
-            You don't seem to have any servers where you have admin permissions.
-          </p>
-          
-          <a
-            href="https://discord.com/servers"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Browse Servers
-          </a>
+  {/* Success State - Display Servers */}
+  {
+    !loading && !error && (
+      <div class="container mx-auto px-4 py-8 animate-fade-in">
+        {/* User Welcome Section */}
+        {userData && (
+          <div class="mb-8 flex items-center gap-4">
+            <img
+              src={`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
+              alt={userData.username}
+              class="w-16 h-16 rounded-full"
+            />
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Welcome, {userData.username}
+              </h1>
+              <p class="text-gray-600 dark:text-gray-400">
+                Select a server to manage or add the bot to a new server
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Servers Grid */}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {discordGuilds.map((guild) => (
+            <ServerCard
+              guild={guild}
+              isConfigured={configuredGuildIds.has(guild.id)}
+            />
+          ))}
         </div>
-      )}
-    </div>
-  )}
+
+        {/* Empty State */}
+        {discordGuilds.length === 0 && (
+          <div class="text-center py-12">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              No Servers Found
+            </h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              You don't seem to have any servers where you have admin
+              permissions.
+            </p>
+
+            <a
+              href="https://discord.com/servers"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Browse Servers
+            </a>
+          </div>
+        )}
+      </div>
+    )
+  }
 </DashLayout>
