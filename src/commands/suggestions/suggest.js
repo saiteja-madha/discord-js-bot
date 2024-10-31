@@ -16,7 +16,6 @@ module.exports = {
   name: 'suggest',
   description: 'submit a suggestion',
   category: 'SUGGESTION',
-  testGuildOnly: true,
   cooldown: 20,
   slashCommand: {
     enabled: SUGGESTIONS.ENABLED,

@@ -3,7 +3,6 @@ import type { APIRoute } from 'astro';
 import { GuildManager } from '@/lib/database/mongoose';
 import { createResponse, createErrorResponse } from '@/lib/api-response';
 
-// Mark this as a server-side endpoint
 export const prerender = false;
 
 // Helper to get guilds from Discord API

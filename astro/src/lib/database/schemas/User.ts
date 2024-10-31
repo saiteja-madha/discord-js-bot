@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema<IUser>(
   {
     _id: String,
     username: String,
-    discriminator: String,
+    global_name: String,
     logged: { type: Boolean, default: false },
     coins: { type: Number, default: 0 },
     bank: { type: Number, default: 0 },

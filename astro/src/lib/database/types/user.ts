@@ -34,7 +34,7 @@ export interface IUserProfile {
 export interface IUser extends Document {
   _id: string;
   username: string;
-  discriminator: string;
+  global_name: string;
   logged: boolean;
   coins: number;
   bank: number;

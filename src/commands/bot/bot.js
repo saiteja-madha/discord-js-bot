@@ -17,7 +17,6 @@ module.exports = {
   description: 'bot related commands',
   category: 'INFO',
   botPermissions: ['EmbedLinks'],
-  testGuildOnly: true,
   slashCommand: {
     enabled: true,
     options: [

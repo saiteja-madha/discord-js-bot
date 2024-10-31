@@ -46,7 +46,7 @@ export class DiscordAuth {
         clientId: env.CLIENT_ID,
         clientSecret: env.CLIENT_SECRET,
         redirectUri: `${env.BASE_URL}/dash/auth/callback`,
-        scopes: ['identify', 'guilds'],
+        scopes: ['identify', 'guilds', 'email'],
       };
     } catch (error) {
       console.error('Environment validation failed:', error);

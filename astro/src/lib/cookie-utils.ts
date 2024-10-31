@@ -3,10 +3,10 @@ import type { AstroCookies } from 'astro';
 import type { TokenData } from './discord-auth';
 
 export const AUTH_COOKIE_NAMES = {
-  ACCESS_TOKEN: 'discord_access_token',
-  REFRESH_TOKEN: 'discord_refresh_token',
-  USER_ID: 'discord_user_id',
-  USER_DATA: 'discord_user_data',
+  ACCESS_TOKEN: 'access_token',
+  REFRESH_TOKEN: 'refresh_token',
+  USER_ID: 'user_id',
+  USER_DATA: 'user_data',
 } as const;
 
 export const COOKIE_OPTIONS = {
@@ -65,19 +65,4 @@ export function clearAuthCookies(cookies: AstroCookies): void {
   Object.values(AUTH_COOKIE_NAMES).forEach((cookieName) => {
     cookies.delete(cookieName, { path: '/' });
   });
-}
-
-export async function getTheme(cookies: AstroCookies): Promise<string> {
-  return cookies.get('theme')?.value || 'dark';
-}
-
-export async function getUserPreferences(cookies: AstroCookies) {
-  // Get user data from cookies or fetch from API
-  const userData = {
-    name: cookies.get('user_name')?.value || 'Guest',
-    avatar: cookies.get('user_avatar')?.value,
-    showWelcomeBanner: !cookies.get('welcome_banner_dismissed')?.value,
-  };
-
-  return userData;
 }

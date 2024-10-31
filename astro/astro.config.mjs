@@ -1,25 +1,25 @@
-import { defineConfig } from 'astro/config'
-import tailwind from '@astrojs/tailwind'
-import sitemap from '@astrojs/sitemap'
-import compressor from 'astro-compressor'
-import starlight from '@astrojs/starlight'
-import node from '@astrojs/node'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import { defineConfig } from 'astro/config';
+import tailwind from '@astrojs/tailwind';
+import sitemap from '@astrojs/sitemap';
+import compressor from 'astro-compressor';
+import starlight from '@astrojs/starlight';
+import node from '@astrojs/node';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import react from '@astrojs/react';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Helper function to ensure proper URL format
-const getSiteURL = val => {
-  const isProduction = import.meta.env.PROD === true
+const getSiteURL = (val) => {
+  const isProduction = import.meta.env.PROD === true;
   if (isProduction) {
     if (val && val !== '/') {
-      return val.startsWith('http') ? val : `https://${val}`
+      return val.startsWith('http') ? val : `https://${val}`;
     }
   }
-  return 'http://localhost:8080'
-}
+  return 'http://localhost:' + (process.env.PORT || '8080');
+};
 
 export default defineConfig({
   site: getSiteURL(process.env.BASE_URL),
@@ -29,8 +29,14 @@ export default defineConfig({
   outDir: './dist',
   base: '/',
   adapter: node({
-    mode: 'standalone',
+    mode: 'middleware',
   }),
+  routeRules: {
+    '/dash/*': { prerender: false },
+    '/api/guilds/*': { prerender: false },
+    '/blog/*': { prerender: true },
+    '/insights/*': { prerender: true },
+  },
   image: { domains: ['images.unsplash.com'] },
   prefetch: {
     prefetchAll: false,
@@ -145,5 +151,4 @@ export default defineConfig({
       },
     },
   },
-})
-
+});

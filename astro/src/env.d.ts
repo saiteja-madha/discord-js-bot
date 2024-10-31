@@ -8,6 +8,8 @@ interface ImportMetaEnv {
   readonly CLIENT_SECRET: string;
   readonly BASE_URL: string;
   readonly MONGO_CONNECTION: string;
+  readonly CACHETOGO_URL: string;
+  readonly CACHETOGO_TLS_URL: string;
 }
 
 interface ImportMeta {

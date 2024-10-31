@@ -2,7 +2,7 @@
 // @/layouts/DashLayout.astro
 import DashNav from '@components/ui/dashboard/DashNav.astro';
 import FooterSection from '@components/sections/navbar&footer/FooterSection.astro';
-
+export const prerender = false;
 interface Props {
   title?: string;
   description?: string;

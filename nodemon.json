@@ -1,6 +1,0 @@
-{
-  "ignore": ["astro/*"],
-  "watch": ["src"],
-  "ext": "js,json"
-}
-

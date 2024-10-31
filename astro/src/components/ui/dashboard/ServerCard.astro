@@ -1,7 +1,6 @@
 ---
-// ServerCard.astro
-import { Settings, Plus } from 'lucide-react';
-import type { DiscordGuild } from '@/lib/data-utils';
+import { Settings, Plus, RefreshCw } from 'lucide-react';
+import { type DiscordGuild, getServerIcon } from '@/lib/data-utils';
 
 interface Props {
   guild: DiscordGuild;
@@ -9,6 +8,19 @@ interface Props {
 }
 
 const { guild, isConfigured } = Astro.props;
+
+// Get the Discord OAuth2 URL for adding the bot
+const CLIENT_ID = import.meta.env.CLIENT_ID;
+const dashUrl = new URL(Astro.request.url).origin + '/dash/auth/callback';
+const DISCORD_PERMISSIONS = '8'; // Administrator permissions
+
+const addBotUrl = new URL('https://discord.com/api/oauth2/authorize');
+addBotUrl.searchParams.append('client_id', CLIENT_ID);
+addBotUrl.searchParams.append('permissions', DISCORD_PERMISSIONS);
+addBotUrl.searchParams.append('scope', 'bot applications.commands');
+addBotUrl.searchParams.append('guild_id', guild.id);
+addBotUrl.searchParams.append('response_type', 'code');
+addBotUrl.searchParams.append('redirect_uri', dashUrl);
 
 // Generate gradient colors based on server name
 const getGradient = (name: string) => {
@@ -21,47 +33,33 @@ const getGradient = (name: string) => {
 };
 
 const gradient = getGradient(guild.name);
+const iconUrl = getServerIcon(guild);
 
-// Get server icon URL or use first letter as fallback
-const getServerIcon = () => {
-  if (guild.icon) {
-    return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
-  }
-  return null;
-};
-
-const iconUrl = getServerIcon();
+// Check if user has admin permissions for this guild
+const permissions = BigInt(guild.permissions);
+const isAdmin = (permissions & 0x8n) === 0x8n;
 ---
 
-<div class="relative group">
-  <div
-    class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg transform transition-all duration-300 hover:scale-105"
-  >
+{isAdmin && (
+  <div class="relative group">
     <div
-      class={`relative h-32 rounded-lg overflow-hidden mb-4 ${
-        iconUrl ? '' : `bg-gradient-to-br ${gradient}`
-      }`}
+      class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg transform transition-all duration-300 hover:scale-105"
     >
-      {
-        iconUrl ? (
-          <img
-            src={iconUrl}
-            alt={`${guild.name} icon`}
-            class="w-full h-full object-cover"
-          />
-        ) : (
-          <div class="w-full h-full flex items-center justify-center">
-            <span class="text-4xl font-bold text-white">
-              {guild.name.charAt(0)}
-            </span>
-          </div>
-        )
-      }
-    </div>
+      <div class="absolute top-2 right-2 z-10">
+        <form action="/api/guilds/refresh" method="POST">
+          <input type="hidden" name="redirect" value={Astro.url.pathname} />
+          <button
+            type="submit"
+            class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-all duration-300 hover:rotate-180"
+            title="Refresh server info"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </button>
+        </form>
+      </div>
 
-    <div class="flex items-start gap-3">
       <div
-        class={`h-12 w-12 rounded-full overflow-hidden flex-shrink-0 ${
+        class={`relative h-32 rounded-lg overflow-hidden mb-4 ${
           iconUrl ? '' : `bg-gradient-to-br ${gradient}`
         }`}
       >
@@ -74,7 +72,7 @@ const iconUrl = getServerIcon();
             />
           ) : (
             <div class="w-full h-full flex items-center justify-center">
-              <span class="text-lg font-bold text-white">
+              <span class="text-4xl font-bold text-white">
                 {guild.name.charAt(0)}
               </span>
             </div>
@@ -82,40 +80,64 @@ const iconUrl = getServerIcon();
         }
       </div>
 
-      <div class="flex-1 min-w-0">
-        <h3
-          class="text-lg font-semibold text-gray-900 dark:text-white truncate"
+      <div class="flex items-start gap-3">
+        <div
+          class={`h-12 w-12 rounded-full overflow-hidden flex-shrink-0 ${
+            iconUrl ? '' : `bg-gradient-to-br ${gradient}`
+          }`}
         >
-          {guild.name}
-        </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          {guild.approximate_member_count?.toLocaleString() ?? 'Unknown'} members
-        </p>
-      </div>
-    </div>
+          {
+            iconUrl ? (
+              <img
+                src={iconUrl}
+                alt={`${guild.name} icon`}
+                class="w-full h-full object-cover"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="text-lg font-bold text-white">
+                  {guild.name.charAt(0)}
+                </span>
+              </div>
+            )
+          }
+        </div>
 
-    <div class="mt-4">
-      <button
-        class={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 ${
-          isConfigured
-            ? `bg-gradient-to-r ${gradient} hover:shadow-lg hover:brightness-110 text-white`
-            : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
-        }`}
-      >
-        {
-          isConfigured ? (
+        <div class="flex-1 min-w-0">
+          <h3
+            class="text-lg font-semibold text-gray-900 dark:text-white truncate"
+          >
+            {guild.name}
+          </h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            {guild.approximate_member_count?.toLocaleString() ?? 'Unknown'} members
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        {isConfigured ? (
+          <a
+            href={`/dashboard/${guild.id}`}
+            class={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 bg-gradient-to-r ${gradient} hover:shadow-lg hover:brightness-110 text-white block text-center`}
+          >
             <span class="flex items-center justify-center gap-2">
               <Settings className="h-4 w-4" />
               Manage
             </span>
-          ) : (
+          </a>
+        ) : (
+          <a
+            href={addBotUrl.toString()}
+            class="w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-white block text-center"
+          >
             <span class="flex items-center justify-center gap-2">
               <Plus className="h-4 w-4" />
               Add Bot
             </span>
-          )
-        }
-      </button>
+          </a>
+        )}
+      </div>
     </div>
   </div>
-</div>
+)}

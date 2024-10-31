@@ -1,34 +1,24 @@
 ---
 import { LogOut, HelpCircle, ExternalLink, Settings } from 'lucide-react';
-import { getDiscordUserData, type DiscordUser } from '@/lib/data-utils';
+import {
+  getDiscordUserData,
+  getAvatarUrl,
+  getInitials,
+} from '@/lib/data-utils';
 import BrandLogo from '@components/BrandLogo.astro';
 import ThemeIcon from '@components/ThemeIcon.astro';
 import navLinks from '@utils/navigation.ts';
 import DashNavLink from '@components/ui/links/DashNavLink.astro';
 
-const homeUrl = '/';
-
 // Get user data from cookies on the server side
 const userData = await getDiscordUserData(Astro.cookies);
-
-// Helper function to get avatar URL
-function getAvatarUrl(user: DiscordUser): string {
-  return user.avatar
-    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-    : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
-}
-
-// Helper function to get initials
-function getInitials(username?: string): string {
-  return username ? username.charAt(0).toUpperCase() : '?';
-}
 ---
 
 <header
   class="sticky inset-x-0 top-4 z-50 flex w-full flex-wrap text-sm md:flex-nowrap md:justify-start"
 >
   <nav
-    class="relative mx-2 w-[1200px] rounded-[36px] border border-cyan-200/40 bg-cyan-100/40 px-4 py-3 backdrop-blur-md dark:border-neutral-700/40 dark:bg-slate-800/80 dark:backdrop-blur-md md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto"
+    class="relative mx-2 w-[1200px] h-[70px] rounded-[26px] border border-cyan-200/40 bg-cyan-100/40 px-4 py-3 backdrop-blur-md dark:border-neutral-700/40 dark:bg-slate-800/80 dark:backdrop-blur-md md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto"
     aria-label="Global"
   >
     <div class="flex items-center justify-between">
@@ -66,14 +56,14 @@ function getInitials(username?: string): string {
             role="button"
             aria-expanded={false}
             class={`
-    flex items-center justify-start gap-x-2 h-auto w-auto
-    ring-zinc-500 focus-visible:ring outline-none
-    dark:border-slate-700 dark:ring-zinc-200 dark:focus:outline-none
-    md:my-6 md:border-s md:border-slate-300 md:ps-6 2xl:text-base
-    hover:text-fuchsia-400 hover:scale-105 dark:hover:text-fuchsia-300
-    bg-discord-blurple text-white px-4 py-2 rounded-lg
-    transform transition-all duration-200
-  `}
+            flex items-center justify-start gap-x-2 h-auto w-auto
+           ring-zinc-500 focus-visible:ring outline-none
+           dark:border-slate-700 dark:ring-zinc-200 dark:focus:outline-none
+           md:my-6 md:border-s md:border-slate-300 md:ps-6 2xl:text-base
+           hover:text-fuchsia-400 hover:scale-105 dark:hover:text-fuchsia-300
+           bg-discord-blurple text-white px-4 py-2 rounded-lg
+           transform transition-all duration-200
+          `}
           >
             <div class="flex items-center gap-x-2">
               {
@@ -91,7 +81,7 @@ function getInitials(username?: string): string {
                 )
               }
               <span class="hidden md:inline-block text-sm font-medium">
-                {userData?.username}
+                {userData?.global_name}
               </span>
             </div>
             <svg
@@ -115,42 +105,44 @@ function getInitials(username?: string): string {
       <div class="relative">
         <div
           id="dropdownMenu"
-          class="hidden absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5"
+          class="hidden absolute right-0 mt-2 w-48 rounded-lg shadow-lg py-1 bg-cyan-50 dark:bg-slate-800 ring-1 ring-black ring-opacity-5"
         >
-          <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-            <p class="text-sm font-medium text-gray-900 dark:text-white">
-              {userData?.username}
+          <div
+            class="px-4 py-2 border-b border-slate-200 dark:border-slate-700"
+          >
+            <p class="text-sm font-medium text-cyan-900 dark:text-cyan-400">
+              user: @{userData?.username}
             </p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">
+            <p class="text-xs text-slate-500 dark:text-slate-400">
               ID: {userData?.id}
             </p>
           </div>
           <a
-            class="flex items-center px-2 py-0 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center px-2 py-0 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             <ThemeIcon className="mr-3 h-4 w-4" /> Theme
           </a>
           <a
             href="dash/settings"
-            class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             <Settings className="mr-3 h-4 w-4" /> Settings
           </a>
           <a
             href="/docs"
-            class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             <ExternalLink className="mr-3 h-4 w-4" /> Documentation
           </a>
           <a
             href="${process.env.SUPPORT_SERVER}"
-            class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             <HelpCircle className="mr-3 h-4 w-4" /> Support
           </a>
-          <hr class="my-1 border-gray-200 dark:border-gray-700" />
+          <hr class="my-1 border-slate-200 dark:border-slate-700" />
           <button
-            class="flex items-center w-full px-4 py-2 text-sm text-pink-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+            class="flex items-center w-full px-4 py-2 text-sm text-pink-600 hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             <LogOut className="mr-3 h-4 w-4" /> Logout
           </button>

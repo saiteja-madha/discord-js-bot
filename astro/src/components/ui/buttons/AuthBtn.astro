@@ -1,43 +1,17 @@
 ---
 // @/components/ui/buttons/AuthBtn.astro
-
 import LoginBtn from './LoginBtn.astro';
 import DashboardBtn from './DashboardBtn.astro';
-import { getAuthCookies, setAuthCookies } from '@/lib/cookie-utils';
-import { discordAuth } from '@/lib/discord-auth';
+import { getAuthCookies } from '@/lib/cookie-utils';
 
-// Get auth cookies
-const { accessToken, refreshToken } = getAuthCookies(Astro.cookies);
+const { accessToken } = getAuthCookies(Astro.cookies);
 
-// Check authentication status
-let isAuthenticated = false;
-
-if (accessToken) {
-  try {
-    isAuthenticated = await discordAuth.validateToken(accessToken);
-    console.log('🔐 Token Validation:', { isValid: isAuthenticated });
-  } catch (error) {
-    console.error('🔒 Token validation error:', error);
-
-    // Try refresh token if available
-    if (refreshToken) {
-      try {
-        const newTokens = await discordAuth.refreshToken(refreshToken);
-        const userData = await discordAuth.getUserInfo(newTokens.access_token);
-        setAuthCookies(Astro.cookies, newTokens, userData);
-        isAuthenticated = true;
-      } catch (refreshError) {
-        console.error('🔄 Refresh token error:', refreshError);
-      }
-    }
-  }
-}
+const isAuthenticated = !!accessToken;
 ---
 
 {isAuthenticated ? <DashboardBtn /> : <LoginBtn />}
 
 <script>
-  // Add some playful animations when the auth state changes
   document.addEventListener('DOMContentLoaded', () => {
     const button = document.querySelector('a, button') as HTMLElement;
     if (button) {

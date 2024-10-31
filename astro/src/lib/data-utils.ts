@@ -4,15 +4,38 @@ import type { IGuild } from '@/lib/database/types/guild';
 import { getAuthCookies } from '@/lib/cookie-utils';
 import type { AstroCookies } from 'astro';
 
+// Cache interface
+interface Cache<T> {
+  data: T;
+  timestamp: number;
+}
+
+// In-memory cache
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const guildsCache = new Map<string, Cache<DiscordGuild[]>>();
+
+export function clearGuildsCache(): void {
+  guildsCache.clear();
+}
+
 export interface DiscordUser {
   id: string;
   username: string;
   discriminator: string;
+  global_name: string;
   avatar: string;
   bot?: boolean;
-  system?: boolean;
-  mfa_enabled?: boolean;
   verified?: boolean;
+}
+
+export function getAvatarUrl(user: DiscordUser): string {
+  return user.avatar
+    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+    : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
+}
+
+export function getInitials(username?: string): string {
+  return username ? username.charAt(0).toUpperCase() : '?';
 }
 
 export interface DiscordGuild {
@@ -25,12 +48,69 @@ export interface DiscordGuild {
   approximate_member_count?: number;
 }
 
+export function getServerIcon(guild: DiscordGuild): string | null {
+  if (guild.icon) {
+    return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
+  }
+  return null;
+}
+
+async function handleDiscordResponse<T>(response: Response): Promise<T> {
+  if (response.status === 429) {
+    const rateLimitData = await response.json();
+    const retryAfter = (rateLimitData.retry_after || 5) * 1000;
+
+    // Wait for the retry-after period
+    await new Promise((resolve) => setTimeout(resolve, retryAfter));
+
+    // Throw a specific error that can be caught and retried
+    throw new Error('RATE_LIMITED');
+  }
+
+  if (!response.ok) {
+    throw new Error(`Discord API error: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+async function fetchWithRetry<T>(
+  url: string,
+  options: RequestInit,
+  maxRetries = 3
+): Promise<T> {
+  let attempts = 0;
+
+  while (attempts < maxRetries) {
+    try {
+      const response = await fetch(url, options);
+      return await handleDiscordResponse<T>(response);
+    } catch (error) {
+      attempts++;
+
+      if (error instanceof Error && error.message === 'RATE_LIMITED') {
+        continue; // Retry after waiting
+      }
+
+      if (attempts === maxRetries) {
+        throw error;
+      }
+
+      // Wait before retrying (exponential backoff)
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.pow(2, attempts) * 1000)
+      );
+    }
+  }
+
+  throw new Error('Max retries exceeded');
+}
+
 export async function getDiscordUserData(
   cookies: AstroCookies
 ): Promise<DiscordUser> {
-  const { accessToken, refreshToken, userData } = getAuthCookies(cookies);
+  const { accessToken, userData } = getAuthCookies(cookies);
 
-  // First check if we have valid cached user data
   if (userData) {
     return userData;
   }
@@ -39,28 +119,17 @@ export async function getDiscordUserData(
     throw new Error('No access token found');
   }
 
-  console.debug('Fetching Discord user data with access token:', accessToken);
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  };
 
-  try {
-    const userResponse = await fetch('https://discord.com/api/users/@me', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!userResponse.ok) {
-      console.error(`Failed to fetch user data: ${userResponse.statusText}`);
-      throw new Error(`Failed to fetch user data: ${userResponse.statusText}`);
-    }
-
-    const userData = await userResponse.json();
-    console.debug('Fetched Discord user data:', userData);
-    return userData;
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    throw error;
-  }
+  return await fetchWithRetry<DiscordUser>(
+    'https://discord.com/api/users/@me',
+    options
+  );
 }
 
 export async function getDiscordGuilds(
@@ -72,64 +141,54 @@ export async function getDiscordGuilds(
     throw new Error('No access token found');
   }
 
-  console.debug('Fetching Discord guilds with access token:', accessToken);
-
-  const guildsResponse = await fetch(
-    'https://discord.com/api/users/@me/guilds?with_counts=true',
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-
-  if (!guildsResponse.ok) {
-    console.error(`Failed to fetch guilds: ${guildsResponse.statusText}`);
-    throw new Error(`Failed to fetch guilds: ${guildsResponse.statusText}`);
+  // Check cache first
+  const cached = guildsCache.get(accessToken);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
   }
 
-  const guildsData = await guildsResponse.json();
-  console.debug('Fetched Discord guilds:', guildsData);
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const guildsData = await fetchWithRetry<DiscordGuild[]>(
+    'https://discord.com/api/users/@me/guilds?with_counts=true',
+    options
+  );
+
+  // Update cache
+  guildsCache.set(accessToken, {
+    data: guildsData,
+    timestamp: Date.now(),
+  });
+
   return guildsData;
 }
 
 export async function getConfiguredGuilds(
   cookies: AstroCookies
 ): Promise<IGuild[]> {
-  console.debug('Getting configured guilds');
   const userGuilds = await getDiscordGuilds(cookies);
-  console.debug('User guilds:', userGuilds);
 
-  // Filter guilds where user has admin permissions (0x8)
   const adminGuilds = userGuilds.filter((guild) => {
     const permissions = BigInt(guild.permissions);
-    const hasAdminPermissions = (permissions & 0x8n) === 0x8n;
-    console.debug(
-      `Guild ${guild.id} has admin permissions:`,
-      hasAdminPermissions
-    );
-    return hasAdminPermissions;
+    return (permissions & 0x8n) === 0x8n;
   });
 
-  console.debug('Admin guilds:', adminGuilds);
-
-  // Get configured guilds from database
   const guildManager = await GuildManager.getInstance();
-  console.debug('GuildManager instance obtained:', guildManager);
 
   const configuredGuildPromises = adminGuilds.map((guild) => {
-    console.debug(`Fetching configured guild for guild ID: ${guild.id}`);
     return guildManager.getGuild(guild.id);
   });
 
   const configuredGuildResults = await Promise.all(configuredGuildPromises);
-  console.debug('Configured guild results:', configuredGuildResults);
 
   const configuredGuilds = configuredGuildResults.filter(
     (guild): guild is IGuild => guild !== null
   );
 
-  console.debug('Filtered configured guilds:', configuredGuilds);
   return configuredGuilds;
 }

@@ -1,5 +1,4 @@
 ---
-// @/pages/dash/index.astro
 export const prerender = false;
 
 import DashLayout from '@/layouts/DashLayout.astro';
@@ -8,15 +7,12 @@ import {
   getDiscordUserData,
   getConfiguredGuilds,
   getDiscordGuilds,
+  getAvatarUrl,
+  getInitials,
+  type DiscordUser,
+  type DiscordGuild,
 } from '@/lib/data-utils';
 import type { IGuild } from '@/lib/database/types/guild';
-import type { DiscordUser, DiscordGuild } from '@/lib/data-utils';
-
-// The middleware will ensure we have valid tokens
-const accessToken = Astro.cookies.get('discord_access_token')?.value;
-if (!accessToken) {
-  return Astro.redirect('/'); // Fallback safety check
-}
 
 let userData: DiscordUser | null = null;
 let discordGuilds: DiscordGuild[] = [];
@@ -52,12 +48,10 @@ try {
 
 // Create a Set of configured guild IDs for efficient lookup
 const configuredGuildIds = new Set(configuredGuilds.map((guild) => guild.id));
-
-const baseUrl = import.meta.env.BASE_URL || '';
 ---
 
 <DashLayout
-  title={userData ? `Welcome, ${userData.username}` : 'Dashboard'}
+  title={userData ? `Welcome | ${userData.global_name}` : 'Dashboard'}
   description="Manage your Discord servers and bot settings"
 >
   {/* Loading State */}
@@ -130,14 +124,21 @@ const baseUrl = import.meta.env.BASE_URL || '';
         {/* User Welcome Section */}
         {userData && (
           <div class="mb-8 flex items-center gap-4">
-            <img
-              src={`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
-              alt={userData.username}
-              class="w-16 h-16 rounded-full"
-            />
+            {userData.avatar ? (
+              <img
+                src={getAvatarUrl(userData)}
+                alt={userData.username}
+                loading="lazy"
+                class="w-16 h-16 rounded-full"
+              />
+            ) : (
+              <div class="w-16 h-16 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white text-xl font-medium">
+                {getInitials(userData.username)}
+              </div>
+            )}
             <div>
               <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                Welcome, {userData.username}
+                Welcome, {userData.global_name}
               </h1>
               <p class="text-gray-600 dark:text-gray-400">
                 Select a server to manage or add the bot to a new server
@@ -163,8 +164,7 @@ const baseUrl = import.meta.env.BASE_URL || '';
               No Servers Found
             </h2>
             <p class="text-gray-600 dark:text-gray-400 mb-4">
-              You don't seem to have any servers where you have admin
-              permissions.
+              You don't seem to have any servers where you have admin permissions.
             </p>
 
             <a

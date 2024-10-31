@@ -18,6 +18,7 @@ const footerLinks = [
         name: 'Invite Amina',
         url: 'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
       },
+      { name: 'Dashboard', url: '/dash'}
     ],
   },
   {

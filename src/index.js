@@ -19,69 +19,48 @@ async function initializeBot() {
   try {
     // initialize client
     const client = new BotClient()
-
-    // check for updates
     await checkForUpdates()
-
-    // Initialize mongoose first
     await initializeMongoose()
-
-    // Load commands and events
     await client.loadCommands('./src/commands')
     client.loadContexts('./src/contexts')
     client.loadEvents('./src/events')
-
-    // start the client
     await client.login(process.env.BOT_TOKEN)
 
-    // Initialize dashboard last, after bot is ready
+    // Initialize dashboard
     if (client.config.DASHBOARD.enabled) {
       client.logger.log('Launching dashboard...')
       try {
         const app = express()
         const port = process.env.PORT || client.config.DASHBOARD.port || 8080
 
-        // Parse cookies and add security middleware
+        // Basic middleware
         app.use(require('cookie-parser')())
-        app.use(require('helmet')())
-
-        // Serve static files from the Astro build output
         app.use(
-          express.static(path.join(__dirname, '..', 'astro', 'dist', 'client'))
+          require('helmet')({
+            contentSecurityPolicy: false,
+          })
         )
 
-        // Handle dashboard routes (SSR)
-        app.use('/astro', async (req, res, next) => {
-          if (
-            req.url.startsWith('/astro/_astro/') ||
-            req.url.startsWith('/astro/static/')
-          ) {
-            // Serve static assets directly
-            return express.static(
-              path.join(__dirname, '..', 'astro', 'dist', 'client')
-            )(req, res, next)
-          }
+        // Import the Astro middleware handler
+        const { handler } = await import('../astro/dist/server/entry.mjs')
 
-          try {
-            // Dynamically import the ESM handler
-            const { handler } = await import('../astro/dist/server/entry.mjs')
-            const response = await handler(req, res)
-            if (response.status === 404) {
-              return res.sendFile(
-                path.join(__dirname, '..', 'astro', 'dist', 'client', '404.html')
-              )
+        // Serve static files
+        app.use(
+          express.static(
+            path.join(__dirname, '..', 'astro', 'dist', 'client'),
+            {
+              index: false, // Prevent express from serving index.html directly
             }
-          } catch (error) {
-            console.error('SSR Error:', error)
-            next(error)
-          }
-        })
-
-        // For any other routes, serve the static build
-        app.get('*', (req, res) => {
-          res.sendFile(
-            path.join(__dirname, '..', 'astro', 'dist', 'client', '404.html')
           )
+        )
+
+        // Use Astro's middleware handler for all routes
+        app.use(handler)
+
+        // Error handling middleware
+        app.use((err, req, res, next) => {
+          console.error('Server error:', err)
+          res.status(500).send('Internal Server Error')
         })
 
         app.listen(port, () => {
@@ -111,14 +90,11 @@ process.on('uncaughtException', err => {
   console.error('Uncaught Exception:', err)
 })
 
-// Heroku specific handlers
 process.on('SIGTERM', () => {
   console.log('SIGTERM received. Performing graceful shutdown...')
-  // Implement any cleanup needed
   process.exit(0)
 })
 
-// Initialize the bot
 initializeBot().catch(error => {
   console.error('Failed to start bot:', error)
   process.exit(1)
