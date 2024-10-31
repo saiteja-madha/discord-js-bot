@@ -18,7 +18,7 @@ const getSiteURL = (val) => {
       return val.startsWith('http') ? val : `https://${val}`;
     }
   }
-  return 'http://localhost:' + (process.env.PORT || '8080');
+  return 'http://localhost:8080';
 };
 
 export default defineConfig({
@@ -29,14 +29,8 @@ export default defineConfig({
   outDir: './dist',
   base: '/',
   adapter: node({
-    mode: 'middleware',
+    mode: 'standalone',
   }),
-  routeRules: {
-    '/dash/*': { prerender: false },
-    '/api/guilds/*': { prerender: false },
-    '/blog/*': { prerender: true },
-    '/insights/*': { prerender: true },
-  },
   image: { domains: ['images.unsplash.com'] },
   prefetch: {
     prefetchAll: false,
