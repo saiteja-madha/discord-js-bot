@@ -29,7 +29,7 @@ export default defineConfig({
   outDir: './dist',
   base: '/',
   adapter: node({
-    mode: 'standalone',
+    mode: 'middleware',
   }),
   image: { domains: ['images.unsplash.com'] },
   prefetch: {

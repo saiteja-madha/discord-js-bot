@@ -13,10 +13,14 @@ const { BotClient } = require('@src/structures')
 const { validateConfiguration } = require('@helpers/Validator')
 const express = require('express')
 const path = require('path')
+const fs = require('fs')
+const { createServer } = require('http')
+const { fileURLToPath } = require('url')
 
 validateConfiguration()
 
 async function initializeBot() {
+  let client
   try {
     // initialize client
     const client = new BotClient()
@@ -36,101 +40,165 @@ async function initializeBot() {
     await client.login(process.env.BOT_TOKEN)
 
     // Initialize dashboard last, after bot is ready
-  if (client.config.DASHBOARD.enabled) {
-    client.logger.log('Launching dashboard...')
-    try {
-      const app = express()
-      const port = process.env.PORT || client.config.DASHBOARD.port || 8080
+    if (client.config.DASHBOARD.enabled) {
+      client.logger.log('Launching dashboard...')
+      try {
+        const app = express()
+        const port = process.env.PORT || client.config.DASHBOARD.port || 8080
 
-      // Parse cookies and add security middleware
-      app.use(require('cookie-parser')())
-      app.use(
-        require('helmet')({
-          contentSecurityPolicy: false, // You might need to configure this based on your needs
-        })
-      )
-
-      // Import the Astro SSR handler
-      const { handler } = await import('../astro/dist/server/entry.mjs')
-
-      // Serve static files from the Astro build output
-      app.use(
-        '/_astro',
-        express.static(
-          path.join(__dirname, '..', 'astro', 'dist', 'client', '_astro')
+        // Parse cookies and add security middleware
+        app.use(require('cookie-parser')())
+        app.use(
+          require('helmet')({
+            contentSecurityPolicy: false,
+          })
         )
-      )
-      app.use(
-        '/static',
-        express.static(
-          path.join(__dirname, '..', 'astro', 'dist', 'client', 'static')
+
+        // Body parsing middleware
+        app.use(express.json())
+        app.use(express.urlencoded({ extended: true }))
+
+        // Verify Astro build output paths
+        const astroClientDir = path.join(
+          __dirname,
+          '..',
+          'astro',
+          'dist',
+          'client'
         )
-      )
+        const astroServerDir = path.join(
+          __dirname,
+          '..',
+          'astro',
+          'dist',
+          'server'
+        )
 
-      // Handle all other routes through Astro's SSR handler
-      app.use(async (req, res, next) => {
-        try {
-          const response = await handler(req, res)
+        // Log paths for debugging
+        client.logger.log('Astro Client Dir:', astroClientDir)
+        client.logger.log('Astro Server Dir:', astroServerDir)
 
-          // If Astro didn't handle the route (404), let Express continue to next middleware
-          if (response.status === 404) {
-            next()
-          }
-        } catch (error) {
-          console.error('SSR Error:', error)
-          next(error)
+        // Check if directories exist
+        if (!fs.existsSync(astroClientDir)) {
+          throw new Error(`Astro client directory not found: ${astroClientDir}`)
         }
-      })
+        if (!fs.existsSync(astroServerDir)) {
+          throw new Error(`Astro server directory not found: ${astroServerDir}`)
+        }
 
-      // Final fallback for unhandled routes
-      app.use((req, res) => {
-        res.sendFile(
-          path.join(__dirname, '..', 'astro', 'dist', 'client', '404.html')
+        // Serve static files from Astro client directory
+        app.use(
+          express.static(astroClientDir, {
+            maxAge: '1d',
+            etag: true,
+            setHeaders: (res, filePath) => {
+              if (path.extname(filePath).toLowerCase() === '.html') {
+                res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+              }
+            },
+          })
         )
-      })
 
-      // Error handling middleware
-      app.use((err, req, res, next) => {
-        console.error('Server error:', err)
-        res
-          .status(500)
-          .sendFile(
-            path.join(__dirname, '..', 'astro', 'dist', 'client', '500.html')
-          )
-      })
+        // Dynamically import Astro SSR handler
+        const entryPath = path.join(astroServerDir, 'entry.mjs')
+        const entryUrl = `file://${entryPath}`
 
-      app.listen(port, () => {
-        const baseURL = process.env.BASE_URL || `http://localhost:${port}`
-        client.logger.success(`Dashboard is running on port ${port}`)
-        client.logger.log(`Dashboard URL: ${baseURL}`)
-      })
-    } catch (ex) {
-      client.logger.error('Failed to launch dashboard:', ex)
-      client.logger.warn('Continuing bot operation without dashboard')
+        const { handler } = await import(entryUrl)
+
+        // Create middleware function for Astro SSR
+        const handleSSR = async (req, res, next) => {
+          try {
+            const url = new URL(req.url, `http://${req.headers.host}`)
+
+            const response = await handler({
+              request: new Request(url, {
+                method: req.method,
+                headers: req.headers,
+                body:
+                  req.method !== 'GET' && req.method !== 'HEAD'
+                    ? JSON.stringify(req.body)
+                    : undefined,
+              }),
+            })
+
+            // Set response status
+            res.status(response.status)
+
+            // Set response headers
+            for (const [key, value] of response.headers.entries()) {
+              res.set(key, value)
+            }
+
+            // Send response body
+            const body = await response.text()
+            res.send(body)
+          } catch (error) {
+            client.logger.error('SSR Handler Error:', error)
+            next(error)
+          }
+        }
+
+        // Use SSR handler for all routes not handled by static files
+        app.use(handleSSR)
+
+        // Error handling middleware
+        app.use((err, req, res, next) => {
+          client.logger.error('Express Error:', err)
+          res.status(500).send('Internal Server Error')
+        })
+
+        // Create HTTP server
+        const server = createServer(app)
+
+        // Start server
+        server.listen(port, () => {
+          const baseURL = process.env.BASE_URL || `http://localhost:${port}`
+          client.logger.success(`Dashboard is running on port ${port}`)
+          client.logger.log(`Dashboard URL: ${baseURL}`)
+        })
+
+        // Graceful shutdown
+        process.on('SIGTERM', () => {
+          client.logger.log('SIGTERM received. Shutting down server...')
+          server.close(() => {
+            client.logger.log('Server closed.')
+            process.exit(0)
+          })
+        })
+
+        return server
+      } catch (ex) {
+        client.logger.error('Failed to launch dashboard:', ex)
+        client.logger.warn('Continuing bot operation without dashboard')
+      }
     }
-  }
 
     return client
   } catch (error) {
-    console.error('Failed to initialize bot:', error)
+    if (client) {
+      client.logger.error('Failed to initialize bot:', error)
+    } else {
+      console.error('Failed to initialize bot:', error)
+    }
     process.exit(1)
   }
 }
 
-// Error handling
+// Global error handling
 process.on('unhandledRejection', err => {
-  console.error('Unhandled Rejection:', err)
+  if (client) {
+    client.logger.error('Unhandled Rejection:', err)
+  } else {
+    console.error('Unhandled Rejection:', err)
+  }
 })
 
 process.on('uncaughtException', err => {
-  console.error('Uncaught Exception:', err)
-})
-
-// Heroku specific handlers
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received. Performing graceful shutdown...')
-  // Implement any cleanup needed
-  process.exit(0)
+  if (client) {
+    client.logger.error('Uncaught Exception:', err)
+  } else {
+    console.error('Uncaught Exception:', err)
+  }
 })
 
 // Initialize the bot
