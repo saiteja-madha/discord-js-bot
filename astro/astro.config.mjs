@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import starlightSiteGraph from 'starlight-site-graph';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import compressor from 'astro-compressor';
@@ -7,6 +8,7 @@ import node from '@astrojs/node';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import react from '@astrojs/react';
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -42,13 +44,6 @@ export default defineConfig({
     sitemap(),
     starlight({
       title: 'Amina Docs',
-      defaultLocale: 'root',
-      locales: {
-        root: {
-          label: 'English',
-          lang: 'en',
-        },
-      },
       sidebar: [
         {
           label: 'Quick Start Guides',
@@ -56,6 +51,7 @@ export default defineConfig({
         },
         {
           label: 'Commands',
+          collapsed: true,
           items: [
             { label: 'My Commands', link: 'commands/commands' },
             {
@@ -89,6 +85,7 @@ export default defineConfig({
           autogenerate: { directory: 'extras' },
         },
       ],
+
       social: {
         github: 'https://github.com/vixshan/amina',
         discord:
@@ -119,6 +116,17 @@ export default defineConfig({
             content: 'https://amina.vikshan.tech' + '/social.webp',
           },
         },
+      ],
+      editLink: {
+        baseUrl: 'https://github.com/vixshan/amina/edit/main/astro/',
+      },
+      expressiveCode: {
+        styleOverrides: { borderRadius: '0.5rem' },
+      },
+      prerender: true,
+      lastUpdated: true,
+      plugins: [
+        starlightSiteGraph({}),
       ],
     }),
     compressor({ gzip: true, brotli: true }),

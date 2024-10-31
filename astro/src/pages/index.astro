@@ -8,7 +8,6 @@ import FeaturesGeneral from '@components/sections/features/FeaturesGeneral.astro
 import FeaturesNavs from '@components/sections/features/FeaturesNavs.astro';
 import TestimonialsSection from '@components/sections/testimonials/TestimonialsSection.astro';
 import FAQ from '@components/sections/misc/FAQ.astro';
-import AnnouncementBanner from '@components/ui/banners/AnnouncementBanner.astro';
 import heroImage from '@images/hero-image.avif';
 import faqs from '@data/faqs.json';
 import features from '@data/features.json';
@@ -26,12 +25,6 @@ const avatarSrcs: Array<string> = [
 ---
 
 <MainLayout>
-  <AnnouncementBanner
-    btnId="discord-invite"
-    btnTitle="✨Add Amina to Your Server"
-    url="https://discord.com/oauth2/authorize?client_id=1035629678632915055"
-  />
-
   <HeroSection
     title=`Energize Your Discord with <span
         class="text-pink-500 dark:text-pink-400">Amina</span>`

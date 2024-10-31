@@ -28,14 +28,21 @@ import {
    ```
 
 3. Set Up Environment Variables
-   Rename .env.example to .env and fill in the required information.
+
+   Rename `.env.example` to `.env and` and fill in the required information.
 
 4. Start the Bot
    ```bash
    npm start
    ```
 
+5. For development purposes, you can use the following command to start the bot with nodemon:
+   
+   <PackageManagers type="run" args="dev" />
+
 </Steps>
+
+import { PackageManagers } from 'starlight-package-managers'
 
 ## Environment Variables
 
@@ -46,6 +53,7 @@ import {
 Here's an example of what your .env file should look like:
 
 ```bash
+// .env
 # Bot Token [Required]
 BOT_TOKEN=
 

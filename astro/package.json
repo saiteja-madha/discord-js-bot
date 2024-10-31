@@ -40,6 +40,8 @@
     "redis": "^4.7.0",
     "sharp": "^0.33.5",
     "sharp-ico": "^0.1.5",
+    "starlight-package-managers": "^0.7.0",
+    "starlight-site-graph": "^0.1.8",
     "tailwindcss": "^3.4.14",
     "tinacms": "^2.1.1",
     "typescript": "^5.6.3"
