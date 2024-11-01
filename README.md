@@ -187,3 +187,5 @@ want to support me and keep me alive? sponsor me on
 [license-shield]:
   https://img.shields.io/github/license/vixshan/amina.svg?style=for-the-badge
 [license-url]: https://github.com/vixshan/amina/blob/master/LICENSE
+
+![Alt](https://repobeats.axiom.co/api/embed/27f7dae1dd9a92ee7b2d3dbe7889eb18ab7a4d61.svg "Repobeats analytics image")
