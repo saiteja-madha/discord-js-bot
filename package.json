@@ -45,7 +45,7 @@
     "lavaclient": "^4.1.1",
     "module-alias": "^2.2.3",
     "moment": "^2.30.1",
-    "mongoose": "^8.1.1",
+    "mongoose": "^8.7.1",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.7.0",
     "os": "^0.1.2",
