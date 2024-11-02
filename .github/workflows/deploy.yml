@@ -37,7 +37,7 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "vikshan-amina-53"
+          project: "mina"
           entrypoint: "server/entry.mjs"
           root: "dist"
           
