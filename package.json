@@ -17,7 +17,8 @@
     "build": "cd astro && npm i && npm run build",
     "f": "prettier --write src",
     "u": "git pull && npm update && npm run f",
-    "start-replit": "node src/index.js"
+    "start-replit": "node src/index.js",
+    "prepare": "husky"
   },
   "homepage": "https://github.com/vixshan/amina#readme",
   "repository": {
@@ -73,6 +74,8 @@
   "devDependencies": {
     "eslint": "^9.14.0",
     "eslint-plugin-jsdoc": "^50.4.3",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "node": "^23.1.0",
     "nodemon": "^3.1.7",
     "prettier": "3.3.3"

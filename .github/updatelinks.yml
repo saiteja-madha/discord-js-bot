@@ -1,6 +1,7 @@
 paths:
   - 'astro'
   - 'src'
+  - '.'
 fileTypes:
   - 'md'
   - 'mdx'
@@ -10,7 +11,8 @@ fileTypes:
 #  - old: 'https://github.com/vixshan/mina'
 #    new: 'https://github.com/vixshan/amina'
 githubUrls:
-  - all: 'true'
+  types:
+    - 'all' 
 ignore:
   - 'https://github.com/Discordjs/discordjs'
   - 'https://github.com/saiteja-madha'
