@@ -11,12 +11,12 @@
   "scripts": {
     "dev": "nodemon .",
     "start": "node .",
-    "atro-build": "cd astro && bun run build",
-    "astro-dev": "cd astro && bun dev",
-    "astro-i": "cd astro && bun i",
-    "build": "cd astro && bun i && bun run build",
+    "atro-build": "cd astro && npm run build",
+    "astro-dev": "cd astro && npm run dev",
+    "astro-i": "cd astro && npm run i",
+    "build": "cd astro && npm run i && npm run build",
     "f": "prettier --write src",
-    "u": "git pull && bun update && bun f",
+    "u": "git pull && npm run update && npm run f",
     "start-replit": "node src/index.js"
   },
   "homepage": "https://github.com/vixshan/amina#readme",
