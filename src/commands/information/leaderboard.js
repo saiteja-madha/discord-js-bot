@@ -171,13 +171,23 @@ async function getRepLeaderboard(author) {
   if (lb.length === 0) return "There are no users in the leaderboard";
 
   let collector = "";
+  let rank = 1;  // Track rank separately to avoid gaps
+
   for (let i = 0; i < lb.length; i++) {
     try {
+      // Try to fetch the user
       const user = await author.client.users.fetch(lb[i].member_id);
-      collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)} [${lb[i].rep}]\n`;
+      collector += `**#${rank}** - ${escapeInlineCode(user.tag)} [${lb[i].rep}]\n`;
+      rank++; // Only increment if the user was found
     } catch (ex) {
-      collector += `**#${(i + 1).toString()}** - DeletedUser#0000 [${lb[i].rep}]\n`;
+      // Skip if the user fetch fails (user might be deleted)
+      continue;
     }
+  }
+
+  if (!collector) {
+    // No valid users were found in the leaderboard
+    return "No valid users found in the leaderboard.";
   }
 
   const embed = new EmbedBuilder()
