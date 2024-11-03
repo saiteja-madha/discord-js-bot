@@ -13,10 +13,10 @@
     "start": "node .",
     "atro-build": "cd astro && npm run build",
     "astro-dev": "cd astro && npm run dev",
-    "astro-i": "cd astro && npm run i",
-    "build": "cd astro && npm run i && npm run build",
+    "astro-i": "cd astro && npm i",
+    "build": "cd astro && npm i && npm run build",
     "f": "prettier --write src",
-    "u": "git pull && npm run update && npm run f",
+    "u": "git pull && npm update && npm run f",
     "start-replit": "node src/index.js"
   },
   "homepage": "https://github.com/vixshan/amina#readme",
