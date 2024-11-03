@@ -47,16 +47,18 @@ module.exports = {
     IDLE_TIME: 60, // Time in seconds before the bot disconnects from an idle voice channel
     DEFAULT_VOLUME: 60, // Default player volume 1-100
     MAX_SEARCH_RESULTS: 5,
-    DEFAULT_SOURCE: 'SC', // Default source for music
+    DEFAULT_SOURCE: 'scsearch', // ytsearch = Youtube, ytmsearch = Youtube Music, scsearch = SoundCloud, spsearch = Spotify
+    // Add any number of lavalink nodes here
+    // Refer to https://github.com/lavalink-devs/Lavalink to host your own lavalink server
     LAVALINK_NODES: [
       {
         id: process.env.LAVALINK_ID,
         host: process.env.LAVALINK_HOST,
-        port: process.env.LAVALINK_PORT,
-        password: process.env.LAVALINK_PASSWORD,
-        secure: process.env.LAVALINK_SECURE === 'true',
-        retryAmount: 20, // Number of reconnection attempts
-        retryDelay: 30000, // Delay (in ms) between reconnection attempts
+        port: Number(process.env.LAVALINK_PORT),
+        authorization: process.env.LAVALINK_PASSWORD,
+        secure: false,
+        retryAmount: 20,
+        retryDelay: 30000,
       },
     ],
   },

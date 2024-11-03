@@ -14,7 +14,7 @@ const { recursiveReadDirSync } = require('../helpers/Utils')
 const { validateCommand, validateContext } = require('../helpers/Validator')
 const { schemas } = require('@src/database/mongoose')
 const CommandCategory = require('./CommandCategory')
-const lavaclient = require('../handlers/lavaclient')
+const Manager = require('../handlers/manager')
 const giveawaysHandler = require('../handlers/giveaway')
 const { DiscordTogether } = require('discord-together')
 
@@ -55,14 +55,22 @@ module.exports = class BotClient extends Client {
       ? new WebhookClient({ url: process.env.LOGS_WEBHOOK })
       : undefined
 
-    // Initialize music and giveaways managers if enabled in config
-    if (this.config.MUSIC.ENABLED) this.musicManager = lavaclient(this)
+    // Music Player
+    if (this.config.MUSIC.ENABLED) this.musicManager = new Manager(this)
+
+    // Giveaways Manager
     if (this.config.GIVEAWAYS.ENABLED)
       this.giveawaysManager = giveawaysHandler(this)
 
     // Initialize logger, database schemas, and DiscordTogether
     this.logger = Logger
+
+    // Database
     this.database = schemas
+
+    // Utils
+    this.utils = require('../helpers/Utils')
+
     this.discordTogether = new DiscordTogether(this)
   }
 

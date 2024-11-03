@@ -1,7 +1,5 @@
 const { musicValidations } = require('@helpers/BotUtils')
-const { LoopType } = require('@lavaclient/queue')
 const { ApplicationCommandOptionType } = require('discord.js')
-const { MUSIC } = require('@src/config.js')
 
 /**
  * @type {import("@structures/Command")}
@@ -11,24 +9,18 @@ module.exports = {
   description: 'loops the song or queue',
   category: 'MUSIC',
   validations: musicValidations,
-
   slashCommand: {
-    enabled: MUSIC.ENABLED,
+    enabled: true,
     options: [
       {
         name: 'type',
         type: ApplicationCommandOptionType.String,
-        description: 'The entity you want to loop',
+        description: 'Select loop type',
         required: false,
         choices: [
-          {
-            name: 'queue',
-            value: 'queue',
-          },
-          {
-            name: 'track',
-            value: 'track',
-          },
+          { name: 'Track', value: 'track' },
+          { name: 'Queue', value: 'queue' },
+          { name: 'Off', value: 'off' },
         ],
       },
     ],
@@ -36,27 +28,40 @@ module.exports = {
 
   async interactionRun(interaction) {
     const type = interaction.options.getString('type') || 'track'
-    const response = toggleLoop(interaction, type)
+    const response = await toggleLoop(interaction, type)
     await interaction.followUp(response)
   },
 }
 
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
- * @param {"queue"|"track"} type
+ * @param {"queue"|"track"|"off"} type
  */
-function toggleLoop({ client, guildId }, type) {
+async function toggleLoop({ client, guildId }, type) {
   const player = client.musicManager.getPlayer(guildId)
 
-  // track
-  if (type === 'track') {
-    player.queue.setLoop(LoopType.Song)
-    return 'Loop mode is set to `track`'
+  if (!player || !player.queue.current) {
+    return '🚫 No song is currently playing'
   }
 
-  // queue
-  else if (type === 'queue') {
-    player.queue.setLoop(1)
-    return 'Loop mode is set to `queue`'
+  switch (type) {
+    case 'track':
+      player.setRepeatMode('track')
+      return 'Loop mode is set to `track`'
+
+    case 'queue':
+      if (player.queue.tracks.length > 1) {
+        player.setRepeatMode('queue')
+        return 'Loop mode is set to `queue`'
+      } else {
+        return '🚫 Queue is too short to be looped'
+      }
+
+    case 'off':
+      player.setRepeatMode('off')
+      return 'Loop mode is disabled'
+
+    default:
+      return 'Invalid loop type'
   }
 }

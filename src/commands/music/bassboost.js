@@ -1,25 +1,17 @@
 const { musicValidations } = require('@helpers/BotUtils')
 const { ApplicationCommandOptionType } = require('discord.js')
-const { MUSIC } = require('@src/config.js')
-
-const levels = {
-  none: 0.0,
-  low: 0.1,
-  medium: 0.15,
-  high: 0.25,
-}
+const { EQList } = require('lavalink-client')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: 'bassboost',
-  description: 'set bassboost level',
+  description: 'Set bassboost level',
   category: 'MUSIC',
   validations: musicValidations,
-
   slashCommand: {
-    enabled: MUSIC.ENABLED,
+    enabled: true,
     options: [
       {
         name: 'level',
@@ -27,22 +19,10 @@ module.exports = {
         type: ApplicationCommandOptionType.String,
         required: true,
         choices: [
-          {
-            name: 'none',
-            value: 'none',
-          },
-          {
-            name: 'low',
-            value: 'low',
-          },
-          {
-            name: 'medium',
-            value: 'medium',
-          },
-          {
-            name: 'high',
-            value: 'high',
-          },
+          { name: 'High', value: 'high' },
+          { name: 'Medium', value: 'medium' },
+          { name: 'Low', value: 'low' },
+          { name: 'Off', value: 'off' },
         ],
       },
     ],
@@ -50,20 +30,41 @@ module.exports = {
 
   async interactionRun(interaction) {
     let level = interaction.options.getString('level')
-    const response = setBassBoost(interaction, level)
+    const response = await setBassBoost(interaction, level)
     await interaction.followUp(response)
   },
 }
 
 /**
- * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
- * @param {number} level
+ * @param {import("discord.js").CommandInteraction} interaction
+ * @param {string} level
  */
-function setBassBoost({ client, guildId }, level) {
+async function setBassBoost({ client, guildId }, level) {
   const player = client.musicManager.getPlayer(guildId)
-  const bands = new Array(3)
-    .fill(null)
-    .map((_, i) => ({ band: i, gain: levels[level] }))
-  player.setEqualizer(...bands)
+
+  if (!player || !player.queue.current) {
+    return '🚫 No song is currently playing'
+  }
+
+  // Clear any existing EQ
+  await player.filterManager.clearEQ()
+
+  switch (level) {
+    case 'high':
+      await player.filterManager.setEQ(EQList.BassboostHigh)
+      break
+    case 'medium':
+      await player.filterManager.setEQ(EQList.BassboostMedium)
+      break
+    case 'low':
+      await player.filterManager.setEQ(EQList.BassboostLow)
+      break
+    case 'off':
+      await player.filterManager.clearEQ()
+      break
+    default:
+      return 'Invalid bassboost level'
+  }
+
   return `> Set the bassboost level to \`${level}\``
 }

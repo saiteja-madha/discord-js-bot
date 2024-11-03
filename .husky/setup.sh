@@ -14,8 +14,6 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 bun lint-staged
-bun run build
-bun package
 EOF
 
 

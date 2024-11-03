@@ -1,32 +1,38 @@
 const { musicValidations } = require('@helpers/BotUtils')
-const { MUSIC } = require('@src/config.js')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: 'pause',
-  description: 'pause the music player',
+  description: 'Pause the music player',
   category: 'MUSIC',
   validations: musicValidations,
 
   slashCommand: {
-    enabled: MUSIC.ENABLED,
+    enabled: true,
   },
 
   async interactionRun(interaction) {
-    const response = pause(interaction)
+    const response = await pause(interaction)
     await interaction.followUp(response)
   },
 }
 
 /**
- * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
+ * @param {import("discord.js").CommandInteraction} interaction
  */
-function pause({ client, guildId }) {
+async function pause({ client, guildId }) {
   const player = client.musicManager.getPlayer(guildId)
-  if (player.paused) return 'The player is already paused.'
 
-  player.pause(true)
-  return '⏸️ Paused the music player.'
+  if (!player || !player.queue.current) {
+    return '🚫 No song is currently playing'
+  }
+
+  if (player.paused) {
+    return 'The player is already paused'
+  }
+
+  player.pause()
+  return '⏸️ Paused the music player'
 }

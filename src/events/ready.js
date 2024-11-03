@@ -16,8 +16,8 @@ module.exports = async client => {
 
   // Initialize Music Manager
   if (client.config.MUSIC.ENABLED) {
-    client.musicManager.connect(client.user.id)
-    client.logger.success('Music Manager is all set up and ready to play!')
+    client.musicManager.init({ ...client.user, shards: 'auto' })
+    client.logger.success('Music Manager initialized')
   }
 
   // Initialize Giveaways Manager

@@ -1,18 +1,16 @@
 const { musicValidations } = require('@helpers/BotUtils')
 const { ApplicationCommandOptionType } = require('discord.js')
-const { MUSIC } = require('@src/config.js')
 
 /**
  * @type {import("@structures/Command")}
  */
 module.exports = {
   name: 'volume',
-  description: 'set the music player volume',
+  description: 'Set the music player volume',
   category: 'MUSIC',
   validations: musicValidations,
-
   slashCommand: {
-    enabled: MUSIC.ENABLED,
+    enabled: true,
     options: [
       {
         name: 'amount',
@@ -24,8 +22,8 @@ module.exports = {
   },
 
   async interactionRun(interaction) {
-    const amount = interaction.options.getInteger('amount')
-    const response = await volume(interaction, amount)
+    const amount = parseInt(interaction.options.getInteger('amount'))
+    const response = await getVolume(interaction, amount)
     await interaction.followUp(response)
   },
 }
@@ -33,13 +31,20 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-async function volume({ client, guildId }, volume) {
+async function getVolume({ client, guildId }, amount) {
   const player = client.musicManager.getPlayer(guildId)
 
-  if (!volume) return `> The player volume is \`${player.volume}\`.`
-  if (volume < 1 || volume > 100)
-    return 'you need to give me a volume between 1 and 100.'
+  if (!player || !player.queue.current) {
+    return "🚫 There's no music currently playing"
+  }
 
-  await player.setVolume(volume)
-  return `🎶 Music player volume is set to \`${volume}\`.`
+  if (!amount) return `> The player volume is \`${player.volume}\``
+
+  if (isNaN(amount) || amount < 0 || amount > 100) {
+    return 'You need to give me a volume between 0 and 100'
+  }
+
+  // Set the player volume
+  await player.setVolume(amount)
+  return `🎶 Music player volume is set to \`${amount}\``
 }
