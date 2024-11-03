@@ -158,37 +158,25 @@ async function getInviteLeaderboard({ guild }, author, settings) {
 }
 
 async function getRepLeaderboard(author) {
-  // Create a cache key using the user ID and the type of leaderboard
   const cacheKey = `${author.id}:rep`;
-
-  // Check if there is a cached result for this request
-  if (cache.has(cacheKey)) {
-    // Return the cached result if it exists
-    return cache.get(cacheKey);
-  }
+  if (cache.has(cacheKey)) return cache.get(cacheKey);
 
   const lb = await getReputationLb(10);
-  if (lb.length === 0) return "There are no users in the leaderboard";
+  if (lb.length === 0) return "No users found in the Reputation leaderboard.";
 
   let collector = "";
-  let rank = 1;  // Track rank separately to avoid gaps
-
   for (let i = 0; i < lb.length; i++) {
     try {
-      // Try to fetch the user
-      const user = await author.client.users.fetch(lb[i].member_id);
-      collector += `**#${rank}** - ${escapeInlineCode(user.tag)} [${lb[i].rep}]\n`;
-      rank++; // Only increment if the user was found
+      const user = await author.client.users.fetch(lb[i]._id);
+      if (lb[i].reputation && lb[i].reputation.received) {
+        collector += `**#${(i + 1).toString()}** - ${escapeInlineCode(user.tag)} [${lb[i].reputation.received}]\n`;
+      }
     } catch (ex) {
-      // Skip if the user fetch fails (user might be deleted)
-      continue;
+      // Ignore deleted users
     }
   }
 
-  if (!collector) {
-    // No valid users were found in the leaderboard
-    return "No valid users found in the leaderboard.";
-  }
+  if (!collector) return "No valid users found in the Reputation leaderboard.";
 
   const embed = new EmbedBuilder()
     .setAuthor({ name: "Reputation Leaderboard" })
@@ -196,7 +184,6 @@ async function getRepLeaderboard(author) {
     .setDescription(collector)
     .setFooter({ text: `Requested by ${author.tag}` });
 
-  // Store the result in the cache for future requests
   cache.set(cacheKey, { embeds: [embed] });
   return { embeds: [embed] };
 }
