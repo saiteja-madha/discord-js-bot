@@ -142,8 +142,7 @@ credits [here](https://m.do.co/c/c5587212fe39)! 💻
 
 ## 🤝 contributing
 
-special thanks to [@androzz](https://github.com/Androz2091/AtlantaBot) for the
-awesome dashboard! want to help make me even better?
+special thanks to [@saiteja-madha](https://github.com/saiteja-madha) for the original code! want to help make me even better?
 [fork](https://github.com/vixshan/amina/fork) my code, submit a pull request,
 and let’s build this together! check out planned features
 [here](https://github.com/vixshan/amina/projects).

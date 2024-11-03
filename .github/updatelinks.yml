@@ -6,8 +6,11 @@ fileTypes:
   - 'mdx'
   - 'js'
   - 'ts'
-links:
-  - old: 'https://github.com/vixshan/mina'
-    new: 'https://github.com/vixshan/amina'
-# ignore:
-#  - 'https://dont-change-this.com'
+#links:
+#  - old: 'https://github.com/vixshan/mina'
+#    new: 'https://github.com/vixshan/amina'
+githubUrls:
+  - all: 'true'
+ignore:
+  - 'https://github.com/Discordjs/discordjs'
+  - 'https://github.com/saiteja-madha'
