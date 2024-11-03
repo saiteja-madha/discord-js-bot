@@ -1,0 +1,13 @@
+paths:
+  - 'astro'
+  - 'src'
+fileTypes:
+  - 'md'
+  - 'mdx'
+  - 'js'
+  - 'ts'
+links:
+  - old: 'https://github.com/vixshan/amina'
+    new: 'https://github.com/vixshan/mina'
+# ignore:
+#  - 'https://dont-change-this.com'

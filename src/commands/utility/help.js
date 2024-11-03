@@ -274,12 +274,12 @@ function getSlashCategoryEmbeds(client, category, member) {
 
     toAdd = toAdd
       .map(cmd => {
-      // Check if the user has the required permissions for the command
-      if (cmd.userPermissions?.some(perm => !member.permissions.has(perm))) {
-        return null
-      }
+        // Check if the user has the required permissions for the command
+        if (cmd.userPermissions?.some(perm => !member.permissions.has(perm))) {
+          return null
+        }
 
-      return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n`
+        return `\`/${cmd.name}\`\n ❯ **Description**: ${cmd.description}\n`
       })
       .filter(Boolean) // Filter out any null values (commands the user doesn't have perms for)
 

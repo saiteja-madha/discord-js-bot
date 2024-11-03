@@ -4,7 +4,7 @@ node_modules/
 *.log
 *.tar.gz
 .env
-package-lock.json
+bun.lockb
 
 # build output
 astro/dist/

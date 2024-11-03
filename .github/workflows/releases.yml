@@ -1,78 +1,14 @@
-name: Create Major Release
-
+name: Update Repository Links
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'changelog.md'
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  create-release:
+  update-links:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: vixshan/links-updater@v1.0.1
         with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install PyYAML PyGithub
-
-      - name: Parse changelog and create release
-        run: |
-          import re
-          import os
-          from github import Github
-          
-          def parse_changelog(content):
-              versions = re.split(r'# Amina [vV](\d+\.\d+\.\d+)', content)[1:]
-              parsed = []
-              for i in range(0, len(versions), 2):
-                  version = versions[i]
-                  notes = versions[i+1].strip()
-                  parsed.append((version, notes))
-              return parsed
-          
-          def summarize_minor_releases(parsed_changelog, major_version):
-              summary = ""
-              for version, notes in parsed_changelog:
-                  if version.startswith(f"{major_version}."):
-                      summary += f"## v{version}\n\n{notes}\n\n"
-              return summary
-          
-          with open('changelog.md', 'r') as f:
-              content = f.read()
-          
-          parsed_changelog = parse_changelog(content)
-          latest_version = parsed_changelog[0][0]
-          major_version = latest_version.split('.')[0]
-          
-          if latest_version.endswith('.0.0'):  # It's a major release
-              release_notes = f"# Amina v{latest_version}\n\n"
-              release_notes += parsed_changelog[0][1] + "\n\n"
-              release_notes += "## Summary of Previous Minor Releases\n\n"
-              release_notes += summarize_minor_releases(parsed_changelog[1:], str(int(major_version)-1))
-              
-              github = Github(os.environ['GH_TOKEN'])
-              repo = github.get_repo(os.environ['GITHUB_REPOSITORY'])
-              repo.create_git_release(
-                  f"v{latest_version}",
-                  f"Amina v{latest_version}",
-                  release_notes,
-                  draft=False,
-                  prerelease=False
-              )
-              print(f"Created release for v{latest_version}")
-          else:
-              print(f"No major release needed. Current version: v{latest_version}")
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          token: ${{ secrets.GH_TOKEN }}
