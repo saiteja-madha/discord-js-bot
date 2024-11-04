@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: vixshan/links-updater@v1.0.2
+      - uses: vixshan/linkapp@v1.0.2-alpha.1
         with:
           token: ${{ secrets.GH_TOKEN }}
+          create-pr: 'true'  # Optional, defaults to false

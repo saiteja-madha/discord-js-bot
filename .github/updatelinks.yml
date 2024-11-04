@@ -16,3 +16,5 @@ githubUrls:
 ignore:
   - 'https://github.com/Discordjs/discordjs'
   - 'https://github.com/saiteja-madha'
+  - 'https://github.com/lavalink-devs/Lavalink'
+  - 'https://github.com/Androz2091/discord-invites-tracker'
