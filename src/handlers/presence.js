@@ -1,10 +1,13 @@
 const { ActivityType } = require("discord.js");
 
+let messageIndex = 0;
+
 /**
  * @param {import('@src/structures').BotClient} client
  */
 function updatePresence(client) {
-  let message = client.config.PRESENCE.MESSAGE;
+  let messages = client.config.PRESENCE.MESSAGE;
+  let message = Array.isArray(messages) ? messages[messageIndex] : messages;
 
   if (message.includes("{servers}")) {
     message = message.replaceAll("{servers}", client.guilds.cache.size);
@@ -55,6 +58,10 @@ function updatePresence(client) {
         },
       ],
     });
+  }
+
+  if (Array.isArray(messages)) {
+    messageIndex = (messageIndex + 1) % messages.length;
   }
 }
 
