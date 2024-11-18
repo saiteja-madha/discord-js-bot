@@ -1,5 +1,4 @@
 const { musicValidations } = require("@helpers/BotUtils");
-const { LoopType } = require("@lavaclient/queue");
 const { ApplicationCommandOptionType } = require("discord.js");
 
 /**
@@ -12,8 +11,9 @@ module.exports = {
   validations: musicValidations,
   command: {
     enabled: true,
+    aliases: ["lp"],
     minArgsCount: 1,
-    usage: "<queue|track>",
+    usage: "<queue|track|off>",
   },
   slashCommand: {
     enabled: true,
@@ -21,17 +21,12 @@ module.exports = {
       {
         name: "type",
         type: ApplicationCommandOptionType.String,
-        description: "The entity you want to loop",
+        description: "Select loop type",
         required: false,
         choices: [
-          {
-            name: "queue",
-            value: "queue",
-          },
-          {
-            name: "track",
-            value: "track",
-          },
+          { name: "Track", value: "track" },
+          { name: "Queue", value: "queue" },
+          { name: "Off", value: "off" },
         ],
       },
     ],
@@ -39,34 +34,47 @@ module.exports = {
 
   async messageRun(message, args) {
     const input = args[0].toLowerCase();
-    const type = input === "queue" ? "queue" : "track";
-    const response = toggleLoop(message, type);
+    const type = input === "queue" ? "queue" : input === "track" ? "track" : "off";
+    const response = await toggleLoop(message, type);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
     const type = interaction.options.getString("type") || "track";
-    const response = toggleLoop(interaction, type);
+    const response = await toggleLoop(interaction, type);
     await interaction.followUp(response);
   },
 };
 
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
- * @param {"queue"|"track"} type
+ * @param {"queue"|"track"|"off"} type
  */
-function toggleLoop({ client, guildId }, type) {
+async function toggleLoop({ client, guildId }, type) {
   const player = client.musicManager.getPlayer(guildId);
 
-  // track
-  if (type === "track") {
-    player.queue.setLoop(LoopType.Song);
-    return "Loop mode is set to `track`";
+  if (!player || !player.queue.current) {
+    return "🚫 No song is currently playing";
   }
 
-  // queue
-  else if (type === "queue") {
-    player.queue.setLoop(1);
-    return "Loop mode is set to `queue`";
+  switch (type) {
+    case "track":
+      player.setRepeatMode("track");
+      return "Loop mode is set to `track`";
+
+    case "queue":
+      if (player.queue.tracks.length > 1) {
+        player.setRepeatMode("queue");
+        return "Loop mode is set to `queue`";
+      } else {
+        return "🚫 Queue is too short to be looped";
+      }
+
+    case "off":
+      player.setRepeatMode("off");
+      return "Loop mode is disabled";
+
+    default:
+      return "Invalid loop type";
   }
 }

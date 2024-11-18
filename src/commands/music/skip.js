@@ -5,24 +5,24 @@ const { musicValidations } = require("@helpers/BotUtils");
  */
 module.exports = {
   name: "skip",
-  description: "skip the current song",
+  description: "Skip the current song",
   category: "MUSIC",
   validations: musicValidations,
   command: {
     enabled: true,
-    aliases: ["next"],
+    aliases: ["next", "s"],
   },
   slashCommand: {
     enabled: true,
   },
 
   async messageRun(message, args) {
-    const response = skip(message);
+    const response = await skip(message);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
-    const response = skip(interaction);
+    const response = await skip(interaction);
     await interaction.followUp(response);
   },
 };
@@ -30,12 +30,19 @@ module.exports = {
 /**
  * @param {import("discord.js").CommandInteraction|import("discord.js").Message} arg0
  */
-function skip({ client, guildId }) {
+async function skip({ client, guildId }) {
   const player = client.musicManager.getPlayer(guildId);
 
-  // check if current song is playing
-  if (!player.queue.current) return "⏯️ There is no song currently being played";
+  if (!player || !player.queue.current) {
+    return "🚫 There's no music currently playing";
+  }
 
-  const { title } = player.queue.current;
-  return player.queue.next() ? `⏯️ ${title} was skipped.` : "⏯️ There is no song to skip.";
+  const title = player.queue.current.info.title;
+
+  if (player.queue.tracks.length === 0) {
+    return "There is no next song to skip to";
+  }
+
+  await player.skip();
+  return `⏯️ ${title} was skipped`;
 }

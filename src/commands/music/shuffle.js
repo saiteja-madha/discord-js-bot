@@ -31,6 +31,15 @@ module.exports = {
  */
 function shuffle({ client, guildId }) {
   const player = client.musicManager.getPlayer(guildId);
+
+  if (!player || !player.queue.curren) {
+    return "🚫 There's no music currently playing";
+  }
+
+  if (player.queue.tracks.length < 2) {
+    return "🚫 Not enough tracks to shuffle";
+  }
+
   player.queue.shuffle();
   return "🎶 Queue has been shuffled";
 }
