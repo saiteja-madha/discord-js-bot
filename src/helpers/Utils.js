@@ -140,13 +140,17 @@ module.exports = class Utils {
    * @returns {string} - Formatted time string
    */
   static formatTime(ms) {
-    return ms < 1000 ? `${ms / 1000}s` :
-      ["d", "h", "m", "s"].map((unit, i) => {
-        const value = [864e5, 36e5, 6e4, 1e3][i];
-        const amount = Math.floor(ms / value);
-        ms %= value;
-        return amount ? `${amount}${unit}` : null;
-      }).filter(x => x !== null).join(" ") || "0s";
+    return ms < 1000
+      ? `${ms / 1000}s`
+      : ["d", "h", "m", "s"]
+          .map((unit, i) => {
+            const value = [864e5, 36e5, 6e4, 1e3][i];
+            const amount = Math.floor(ms / value);
+            ms %= value;
+            return amount ? `${amount}${unit}` : null;
+          })
+          .filter((x) => x !== null)
+          .join(" ") || "0s";
   }
 
   /**

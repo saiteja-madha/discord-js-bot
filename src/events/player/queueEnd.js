@@ -4,12 +4,9 @@ const { EmbedBuilder } = require("discord.js");
 module.exports = async (client, player) => {
   const guild = client.guilds.cache.get(player.guildId);
   if (!guild) return;
-    
+
   if (player.voiceChannelId) {
-    await client.utils.setVoiceStatus(
-      client, player.voiceChannelId,
-      "Silence? Use /play to start the beat!"
-    );
+    await client.utils.setVoiceStatus(client, player.voiceChannelId, "Silence? Use /play to start the beat!");
   }
 
   if (player.volume > 100) {
@@ -29,7 +26,9 @@ module.exports = async (client, player) => {
           new EmbedBuilder()
             .setColor(EMBED_COLORS.BOT_EMBED)
             .setTitle("Queue Concluded")
-            .setDescription(`Enjoying music with me? Consider [voting](https://top.gg/bot/${client.user?.id}/vote) for me!`),
+            .setDescription(
+              `Enjoying music with me? Consider [voting](https://top.gg/bot/${client.user?.id}/vote) for me!`
+            ),
         ],
       },
       10

@@ -1,4 +1,3 @@
-
 const {
   EmbedBuilder,
   ActionRowBuilder,
@@ -78,11 +77,7 @@ async function search({ member, guild, channel }, query) {
 
   if (!res || !res.tracks?.length) {
     return {
-      embeds: [
-        new EmbedBuilder()
-          .setColor(EMBED_COLORS.ERROR)
-          .setDescription(`No results found for \`${query}\``),
-      ],
+      embeds: [new EmbedBuilder().setColor(EMBED_COLORS.ERROR).setDescription(`No results found for \`${query}\``)],
     };
   }
 
@@ -144,7 +139,6 @@ async function search({ member, guild, channel }, query) {
     }
 
     return { embeds: [trackEmbed] };
-
   } catch (err) {
     console.error("Error handling response:", err);
     await searchMessage.delete();

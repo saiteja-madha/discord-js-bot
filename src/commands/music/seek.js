@@ -26,26 +26,18 @@ module.exports = {
   },
 
   async messageRun(message, args) {
-    const time = message.client.utils.parseTime(
-      args.join(" ")
-    );
+    const time = message.client.utils.parseTime(args.join(" "));
     if (!time) {
-      return await message.safeReply(
-        "Invalid time format. Use 10s, 1m 50s, 1h"
-      );
+      return await message.safeReply("Invalid time format. Use 10s, 1m 50s, 1h");
     }
     const response = await seekTo(message, time);
     await message.safeReply(response);
   },
 
   async interactionRun(interaction) {
-    const time = interaction.client.utils.parseTime(
-      interaction.options.getString("time")
-    );
+    const time = interaction.client.utils.parseTime(interaction.options.getString("time"));
     if (!time) {
-      return await interaction.followUp(
-        "Invalid time format. Use 10s, 1m 50s, 1h"
-      );
+      return await interaction.followUp("Invalid time format. Use 10s, 1m 50s, 1h");
     }
     const response = await seekTo(interaction, time);
     await interaction.followUp(response);

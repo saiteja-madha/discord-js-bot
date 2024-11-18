@@ -48,7 +48,7 @@ async function play({ member, guild, channel }, searchQuery) {
   if (!member.voice.channel) return "🚫 You need to join a voice channel first";
 
   let player = guild.client.musicManager.getPlayer(guild.id);
-  
+
   if (player && member.voice.channel !== guild.members.me.voice.channel) {
     return "🚫 You must be in the same voice channel as mine";
   }
@@ -78,7 +78,7 @@ async function play({ member, guild, channel }, searchQuery) {
         guild.client.logger.error("Search Exception", res.exception);
         return "🚫 There was an error while searching";
 
-      case "playlist":
+      case "playlist": {
         player.queue.add(res.tracks);
 
         const playlistEmbed = new EmbedBuilder()
@@ -90,19 +90,21 @@ async function play({ member, guild, channel }, searchQuery) {
             { name: "Enqueued", value: `${res.tracks.length} songs`, inline: true },
             {
               name: "Playlist duration",
-              value: "`" + guild.client.utils.formatTime(
-                res.tracks.map((t) => t.info.duration).reduce((a, b) => a + b, 0),
-              ) + "`",
+              value:
+                "`" +
+                guild.client.utils.formatTime(res.tracks.map((t) => t.info.duration).reduce((a, b) => a + b, 0)) +
+                "`",
               inline: true,
             }
           )
           .setFooter({ text: `Requested By: ${member.user.username}` });
 
-        if (!player.playing && player.queue.tracks.length > 0) { 
+        if (!player.playing && player.queue.tracks.length > 0) {
           await player.play({ paused: false });
         }
 
         return { embeds: [playlistEmbed] };
+      }
 
       case "track":
       case "search": {
@@ -129,7 +131,7 @@ async function play({ member, guild, channel }, searchQuery) {
           });
         }
 
-        if (!player.playing && player.queue.tracks.length > 0) { 
+        if (!player.playing && player.queue.tracks.length > 0) {
           await player.play({ paused: false });
         }
 

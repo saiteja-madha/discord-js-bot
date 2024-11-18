@@ -10,7 +10,7 @@ module.exports = {
   validations: musicValidations,
   command: {
     enabled: true,
-    aliases: ["disconnect"],
+    aliases: ["dc"],
     minArgsCount: 0,
     usage: "",
   },
@@ -35,7 +35,7 @@ module.exports = {
  */
 async function leave({ client, guildId, member }) {
   const player = client.musicManager.getPlayer(guildId);
-    
+
   player.destroy();
   return "👋 Disconnected from the voice channel";
 }

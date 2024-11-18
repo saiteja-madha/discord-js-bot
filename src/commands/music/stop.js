@@ -42,6 +42,6 @@ async function stop({ client, guildId }) {
   }
 
   player.stopPlaying(true, false);
-  
+
   return "🎶 The music player is stopped, and the queue has been cleared";
 }

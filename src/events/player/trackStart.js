@@ -15,35 +15,21 @@ module.exports = async (client, player, track) => {
   }
 
   if (player.voiceChannelId) {
-    await client.utils.setVoiceStatus(client, player.voiceChannelId, `Paying: **${track.info.title}**`
-    );
+    await client.utils.setVoiceStatus(client, player.voiceChannelId, `Paying: **${track.info.title}**`);
   }
 
   const previous = await player.queue.shiftPrevious();
 
   const row = (player) =>
     new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId("previous")
-        .setEmoji("⏪")
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(!previous),
+      new ButtonBuilder().setCustomId("previous").setEmoji("⏪").setStyle(ButtonStyle.Secondary).setDisabled(!previous),
       new ButtonBuilder()
         .setCustomId("pause")
         .setEmoji(player.paused ? "▶️" : "⏸️")
         .setStyle(player.paused ? ButtonStyle.Success : ButtonStyle.Secondary),
-      new ButtonBuilder()
-        .setCustomId("stop")
-        .setEmoji("⏹️")
-        .setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder()
-        .setCustomId("skip")
-        .setEmoji("⏩")
-        .setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder()
-        .setCustomId("shuffle")
-        .setEmoji("🔀")
-        .setStyle(ButtonStyle.Secondary)
+      new ButtonBuilder().setCustomId("stop").setEmoji("⏹️").setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId("skip").setEmoji("⏩").setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId("shuffle").setEmoji("🔀").setStyle(ButtonStyle.Secondary)
     );
 
   const msg = await channel.safeSend({
@@ -57,9 +43,13 @@ module.exports = async (client, player, track) => {
           text: `Requested by: ${track.requester.username}`,
         })
         .addFields(
-          { name: "Duration", value: track.info.isStream ? "Live" : client.utils.formatTime(track.info.duration), inline: true },
+          {
+            name: "Duration",
+            value: track.info.isStream ? "Live" : client.utils.formatTime(track.info.duration),
+            inline: true,
+          },
           { name: "Author", value: track.info.author || "Unknown", inline: true }
-        )
+        ),
     ],
     components: [row(player)],
   });
@@ -75,7 +65,7 @@ module.exports = async (client, player, track) => {
 
   collector.on("collect", async (int) => {
     if (!int.isButton()) return;
-      
+
     await int.deferReply({ ephemeral: true });
     let description;
 
@@ -114,7 +104,7 @@ module.exports = async (client, player, track) => {
           description = "The queue has been shuffled!";
         }
         break;
-      }
+    }
     await int.followUp({
       embeds: [new EmbedBuilder().setDescription(description).setColor(EMBED_COLORS.BOT_EMBED)],
     });

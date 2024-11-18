@@ -34,14 +34,12 @@ module.exports = {
  */
 function nowPlaying({ client, guildId }) {
   const player = client.musicManager.getPlayer(guildId);
-  if (!player || !player.queue.current) { 
+  if (!player || !player.queue.current) {
     return "🚫 No music is being played!";
   }
 
   const track = player.queue.current;
-  const end = track.info.duration > 6.048e8
-    ? "🔴 LIVE"
-    : client.utils.formatTime(track.info.duration);
+  const end = track.info.duration > 6.048e8 ? "🔴 LIVE" : client.utils.formatTime(track.info.duration);
 
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
@@ -61,13 +59,9 @@ function nowPlaying({ client, guildId }) {
       {
         name: "\u200b",
         value:
-          client.utils.formatTime(player.position) + 
+          client.utils.formatTime(player.position) +
           " [" +
-          splitBar(
-            track.info.duration > 6.048e8 ? player.position : track.info.duration,
-            player.position,
-            15
-          )[0] +
+          splitBar(track.info.duration > 6.048e8 ? player.position : track.info.duration, player.position, 15)[0] +
           "] " +
           end,
         inline: false,

@@ -31,11 +31,11 @@ module.exports = {
  */
 async function pause({ client, guildId }) {
   const player = client.musicManager.getPlayer(guildId);
-  
+
   if (!player || !player.queue.current) {
     return "🚫 No song is currently playing";
   }
-  
+
   if (player.paused) {
     return "The player is already paused";
   }

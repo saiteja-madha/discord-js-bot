@@ -73,7 +73,7 @@ module.exports = class BotClient extends Client {
 
     // Database
     this.database = schemas;
-      
+
     // Utils
     this.utils = require("../helpers/Utils");
 

@@ -35,17 +35,16 @@ module.exports = {
     const res = await player.search({ query: url, source: source }, track.requester);
 
     if (!res || res.tracks.length === 0) {
-      await channel.safeSend({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(EMBED_COLORS.WARNING)
-            .setDescription("> Autoplay, No results found"),
-        ],
-      }, 10);
+      await channel.safeSend(
+        {
+          embeds: [new EmbedBuilder().setColor(EMBED_COLORS.WARNING).setDescription("> Autoplay, No results found")],
+        },
+        10
+      );
       return player.destroy();
     }
 
-    for (let songs = 0; songs < 3;) {
+    for (let songs = 0; songs < 3; ) {
       const chosen = res.tracks[Math.floor(Math.random() * res.tracks.length)];
 
       if (
@@ -58,13 +57,14 @@ module.exports = {
     }
 
     if (player.queue.tracks.length === 0) {
-      await channel?.safeSend({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(EMBED_COLORS.WARNING)
-            .setDescription("> Autoplay, No unique track found"),
-        ],
-      }, 10);
+      await channel?.safeSend(
+        {
+          embeds: [
+            new EmbedBuilder().setColor(EMBED_COLORS.WARNING).setDescription("> Autoplay, No unique track found"),
+          ],
+        },
+        10
+      );
       return player.destroy();
     }
   },

@@ -25,7 +25,7 @@ class Manager extends LavalinkManager {
     this.nodeManager.on("connect", (node) => {
       client.logger.success(`Lavalink node ${node.id} connected!`);
     });
-      
+
     this.nodeManager.on("disconnect", (node, reason) => {
       client.logger.warn(`Lavalink node "${node.id}" disconnected. Reason: ${JSON.stringify(reason)}`);
     });

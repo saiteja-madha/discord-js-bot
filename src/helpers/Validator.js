@@ -47,8 +47,12 @@ module.exports = class Validator {
       if (config.MUSIC.LAVALINK_NODES.length == 0) {
         warn("config.js: There must be at least one node for Lavalink");
       }
-      if (!["ytsearch", "ytmsearch", "scsearch", "spsearch", "dzsearch", "jssearch"].includes(config.MUSIC.DEFAULT_SOURCE)) {
-        warn("config.js: MUSIC.DEFAULT_SOURCE must be either ytsearch, ytmsearch, scsearch, spsearch, dzsearch or jssearch");
+      if (
+        !["ytsearch", "ytmsearch", "scsearch", "spsearch", "dzsearch", "jssearch"].includes(config.MUSIC.DEFAULT_SOURCE)
+      ) {
+        warn(
+          "config.js: MUSIC.DEFAULT_SOURCE must be either ytsearch, ytmsearch, scsearch, spsearch, dzsearch or jssearch"
+        );
       }
     }
 
