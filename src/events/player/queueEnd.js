@@ -22,14 +22,7 @@ module.exports = async (client, player) => {
   if (channel) {
     await channel.safeSend(
       {
-        embeds: [
-          new EmbedBuilder()
-            .setColor(EMBED_COLORS.BOT_EMBED)
-            .setTitle("Queue Concluded")
-            .setDescription(
-              `Enjoying music with me? Consider [voting](https://top.gg/bot/${client.user?.id}/vote) for me!`
-            ),
-        ],
+        embeds: [new EmbedBuilder().setColor(EMBED_COLORS.BOT_EMBED).setDescription("Queue has ended.")],
       },
       10
     );
