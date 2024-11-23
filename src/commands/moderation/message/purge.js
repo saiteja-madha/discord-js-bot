@@ -22,7 +22,7 @@ module.exports = {
     if (parseInt(amount) > 99) return message.safeReply("The max amount of messages that I can delete is 99");
 
     const { channel } = message;
-    const response = await purgeMessages(message.member, channel, "ALL", amount);
+    const response = await purgeMessages(message.member, channel, "ALL", amount + 1);
 
     if (typeof response === "number") {
       return channel.safeSend(`Successfully deleted ${response} messages`, 5);
