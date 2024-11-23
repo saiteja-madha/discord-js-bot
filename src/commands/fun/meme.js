@@ -142,4 +142,4 @@ async function getRandomEmbed(choice) {
     .setImage(memeImage)
     .setColor("Random")
     .setFooter({ text: `👍 ${memeUpvotes}` });
- }
+}

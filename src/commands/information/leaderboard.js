@@ -79,7 +79,6 @@ module.exports = {
 };
 
 async function getXpLeaderboard({ guild }, author, settings) {
-
   if (!settings.stats.enabled) return "The leaderboard is disabled on this server";
 
   const lb = await getXpLb(guild.id, 10);
@@ -105,7 +104,6 @@ async function getXpLeaderboard({ guild }, author, settings) {
 }
 
 async function getInviteLeaderboard({ guild }, author, settings) {
-
   if (!settings.invite.tracking) return "Invite tracking is disabled on this server";
 
   const lb = await getInvitesLb(guild.id, 10);
@@ -130,12 +128,11 @@ async function getInviteLeaderboard({ guild }, author, settings) {
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setDescription(collector)
     .setFooter({ text: `Requested by ${author.tag}` });
-  
+
   return { embeds: [embed] };
 }
 
 async function getRepLeaderboard(author) {
-
   const lb = await getReputationLb(10);
   if (lb.length === 0) return "There are no users in the leaderboard";
 
