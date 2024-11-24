@@ -41,14 +41,14 @@ module.exports = {
     // check user permissions
     if (cmd.userPermissions && cmd.userPermissions?.length > 0) {
       if (!message.channel.permissionsFor(message.member).has(cmd.userPermissions)) {
-        return message.safeReply(`You need ${parsePermissions(cmd.userPermissions)} for this command`);
+        return message.safeReply(`You need ${parsePermissions(cmd.userPermissions)} for use this command`);
       }
     }
 
     // check bot permissions
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
       if (!message.channel.permissionsFor(message.guild.members.me).has(cmd.botPermissions)) {
-        return message.safeReply(`I need ${parsePermissions(cmd.botPermissions)} for this command`);
+        return message.safeReply(`I need ${parsePermissions(cmd.botPermissions)} for use this command`);
       }
     }
 
@@ -107,7 +107,7 @@ module.exports = {
     if (interaction.member && cmd.userPermissions?.length > 0) {
       if (!interaction.member.permissions.has(cmd.userPermissions)) {
         return interaction.reply({
-          content: `You need ${parsePermissions(cmd.userPermissions)} for this command`,
+          content: `You need ${parsePermissions(cmd.userPermissions)} for use this command`,
           ephemeral: true,
         });
       }
@@ -117,7 +117,7 @@ module.exports = {
     if (cmd.botPermissions && cmd.botPermissions.length > 0) {
       if (!interaction.guild.members.me.permissions.has(cmd.botPermissions)) {
         return interaction.reply({
-          content: `I need ${parsePermissions(cmd.botPermissions)} for this command`,
+          content: `I need ${parsePermissions(cmd.botPermissions)} for use this command`,
           ephemeral: true,
         });
       }
