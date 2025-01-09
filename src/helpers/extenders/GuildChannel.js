@@ -14,9 +14,11 @@ GuildChannel.prototype.canSendEmbeds = function () {
  */
 GuildChannel.prototype.safeSend = async function (content, seconds) {
   if (!content) return;
-  if (!this.type === ChannelType.GuildText && !this.type === ChannelType.DM) return;
+  if (this.type !== ChannelType.GuildText && this.type !== ChannelType.DM && this.type !== ChannelType.GuildVoice) return;
 
   const perms = ["ViewChannel", "SendMessages"];
+  if (this.type === ChannelType.GuildVoice) perms.push("Connect");
+
   if (content.embeds && content.embeds.length > 0) perms.push("EmbedLinks");
   if (!this.permissionsFor(this.guild.members.me).has(perms)) return;
 
