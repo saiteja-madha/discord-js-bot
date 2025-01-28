@@ -26,7 +26,7 @@
   "dependencies": {
     "@lavaclient/queue": "^2.1.1",
     "@lavaclient/spotify": "^3.1.0",
-    "@vitalets/google-translate-api": "^9.2.0",
+    "@vitalets/google-translate-api": "^9.2.1",
     "ascii-table": "0.0.9",
     "btoa": "^1.2.1",
     "common-tags": "^1.8.2",
@@ -34,18 +34,18 @@
     "country-emoji-languages": "^1.0.1",
     "discord-giveaways": "^6.0.1",
     "discord-together": "^1.3.31",
-    "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "enhanced-ms": "^2.3.0",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "express-session": "^1.18.1",
     "fixedsize-map": "^1.1.0",
-    "iso-639-1": "^3.1.3",
+    "iso-639-1": "^3.1.4",
     "lavaclient": "^4.1.1",
     "module-alias": "^2.2.3",
     "moment": "^2.30.1",
-    "mongoose": "^8.8.0",
+    "mongoose": "^8.9.5",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.7.0",
     "os": "^0.1.2",
@@ -55,12 +55,12 @@
     "snakecord": "^1.0.9",
     "sourcebin_js": "^0.0.3-ignore",
     "string-progressbar": "^1.0.4",
-    "table": "^6.8.2",
+    "table": "^6.9.0",
     "timestamp-to-date": "^1.1.0",
     "twemoji-parser": "^14.0.0"
   },
   "optionalDependencies": {
-    "bufferutil": "^4.0.8",
+    "bufferutil": "^4.0.9",
     "erlpack": "^0.1.4",
     "utf-8-validate": "^6.0.5",
     "zlib-sync": "^0.1.9"
@@ -68,9 +68,9 @@
   "devDependencies": {
     "eslint": "^8.57.1",
     "eslint-plugin-jsdoc": "^46.10.1",
-    "node": "^18.20.4",
-    "nodemon": "^3.1.7",
-    "prettier": "3.3.3"
+    "node": "^18.20.6",
+    "nodemon": "^3.1.9",
+    "prettier": "3.4.2"
   },
   "keywords": [
     "discord",
