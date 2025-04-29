@@ -92,9 +92,13 @@ module.exports = {
 
     // user
     if (sub === "user") {
-      let targetUser = interaction.options.getUser("name") || interaction.user;
-      let target = await interaction.guild.members.fetch(targetUser);
-      response = user(target);
+      try {
+        let targetUser = interaction.options.getUser("name") || interaction.user;
+        let target = await interaction.guild.members.fetch(targetUser);
+        response = user(target);
+      } catch (e) {
+        response = "It appears that the user is either invalid or not a member of this server.";
+      }
     }
 
     // channel

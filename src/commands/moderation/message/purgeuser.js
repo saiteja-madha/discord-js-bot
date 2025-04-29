@@ -27,7 +27,7 @@ module.exports = {
     }
 
     const { channel } = message;
-    const response = await purgeMessages(message.member, message.channel, "USER", amount, target);
+    const response = await purgeMessages(message.member, message.channel, "USER", amount, target.id);
 
     if (typeof response === "number") {
       return channel.safeSend(`Successfully deleted ${response} messages`, 5);

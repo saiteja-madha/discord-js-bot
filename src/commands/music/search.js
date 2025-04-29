@@ -154,7 +154,7 @@ async function search({ member, guild, channel }, query) {
 
       const results = res.tracks.slice(0, max);
       const options = results.map((result, index) => ({
-        label: result.info.title,
+        label: result.info.title.length > 100 ? result.info.title.slice(0, 97) + "..." : result.info.title, // Truncate title
         value: index.toString(),
       }));
 
