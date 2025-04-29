@@ -125,7 +125,7 @@ If you need any additional help, make sure to read our guides [here](docs/additi
 
 ### ⭐ **Anime Content:**
 
-- **Love Anime? Express You Love To Someone Using The React Commands** <br /> _Commands:_ `react`, `hug`, `kiss`, `cuddle`, `pat`, `poke`, `slap`, `smug`, ...
+- **Love Anime? Express Your Love To Someone Using The React Commands** <br /> _Commands:_ `react`, `hug`, `kiss`, `cuddle`, `pat`, `poke`, `slap`, `smug`, ...
 
 ### 🪙 **Economy System:**
 
