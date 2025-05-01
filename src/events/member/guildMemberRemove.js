@@ -1,6 +1,7 @@
 const { inviteHandler, greetingHandler } = require("@src/handlers");
 const { getSettings } = require("@schemas/Guild");
-
+const { AuditLogEvent } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 /**
  * @param {import('@src/structures').BotClient} client
  * @param {import('discord.js').GuildMember|import('discord.js').PartialGuildMember} member
@@ -26,4 +27,20 @@ module.exports = async (client, member) => {
 
   // Farewell message
   greetingHandler.sendFarewell(member, inviterData);
+
+  // Check if member was kicked, not needed for ban since it has its event
+  const log = await member.guild.fetchAuditLogs({ limit: 5 });
+  const possibleLog = log.entries.find((e) => e.action === AuditLogEvent.MemberKick && e.targetId === member.id);
+  if (possibleLog) {
+    if (settings.logging?.members) return;
+    const logChannel = client.channels.cache.get(settings.logging.members);
+    const embed = new EmbedBuilder()
+      .setAuthor({ name: "Member kicked" })
+      .setColor("Red")
+      .setTitle(`${member.displayName} (\`${member.id}\` was kicked.)`)
+      .setDescription(`Reason: ${possibleLog.reason || "none"}`)
+      .setTimestamp()
+      .setFooter({ text: `ID: ${member.id} | Executor: ${possibleLog.executor.username}` })
+    await logChannel.send({ embeds: [embed] })
+  }
 };

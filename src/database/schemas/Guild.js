@@ -60,6 +60,16 @@ const Schema = new mongoose.Schema({
     enabled: Boolean,
   },
   modlog_channel: String,
+  logging: {
+    messages: String,
+    channels: String,
+    emojis: String,
+    members: String,
+    roles: String,
+    bans: String,
+    invites: String,
+    voice: String,
+  },
   max_warn: {
     action: {
       type: String,
@@ -132,7 +142,7 @@ module.exports = {
           const userDb = await getUser(owner);
           await userDb.save();
         })
-        .catch((ex) => {});
+        .catch((ex) => { });
 
       // create a new guild model
       guildData = new Model({
