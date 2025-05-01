@@ -18,7 +18,6 @@ const { error } = require("@helpers/Logger");
 
 const OPEN_PERMS = ["ManageChannels"];
 const CLOSE_PERMS = ["ManageChannels", "ReadMessageHistory"];
-
 /**
  * @param {import('discord.js').Channel} channel
  */
@@ -76,7 +75,7 @@ async function closeTicket(channel, closedBy, reason) {
 
     let content = "";
     reversed.forEach((m) => {
-      content += `[${new Date(m.createdAt).toLocaleString("en-US")}] - ${m.author.username}\n`;
+      content += `[${new Date(m.createdAt).toLocaleString("en-US")}] - ${m.author.tag}\n`;
       if (m.cleanContent !== "") content += `${m.cleanContent}\n`;
       if (m.attachments.size > 0) content += `${m.attachments.map((att) => att.proxyURL).join(", ")}\n`;
       content += "\n";
@@ -96,19 +95,19 @@ async function closeTicket(channel, closedBy, reason) {
 
     if (channel.deletable) await channel.delete();
 
-    const embed = new EmbedBuilder().setAuthor({ name: "Ticket Closed" }).setColor(TICKET.CLOSE_EMBED);
+    const embed = new EmbedBuilder().setAuthor({ name: "Ticket Closed & deleted" }).setColor(TICKET.CLOSE_EMBED);
     const fields = [];
 
     if (reason) fields.push({ name: "Reason", value: reason, inline: false });
     fields.push(
       {
         name: "Opened By",
-        value: ticketDetails.user ? ticketDetails.user.username : "Unknown",
+        value: ticketDetails.user ? ticketDetails.user.tag : "Unknown",
         inline: true,
       },
       {
         name: "Closed By",
-        value: closedBy ? closedBy.username : "Unknown",
+        value: closedBy ? closedBy.tag : "Unknown",
         inline: true,
       }
     );
@@ -207,20 +206,34 @@ async function handleTicketOpen(interaction) {
 
   try {
     const ticketNumber = (existing + 1).toString();
-    const permissionOverwrites = [
-      {
-        id: guild.roles.everyone,
-        deny: ["ViewChannel"],
-      },
-      {
-        id: user.id,
-        allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
-      },
-      {
-        id: guild.members.me.roles.highest.id,
-        allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
-      },
-    ];
+const permissionOverwrites = [
+  {
+    id: guild.roles.everyone.id,
+    deny: ["ViewChannel"],
+  },
+  {
+    id: user.id,
+    allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
+  },
+];
+
+// Get staff roles from settings
+const staffRoles = settings.ticket?.staff_roles || [];
+
+
+// Loop through each staff role ID
+staffRoles.forEach(roleId => {
+  const role = guild.roles.cache.get(roleId);
+  if (role) {
+    permissionOverwrites.push({
+      id: role.id,
+      allow: ["ViewChannel", "SendMessages", "ReadMessageHistory"],
+    });
+  }
+});
+
+
+
 
     if (catPerms?.length > 0) {
       catPerms?.forEach((roleId) => {
@@ -233,18 +246,22 @@ async function handleTicketOpen(interaction) {
       });
     }
 
+    const username = interaction.user.username;
+
     const tktChannel = await guild.channels.create({
-      name: `tіcket-${ticketNumber}`,
+      name: `${username}-${ticketNumber}`,
       type: ChannelType.GuildText,
-      topic: `tіcket|${user.id}|${catName || "Default"}`,
+      topic: `${username}|${user.id}|${catName || "Default"}`,
       permissionOverwrites,
     });
 
+
+const staffRolesPing = staffRoles.map(roleId => `<@&${roleId}>`).join(' ');
     const embed = new EmbedBuilder()
       .setAuthor({ name: `Ticket #${ticketNumber}` })
       .setDescription(
         `Hello ${user.toString()}
-        Support will be with you shortly
+        ${staffRolesPing} will be with you shortly 
         ${catName ? `\n**Category:** ${catName}` : ""}
         `
       )
@@ -252,13 +269,20 @@ async function handleTicketOpen(interaction) {
 
     let buttonsRow = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
-        .setLabel("Close Ticket")
+        .setLabel("Close & delete Ticket")
         .setCustomId("TICKET_CLOSE")
         .setEmoji("🔒")
         .setStyle(ButtonStyle.Primary)
     );
-
-    const sent = await tktChannel.send({ content: user.toString(), embeds: [embed], components: [buttonsRow] });
+     // Ping staff roles if present
+     if (staffRoles.length > 0) {
+       const staffRolesPing = staffRoles.map(roleId => `<@&${roleId}>`).join(' ');
+       const messageContent = `**New ticket**\n${staffRolesPing}`;
+       await tktChannel.send({ content: messageContent, allowedMentions: { parse: ["everyone", "roles", "users"] } });
+     } else {
+       await tktChannel.send("**New ticket**");
+     }
+    const sent = await tktChannel.send({ content: user.toString(), embeds: [embed], components: [buttonsRow],   allowedMentions: { parse: ["users"] } });
 
     const dmEmbed = new EmbedBuilder()
       .setColor(TICKET.CREATE_EMBED)
@@ -276,7 +300,7 @@ async function handleTicketOpen(interaction) {
 
     user.send({ embeds: [dmEmbed], components: [row] }).catch((ex) => {});
 
-    await interaction.editReply(`Ticket created! 🔥`);
+    await interaction.editReply(`💯 Ticket created! in\n${tktChannel}`);
   } catch (ex) {
     error("handleTicketOpen", ex);
     return interaction.editReply("Failed to create ticket channel, an error occurred!");
