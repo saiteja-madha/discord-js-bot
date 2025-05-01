@@ -12,7 +12,6 @@ const {
 } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { isTicketChannel, closeTicket, closeAllTickets } = require("@handlers/ticket");
-
 /**
  * @type {import("@structures/Command")}
  */
@@ -52,6 +51,10 @@ module.exports = {
       {
         trigger: "remove <userId|roleId>",
         description: "remove user/role from the ticket",
+      },
+      {
+        trigger: "category <categoryId>",
+        description: "set the ticket category channel by ID",
       },
     ],
   },
@@ -135,6 +138,24 @@ module.exports = {
           },
         ],
       },
+      {
+        name: "category",
+        description: "set the ticket category channel by ID",
+        type: ApplicationCommandOptionType.Subcommand,
+        options: [
+          {
+            name: "id",
+            description: "the ID of the category channel to set as the ticket category",
+            type: ApplicationCommandOptionType.String,
+            required: true,
+          },
+        ],
+      },
+      {
+        name: "remove-c",
+        description: "remove the ticket category channel",
+        type: ApplicationCommandOptionType.Subcommand,
+      },      
     ],
   },
 
@@ -202,7 +223,11 @@ module.exports = {
       else inputId = args[1];
       response = await removeFromTicket(message, inputId);
     }
-
+    // Set ticket category
+    else if (input === "category") {
+      // Call function to set category channel in guild settings
+      response = await setTicketCategory(message.guild, args[1], data.settings);
+    }
     // Invalid input
     else {
       return message.safeReply("Incorrect command usage");
@@ -260,11 +285,42 @@ module.exports = {
       const user = interaction.options.getUser("user");
       response = await removeFromTicket(interaction, user.id);
     }
-
+    // Set ticket category
+    else if (sub === "category") {
+      const categoryId = interaction.options.getString("id");
+      response = await setTicketCategory(interaction.guild, categoryId, data.settings);
+    }
+    else if (sub === "remove-c") {
+      response = await removeTicketCategory(interaction.guild, data.settings);
+    }
     if (response) await interaction.followUp(response);
   },
 };
+async function removeTicketCategory(guild, settings) {
+  // Remove the category channel ID from guild settings
+  settings.ticket.category_channel = null;
+  await settings.save();
 
+  return "Ticket category channel removed successfully";
+}
+async function setTicketCategory(guild, categoryId, settings) {
+
+  // Find the category channel by ID
+  const categoryChannel = guild.channels.cache.find(
+    (channel) => channel.type === 4 && channel.id === categoryId
+  );
+
+  // Check if the category channel was found
+  if (!categoryChannel) {
+    return "Invalid category ID provided or it does not refer to a category channel";
+  }
+
+  // Update the category channel ID in guild settings
+  settings.ticket.category_channel = categoryId;
+  await settings.save();
+
+  return "Ticket category channel set successfully";
+}
 /**
  * @param {import('discord.js').Message} param0
  * @param {import('discord.js').GuildTextBasedChannel} targetChannel
@@ -276,7 +332,7 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   );
 
   const sentMsg = await channel.safeSend({
-    content: "Please click the button below to setup ticket message",
+    content: "Please click the button below to setup your ticket system!",
     components: [buttonRow],
   });
 
@@ -301,21 +357,28 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId("title")
-            .setLabel("Embed Title")
+            .setLabel("ticket Title")
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId("description")
-            .setLabel("Embed Description")
+            .setLabel("ticket Description")
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false)
         ),
         new ActionRowBuilder().addComponents(
           new TextInputBuilder()
             .setCustomId("footer")
-            .setLabel("Embed Footer")
+            .setLabel("ticket Footer")
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId("staff")
+            .setLabel("Staff Role (ID separate with ,)")
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
         ),
@@ -337,6 +400,10 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   const title = modal.fields.getTextInputValue("title");
   const description = modal.fields.getTextInputValue("description");
   const footer = modal.fields.getTextInputValue("footer");
+  const staffRoles = modal.fields
+    .getTextInputValue("staff")
+    .split(",")
+    .filter((s) => guild.roles.cache.has(s.trim()));
 
   // send ticket message
   const embed = new EmbedBuilder()
@@ -348,6 +415,11 @@ async function ticketModalSetup({ guild, channel, member }, targetChannel, setti
   const tktBtnRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder().setLabel("Open a ticket").setCustomId("TICKET_CREATE").setStyle(ButtonStyle.Success)
   );
+
+
+  // save configuration
+  settings.ticket.staff_roles = staffRoles;
+  await settings.save();
 
   await targetChannel.send({ embeds: [embed], components: [tktBtnRow] });
   await modal.deleteReply();
