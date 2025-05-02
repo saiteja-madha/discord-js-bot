@@ -28,7 +28,6 @@ module.exports = {
   },
 
   // PLUGINS
-
   AUTOMOD: {
     ENABLED: false,
     LOG_EMBED: "#36393F",
@@ -36,7 +35,7 @@ module.exports = {
   },
 
   DASHBOARD: {
-    enabled: false, // enable or disable dashboard
+    enabled: false,
     baseURL: "http://localhost:8080", // base url
     failureURL: "http://localhost:8080", // failure redirect url
     port: "8080", // port to run the bot on
@@ -48,24 +47,6 @@ module.exports = {
     DAILY_COINS: 100, // coins to be received by daily command
     MIN_BEG_AMOUNT: 100, // minimum coins to be received when beg command is used
     MAX_BEG_AMOUNT: 2500, // maximum coins to be received when beg command is used
-  },
-
-  MUSIC: {
-    ENABLED: false,
-    IDLE_TIME: 60, // Time in seconds before the bot disconnects from an idle voice channel
-    MAX_SEARCH_RESULTS: 5,
-    DEFAULT_SOURCE: "SC", // YT = Youtube, YTM = Youtube Music, SC = SoundCloud
-    // Add any number of lavalink nodes here
-    // Refer to https://github.com/freyacodes/Lavalink to host your own lavalink server
-    LAVALINK_NODES: [
-      {
-        host: "localhost",
-        port: 2333,
-        password: "youshallnotpass",
-        id: "Local Node",
-        secure: false,
-      },
-    ],
   },
 
   GIVEAWAYS: {
@@ -102,8 +83,26 @@ module.exports = {
     },
   },
 
+  MUSIC: {
+    ENABLED: false,
+    IDLE_TIME: 60, // Time in seconds before the bot disconnects from an idle voice channel
+    MAX_SEARCH_RESULTS: 5,
+    DEFAULT_SOURCE: "SC", // YT = Youtube, YTM = Youtube Music, SC = SoundCloud
+    // Add any number of lavalink nodes here
+    // Refer to https://github.com/lavalink-devs/Lavalink to host your own lavalink server
+    LAVALINK_NODES: [
+      {
+        host: "localhost",
+        port: 2333,
+        password: "youshallnotpass",
+        id: "Local Node",
+        secure: false,
+      },
+    ],
+  },
+
   PRESENCE: {
-    ENABLED: false, // Whether or not the bot should update its status
+    ENABLED: false,
     STATUS: "online", // The bot's status [online, idle, dnd, invisible]
     TYPE: "WATCHING", // Status type for the bot [ CUSTOM | PLAYING | LISTENING | WATCHING | COMPETING ]
     // Your bot status message (note: in custom status type you won't have "Playing", "Listening", "Competing" prefix)
