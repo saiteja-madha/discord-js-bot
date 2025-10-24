@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/saiteja-madha"><img src="./docs/.gitbook/assets/logo_transparent.png" height="200" alt="Discord.js v14 Bot"></a>
+  <a href="https://github.com/saiteja-madha"><img src="./docs/.gitbook/assets/logo.png" height="200" alt="Discord.js v14 Bot"></a>
   <br>
   Discord.js v14 Bot
   <br>
@@ -26,7 +26,7 @@
 
 ## 🔗 Resource Links
 
-- 🌐 Bot Website: [Visit Here](https://djs-bot.hostz.me)
+- 🌐 Bot Website: [Visit Here](https://strangebot.fun)
 - 🤖 Demo Bot: [Invite Here](https://discord.com/oauth2/authorize?client_id=1013236808353599488&permissions=397602323830&scope=bot%20applications.commands)
 - 🤝 Support Server: [Join Here](https://discord.gg/2gPy75zgbW)
 - 🐳 Docker Image: [Hub](https://hub.docker.com/r/saitejamadha/discord-js-bot)
