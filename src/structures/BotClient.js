@@ -18,8 +18,8 @@ const giveawaysHandler = require("../handlers/giveaway");
 const { DiscordTogether } = require("discord-together");
 
 module.exports = class BotClient extends Client {
-  constructor() {
-    super({
+  constructor(externalOptions = {}) {
+    const defaultOptions = {
       intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -35,7 +35,10 @@ module.exports = class BotClient extends Client {
         repliedUser: false,
       },
       restRequestTimeout: 20000,
-    });
+    };
+
+    // Merge defaults with external options (e.g., shards, shardCount)
+    super({ ...defaultOptions, ...externalOptions });
 
     this.wait = require("util").promisify(setTimeout); // await client.wait(1000) - Wait 1 second
     this.config = require("@root/config"); // load the config file
