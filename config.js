@@ -64,6 +64,14 @@ module.exports = {
         password: "youshallnotpass",
         id: "Local Node",
         secure: false,
+        resuming: { // resumeConfiguration
+          key: "Your resuming key",
+          timeout: 60000 // after 60 seconds the bot will not resume.
+        },
+        reconnect: { // reconnectConfiguration
+          tries: 10,
+          delay: 10000
+        },
       },
     ],
   },
