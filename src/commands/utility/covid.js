@@ -43,7 +43,7 @@ module.exports = {
 };
 
 async function getCovid(country) {
-  const response = await getJson(`https://disease.sh/v2/countries/${country}`);
+  const response = await getJson(`https://corona.lmao.ninja/v2/countries/${country}`);
 
   if (response.status === 404) return "```css\nCountry with the provided name is not found```";
   if (!response.success) return MESSAGES.API_ERROR;
