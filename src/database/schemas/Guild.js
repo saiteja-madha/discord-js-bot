@@ -33,6 +33,7 @@ const Schema = new mongoose.Schema({
         staff_roles: [String],
       },
     ],
+    staff_roles: [String], // Add this line
   },
   automod: {
     debug: Boolean,
@@ -117,8 +118,9 @@ module.exports = {
    * @param {import('discord.js').Guild} guild
    */
   getSettings: async (guild) => {
-    if (!guild) throw new Error("Guild is undefined");
-    if (!guild.id) throw new Error("Guild Id is undefined");
+    if (!guild || !guild.id) {
+      throw new Error("Guild or Guild Id is undefined");
+    }
 
     const cached = cache.get(guild.id);
     if (cached) return cached;
