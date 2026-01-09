@@ -3,6 +3,7 @@ const { OWNER_IDS, PREFIX_COMMANDS, EMBED_COLORS } = require("@root/config");
 const { parsePermissions } = require("@helpers/Utils");
 const { timeformat } = require("@helpers/Utils");
 const { getSettings } = require("@schemas/Guild");
+const { isPremiumUser } = require("@handlers/premium");
 
 const cooldownCache = new Map();
 
@@ -36,6 +37,11 @@ module.exports = {
     // Owner commands
     if (cmd.category === "OWNER" && !OWNER_IDS.includes(message.author.id)) {
       return message.safeReply("This command is only accessible to bot owners");
+    }
+
+    // Premium commands
+    if (cmd.isPremium && !(await isPremiumUser(message.author))) {
+      return message.safeReply("❌ Este comando é exclusivo para usuários premium!");
     }
 
     // check user permissions
@@ -99,6 +105,14 @@ module.exports = {
     if (cmd.category === "OWNER" && !OWNER_IDS.includes(interaction.user.id)) {
       return interaction.reply({
         content: `This command is only accessible to bot owners`,
+        ephemeral: true,
+      });
+    }
+
+    // Premium commands
+    if (cmd.isPremium && !(await isPremiumUser(interaction.user))) {
+      return interaction.reply({
+        content: "❌ Este comando é exclusivo para usuários premium!",
         ephemeral: true,
       });
     }

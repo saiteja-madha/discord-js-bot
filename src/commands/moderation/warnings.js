@@ -1,6 +1,7 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getWarningLogs, clearWarningLogs } = require("@schemas/ModLog");
 const { getMember } = require("@schemas/Member");
+const { timeformat } = require("@helpers/Utils");
 
 /**
  * @type {import("@structures/Command")}
@@ -114,7 +115,9 @@ async function listWarnings(target, { guildId }) {
   const warnings = await getWarningLogs(guildId, target.id);
   if (!warnings.length) return `${target.user.username} has no warnings`;
 
-  const acc = warnings.map((warning, i) => `${i + 1}. ${warning.reason} [By ${warning.admin.username}]`).join("\n");
+  const acc = warnings.map((warning, i) => 
+    `${i + 1}. ${warning.reason} [By ${warning.admin.username}] - ${timeformat(warning.timestamp)}`
+  ).join("\n");
   const embed = new EmbedBuilder({
     author: { name: `${target.user.username}'s warnings` },
     description: acc,

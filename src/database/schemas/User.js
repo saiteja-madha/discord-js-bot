@@ -21,6 +21,11 @@ const Schema = new mongoose.Schema(
       streak: { type: Number, default: 0 },
       timestamp: Date,
     },
+    premium: {
+      isActive: { type: Boolean, default: false },
+      expiresAt: Date,
+      activatedAt: Date,
+    },
   },
   {
     timestamps: {
