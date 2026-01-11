@@ -99,7 +99,9 @@ module.exports = class BotClient extends Client {
         const event = require(filePath);
 
         if (dir === "player") {
-          this.musicManager.on(eventName, event.bind(null, this));
+          if (this.config.MUSIC.ENABLED) {
+            this.musicManager.on(eventName, event.bind(null, this));
+          }
         } else {
           this.on(eventName, event.bind(null, this));
         }

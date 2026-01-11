@@ -1,3 +1,7 @@
+const { MUSIC } = require("@root/config");
+
 module.exports = async (client, data) => {
-  client.musicManager.sendRawData(data);
+  if (MUSIC.ENABLED) {
+    client.musicManager.sendRawData(data);
+  }
 };
