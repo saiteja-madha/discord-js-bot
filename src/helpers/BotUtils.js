@@ -72,7 +72,7 @@ module.exports = class BotUtils {
       },
       {
         callback: ({ member, client, guildId }) =>
-          member.voice?.channelId === client.musicManager.getPlayer(guildId)?.channelId,
+          member.voice?.channelId === client.musicManager.getPlayer(guildId)?.voiceChannelId,
         message: "🚫 You're not in the same voice channel.",
       },
     ];

@@ -1,8 +1,8 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { getJson } = require("@helpers/HttpUtils");
-const { MESSAGES, EMBED_COLORS } = require("@root/config");
+const { EMBED_COLORS } = require("@root/config");
 
-const BASE_URL = "https://some-random-api.com/lyrics";
+const BASE_URL = "https://lrclib.net/api";
 
 /**
  * @type {import("@structures/Command")}
@@ -46,21 +46,35 @@ module.exports = {
 };
 
 async function getLyric(user, choice) {
-  const lyric = await getJson(`${BASE_URL}?title=${choice}`);
-  if (!lyric.success) return MESSAGES.API_ERROR;
+  try {
+    const response = await getJson(`${BASE_URL}/search?q=${encodeURIComponent(choice)}`);
 
-  const thumbnail = lyric.data?.thumbnail.genius;
-  const author = lyric.data?.author;
-  const lyrics = lyric.data?.lyrics;
-  const title = lyric.data?.title;
+    if (!response.success || !Array.isArray(response.data) || response.data.length === 0) {
+      return { content: `❌ No lyrics found for "${choice}".` };
+    }
 
-  const embed = new EmbedBuilder();
-  embed
-    .setColor(EMBED_COLORS.BOT_EMBED)
-    .setTitle(`${author} - ${title}`)
-    .setThumbnail(thumbnail)
-    .setDescription(lyrics)
-    .setFooter({ text: `Request By: ${user.username}` });
+    const lyricData = response.data[0];
+    let lyrics = lyricData.plainLyrics;
 
-  return { embeds: [embed] };
+    if (!lyrics && lyricData.syncedLyrics) {
+      lyrics = lyricData.syncedLyrics
+        .split("\n")
+        .map((line) => line.replace(/^\[\d{2}:\d{2}\.\d{2}\]\s?/g, ""))
+        .filter((line) => line.trim())
+        .join("\n");
+    }
+
+    if (!lyrics) lyrics = "No lyrics available";
+
+    const embed = new EmbedBuilder()
+      .setColor(EMBED_COLORS.BOT_EMBED)
+      .setTitle(`${lyricData.artistName} - ${lyricData.trackName}`)
+      .setDescription(lyrics.length > 4090 ? lyrics.substring(0, 4090) + "..." : lyrics)
+      .setFooter({ text: `Requested by: ${user.username}` });
+
+    return { embeds: [embed] };
+  } catch (error) {
+    console.error("Lrclib Api Error:", error);
+    return "An error occurred while fetching lyrics.";
+  }
 }
