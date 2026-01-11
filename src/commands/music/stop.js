@@ -16,13 +16,13 @@ module.exports = {
     enabled: true,
   },
 
-  async messageRun(message, args, data) {
-    const response = await stop(message, data.settings);
+  async messageRun(message) {
+    const response = await stop(message);
     await message.safeReply(response);
   },
 
-  async interactionRun(interaction, data) {
-    const response = await stop(interaction, data.settings);
+  async interactionRun(interaction) {
+    const response = await stop(interaction);
     await interaction.followUp(response);
   },
 };
