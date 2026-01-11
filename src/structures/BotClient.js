@@ -13,7 +13,7 @@ const { recursiveReadDirSync } = require("../helpers/Utils");
 const { validateCommand, validateContext } = require("../helpers/Validator");
 const { schemas } = require("@src/database/mongoose");
 const CommandCategory = require("./CommandCategory");
-const lavaclient = require("../handlers/lavaclient");
+const MusicManager = require("../handlers/lavaclient");
 const giveawaysHandler = require("../handlers/giveaway");
 const { DiscordTogether } = require("discord-together");
 
@@ -63,7 +63,7 @@ module.exports = class BotClient extends Client {
       : undefined;
 
     // Music Player
-    if (this.config.MUSIC.ENABLED) this.musicManager = lavaclient(this);
+    if (this.config.MUSIC.ENABLED) this.musicManager = new MusicManager(this);
 
     // Giveaways
     if (this.config.GIVEAWAYS.ENABLED) this.giveawaysManager = giveawaysHandler(this);
@@ -73,6 +73,9 @@ module.exports = class BotClient extends Client {
 
     // Database
     this.database = schemas;
+
+    // Utils
+    this.utils = require("../helpers/Utils");
 
     // Discord Together
     this.discordTogether = new DiscordTogether(this);
@@ -90,11 +93,19 @@ module.exports = class BotClient extends Client {
 
     recursiveReadDirSync(directory).forEach((filePath) => {
       const file = path.basename(filePath);
+      const dir = path.basename(path.dirname(filePath));
       try {
         const eventName = path.basename(file, ".js");
         const event = require(filePath);
 
-        this.on(eventName, event.bind(null, this));
+        if (dir === "player") {
+          if (this.config.MUSIC.ENABLED) {
+            this.musicManager.on(eventName, event.bind(null, this));
+          }
+        } else {
+          this.on(eventName, event.bind(null, this));
+        }
+
         clientEvents.push([file, "✓"]);
 
         delete require.cache[require.resolve(filePath)];
