@@ -1,9 +1,8 @@
-module.exports = async (client, player) => {
+module.exports = async (client, player, voiceChannelId) => {
   if (!player) return;
 
-  const voiceChannelId = player.voiceChannelId ?? player.options.voiceChannelId;
   if (voiceChannelId) {
-    await this.client.utils.setVoiceStatus(client, voiceChannelId, "");
+    await client.utils.setVoiceStatus(client, voiceChannelId, "");
   }
 
   if (!player.textChannelId) return;

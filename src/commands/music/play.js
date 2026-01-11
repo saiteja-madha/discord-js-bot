@@ -83,7 +83,7 @@ async function play({ member, guild, channel }, searchQuery) {
           .setAuthor({ name: "Added Playlist to queue" })
           .setThumbnail(res.playlist.thumbnail)
           .setColor(EMBED_COLORS.BOT_EMBED)
-          .setDescription(`[${res.playlist.name}](${res.playlist.uri})`)
+          .setDescription(`[${guild.client.utils.sliceText(res.playlist.name)}](${res.playlist.uri})`)
           .addFields(
             { name: "Enqueued", value: `${res.tracks.length} songs`, inline: true },
             {
@@ -112,7 +112,7 @@ async function play({ member, guild, channel }, searchQuery) {
         const trackEmbed = new EmbedBuilder()
           .setAuthor({ name: "Added Track to queue" })
           .setColor(EMBED_COLORS.BOT_EMBED)
-          .setDescription(`[${track.info.title}](${track.info.uri})`)
+          .setDescription(`[${guild.client.utils.sliceText(track.info.title)}](${track.info.uri})`)
           .setThumbnail(track.info.artworkUrl)
           .addFields({
             name: "Song Duration",

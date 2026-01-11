@@ -44,7 +44,7 @@ function nowPlaying({ client, guildId }) {
   const embed = new EmbedBuilder()
     .setColor(EMBED_COLORS.BOT_EMBED)
     .setAuthor({ name: "Now Playing" })
-    .setDescription(`[${track.info.title}](${track.info.uri})`)
+    .setDescription(`[${client.utils.sliceText(track.info.title)}](${track.info.uri})`)
     .addFields(
       {
         name: "Song Duration",

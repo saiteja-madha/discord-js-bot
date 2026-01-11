@@ -25,6 +25,17 @@ module.exports = class Utils {
   }
 
   /**
+   * Slices a text and removes special characters
+   * @param {string} text
+   * @param {number} length
+   */
+  static sliceText(text, length = 30) {
+    if (!text) return "";
+    const clean = text.replace(/[^\p{L}\p{N}\s]/gu, "");
+    return clean.length > length ? clean.slice(0, length).padEnd(length + 3, ".") : clean;
+  }
+
+  /**
    * Returns a random number below a max
    * @param {number} max
    */

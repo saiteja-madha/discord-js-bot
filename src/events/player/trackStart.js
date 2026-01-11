@@ -7,7 +7,11 @@ module.exports = async (client, player, track) => {
   if (!track) return;
 
   if (player.voiceChannelId) {
-    await client.utils.setVoiceStatus(client, player.voiceChannelId, `Now playing: **${track.info.title}**`);
+    await client.utils.setVoiceStatus(
+      client,
+      player.voiceChannelId,
+      `Now playing: **${client.utils.sliceText(track.info.title)}**`
+    );
   }
 
   const channel = client.channels.cache.get(player.textChannelId);
@@ -32,7 +36,7 @@ module.exports = async (client, player, track) => {
       new EmbedBuilder()
         .setColor(EMBED_COLORS.BOT_EMBED)
         .setAuthor({ name: "Track Started" })
-        .setDescription(`🎶 **Now playing [${track.info.title}](${track.info.uri})**`)
+        .setDescription(`🎶 **Now playing [${client.utils.sliceText(track.info.title)}](${track.info.uri})**`)
         .setThumbnail(track.info.artworkUrl)
         .setFooter({
           text: `Requested by: ${track.requester.username}`,
@@ -40,7 +44,7 @@ module.exports = async (client, player, track) => {
         .addFields(
           {
             name: "Duration",
-            value: track.info.isStream ? "Live" : client.utils.formatTime(track.info.duration),
+            value: track.info.isStream ? "LIVE" : client.utils.formatTime(track.info.duration),
             inline: true,
           },
           { name: "Author", value: track.info.author || "Unknown", inline: true }

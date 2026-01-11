@@ -12,7 +12,7 @@ const { EMBED_COLORS, MUSIC } = require("@root/config");
  */
 module.exports = {
   name: "search",
-  description: "search for matching songs on YouTube",
+  description: "Search for matching songs on youtube",
   category: "MUSIC",
   botPermissions: ["EmbedLinks"],
   command: {
@@ -43,7 +43,7 @@ module.exports = {
     const query = interaction.options.getString("query");
     const response = await search(interaction, query);
     if (response) await interaction.followUp(response);
-    else interaction.deleteReply();
+    else await interaction.deleteReply();
   },
 };
 
@@ -52,16 +52,16 @@ module.exports = {
  * @param {string} query
  */
 async function search({ member, guild, channel }, query) {
-  if (!member.voice.channel) return "ðŸš« You need to join a voice channel first";
+  if (!member.voice.channel) return "🚫 You need to join a voice channel first";
 
-  let player = guild.client.manager.getPlayer(guild.id);
+  let player = guild.client.musicManager.getPlayer(guild.id);
 
   if (player && member.voice.channel !== guild.members.me.voice.channel) {
     return "🚫 You must be in the same voice channel as me.";
   }
 
   if (!player) {
-    player = await guild.client.manager.createPlayer({
+    player = await guild.client.musicManager.createPlayer({
       guildId: guild.id,
       voiceChannelId: member.voice.channel.id,
       textChannelId: channel.id,
@@ -83,7 +83,7 @@ async function search({ member, guild, channel }, query) {
 
   const results = res.tracks.slice(0, maxResults);
   const options = results.map((track, index) => ({
-    label: track.info.title,
+    label: guild.client.utils.sliceText(track.info.title),
     value: index.toString(),
   }));
 
@@ -100,29 +100,28 @@ async function search({ member, guild, channel }, query) {
     .setAuthor({ name: "Search Results" })
     .setDescription(`Select the song you wish to add to the queue`);
 
-  const searchMessage = await channel.safeSend({
+  const sentMsg = await channel.safeSend({
     embeds: [searchEmbed],
     components: [menuRow],
   });
 
-  try {
-    const response = await channel.awaitMessageComponent({
-      filter: (i) => i.user.id === member.id && i.message.id === searchMessage.id,
-      componentType: ComponentType.StringSelect,
-      idle: 30 * 1000,
-    });
+  const collector = sentMsg.createMessageComponentCollector({
+    filter: (i) => i.user.id === member.id,
+    componentType: ComponentType.StringSelect,
+    time: 30000,
+    max: 1,
+  });
 
+  collector.on("collect", async (response) => {
     if (response.customId !== "search-results") return;
-
-    await searchMessage.delete();
-    if (!response) return "🚫 You took too long to select the songs";
+    await response.deferUpdate();
 
     const selectedTrack = results[response.values[0]];
     player.queue.add(selectedTrack);
 
     const trackEmbed = new EmbedBuilder()
       .setAuthor({ name: "Added Track to queue" })
-      .setDescription(`[${selectedTrack.info.title}](${selectedTrack.info.uri})`)
+      .setDescription(`[${guild.client.utils.sliceText(selectedTrack.info.title)}](${selectedTrack.info.uri})`)
       .setThumbnail(selectedTrack.info.artworkUrl)
       .addFields({
         name: "Song Duration",
@@ -135,10 +134,10 @@ async function search({ member, guild, channel }, query) {
       await player.play({ paused: false });
     }
 
-    return { embeds: [trackEmbed] };
-  } catch (err) {
-    console.error("Error handling response:", err);
-    await searchMessage.delete();
-    return "🚫 Failed to register your response";
-  }
+    await channel.safeSend({ embeds: [trackEmbed] });
+  });
+
+  collector.on("end", async () => {
+    if (sentMsg) await sentMsg.delete().catch(() => {});
+  });
 }

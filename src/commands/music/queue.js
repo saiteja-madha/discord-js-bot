@@ -60,14 +60,14 @@ async function getQueue({ client, guild }, pgNo) {
     embed
       .addFields({
         name: "Current",
-        value: `[${current.info.title}](${current.info.uri}) \`[${client.utils.formatTime(current.info.duration)}]\``,
+        value: `[${client.utils.sliceText(current.info.title)}](${current.info.uri}) \`[${client.utils.formatTime(current.info.duration)}]\``,
       })
       .setThumbnail(current.info.artworkUrl);
   }
 
   const queueList = tracks.map(
     (track, index) =>
-      `${start + index + 1}. [${track.info.title}](${track.info.uri}) \`[${client.utils.formatTime(track.info.duration)}]\``
+      `${start + index + 1}. [${client.utils.sliceText(track.info.title)}](${track.info.uri}) \`[${client.utils.formatTime(track.info.duration)}]\``
   );
 
   embed.setDescription(

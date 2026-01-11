@@ -28,7 +28,7 @@ module.exports = async (client, player) => {
         new EmbedBuilder()
           .setColor(EMBED_COLORS.BOT_EMBED)
           .setTitle("Queue Finished")
-          .setDescription("Add more music using **/play**"),
+          .setDescription("All tracks have been played. Add more to continue listening"),
       ],
     },
     10
