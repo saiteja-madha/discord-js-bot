@@ -43,7 +43,7 @@ function sendWebhook(content, err) {
 
   if (errString)
     embed.setDescription(
-      "```js\n" + (errString.length > 4096 ? `${errString.substr(0, 4000)}...` : errString) + "\n```"
+      "```js\n" + (errString.length > 4096 ? `${errString.substring(0, 4000)}...` : errString) + "\n```"
     );
 
   embed.addFields({ name: "Description", value: content || err?.message || "NA" });

@@ -63,8 +63,8 @@ const buildSuccessResponse = (output, client) => {
   output = require("util").inspect(output, { depth: 0 }).replaceAll(client.token, DUMMY_TOKEN);
 
   const embed = new EmbedBuilder()
-    .setAuthor({ name: "📤 Output" })
-    .setDescription("```js\n" + (output.length > 4096 ? `${output.substr(0, 4000)}...` : output) + "\n```")
+    .setAuthor({ name: "\ud83d\udce4 Output" })
+    .setDescription("```js\n" + (output.length > 4096 ? `${output.substring(0, 4000)}...` : output) + "\n```")
     .setColor("Random")
     .setTimestamp(Date.now());
 
@@ -74,8 +74,8 @@ const buildSuccessResponse = (output, client) => {
 const buildErrorResponse = (err) => {
   const embed = new EmbedBuilder();
   embed
-    .setAuthor({ name: "📤 Error" })
-    .setDescription("```js\n" + (err.length > 4096 ? `${err.substr(0, 4000)}...` : err) + "\n```")
+    .setAuthor({ name: "\ud83d\udce4 Error" })
+    .setDescription("```js\n" + (err.length > 4096 ? `${err.substring(0, 4000)}...` : err) + "\n```")
     .setColor(EMBED_COLORS.ERROR)
     .setTimestamp(Date.now());
 
