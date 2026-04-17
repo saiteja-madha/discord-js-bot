@@ -1,12 +1,10 @@
 const { EmbedBuilder, ApplicationCommandOptionType } = require("discord.js");
 const { EMBED_COLORS } = require("@root/config.js");
 const { translate } = require("@helpers/HttpUtils");
-const { GOOGLE_TRANSLATE } = require("@src/data.json");
 
 // Discord limits to a maximum of 25 choices for slash command
 // Add any 25 language codes from here: https://cloud.google.com/translate/docs/languages
-
-const choices = ["ar", "cs", "de", "en", "fa", "fr", "hi", "hr", "it", "ja", "ko", "la", "nl", "pl", "ta", "te"];
+const { GOOGLE_TRANSLATE } = require("@src/data.json");
 
 /**
  * @type {import("@structures/Command")}
@@ -31,7 +29,7 @@ module.exports = {
         description: "translation language",
         type: ApplicationCommandOptionType.String,
         required: true,
-        choices: choices.map((choice) => ({ name: GOOGLE_TRANSLATE[choice], value: choice })),
+        choices: Object.entries(GOOGLE_TRANSLATE).map(([id, name]) => ({ name: name, value: id })).slice(0, 25),
       },
       {
         name: "text",
